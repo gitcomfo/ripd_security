@@ -1,8 +1,7 @@
 <?php
-error_reporting(0);
-include_once 'includes/MiscFunctions.php';
-include_once 'includes/ConnectDB.inc';
+include_once 'includes/session.inc';
 include_once 'includes/header.php';
+include_once 'includes/MiscFunctions.php';
 
 $loginUSERname = $_SESSION['UserID'] ;
 $queryemp = mysql_query("SELECT idUser FROM cfs_user WHERE user_name = '$loginUSERname';");

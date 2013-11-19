@@ -9,12 +9,13 @@ session_start();
         <div class="top_left_box">
         </div>
         <div class="center_left_box">
-            <div class="box_title"><span> Main</span> Menu</div>
+            <div class="box_title"><span>প্রধান</span> কার্যক্রম</div>
             <div class="navbox">
                 <ul class="nav">
 
                     <?php
                     //$i=0;
+                    if(!empty($_SESSION['modSubModPageArray'])) {  
                     foreach ($_SESSION['modSubModPageArray'] as $key => $value) {
                         /*if (!isset($_SESSION['Module']) OR $_SESSION['Module'] == '') {
                             $_SESSION['Module'] = $key;
@@ -30,6 +31,9 @@ session_start();
                        $module_key = $key;
                        echo '<li><a href="' . $key . '">' . $_SESSION['moduleArray'][$module_key] . '</a></li>';
                     }
+                    
+                    }  else {
+                        echo "দুঃখিত, আপনাকে কোনো প্রধান কার্যক্রম দেওয়া নাই।";}
                     ?>
 
 

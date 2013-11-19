@@ -32,7 +32,7 @@ mysql_set_charset('utf8', $db);
 
 
 if ( !$db ) {
-	include_once 'header.php';
+        include_once 'header.php';
         echo '<div class="columnSld" style="height: 150px; ">';
         echo '<div style="width: 99%; text-align: center; margin-left: 18%; background-color: #FC7891; padding-left: 5%; color: #222222; font-size: 16px; border: 1px solid #212121">';
 	echo '<br />' . _('Sorry, We are unable to connect with database server');
