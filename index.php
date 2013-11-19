@@ -1,6 +1,6 @@
-     <?php
-     include_once 'includes/header.php';
-     ?>  
+<?php
+include_once 'includes/header.php';
+?>  
         
 <div class="columnSld">
         <div class="main_text_box">

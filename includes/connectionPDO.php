@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-$dbhost = "localhost";
+$dbhost = "192.168.1.100";
 $dbname = "ripd_db_comfosys";
-$dbuser = "root";
+$dbuser = "cfs_iftee";
 $dbpass = "";
 
 //$host = "localhost";

@@ -9,7 +9,7 @@ session_start();
         <div class="top_left_box">
         </div>
         <div class="center_left_box">
-            <div class="box_title"><span> Main</span> Menu</div>
+            <div class="box_title"><span>সাধারণ</span> কার্যক্রম</div>
             <div class="navbox">
                 <ul class="nav">
 
