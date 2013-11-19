@@ -1,6 +1,7 @@
 <?php
+error_reporting(0);
 include_once 'ConnectDB.inc';
-include_once 'includes/MiscFunctions.php';
+include_once 'MiscFunctions.php';
 
 if(isset($_GET['t']))
 {

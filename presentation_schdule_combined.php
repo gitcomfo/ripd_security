@@ -168,7 +168,7 @@ if ($_GET['action'] == 'first') {
     ?>
     <div style="padding-top: 10px;">    
         <div style="padding-left: 110px; width: 49%; float: left"><a href="program_management.php"><b>ফিরে যান</b></a></div>
-        <div><a href="presentation_schdule.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
+        <div><a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
     </div>
     <div>
         <form method="POST" onsubmit="">	
@@ -240,7 +240,7 @@ if ($_GET['action'] == 'first') {
                                 ?>
                             </td>
                             <td><?php echo $db_rl_prstn_time; ?></td>
-                            <td style="text-align: center " > <a href="presentation_schdule.php?action=edit&id=<?php echo $db_programID; ?>&type=<?php echo $type;?>"> এডিট সিডিউল </a></td>  
+                            <td style="text-align: center " > <a href="presentation_schdule_combined.php?action=edit&id=<?php echo $db_programID; ?>&type=<?php echo $type;?>"> এডিট সিডিউল </a></td>  
                         </tr>
                     <?php } ?>
                 </tbody>
@@ -253,11 +253,11 @@ if ($_GET['action'] == 'first') {
     ?>
     <div style="padding-top: 10px;">    
         <div style="padding-left: 110px; width: 49%; float: left"><a href="program_management.php"><b>ফিরে যান</b></a></div>
-        <div> <a href="presentation_schdule.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?>লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
+        <div> <a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?>লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
     </div>
 
     <div>
-        <form method="POST" autocomplete="off" aciton="presentation_schdule.php?action=first">
+        <form method="POST" autocomplete="off" aciton="presentation_schdule_combined.php?action=first">
             <table class="formstyle" style =" width:78%">
 
                 <tr>
@@ -309,7 +309,7 @@ if ($_GET['action'] == 'first') {
     ?>
     <div style="padding-top: 10px;">    
         <div style="padding-left: 110px; width: 49%; float: left"><a href="program_management.php">ফিরে যান</b></a></div>
-        <div> <a href="presentation_schdule.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
+        <div> <a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
     </div>
     <div>
         <!--PHP coding for SHOWING THE DATA IN EDIT SCHEDULE -->     
@@ -379,7 +379,7 @@ if ($_GET['action'] == 'first') {
     ?>
     <div style="padding-top: 10px;">    
         <div style="padding-left: 110px; width: 49%; float: left"><a href="program_management.php"><b> ফিরে যান</b></a></div>
-        <div><a href="presentation_schdule.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a> </div> 
+        <div><a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a> </div> 
     </div> 
 
     <form method="POST" onsubmit="">	
@@ -430,7 +430,7 @@ if ($_GET['action'] == 'first') {
                         <td><?php echo $db_rl_presennter_thana; ?></td>
                         <td><?php echo $db_rl_presenter_district; ?></td>
                         <td><?php echo $db_rl_presenter_division; ?></td>
-                        <td style="text-align: center " > <a href="presentation_schdule.php?action=sedule&id=<?php echo $db_rl_presenter_id; ?>&type=<?php echo $type;?>">সিডিউল </a></td>  
+                        <td style="text-align: center " > <a href="presentation_schdule_combined.php?action=sedule&id=<?php echo $db_rl_presenter_id; ?>&type=<?php echo $type;?>">সিডিউল </a></td>  
                     </tr>
                 <?php } ?>
             </tbody>
@@ -447,8 +447,8 @@ if ($_GET['action'] == 'first') {
 } elseif ($_GET['action'] == 'sedule') {
     ?>
     <div style="padding-top: 10px;">    
-        <div style="padding-left: 110px; width: 49%; float: left"><a href="presentation_schdule.php?action=list&type=<?php echo $type;?>"><b>ফিরে যান</b></a></div>
-        <div><a href="presentation_schdule.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
+        <div style="padding-left: 110px; width: 49%; float: left"><a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><b>ফিরে যান</b></a></div>
+        <div><a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
     </div>
     <form method="POST" onsubmit="">	
         <table  class="formstyle" style =" width:78%"id="presentation_fillter">          

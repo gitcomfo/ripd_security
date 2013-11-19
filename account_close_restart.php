@@ -84,7 +84,7 @@ if (isset($_POST['submit_new'])) {
             }
             document.getElementById('accountfound').innerHTML=xmlhttp.responseText;
         }
-        xmlhttp.open("GET","includes/accountSearch_1.php?key="+keystr+"&location=close_account.php",true);
+        xmlhttp.open("GET","includes/accountSearch_1.php?key="+keystr+"&location=account_close_restart.php",true);
         xmlhttp.send();	
     }
 </script>

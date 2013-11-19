@@ -329,6 +329,14 @@ way to fit your requirements.
     margin:0px;
     padding:5px 0px 10px 0px;
 }
+
+.columnInnerPages{
+    width:80%;
+    float:left;
+    margin:0px;
+    padding:5px 5px 10px 5px;
+}
+
 .columnSubmodule{
     width:71%;
     float:left;
