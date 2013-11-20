@@ -1,5 +1,5 @@
 <?php
-include_once 'includes/session.inc';
+//include_once 'includes/session.inc';
 include_once 'includes/header.php';
 
 $sql_role_ins= $conn->prepare("INSERT INTO security_roles (role_name,role_desc,role_type) VALUES (?, ?, 'emp');");

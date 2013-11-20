@@ -68,7 +68,7 @@ include_once 'connectionPDO.php';
                         if(isset($_SESSION['UserID']) && isset($_SESSION['acc_holder_name']))
                             {
                             $user_name = $_SESSION['acc_holder_name'];
-                            echo '<li><a href="main_account_management.php">প্রধান মডিউল</a></li>';
+                            echo '<li><a href="main_account_management.php">প্রধান কার্যক্রম</a></li>';
                             echo '<li><a href="account_management.php">'.$user_name.'</a></li>';                        
                             echo '<li><a href="logout.php">লগ আউট</a></li>';
                             }

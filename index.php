@@ -111,8 +111,7 @@ include_once 'includes/columnLeftIndexHome.php';
                     <div class="small_title">দৃষ্টিআকর্ষণঃ নতুন নতুন অফারসমূহ</div>
 
                     <div class="offer_box">
-                        <a href="details.html"><img src="images/p1.jpg" width="130"
-                                                    height="98" class="img_left" alt="" title="" border="0" /> </a>
+                        <a href="details.html"><img src="images/p1.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" /> </a>
                         <div class="offer_info">
                             <span>বিক্রয়ের জন্য</span>
                             <p class="offer">ঘরে বসেই হাতের কাছে পেয়ে যাচ্ছেন সব পণ্য। ঘরে বসে আরাম করে সব কেনাকাটা করুন কিংবা প্রিয়জনদের উপহার দিন। অর্ডার দেওয়া মাত্র প্রিয়জনদের হাতে পৌঁছে দেওয়া হবে আপনার উপহার। </p>
@@ -122,10 +121,8 @@ include_once 'includes/columnLeftIndexHome.php';
                         </div>
                     </div>
 
-
                     <div class="offer_box">
-                        <a href="details.html"><img src="images/p2.jpg" width="130"
-                                                    height="98" class="img_left" alt="" title="" border="0" /> </a>
+                        <a href="details.html"><img src="images/p2.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" /> </a>
                         <div class="offer_info">
                             <span>বিক্রয়ের জন্য</span>
                             <p class="offer">শীত, গ্রীষ্ম বা বর্ষা এখন কোনোই ব্যাপার না। যখন দরকার তখনই হাতের নাগালে পাওয়া যাবে সবকিছু। 
@@ -135,6 +132,18 @@ include_once 'includes/columnLeftIndexHome.php';
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="offer_box">
+                        <a href="details.html"><img src="images/p1.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" /> </a>
+                        <div class="offer_info">
+                            <span>বিক্রয়ের জন্য</span>
+                            <p class="offer">ঘরে বসেই হাতের কাছে পেয়ে যাচ্ছেন সব পণ্য। ঘরে বসে আরাম করে সব কেনাকাটা করুন কিংবা প্রিয়জনদের উপহার দিন। অর্ডার দেওয়া মাত্র প্রিয়জনদের হাতে পৌঁছে দেওয়া হবে আপনার উপহার। </p>
+                            <div class="more">
+                                <a href="#">...বিস্তারিত</a>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
 <?php 
 include_once 'includes/footer.php';
