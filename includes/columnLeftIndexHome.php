@@ -1,5 +1,5 @@
 <div class="column1">
-    
+
     <div class="left_box">
         <div class="top_left_box">
         </div>
@@ -94,4 +94,15 @@
         <div class="bottom_left_box">
         </div>
     </div>  
+
+    <div class="left_box">
+        <div class="top_left_box">
+        </div>
+        <div class="center_left_box" style="margin-left: 28px;">
+            <div class="fb-like-box" data-href="http://www.facebook.com/RIPDuniversal" data-width="200" data-show-faces="true" data-header="true" data-stream="false" data-colorscheme="light" data-show-border="true"></div>
+        </div>
+        <div class="bottom_left_box">
+        </div>
+    </div>  
+
 </div>
