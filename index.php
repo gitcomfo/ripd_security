@@ -90,12 +90,9 @@ include_once 'includes/columnLeftIndexHome.php';
                              //print_r($_SESSION);
                              echo '</pre>';
                         ?>
+                        <h1>আমাদের সম্পর্কে</h1>
                         <h2>রিপ্‌ড এর ভুবনে আপনাকে স্বাগতম!</h2>
-                        <h2>শুভ উদ্বোধন</h2>
-                        <p>শীঘ্রই “সারাবাংলা চেইন-শপ” নামে একটি ব্যতিক্রমী শপ চালু হতে যাচ্ছে। যা আমাদের সিস্টেমের প্রথম ও দেশের সর্ব প্রথম পূর্ণ অনলাইন সফটওয়ার নির্ভর 
-                            একটি অত্যাধুনিক চেইন-শপ। এই শপে থাকছে ভোগ্য পণ্য (মুদি আইটেম), পোষাক, জুতা, কসমেটিকস, কুকারিজ, পস্নাস্টিক, ইলেক্ট্রিক, খেলনা, বেভারেজ, 
-                            চাউল ও ঔষধসহ আরো চমৎকার চমৎকার আইটেম। খুব দ্রম্নতই আমাদের প্রথম সিস্টেমিক চেইন-শপটি মুন্সিগঞ্জ জেলার সিরাজদিখান বাজারে চালু হতে যাচ্ছে
-                            <br/><br/>
+                        <p style="font-size: 12px;">
                             রিপ্‌ড ইউনিভার্সেল মূলত আপনারই প্রতিষ্ঠান। আপনার স্বপ্ন পূরণে সার্বক্ষণিক নিজের কাছে অঙ্গিকারাবদ্ধ। রিপ্‌ড হচ্ছে সিস্টেম তথা সিস্টেমিক প্রতিষ্ঠান, যা একটি 
                             অত্যাধুনিক সফটওয়ারের মাধ্যমে আপনার সাথে মিশে থাকবে সারাক্ষণ। এই সফটের মাধ্যমে আপনি অনেক পরিসেবাই পেতে পারেন সম্পূর্ণ ফ্রি। যেগুলো আপনার 
                             নানাবিধ স্বপ্ন পূরণে সহায়ক বলে বিভিন্নভাবে বিবেচিত। এটির মাধ্যমে আপনি বাড়াতে পারবেন, নিজের জ্ঞানের পরিধি, পরস্পরে মেইলিং যোগাযোগ। জানতে পারবেন 
@@ -108,10 +105,28 @@ include_once 'includes/columnLeftIndexHome.php';
                     </div>
                 </div>
                 <div class="column3">
-                    <div class="small_title">দৃষ্টিআকর্ষণঃ নতুন নতুন অফারসমূহ</div>
+                    
+                    <div class="small_title">দৃষ্টিআকর্ষণ</div>
+                    
+                    <div class="offer_box">
+                        <img src="images/supershop.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
+                        <div class="offer_info">
+                            <span>শুভ উদ্বোধন</span>
+                            <p class="offer">
+                             শীঘ্রই "সারাবাংলা চেইন-শপ" নামে একটি ব্যতিক্রমী শপ চালু হতে যাচ্ছে। যা আমাদের সিস্টেমের প্রথম ও দেশের সর্ব প্রথম পূর্ণ অনলাইন সফটওয়ার নির্ভর 
+                            একটি অত্যাধুনিক চেইন-শপ। এই শপে থাকছে ভোগ্য পণ্য (মুদি আইটেম), পোষাক, জুতা, কসমেটিকস, কুকারিজ, প্লাস্টিক, ইলেক্ট্রিক, খেলনা, বেভারেজ, 
+                            চাউল ও ঔষধসহ আরো চমৎকার চমৎকার আইটেম। খুব দ্রম্নতই আমাদের প্রথম সিস্টেমিক চেইন-শপটি মুন্সিগঞ্জ জেলার সিরাজদিখান বাজারে চালু হতে যাচ্ছে।
+                            </p>
+                            <div class="more">
+                                <a href="#">...বিস্তারিত</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="small_title">নতুন নতুন অফারসমূহ</div>
 
                     <div class="offer_box">
-                        <a href="details.html"><img src="images/p1.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" /> </a>
+                        <img src="images/p1.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
                         <div class="offer_info">
                             <span>বিক্রয়ের জন্য</span>
                             <p class="offer">ঘরে বসেই হাতের কাছে পেয়ে যাচ্ছেন সব পণ্য। ঘরে বসে আরাম করে সব কেনাকাটা করুন কিংবা প্রিয়জনদের উপহার দিন। অর্ডার দেওয়া মাত্র প্রিয়জনদের হাতে পৌঁছে দেওয়া হবে আপনার উপহার। </p>
@@ -122,7 +137,7 @@ include_once 'includes/columnLeftIndexHome.php';
                     </div>
 
                     <div class="offer_box">
-                        <a href="details.html"><img src="images/p2.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" /> </a>
+                        <img src="images/p2.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
                         <div class="offer_info">
                             <span>বিক্রয়ের জন্য</span>
                             <p class="offer">শীত, গ্রীষ্ম বা বর্ষা এখন কোনোই ব্যাপার না। যখন দরকার তখনই হাতের নাগালে পাওয়া যাবে সবকিছু। 
@@ -134,7 +149,7 @@ include_once 'includes/columnLeftIndexHome.php';
                     </div>
                     
                     <div class="offer_box">
-                        <a href="details.html"><img src="images/p1.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" /> </a>
+                        <img src="images/p1.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
                         <div class="offer_info">
                             <span>বিক্রয়ের জন্য</span>
                             <p class="offer">ঘরে বসেই হাতের কাছে পেয়ে যাচ্ছেন সব পণ্য। ঘরে বসে আরাম করে সব কেনাকাটা করুন কিংবা প্রিয়জনদের উপহার দিন। অর্ডার দেওয়া মাত্র প্রিয়জনদের হাতে পৌঁছে দেওয়া হবে আপনার উপহার। </p>

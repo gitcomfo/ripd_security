@@ -6,7 +6,7 @@ include_once 'includes/header.php';
     <tr>
         <td style="padding: 0px;">
             <div class="columnSld">
-                <div   class="small_title" style="height: 30px; vertical-align: bottom; font-size: 16px;">প্রোডাক্ট ইনফরমেশন</div>
+                <div   class="small_title" style="height: 30px; vertical-align: bottom; font-size: 16px;">পণ্য সম্পর্কিত তথ্য</div>
             </div>
         </td>
     </tr>

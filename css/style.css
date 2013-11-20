@@ -366,22 +366,24 @@ way to fit your requirements.
     height:auto;
     float:left;
     padding-bottom:10px;
-    background:url(../images/center_box_bg.gif) repeat center;
 }
 .top_left_box{
     width:257px;
     height:10px;
     float:left;
+    background:url(../images/top_box_bg.gif) no-repeat center;
 }
 .center_left_box{
     width:257px;
     height: auto;
     float:left;
+    background:url(../images/center_box_bg.gif) repeat-y;
 }
 .bottom_left_box{
     width:257px;
     height:10px;
     float:left;
+    background:url(../images/bottom_box_bg.gif) no-repeat center;
 }
 .box_title{
     width:257px;
@@ -521,10 +523,10 @@ way to fit your requirements.
 /*---------------offer_box----------------------*/
 .offer_box{
     width:100%;
-    height:100px;
+    height:auto;
     background-color:#f3f5f6;
     padding:0px;
-    margin:10px 0px 10px 0px;
+    margin:10px 0px 25px 0px;
 }
 .offer_box_wide{
     width:310px;
@@ -551,7 +553,7 @@ way to fit your requirements.
 }
 p.offer{
     text-align:justify;
-    font-size:10px;
+    font-size:11px;
 }
 .more{
     float:right;
@@ -645,7 +647,7 @@ input.form_input{
 }
 
 .visitor_information{
-    font-size:30px;
+    font-size:20px;
     color:#385870;
     text-align:center;
     padding-left:0px;
