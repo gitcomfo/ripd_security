@@ -36,7 +36,7 @@ include_once 'connectionPDO.php';
                         <li><a>কোম্পানি</a>
                             <ul>
                                 <li><a href="about_company.php">এবাউট কোম্পানী</a></li>
-                                <li><a href="product_info.php" title="">প্রোডাক্ট ইনফরমেশন</a></li>
+                                <li><a href="product_info.php" title="">পণ্য-তথ্য</a></li>
                                 <li><a href="patent.php" title="">প্যাটেন্ট</a></li>
                                 <li><a href="programProfile.php" title="">অনুষ্ঠানসূচি</a></li>
                                 <li><a href="awards.php" title="">এওয়ার্ড</a></li>

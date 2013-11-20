@@ -1,30 +1,22 @@
 <div class="column1">
 
     <div class="left_box">
-        <div class="top_left_box">
-        </div>
+        <div class="top_left_box"></div>
         <div class="center_left_box">
             <div class="box_title"><span>সংস্পর্শে </span>থাকুন</div>
-
-
             <div class="form">
                 <div class="form_row"><label class="left">ইমেইলঃ </label><input type="text" class="form_input"/></div>                    
                 <div style="float:right; padding:10px 25px 0 0;">
                     <input type="image" src="images/join.gif"/>
                 </div>
-
             </div>
-
-
         </div>
-        <div class="bottom_left_box">
-        </div>
+        <div class="bottom_left_box"></div>
     </div> 
 
 
     <div class="left_box">
-        <div class="top_left_box">
-        </div>
+        <div class="top_left_box"></div>
         <div class="center_left_box">
             <div class="box_title"><span> যোগাযোগের </span>ঠিকানা</div>
             <div class="form">
@@ -40,20 +32,15 @@
                 </div>                    
             </div>
         </div>
-        <div class="bottom_left_box">
-        </div>
+        <div class="bottom_left_box"></div>
     </div>  
 
     <div class="left_box">
-        <div class="top_left_box">
-        </div>
+        <div class="top_left_box"></div>
         <div class="center_left_box">
             <div class="box_title"><span>সাইটটি </span>দেখা হয়েছে</div>
-
-
             <div class="form">
                 <div class="form_row">
-
                     <div class="visitor_information">
                         <span>
                             <?php
@@ -64,22 +51,14 @@
                     </div>
                 </div>                    
             </div>
-
-
         </div>
-        <div class="bottom_left_box">
-
-
-        </div>
+        <div class="bottom_left_box"></div>
     </div> 
 
     <div class="left_box">
-        <div class="top_left_box">
-        </div>
+        <div class="top_left_box"></div>
         <div class="center_left_box">
             <div class="box_title"><span> সাইট </span>ভিজিটর</div>
-
-
             <div class="form">
                 <div class="form_row">
                     <div class="flag_information">
@@ -91,18 +70,15 @@
                 </div>                    
             </div>
         </div>
-        <div class="bottom_left_box">
-        </div>
+        <div class="bottom_left_box"></div>
     </div>  
 
     <div class="left_box">
-        <div class="top_left_box">
+        <div class="top_left_box"></div>
+        <div class="center_left_box">
+            <div style="margin-left: 28px;" class="fb-like-box" data-href="http://www.facebook.com/RIPDuniversal" data-width="200" data-show-faces="true" data-header="true" data-stream="false" data-colorscheme="light" data-show-border="true"></div>
         </div>
-        <div class="center_left_box" style="margin-left: 28px;">
-            <div class="fb-like-box" data-href="http://www.facebook.com/RIPDuniversal" data-width="200" data-show-faces="true" data-header="true" data-stream="false" data-colorscheme="light" data-show-border="true"></div>
-        </div>
-        <div class="bottom_left_box">
-        </div>
+        <div class="bottom_left_box"></div>
     </div>  
 
 </div>
