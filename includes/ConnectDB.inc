@@ -13,10 +13,7 @@ $dbpassword = '';
 $dbname = 'ripd_db_comfosys';
  
  
-$_SESSION['DatabaseName'] = $dbname;
-/*if(!isset($_SESSION['DatabaseName'])){
-    $_SESSION['DatabaseName'] = $dbname;
-}*/
+
 // Make sure it IS global, regardless of our context
 if (!isset($mysqlport)){
 	$mysqlport = 3306;
@@ -32,13 +29,13 @@ mysql_set_charset('utf8', $db);
 
 
 if ( !$db ) {
-        include_once 'header.php';
+        include_once 'dbConnectionErrorHeader.php';
         echo '<div class="columnSld" style="height: 150px; ">';
-        echo '<div style="width: 99%; text-align: center; margin-left: 18%; background-color: #FC7891; padding-left: 5%; color: #222222; font-size: 16px; border: 1px solid #212121">';
+        echo '<div style="width: 70%; text-align: center; margin-left: 15%; background-color: #FC7891; color: #222222; font-size: 16px; border: 1px solid #212121">';
 	echo '<br />' . _('Sorry, We are unable to connect with database server');
 	session_unset();
 	session_destroy();
-	echo '<br />' . _('Please click ') . '<a href="login.php">' . _(' here ') . '</a>' ._(' to try logging in again').'';
+	echo '<br />' . _('Please try again in later').'';
         echo '</div>';
         include_once 'footer.php';
         exit;

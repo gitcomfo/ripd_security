@@ -1,8 +1,6 @@
 <?php 
 error_reporting(0);
 session_start();
-include_once 'ConnectDB.inc';
-include_once 'connectionPDO.php';
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -60,9 +58,7 @@ include_once 'connectionPDO.php';
                             {
                             $user_name = $_SESSION['acc_holder_name'];
                             $logged_in_office_name = $_SESSION['loggedInOfficeName'];
-                            if($logged_in_office_name!='customerOffice'){
                             echo '<li><a href="main_account_management.php">'.$_SESSION['loggedInOfficeName'].'</a></li>';
-                            }
                             echo '<li><a href="account_management.php">'.$user_name.'</a></li>';                        
                             echo '<li><a href="logout.php">লগ আউট</a></li>';
                             }
@@ -74,5 +70,5 @@ include_once 'connectionPDO.php';
                     </ul>
                 </div>
             </div> 
-<div id="main_content">
-                
+<div id="main_content">               
+
