@@ -95,9 +95,9 @@ include_once 'includes/columnLeftIndexHome.php';
                 <div class="column2">
                     <div class="main_text_box">
                         <?php
-                             echo "<pre>";
-                             print_r($_SESSION);
-                             echo '</pre>';
+                             //echo "<pre>";
+                             //print_r($_SESSION);
+                             //echo '</pre>';
                         ?>
                         <h1>আমাদের সম্পর্কে</h1>
                         <h2>রিপ্‌ড এর ভুবনে আপনাকে স্বাগতম!</h2>

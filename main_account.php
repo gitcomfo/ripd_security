@@ -1,8 +1,12 @@
 <?php
-include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
-include_once 'includes/makeAccountNumbers.php';
+/*
+ * This page is commonly (internally) used to create proprietor, employee, customer. So this page not need to give any security
+ */
 error_reporting(0);
+include 'includes/header.php';
+include_once 'includes/MiscFunctions.php';
+include 'includes/makeAccountNumbers.php';
+
 function showPowerHeads()
 {
     echo  "<option value=0> -সিলেক্ট করুন- </option>";
@@ -61,7 +65,7 @@ if($_POST['submit'])
                     
                     $empinfo_ins = mysql_query("INSERT into $dbname.employee_information (Employee_idEmployee) VALUES ($employee_id)");
                     $employee_info_id = mysql_insert_id();
-                    if($empinfo_ins == 1) {$pass_message = "create_employee_account.php?empInfoID=".$employee_info_id; }
+                    if($empinfo_ins == 1) {$pass_message = "create_employee_account_inner.php?empInfoID=".$employee_info_id; }
                 }
         else if($account_type == "customer")
                 {
@@ -79,7 +83,7 @@ if($_POST['submit'])
                     mysql_query("INSERT into $dbname.customer_account (opening_pin_no, referer_id, Account_type_idAccount_type, Designation_idDesignation, cfs_user_idUser)
                                             VALUES ('$pin_number', $db_referid, $db_accounttypeID, 1, $cfs_user_id )") or exit(mysql_error());
                     $cust_acc_id= mysql_insert_id();
-                    $pass_message = "create_customer_account.php?custACid=".$cust_acc_id;
+                    $pass_message = "create_customer_account_inner.php?custACid=".$cust_acc_id;
                 }
        else if($account_type == "proprietor")
                 {
@@ -91,7 +95,7 @@ if($_POST['submit'])
                     $sql_pro_ins= mysql_query("INSERT INTO proprietor_account (powerStore_name, powerStore_accountNumber, Office_idOffice, cfs_user_idUser)
                                             VALUES ('$db_pwrHeadname', '$pwrHeadAccNo',$db_pwrOfficeID,  $cfs_user_id)");
                     $propreitor_account_id = mysql_insert_id();
-                    if($sql_pro_ins == 1){$pass_message = "create_proprietor_account.php?proID=".$propreitor_account_id;}                     
+                    if($sql_pro_ins == 1){$pass_message = "create_proprietor_account_inner.php?proID=".$propreitor_account_id;}                     
                 }
         }
 
@@ -425,5 +429,5 @@ xmlhttp.send();
     </div>      
 </div> 
 <?php
-include 'includes/footer.php';
+include_once 'includes/footer.php';
 ?>
