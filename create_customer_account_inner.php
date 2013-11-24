@@ -2,7 +2,6 @@
 error_reporting(0);
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
-
 $custAcid = $_GET['custACid'];
 ?>
 <title>ক্রিয়েট কাস্টমার অ্যাকাউন্ট</title>
@@ -429,7 +428,7 @@ elseif (isset($_POST['submit4'])) {
                                     echo "<option value='$i'>" . $year . "</option>";
                                 }
                                 ?>
-                            </select>
+                            </select><em2> *</em2>
                         </td>			
                     </tr>
                     <tr>
@@ -441,9 +440,9 @@ elseif (isset($_POST['submit4'])) {
                     </tr>                
                     <tr>
                         <td >জাতীয় পরিচয়পত্র নং</td>
-                        <td>:   <input class="box" type="text" id="cust_nationalID_no" name="cust_nationalID_no" /></td>
+                        <td>:   <input class="box" type="text" id="cust_nationalID_no" name="cust_nationalID_no" /><em2> *</em2></td>
                         <td style="width: 100px;" font-weight="bold" > জাতীয় পরিচয়পত্র</td>
-                        <td >:   <input class="box" type="file" id="scanDoc_national_id" name="scanDoc_national_id" style="font-size:10px;"/> </td>
+                        <td >:   <input class="box" type="file" id="scanDoc_national_id" name="scanDoc_national_id" style="font-size:10px;"/><em2> *</em2> </td>
                     </tr>
                     <tr>
                         <td >পাসপোর্ট আইডি নং</td>
@@ -453,15 +452,15 @@ elseif (isset($_POST['submit4'])) {
                     </tr>      
                     <tr>  
                         <td font-weight="bold" >ছবি </td>
-                        <td>:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/></td>             
+                        <td>:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/><em2> *</em2></td>             
                     </tr>
                     <tr>  
                         <td font-weight="bold" >স্বাক্ষর</td>
-                        <td >:   <input class="box" type="file" id="scanDoc_signature" name="scanDoc_signature" style="font-size:10px;"/> </td>                  
+                        <td >:   <input class="box" type="file" id="scanDoc_signature" name="scanDoc_signature" style="font-size:10px;"/><em2> *</em2> </td>                  
                     </tr>
                     <tr>	        
                         <td font-weight="bold" > টিপসই</td>
-                        <td >:   <input class="box" type="file" id="scanDoc_finger_print" name="scanDoc_finger_print" style="font-size:10px;"/> </td>       
+                        <td >:   <input class="box" type="file" id="scanDoc_finger_print" name="scanDoc_finger_print" style="font-size:10px;"/><em2> *</em2> </td>       
                     </tr>
                     <tr>
                         <td colspan="4" ><hr /></td>

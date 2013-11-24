@@ -5,10 +5,13 @@ function rendomgenerator() // 4 digit + 4 digit random no generator*************
     $str_random_part=""; 
     for($i=0;$i<2;$i++)
         {
-            $str_random_no=(string)mt_rand (0 ,9999 );
-            $str_random= str_pad($str_random_no,4, "0", STR_PAD_LEFT);
+            $str_random_no=(string)mt_rand (0 ,999 );
+            $str_random= str_pad($str_random_no,3, "0", STR_PAD_LEFT);
             $str_random_part = $str_random_part."-".$str_random;
         }
+        $str_random_no2=(string)mt_rand (0 ,9999 );
+        $str_random2 = str_pad($str_random_no2,4, "0", STR_PAD_LEFT);
+        $str_random_part = $str_random_part."-".$str_random2;
         return $str_random_part;
 }
 

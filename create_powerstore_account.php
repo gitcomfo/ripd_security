@@ -295,7 +295,7 @@ xmlhttp.send();
                 <tr><td colspan="2" style="text-align: center;color: green;font-size: 16px;"><?php if($msg != "") echo $msg;?></td></tr>
                      <tr>
                         <td>পাওয়ারস্টোরের নাম</td>
-                        <td>:    <input  class ="textfield" type="text" id="office_name" name="office_name" /></td>
+                        <td>:    <input  class ="textfield" type="text" id="office_name" name="office_name" /><em2> *</em2></td>
                     </tr>
                      <tr>
                         <td>পাওয়ারস্টোরের অ্যাকাউন্ট</td>
@@ -358,11 +358,11 @@ xmlhttp.send();
                         }
                         
                         ?>
-                                  </select>
+                                  </select><em2> *</em2>
                           </td></tr>
                            <tr>
                         <td>পাওয়ারস্টোরের ঠিকানা</td>
-                        <td>:    <input  class ="textfield" type="text" id="office_address_" name="office_address" /></td>
+                        <td>:    <input  class ="textfield" type="text" id="office_address_" name="office_address" /><em2> *</em2></td>
                     </tr>
                            <tr>
                         <td>পাওয়ারস্টোরের নাম্বার</td>
@@ -388,7 +388,7 @@ xmlhttp.send();
                     </tr>
                     <tr>
                         <td >ফ্লোর নাম্বার</td>
-                        <td>:   <input class="textfield" type="text" id="floor_number" name="floor_number" /> </td>
+                        <td>:   <input class="textfield" type="text" id="floor_number" name="floor_number" /><em2> *</em2> </td>
                     </tr>   
                     <tr>
                         <td colspan="2" ><hr /></td>
@@ -399,7 +399,7 @@ xmlhttp.send();
                     <tr>
                         <td  >ভাড়া</td>
                         <td >:   <input class="textfield" style="text-align: right" type="text" id="office_rent1" name="office_rent1" onkeypress="return numbersonly(event)" />
-                            . <input class="boxTK" type="text" maxlength="2"  id="office_rent2" name="office_rent2"  onkeypress=" return numbersonly(event)"/>TK <em> (ইংরেজিতে লিখুন)</em></td>
+                            . <input class="boxTK" type="text" maxlength="2"  id="office_rent2" name="office_rent2"  onkeypress=" return numbersonly(event)"/>TK <em> (ইংরেজিতে লিখুন)</em><em2> *</em2></td>
                         
                     </tr>
                     <tr>
@@ -421,7 +421,7 @@ xmlhttp.send();
                     <tr>
                         <td >অগ্রিম</td>
                         <td >:   <input class="textfield" style="text-align: right" type="text" id="advanced_payment1" name="advanced_payment1"  onkeypress="return numbersonly(event)" />
-                            . <input class="boxTK" type="text" maxlength="2" id="advanced_payment2" name="advanced_payment2" onkeypress="return numbersonly(event)" />TK<em> (ইংরেজিতে লিখুন)</em></td>
+                            . <input class="boxTK" type="text" maxlength="2" id="advanced_payment2" name="advanced_payment2" onkeypress="return numbersonly(event)" />TK<em> (ইংরেজিতে লিখুন)</em><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td  >ডেকোরেশন</td>
@@ -457,7 +457,7 @@ xmlhttp.send();
                     </tr>
                     <tr>
                         <td >মালিকের নাম</td>
-                        <td >:   <input class="textfield" type="text" id="owner_Name" name="owner_Name" /></td>
+                        <td >:   <input class="textfield" type="text" id="owner_Name" name="owner_Name" /><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td  >বাসার ঠিকানা</td>
@@ -465,7 +465,7 @@ xmlhttp.send();
                     </tr>
                     <tr>
                         <td >মোবাইল নাম্বার</td>
-                        <td>:   <input class="textfield" type="text" id="mobile_number" name="mobile_number" onkeypress=' return numbersonly(event)'/> <em> (ইংরেজিতে লিখুন)</em></td>
+                        <td>:   <input class="textfield" type="text" id="mobile_number" name="mobile_number" onkeypress=' return numbersonly(event)'/> <em> (ইংরেজিতে লিখুন)</em><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td >ই-মেইল</td>

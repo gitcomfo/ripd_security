@@ -321,7 +321,7 @@ mysql_query("START TRANSACTION");
                     </td>			
                     </tr>                     
                     <td >জাতীয় পরিচয়পত্র নং</td>
-                    <td>:  <input class="box" type="text" id="employee_national_ID" name="employee_national_ID" /></td>			
+                    <td>:  <input class="box" type="text" id="employee_national_ID" name="employee_national_ID" /><em2> *</em2></td>			
                     </tr>
                     <tr>
                         <td >পাসপোর্ট আইডি নং</td>
@@ -401,9 +401,9 @@ mysql_query("START TRANSACTION");
                     </tr>
                     <tr>
                         <td >পোষ্ট অফিস</td>
-                        <td>: <span id="pidd"></span></td> 
+                        <td>: <span id="pidd"></span><em2> *</em2></td> 
                         <td >পোষ্ট অফিস</td>
-                        <td>: <span id="pidd2"></span></td> 
+                        <td>: <span id="pidd2"></span><em2> *</em2></td> 
                     </tr>
                     <tr>
                         <td>গ্রাম / পাড়া / প্রোজেক্ট</td>
@@ -521,9 +521,9 @@ mysql_query("START TRANSACTION");
                     </tr>                        
                     <tr>
                         <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd5"></span></td>      
+                        <td>: <span id="tidd5"></span><em2> *</em2></td>      
                         <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd6"></span></td>
+                        <td>: <span id="tidd6"></span><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td >পোষ্ট অফিস</td>

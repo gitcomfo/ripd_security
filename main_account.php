@@ -6,6 +6,7 @@ error_reporting(0);
 include 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 include 'includes/makeAccountNumbers.php';
+include 'includes/checkAccountNo.php';
 
 function showPowerHeads()
 {
@@ -26,20 +27,21 @@ if($_POST['submit'])
         $account_email = $_POST['email'];
         $account_mobile = $_POST['mobile'];
         $account_type = $_POST['account_type'];
+        $account_number1 = checkAccountNo($account_number);
         if($account_type == "proprietor")
         {
              mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, cfs_account_status, user_type)
-                                                                        VALUES ('$user_username', '$user_password', '0', '$account_name', '$account_number', NOW(), '$account_mobile', '$account_email', 'active', 'owner')") or exit(mysql_error()." sorry");
+                                                                        VALUES ('$user_username', '$user_password', '0', '$account_name', '$account_number1', NOW(), '$account_mobile', '$account_email', 'active', 'owner')") or exit(mysql_error()." sorry");
         }
         elseif($account_type == "employee")
         {
             $p_employee_type = $_POST['employee_type']; 
             mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, cfs_account_status, user_type)
-                                                                        VALUES ('$user_username', '$user_password', '0', '$account_name', '$account_number', NOW(), '$account_mobile', '$account_email', 'active', '$p_employee_type')") or exit(mysql_error()." sorry");
+                                                                        VALUES ('$user_username', '$user_password', '0', '$account_name', '$account_number1', NOW(), '$account_mobile', '$account_email', 'active', '$p_employee_type')") or exit(mysql_error()." sorry");
         }
  else {
      mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, cfs_account_status, user_type)
-                                                                        VALUES ('$user_username', '$user_password', '0', '$account_name', '$account_number', NOW(), '$account_mobile', '$account_email', 'active', 'customer')") or exit(mysql_error()." sorry");
+                                                                        VALUES ('$user_username', '$user_password', '0', '$account_name', '$account_number1', NOW(), '$account_mobile', '$account_email', 'active', 'customer')") or exit(mysql_error()." sorry");
  }
        
         $cfs_user_id = mysql_insert_id();
@@ -299,6 +301,35 @@ xmlhttp.onreadystatechange=function()
 xmlhttp.open("GET","includes/getGradeForEmployeeType.php?onsid="+onsid+"&step=4",true);
 xmlhttp.send();
 }
+function checkUserName(uname)
+{
+ if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("usernamecheck").innerHTML=xmlhttp.responseText;
+    document.getElementById('save').disabled= false;
+    }
+  }
+xmlhttp.open("GET","includes/checkUserName.php?strkey="+uname,true);
+xmlhttp.send();
+}
+function beforeSave()
+        {
+            if(document.getElementById('usernamecheck').innerHTML != "") 
+                {
+                document.getElementById('save').disabled= true;
+                }
+                else {document.getElementById('save').disabled= false;}
+        }
 </script>
 <div class="column6">
     <div class="main_text_box">
@@ -316,7 +347,7 @@ xmlhttp.send();
                     <tr><th colspan='4' style='text-align: center;'>$showAccountType মূল তথ্য</th></tr>  
                     <tr>
                         <td >$showAccountType নাম</td>
-                        <td>:   <input class='box' type='text' id='name' name='name'/></td>			
+                        <td>:   <input class='box' type='text' id='name' name='name'/><em2> *</em2></td>			
                     </tr>
                     <tr>
                         <td >একাউন্ট নাম্বার</td>
@@ -328,23 +359,23 @@ xmlhttp.send();
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
-                        <td>:   <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' /> <em>ইংরেজিতে লিখুন</em></td>		
+                        <td>:   <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' /><em2> *</em2> <em>ইংরেজিতে লিখুন</em></td>		
                     </tr>";
                     if($input == "customer")
                             {
                             echo "<tr>
                                 <td >পিন নাম্বার</td>
-                                <td>:   <input class='box' type='text' id='pin_num' name='pin_num' /> <em>ইংরেজিতে লিখুন</em></td>		
+                                <td>:   <input class='box' type='text' id='pin_num' name='pin_num' /><em2> *</em2> <em>ইংরেজিতে লিখুন</em></td>		
                             </tr>";
                             }
                     echo "
                    <tr>
                         <td>ইউজারের নাম</td>
-                      <td>:   <input class='box' type='text' id='user_username' name='user_username' /> <em>ইংরেজিতে লিখুন</em></td>
+                      <td>:   <input class='box' type='text' id='user_username' name='user_username' onblur='checkUserName(this.value)'/><em2> *</em2> <em>ইংরেজিতে লিখুন</em> <span style='color:red;' id='usernamecheck'></td>
                     </tr>   
                     <tr>
                         <td>পাসওয়ার্ড</td>
-                       <td>:   <input class='box' type='password' id='user_password' name='user_password' /> <em>ইংরেজিতে লিখুন</em></td>
+                       <td>:   <input class='box' type='password' id='user_password' name='user_password' /><em2> *</em2> <em>ইংরেজিতে লিখুন</em></td>
                     </tr>
                     <tr>
                         <td>কনফার্ম পাসওয়ার্ড</td>
@@ -362,15 +393,15 @@ xmlhttp.send();
                                 <option value='presenter'>প্রেজেন্টার</option>
                                 <option value='trainer'>ট্রেইনার</option>
                                 <option value='employee'>এমপ্লয়ী</option> 
-                            </select></td>
+                            </select><em2> *</em2></td>
                     </tr>   
                     <tr>
                         <td>গ্রেড নির্বাচন</td>
-                       <td id='showGrade'>: </td>
+                       <td id='showGrade'>: <em2> *</em2></td>
                     </tr>
                     <tr>
                         <td>সেলারি</td>
-                       <td>:   <input class='box' type='text' id='salary' name='salary' onkeypress='return checkIt(event)' onkeyup='checkSalaryRange(this.value);'/> টাকা (সেলারি রেঞ্জঃ <span id='SalaryRange' style='color:red;'></span>)</td>
+                       <td>:   <input class='box' type='text' id='salary' name='salary' onkeypress='return checkIt(event)' onkeyup='checkSalaryRange(this.value);'/><em2> *</em2> টাকা (সেলারি রেঞ্জঃ <span id='SalaryRange' style='color:red;'></span>)</td>
                     </tr>
                     <tr>
                         <td colspan='2' id='showerror' style='text-align:center;color:red;'></td>
@@ -382,13 +413,13 @@ xmlhttp.send();
                     </tr>
                      <tr>
                         <td>অফিস / সেলস স্টোর / পাওয়ার স্টোর</td>
-                        <td>: <input class='box' type='text' id='officesearch' name='officesearch' onkeyup='searchOSP(this.value)'/>
+                        <td>: <input class='box' type='text' id='officesearch' name='officesearch' onkeyup='searchOSP(this.value)'/><em2> *</em2>
                         <div id='offResult'></div><input type='hidden' name='ospID' id='ospID'/></br>
                         </td>            
                     </tr>
                     <tr>
                         <td>দায়িত্ব / পোস্ট</td>  
-                        <td id='getPost'>
+                        <td id='getPost'><em2> *</em2>
                         </td>            
                     </tr>
                     <tr id='postingbox'  style='visibility: hidden;'>
@@ -407,7 +438,7 @@ xmlhttp.send();
                         <td>পাওয়ার স্টোরের নাম</td>
                         <td >:  <select  class='box' name='powerStore_name' style='height:20px;'onchange='showAccountNo(this.value)'>";
                                 showPowerHeads();
-                         echo "</select>	
+                         echo "</select><em2> *</em2>	
                         </td>
                         <td>পাওয়ার স্টোরের একাউন্ট নং </td>
                         <td>:  <input class='box' type='text' readonly='' id='powerStore_accountNumber' name='powerStore_accountNumber' /></td>	
@@ -419,7 +450,7 @@ xmlhttp.send();
                             {
                             echo "<a href='$pass_message'>পরবর্তী ধাপে যেতে ক্লিক করুন</a>";
                             }
-                    else echo "<input class='btn' style ='font-size: 12px;' type='submit' name='submit' value='সেভ করুন' />";
+                    else echo "<input class='btn' style ='font-size: 12px;' type='submit' name='submit' id='save' value='সেভ করুন' disabled onclick='beforeSave();'/>";
                     echo "</td>                           
                     </tr>             
                 </table>";        

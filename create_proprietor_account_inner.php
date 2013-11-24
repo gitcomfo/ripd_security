@@ -276,19 +276,19 @@ elseif (isset($_POST['submit4'])) {
                         <td>স্বত্বাধিকারীর নাম</td>
                         <td>:  <input  class="box" type="text" id="prop_name" name="prop_name" /><input type="hidden" name="proprietorID" value="<?php echo $proprietorID;?>"/></td>   
                         <td font-weight="bold" >ছবি </td>
-                        <td>:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/></td>               
+                        <td>:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/><<em2> *</em2>/td>               
                     </tr>
                     <tr>
                         <td >বাবার নাম </td>
                         <td>:  <input class="box" type="text" id="prop_father_name" name="prop_father_name" /></td>	
                         <td font-weight="bold" >স্বাক্ষর</td>
-                        <td >:   <input class="box" type="file" id="scanDoc_signature" name="scanDoc_signature" style="font-size:10px;"/> </td> 
+                        <td >:   <input class="box" type="file" id="scanDoc_signature" name="scanDoc_signature" style="font-size:10px;"/> <em2> *</em2></td> 
                     </tr>
                     <tr>
                         <td >মার নাম </td>
                         <td>:  <input class="box" type="text" id="prop_motherName" name="prop_motherName"/></td>
                         <td font-weight="bold" > টিপসই</td>
-                        <td >:   <input class="box" type="file" id="scanDoc_finger_print" name="scanDoc_finger_print" style="font-size:10px;"/> </td> 
+                        <td >:   <input class="box" type="file" id="scanDoc_finger_print" name="scanDoc_finger_print" style="font-size:10px;"/><em2> *</em2> </td> 
                     </tr>
                     <tr>
                         <td >দম্পতির নাম  </td>
@@ -346,7 +346,7 @@ elseif (isset($_POST['submit4'])) {
                         </td>			
                     </tr>             
                     <td >জাতীয় পরিচয়পত্র নং</td>
-                    <td>:  <input class="box" type="text" id="prop_nationalID_no" name="prop_nationalID_no" /></td>			
+                    <td>:  <input class="box" type="text" id="prop_nationalID_no" name="prop_nationalID_no" /><em2> *</em2></td>			
                     </tr>
                     <tr>
                         <td >পাসপোর্ট আইডি নং</td>
@@ -421,9 +421,9 @@ elseif (isset($_POST['submit4'])) {
                     </tr>                        
                     <tr>
                         <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd"></span></td>      
+                        <td>: <span id="tidd"></span><em2> *</em2></td>      
                         <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd2"></span></td>
+                        <td>: <span id="tidd2"></span><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td >পোষ্ট অফিস</td>
