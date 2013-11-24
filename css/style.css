@@ -367,6 +367,13 @@ way to fit your requirements.
     float:left;
     padding-bottom:10px;
 }
+.login_left_box{
+    width:257px;
+    height:auto;
+    float:left;
+    padding-bottom:10px;
+    background:url(../images/center_box_bg.gif) repeat center;
+}
 .top_left_box{
     width:257px;
     height:10px;

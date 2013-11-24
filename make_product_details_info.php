@@ -1,5 +1,5 @@
 <?php
-include 'includes/session.inc';
+include_once 'includes/session.inc';
 include_once 'includes/header.php';
 
 $msg = "";

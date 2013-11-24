@@ -27,7 +27,7 @@ include_once 'connectionPDO.php';
                         <li><a>কোম্পানি</a>
                             <ul>
                                 <li><a href="about_company.php">এবাউট কোম্পানী</a></li>
-                                <li><a href="product_info.php" title="">পণ্য-তথ্য</a></li>
+                                <li><a href="product_info.php" title="">পণ্যের তথ্য</a></li>
                                 <li><a href="patent.php" title="">প্যাটেন্ট</a></li>
                                 <li><a href="programProfile.php" title="">অনুষ্ঠানসূচি</a></li>
                                 <li><a href="awards.php" title="">এওয়ার্ড</a></li>
@@ -59,7 +59,10 @@ include_once 'connectionPDO.php';
                         if(isset($_SESSION['UserID']) && isset($_SESSION['acc_holder_name']))
                             {
                             $user_name = $_SESSION['acc_holder_name'];
-                            echo '<li><a href="main_account_management.php">প্রধান কার্যক্রম</a></li>';
+                            $logged_in_office_name = $_SESSION['loggedInOfficeName'];
+                            if($logged_in_office_name!='customerOffice'){
+                            echo '<li><a href="main_account_management.php">'.$_SESSION['loggedInOfficeName'].'</a></li>';
+                            }
                             echo '<li><a href="account_management.php">'.$user_name.'</a></li>';                        
                             echo '<li><a href="logout.php">লগ আউট</a></li>';
                             }

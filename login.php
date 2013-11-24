@@ -77,8 +77,7 @@ if (isset($_POST['submit'])) {
 
 <div style="margin-top: 10%; margin-left: 20%;margin-bottom: 10%;">
 
-    <div class="left_box" style="width: 600px;">
-        <div class="top_left_box"></div>
+    <div class="login_left_box" style="width: 600px;">
         <div class="center_left_box" style="width: 400px;">
            
             <div class="box_title" style="text-align: center; margin-left: 40%;">
@@ -113,7 +112,6 @@ if (isset($_POST['submit'])) {
                 </form>
             </div>
         </div>
-        <div class="bottom_left_box"></div>
     </div>
 </div>
 <?php

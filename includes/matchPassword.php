@@ -10,7 +10,7 @@ $cfs_query = mysql_query("SELECT * FROM cfs_user WHERE user_name= '$p_user_name'
 $y = mysql_num_rows($cfs_query);
 if($y <= 0)
 {
-    echo "দুঃখিত, অ্যাকাউন্ট নং এবং পাসওয়ার্ড ম্যাচ  হয়নি";
+    echo "দুঃখিত, আপনার পাসওয়ার্ডটি ম্যাচ হয়নি";
 }
  else {
     echo "OK";
