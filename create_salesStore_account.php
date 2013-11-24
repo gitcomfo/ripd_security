@@ -21,7 +21,7 @@ if(isset($_POST['submit']))
     else {$powrid = 0; $topparent_id = 0;}
     $officeID = $_POST['parentOff_id'];
    $thana = $_POST['thana_id'];
-    
+    mysql_query("START TRANSACTION");
    $sql= "INSERT INTO ". $dbname .".`sales_store` (`salesStore_name` ,`salesStore_number` ,`account_number` ,`salesStore_details_address` ,`salesStore_email` ,`office_id`, `powerstore_officeid`,`top_pwr`, `Thana_idThana`) 
             VALUES ( '$name','$sales_no' , '$sales_acc', '$sales_add','$sales_mail', '$officeID', '$powrid', '$topparent_id', '$thana')";
     $reslt=mysql_query($sql) or exit('query failed insert into sales store: '.mysql_error());
@@ -137,12 +137,13 @@ if(isset($_POST['submit']))
      
      $ins_postinons = mysql_query("INSERT INTO post_in_ons (number_of_post, free_post, post_onstype, used_post, post_onsid, Post_idPost)
                                                         VALUES (1, 1, 's_store', 0, $off, 11)");
-     if($ownreslt && $ins_postinons)
+     if($reslt && $sreslt && $ireslt && $oreslt && $ownreslt && $ins_postinons)
      {
+         mysql_query("COMMIT");
          $msg = "সেলসস্টোর তৈরি হয়েছে";
      }
      else
-     {$msg = "দুঃখিত, সেলসস্টোর তৈরি হয়নি";}
+     {mysql_query("ROLLBACK"); $msg = "দুঃখিত, সেলসস্টোর তৈরি হয়নি";}
 }
 ?>
 <title>ক্রিয়েট সেলসস্টোর অ্যাকাউন্ট</title>

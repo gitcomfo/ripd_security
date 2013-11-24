@@ -38,7 +38,9 @@ if(isset($_POST['submit0']))
       elseif (($selected_type == 'pwr') && $topparent_id != 0) { $topparent_id = $topparent_id;}
     $thana = $_POST['thana_id'];
     
-   $sql= "INSERT INTO ". $dbname .".`office` (`office_type` ,`office_selection`, `parent_id`, `top_parent`, `office_name` ,`office_number` ,`account_number` ,`branch_name` ,`office_email` ,`Thana_idThana`,`office_details_address` ) 
+    mysql_query("START TRANSACTION");
+   
+    $sql= "INSERT INTO ". $dbname .".`office` (`office_type` ,`office_selection`, `parent_id`, `top_parent`, `office_name` ,`office_number` ,`account_number` ,`branch_name` ,`office_email` ,`Thana_idThana`,`office_details_address` ) 
             VALUES ( '$off_type','$selected_type', '$parent_id','$topparent_id',  '$name','$off_no' , '$off_acc', '$br_name','$mail' , '$thana', '$off_add')";
     $reslt=mysql_query($sql);
     $off = mysql_insert_id();
@@ -88,51 +90,57 @@ if(isset($_POST['submit0']))
         $extension = end(explode(".", $_FILES["image"]["name"]));
         $image_name = $off_acc."_".$_FILES["image"]["name"];
         $image_path = "pic/" . $image_name;
-        if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
-                {
-                    move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
-                } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
+        if( $_FILES["image"]["name"] != ""){
+            if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
+                    {
+                        move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
+                    } 
+            else 
+                    {
+                    echo "Invalid file format.";
+                    }
+        }
                 
                   $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["signature"]["name"]));
         $sign_name = $off_acc."_". $_FILES["signature"]["name"];
         $sing_path = "sign/" . $sign_name;
-        if (($_FILES["signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
-                {
-                        move_uploaded_file($_FILES["signature"]["tmp_name"], "sign/" . $sign_name);
-                 } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
+        if( $_FILES["signature"]["name"] != ""){
+            if (($_FILES["signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
+                    {
+                            move_uploaded_file($_FILES["signature"]["tmp_name"], "sign/" . $sign_name);
+                     } 
+            else 
+                    {echo "Invalid file format.";}
+        }
                 
                 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["owner_finger_print"]["name"]));
         $finger_name = $off_acc."_".$_FILES["owner_finger_print"]["name"];
         $finger_path = "fingerprints/".$finger_name;
-        if (($_FILES["owner_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
-                {
-                        move_uploaded_file($_FILES["owner_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
-                } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
+        if( $_FILES["owner_finger_print"]["name"] != ""){
+            if (($_FILES["owner_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
+                    {
+                            move_uploaded_file($_FILES["owner_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
+                    } 
+            else 
+                    {
+                    echo "Invalid file format.";
+                    }
+        }
                 
                 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG","pdf");
         $extension = end(explode(".", $_FILES["scanDoc"]["name"]));
          $scan_name = $off_acc."_".$_FILES["scanDoc"]["name"];
           $scan_path = "scaned/".$scan_name;
-        if (($_FILES["scanDoc"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
-                { move_uploaded_file($_FILES["scanDoc"]["tmp_name"], "scaned/" . $scan_name); }
-        else 
-                {
-                echo "Invalid file format.";
-                }
+          if( $_FILES["scanDoc"]["name"] != ""){
+            if (($_FILES["scanDoc"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
+                    { move_uploaded_file($_FILES["scanDoc"]["tmp_name"], "scaned/" . $scan_name); }
+            else 
+                    {
+                    echo "Invalid file format.";
+                    }
+          }
      
      $own_name = $_POST['owner_Name'];          
      $own_add = $_POST['owner_address'];
@@ -146,12 +154,16 @@ if(isset($_POST['submit0']))
      $ins_postinons = mysql_query("INSERT INTO post_in_ons (number_of_post, free_post, post_onstype, used_post, post_onsid, Post_idPost)
                                                         VALUES (1, 1, 'office', 0, $off, 11)");
      
-     if($ownreslt && $ins_postinons)
+     if($reslt && $sreslt && $ireslt && $oreslt && $ownreslt && $ins_postinons)
      {
+         mysql_query("COMMIT");
          $msg = "অফিস তৈরি হয়েছে";
      }
      else
-     {$msg = "দুঃখিত, অফিস তৈরি হয়নি";}
+     {
+          mysql_query("ROLLBACK");
+          $msg = "দুঃখিত, অফিস তৈরি হয়নি";
+     }
    }
 
 ?>

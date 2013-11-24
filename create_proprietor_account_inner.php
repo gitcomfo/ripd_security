@@ -83,6 +83,7 @@ if (isset($_POST['submit1'])) {
     } else {
         echo "Invalid file format.";
     }
+    mysql_query("START TRANSACTION");
     $sql_update_proprietor = mysql_query("UPDATE $dbname.proprietor_account SET prop_father_name='$prop_father_name', prop_motherName='$prop_motherName', prop_spouseName='$prop_spouseName', 
                                                         prop_occupation='$prop_occupation', prop_religion='$prop_religion', prop_natonality='$prop_natonality', prop_nationalID_no='$prop_nationalID_no', 
                                                         prop_passportID_no='$prop_passportID_no', prop_date_of_birth='$dob', prop_birth_certificate_no='$prop_birth_certificate_no',  
@@ -114,9 +115,12 @@ if (isset($_POST['submit1'])) {
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
                                      VALUES ('Permanent', '$pp_house', '$pp_house_no', '$pp_road', 'pwr', '$pp_post_code','$pp_Thana_idThana', '$pp_Post_idPost', '$pp_Village_idVillage', '$proprietorTableID')");
 
-    if ($sql_update_proprietor || $sql_p_insert_current_address || $sql_pp_insert_permanent_address) {
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+    if ($sql_update_proprietor && $sql_p_insert_current_address && $sql_pp_insert_permanent_address) 
+        {
+            mysql_query("COMMIT");
+            $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+        mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
 }elseif (isset($_POST['submit2'])) {
@@ -137,7 +141,7 @@ if (isset($_POST['submit1'])) {
     } else {
         echo "Invalid file format.";
     }
-
+mysql_query("START TRANSACTION");
     $sql_nominee = mysql_query("INSERT INTO $dbname.nominee(nominee_name, nominee_relation, nominee_mobile,
                                        nominee_email, nominee_national_ID, nominee_age, nominee_passport_ID, nominee_picture,cep_type, cep_nominee_id) 
                                        VALUES('$nominee_name','$nominee_relation','$nominee_mobile','$nominee_email','$nominee_national_ID',
@@ -171,9 +175,11 @@ if (isset($_POST['submit1'])) {
                                     (address_type, house, house_no, road, address_whom,post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
                                      VALUES ('Permanent', '$np_house', '$np_house_no','$np_road', 'nmn',  '$np_post_code','$np_Thana_idThana','$np_Post_idPost', '$np_Village_idVillage','$proprietorID')");
 
-    if ($sql_nominee || $sql_n_insert_current_address || $sql_np_insert_permanent_address) {
+    if ($sql_nominee && $sql_n_insert_current_address && $sql_np_insert_permanent_address) {
+        mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+        mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
 } elseif (isset($_POST['submit3'])) {
@@ -184,6 +190,7 @@ if (isset($_POST['submit1'])) {
     $e_board = $_POST['e_board'];
     $e_gpa = $_POST['e_gpa'];
     $a = count($e_ex_name);
+    mysql_query("START TRANSACTION");
     for ($i = 0; $i < $a; $i++) {
         $sql_insert_emp_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) VALUES ('$e_ex_name[$i]', '$e_pass_year[$i]','$e_institute[$i]','$e_board[$i]','$e_gpa[$i]','pwr','$proprietorID');";
         $emp_edu = mysql_query($sql_insert_emp_edu) or exit('query failed: ' . mysql_error());
@@ -202,12 +209,15 @@ if (isset($_POST['submit1'])) {
         $sql_insert_nom_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) VALUES ('$n_ex_name[$i]', '$n_pass_year[$i]','$n_institute[$i]','$n_board[$i]','$n_gpa[$i]','nmn','$nomineeID');";
         $nom_edu = mysql_query($sql_insert_nom_edu) or exit('query failed: ' . mysql_error());
     }
-    if ($emp_edu || $nom_edu) {
+    if ($emp_edu && $nom_edu) {
+        mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+        mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
-}elseif (isset($_POST['submit4'])) {
+}
+elseif (isset($_POST['submit4'])) {
     $pathArray = array();
     for ($i = 1; $i < 12; $i++) {
         $scan_document = "";

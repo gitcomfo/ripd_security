@@ -270,6 +270,7 @@ if (isset($_POST['submit1'])) {
                     echo "Invalid file format.";
                     }
         }
+        mysql_query("START TRANSACTION");
     $sql_update_customer = mysql_query("UPDATE customer_account SET cust_father_name='$cust_father_name', cust_mother_name='$cust_mother_name', cust_spouse_name='$cust_spouse_name', cust_family_member='$cust_family_member', cust_son_no='$cust_son_no', cust_daughter_no='$cust_daughter_no', 
                                                         cust_son_student_no='$cust_son_student_no', cust_daughter_student_no='$cust_daughter_student_no', cust_occupation='$cust_occupation', cust_religion='$cust_religion', cust_nationality='$cust_nationality', cust_nationalID_no='$cust_nationalID_no', 
                                                         cust_passportID_no='$cust_passportID_no', cust_date_of_birth='$dob', birth_certificate_no='$birth_certificate_no', cust_gurdian_name='$cust_gurdian_name', cust_gurdian_relation='$cust_gurdian_relation', cust_gurdian_mobile='$cust_gurdian_mobile', 
@@ -336,8 +337,10 @@ if (isset($_POST['submit1'])) {
                                                                                     WHERE address_type='Permanent'  AND address_whom='cust_prnt' AND adrs_cepng_id='$custAcid'");
     }
     if ($sql_update_customer && $child_male && $child_female && $sql_g_insert_current_address && $sql_gp_insert_present_address) {
+        mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+        mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
 } 
@@ -373,6 +376,7 @@ elseif (isset($_POST['submit2'])) {
                     }
         }
 $sql_sel_nominee = mysql_query("SELECT * FROM nominee WHERE idNominee = $nominee_id");
+mysql_query("START TRANSACTION");
     if(mysql_num_rows($sql_sel_nominee) <1)
     {
         $sql_nominee = mysql_query("INSERT INTO $dbname.nominee(nominee_name, nominee_relation, nominee_mobile,
@@ -422,14 +426,16 @@ $sql_sel_nominee = mysql_query("SELECT * FROM nominee WHERE idNominee = $nominee
                                      VALUES ('Permanent', '$np_house', '$np_house_no','$np_road', 'nmn',  '$np_post_code','$np_Thana_idThana','$np_Post_idPost', '$np_Village_idVillage','$nominee_id')");
     }
     else {
-        $sql_n_insert_permanent_address = mysql_query("UPDATE address 
+        $sql_np_insert_permanent_address = mysql_query("UPDATE address 
                                                                     SET house='$np_house', house_no='$np_house_no', road='$np_road', post_code='$np_post_code',Thana_idThana='$np_Thana_idThana', post_idpost='$np_Post_idPost', village_idvillage='$np_Village_idVillage'  
                                                                     WHERE adrs_cepng_id=$nominee_id AND address_whom='nmn' AND address_type='Permanent' ");
     }    
 
     if ($sql_nominee && $sql_n_insert_current_address && $sql_np_insert_permanent_address) {
+        mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+        mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
 } 
@@ -441,6 +447,7 @@ elseif (isset($_POST['submit3'])) {
     $c_board = $_POST['c_board'];
     $c_gpa = $_POST['c_gpa'];
     $a = count($c_ex_name);
+    mysql_query("START TRANSACTION");
    $del_e_edu = mysql_query("DELETE FROM education WHERE education_type='cust' AND cepn_id=$custAcid");
     for ($i = 0; $i < $a; $i++) {
         $sql_insert_cus_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) 
@@ -463,9 +470,11 @@ elseif (isset($_POST['submit3'])) {
                                                 VALUES ('$n_ex_name[$i]', '$n_pass_year[$i]','$n_institute[$i]','$n_board[$i]','$n_gpa[$i]','nmn','$db_nomID');";
         $nom_edu = mysql_query($sql_insert_nom_edu);
     }
-    if ($cus_edu || $nom_edu) {
+    if ($del_e_edu && $cus_edu && $del_n_edu && $nom_edu) {
+        mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+         mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
 } 
@@ -489,6 +498,7 @@ elseif (isset($_POST['submit4'])) {
    
     //customer address_type=Present
     $sql_sel_present_adrs= mysql_query("SELECT * FROM address WHERE adrs_cepng_id=$custAcid AND address_whom='cust' AND address_type='Present' ");
+    mysql_query("START TRANSACTION");
     if(mysql_num_rows($sql_sel_present_adrs)<1)
     {
     $sql_c_insert_current_address = mysql_query("INSERT INTO $dbname.address 
@@ -508,8 +518,10 @@ elseif (isset($_POST['submit4'])) {
     else {$sql_cp_insert_permanent_address = mysql_query("UPDATE address 
                                                                          SET house='$cp_house', house_no='$cp_house_no', road='$cp_road', post_code='$cp_post_code',Thana_idThana='$cp_Thana_idThana', post_idpost='$cp_Post_idPost', village_idvillage='$cp_Village_idVillage'  WHERE adrs_cepng_id=$custAcid AND address_whom='cust' AND address_type ='Permanent' "); }
     if ($sql_c_insert_current_address && $sql_cp_insert_permanent_address ) {
+        mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+        mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
 }
@@ -518,7 +530,6 @@ elseif (isset($_POST['submit5'])) {
   $p_email = $_POST['email'];
   $p_mobile = $_POST['mobile'];
   $p_cfsid = $_POST['cfsid'];
-
   $sql_update_cfs = mysql_query("UPDATE cfs_user SET account_name='$p_name', email='$p_email', mobile='$p_mobile' WHERE idUser=$p_cfsid ");
     if ($sql_update_cfs) {
         $msg = "তথ্য সংরক্ষিত হয়েছে";

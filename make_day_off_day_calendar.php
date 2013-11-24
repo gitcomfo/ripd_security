@@ -172,7 +172,7 @@ if (isset($_POST['submit'])) {
             }
             echo '<td><a href="?date=' . PREV_MONTH . '"><img src="images/back.ico" height="35px" width="35px"></img></a></td>';
             echo '<td colspan="3" ><b>' . CURRENT_MONTH_A . ' - ' . CURRENT_YEAR . '</b></td>';
-            echo '<td><a href="?date=' . NEXT_MONTH . '"><img src="images/back.ico" height="35px" width="35px" style="-moz-transform: rotate(-180deg);"></img></a></td>';
+            echo '<td><a href="?date=' . NEXT_MONTH . '"><img src="images/back_right.bmp" height="35px" width="35px"></img></a></td>';
             echo '</tr>
                 <tr bgcolor = #06ACE5>';
             echo '<td>বার</td>';

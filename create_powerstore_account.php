@@ -13,7 +13,7 @@ if(isset($_POST['submit0']))
     $mail = $_POST['office_mail'];
     $off_acc = $_POST['office_acc'];
     $thana = $_POST['thana_id'];
-    
+     mysql_query("START TRANSACTION");
    $sql= "INSERT INTO ". $dbname .".`office` (`office_type` ,`office_selection` ,`office_name` ,`office_number` ,`account_number` ,`office_email` ,`Thana_idThana`,`office_details_address`) 
               VALUES ( 'pwr_head', 'pwr','$name' , '$off_no', '$off_acc','$mail' , '$thana', '$off_add')";
     $reslt=mysql_query($sql);
@@ -122,12 +122,16 @@ if(isset($_POST['submit0']))
     
      $ownsql = "INSERT INTO ". $dbname .".`ons_deed` (`owner_name` ,`owner_address` ,`cell_number` ,`owner_email` ,`owner_photo` ,`owner_signature`  ,`expire_date` ,`scan_documents` ,`ons_relation_idons_relation`,`owner_fingerprint`) VALUES  ( '$own_name', '$own_add' , '$own_mbl' , '$own_mail'  , '$image_path' , '$sing_path'  , '$own_valid' , '$scan_path' , '$ons' , '$finger_path');";
      $ownreslt = mysql_query($ownsql) or exit('query failed: '.mysql_error());
-     if($ownreslt == 1)
+    if($reslt && $sreslt && $ireslt && $oreslt && $ownreslt)
      {
+         mysql_query("COMMIT");
          $msg = "পাওয়ার স্টোর তৈরি হয়েছে";
      }
      else
-     {$msg = "দুঃখিত, পাওয়ার স্টোর তৈরি হয়নি";}
+     {
+         mysql_query("ROLLBACK");
+         $msg = "দুঃখিত, পাওয়ার স্টোর তৈরি হয়নি";
+     }
    }
 
 ?>
@@ -282,7 +286,7 @@ xmlhttp.send();
 
 <div class="columnSld" style=" padding-left: 50px;">
     <div class="main_text_box" style="width: 100%;">
-        <div style="padding-left: 110px;"><a href="office_sstore_management.php"><b>ফিরে যান</b></a><a href="" onclick="javasrcipt:window.open('update_office_account.php?pwr=1');return false;" style="padding-left: 510px;"><b>মেইন পাওয়ারস্টোর লিস্ট</b></a></div>
+        <div style="padding-left: 110px;"><a href="office_sstore_management.php"><b>ফিরে যান</b></a><a href="" onclick="javasrcipt:window.open('update_office_account_office_pstore.php?pwr=1');return false;" style="padding-left: 510px;"><b>মেইন পাওয়ারস্টোর লিস্ট</b></a></div>
         <div>           
             <form method="POST" enctype="multipart/form-data" action="" id="off_form" name="off_form">       
                 <table class="formstyle"  style=" width: 70%; ">          
