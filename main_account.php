@@ -73,7 +73,7 @@ if($_POST['submit'])
                 {
                     $pin_number = $_POST['pin_num'];
                     // get referer ID*****************************
-                    $getreferer_sql = mysql_query("SELECT * FROM pin_makingused, sales_summery WHERE idsalessummery = 	sales_summery_idsalessummery AND pin_no = '$pin_number'");
+                    $getreferer_sql = mysql_query("SELECT * FROM pin_makingused, sales_summery WHERE idsalessummery = sales_summery_idsalessummery AND pin_no = '$pin_number'");
                     $refererrow = mysql_fetch_assoc($getreferer_sql);
                     $db_referid = $refererrow['sal_buyerid'];
                     $db_pv= $refererrow['sal_totalpv'];
