@@ -154,16 +154,17 @@ function infoFromThana2()
                         }
                     }
                      else{
-                        $sql_officeTable = "SELECT * from cfs_user,customer_account,address,thana WHERE idThana=Thana_idThana AND address_whom='cust' AND address_type='Present' 
-                                                        AND adrs_cepng_id= idCustomer_account AND cfs_user_idUser=idUser AND user_type='customer' ORDER BY account_name ASC";
+                        $sql_officeTable = "SELECT * from cfs_user,customer_account WHERE  cfs_user_idUser=idUser AND user_type='customer' ORDER BY account_name ASC";
                         $rs = mysql_query($sql_officeTable);
                             while ($row_officeNcontact = mysql_fetch_array($rs)) {
                             $db_Name = $row_officeNcontact['account_name'];
                             $db_accNumber = $row_officeNcontact['account_number'];
                             $db_email = $row_officeNcontact['email'];
                             $db_mobile = $row_officeNcontact['mobile'];
-                            $db_thana = $row_officeNcontact['thana_name'];
                             $db_custID = $row_officeNcontact['idCustomer_account'];
+                            $sql_custAddrss = mysql_query("SELECT * FROM customer_account,address,thana WHERE  idThana=Thana_idThana AND address_whom='cust' AND address_type='Present' AND adrs_cepng_id= $db_custID");
+                            $addressrow = mysql_fetch_assoc($sql_custAddrss);
+                            $db_thana = $addressrow['thana_name'];
                             echo "<tr>";
                             echo "<td>$db_Name</td>";
                             echo "<td>$db_accNumber</td>";

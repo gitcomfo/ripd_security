@@ -75,6 +75,7 @@ elseif (isset($_POST['submit1'])) {
 <script type="text/javascript" src="javascripts/jsDatePick.min.1.3.js"></script>
 <script type="text/javascript" src="javascripts/jquery.js"></script>
 <script type="text/javascript" src="javascripts/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="javascripts/area.js"></script>
 <link rel="stylesheet" type="text/css" href="css/jquery.autocomplete.css"/>
 <style type="text/css">@import "css/bush.css";</style>
 <?php
@@ -160,6 +161,25 @@ function getOffice(str_key) // for searching parent offices
         xmlhttp.open("GET","includes/getParentOffices.php?search="+str_key+"&office=1",true);
         xmlhttp.send();	
 }
+    function infoFromThana()
+    {
+        alert("dfjsklhdfkha");
+        var xmlhttp;
+        if (window.XMLHttpRequest) xmlhttp=new XMLHttpRequest();
+        else xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) 
+                document.getElementById('plist').innerHTML=xmlhttp.responseText;
+        }
+        var division_id, district_id, thana_id,type;
+        division_id = document.getElementById('division_id').value;
+        district_id = document.getElementById('district_id').value;
+        thana_id = document.getElementById('thana_id').value;
+        type = <?php echo $whoType;?>;
+        xmlhttp.open("GET","includes/updatePresentersFromThana.php?dsd="+district_id+"&dvd="+division_id+"&ttid="+thana_id+"&type="+type,true);
+        xmlhttp.send();
+    }
 </script>
 
 <!--*********************Presentation List****************** -->
@@ -386,23 +406,29 @@ if ($_GET['action'] == 'first') {
         <table  class="formstyle" style =" width:78%"id="presentation_fillter">          
             <thead>
                 <tr>
-                    <th colspan="8" ><?php echo $whoinbangla?>-এর  লিস্ট </th>                        
+                    <th colspan="9" ><?php echo $whoinbangla?>-এর  লিস্ট </th>                        
                 </tr>             
                 <tr >
-                    <td colspan="8" style="text-align: right"> খুঁজুন:  <input type="text" class="box"id="search_box_filter" name="search" /></td>
+                    <td colspan="9">
+                     <?php include_once 'includes/areaSearch.php';
+                                    getArea("infoFromThana()");
+                    ?>
+                    <input type="hidden" id="method" value="infoFromThana()">
+                    </td>
                 </tr>
                 <tr id = "table_row_odd">
                     <td><?php echo $whoinbangla?>-এর নাম </td>
                     <td >একাউন্ট নাম্বার</td>
                     <td >গ্রেড</td>
                     <td >সেল নাম্বার</td>
+                    <td >ইমেইল</td>
                     <td> থানা</td>
                     <td>জেলা</td>
                     <td>বিভাগ</td>
                     <td>অপশন</td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="plist">
                 <!--Presenter List Query -->
                 <?php
                 $sql_list = "SELECT * FROM cfs_user, employee, pay_grade  
@@ -413,10 +439,13 @@ if ($_GET['action'] == 'first') {
                     $db_rl_presenter_name = $row_prstn['user_name'];
                     $db_rl_presenter_acc = $row_prstn['account_number'];
                     $db_rl_presenter_mobile = $row_prstn['mobile'];
+                    $db_rl_presenter_email = $row_prstn['email'];
                     $db_rl_presenter_grade = $row_prstn['grade_name'];
                     $db_rl_presenter_id = $row_prstn['idEmployee'];
                     
-                    $sql_sel_adrs = mysql_query("SELECT * FROM address,thana,district,division WHERE address_type= 'Present' AND address_whom= 'emp' AND adrs_cepng_id='$db_rl_presenter_id' AND idThana=Thana_idThana AND idDistrict= District_idDistrict AND idDivision=Division_idDivision ");
+                    $sql_sel_adrs = mysql_query("SELECT * FROM address,thana,district,division 
+                                                                    WHERE address_type= 'Present' AND address_whom= 'emp' AND adrs_cepng_id='$db_rl_presenter_id' 
+                                                                   AND idThana=Thana_idThana AND idDistrict= District_idDistrict AND idDivision=Division_idDivision ");
                     $adrsrow = mysql_fetch_assoc($sql_sel_adrs);
                     $db_rl_presenter_division = $adrsrow['division_name'];
                     $db_rl_presenter_district = $adrsrow['district_name'];
@@ -427,6 +456,7 @@ if ($_GET['action'] == 'first') {
                         <td><?php echo $db_rl_presenter_acc; ?></td>
                         <td><?php echo $db_rl_presenter_grade; ?></td>
                         <td><?php echo $db_rl_presenter_mobile; ?></td>
+                        <td><?php echo $db_rl_presenter_email; ?></td>
                         <td><?php echo $db_rl_presennter_thana; ?></td>
                         <td><?php echo $db_rl_presenter_district; ?></td>
                         <td><?php echo $db_rl_presenter_division; ?></td>
