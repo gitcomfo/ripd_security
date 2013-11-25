@@ -3,7 +3,7 @@ function getArea($dv,$d,$t,$p,$v)
     {
     $dbname = $_SESSION['DatabaseName'];
     ?>            
-    বিভাগ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <select name="division_id" id="division_id" class="box2" onChange="getDistrict(); getThana();getPostOffice();getVillage();" >
+    বিভাগ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <select name="division_id" id="division_id" class="box2" onChange="getDistrict(); getThana();" >
         <option value="all" selected="selected">-বিভাগ-</option>
         <?php
         $division_sql = mysql_query("SELECT * FROM " . $dbname . ".division ORDER BY division_name ASC");
@@ -19,7 +19,7 @@ function getArea($dv,$d,$t,$p,$v)
         ?>
     </select></br>
     জেলা &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp: <span id="did">
-        <select name="district_id"  id="district_id" onChange="getThana();getPostOffice();getVillage();" class="box2" >
+        <select name="district_id"  id="district_id" onChange="getThana();" class="box2" >
             <option value="all">-জেলা-</option>
             <?php
             $district_sql = mysql_query("SELECT * FROM " . $dbname . ".district ORDER BY district_name ASC");
@@ -69,7 +69,7 @@ function getArea($dv,$d,$t,$p,$v)
             ?>
         </select>
     </span></br>
-    গ্রাম &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span id="vid">
+    গ্রাম / পাড়া / প্রোজেক্ট&nbsp;&nbsp;&nbsp;&nbsp;: <span id="vid">
         <select name='vilg_id' id='vilg_id' class="box2" >
             <option value="all">-গ্রাম-</option>
             <?php
@@ -95,7 +95,7 @@ function getArea2($dv,$d,$t,$p,$v)
     {
     $dbname = $_SESSION['DatabaseName'];
     ?>            
-    বিভাগ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <select name="division_id1" id="division_id1" class="box2" onChange="getDistrict1(); getThana1();getPostOffice1();getVillage1();" >
+    বিভাগ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <select name="division_id1" id="division_id1" class="box2" onChange="getDistrict1(); getThana1();" >
         <option value="all" selected="selected">-বিভাগ-</option>
         <?php
         $division_sql = mysql_query("SELECT * FROM " . $dbname . ".division ORDER BY division_name ASC");
@@ -111,7 +111,7 @@ function getArea2($dv,$d,$t,$p,$v)
         ?>
     </select></br>
     জেলা &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp: <span id="did1">
-        <select name="district_id1"  id="district_id1" onChange="getThana1();getPostOffice1();getVillage1();" class="box2" >
+        <select name="district_id1"  id="district_id1" onChange="getThana1();" class="box2" >
             <option value="all">-জেলা-</option>
             <?php
             $district_sql = mysql_query("SELECT * FROM " . $dbname . ".district ORDER BY district_name ASC");
@@ -161,7 +161,7 @@ function getArea2($dv,$d,$t,$p,$v)
             ?>
         </select>
     </span></br>
-    গ্রাম &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span id="vid1">
+    গ্রাম / পাড়া / প্রোজেক্ট&nbsp;&nbsp;&nbsp;&nbsp;: <span id="vid1">
         <select name='vilg_id1' id='vilg_id1' class="box2" >
             <option value="all">-গ্রাম-</option>
             <?php
@@ -187,7 +187,7 @@ function getArea3($dv,$d,$t,$p,$v)
     {
     $dbname = $_SESSION['DatabaseName'];
     ?>            
-    বিভাগ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <select name="division_id2" id="division_id2" class="box2" onChange="getDistrict2(); getThana2();getPostOffice2();getVillage2();" >
+    বিভাগ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <select name="division_id2" id="division_id2" class="box2" onChange="getDistrict2(); getThana2();" >
         <option value="all" selected="selected">-বিভাগ-</option>
         <?php
         $division_sql = mysql_query("SELECT * FROM " . $dbname . ".division ORDER BY division_name ASC");
@@ -203,7 +203,7 @@ function getArea3($dv,$d,$t,$p,$v)
         ?>
     </select></br>
     জেলা &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp: <span id="did2">
-        <select name="district_id2"  id="district_id2" onChange="getThana2();getPostOffice2();getVillage2();" class="box2" >
+        <select name="district_id2"  id="district_id2" onChange="getThana2();" class="box2" >
             <option value="all">-জেলা-</option>
             <?php
             $district_sql = mysql_query("SELECT * FROM " . $dbname . ".district ORDER BY district_name ASC");
@@ -253,7 +253,7 @@ function getArea3($dv,$d,$t,$p,$v)
             ?>
         </select>
     </span></br>
-    গ্রাম &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span id="vid2">
+    গ্রাম / পাড়া / প্রোজেক্ট&nbsp;&nbsp;&nbsp;&nbsp;: <span id="vid2">
         <select name='vilg_id2' id='vilg_id2' class="box2" >
             <option value="all">-গ্রাম-</option>
             <?php
@@ -346,7 +346,7 @@ function getArea4($dv,$d,$t,$p,$v)
             ?>
         </select>
     </span></br>
-    গ্রাম &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span id="vid3">
+    গ্রাম / পাড়া / প্রোজেক্ট&nbsp;&nbsp;&nbsp;&nbsp;: <span id="vid3">
         <select name='vilg_id3' id='vilg_id3' class="box2" >
             <option value="all">-গ্রাম-</option>
             <?php
