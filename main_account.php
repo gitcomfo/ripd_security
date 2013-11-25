@@ -3,9 +3,10 @@
  * This page is commonly (internally) used to create proprietor, employee, customer. So this page not need to give any security
  */
 error_reporting(0);
-include 'includes/header.php';
+include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
-include 'includes/makeAccountNumbers.php';
+include_once 'includes/makeAccountNumbers.php';
+include_once 'includes/email_conf.php';
 
 function showPowerHeads()
 {
@@ -71,7 +72,7 @@ if($_POST['submit'])
                 {
                     $pin_number = $_POST['pin_num'];
                     // get referer ID*****************************
-                    $getreferer_sql = mysql_query("SELECT * FROM pin_makingused, sales_summery WHERE idsalessummery = 	sales_summery_idsalessummery AND pin_no = '$pin_number'");
+                    $getreferer_sql = mysql_query("SELECT * FROM pin_makingused, sales_summery WHERE idsalessummery = sales_summery_idsalessummery AND pin_no = '$pin_number'");
                     $refererrow = mysql_fetch_assoc($getreferer_sql);
                     $db_referid = $refererrow['sal_buyerid'];
                     $db_pv= $refererrow['sal_totalpv'];
@@ -97,6 +98,9 @@ if($_POST['submit'])
                     $propreitor_account_id = mysql_insert_id();
                     if($sql_pro_ins == 1){$pass_message = "create_proprietor_account_inner.php?proID=".$propreitor_account_id;}                     
                 }
+        $email_pass = $_POST['user_password'];
+        $email_create = CreateEmailAccount($user_username, $email_pass);
+        //echo $email_create; //make decision to give error message
         }
 
 ?>

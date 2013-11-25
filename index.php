@@ -26,20 +26,23 @@ include_once 'includes/header.php';
                     <li><img class="main" src="images/slider/people-shadow-globe.jpg" /> <img
                             class="thumb" src="images/slider/people-shadow-globe.jpg" />
                     </li>
-                    <li><img class="main" src="images/slider/mob.jpg" /> <img
-                            class="thumb" src="images/slider/mob.jpg" />
+                    <li><img class="main" src="images/slider/pic1.jpg" /> <img
+                            class="thumb" src="images/slider/pic1.jpg" />
                     </li>
-                    <li><img class="main" src="images/slider/local-business-header.jpg" /> <img
-                            class="thumb" src="images/slider/local-business-header.jpg" />
+                    <li><img class="main" src="images/slider/pic3.jpg" /> <img
+                            class="thumb" src="images/slider/pic3.jpg" />
                     </li>
-                    <li><img class="main" src="images/slider/local-business.jpeg" /> <img
-                            class="thumb" src="images/slider/local-business.jpeg" />
+                    <li><img class="main" src="images/slider/pic4.jpg" /> <img
+                            class="thumb" src="images/slider/pic4.jpg" />
                     </li>
-                    <li><img class="main" src="images/slider/2.jpg" /> <img
-                            class="thumb" src="images/slider/2.jpg" />
+                    <li><img class="main" src="images/slider/pic2.jpg" /> <img
+                            class="thumb" src="images/slider/pic2.jpg" />
                     </li>
-                    <li><img class="main" src="images/slider/1.jpg" /> <img
-                            class="thumb" src="images/slider/1.jpg" />
+                    <li><img class="main" src="images/slider/pic5.jpg" /> <img
+                            class="thumb" src="images/slider/pic5.jpg" />
+                    </li>
+                    <li><img class="main" src="images/slider/pic6.jpg" /> <img
+                            class="thumb" src="images/slider/pic6.jpg" />
                     </li>
                 </ul>
             </div>
