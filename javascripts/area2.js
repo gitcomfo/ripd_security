@@ -283,3 +283,99 @@ function getVillage2()
     xmlhttp.open("GET","includes/getVillage2.php?PoId="+post_id,true);
     xmlhttp.send();
 }
+
+//**************###########****************##########********************###############******************
+function getDistrict3()
+{
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            document.getElementById('did3').innerHTML=xmlhttp.responseText;
+        }
+    }
+    var division_id;
+    division_id = document.getElementById('division_id3').value;
+    xmlhttp.open("GET","includes/getDistrict23.php?did="+division_id,true);
+    xmlhttp.send();
+}
+
+function getThana3()
+{
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            document.getElementById('tid3').innerHTML=xmlhttp.responseText;
+        }
+    }
+    var division_id, district_id;
+    division_id = document.getElementById('division_id3').value;
+    district_id = document.getElementById('district_id3').value;
+    xmlhttp.open("GET","includes/getThana23.php?tDsId="+district_id+"&tDfId="+division_id,true);
+    xmlhttp.send();
+}
+
+function getPostOffice3()
+{
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            document.getElementById('pid3').innerHTML=xmlhttp.responseText;
+        }
+    }
+    var thana_id = document.getElementById('thana_id3').value;
+    xmlhttp.open("GET","includes/getPostOffice3.php?ThId="+thana_id,true);
+    xmlhttp.send();
+}
+
+function getVillage3()
+{
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            document.getElementById('vid3').innerHTML=xmlhttp.responseText;
+        }
+    }
+    var post_id = document.getElementById('post_id3').value;
+    xmlhttp.open("GET","includes/getVillage3.php?PoId="+post_id,true);
+    xmlhttp.send();
+}
