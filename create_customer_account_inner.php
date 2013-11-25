@@ -359,7 +359,7 @@ elseif (isset($_POST['submit4'])) {
                                     (address_type, house, house_no, road, address_whom,post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
                                      VALUES ('Permanent', '$np_house', '$np_house_no','$np_road', 'nmn',  '$np_post_code','$np_Thana_idThana','$np_Post_idPost', '$np_Village_idVillage','$custAcid')");
 
-    if ($sql_c_insert_current_address && $sql_cp_insert_permanent_address && $sql_g_insert_current_address && $sql_gp_insert_present_address && $sql_n_insert_current_address && $sql_np_insert_present_address) {
+    if ($sql_c_insert_current_address || $sql_cp_insert_permanent_address || $sql_g_insert_current_address || $sql_gp_insert_present_address || $sql_n_insert_current_address || $sql_np_insert_present_address) {
         mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {

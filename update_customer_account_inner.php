@@ -336,7 +336,7 @@ if (isset($_POST['submit1'])) {
         $sql_gp_insert_present_address = mysql_query("UPDATE address SET  house ='$gp_house', house_no='$gp_house_no' , road='$gp_road' ,  post_code='$gp_post_code',Thana_idThana='$gp_Thana_idThana',  post_idpost='$gp_Post_idPost', village_idvillage='$gp_Village_idVillage'
                                                                                     WHERE address_type='Permanent'  AND address_whom='cust_prnt' AND adrs_cepng_id='$custAcid'");
     }
-    if ($sql_update_customer && $child_male && $child_female && $sql_g_insert_current_address && $sql_gp_insert_present_address) {
+    if ($sql_update_customer || ($child_male && $del_m_children) || ($child_female && $del_f_children) || $sql_g_insert_current_address || $sql_gp_insert_present_address) {
         mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
@@ -431,7 +431,7 @@ mysql_query("START TRANSACTION");
                                                                     WHERE adrs_cepng_id=$nominee_id AND address_whom='nmn' AND address_type='Permanent' ");
     }    
 
-    if ($sql_nominee && $sql_n_insert_current_address && $sql_np_insert_permanent_address) {
+    if ($sql_nominee || $sql_n_insert_current_address || $sql_np_insert_permanent_address) {
         mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
@@ -448,7 +448,7 @@ elseif (isset($_POST['submit3'])) {
     $c_gpa = $_POST['c_gpa'];
     $a = count($c_ex_name);
     mysql_query("START TRANSACTION");
-   $del_e_edu = mysql_query("DELETE FROM education WHERE education_type='cust' AND cepn_id=$custAcid");
+   $del_c_edu = mysql_query("DELETE FROM education WHERE education_type='cust' AND cepn_id=$custAcid");
     for ($i = 0; $i < $a; $i++) {
         $sql_insert_cus_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) 
                                             VALUES ('$c_ex_name[$i]', '$c_pass_year[$i]','$c_institute[$i]','$c_board[$i]','$c_gpa[$i]','cust','$custAcid');";
@@ -470,7 +470,7 @@ elseif (isset($_POST['submit3'])) {
                                                 VALUES ('$n_ex_name[$i]', '$n_pass_year[$i]','$n_institute[$i]','$n_board[$i]','$n_gpa[$i]','nmn','$db_nomID');";
         $nom_edu = mysql_query($sql_insert_nom_edu);
     }
-    if ($del_e_edu && $cus_edu && $del_n_edu && $nom_edu) {
+    if (($del_c_edu && $cus_edu) || ($del_n_edu && $nom_edu)) {
         mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
@@ -517,7 +517,7 @@ elseif (isset($_POST['submit4'])) {
     }
     else {$sql_cp_insert_permanent_address = mysql_query("UPDATE address 
                                                                          SET house='$cp_house', house_no='$cp_house_no', road='$cp_road', post_code='$cp_post_code',Thana_idThana='$cp_Thana_idThana', post_idpost='$cp_Post_idPost', village_idvillage='$cp_Village_idVillage'  WHERE adrs_cepng_id=$custAcid AND address_whom='cust' AND address_type ='Permanent' "); }
-    if ($sql_c_insert_current_address && $sql_cp_insert_permanent_address ) {
+    if ($sql_c_insert_current_address || $sql_cp_insert_permanent_address ) {
         mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
@@ -733,7 +733,7 @@ elseif (isset($_POST['submit5'])) {
         
          <div>
             <h2><a name="01" id="01"></a></h2><br/>
-            <form method="POST" onsubmit="" style=" padding-right: 70px;" enctype="multipart/form-data" action="" id="emp_form1" name="emp_form1">	
+            <form method="POST" onsubmit="" enctype="multipart/form-data" action="" id="emp_form1" name="emp_form1">	
                 <table  class="formstyle">     
                     <tr><th colspan="4" style="text-align: center" colspan="2"><h1>কাস্টমারের মূল তথ্য</h1></th></tr>
                     <tr><td colspan="4" ></td>

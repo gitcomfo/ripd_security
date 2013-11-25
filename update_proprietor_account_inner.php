@@ -129,7 +129,7 @@ mysql_query("START TRANSACTION");
    else {$sql_pp_insert_permanent_address = mysql_query("UPDATE $dbname.address 
                                                                          SET house='$pp_house', house_no='$pp_house_no', road='$pp_road', post_code='$pp_post_code',Thana_idThana='$pp_Thana_idThana', post_idpost='$pp_Post_idPost', village_idvillage='$pp_Village_idVillage'  WHERE adrs_cepng_id=$proprietorID AND address_whom='pwr' AND address_type ='Permanent' ") or exit(mysql_error()); }
 
-    if ($sql_update_proprietor && $sql_p_insert_current_address && $sql_pp_insert_permanent_address) {
+    if ($sql_update_proprietor || $sql_p_insert_current_address || $sql_pp_insert_permanent_address) {
         mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
@@ -223,7 +223,7 @@ elseif (isset($_POST['submit2'])) {
                                                                     WHERE adrs_cepng_id=$nominee_id AND address_whom='nmn' AND address_type='Permanent' ");
     }    
    
-    if ($sql_nominee && $sql_n_insert_current_address && $sql_np_insert_permanent_address) {
+    if ($sql_nominee || $sql_n_insert_current_address || $sql_np_insert_permanent_address) {
         mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
@@ -259,7 +259,7 @@ elseif (isset($_POST['submit2'])) {
         $sql_insert_nom_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) VALUES ('$n_ex_name[$i]', '$n_pass_year[$i]','$n_institute[$i]','$n_board[$i]','$n_gpa[$i]','nmn','$nomineeID');";
         $nom_edu = mysql_query($sql_insert_nom_edu) or exit('query failed: ' . mysql_error());
     }
-    if ($emp_edu && $nom_edu && $del_n_edu && $del_p_edu) {
+    if (($emp_edu && $del_p_edu) || ($nom_edu && $del_n_edu)) {
         mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {

@@ -80,8 +80,7 @@ $x= $_GET['id'];
         $decorationINT= (int)$decoration;
         list($before_dot, $after_dot) = explode('.', $decoration);
         $decorationDeci = substr($after_dot, 0, 2);
-        $idcost=$cost_row['idons_cost'];
-    }
+     }
     $count =0;
     $othercost = "SELECT * FROM ".$dbname.".`ons_cost_others` WHERE ons_cost_idons_cost=$costid";
     $othercostsql = mysql_query($othercost) or exit('query failed: '.mysql_error());
@@ -112,7 +111,7 @@ $x= $_GET['id'];
       $b_space = $_POST['office_space'];
     $b_type = $_POST['building_type'];
     $b_floor = $_POST['floor_number'];
-    $infoup="UPDATE `ripd_db_comfosys`.`ons_information` SET `space` = '$b_space', `building_type` = '$b_type', `floor` = '$floor' WHERE `ons_information`.`idons_information` =$info_id  AND `ons_information`.`ons_relation_idons_relation` =$idons;";
+    $infoup="UPDATE `ripd_db_comfosys`.`ons_information` SET `space` = '$b_space', `building_type` = '$b_type', `floor` = '$b_floor' WHERE `ons_information`.`idons_information` =$info_id  AND `ons_information`.`ons_relation_idons_relation` =$idons;";
     $infoupsql = mysql_query($infoup) or exit('query failed: '.mysql_error());
     echo "<script type='text/javascript'>window.location.href = window.location; </script>";
   }
@@ -239,7 +238,7 @@ $x= $_GET['id'];
      $own_mbl = $_POST['mobile_number'];
      $own_mail = $_POST['mail_address'];
      $own_valid = $_POST['validity'];
-    $deedup="UPDATE `ripd_db_comfosys`.`ons_deed` SET `owner_name`='$own_name',`owner_address` = '$own_add', `cell_number` = '$own_mbl', `owner_email`='$mail', `owner_photo`='$image_path', `owner_signature`='$sing_path', `expire_date`='$own_valid', `scan_documents`='$scan_path', `owner_fingerprint`='$finger_path' WHERE `ons_deed`.`idons_deed` =$deedid AND `ons_deed`.`ons_relation_idons_relation` =$idons;";
+    $deedup="UPDATE `ripd_db_comfosys`.`ons_deed` SET `owner_name`='$own_name',`owner_address` = '$own_add', `cell_number` = '$own_mbl', `owner_email`='$own_mail', `owner_photo`='$image_path', `owner_signature`='$sing_path', `expire_date`='$own_valid', `scan_documents`='$scan_path', `owner_fingerprint`='$finger_path' WHERE `ons_deed`.`idons_deed` =$deedid AND `ons_deed`.`ons_relation_idons_relation` =$idons;";
     $deedupsql = mysql_query($deedup) or exit('query failed: '.mysql_error());
     echo "<script type='text/javascript'>window.location.href = window.location; </script>";
   }
