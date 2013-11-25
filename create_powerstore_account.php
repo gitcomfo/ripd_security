@@ -13,7 +13,7 @@ if(isset($_POST['submit0']))
     $mail = $_POST['office_mail'];
     $off_acc = $_POST['office_acc'];
     $thana = $_POST['thana_id'];
-    
+     mysql_query("START TRANSACTION");
    $sql= "INSERT INTO ". $dbname .".`office` (`office_type` ,`office_selection` ,`office_name` ,`office_number` ,`account_number` ,`office_email` ,`Thana_idThana`,`office_details_address`) 
               VALUES ( 'pwr_head', 'pwr','$name' , '$off_no', '$off_acc','$mail' , '$thana', '$off_add')";
     $reslt=mysql_query($sql);
@@ -122,12 +122,16 @@ if(isset($_POST['submit0']))
     
      $ownsql = "INSERT INTO ". $dbname .".`ons_deed` (`owner_name` ,`owner_address` ,`cell_number` ,`owner_email` ,`owner_photo` ,`owner_signature`  ,`expire_date` ,`scan_documents` ,`ons_relation_idons_relation`,`owner_fingerprint`) VALUES  ( '$own_name', '$own_add' , '$own_mbl' , '$own_mail'  , '$image_path' , '$sing_path'  , '$own_valid' , '$scan_path' , '$ons' , '$finger_path');";
      $ownreslt = mysql_query($ownsql) or exit('query failed: '.mysql_error());
-     if($ownreslt == 1)
+    if($reslt && $sreslt && $ireslt && $oreslt && $ownreslt)
      {
+         mysql_query("COMMIT");
          $msg = "পাওয়ার স্টোর তৈরি হয়েছে";
      }
      else
-     {$msg = "দুঃখিত, পাওয়ার স্টোর তৈরি হয়নি";}
+     {
+         mysql_query("ROLLBACK");
+         $msg = "দুঃখিত, পাওয়ার স্টোর তৈরি হয়নি";
+     }
    }
 
 ?>
@@ -282,7 +286,7 @@ xmlhttp.send();
 
 <div class="columnSld" style=" padding-left: 50px;">
     <div class="main_text_box" style="width: 100%;">
-        <div style="padding-left: 110px;"><a href="office_sstore_management.php"><b>ফিরে যান</b></a><a href="" onclick="javasrcipt:window.open('update_office_account.php?pwr=1');return false;" style="padding-left: 510px;"><b>মেইন পাওয়ারস্টোর লিস্ট</b></a></div>
+        <div style="padding-left: 110px;"><a href="office_sstore_management.php"><b>ফিরে যান</b></a><a href="" onclick="javasrcipt:window.open('update_office_account_office_pstore.php?pwr=1');return false;" style="padding-left: 510px;"><b>মেইন পাওয়ারস্টোর লিস্ট</b></a></div>
         <div>           
             <form method="POST" enctype="multipart/form-data" action="" id="off_form" name="off_form">       
                 <table class="formstyle"  style=" width: 70%; ">          
@@ -291,7 +295,7 @@ xmlhttp.send();
                 <tr><td colspan="2" style="text-align: center;color: green;font-size: 16px;"><?php if($msg != "") echo $msg;?></td></tr>
                      <tr>
                         <td>পাওয়ারস্টোরের নাম</td>
-                        <td>:    <input  class ="textfield" type="text" id="office_name" name="office_name" /></td>
+                        <td>:    <input  class ="textfield" type="text" id="office_name" name="office_name" /><em2> *</em2></td>
                     </tr>
                      <tr>
                         <td>পাওয়ারস্টোরের অ্যাকাউন্ট</td>
@@ -354,11 +358,11 @@ xmlhttp.send();
                         }
                         
                         ?>
-                                  </select>
+                                  </select><em2> *</em2>
                           </td></tr>
                            <tr>
                         <td>পাওয়ারস্টোরের ঠিকানা</td>
-                        <td>:    <input  class ="textfield" type="text" id="office_address_" name="office_address" /></td>
+                        <td>:    <input  class ="textfield" type="text" id="office_address_" name="office_address" /><em2> *</em2></td>
                     </tr>
                            <tr>
                         <td>পাওয়ারস্টোরের নাম্বার</td>
@@ -384,7 +388,7 @@ xmlhttp.send();
                     </tr>
                     <tr>
                         <td >ফ্লোর নাম্বার</td>
-                        <td>:   <input class="textfield" type="text" id="floor_number" name="floor_number" /> </td>
+                        <td>:   <input class="textfield" type="text" id="floor_number" name="floor_number" /><em2> *</em2> </td>
                     </tr>   
                     <tr>
                         <td colspan="2" ><hr /></td>
@@ -395,7 +399,7 @@ xmlhttp.send();
                     <tr>
                         <td  >ভাড়া</td>
                         <td >:   <input class="textfield" style="text-align: right" type="text" id="office_rent1" name="office_rent1" onkeypress="return numbersonly(event)" />
-                            . <input class="boxTK" type="text" maxlength="2"  id="office_rent2" name="office_rent2"  onkeypress=" return numbersonly(event)"/>TK <em> (ইংরেজিতে লিখুন)</em></td>
+                            . <input class="boxTK" type="text" maxlength="2"  id="office_rent2" name="office_rent2"  onkeypress=" return numbersonly(event)"/>TK <em> (ইংরেজিতে লিখুন)</em><em2> *</em2></td>
                         
                     </tr>
                     <tr>
@@ -417,7 +421,7 @@ xmlhttp.send();
                     <tr>
                         <td >অগ্রিম</td>
                         <td >:   <input class="textfield" style="text-align: right" type="text" id="advanced_payment1" name="advanced_payment1"  onkeypress="return numbersonly(event)" />
-                            . <input class="boxTK" type="text" maxlength="2" id="advanced_payment2" name="advanced_payment2" onkeypress="return numbersonly(event)" />TK<em> (ইংরেজিতে লিখুন)</em></td>
+                            . <input class="boxTK" type="text" maxlength="2" id="advanced_payment2" name="advanced_payment2" onkeypress="return numbersonly(event)" />TK<em> (ইংরেজিতে লিখুন)</em><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td  >ডেকোরেশন</td>
@@ -453,7 +457,7 @@ xmlhttp.send();
                     </tr>
                     <tr>
                         <td >মালিকের নাম</td>
-                        <td >:   <input class="textfield" type="text" id="owner_Name" name="owner_Name" /></td>
+                        <td >:   <input class="textfield" type="text" id="owner_Name" name="owner_Name" /><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td  >বাসার ঠিকানা</td>
@@ -461,7 +465,7 @@ xmlhttp.send();
                     </tr>
                     <tr>
                         <td >মোবাইল নাম্বার</td>
-                        <td>:   <input class="textfield" type="text" id="mobile_number" name="mobile_number" onkeypress=' return numbersonly(event)'/> <em> (ইংরেজিতে লিখুন)</em></td>
+                        <td>:   <input class="textfield" type="text" id="mobile_number" name="mobile_number" onkeypress=' return numbersonly(event)'/> <em> (ইংরেজিতে লিখুন)</em><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td >ই-মেইল</td>

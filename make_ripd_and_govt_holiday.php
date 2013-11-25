@@ -122,7 +122,7 @@ if (isset($_POST['submit'])) {
             }
             echo '<td><a href="?&apps=SD&date=' . PREV_MONTH . '"><img src="images/back.ico" height="35px" width="35px"></img></a></td>';
             echo '<td colspan="2" ><b>' . CURRENT_MONTH_A . ' - ' . CURRENT_YEAR . '</b></td>';
-            echo '<td><a href="?&apps=SD&date=' . NEXT_MONTH . '"><img src="images/back.ico" height="35px" width="35px" style="-moz-transform: rotate(-180deg);"></img></a></td>';
+            echo '<td><a href="?&apps=SD&date=' . NEXT_MONTH . '"><img src="images/back_right.bmp" height="35px" width="35px"></img></a></td>';
             echo '</tr>
                 <tr bgcolor = #06ACE5>';
 

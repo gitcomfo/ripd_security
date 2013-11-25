@@ -121,6 +121,11 @@ em{
     font-size: 10px;
     color: darkblue;
 }
+em2{
+    font-size: 13px;
+    color: red;
+    font-weight: bold;
+}
 .box{
     height: 22px;
     width: 160px;
@@ -163,7 +168,7 @@ em{
 } 
 .box5{
     height: 20px;
-    width: 105px;
+    width: 72px;
     border: 1px gray inset;
     padding-left: 5px;
     -moz-border-radius: 2px;

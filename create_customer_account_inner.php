@@ -2,7 +2,6 @@
 error_reporting(0);
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
-
 $custAcid = $_GET['custACid'];
 ?>
 <title>ক্রিয়েট কাস্টমার অ্যাকাউন্ট</title>
@@ -186,6 +185,7 @@ if (isset($_POST['submit1'])) {
     } else {
         echo "Invalid file format.";
     }
+    mysql_query("START TRANSACTION");
     $sql_update_customer = mysql_query("UPDATE customer_account SET cust_father_name='$cust_father_name', cust_mother_name='$cust_mother_name', cust_spouse_name='$cust_spouse_name', cust_family_member='$cust_family_member', cust_son_no='$cust_son_no', cust_daughter_no='$cust_daughter_no', 
                                                         cust_son_student_no='$cust_son_student_no', cust_daughter_student_no='$cust_daughter_student_no', cust_occupation='$cust_occupation', cust_religion='$cust_religion', cust_nationality='$cust_nationality', cust_nationalID_no='$cust_nationalID_no', 
                                                         cust_passportID_no='$cust_passportID_no', cust_date_of_birth='$dob', birth_certificate_no='$birth_certificate_no', cust_gurdian_name='$cust_gurdian_name', cust_gurdian_relation='$cust_gurdian_relation', cust_gurdian_mobile='$cust_gurdian_mobile', 
@@ -209,8 +209,10 @@ if (isset($_POST['submit1'])) {
         $child_female = mysql_query($sql_insert_femalechild) or exit('query failed: ' . mysql_error());
     }
     if ($sql_update_customer && $child_male && $child_female) {
+        mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+        mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
 } 
@@ -253,6 +255,7 @@ elseif (isset($_POST['submit3'])) {
     $c_board = $_POST['c_board'];
     $c_gpa = $_POST['c_gpa'];
     $a = count($c_ex_name);
+    mysql_query("START TRANSACTION");
     for ($i = 0; $i < $a; $i++) {
         $sql_insert_cus_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) 
                                             VALUES ('$c_ex_name[$i]', '$c_pass_year[$i]','$c_institute[$i]','$c_board[$i]','$c_gpa[$i]','cust','$custAcid');";
@@ -273,9 +276,11 @@ elseif (isset($_POST['submit3'])) {
                                                 VALUES ('$n_ex_name[$i]', '$n_pass_year[$i]','$n_institute[$i]','$n_board[$i]','$n_gpa[$i]','nmn','$db_nomID');";
         $nom_edu = mysql_query($sql_insert_nom_edu) or exit('query failed: ' . mysql_error());
     }
-    if ($cus_edu || $nom_edu) {
+    if ($cus_edu && $nom_edu) {
+        mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+        mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
 } 
@@ -328,6 +333,7 @@ elseif (isset($_POST['submit4'])) {
     $np_house_no = $_POST['np_house_no'];
     $np_road = $_POST['np_road'];
     $np_post_code = $_POST['np_post_code'];
+    mysql_query("START TRANSACTION");
     //customer address_type=Present
     $sql_c_insert_current_address = mysql_query("INSERT INTO $dbname.address 
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana, post_idpost, village_idvillage ,adrs_cepng_id)
@@ -354,8 +360,10 @@ elseif (isset($_POST['submit4'])) {
                                      VALUES ('Permanent', '$np_house', '$np_house_no','$np_road', 'nmn',  '$np_post_code','$np_Thana_idThana','$np_Post_idPost', '$np_Village_idVillage','$custAcid')");
 
     if ($sql_c_insert_current_address || $sql_cp_insert_permanent_address || $sql_g_insert_current_address || $sql_gp_insert_present_address || $sql_n_insert_current_address || $sql_np_insert_present_address) {
+        mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+        mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
 }
@@ -420,7 +428,7 @@ elseif (isset($_POST['submit4'])) {
                                     echo "<option value='$i'>" . $year . "</option>";
                                 }
                                 ?>
-                            </select>
+                            </select><em2> *</em2>
                         </td>			
                     </tr>
                     <tr>
@@ -432,9 +440,9 @@ elseif (isset($_POST['submit4'])) {
                     </tr>                
                     <tr>
                         <td >জাতীয় পরিচয়পত্র নং</td>
-                        <td>:   <input class="box" type="text" id="cust_nationalID_no" name="cust_nationalID_no" /></td>
+                        <td>:   <input class="box" type="text" id="cust_nationalID_no" name="cust_nationalID_no" /><em2> *</em2></td>
                         <td style="width: 100px;" font-weight="bold" > জাতীয় পরিচয়পত্র</td>
-                        <td >:   <input class="box" type="file" id="scanDoc_national_id" name="scanDoc_national_id" style="font-size:10px;"/> </td>
+                        <td >:   <input class="box" type="file" id="scanDoc_national_id" name="scanDoc_national_id" style="font-size:10px;"/><em2> *</em2> </td>
                     </tr>
                     <tr>
                         <td >পাসপোর্ট আইডি নং</td>
@@ -444,15 +452,15 @@ elseif (isset($_POST['submit4'])) {
                     </tr>      
                     <tr>  
                         <td font-weight="bold" >ছবি </td>
-                        <td>:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/></td>             
+                        <td>:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/><em2> *</em2></td>             
                     </tr>
                     <tr>  
                         <td font-weight="bold" >স্বাক্ষর</td>
-                        <td >:   <input class="box" type="file" id="scanDoc_signature" name="scanDoc_signature" style="font-size:10px;"/> </td>                  
+                        <td >:   <input class="box" type="file" id="scanDoc_signature" name="scanDoc_signature" style="font-size:10px;"/><em2> *</em2> </td>                  
                     </tr>
                     <tr>	        
                         <td font-weight="bold" > টিপসই</td>
-                        <td >:   <input class="box" type="file" id="scanDoc_finger_print" name="scanDoc_finger_print" style="font-size:10px;"/> </td>       
+                        <td >:   <input class="box" type="file" id="scanDoc_finger_print" name="scanDoc_finger_print" style="font-size:10px;"/><em2> *</em2> </td>       
                     </tr>
                     <tr>
                         <td colspan="4" ><hr /></td>

@@ -2,7 +2,8 @@
 error_reporting(0);
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
-include 'includes/makeAccountNumbers.php';
+include_once  'includes/makeAccountNumbers.php';
+include_once  'includes/checkAccountNo.php';
 $RaccNo = getRoAccount();
 $PwaccNo = getPwAccount();
 
@@ -15,6 +16,8 @@ if(isset($_POST['submit0']))
     $off_no = $_POST['office_no'];
     $mail = $_POST['office_mail'];
     $off_acc = $_POST['office_acc'];
+    $accType = current(explode("-", $off_acc));
+    $off_acc1 = checkAccountNo2($off_acc,$accType);
      $selected_type = $_POST['whatoffice'];
       $parent_id = $_POST['parent_id'];
       $ripdsql = mysql_query("SELECT * FROM office WHERE office_type = 'ripd_head'");
@@ -38,8 +41,10 @@ if(isset($_POST['submit0']))
       elseif (($selected_type == 'pwr') && $topparent_id != 0) { $topparent_id = $topparent_id;}
     $thana = $_POST['thana_id'];
     
-   $sql= "INSERT INTO ". $dbname .".`office` (`office_type` ,`office_selection`, `parent_id`, `top_parent`, `office_name` ,`office_number` ,`account_number` ,`branch_name` ,`office_email` ,`Thana_idThana`,`office_details_address` ) 
-            VALUES ( '$off_type','$selected_type', '$parent_id','$topparent_id',  '$name','$off_no' , '$off_acc', '$br_name','$mail' , '$thana', '$off_add')";
+    mysql_query("START TRANSACTION");
+   
+    $sql= "INSERT INTO ". $dbname .".`office` (`office_type` ,`office_selection`, `parent_id`, `top_parent`, `office_name` ,`office_number` ,`account_number` ,`branch_name` ,`office_email` ,`Thana_idThana`,`office_details_address` ) 
+            VALUES ( '$off_type','$selected_type', '$parent_id','$topparent_id',  '$name','$off_no' , '$off_acc1', '$br_name','$mail' , '$thana', '$off_add')";
     $reslt=mysql_query($sql);
     $off = mysql_insert_id();
     
@@ -86,53 +91,59 @@ if(isset($_POST['submit0']))
      
          $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["image"]["name"]));
-        $image_name = $off_acc."_".$_FILES["image"]["name"];
+        $image_name = $off_acc."-".$_FILES["image"]["name"];
         $image_path = "pic/" . $image_name;
-        if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
-                {
-                    move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
-                } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
+        if( $_FILES["image"]["name"] != ""){
+            if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
+                    {
+                        move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
+                    } 
+            else 
+                    {
+                    echo "Invalid file format.";
+                    }
+        }
                 
                   $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["signature"]["name"]));
-        $sign_name = $off_acc."_". $_FILES["signature"]["name"];
+        $sign_name = $off_acc."-". $_FILES["signature"]["name"];
         $sing_path = "sign/" . $sign_name;
-        if (($_FILES["signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
-                {
-                        move_uploaded_file($_FILES["signature"]["tmp_name"], "sign/" . $sign_name);
-                 } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
+        if( $_FILES["signature"]["name"] != ""){
+            if (($_FILES["signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
+                    {
+                            move_uploaded_file($_FILES["signature"]["tmp_name"], "sign/" . $sign_name);
+                     } 
+            else 
+                    {echo "Invalid file format.";}
+        }
                 
                 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["owner_finger_print"]["name"]));
-        $finger_name = $off_acc."_".$_FILES["owner_finger_print"]["name"];
+        $finger_name = $off_acc."-".$_FILES["owner_finger_print"]["name"];
         $finger_path = "fingerprints/".$finger_name;
-        if (($_FILES["owner_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
-                {
-                        move_uploaded_file($_FILES["owner_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
-                } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
+        if( $_FILES["owner_finger_print"]["name"] != ""){
+            if (($_FILES["owner_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
+                    {
+                            move_uploaded_file($_FILES["owner_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
+                    } 
+            else 
+                    {
+                    echo "Invalid file format.";
+                    }
+        }
                 
                 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG","pdf");
         $extension = end(explode(".", $_FILES["scanDoc"]["name"]));
-         $scan_name = $off_acc."_".$_FILES["scanDoc"]["name"];
+         $scan_name = $off_acc."-".$_FILES["scanDoc"]["name"];
           $scan_path = "scaned/".$scan_name;
-        if (($_FILES["scanDoc"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
-                { move_uploaded_file($_FILES["scanDoc"]["tmp_name"], "scaned/" . $scan_name); }
-        else 
-                {
-                echo "Invalid file format.";
-                }
+          if( $_FILES["scanDoc"]["name"] != ""){
+            if (($_FILES["scanDoc"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
+                    { move_uploaded_file($_FILES["scanDoc"]["tmp_name"], "scaned/" . $scan_name); }
+            else 
+                    {
+                    echo "Invalid file format.";
+                    }
+          }
      
      $own_name = $_POST['owner_Name'];          
      $own_add = $_POST['owner_address'];
@@ -146,12 +157,16 @@ if(isset($_POST['submit0']))
      $ins_postinons = mysql_query("INSERT INTO post_in_ons (number_of_post, free_post, post_onstype, used_post, post_onsid, Post_idPost)
                                                         VALUES (1, 1, 'office', 0, $off, 11)");
      
-     if($ownreslt && $ins_postinons)
+     if($reslt && $sreslt && $ireslt && $oreslt && $ownreslt && $ins_postinons)
      {
+         mysql_query("COMMIT");
          $msg = "অফিস তৈরি হয়েছে";
      }
      else
-     {$msg = "দুঃখিত, অফিস তৈরি হয়নি";}
+     {
+          mysql_query("ROLLBACK");
+          $msg = "দুঃখিত, অফিস তৈরি হয়নি";
+     }
    }
 
 ?>
@@ -183,16 +198,14 @@ if(isset($_POST['submit0']))
         });
     }
     
-     function numbersonly(e)
+function numbersonly(e)
    {
-   
-var unicode=e.charCode? e.charCode : e.keyCode
-    if (unicode!=8)
-    { //if the key isn't the backspace key (which we should allow)
-
-        if (unicode<48||unicode>57) //if not a number
-        return false //disable key press
-    }
+        var unicode=e.charCode? e.charCode : e.keyCode
+            if (unicode!=8)
+            { //if the key isn't the backspace key (which we should allow)
+                if (unicode<48||unicode>57) //if not a number
+                return false //disable key press
+            }
 }
 
 function setParent(office,offid)
@@ -363,7 +376,7 @@ function getParentOfiice(str_key) // for searching parent offices
                     <tr><td colspan="2" style="text-align: center;color: green;font-size: 16px;"><?php if($msg != "") echo $msg;?></td></tr>
                      <tr>
                         <td>অফিসের নাম</td>
-                        <td>:    <input  class ="textfield" type="text" id="office_name" name="office_name" /></td>
+                        <td>:    <input  class ="textfield" type="text" id="office_name" name="office_name" /><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td>ব্রাঞ্চের নাম</td>
@@ -426,11 +439,11 @@ function getParentOfiice(str_key) // for searching parent offices
                         }
                         
                         ?>
-                                  </select>
+                                  </select><em2> *</em2>
                           </td></tr>
                            <tr>
                         <td>অফিসের ঠিকানা</td>
-                        <td>:    <input  class ="textfield" type="text" id="office_address_" name="office_address" /></td>
+                        <td>:    <input  class ="textfield" type="text" id="office_address_" name="office_address" /><em2> *</em2></td>
                     </tr>
                            <tr>
                         <td>অফিসের নাম্বার</td>
@@ -460,11 +473,11 @@ function getParentOfiice(str_key) // for searching parent offices
                                 <option value="Dis_local">জেলা লোকাল অফিস</option>
                                 <option value="Thana">থানা হেড অফিস</option>
                                 <option value="Tha_local">থানা লোকাল অফিস</option> 
-                            </select></td>
+                            </select><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td>প্যারেন্ট অফিস</td>
-                        <td>:    <input  class ="textfield" type="text" id="parent" name="parent" onkeyup="getParentOfiice(this.value);" /><em> (অ্যাকাউন্ট নাম্বার)</em>
+                        <td>:    <input  class ="textfield" type="text" id="parent" name="parent" onkeyup="getParentOfiice(this.value);" /><em> (অ্যাকাউন্ট নাম্বার)</em><em2> *</em2>
                             <div id="parentResult"></div><input type="hidden" name="parent_id" id="parent_id"/></br>
                         </td>
                     </tr>
@@ -484,7 +497,7 @@ function getParentOfiice(str_key) // for searching parent offices
                     </tr>
                     <tr>
                         <td >ফ্লোর নাম্বার</td>
-                        <td>:   <input class="textfield" type="text" id="floor_number" name="floor_number" /> </td>
+                        <td>:   <input class="textfield" type="text" id="floor_number" name="floor_number" /><em2> *</em2> </td>
                     </tr>   
                     <tr>
                         <td colspan="2" ><hr /></td>
@@ -495,7 +508,7 @@ function getParentOfiice(str_key) // for searching parent offices
                     <tr>
                         <td  >ভাড়া</td>
                         <td >:   <input class="textfield" style="text-align: right" type="text" id="office_rent1" name="office_rent1" onkeypress="return numbersonly(event)" />
-                            . <input class="boxTK" type="text" maxlength="2"  id="office_rent2" name="office_rent2"  onkeypress=" return numbersonly(event)"/>TK <em> (ইংরেজিতে লিখুন)</em></td>
+                            . <input class="boxTK" type="text" maxlength="2"  id="office_rent2" name="office_rent2"  onkeypress=" return numbersonly(event)"/>TK <em> (ইংরেজিতে লিখুন)</em> <em2> *</em2></td>
                         
                     </tr>
                     <tr>
@@ -517,7 +530,7 @@ function getParentOfiice(str_key) // for searching parent offices
                     <tr>
                         <td >অগ্রিম</td>
                         <td >:   <input class="textfield" style="text-align: right" type="text" id="advanced_payment1" name="advanced_payment1"  onkeypress="return numbersonly(event)" />
-                            . <input class="boxTK" type="text" maxlength="2" id="advanced_payment2" name="advanced_payment2" onkeypress="return numbersonly(event)" />TK<em> (ইংরেজিতে লিখুন)</em></td>
+                            . <input class="boxTK" type="text" maxlength="2" id="advanced_payment2" name="advanced_payment2" onkeypress="return numbersonly(event)" />TK<em> (ইংরেজিতে লিখুন)</em> <em2> *</em2></td>
                     </tr>
                     <tr>
                         <td  >ডেকোরেশন</td>
@@ -553,7 +566,7 @@ function getParentOfiice(str_key) // for searching parent offices
                     </tr>
                     <tr>
                         <td >মালিকের নাম</td>
-                        <td >:   <input class="textfield" type="text" id="owner_Name" name="owner_Name" /></td>
+                        <td >:   <input class="textfield" type="text" id="owner_Name" name="owner_Name" /> <em2> *</em2></td>
                     </tr>
                     <tr>
                         <td  >বাসার ঠিকানা</td>
@@ -561,7 +574,7 @@ function getParentOfiice(str_key) // for searching parent offices
                     </tr>
                     <tr>
                         <td >মোবাইল নাম্বার</td>
-                        <td>:   <input class="textfield" type="text" id="mobile_number" name="mobile_number" /> <em> (ইংরেজিতে লিখুন)</em></td>
+                        <td>:   <input class="textfield" type="text" id="mobile_number" name="mobile_number" onkeypress=' return numbersonly(event)'/> <em> (ইংরেজিতে লিখুন)</em> <em2> *</em2></td>
                     </tr>
                     <tr>
                         <td >ই-মেইল</td>
