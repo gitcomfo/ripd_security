@@ -7,7 +7,7 @@ error_reporting(0);
 $x= $_GET['id'];
 $custAcid = base64_decode($x);
 ?>
-<title>ক্রিয়েট কাস্টমার অ্যাকাউন্ট</title>
+<title>ক্রিয়েট কাস্টমার অ্যাকাউন্ট</title>
 <style type="text/css">@import "css/bush.css";</style>
 <script type="text/javascript" src="javascripts/area2.js"></script>
 <script type="text/javascript" src="javascripts/jquery-1.4.3.min.js"></script>
@@ -338,10 +338,10 @@ if (isset($_POST['submit1'])) {
     }
     if ($sql_update_customer || ($child_male && $del_m_children) || ($child_female && $del_f_children) || $sql_g_insert_current_address || $sql_gp_insert_present_address) {
         mysql_query("COMMIT");
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+        $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
         mysql_query("ROLLBACK");
-        $msg = "ভুল হয়েছে";
+        $msg = "ভুল হয়েছে";
     }
 } 
 elseif (isset($_POST['submit2'])) {
@@ -433,10 +433,10 @@ mysql_query("START TRANSACTION");
 
     if ($sql_nominee || $sql_n_insert_current_address || $sql_np_insert_permanent_address) {
         mysql_query("COMMIT");
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+        $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
         mysql_query("ROLLBACK");
-        $msg = "ভুল হয়েছে";
+        $msg = "ভুল হয়েছে";
     }
 } 
 elseif (isset($_POST['submit3'])) {
@@ -472,10 +472,10 @@ elseif (isset($_POST['submit3'])) {
     }
     if (($del_c_edu && $cus_edu) || ($del_n_edu && $nom_edu)) {
         mysql_query("COMMIT");
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+        $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
          mysql_query("ROLLBACK");
-        $msg = "ভুল হয়েছে";
+        $msg = "ভুল হয়েছে";
     }
 } 
 elseif (isset($_POST['submit4'])) {
@@ -519,10 +519,10 @@ elseif (isset($_POST['submit4'])) {
                                                                          SET house='$cp_house', house_no='$cp_house_no', road='$cp_road', post_code='$cp_post_code',Thana_idThana='$cp_Thana_idThana', post_idpost='$cp_Post_idPost', village_idvillage='$cp_Village_idVillage'  WHERE adrs_cepng_id=$custAcid AND address_whom='cust' AND address_type ='Permanent' "); }
     if ($sql_c_insert_current_address || $sql_cp_insert_permanent_address ) {
         mysql_query("COMMIT");
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+        $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
         mysql_query("ROLLBACK");
-        $msg = "ভুল হয়েছে";
+        $msg = "ভুল হয়েছে";
     }
 }
 elseif (isset($_POST['submit5'])) {
@@ -532,9 +532,9 @@ elseif (isset($_POST['submit5'])) {
   $p_cfsid = $_POST['cfsid'];
   $sql_update_cfs = mysql_query("UPDATE cfs_user SET account_name='$p_name', email='$p_email', mobile='$p_mobile' WHERE idUser=$p_cfsid ");
     if ($sql_update_cfs) {
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+        $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
-        $msg = "ভুল হয়েছে";
+        $msg = "ভুল হয়েছে";
     }
 }
 ?>
@@ -777,18 +777,18 @@ elseif (isset($_POST['submit5'])) {
         <div>
             <h2><a name="02" id="02"></a></h2><br/>
             <form method="POST" onsubmit="" enctype="multipart/form-data" action="" id="cust_form" name="cust_form">	
-                <table class="formstyle" style=" width: 95%; padding-left: 15px; padding-top: 5px;padding-bottom: 8px;" >            
+                <table class="formstyle" style=" width: 90%; padding-left: 15px; padding-top: 5px;padding-bottom: 8px;" >            
                <tr><td colspan="4" ></td></tr>
                     <tr>
-                        <td >পেশা</td>
-                        <td>:   <input class="box" type="text" id="cust_occupation" name="cust_occupation" value="<?php echo $db_custOccu;?>"/></td>                   
+                        <td width="219" >পেশা</td>
+                        <td width="223">:   <input class="box" type="text" id="cust_occupation" name="cust_occupation" value="<?php echo $db_custOccu;?>"/></td>                   
                     </tr>
                     <tr>
                         <td>ধর্ম</td>
                         <td>:   <input  class="box" type="text" id="cust_religion" name="cust_religion" value="<?php echo $db_custRel;?>"/></td>	      
                     </tr>
                     <tr>
-                        <td >জাতীয়তা</td>
+                        <td >জাতীয়তা</td>
                         <td>:   <input class="box" type="text" id="cust_nationality" name="cust_nationality" value="<?php echo $db_custNation;?>"/> </td>			
                     </tr>
                     <tr>
@@ -798,14 +798,14 @@ elseif (isset($_POST['submit5'])) {
                     <tr>
                         <td >জন্ম সনদ নং</td>
                         <td>:   <input class="box" type="text" id="birth_certificate_no" name="birth_certificate_no" value="<?php echo $db_custDOBID;?>"/></td>
-                        <td  font-weight="bold" >জন্ম সনদ </td>
-                        <td>: <img src="<?php echo $db_custDOBC;?>" width="80px" height="80px"/> <input class="box5" type="file" id="scanDoc_birth_certificate" name="scanDoc_birth_certificate" style="font-size:10px;"/><input type="hidden" name="DOBCname" value="<?php echo $DOBCname;?>"/> </td> 
+                        <td width="200"  font-weight="bold" >জন্ম সনদ </td>
+                        <td width="234">: <img src="<?php echo $db_custDOBC;?>" width="80px" height="80px"/> <input class="box5" type="file" id="scanDoc_birth_certificate" name="scanDoc_birth_certificate" style="font-size:10px;"/><input type="hidden" name="DOBCname" value="<?php echo $DOBCname;?>"/> </td> 
                         
                     </tr>                
                     <tr>
-                        <td >জাতীয় পরিচয়পত্র নং</td>
+                        <td >জাতীয় পরিচয়পত্র নং</td>
                         <td>:   <input class="box" type="text" id="cust_nationalID_no" name="cust_nationalID_no" value="<?php echo $db_custNID;?>"/></td>
-                        <td style="width: 100px;" font-weight="bold" > জাতীয় পরিচয়পত্র</td>
+                        <td style="width: 100px;" font-weight="bold" > জাতীয় পরিচয়পত্র</td>
                         <td >: <img src="<?php echo $db_custNIDC;?>" width="80px" height="80px"/><input type="hidden" name="NIDCname" value="<?php echo $NIDCname;?>"/> <input class="box5" type="file" id="scanDoc_national_id" name="scanDoc_national_id" style="font-size:10px;"/> </td>
                     </tr>
                     <tr>
@@ -837,7 +837,7 @@ elseif (isset($_POST['submit5'])) {
                         <td>:   <input class="box" type="text" id="cust_father_name" name="cust_father_name" value="<?php echo $db_custFather;?>"/></td>			
                     </tr>
                     <tr>
-                        <td >মায়ের নাম </td>
+                        <td >মায়ের নাম </td>
                         <td>:    <input class="box" type="text" id="cust_mother_name" name="cust_mother_name" value="<?php echo $db_custMother;?>"/></td>			
                     </tr>
                     <tr>
@@ -863,12 +863,12 @@ elseif (isset($_POST['submit5'])) {
                         <td>:    <input class="textfield" type="text" id="cust_son_student_no" name="cust_son_student_no" value="<?php echo $custSonStdNo;?>"/> জন</td>
                     </tr>              
                     <tr>
-                        <td style="padding-top: 14px;vertical-align: top; width: 25%;" >বয়স ও শ্রেণী</td>
+                        <td style="padding-top: 14px;vertical-align: top; width: 25%;" >বয়স ও শ্রেণী</td>
                         <td colspan="4">
                             <table id="container_others30">                     
                                 <tr>
-                                    <td>সন্তানের বয়স  :</td>
-                                    <td>অধ্যয়ণরত শ্রেণী : </td>
+                                    <td>সন্তানের বয়স  :</td>
+                                    <td>অধ্যয়ণরত শ্রেণী : </td>
                                 </tr>
                                         <?php
                                             echo "<tr><td><select class='box2' name='m_children_age[]' style ='font-size: 11px'><option>একটি নির্বাচন করুন</option>";                                                    
@@ -945,25 +945,25 @@ elseif (isset($_POST['submit5'])) {
                         <td colspan="4" ><hr /></td>
                     </tr>
                     <tr>	                                          
-                        <td colspan="4" style =" font-size: 14px"><b>মেয়ের সন্তানের তথ্য</b></td>
+                        <td colspan="4" style =" font-size: 14px"><b>মেয়ের সন্তানের তথ্য</b></td>
                     </tr>        
                     <tr>
-                        <td >মেয়ের সন্তানের সংখ্যা  </td>
+                        <td >মেয়ের সন্তানের সংখ্যা  </td>
                         <td >:  <input class="textfield" type="text" id="cust_daughter_no" name="cust_daughter_no" value="<?php echo $custDauNo;?>"/> জন</td>
                     </tr>                                                                                                 
                     <tr>
-                        <td >মেয়ে  ষ্টুডেন্ট </td>
+                        <td >মেয়ে  ষ্টুডেন্ট </td>
                         <td>:  <input class="textfield" type="text" id="cust_daughter_student_no" name="cust_daughter_student_no" value="<?php echo $custDauStdNo;?>"/> জন </td>	
                     </tr>                                                                                                
                     <tr>
                         <td colspan="4" >                
                     <tr>
-                        <td style="padding-top: 14px;vertical-align: top; width: 25%;">বয়স ও শ্রেণী</td>
+                        <td style="padding-top: 14px;vertical-align: top; width: 25%;">বয়স ও শ্রেণী</td>
                         <td colspan="4">
                             <table id="container_others31">                                                    
                                 <tr>
-                                    <td>সন্তানের বয়স  :</td>
-                                    <td>অধ্যয়ণরত শ্রেণী : </td>
+                                    <td>সন্তানের বয়স  :</td>
+                                    <td>অধ্যয়ণরত শ্রেণী : </td>
                                 </tr>
                                <?php
                                             echo "<tr><td><select class='box2' name='f_children_age[]' style ='font-size: 11px'><option>একটি নির্বাচন করুন</option>";                                                    
@@ -1057,7 +1057,7 @@ elseif (isset($_POST['submit5'])) {
                         <td>:   <input class="box" type="text" id="cust_gurdian_email" name="cust_gurdian_email" value="<?php echo $db_custGurdEmail;?>"/></td>			
                     </tr>
                     <tr>
-                        <td >জাতীয় পরিচয়পত্র নং</td>
+                        <td >জাতীয় পরিচয়পত্র নং</td>
                         <td>:   <input class="box" type="text" id="cust_gurdian_nationalID_no" name="cust_gurdian_nationalID_no" value="<?php echo $db_custGurdNID;?>"/></td>			
                     </tr>
                     <tr>
@@ -1085,15 +1085,15 @@ elseif (isset($_POST['submit5'])) {
                         <td colspan="2" style =" font-size: 14px"><b> স্থায়ী ঠিকানা   </b></td>
                     </tr>
                     <tr>
-                        <td>বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td>বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td >: <input class="box" type="text" id="g_house" name="g_house" value="<?php echo $gpreHouse;?>"/></td>
-                        <td>বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td>বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td>: <input class="box" type="text" id="gp_house" name="gp_house" value="<?php echo $gperHouse;?>"/></td>
                     </tr>
                     <tr>
-                        <td>বাড়ি নং</td>
+                        <td>বাড়ি নং</td>
                         <td >: <input class="box" type="text" id="g_house_no" name="g_house_no" value="<?php echo $gpreHouseNo;?>"/></td>
-                        <td >বাড়ি নং</td>
+                        <td >বাড়ি নং</td>
                         <td>: <input class="box" type="text" id="gp_house_no" name="gp_house_no" value="<?php echo $gperHouseNo;?>"/></td>
                     </tr>
                     <tr>
@@ -1126,11 +1126,11 @@ elseif (isset($_POST['submit5'])) {
             <form method="POST" onsubmit=""  enctype="multipart/form-data" action="" id="cust_form1" name="cust_form1">	
                 <table class="formstyle" style=" width: 90%; padding-left: 15px; padding-top: 5px; padding-bottom: 8px;" >      
                     <tr>
-                        <td >নমিনির নাম</td>
-                        <td>:   <input class="box" type="text" id="nominee_name" name="nominee_name" value="<?php echo $db_nomName;?>"/><input type="hidden" name="nomineeID" value="<?php echo $db_nomID?>"/></td>
+                        <td width="22%" >নমিনির নাম</td>
+                        <td width="24%">:   <input class="box" type="text" id="nominee_name" name="nominee_name" value="<?php echo $db_nomName;?>"/><input type="hidden" name="nomineeID" value="<?php echo $db_nomID?>"/></td>
                     </tr>   
                     <tr>
-                        <td >বয়স</td>
+                        <td >বয়স</td>
                         <td>:   <input class="box" type="text" id="nominee_age" name="nominee_age" value="<?php echo $db_nomAge;?>"/></td>
                     </tr>   
                     <tr>
@@ -1146,7 +1146,7 @@ elseif (isset($_POST['submit5'])) {
                         <td>:   <input class="box" type="text" id="nominee_email" name="nominee_email" value="<?php echo $db_nomEmail;?>"/></td>			
                     </tr>
                     <tr>
-                        <td >জাতীয় পরিচয়পত্র নং</td>
+                        <td >জাতীয় পরিচয়পত্র নং</td>
                         <td>:   <input class="box" type="text" id="nominee_national_ID" name="nominee_national_ID" value="<?php echo $db_nomNID;?>"/></td>			
                     </tr>
                     <tr>
@@ -1166,15 +1166,15 @@ elseif (isset($_POST['submit5'])) {
                         <td colspan="2" style =" font-size: 14px"><b> স্থায়ী ঠিকানা   </b></td>
                     </tr>
                     <tr>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td >: <input class="box" type="text" id="n_house" name="n_house" value="<?php echo $nompreHouse;?>"/></td>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        <td >: <input class="box" type="text" id="np_house" name="np_house" value="<?php echo $nomperHouse;?>"/></td>
+                        <td width="30%"  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td width="24%" >: <input class="box" type="text" id="np_house" name="np_house" value="<?php echo $nomperHouse;?>"/></td>
                     </tr>
                     <tr>
-                        <td  >বাড়ি নং</td>
+                        <td  >বাড়ি নং</td>
                         <td >: <input class="box" type="text" id="n_house_no" name="n_house_no" value="<?php echo $nompreHouseNo;?>"/></td>
-                        <td >বাড়ি নং</td>
+                        <td >বাড়ি নং</td>
                         <td>: <input class="box" type="text" id="np_house_no" name="np_house_no" value="<?php echo $nomperHouseNo;?>"/></td>
                     </tr>
                     <tr>
@@ -1295,15 +1295,15 @@ elseif (isset($_POST['submit5'])) {
                         <td colspan="2" style =" font-size: 14px"><b> স্থায়ী ঠিকানা   </b></td>
                     </tr>
                     <tr>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td >:   <input class="box" type="text" id="c_house" name="c_house" value="<?php echo $preHouse;?>"/></td>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td >:   <input class="box" type="text" id="cp_house" name="cp_house" value="<?php echo $perHouse;?>"/></td>
                     </tr>
                     <tr>
-                        <td  >বাড়ি নং</td>
+                        <td  >বাড়ি নং</td>
                         <td >:   <input class="box" type="text" id="c_house_no" name="c_house_no" value="<?php echo $preHouseNo;?>"/></td>
-                        <td >বাড়ি নং</td>
+                        <td >বাড়ি নং</td>
                         <td>:   <input class="box" type="text" id="cp_house_no" name="cp_house_no" value="<?php echo $perHouseNo;?>"/></td>
                     </tr>
                     <tr>
