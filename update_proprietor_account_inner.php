@@ -190,9 +190,9 @@ elseif (isset($_POST['submit2'])) {
     $n_road = $_POST['n_road'];
     $n_post_code = $_POST['n_post_code'];
     //Permanent Address information
-    $np_Village_idVillage = $_POST['vilg_id1'];
-    $np_Post_idPost = $_POST['post_id1'];
-    $np_Thana_idThana = $_POST['thana_id1'];
+    $np_Village_idVillage = $_POST['vilg_id3'];
+    $np_Post_idPost = $_POST['post_id3'];
+    $np_Thana_idThana = $_POST['thana_id3'];
     $np_house = $_POST['np_house'];
     $np_house_no = $_POST['np_house_no'];
     $np_road = $_POST['np_road'];

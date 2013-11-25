@@ -183,17 +183,17 @@ elseif (isset($_POST['submit2'])) {
                                                         nominee_mobile='$nominee_mobile', nominee_email='$nominee_email', nominee_national_ID='$nominee_national_ID', nominee_age='$nominee_age', 
                                                         nominee_passport_ID='$nominee_passport_ID' WHERE idNominee = $nominee_id"); }
     //Current Address Infromation
-    $n_Village_idVillage = $_POST['vilg_id'];
-    $n_Post_idPost = $_POST['post_id'];
-    $n_Thana_idThana = $_POST['thana_id'];
+    $n_Village_idVillage = $_POST['vilg_id2'];
+    $n_Post_idPost = $_POST['post_id2'];
+    $n_Thana_idThana = $_POST['thana_id2'];
     $n_house = $_POST['n_house'];
     $n_house_no = $_POST['n_house_no'];
     $n_road = $_POST['n_road'];
     $n_post_code = $_POST['n_post_code'];
     //Permanent Address information
-    $np_Village_idVillage = $_POST['vilg_id1'];
-    $np_Post_idPost = $_POST['post_id1'];
-    $np_Thana_idThana = $_POST['thana_id1'];
+    $np_Village_idVillage = $_POST['vilg_id3'];
+    $np_Post_idPost = $_POST['post_id3'];
+    $np_Thana_idThana = $_POST['thana_id3'];
     $np_house = $_POST['np_house'];
     $np_house_no = $_POST['np_house_no'];
     $np_road = $_POST['np_road'];
@@ -678,8 +678,8 @@ elseif (isset($_POST['submit5'])) {
                         <td>:   <input class="box" type="text" id="np_post_code" name="np_post_code" value="<?php echo $nomperPostCode;?>"/></td>
                     </tr>
                      <tr>
-                        <td colspan="2"><?php getArea($nompreDivID,$nompreDisID,$nompreThanaID,$nomprePostID,$nompreVilID); ?></td>
-                        <td colspan="2"><?php getArea2($nomperDivID,$nomperDisID,$nomperThanaID,$nomperPostID,$nomperVilID); ?></td>
+                        <td colspan="2"><?php getArea3($nompreDivID,$nompreDisID,$nompreThanaID,$nomprePostID,$nompreVilID); ?></td>
+                        <td colspan="2"><?php getArea4($nomperDivID,$nomperDisID,$nomperThanaID,$nomperPostID,$nomperVilID); ?></td>
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-top: 10px; padding-left: 250px;padding-bottom: 5px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit2" value="সেভ করুন" />

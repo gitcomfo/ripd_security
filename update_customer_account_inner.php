@@ -297,17 +297,17 @@ if (isset($_POST['submit1'])) {
     }
     
      //Current Address Infromation
-    $g_Village_idVillage = $_POST['vilg_id'];
-    $g_Post_idPost = $_POST['post_id'];
-    $g_Thana_idThana = $_POST['thana_id'];
+    $g_Village_idVillage = $_POST['vilg_id4'];
+    $g_Post_idPost = $_POST['post_id4'];
+    $g_Thana_idThana = $_POST['thana_id4'];
     $g_house = $_POST['g_house'];
     $g_house_no = $_POST['g_house_no'];
     $g_road = $_POST['g_road'];
     $g_post_code = $_POST['g_post_code'];
     //Permanent Address information
-    $gp_Village_idVillage = $_POST['vilg_id1'];
-    $gp_Post_idPost = $_POST['post_id1'];
-    $gp_Thana_idThana = $_POST['thana_id1'];
+    $gp_Village_idVillage = $_POST['vilg_id5'];
+    $gp_Post_idPost = $_POST['post_id5'];
+    $gp_Thana_idThana = $_POST['thana_id5'];
     $gp_house = $_POST['gp_house'];
     $gp_house_no = $_POST['gp_house_no'];
     $gp_road = $_POST['gp_road'];
@@ -390,17 +390,17 @@ mysql_query("START TRANSACTION");
                                                         nominee_passport_ID='$nominee_passport_ID' WHERE idNominee = $nominee_id"); }
     
      //Current Address Infromation
-    $n_Village_idVillage = $_POST['vilg_id'];
-    $n_Post_idPost = $_POST['post_id'];
-    $n_Thana_idThana = $_POST['thana_id'];
+    $n_Village_idVillage = $_POST['vilg_id2'];
+    $n_Post_idPost = $_POST['post_id2'];
+    $n_Thana_idThana = $_POST['thana_id2'];
     $n_house = $_POST['n_house'];
     $n_house_no = $_POST['n_house_no'];
     $n_road = $_POST['n_road'];
     $n_post_code = $_POST['n_post_code'];
     //Permanent Address information
-    $np_Village_idVillage = $_POST['vilg_id1'];
-    $np_Post_idPost = $_POST['post_id1'];
-    $np_Thana_idThana = $_POST['thana_id1'];
+    $np_Village_idVillage = $_POST['vilg_id3'];
+    $np_Post_idPost = $_POST['post_id3'];
+    $np_Thana_idThana = $_POST['thana_id3'];
     $np_house = $_POST['np_house'];
     $np_house_no = $_POST['np_house_no'];
     $np_road = $_POST['np_road'];
@@ -1109,8 +1109,8 @@ elseif (isset($_POST['submit5'])) {
                         <td>: <input class="box" type="text" id="gp_post_code" name="gp_post_code" value="<?php echo $gperPostCode;?>"/></td>
                     </tr>
                     <tr>
-                        <td colspan="2"><?php getArea($gpreDivID,$gpreDisID,$gpreThanaID,$gprePostID,$gpreVilID); ?></td>
-                        <td colspan="2"><?php getArea2($gperDivID,$gperDisID,$gperThanaID,$gperPostID,$gperVilID); ?></td>
+                        <td colspan="2"><?php getArea5($gpreDivID,$gpreDisID,$gpreThanaID,$gprePostID,$gpreVilID); ?></td>
+                        <td colspan="2"><?php getArea6($gperDivID,$gperDisID,$gperThanaID,$gperPostID,$gperVilID); ?></td>
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit1" value="সেভ করুন" />
@@ -1190,8 +1190,8 @@ elseif (isset($_POST['submit5'])) {
                         <td>:   <input class="box" type="text" id="np_post_code" name="np_post_code" value="<?php echo $nomperPostCode;?>"/></td>
                     </tr>
                     <tr>
-                        <td colspan="2"><?php getArea($nompreDivID,$nompreDisID,$nompreThanaID,$nomprePostID,$nompreVilID); ?></td>
-                        <td colspan="2"><?php getArea2($nomperDivID,$nomperDisID,$nomperThanaID,$nomperPostID,$nomperVilID); ?></td>
+                        <td colspan="2"><?php getArea3($nompreDivID,$nompreDisID,$nompreThanaID,$nomprePostID,$nompreVilID); ?></td>
+                        <td colspan="2"><?php getArea4($nomperDivID,$nomperDisID,$nomperThanaID,$nomperPostID,$nomperVilID); ?></td>
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit2" value="সেভ করুন" />
