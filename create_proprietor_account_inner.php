@@ -83,6 +83,7 @@ if (isset($_POST['submit1'])) {
     } else {
         echo "Invalid file format.";
     }
+    mysql_query("START TRANSACTION");
     $sql_update_proprietor = mysql_query("UPDATE $dbname.proprietor_account SET prop_father_name='$prop_father_name', prop_motherName='$prop_motherName', prop_spouseName='$prop_spouseName', 
                                                         prop_occupation='$prop_occupation', prop_religion='$prop_religion', prop_natonality='$prop_natonality', prop_nationalID_no='$prop_nationalID_no', 
                                                         prop_passportID_no='$prop_passportID_no', prop_date_of_birth='$dob', prop_birth_certificate_no='$prop_birth_certificate_no',  
@@ -114,9 +115,12 @@ if (isset($_POST['submit1'])) {
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
                                      VALUES ('Permanent', '$pp_house', '$pp_house_no', '$pp_road', 'pwr', '$pp_post_code','$pp_Thana_idThana', '$pp_Post_idPost', '$pp_Village_idVillage', '$proprietorTableID')");
 
-    if ($sql_update_proprietor || $sql_p_insert_current_address || $sql_pp_insert_permanent_address) {
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+    if ($sql_update_proprietor || $sql_p_insert_current_address || $sql_pp_insert_permanent_address) 
+        {
+            mysql_query("COMMIT");
+            $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+        mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
 }elseif (isset($_POST['submit2'])) {
@@ -137,7 +141,7 @@ if (isset($_POST['submit1'])) {
     } else {
         echo "Invalid file format.";
     }
-
+mysql_query("START TRANSACTION");
     $sql_nominee = mysql_query("INSERT INTO $dbname.nominee(nominee_name, nominee_relation, nominee_mobile,
                                        nominee_email, nominee_national_ID, nominee_age, nominee_passport_ID, nominee_picture,cep_type, cep_nominee_id) 
                                        VALUES('$nominee_name','$nominee_relation','$nominee_mobile','$nominee_email','$nominee_national_ID',
@@ -148,9 +152,7 @@ if (isset($_POST['submit1'])) {
     $n_Thana_idThana = $_POST['thana_id5'];
     $n_house = $_POST['n_house'];
     $n_house_no = $_POST['n_house_no'];
-    $n_village = $_POST['n_village'];
     $n_road = $_POST['n_road'];
-    $n_post = $_POST['n_post'];
     $n_post_code = $_POST['n_post_code'];
     //Permanent Address information
     $np_Village_idVillage = $_POST['village_id6'];
@@ -158,9 +160,7 @@ if (isset($_POST['submit1'])) {
     $np_Thana_idThana = $_POST['thana_id6'];
     $np_house = $_POST['np_house'];
     $np_house_no = $_POST['np_house_no'];
-    $np_village = $_POST['np_village'];
     $np_road = $_POST['np_road'];
-    $np_post = $_POST['np_post'];
     $np_post_code = $_POST['np_post_code'];
     //nominee address_type=Present
     $sql_n_insert_current_address = mysql_query("INSERT INTO $dbname.address 
@@ -172,8 +172,10 @@ if (isset($_POST['submit1'])) {
                                      VALUES ('Permanent', '$np_house', '$np_house_no','$np_road', 'nmn',  '$np_post_code','$np_Thana_idThana','$np_Post_idPost', '$np_Village_idVillage','$proprietorID')");
 
     if ($sql_nominee || $sql_n_insert_current_address || $sql_np_insert_permanent_address) {
+        mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+        mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
 } elseif (isset($_POST['submit3'])) {
@@ -184,6 +186,7 @@ if (isset($_POST['submit1'])) {
     $e_board = $_POST['e_board'];
     $e_gpa = $_POST['e_gpa'];
     $a = count($e_ex_name);
+    mysql_query("START TRANSACTION");
     for ($i = 0; $i < $a; $i++) {
         $sql_insert_emp_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) VALUES ('$e_ex_name[$i]', '$e_pass_year[$i]','$e_institute[$i]','$e_board[$i]','$e_gpa[$i]','pwr','$proprietorID');";
         $emp_edu = mysql_query($sql_insert_emp_edu) or exit('query failed: ' . mysql_error());
@@ -203,11 +206,14 @@ if (isset($_POST['submit1'])) {
         $nom_edu = mysql_query($sql_insert_nom_edu) or exit('query failed: ' . mysql_error());
     }
     if ($emp_edu || $nom_edu) {
+        mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
+        mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
-}elseif (isset($_POST['submit4'])) {
+}
+elseif (isset($_POST['submit4'])) {
     $pathArray = array();
     for ($i = 1; $i < 12; $i++) {
         $scan_document = "";
@@ -266,19 +272,19 @@ if (isset($_POST['submit1'])) {
                         <td>স্বত্বাধিকারীর নাম</td>
                         <td>:  <input  class="box" type="text" id="prop_name" name="prop_name" /><input type="hidden" name="proprietorID" value="<?php echo $proprietorID;?>"/></td>   
                         <td font-weight="bold" >ছবি </td>
-                        <td>:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/></td>               
+                        <td>:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/><<em2> *</em2>/td>               
                     </tr>
                     <tr>
                         <td >বাবার নাম </td>
                         <td>:  <input class="box" type="text" id="prop_father_name" name="prop_father_name" /></td>	
                         <td font-weight="bold" >স্বাক্ষর</td>
-                        <td >:   <input class="box" type="file" id="scanDoc_signature" name="scanDoc_signature" style="font-size:10px;"/> </td> 
+                        <td >:   <input class="box" type="file" id="scanDoc_signature" name="scanDoc_signature" style="font-size:10px;"/> <em2> *</em2></td> 
                     </tr>
                     <tr>
                         <td >মার নাম </td>
                         <td>:  <input class="box" type="text" id="prop_motherName" name="prop_motherName"/></td>
                         <td font-weight="bold" > টিপসই</td>
-                        <td >:   <input class="box" type="file" id="scanDoc_finger_print" name="scanDoc_finger_print" style="font-size:10px;"/> </td> 
+                        <td >:   <input class="box" type="file" id="scanDoc_finger_print" name="scanDoc_finger_print" style="font-size:10px;"/><em2> *</em2> </td> 
                     </tr>
                     <tr>
                         <td >দম্পতির নাম  </td>
@@ -336,7 +342,7 @@ if (isset($_POST['submit1'])) {
                         </td>			
                     </tr>             
                     <td >জাতীয় পরিচয়পত্র নং</td>
-                    <td>:  <input class="box" type="text" id="prop_nationalID_no" name="prop_nationalID_no" /></td>			
+                    <td>:  <input class="box" type="text" id="prop_nationalID_no" name="prop_nationalID_no" /><em2> *</em2></td>			
                     </tr>
                     <tr>
                         <td >পাসপোর্ট আইডি নং</td>
@@ -411,9 +417,9 @@ if (isset($_POST['submit1'])) {
                     </tr>                        
                     <tr>
                         <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd"></span></td>      
+                        <td>: <span id="tidd"></span><em2> *</em2></td>      
                         <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd2"></span></td>
+                        <td>: <span id="tidd2"></span><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td >পোষ্ট অফিস</td>

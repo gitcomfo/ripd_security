@@ -33,12 +33,4 @@
                     echo "<option value='$db_thana_id'>$db_thana_name</option>";
                     }
             echo "</select>"; 
-            /*officeTableHead();
-            for($a=0; $a<count($arr_thanaID); $a++)
-                {
-                //$temp = $arr_thanaID[$a];
-                $office_sql = "SELECT * FROM ".$dbname.".office WHERE Thana_idThana = '" .$arr_thanaID[$a]. "'ORDER BY office_name ASC";
-                officeNcontactTable($office_sql);
-                }
-            officeTableEnd();*/
 ?>

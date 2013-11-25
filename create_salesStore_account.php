@@ -2,7 +2,8 @@
 error_reporting(0);
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
-include 'includes/makeAccountNumbers.php';
+include_once 'includes/makeAccountNumbers.php';
+include_once 'includes/checkAccountNo.php';
 if(isset($_POST['submit']))
 {
     $name = $_POST['sales_name'];
@@ -10,6 +11,8 @@ if(isset($_POST['submit']))
     $sales_no = $_POST['sales_no'];
     $sales_mail = $_POST['sales_mail'];
     $sales_acc = $_POST['sales_acc'];
+    $accType = current(explode("-", $sales_acc));
+    $sales_acc1 = checkAccountNo2($sales_acc,$accType);
     $whatPwr = $_POST['pwrstore'];
     if($whatPwr == 'yes')
     {
@@ -21,7 +24,7 @@ if(isset($_POST['submit']))
     else {$powrid = 0; $topparent_id = 0;}
     $officeID = $_POST['parentOff_id'];
    $thana = $_POST['thana_id'];
-    
+    mysql_query("START TRANSACTION");
    $sql= "INSERT INTO ". $dbname .".`sales_store` (`salesStore_name` ,`salesStore_number` ,`account_number` ,`salesStore_details_address` ,`salesStore_email` ,`office_id`, `powerstore_officeid`,`top_pwr`, `Thana_idThana`) 
             VALUES ( '$name','$sales_no' , '$sales_acc', '$sales_add','$sales_mail', '$officeID', '$powrid', '$topparent_id', '$thana')";
     $reslt=mysql_query($sql) or exit('query failed insert into sales store: '.mysql_error());
@@ -137,12 +140,13 @@ if(isset($_POST['submit']))
      
      $ins_postinons = mysql_query("INSERT INTO post_in_ons (number_of_post, free_post, post_onstype, used_post, post_onsid, Post_idPost)
                                                         VALUES (1, 1, 's_store', 0, $off, 11)");
-     if($ownreslt && $ins_postinons)
+     if($reslt && $sreslt && $ireslt && $oreslt && $ownreslt && $ins_postinons)
      {
+         mysql_query("COMMIT");
          $msg = "সেলসস্টোর তৈরি হয়েছে";
      }
      else
-     {$msg = "দুঃখিত, সেলসস্টোর তৈরি হয়নি";}
+     {mysql_query("ROLLBACK"); $msg = "দুঃখিত, সেলসস্টোর তৈরি হয়নি";}
 }
 ?>
 <title>ক্রিয়েট সেলসস্টোর অ্যাকাউন্ট</title>
@@ -171,16 +175,14 @@ if(isset($_POST['submit']))
         });
     }
     
-    function numbersonly(e)
+ function numbersonly(e)
    {
-   
-var unicode=e.charCode? e.charCode : e.keyCode
-    if (unicode!=8)
-    { //if the key isn't the backspace key (which we should allow)
-
-        if (unicode<48||unicode>57) //if not a number
-        return false //disable key press
-    }
+        var unicode=e.charCode? e.charCode : e.keyCode
+            if (unicode!=8)
+            { //if the key isn't the backspace key (which we should allow)
+                if (unicode<48||unicode>57) //if not a number
+                return false //disable key press
+            }
 }
 function enableIT() { document.getElementById('parentPwr').disabled = false;}
 function disableIT() { document.getElementById('parentPwr').disabled = true;}
@@ -367,7 +369,7 @@ var xmlhttp;
                     <tr><td colspan="2" style="text-align: center;color: green;font-size: 16px;"><?php if($msg != "") echo $msg;?></td></tr>
                     <tr>
                         <td>সেলস স্টোরের নাম</td>
-                        <td>:    <input  class ="textfield" type="text" id="sales_name" name="sales_name" /></td>
+                        <td>:    <input  class ="textfield" type="text" id="sales_name" name="sales_name" /><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td>বিভাগ</td>
@@ -425,13 +427,13 @@ var xmlhttp;
                         }
                         
                         ?>
-                                  </select>
+                                  </select><em2> *</em2>
                           </td>                
                     </tr>
                     
                      <tr>
                         <td>সেলস স্টোরের  ঠিকানা</td>
-                        <td>:    <input  class ="textfield" type="text" id="sales_address_" name="sales_address" /></td>
+                        <td>:    <input  class ="textfield" type="text" id="sales_address_" name="sales_address" /><em2> *</em2></td>
                     </tr>
                            <tr>
                         <td>সেলস স্টোরের  নাম্বার</td>
@@ -453,7 +455,7 @@ var xmlhttp;
                     </tr>
                     <tr>
                         <td>প্যারেন্ট অফিস</td>
-                        <td>: <input class="textfield" type="text" id="parent" name="parent" onkeyup="getParentOffice(this.value);"/><em> (অ্যাকাউন্ট নাম্বার)</em>
+                        <td>: <input class="textfield" type="text" id="parent" name="parent" onkeyup="getParentOffice(this.value);"/><em2> *</em2><em> (অ্যাকাউন্ট নাম্বার)</em>
                                  <div id="offResult"></div><input type="hidden" name="parentOff_id" id="parentOff_id"/></td>
                     </tr>
                     <tr>
@@ -472,7 +474,7 @@ var xmlhttp;
                     </tr>
                     <tr>
                         <td >ফ্লোর নাম্বার</td>
-                        <td>:   <input class="textfield" type="text" id="floor_number" name="floor_number" /> </td>
+                        <td>:   <input class="textfield" type="text" id="floor_number" name="floor_number" /> <em2> *</em2></td>
                     </tr>
                     
                       <td colspan="2" ><hr /></td>
@@ -483,7 +485,7 @@ var xmlhttp;
                     <tr>
                         <td  >ভাড়া</td>
                         <td >:   <input class="textfield" style="text-align: right" type="text" id="office_rent1" name="office_rent1" onkeypress="return numbersonly(event)" />
-                            . <input class="boxTK" type="text" maxlength="2"  id="office_rent2" name="office_rent2"  onkeypress=" return numbersonly(event)"/>TK <em> (ইংরেজিতে লিখুন)</em></td>
+                            . <input class="boxTK" type="text" maxlength="2"  id="office_rent2" name="office_rent2"  onkeypress=" return numbersonly(event)"/>TK <em> (ইংরেজিতে লিখুন)</em><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td  >কারেন্ট বিল</td>
@@ -504,7 +506,7 @@ var xmlhttp;
                     <tr>
                         <td >অগ্রিম</td>
                         <td >:   <input class="textfield" style="text-align: right" type="text" id="advanced_payment1" name="advanced_payment1"  onkeypress="return numbersonly(event)" />
-                            . <input class="boxTK" type="text" maxlength="2" id="advanced_payment2" name="advanced_payment2" onkeypress="return numbersonly(event)" />TK<em> (ইংরেজিতে লিখুন)</em></td>
+                            . <input class="boxTK" type="text" maxlength="2" id="advanced_payment2" name="advanced_payment2" onkeypress="return numbersonly(event)" />TK<em> (ইংরেজিতে লিখুন)</em><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td  >ডেকোরেশন</td>
@@ -540,7 +542,7 @@ var xmlhttp;
                     </tr>
                     <tr>
                         <td >মালিকের নাম</td>
-                        <td >:   <input class="textfield" type="text" id="owner_Name" name="owner_Name" /></td>
+                        <td >:   <input class="textfield" type="text" id="owner_Name" name="owner_Name" /><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td  >বাসার ঠিকানা</td>
@@ -548,7 +550,7 @@ var xmlhttp;
                     </tr>
                     <tr>
                         <td >মোবাইল নাম্বার</td>
-                        <td>:   <input class="textfield" type="text" id="mobile_number" name="mobile_number" /><em> (ইংরেজিতে লিখুন)</em></td>
+                        <td>:   <input class="textfield" type="text" id="mobile_number" name="mobile_number" onkeypress=' return numbersonly(event)'/><em2> *</em2><em> (ইংরেজিতে লিখুন)</em></td>
                     </tr>
                     <tr>
                         <td >ই-মেইল</td>

@@ -44,8 +44,7 @@ $g_type = $_GET['pwr'];
                     include_once 'includes/areaSearch.php';
                     getArea("infoFromThana()");
                     ?>
-<input type="hidden" id="method" value="infoFromThana()">
-    সার্চ/খুঁজুন:  <input type="text" id="search_box_filter">
+                <input type="hidden" id="method" value="infoFromThana()">সার্চ/খুঁজুন: <input style="width: 150px;" type="text" id="search_box_filter">
     <span id="office">
         <br /><br />
         <div>

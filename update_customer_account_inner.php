@@ -7,7 +7,7 @@ error_reporting(0);
 $x= $_GET['id'];
 $custAcid = base64_decode($x);
 ?>
-<title>ক্রিয়েট কাস্টমার অ্যাকাউন্ট</title>
+<title>ক্রিয়েট কাস্টমার অ্যাকাউন্ট</title>
 <style type="text/css">@import "css/bush.css";</style>
 <script type="text/javascript" src="javascripts/area2.js"></script>
 <script type="text/javascript" src="javascripts/jquery-1.4.3.min.js"></script>
@@ -270,6 +270,7 @@ if (isset($_POST['submit1'])) {
                     echo "Invalid file format.";
                     }
         }
+        mysql_query("START TRANSACTION");
     $sql_update_customer = mysql_query("UPDATE customer_account SET cust_father_name='$cust_father_name', cust_mother_name='$cust_mother_name', cust_spouse_name='$cust_spouse_name', cust_family_member='$cust_family_member', cust_son_no='$cust_son_no', cust_daughter_no='$cust_daughter_no', 
                                                         cust_son_student_no='$cust_son_student_no', cust_daughter_student_no='$cust_daughter_student_no', cust_occupation='$cust_occupation', cust_religion='$cust_religion', cust_nationality='$cust_nationality', cust_nationalID_no='$cust_nationalID_no', 
                                                         cust_passportID_no='$cust_passportID_no', cust_date_of_birth='$dob', birth_certificate_no='$birth_certificate_no', cust_gurdian_name='$cust_gurdian_name', cust_gurdian_relation='$cust_gurdian_relation', cust_gurdian_mobile='$cust_gurdian_mobile', 
@@ -296,17 +297,17 @@ if (isset($_POST['submit1'])) {
     }
     
      //Current Address Infromation
-    $g_Village_idVillage = $_POST['vilg_id'];
-    $g_Post_idPost = $_POST['post_id'];
-    $g_Thana_idThana = $_POST['thana_id'];
+    $g_Village_idVillage = $_POST['vilg_id4'];
+    $g_Post_idPost = $_POST['post_id4'];
+    $g_Thana_idThana = $_POST['thana_id4'];
     $g_house = $_POST['g_house'];
     $g_house_no = $_POST['g_house_no'];
     $g_road = $_POST['g_road'];
     $g_post_code = $_POST['g_post_code'];
     //Permanent Address information
-    $gp_Village_idVillage = $_POST['vilg_id1'];
-    $gp_Post_idPost = $_POST['post_id1'];
-    $gp_Thana_idThana = $_POST['thana_id1'];
+    $gp_Village_idVillage = $_POST['vilg_id5'];
+    $gp_Post_idPost = $_POST['post_id5'];
+    $gp_Thana_idThana = $_POST['thana_id5'];
     $gp_house = $_POST['gp_house'];
     $gp_house_no = $_POST['gp_house_no'];
     $gp_road = $_POST['gp_road'];
@@ -335,10 +336,12 @@ if (isset($_POST['submit1'])) {
         $sql_gp_insert_present_address = mysql_query("UPDATE address SET  house ='$gp_house', house_no='$gp_house_no' , road='$gp_road' ,  post_code='$gp_post_code',Thana_idThana='$gp_Thana_idThana',  post_idpost='$gp_Post_idPost', village_idvillage='$gp_Village_idVillage'
                                                                                     WHERE address_type='Permanent'  AND address_whom='cust_prnt' AND adrs_cepng_id='$custAcid'");
     }
-    if ($sql_update_customer && $child_male && $child_female && $sql_g_insert_current_address && $sql_gp_insert_present_address) {
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+    if ($sql_update_customer || ($child_male && $del_m_children) || ($child_female && $del_f_children) || $sql_g_insert_current_address || $sql_gp_insert_present_address) {
+        mysql_query("COMMIT");
+        $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
-        $msg = "ভুল হয়েছে";
+        mysql_query("ROLLBACK");
+        $msg = "ভুল হয়েছে";
     }
 } 
 elseif (isset($_POST['submit2'])) {
@@ -373,6 +376,7 @@ elseif (isset($_POST['submit2'])) {
                     }
         }
 $sql_sel_nominee = mysql_query("SELECT * FROM nominee WHERE idNominee = $nominee_id");
+mysql_query("START TRANSACTION");
     if(mysql_num_rows($sql_sel_nominee) <1)
     {
         $sql_nominee = mysql_query("INSERT INTO $dbname.nominee(nominee_name, nominee_relation, nominee_mobile,
@@ -386,17 +390,17 @@ $sql_sel_nominee = mysql_query("SELECT * FROM nominee WHERE idNominee = $nominee
                                                         nominee_passport_ID='$nominee_passport_ID' WHERE idNominee = $nominee_id"); }
     
      //Current Address Infromation
-    $n_Village_idVillage = $_POST['vilg_id'];
-    $n_Post_idPost = $_POST['post_id'];
-    $n_Thana_idThana = $_POST['thana_id'];
+    $n_Village_idVillage = $_POST['vilg_id2'];
+    $n_Post_idPost = $_POST['post_id2'];
+    $n_Thana_idThana = $_POST['thana_id2'];
     $n_house = $_POST['n_house'];
     $n_house_no = $_POST['n_house_no'];
     $n_road = $_POST['n_road'];
     $n_post_code = $_POST['n_post_code'];
     //Permanent Address information
-    $np_Village_idVillage = $_POST['vilg_id1'];
-    $np_Post_idPost = $_POST['post_id1'];
-    $np_Thana_idThana = $_POST['thana_id1'];
+    $np_Village_idVillage = $_POST['vilg_id3'];
+    $np_Post_idPost = $_POST['post_id3'];
+    $np_Thana_idThana = $_POST['thana_id3'];
     $np_house = $_POST['np_house'];
     $np_house_no = $_POST['np_house_no'];
     $np_road = $_POST['np_road'];
@@ -422,15 +426,17 @@ $sql_sel_nominee = mysql_query("SELECT * FROM nominee WHERE idNominee = $nominee
                                      VALUES ('Permanent', '$np_house', '$np_house_no','$np_road', 'nmn',  '$np_post_code','$np_Thana_idThana','$np_Post_idPost', '$np_Village_idVillage','$nominee_id')");
     }
     else {
-        $sql_n_insert_permanent_address = mysql_query("UPDATE address 
+        $sql_np_insert_permanent_address = mysql_query("UPDATE address 
                                                                     SET house='$np_house', house_no='$np_house_no', road='$np_road', post_code='$np_post_code',Thana_idThana='$np_Thana_idThana', post_idpost='$np_Post_idPost', village_idvillage='$np_Village_idVillage'  
                                                                     WHERE adrs_cepng_id=$nominee_id AND address_whom='nmn' AND address_type='Permanent' ");
     }    
 
-    if ($sql_nominee && $sql_n_insert_current_address && $sql_np_insert_permanent_address) {
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+    if ($sql_nominee || $sql_n_insert_current_address || $sql_np_insert_permanent_address) {
+        mysql_query("COMMIT");
+        $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
-        $msg = "ভুল হয়েছে";
+        mysql_query("ROLLBACK");
+        $msg = "ভুল হয়েছে";
     }
 } 
 elseif (isset($_POST['submit3'])) {
@@ -441,7 +447,8 @@ elseif (isset($_POST['submit3'])) {
     $c_board = $_POST['c_board'];
     $c_gpa = $_POST['c_gpa'];
     $a = count($c_ex_name);
-   $del_e_edu = mysql_query("DELETE FROM education WHERE education_type='cust' AND cepn_id=$custAcid");
+    mysql_query("START TRANSACTION");
+   $del_c_edu = mysql_query("DELETE FROM education WHERE education_type='cust' AND cepn_id=$custAcid");
     for ($i = 0; $i < $a; $i++) {
         $sql_insert_cus_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) 
                                             VALUES ('$c_ex_name[$i]', '$c_pass_year[$i]','$c_institute[$i]','$c_board[$i]','$c_gpa[$i]','cust','$custAcid');";
@@ -463,10 +470,12 @@ elseif (isset($_POST['submit3'])) {
                                                 VALUES ('$n_ex_name[$i]', '$n_pass_year[$i]','$n_institute[$i]','$n_board[$i]','$n_gpa[$i]','nmn','$db_nomID');";
         $nom_edu = mysql_query($sql_insert_nom_edu);
     }
-    if ($cus_edu || $nom_edu) {
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+    if (($del_c_edu && $cus_edu) || ($del_n_edu && $nom_edu)) {
+        mysql_query("COMMIT");
+        $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
-        $msg = "ভুল হয়েছে";
+         mysql_query("ROLLBACK");
+        $msg = "ভুল হয়েছে";
     }
 } 
 elseif (isset($_POST['submit4'])) {
@@ -489,6 +498,7 @@ elseif (isset($_POST['submit4'])) {
    
     //customer address_type=Present
     $sql_sel_present_adrs= mysql_query("SELECT * FROM address WHERE adrs_cepng_id=$custAcid AND address_whom='cust' AND address_type='Present' ");
+    mysql_query("START TRANSACTION");
     if(mysql_num_rows($sql_sel_present_adrs)<1)
     {
     $sql_c_insert_current_address = mysql_query("INSERT INTO $dbname.address 
@@ -507,10 +517,12 @@ elseif (isset($_POST['submit4'])) {
     }
     else {$sql_cp_insert_permanent_address = mysql_query("UPDATE address 
                                                                          SET house='$cp_house', house_no='$cp_house_no', road='$cp_road', post_code='$cp_post_code',Thana_idThana='$cp_Thana_idThana', post_idpost='$cp_Post_idPost', village_idvillage='$cp_Village_idVillage'  WHERE adrs_cepng_id=$custAcid AND address_whom='cust' AND address_type ='Permanent' "); }
-    if ($sql_c_insert_current_address && $sql_cp_insert_permanent_address ) {
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+    if ($sql_c_insert_current_address || $sql_cp_insert_permanent_address ) {
+        mysql_query("COMMIT");
+        $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
-        $msg = "ভুল হয়েছে";
+        mysql_query("ROLLBACK");
+        $msg = "ভুল হয়েছে";
     }
 }
 elseif (isset($_POST['submit5'])) {
@@ -518,12 +530,11 @@ elseif (isset($_POST['submit5'])) {
   $p_email = $_POST['email'];
   $p_mobile = $_POST['mobile'];
   $p_cfsid = $_POST['cfsid'];
-
   $sql_update_cfs = mysql_query("UPDATE cfs_user SET account_name='$p_name', email='$p_email', mobile='$p_mobile' WHERE idUser=$p_cfsid ");
     if ($sql_update_cfs) {
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+        $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
-        $msg = "ভুল হয়েছে";
+        $msg = "ভুল হয়েছে";
     }
 }
 ?>
@@ -722,7 +733,7 @@ elseif (isset($_POST['submit5'])) {
         
          <div>
             <h2><a name="01" id="01"></a></h2><br/>
-            <form method="POST" onsubmit="" style=" padding-right: 70px;" enctype="multipart/form-data" action="" id="emp_form1" name="emp_form1">	
+            <form method="POST" onsubmit="" enctype="multipart/form-data" action="" id="emp_form1" name="emp_form1">	
                 <table  class="formstyle">     
                     <tr><th colspan="4" style="text-align: center" colspan="2"><h1>কাস্টমারের মূল তথ্য</h1></th></tr>
                     <tr><td colspan="4" ></td>
@@ -766,18 +777,18 @@ elseif (isset($_POST['submit5'])) {
         <div>
             <h2><a name="02" id="02"></a></h2><br/>
             <form method="POST" onsubmit="" enctype="multipart/form-data" action="" id="cust_form" name="cust_form">	
-                <table class="formstyle" style=" width: 95%; padding-left: 15px; padding-top: 5px;padding-bottom: 8px;" >            
+                <table class="formstyle" style=" width: 90%; padding-left: 15px; padding-top: 5px;padding-bottom: 8px;" >            
                <tr><td colspan="4" ></td></tr>
                     <tr>
-                        <td >পেশা</td>
-                        <td>:   <input class="box" type="text" id="cust_occupation" name="cust_occupation" value="<?php echo $db_custOccu;?>"/></td>                   
+                        <td width="219" >পেশা</td>
+                        <td width="223">:   <input class="box" type="text" id="cust_occupation" name="cust_occupation" value="<?php echo $db_custOccu;?>"/></td>                   
                     </tr>
                     <tr>
                         <td>ধর্ম</td>
                         <td>:   <input  class="box" type="text" id="cust_religion" name="cust_religion" value="<?php echo $db_custRel;?>"/></td>	      
                     </tr>
                     <tr>
-                        <td >জাতীয়তা</td>
+                        <td >জাতীয়তা</td>
                         <td>:   <input class="box" type="text" id="cust_nationality" name="cust_nationality" value="<?php echo $db_custNation;?>"/> </td>			
                     </tr>
                     <tr>
@@ -787,14 +798,14 @@ elseif (isset($_POST['submit5'])) {
                     <tr>
                         <td >জন্ম সনদ নং</td>
                         <td>:   <input class="box" type="text" id="birth_certificate_no" name="birth_certificate_no" value="<?php echo $db_custDOBID;?>"/></td>
-                        <td  font-weight="bold" >জন্ম সনদ </td>
-                        <td>: <img src="<?php echo $db_custDOBC;?>" width="80px" height="80px"/> <input class="box5" type="file" id="scanDoc_birth_certificate" name="scanDoc_birth_certificate" style="font-size:10px;"/><input type="hidden" name="DOBCname" value="<?php echo $DOBCname;?>"/> </td> 
+                        <td width="200"  font-weight="bold" >জন্ম সনদ </td>
+                        <td width="234">: <img src="<?php echo $db_custDOBC;?>" width="80px" height="80px"/> <input class="box5" type="file" id="scanDoc_birth_certificate" name="scanDoc_birth_certificate" style="font-size:10px;"/><input type="hidden" name="DOBCname" value="<?php echo $DOBCname;?>"/> </td> 
                         
                     </tr>                
                     <tr>
-                        <td >জাতীয় পরিচয়পত্র নং</td>
+                        <td >জাতীয় পরিচয়পত্র নং</td>
                         <td>:   <input class="box" type="text" id="cust_nationalID_no" name="cust_nationalID_no" value="<?php echo $db_custNID;?>"/></td>
-                        <td style="width: 100px;" font-weight="bold" > জাতীয় পরিচয়পত্র</td>
+                        <td style="width: 100px;" font-weight="bold" > জাতীয় পরিচয়পত্র</td>
                         <td >: <img src="<?php echo $db_custNIDC;?>" width="80px" height="80px"/><input type="hidden" name="NIDCname" value="<?php echo $NIDCname;?>"/> <input class="box5" type="file" id="scanDoc_national_id" name="scanDoc_national_id" style="font-size:10px;"/> </td>
                     </tr>
                     <tr>
@@ -826,7 +837,7 @@ elseif (isset($_POST['submit5'])) {
                         <td>:   <input class="box" type="text" id="cust_father_name" name="cust_father_name" value="<?php echo $db_custFather;?>"/></td>			
                     </tr>
                     <tr>
-                        <td >মায়ের নাম </td>
+                        <td >মায়ের নাম </td>
                         <td>:    <input class="box" type="text" id="cust_mother_name" name="cust_mother_name" value="<?php echo $db_custMother;?>"/></td>			
                     </tr>
                     <tr>
@@ -852,12 +863,12 @@ elseif (isset($_POST['submit5'])) {
                         <td>:    <input class="textfield" type="text" id="cust_son_student_no" name="cust_son_student_no" value="<?php echo $custSonStdNo;?>"/> জন</td>
                     </tr>              
                     <tr>
-                        <td style="padding-top: 14px;vertical-align: top; width: 25%;" >বয়স ও শ্রেণী</td>
+                        <td style="padding-top: 14px;vertical-align: top; width: 25%;" >বয়স ও শ্রেণী</td>
                         <td colspan="4">
                             <table id="container_others30">                     
                                 <tr>
-                                    <td>সন্তানের বয়স  :</td>
-                                    <td>অধ্যয়ণরত শ্রেণী : </td>
+                                    <td>সন্তানের বয়স  :</td>
+                                    <td>অধ্যয়ণরত শ্রেণী : </td>
                                 </tr>
                                         <?php
                                             echo "<tr><td><select class='box2' name='m_children_age[]' style ='font-size: 11px'><option>একটি নির্বাচন করুন</option>";                                                    
@@ -934,25 +945,25 @@ elseif (isset($_POST['submit5'])) {
                         <td colspan="4" ><hr /></td>
                     </tr>
                     <tr>	                                          
-                        <td colspan="4" style =" font-size: 14px"><b>মেয়ের সন্তানের তথ্য</b></td>
+                        <td colspan="4" style =" font-size: 14px"><b>মেয়ের সন্তানের তথ্য</b></td>
                     </tr>        
                     <tr>
-                        <td >মেয়ের সন্তানের সংখ্যা  </td>
+                        <td >মেয়ের সন্তানের সংখ্যা  </td>
                         <td >:  <input class="textfield" type="text" id="cust_daughter_no" name="cust_daughter_no" value="<?php echo $custDauNo;?>"/> জন</td>
                     </tr>                                                                                                 
                     <tr>
-                        <td >মেয়ে  ষ্টুডেন্ট </td>
+                        <td >মেয়ে  ষ্টুডেন্ট </td>
                         <td>:  <input class="textfield" type="text" id="cust_daughter_student_no" name="cust_daughter_student_no" value="<?php echo $custDauStdNo;?>"/> জন </td>	
                     </tr>                                                                                                
                     <tr>
                         <td colspan="4" >                
                     <tr>
-                        <td style="padding-top: 14px;vertical-align: top; width: 25%;">বয়স ও শ্রেণী</td>
+                        <td style="padding-top: 14px;vertical-align: top; width: 25%;">বয়স ও শ্রেণী</td>
                         <td colspan="4">
                             <table id="container_others31">                                                    
                                 <tr>
-                                    <td>সন্তানের বয়স  :</td>
-                                    <td>অধ্যয়ণরত শ্রেণী : </td>
+                                    <td>সন্তানের বয়স  :</td>
+                                    <td>অধ্যয়ণরত শ্রেণী : </td>
                                 </tr>
                                <?php
                                             echo "<tr><td><select class='box2' name='f_children_age[]' style ='font-size: 11px'><option>একটি নির্বাচন করুন</option>";                                                    
@@ -1046,7 +1057,7 @@ elseif (isset($_POST['submit5'])) {
                         <td>:   <input class="box" type="text" id="cust_gurdian_email" name="cust_gurdian_email" value="<?php echo $db_custGurdEmail;?>"/></td>			
                     </tr>
                     <tr>
-                        <td >জাতীয় পরিচয়পত্র নং</td>
+                        <td >জাতীয় পরিচয়পত্র নং</td>
                         <td>:   <input class="box" type="text" id="cust_gurdian_nationalID_no" name="cust_gurdian_nationalID_no" value="<?php echo $db_custGurdNID;?>"/></td>			
                     </tr>
                     <tr>
@@ -1074,15 +1085,15 @@ elseif (isset($_POST['submit5'])) {
                         <td colspan="2" style =" font-size: 14px"><b> স্থায়ী ঠিকানা   </b></td>
                     </tr>
                     <tr>
-                        <td>বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td>বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td >: <input class="box" type="text" id="g_house" name="g_house" value="<?php echo $gpreHouse;?>"/></td>
-                        <td>বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td>বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td>: <input class="box" type="text" id="gp_house" name="gp_house" value="<?php echo $gperHouse;?>"/></td>
                     </tr>
                     <tr>
-                        <td>বাড়ি নং</td>
+                        <td>বাড়ি নং</td>
                         <td >: <input class="box" type="text" id="g_house_no" name="g_house_no" value="<?php echo $gpreHouseNo;?>"/></td>
-                        <td >বাড়ি নং</td>
+                        <td >বাড়ি নং</td>
                         <td>: <input class="box" type="text" id="gp_house_no" name="gp_house_no" value="<?php echo $gperHouseNo;?>"/></td>
                     </tr>
                     <tr>
@@ -1098,8 +1109,8 @@ elseif (isset($_POST['submit5'])) {
                         <td>: <input class="box" type="text" id="gp_post_code" name="gp_post_code" value="<?php echo $gperPostCode;?>"/></td>
                     </tr>
                     <tr>
-                        <td colspan="2"><?php getArea($gpreDivID,$gpreDisID,$gpreThanaID,$gprePostID,$gpreVilID); ?></td>
-                        <td colspan="2"><?php getArea2($gperDivID,$gperDisID,$gperThanaID,$gperPostID,$gperVilID); ?></td>
+                        <td colspan="2"><?php getArea5($gpreDivID,$gpreDisID,$gpreThanaID,$gprePostID,$gpreVilID); ?></td>
+                        <td colspan="2"><?php getArea6($gperDivID,$gperDisID,$gperThanaID,$gperPostID,$gperVilID); ?></td>
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit1" value="সেভ করুন" />
@@ -1115,11 +1126,11 @@ elseif (isset($_POST['submit5'])) {
             <form method="POST" onsubmit=""  enctype="multipart/form-data" action="" id="cust_form1" name="cust_form1">	
                 <table class="formstyle" style=" width: 90%; padding-left: 15px; padding-top: 5px; padding-bottom: 8px;" >      
                     <tr>
-                        <td >নমিনির নাম</td>
-                        <td>:   <input class="box" type="text" id="nominee_name" name="nominee_name" value="<?php echo $db_nomName;?>"/><input type="hidden" name="nomineeID" value="<?php echo $db_nomID?>"/></td>
+                        <td width="22%" >নমিনির নাম</td>
+                        <td width="24%">:   <input class="box" type="text" id="nominee_name" name="nominee_name" value="<?php echo $db_nomName;?>"/><input type="hidden" name="nomineeID" value="<?php echo $db_nomID?>"/></td>
                     </tr>   
                     <tr>
-                        <td >বয়স</td>
+                        <td >বয়স</td>
                         <td>:   <input class="box" type="text" id="nominee_age" name="nominee_age" value="<?php echo $db_nomAge;?>"/></td>
                     </tr>   
                     <tr>
@@ -1135,7 +1146,7 @@ elseif (isset($_POST['submit5'])) {
                         <td>:   <input class="box" type="text" id="nominee_email" name="nominee_email" value="<?php echo $db_nomEmail;?>"/></td>			
                     </tr>
                     <tr>
-                        <td >জাতীয় পরিচয়পত্র নং</td>
+                        <td >জাতীয় পরিচয়পত্র নং</td>
                         <td>:   <input class="box" type="text" id="nominee_national_ID" name="nominee_national_ID" value="<?php echo $db_nomNID;?>"/></td>			
                     </tr>
                     <tr>
@@ -1155,15 +1166,15 @@ elseif (isset($_POST['submit5'])) {
                         <td colspan="2" style =" font-size: 14px"><b> স্থায়ী ঠিকানা   </b></td>
                     </tr>
                     <tr>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td >: <input class="box" type="text" id="n_house" name="n_house" value="<?php echo $nompreHouse;?>"/></td>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        <td >: <input class="box" type="text" id="np_house" name="np_house" value="<?php echo $nomperHouse;?>"/></td>
+                        <td width="30%"  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td width="24%" >: <input class="box" type="text" id="np_house" name="np_house" value="<?php echo $nomperHouse;?>"/></td>
                     </tr>
                     <tr>
-                        <td  >বাড়ি নং</td>
+                        <td  >বাড়ি নং</td>
                         <td >: <input class="box" type="text" id="n_house_no" name="n_house_no" value="<?php echo $nompreHouseNo;?>"/></td>
-                        <td >বাড়ি নং</td>
+                        <td >বাড়ি নং</td>
                         <td>: <input class="box" type="text" id="np_house_no" name="np_house_no" value="<?php echo $nomperHouseNo;?>"/></td>
                     </tr>
                     <tr>
@@ -1179,8 +1190,8 @@ elseif (isset($_POST['submit5'])) {
                         <td>:   <input class="box" type="text" id="np_post_code" name="np_post_code" value="<?php echo $nomperPostCode;?>"/></td>
                     </tr>
                     <tr>
-                        <td colspan="2"><?php getArea($nompreDivID,$nompreDisID,$nompreThanaID,$nomprePostID,$nompreVilID); ?></td>
-                        <td colspan="2"><?php getArea2($nomperDivID,$nomperDisID,$nomperThanaID,$nomperPostID,$nomperVilID); ?></td>
+                        <td colspan="2"><?php getArea3($nompreDivID,$nompreDisID,$nompreThanaID,$nomprePostID,$nompreVilID); ?></td>
+                        <td colspan="2"><?php getArea4($nomperDivID,$nomperDisID,$nomperThanaID,$nomperPostID,$nomperVilID); ?></td>
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit2" value="সেভ করুন" />
@@ -1284,15 +1295,15 @@ elseif (isset($_POST['submit5'])) {
                         <td colspan="2" style =" font-size: 14px"><b> স্থায়ী ঠিকানা   </b></td>
                     </tr>
                     <tr>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td >:   <input class="box" type="text" id="c_house" name="c_house" value="<?php echo $preHouse;?>"/></td>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td >:   <input class="box" type="text" id="cp_house" name="cp_house" value="<?php echo $perHouse;?>"/></td>
                     </tr>
                     <tr>
-                        <td  >বাড়ি নং</td>
+                        <td  >বাড়ি নং</td>
                         <td >:   <input class="box" type="text" id="c_house_no" name="c_house_no" value="<?php echo $preHouseNo;?>"/></td>
-                        <td >বাড়ি নং</td>
+                        <td >বাড়ি নং</td>
                         <td>:   <input class="box" type="text" id="cp_house_no" name="cp_house_no" value="<?php echo $perHouseNo;?>"/></td>
                     </tr>
                     <tr>

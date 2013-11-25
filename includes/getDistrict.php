@@ -12,7 +12,7 @@
                     {
                     $district_sql = mysql_query("SELECT * FROM  ".$dbname.".district WHERE Division_idDivision = '".$dv_id."' ORDER BY district_name ASC");
                     }
-            echo "<select name='district_id' id='district_id' class='box2' onchange='getThana()'>
+            echo "<select name='district_id' id='district_id' class='box2' onchange='getThana(),$gt_methodD'>
                             <option value='all'>-জেলা-</option>";
             while($district_rows = mysql_fetch_array($district_sql))
                     {
