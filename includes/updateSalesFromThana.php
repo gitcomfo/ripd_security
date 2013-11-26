@@ -25,7 +25,7 @@
                         $db_salesStoreName = $row_officeNcontact['salesStore_name'];
                         $db_salesStoreNumber = $row_officeNcontact['salesStore_number'];
                         $db_salesStoreAN = $row_officeNcontact['account_number'];
-                        $db_salesStoreAddress = $row_officeNcontact['salesStore_detailsAddress'];
+                        $db_salesStoreAddress = $row_officeNcontact['salesStore_details_address'];
                         $db_salesID = $row_officeNcontact['idSales_store'];
                         echo "<tr>";
                          echo "<td>$db_salesStoreName</td>";

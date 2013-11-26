@@ -42,7 +42,7 @@
                         echo "<td>$db_offAN</td>";
                         echo "<td>$db_offAddress</td>";
                         $v = base64_encode($db_offID);
-                        echo "<td><a href='update_account.php?id=$v'>আপডেট</a></td>";
+                        echo "<td><a href='update_account_off_pstore.php?id=$v&type=$gettype'>আপডেট</a></td>";
                         echo "</tr>";
                     }
                     ?>

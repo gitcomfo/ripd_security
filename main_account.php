@@ -277,7 +277,7 @@ function searchOSP(keystr)
                }
                 else
                     {document.getElementById('offResult').style.visibility = "visible";
-                document.getElementById('offResult').setAttribute('style','position:absolute;top:80.5%;left:48%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('offResult').setAttribute('style','position:absolute;top:87%;left:48%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('offResult').innerHTML=xmlhttp.responseText;
         }
@@ -364,23 +364,23 @@ function beforeSave()
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
-                        <td>: <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' placeholder='01XXXXXXXXX' /><em2> *</em2> <em>ইংরেজিতে লিখুন</em></td>		
+                        <td>: <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' style='font-size:16px;' placeholder='01XXXXXXXXX' /><em2>*</em2><em>ইংরেজিতে লিখুন</em></td>		
                     </tr>";
                     if($input == "customer")
                             {
                             echo "<tr>
                                 <td >পিন নাম্বার</td>
-                                <td>:   <input class='box' type='text' id='pin_num' name='pin_num' /><em2> *</em2> <em>ইংরেজিতে লিখুন</em></td>		
+                                <td>:   <input class='box' type='text' id='pin_num' name='pin_num' /><em2>*</em2><em>ইংরেজিতে লিখুন</em></td>		
                             </tr>";
                             }
                     echo "
                    <tr>
                         <td>ইউজারের নাম</td>
-                      <td>:   <input class='box' type='text' id='user_username' name='user_username' onblur='checkUserName(this.value)'/><em2> *</em2> <em>ইংরেজিতে লিখুন</em> <span style='color:red;' id='usernamecheck'></td>
+                      <td>:   <input class='box' type='text' id='user_username' name='user_username' onblur='checkUserName(this.value)'/><em2>*</em2><em>ইংরেজিতে লিখুন</em> <span style='color:red;' id='usernamecheck'></td>
                     </tr>   
                     <tr>
                         <td>পাসওয়ার্ড</td>
-                       <td>:   <input class='box' type='password' id='user_password' name='user_password' /><em2> *</em2> <em>ইংরেজিতে লিখুন</em></td>
+                       <td>:   <input class='box' type='password' id='user_password' name='user_password' /><em2>*</em2><em>ইংরেজিতে লিখুন</em></td>
                     </tr>
                     <tr>
                         <td>কনফার্ম পাসওয়ার্ড</td>
@@ -402,7 +402,7 @@ function beforeSave()
                     </tr>   
                     <tr>
                         <td>গ্রেড নির্বাচন</td>
-                       <td id='showGrade'>: <em2> *</em2></td>
+                       <td id='showGrade'>: </td>
                     </tr>
                     <tr>
                         <td>সেলারি</td>
@@ -424,7 +424,7 @@ function beforeSave()
                     </tr>
                     <tr>
                         <td>দায়িত্ব / পোস্ট</td>  
-                        <td id='getPost'><em2> *</em2>
+                        <td id='getPost'>
                         </td>            
                     </tr>
                     <tr id='postingbox'  style='visibility: hidden;'>
