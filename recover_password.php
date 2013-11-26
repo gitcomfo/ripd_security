@@ -81,7 +81,7 @@ if (isset($_POST['submit_new_password'])) {
         }
 }
 
-if (isset($_POST['submit_account'])) {
+if (isset($_POST['submit_account'])){
     //print_r($_POST);
     $account_msg = '';
     //$account_status = '';
@@ -198,7 +198,7 @@ if (isset($_POST['submit_account'])) {
 } else {
     ?>
     <div style="padding-top: 10px;">    
-        <div style="padding-left: 110px; width: 48%; float: left"><a href="index.php?apps=CRM"><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 110px; width: 48%; float: left"><a href="crm_management.php"><b>ফিরে যান</b></a></div>
         <div style="text-align: right;padding-right: 35px;"><a href="close_account.php?action=new"></a>&nbsp;&nbsp;<a href=""></a></div>
     </div>
     <div>           
@@ -228,7 +228,7 @@ if (isset($_POST['submit_account'])) {
             </table>
         </form>
     </div>
-    <?php
+<?php
 }
 include_once 'includes/footer.php';
 ?> 
