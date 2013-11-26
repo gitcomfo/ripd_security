@@ -44,14 +44,13 @@ $x= $_GET['id'];
         $ombl=$deed_row['cell_number'];
         $omail=$deed_row['owner_email'];
         $ophoto=$deed_row['owner_photo'];
-        $ophotoname = end(explode("-", $ophoto));
-      
+        $ophotoname = end(explode("/", $ophoto));      
         $osign=$deed_row['owner_signature'];
-        $osignname = end(explode("-", $osign));
+        $osignname = end(explode("/", $osign));
         $oscanDoc=$deed_row['scan_documents'];
-        $oscanDocname = end(explode("-", $oscanDoc));
+        $oscanDocname = end(explode("/", $oscanDoc));
         $ofinger=$deed_row['owner_fingerprint'];
-        $ofingername = end(explode("-", $ofinger));
+        $ofingername = end(explode("/", $ofinger));
         $oexpire=$deed_row['expire_date'];
         $deedid=$deed_row['idons_deed'];
     }
@@ -157,6 +156,7 @@ $x= $_GET['id'];
         }
         else
         {
+            $image_name = $off_acc."-".$image_name;
         $image_path = "pic/" . $image_name;
         if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
@@ -174,11 +174,12 @@ $x= $_GET['id'];
         $sign_name = $_FILES["signature"]["name"];
         if($sign_name=="")
         {
-            $sign_name= $osignname;
+            $sign_name=  $osignname;
             $sing_path = "sign/" . $sign_name;
         }
         else
         {
+            $sign_name = $off_acc."-".$sign_name;
         $sing_path = "sign/" . $sign_name;
         if (($_FILES["signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
@@ -200,7 +201,8 @@ $x= $_GET['id'];
         }
         else
         {
-        $finger_path = "fingerprints/".$finger_name;
+            $finger_name = $off_acc."-".$finger_name;
+         $finger_path = "fingerprints/".$finger_name;
         if (($_FILES["owner_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
                    move_uploaded_file($_FILES["owner_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
@@ -221,6 +223,7 @@ $x= $_GET['id'];
         }
         else
         {
+            $scan_name = $off_acc."-".$scan_name;
         $scan_path = "scaned/".$scan_name;
         if (($_FILES["scanDoc"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
