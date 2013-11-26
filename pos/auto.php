@@ -1,7 +1,5 @@
 <?php
 error_reporting(0);
-require_once('auth.php');
-include 'session.php';
 include 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 

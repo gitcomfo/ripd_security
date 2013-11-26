@@ -1,6 +1,5 @@
 <?php
 error_reporting(0);
-include 'session.php';
 include 'includes/ConnectDB.inc';
 include 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';

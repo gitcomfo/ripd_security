@@ -1,9 +1,7 @@
 <?php 
 error_reporting(0);
-require_once('auth.php');
 include 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
-include 'session.php';
 $storeName= $_SESSION['offname'];
 $cfsID = $_SESSION['cfsid'];
 $storeID = $_SESSION['offid'];

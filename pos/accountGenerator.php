@@ -1,6 +1,5 @@
 <?php
 error_reporting(0);
-require_once('auth.php');
 include 'includes/ConnectDB.inc';
 $cfsid= $_SESSION['cfsid'];
 $sumeryid = $_GET['ssumid'];
