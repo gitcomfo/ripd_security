@@ -1,6 +1,5 @@
 <?php 
 error_reporting(0);
-require_once('auth.php');
 include 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 $G_rID= $_SESSION['SESS_MEMBER_ID'];
