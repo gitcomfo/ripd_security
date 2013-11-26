@@ -27,6 +27,7 @@ if($_POST['submit'])
         $account_number = $_POST['acc_num'];
         $account_email = $_POST['email'];
         $account_mobile = $_POST['mobile'];
+        $account_mobile = "88".$account_mobile;
         $account_type = $_POST['account_type'];
         $account_number1 = checkAccountNo($account_number);
         if($account_type == "proprietor")
