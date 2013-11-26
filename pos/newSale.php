@@ -1,6 +1,5 @@
 <?php
 error_reporting(0);
-include 'session.php';
 include 'includes/ConnectDB.inc';
 $storeName= $_SESSION['offname'];
 $cfsID = $_SESSION['cfsid'];
@@ -27,7 +26,7 @@ while($forwhileloop==1)
 $_SESSION['SESS_MEMBER_ID']=$str_recipt;
 if($G_sellingType==1)
 {
-header("location: auto.php");
+    header("location: auto.php");
 }
 elseif($G_sellingType==2)
 {

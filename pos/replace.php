@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 include 'includes/ConnectDB.inc';
-include 'session.php';
 include_once 'includes/MiscFunctions.php';
 if(isset($_GET['edit']))
 {

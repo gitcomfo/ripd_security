@@ -1,6 +1,5 @@
 <?php 
 error_reporting(0);
-include 'session.php';
 include 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 $id= $_GET['ssumid'];

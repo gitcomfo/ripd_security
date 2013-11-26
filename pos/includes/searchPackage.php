@@ -1,6 +1,5 @@
 <?php
 error_reporting(0);
-include '../session.php';
     include 'ConnectDB.inc'; 
     $storeID = $_SESSION['offid'];
 $scatagory = $_SESSION['catagory'];

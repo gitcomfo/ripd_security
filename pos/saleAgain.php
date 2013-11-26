@@ -1,6 +1,5 @@
 <?php
 error_reporting(0);
-require_once('auth.php');
 include 'includes/ConnectDB.inc';
 $G_rID= $_SESSION['SESS_MEMBER_ID'];
 $G_s_type = $_SESSION['catagory'];

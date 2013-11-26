@@ -363,7 +363,7 @@ function beforeSave()
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
-                        <td>:   <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' /><em2> *</em2> <em>ইংরেজিতে লিখুন</em></td>		
+                        <td>: <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' placeholder='01XXXXXXXXX' /><em2> *</em2> <em>ইংরেজিতে লিখুন</em></td>		
                     </tr>";
                     if($input == "customer")
                             {

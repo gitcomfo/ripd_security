@@ -2,7 +2,6 @@
 error_reporting(0);
 include 'includes/ConnectDB.inc';
 include 'includes/connectionPDO.php';
-include 'session.php';
 include_once 'includes/MiscFunctions.php';
 $storeName= $_SESSION['offname'];
 $cfsID = $_SESSION['cfsid'];
