@@ -42,8 +42,7 @@ if(isset($_POST['submit']))
 }
 ?>
 <title>চাকুরি স্থগিতকরন</title>
-<style type="text/css"> 
-    @import "css/bush.css";</style>
+<style type="text/css"> @import "css/bush.css";</style>
 <script>
     function getEmployee(keystr) //search employee by account number***************
 {
@@ -75,9 +74,9 @@ if(isset($_POST['submit']))
 
 <div class="column6">
     <div class="main_text_box">
-        <div style="padding-left: 110px;"><a href="index.php?apps=HRE"><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 110px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
         <div>
-            <form method="POST" enctype="multipart/form-data" action="terminate_employment.php">	
+            <form method="POST" enctype="multipart/form-data" action="">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
                     <tr><th colspan="2" style="text-align: center;">চাকুরি স্থগিতকরন</th>
                     <?php
@@ -184,5 +183,5 @@ if(isset($_POST['submit']))
         </div>           
     </div>
     <?php
-    include 'includes/footer.php';
+    include_once 'includes/footer.php';
     ?>

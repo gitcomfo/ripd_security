@@ -1,9 +1,7 @@
 <?php
 include_once 'includes/session.inc';
-include 'includes/header.php';
-//$loginUSERname = $_SESSION['UserID'];
-$user_id = $_SESSION['userIDUser'];
-//echo "$loginUSERname";
+include_once 'includes/header.php';
+include_once 'includes/sms_send_function.php';
 
 $update_msg = "";
 ?>
@@ -37,23 +35,7 @@ $update_msg = "";
         }
         xmlhttp.open("POST","includes/accountSearch.php?key="+keystr+"&location=recover_password.php",true);
         xmlhttp.send();	
-    }
-    function sendsms(mob,msg)
-    {  
-        var xmlhttp;
-        //alert(mob);
-        //alert(msg);
-        if (window.XMLHttpRequest) xmlhttp=new XMLHttpRequest();
-        else xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        xmlhttp.onreadystatechange=function()
-        {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200)       
-                document.getElementById('response').innerHTML=xmlhttp.responseText;
-        }
-        xmlhttp.open("GET", "includes/sms_host_info.php?mob="+mob+"&msg="+msg, true);
-        xmlhttp.send();
-        //alert(mob);
-    }
+    }    
 </script>
 
 <?php
@@ -75,24 +57,31 @@ if (isset($_POST['submit_new_password'])) {
     }
 
     if (!empty($new_pass_str)) {
-        $update_pass_sql = "Update cfs_user SET password = '$new_pass_str' WHERE idUser = '$receiver_acc_cfs_id'";
+            $send_sms_content = "Dear User, Your password has been changed. Your  new password is: $new_pass_str";
+            //echo 'New Password = '.$new_pass_str. "<br/>";
+            //echo "Mobile No: ".$receiver_acc_mobile_number;
 
-        if (mysql_query($update_pass_sql)) {
-            $send_msg = "Dear $receiver_acc_user_name, Your password has been changed. Your  new password is: $new_pass_str";
-            //$send_msg2 = "Hello I am here";
-            //echo "$receiver_acc_mobile_number --- $send_msg.<br/>";
-            //echo '<script src="javascripts/sms_sending.js"></script>';
-
-            echo '<script>sendsms("' . $receiver_acc_mobile_number . '","' . $send_msg . '")</script>';
-
-            $update_msg = "$receiver_acc_user_name একাউন্ট নামের পাসওয়ার্ড সফলভাবে আপডেট হয়েছে এবং $receiver_acc_mobile_number এই নাম্বারে পাসওয়ার্ডটি পাঠানো হয়েছে ";
+            $sendResult = SendSMSFuntion($receiver_acc_mobile_number, $send_sms_content);
+            //echo "Result is: " . $sendResult;
+            $sendStatus = substr($sendResult, 0, 4);
+            //echo "SendStatus = ".$sendStatus;
+            if($sendStatus == '1701'){
+                $update_pass_sql = "Update cfs_user SET password = '$new_pass_str' WHERE idUser = '$receiver_acc_cfs_id'";
+                if(mysql_query($update_pass_sql)){
+                    $update_msg = "'$receiver_acc_user_name' একাউন্ট নামের পাসওয়ার্ড সফলভাবে আপডেট হয়েছে এবং '$receiver_acc_mobile_number' এই নাম্বারে পাসওয়ার্ডটি পাঠানো হয়েছে ";
+                }else{
+                    $update_msg = "দুঃখিত, '$receiver_acc_mobile_number' এই নাম্বারে যে পাসওয়ার্ডটি পাঠানো হয়েছে তা সিস্টেমে আপডেট হয় নাই। পুনরায় পাসওয়ার্ডটি আপডেট করুন";
+                }
+            }else{
+                $update_msg = "দুঃখিত, '$receiver_acc_user_name' একাউন্টধারীর মোবাইল নাম্বারে মেসেজ পাঠানো যাচ্ছে না, পুনরায় চেষ্টা করুন";
+            }
+            
         } else {
-            $update_msg = "Sorry, Please update again";
+            $update_msg = "দুঃখিত, পাসওয়ার্ড আপডেট হয় নাই। আবার চেষ্টা করুন";
         }
-    }
 }
 
-if (isset($_POST['submit_account'])) {
+if (isset($_POST['submit_account'])){
     //print_r($_POST);
     $account_msg = '';
     //$account_status = '';
@@ -209,7 +198,7 @@ if (isset($_POST['submit_account'])) {
 } else {
     ?>
     <div style="padding-top: 10px;">    
-        <div style="padding-left: 110px; width: 48%; float: left"><a href="index.php?apps=CRM"><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 110px; width: 48%; float: left"><a href="crm_management.php"><b>ফিরে যান</b></a></div>
         <div style="text-align: right;padding-right: 35px;"><a href="close_account.php?action=new"></a>&nbsp;&nbsp;<a href=""></a></div>
     </div>
     <div>           
@@ -222,10 +211,10 @@ if (isset($_POST['submit_account'])) {
                     <td width="60%" style="text-align: center;"><b>
                             <span style="color:gray;font-size:16px;">
                                 <blink><?php
-                            if (!empty($update_msg)) {
-                                echo $update_msg;
-                            }
-                            ?></blink></span></b>
+    if (!empty($update_msg)) {
+        echo $update_msg;
+    }
+    ?></blink></span></b>
                     </td>
                     <td width="40%">
                         <table>
