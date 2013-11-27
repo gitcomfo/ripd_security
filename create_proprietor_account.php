@@ -82,10 +82,7 @@ if($_POST['submit'])
                 $errormsg = "দুঃখিত,একাউন্টধারীর মোবাইল নাম্বারে মেসেজ পাঠানো যাচ্ছে না, পুনরায় চেষ্টা করুন";
                 $error = 1;
             }
-            
-            
-                                 
-            
+
         //echo $email_create; //make decision to give error message
         }
 ?>
@@ -311,12 +308,39 @@ xmlhttp.send();
 }
 function beforeSave()
         {
-            if(document.getElementById('usernamecheck').innerHTML != "") 
+            if((document.getElementById('usernamecheck').innerHTML == "") && (document.getElementById('powerStore_accountNumber').value != ""))
                 {
-                document.getElementById('save').disabled= true;
+                    document.getElementById('save').disabled= false;
                 }
-                else {document.getElementById('save').disabled= false;}
+                else {document.getElementById('save').disabled= true;}
         }
+
+function validateMobile(mblno)
+{
+    if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("mblValidationMsg").innerHTML=xmlhttp.responseText;
+     var message = document.getElementById("mblValidationMsg").innerText;
+     if(message != "OK")
+        {
+            document.getElementById('mobile').focus();
+        }
+    //document.getElementById('save').disabled= false;
+    }
+  }
+xmlhttp.open("GET","includes/mobileNoValidation.php?mobile="+mblno,true);
+xmlhttp.send();
+}
 </script>
 <div class="column6">
     <div class="main_text_box">
@@ -345,7 +369,8 @@ function beforeSave()
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
-                        <td>: <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' style='font-size:16px;' placeholder='01XXXXXXXXX' value='$account_mobile' /><em2>*</em2><em>ইংরেজিতে লিখুন</em></td>		
+                        <td>: <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' onblur='validateMobile(this.value)' style='font-size:16px;' placeholder='01XXXXXXXXX' />
+                        <em2>*</em2><em>ইংরেজিতে লিখুন</em> <span id='mblValidationMsg'></span></td>		
                     </tr>
                    <tr>
                         <td>ইউজারের নাম</td>
@@ -372,7 +397,7 @@ function beforeSave()
                     </tr>
                     <tr>                    
                         <td colspan='4' style='padding-left: 250px; '>
-                        <input class='btn' style ='font-size: 12px;width:200px;' type='submit' name='submitwithpass' id='save' value='সেভ' disabled onclick='beforeSave();'/>                   
+                        <input class='btn' style ='font-size: 12px;width:200px;' type='submit' name='submitwithpass' id='save1' value='সেভ' disabled onclick='beforeSave();'/>                   
                         <input class='btn' style ='font-size: 12px;width:200px;' type='submit' name='retry' value='রি ট্রাই' />";
                     echo "</td>                           
                     </tr>             
@@ -399,7 +424,8 @@ function beforeSave()
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
-                        <td>: <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' style='font-size:16px;' placeholder='01XXXXXXXXX' /><em2>*</em2><em>ইংরেজিতে লিখুন</em></td>		
+                        <td>: <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' onblur='validateMobile(this.value)' style='font-size:16px;' placeholder='01XXXXXXXXX' />
+                        <em2>*</em2><em>ইংরেজিতে লিখুন</em> <span id='mblValidationMsg'></span></td>		
                     </tr>
                    <tr>
                         <td>ইউজারের নাম</td>
@@ -417,12 +443,8 @@ function beforeSave()
                         <td>:  <input class='box' type='text' readonly='' id='powerStore_accountNumber' name='powerStore_accountNumber' /></td>	
                     </tr>
                     <tr>                    
-                        <td colspan='4' style='padding-left: 250px; '>";
-                    if($_POST['submit'])
-                            {
-                            echo "<a href='$pass_message'>পরবর্তী ধাপে যেতে ক্লিক করুন</a>";
-                            }
-                    else echo "<input class='btn' style ='font-size: 12px;width:200px;' type='submit' name='submit' id='save' value='সেভ এন্ড সেন্ড পাসওয়ার্ড' disabled onclick='beforeSave();'/>";
+                        <td colspan='4' style='padding-left: 250px; '>
+                   <input class='btn' style ='font-size: 12px;width:200px;' type='submit' name='submit' id='save' value='সেভ এন্ড সেন্ড পাসওয়ার্ড' disabled='true' onclick='beforeSave();'/>";
                     echo "</td>                           
                     </tr>             
                 </table>";
