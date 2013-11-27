@@ -1,6 +1,6 @@
 <?php
 include_once 'includes/session.inc';
-include 'includes/header.php';
+include_once 'includes/header.php';
 //$loginUSERname = $_SESSION['UserID'];
 $user_id = $_SESSION['userIDUser'];
 //echo "$loginUSERname";
@@ -168,7 +168,7 @@ if ($_GET['action'] == 'new' or isset($_GET['id'])) {
     ?>
     <div style="padding-top: 10px;">    
         <div style="padding-left: 110px; width: 48%; float: left"><a href="crm_management.php"><b>ফিরে যান</b></a></div>
-        <div style="text-align: right;padding-right: 35px;"><a href="close_account.php?action=new"> একাউন্ট বন্ধ-করন</a>&nbsp;&nbsp;<a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">বন্ধ একাউন্ট লিস্ট</a></div>
+        <div style="text-align: right;padding-right: 35px;"><a href="account_close_restart.php?action=new"> একাউন্ট বন্ধ-করন</a>&nbsp;&nbsp;<a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">বন্ধ একাউন্ট লিস্ট</a></div>
     </div>
     <div>           
         <form name="account_close_form" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">	

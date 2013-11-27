@@ -6,6 +6,7 @@
 
 //$module_page_name = basename($_SERVER["SCRIPT_NAME"]);
 $module_page_name = $current_page_name;
+//echo "changedPath Pos : ".$_SESSION['changedPathPos'];
 //$subModuleArray = $_SESSION['modSubModPageArray'][$module_id];
 foreach ($_SESSION['modSubModPageArray'][$module_page_name] as $key => $value) {
     //$module_value = $value;
@@ -20,7 +21,7 @@ foreach ($_SESSION['modSubModPageArray'][$module_page_name] as $key => $value) {
             }
         $pageLinkName = $key2;
         $pageLinkViewName = $value2;
-        echo '<td><a href="' . $pageLinkName . '">' . $pageLinkViewName . '</a></td>';
+        echo '<td><a href="' . $_SESSION['changedPathPos'].$pageLinkName . '">' . $pageLinkViewName . '</a></td>';
         //echo "Page Key : " . $pageKey . " page Name : " . $pageValue . "<br/>";
         $loopValue = $loopValue + 1;
         
