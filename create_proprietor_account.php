@@ -123,7 +123,7 @@ if (isset($_POST['submitwithpass'])) {
 <?php 
 include_once 'includes/header.php';
 ?>
-<title>ক্রিয়েট কর্মচারী অ্যাকাউন্ট</title>
+<title>ক্রিয়েট প্রোপ্রাইটার অ্যাকাউন্ট</title>
 <style type="text/css">@import "css/bush.css";</style>
 <link rel="stylesheet" type="text/css" media="all" href="javascripts/jsDatePick_ltr.min.css" />
 <script type="text/javascript" src="javascripts/jsDatePick.min.1.3.js"></script>
@@ -466,7 +466,7 @@ function passminlength(pass)
                     </tr>
                    <tr>
                         <td>ইউজারের নাম</td>
-                      <td>:   <td>:   <input class='box' type='text' id='user_username' name='user_username' onblur='userminlength(this.value),checkUserName(this.value)' value='$user_username' />
+                      <td>: <input class='box' type='text' id='user_username' name='user_username' onblur='userminlength(this.value),checkUserName(this.value)' value='$user_username' />
                       <em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span style='color:red;' id='usernamecheck'></span><span style='color:red;' id='minlegthcheck'></span></td>
                     </tr>   
                     <tr>
@@ -491,8 +491,8 @@ function passminlength(pass)
                     <tr>                    
                         <td colspan='4' style='padding-left: 200px; '>
                         <input class='btn' style ='font-size: 12px;width:200px;' type='submit' name='submitwithpass' id='save2' value='সেভ' readonly onclick='return beforeSave2();'/>                   
-                        <input class='btn' style ='font-size: 12px;width:200px;' type='submit' name='retry' id='retry' value='রি ট্রাই' onclick='return beforeSaveRetry()'/>";
-                    echo "</td>                           
+                        <input class='btn' style ='font-size: 12px;width:200px;' type='submit' name='retry' id='retry' value='রি ট্রাই' onclick='return beforeSaveRetry()'/>
+                    </td>                           
                     </tr>             
                 </table>";
                 } else {

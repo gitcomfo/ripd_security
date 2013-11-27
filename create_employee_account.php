@@ -457,14 +457,13 @@ function passminlength(pass)
                     $arrayAccountType = array('employee' => 'কর্মচারীর', 'customer' => 'কাস্টমারের', 'proprietor' => 'প্রোপ্রাইটারের');
                     $showAccountType  = $arrayAccountType[$input];
                     
-                    echo "<tr><td><input type='hidden' value='$input' name='account_type'/></td></tr>";
-
-                    echo "<table  class='formstyle'>          
+                    echo "<tr><td><input type='hidden' value='$input' name='account_type'/></td></tr>
+                    <table  class='formstyle'>          
                     <tr><th colspan='4' style='text-align: center;'>$showAccountType মূল তথ্য</th></tr>  
                          <tr><td colspan ='2' style='text-align: center;'><font color='read'>$smserror</font></td></tr>
                     <tr>
                         <td >$showAccountType নাম</td>
-                        <td>:   <input class='box' type='text' id='name' name='name'/><em2> *</em2></td>			
+                        <td>:   <input class='box' type='text' id='name' name='name' value='$account_name'/><em2> *</em2></td>			
                     </tr>
                     <tr>
                         <td >একাউন্ট নাম্বার</td>
@@ -472,7 +471,7 @@ function passminlength(pass)
                     </tr>
                     <tr>
                         <td >ই মেইল</td>
-                       <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
+                       <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' value='$account_email' /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
