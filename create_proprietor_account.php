@@ -407,10 +407,12 @@ function beforeSave()
                     </tr>   
                     <tr>
                         <td>পাওয়ার স্টোরের নাম</td>
-                        <td >:  <select  class='box' name='powerStore_name' style='height:20px;'onchange='showAccountNo(this.value)'>";
+                        <td >:  <select  class='box' name='powerStore_name' style='height:22px;'onchange='showAccountNo(this.value)'>";
                                 showPowerHeads();
                          echo "</select><em2> *</em2>	
                         </td>
+                        </tr>
+                        <tr>
                         <td>পাওয়ার স্টোরের একাউন্ট নং </td>
                         <td>:  <input class='box' type='text' readonly='' id='powerStore_accountNumber' name='powerStore_accountNumber' /></td>	
                     </tr>
