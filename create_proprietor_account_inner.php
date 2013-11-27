@@ -251,7 +251,7 @@ elseif (isset($_POST['submit4'])) {
         <div style="padding-left: 110px;"><a href="office_sstore_management.php"><b>ফিরে যান</b></a></div>
         <div class="domtab">
             <ul class="domtabs">
-                <li class="current"><a href="#01">মূল তথ্য</a></li><li class="current"><a href="#02">নমিনির তথ্য</a></li><li class="current"><a href="#03">শিক্ষাগত যোগ্যতা</a></li><li class="current"><a href="#04">প্রয়োজনীয় ডকুমেন্টস</a></li>
+                <li class="current"><a href="#01">ব্যাক্তিগত  তথ্য</a></li><li class="current"><a href="#02">নমিনির তথ্য</a></li><li class="current"><a href="#03">শিক্ষাগত যোগ্যতা</a></li><li class="current"><a href="#04">প্রয়োজনীয় ডকুমেন্টস</a></li>
             </ul>
         </div>  
         <div>
@@ -266,13 +266,13 @@ elseif (isset($_POST['submit4'])) {
                     }
                     ?>
                     <tr>	
-                        <td  colspan="4" style =" font-size: 14px"><b>ব্যাক্তিগত  তথ্য</b></td>                            
+                        <td  colspan="4" style =" font-size: 14px;text-align: center;"><b>ব্যাক্তিগত  তথ্য</b></td>                            
                     </tr>
                     <tr>
                         <td>স্বত্বাধিকারীর নাম</td>
                         <td>:  <input  class="box" type="text" id="prop_name" name="prop_name" /><input type="hidden" name="proprietorID" value="<?php echo $proprietorID;?>"/></td>   
                         <td font-weight="bold" >ছবি </td>
-                        <td>:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/><<em2> *</em2>/td>               
+                        <td>:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/><em2> *</em2></td>             
                     </tr>
                     <tr>
                         <td >বাবার নাম </td>
@@ -417,9 +417,9 @@ elseif (isset($_POST['submit4'])) {
                     </tr>                        
                     <tr>
                         <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd"></span><em2> *</em2></td>      
+                        <td>: <span id="tidd"></span></td>      
                         <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd2"></span><em2> *</em2></td>
+                        <td>: <span id="tidd2"></span></td>
                     </tr>
                     <tr>
                         <td >পোষ্ট অফিস</td>
