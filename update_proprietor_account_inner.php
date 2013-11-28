@@ -481,7 +481,7 @@ elseif (isset($_POST['submit5'])) {
                     <tr><td colspan="4" ></td>
                         <?php
                         if ($msg != "") {
-                            echo '<tr> <td colspan="2" style="text-allign: center; color: green; font-size: 15px"><b>' . $msg . '</b></td></tr>';
+                            echo '<tr> <td colspan="2" style="text-align: center; color: green; font-size: 15px"><b>' . $msg . '</b></td></tr>';
                         }
                         ?>
                     </tr>

@@ -7,7 +7,6 @@ include_once 'includes/checkAccountNo.php';
 include_once 'includes/email_conf.php';
 include_once './includes/sms_send_function.php';
 
-
 function showPowerHeads() {
     echo "<option value=0> -সিলেক্ট করুন- </option>";
     $sql_office = mysql_query("SELECT * FROM office WHERE office_type='pwr_head' ORDER BY office_name;");
@@ -60,9 +59,10 @@ if (isset($_POST['submit']) || isset($_POST['retry'])) {
         $sql_pro_ins = mysql_query("INSERT INTO proprietor_account (powerStore_name, powerStore_accountNumber, Office_idOffice, cfs_user_idUser)
                                                 VALUES ('$db_pwrHeadname', '$pwrHeadAccNo',$db_pwrOfficeID,  $cfs_user_id)") or exit(mysql_error());
         $propreitor_account_id = mysql_insert_id();
+        $encodedID = base64_encode($propreitor_account_id);
         if ($ins_cfsuser && $sql_pro_ins) {
             mysql_query("COMMIT");
-            header( 'Location: create_proprietor_account_inner.php?proID='.$propreitor_account_id);
+            header( 'Location: create_proprietor_account_inner.php?proID='.$encodedID);
         } else {
             mysql_query("ROLLBACK");
             $msg = "দুঃখিত, প্রোপ্রাইটার তৈরি হয়নি";
@@ -111,9 +111,10 @@ if (isset($_POST['submitwithpass'])) {
     $sql_pro_ins = mysql_query("INSERT INTO proprietor_account (powerStore_name, powerStore_accountNumber, Office_idOffice, cfs_user_idUser)
                                                 VALUES ('$db_pwrHeadname', '$pwrHeadAccNo',$db_pwrOfficeID,  $cfs_user_id)") or exit(mysql_error());
     $propreitor_account_id = mysql_insert_id();
+    $encodedID = base64_encode($propreitor_account_id);
     if ($ins_cfsuser && $sql_pro_ins) {
         mysql_query("COMMIT");
-        header('Location: create_proprietor_account_inner.php?proID=' . $propreitor_account_id);
+        header('Location: create_proprietor_account_inner.php?proID=' . $encodedID);
     } else {
         mysql_query("ROLLBACK");
         $msg = "দুঃখিত, প্রোপ্রাইটার তৈরি হয়নি";

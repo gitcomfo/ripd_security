@@ -4,6 +4,7 @@ include_once 'includes/MiscFunctions.php';
 include_once 'includes/makeAccountNumbers.php';
 include_once 'includes/checkAccountNo.php';
 include_once 'includes/email_conf.php';
+include_once './includes/sms_send_function.php';
 
 if (isset($_POST['submit']) || isset($_POST['retry']))
         {
@@ -22,10 +23,10 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
         $p_onsid = $_POST['ospID'];
         $p_postonsID = $_POST['post'];
         $p_posting_type = $_POST['posttype'];
+        $p_joiningdate = $_POST['date'];
          // ****************** password create & send ******************************************
         $pass = getRandomPassword();
         $passwrd = md5($pass);
-
         $send_sms_content = "Dear User,Your\nACC.# $account_number\nUsername: $user_username\nRIPD email: $ripdemailid\nPassword: $pass\nThanks";
         $sendResult = SendSMSFuntion($account_mobile1, $send_sms_content);
         $sendStatus = substr($sendResult, 0, 4);
@@ -47,23 +48,24 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
              $cfs_user_id = mysql_insert_id();
                     
                     $ins_employee = mysql_query("INSERT INTO employee (status, employee_type, joining_date, posting_type, emp_ons_id, pay_grade_id, cfs_user_idUser)
-                                           VALUES ('posting', '$p_employee_type', NOW() ,'$p_posting_type', '$p_onsid', '$p_employee_grade', '$cfs_user_id')") or exit(mysql_error());
+                                           VALUES ('posting', '$p_employee_type', '$p_joiningdate' ,'$p_posting_type', '$p_onsid', '$p_employee_grade', '$cfs_user_id')") or exit(mysql_error()."step2");
                     $employee_id = mysql_insert_id();
                     // employee_posting table-e insert***********************
                     $ins_empposting = mysql_query("INSERT INTO employee_posting (posting_type, posting_date, Employee_idEmployee, ons_relation_idons_relation, post_in_ons_idpostinons)
-                                            VALUES ('$p_posting_type',NOW(), $employee_id, $p_onsid, $p_postonsID)");
+                                            VALUES ('$p_posting_type',NOW(), $employee_id, $p_onsid, $p_postonsID)")or exit(mysql_error()."step3");
                     // update post_in_ons table***********************
-                    $ins_postinons=mysql_query("UPDATE `post_in_ons` SET `free_post` = free_post-1,`used_post` = used_post+1 WHERE `idpostinons` =$p_postonsID");
+                    $ins_postinons=mysql_query("UPDATE `post_in_ons` SET `free_post` = free_post-1,`used_post` = used_post+1 WHERE `idpostinons` =$p_postonsID")or exit(mysql_error()."step4");
                    //employee_salary table-e insert***************
                     $ins_empsalary= mysql_query("INSERT INTO employee_salary (total_salary, insert_date, user_id, pay_grade_idpaygrade)
-                                            VALUES ('$p_employee_salary',NOW(), $employee_id, $p_employee_grade)");
+                                            VALUES ('$p_employee_salary',NOW(), $employee_id, $p_employee_grade)")or exit(mysql_error()."step5");
                     
-                    $empinfo_ins = mysql_query("INSERT INTO employee_information (Employee_idEmployee) VALUES ($employee_id)");
+                    $empinfo_ins = mysql_query("INSERT INTO employee_information (Employee_idEmployee) VALUES ($employee_id)") or exit(mysql_error()."step6");
                     $employee_info_id = mysql_insert_id();
+                    $encodedID = base64_encode($employee_info_id);
                     
                      if ($ins_cfsuser && $ins_employee && $ins_empposting && $ins_postinons && $ins_postinons && $ins_empsalary && $empinfo_ins) {
                         mysql_query("COMMIT");
-                        header( 'Location: create_employee_account_inner.php?empInfoID='.$employee_info_id);
+                        header( 'Location: create_employee_account_inner.php?empInfoID='.$encodedID);
                     } else {
                         mysql_query("ROLLBACK");
                         $msg = "দুঃখিত, কর্মচারী তৈরি হয়নি";
@@ -91,6 +93,7 @@ if (isset($_POST['submitwithpass']))
         $p_onsid = $_POST['ospID'];
         $p_postonsID = $_POST['post'];
         $p_posting_type = $_POST['posttype'];
+        $p_joiningdate = $_POST['date'];
         $pass = $_POST['reap_password'];
         $passwrd = md5($pass);
 
@@ -110,7 +113,7 @@ if (isset($_POST['submitwithpass']))
              $cfs_user_id = mysql_insert_id();
                     
                     $ins_employee = mysql_query("INSERT INTO employee (status, employee_type, joining_date, posting_type, emp_ons_id, pay_grade_id, cfs_user_idUser)
-                                           VALUES ('posting', '$p_employee_type', NOW() ,'$p_posting_type', '$p_onsid', '$p_employee_grade', '$cfs_user_id')") or exit(mysql_error());
+                                           VALUES ('posting', '$p_employee_type','$p_joiningdate' ,'$p_posting_type', '$p_onsid', '$p_employee_grade', '$cfs_user_id')") or exit(mysql_error());
                     $employee_id = mysql_insert_id();
                     // employee_posting table-e insert***********************
                     $ins_empposting = mysql_query("INSERT INTO employee_posting (posting_type, posting_date, Employee_idEmployee, ons_relation_idons_relation, post_in_ons_idpostinons)
@@ -123,10 +126,10 @@ if (isset($_POST['submitwithpass']))
                     
                     $empinfo_ins = mysql_query("INSERT INTO employee_information (Employee_idEmployee) VALUES ($employee_id)");
                     $employee_info_id = mysql_insert_id();
-                    
+                    $encodedID = base64_encode($employee_info_id);
                      if ($ins_cfsuser && $ins_employee && $ins_empposting && $ins_postinons && $ins_postinons && $ins_empsalary && $empinfo_ins) {
                         mysql_query("COMMIT");
-                        header( 'Location: create_employee_account_inner.php?empInfoID='.$employee_info_id);
+                        header( 'Location: create_employee_account_inner.php?empInfoID='.$encodedID);
                     } else {
                         mysql_query("ROLLBACK");
                         $msg = "দুঃখিত, কর্মচারী তৈরি হয়নি";
@@ -190,7 +193,6 @@ if (isset($_POST['submitwithpass']))
     function showAccountNo(account)
     {
         document.getElementById('powerStore_accountNumber').value = account;
-//                document.getElementById('retry').disabled= false;
     }
 
     function checkSalaryRange(sal)
@@ -220,7 +222,12 @@ if (isset($_POST['submitwithpass']))
     }
     function beforeSave()
     {
-        if ((document.getElementById('usernamecheck').innerHTML == "") && (document.getElementById('powerStore_accountNumber').value != ""))
+        var radio = document.forms['employee_form'].elements['posttype'];
+        if ((document.getElementById('usernamecheck').innerHTML == "")
+                && (document.getElementById('salary').value != "")
+                && (document.getElementById('SalaryRange').innerHTML != "")
+                && (document.getElementById('showerror').innerHTML == "")
+                && ((radio[0].checked) || (radio[1].checked)) )
         {
             document.getElementById('save').readonly = false;
             return true;
@@ -232,7 +239,13 @@ if (isset($_POST['submitwithpass']))
     }
     function beforeSave2()
     {
-        if ((document.getElementById('usernamecheck').innerHTML == "") && (document.getElementById('powerStore_accountNumber').value != "") && (document.getElementById('passcheck').innerHTML == "OK"))
+        var radio = document.forms['employee_form'].elements['posttype'];
+        if ((document.getElementById('usernamecheck').innerHTML == "")
+                && (document.getElementById('salary').value != "")
+                && (document.getElementById('SalaryRange').innerHTML != "")
+                && (document.getElementById('showerror').innerHTML == "")
+                && ((radio[0].checked) || (radio[1].checked))
+                && (document.getElementById('passcheck').innerHTML == "OK"))
         {
             document.getElementById('save2').readonly = false;
             return true;
@@ -244,7 +257,13 @@ if (isset($_POST['submitwithpass']))
     }
     function beforeSaveRetry()
     {
-        if ((document.getElementById('usernamecheck').innerHTML == "") && (document.getElementById('powerStore_accountNumber').value != "") && (document.getElementById('passcheck').innerHTML == ""))
+        var radio = document.forms['employee_form'].elements['posttype'];
+        if ((document.getElementById('usernamecheck').innerHTML == "")
+                && (document.getElementById('salary').value != "")
+                && (document.getElementById('SalaryRange').innerHTML != "")
+                && (document.getElementById('showerror').innerHTML == "")
+                && ((radio[0].checked) || (radio[1].checked))
+                && (document.getElementById('passcheck').innerHTML == ""))
         {
             document.getElementById('retry').readonly = false;
             return true;
@@ -450,7 +469,7 @@ function passminlength(pass)
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a onclick="goBack();" style="cursor: pointer;"><b><u>ফিরে যান</u></b></a></div> 
         <div>            
-            <form method="POST" action="">
+            <form method="POST" id="employee_form" name="employee_form" action="">
                 <?php
                  if ((isset($_POST['submit']) || isset($_POST['retry'])) && $error == 1) {
                     $input= 'employee';
@@ -480,7 +499,7 @@ function passminlength(pass)
                     </tr>
                    <tr>
                         <td>ইউজারের নাম</td>
-                      <td>:   <td>:   <input class='box' type='text' id='user_username' name='user_username' onblur='userminlength(this.value),checkUserName(this.value)' value='$user_username' />
+                      <td>: <input class='box' type='text' id='user_username' name='user_username' onblur='userminlength(this.value),checkUserName(this.value)' value='$user_username' />
                       <em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span style='color:red;' id='usernamecheck'></span><span style='color:red;' id='minlegthcheck'></span></td>
                     </tr>   
                     <tr>
@@ -525,17 +544,17 @@ function passminlength(pass)
                     </tr>
                     <tr id='postingbox'  style='visibility: hidden;'>
                         <td>পোস্টের ধরন</td>
-                        <td>: <input type='radio' name='posttype' value ='Acting'/> অ্যাক্টিং &nbsp;&nbsp;&nbsp;
-                            <input  type='radio' name='posttype' value ='Permanent'/> পার্মানেন্ট</td>
+                        <td>: <input type='radio' name='posttype' id='posttype' value ='Acting'/> অ্যাক্টিং &nbsp;&nbsp;&nbsp;
+                            <input  type='radio' name='posttype' id='posttype' value ='Permanent'/> পার্মানেন্ট</td>
                     </tr>
                     <tr>
                         <td>যোগদানের তারিখ</td>
-                        <td>: <input class='box' type='text' id='date' placeholder='Date' name='date' value=''/>
+                        <td>: <input class='box' type='text' id='date' placeholder='Date' name='date' value='$p_joiningdate'/>
                         </td>            
                     </tr>
                     <tr>
                         <td>পাসওয়ার্ড</td>
-                       <td>:   <input class='box' type='password' id='user_password' name='user_password' maxlength='15' onblur='passminlength(this.value)'/><em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span style='color:red;' id='minlengtherror'></span></td>
+                       <td>: <input class='box' type='password' id='user_password' name='user_password' maxlength='15' onblur='passminlength(this.value)'/><em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span style='color:red;' id='minlengtherror'></span></td>
                     </tr>
                     <tr>
                         <td>কনফার্ম পাসওয়ার্ড</td>
@@ -567,17 +586,17 @@ function passminlength(pass)
                     </tr>
                     <tr>
                         <td >ই মেইল</td>
-                       <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
+                       <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' /> <em>ইংরেজিতে লিখুন</em></br><span id='error_msg' style='margin-left: 5px'></span></td>			
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
                         <td>: <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' onblur='validateMobile(this.value)' style='font-size:16px;' placeholder='01XXXXXXXXX' value='$account_mobile' />
-                        <em2>*</em2><em>ইংরেজিতে লিখুন</em> <span id='mblValidationMsg'></span></td>		
+                        <em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span id='mblValidationMsg'></span></td>		
                     </tr>
                    <tr>
                         <td>ইউজারের নাম</td>
                       <td>:   <input class='box' type='text' id='user_username' name='user_username' onblur='userminlength(this.value),checkUserName(this.value)' />
-                      <em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span style='color:red;' id='usernamecheck'></span><span style='color:red;' id='minlegthcheck'></span></td>
+                      <em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span style='color:red;' id='usernamecheck'></span></br><span style='color:red;' id='minlegthcheck'></span></td>
                     </tr>   
                     <tr>
                         <td colspan='2' ><hr /></td>
