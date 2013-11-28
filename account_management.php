@@ -26,7 +26,6 @@ foreach ($arr_cust_basic as $aab)
         {
         $aab_designation_name = $aab['designation_name'];
         $aab_designation_star = english2bangla($aab['designation_star']);
-        $aab_signature = $aab['scanDoc_finger_print'];
         $aab_picture = $aab['scanDoc_picture'];
         $aab_referrer_id = $aab['referer_id'];
         }
@@ -77,27 +76,19 @@ if(!file_exists($aab_picture)) $aab_picture = "pic/default_profile.jpg";
                     }
                     else echo "<td style='font-size: 20px;'>আপনার একাউন্টে স্বাগতম</td>";
                     ?>
-                    <td style="width: 30%;">
-                        <table>
+                    <td style="width: 35%; text-align: center;">
+                        <table >
                             <tr>
-                                <td colspan="2" style="font-size: 16px; text-align: center"><b><?php echo $aab_account_name;?></b></td>
+                                <td style="font-size: 16px; text-align: center;"><b><?php echo $aab_account_name;?></b></td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td rowspan="3"><img src="<?php echo $aab_picture;?>" width='120px' height='120px'/></td>
+                                <td style="text-align: center;"><img src="<?php echo $aab_picture;?>" width='120px' height='120px'/></td>
                             </tr>
                             <tr>
-                                <td><?php echo $aab_mobile;?></td>
+                                <td style="text-align: center;"><?php echo $aab_mobile;?></td>
                             </tr>
                             <tr>
-                                <td><?php echo $aab_email;?></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td style="text-align: center"><img src="<?php echo $aab_signature;?>" width='120px' height='40px'/></td>
+                                <td style="text-align: center;"><?php echo $aab_email;?></td>
                             </tr>
                         </table>
                     </td>

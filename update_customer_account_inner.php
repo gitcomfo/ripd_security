@@ -120,12 +120,12 @@ if (isset($_POST['submit1'])) {
     $image_name = $_FILES["image"]["name"];
     if($image_name=="")
         {
-            $image_name= "picture" . "-" . $_POST['imagename'];
+            $image_name= "cust-".$custAcid."-".$_POST['imagename'];
              $image_path = "pic/" . $image_name;
         }
         else
         {
-            $image_name = "picture" . "-" . $_FILES["image"]["name"];
+            $image_name = "cust-".$custAcid."-".$_FILES["image"]["name"];
             $image_path = "pic/" . $image_name;
             if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -141,12 +141,12 @@ if (isset($_POST['submit1'])) {
     $sign_name = $_FILES["scanDoc_signature"]["name"];
     if($sign_name=="")
         {
-            $sign_name= "signature" . "-" . $_POST['signname'];
+            $sign_name= "cust-".$custAcid."-".$_POST['signname'];
              $sing_path = "sign/" . $sign_name;
         }
         else
         {
-            $sign_name = "signature" . "-" . $_FILES["scanDoc_signature"]["name"];
+            $sign_name = "cust-".$custAcid."-".$_FILES["scanDoc_signature"]["name"];
             $sing_path = "sign/" . $sign_name;
             if (($_FILES["scanDoc_signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -158,17 +158,15 @@ if (isset($_POST['submit1'])) {
 
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_finger_print"]["name"]));
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
-    $extension = end(explode(".", $_FILES["scanDoc_finger_print"]["name"]));
     $finger_name = $_FILES["scanDoc_finger_print"]["name"];
     if($finger_name=="")
         {
-            $finger_name= "fingerprint" . "-" . $_POST['fingername'];
+            $finger_name= "cust-".$custAcid."-".$_POST['fingername'];
              $finger_path = "fingerprints/" . $finger_name;
         }
         else
         {
-            $finger_name = "fingerprint" . "-" . $_FILES["scanDoc_finger_print"]["name"];
+            $finger_name = "cust-".$custAcid."-".$_FILES["scanDoc_finger_print"]["name"];
             $finger_path = "fingerprints/" . $finger_name;
             if (($_FILES["scanDoc_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -182,17 +180,15 @@ if (isset($_POST['submit1'])) {
 
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["cust_gurd_scanpic"]["name"]));
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
-    $extension = end(explode(".", $_FILES["cust_gurd_scanpic"]["name"]));
     $gurdimage_name = $_FILES["cust_gurd_scanpic"]["name"];
     if($gurdimage_name=="")
         {
-            $gurdimage_name= "gurdpic" . "-" . $_POST['gurdimagename'];
+            $gurdimage_name= "gurd-".$custAcid."-". $_POST['gurdimagename'];
              $gimage_path = "pic/" . $gurdimage_name;
         }
         else
         {
-            $gurdimage_name = "gurdpic" . "-" . $_FILES["cust_gurd_scanpic"]["name"];
+            $gurdimage_name = "gurd-".$custAcid."-".$_FILES["cust_gurd_scanpic"]["name"];
             $gimage_path = "pic/" . $gurdimage_name;
             if (($_FILES["cust_gurd_scanpic"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -210,12 +206,12 @@ if (isset($_POST['submit1'])) {
    $dob_name = $_FILES["scanDoc_birth_certificate"]["name"];
     if($dob_name=="")
         {
-            $dob_name= "DOB" . "-" . $_POST['DOBCname'];
+            $dob_name= "DOB-".$custAcid."-".$_POST['DOBCname'];
              $dob_path = "scaned/" . $dob_name;
         }
         else
         {
-            $dob_name = "DOB" . "-" . $_FILES["scanDoc_birth_certificate"]["name"];
+            $dob_name = "DOB-".$custAcid."-".$_FILES["scanDoc_birth_certificate"]["name"];
             $dob_path = "scaned/" . $dob_name;
             if (($_FILES["scanDoc_birth_certificate"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -232,12 +228,12 @@ if (isset($_POST['submit1'])) {
     $nid_name = $_FILES["scanDoc_national_id"]["name"];
     if($nid_name=="")
         {
-            $nid_name= "NID" . "-" . $_POST['NIDCname'];
+            $nid_name= "NID-".$custAcid."-".$_POST['NIDCname'];
              $nid_path = "scaned/" . $nid_name;
         }
         else
         {
-            $nid_name = "NID" . "-" . $_FILES["scanDoc_national_id"]["name"];
+            $nid_name = "NID-".$custAcid."-".$_FILES["scanDoc_national_id"]["name"];
             $nid_path = "scaned/" . $nid_name;
             if (($_FILES["scanDoc_national_id"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -254,12 +250,12 @@ if (isset($_POST['submit1'])) {
     $cc_name = $_FILES["scanDoc_chairman_certificate"]["name"];
     if($cc_name=="")
         {
-            $cc_name= "CC" . "-" . $_POST['CCname'];
+            $cc_name= "CC-".$custAcid."-".$_POST['CCname'];
              $cc_path = "scaned/" . $cc_name;
         }
         else
         {
-            $cc_name = "CC" . "-" . $_FILES["scanDoc_chairman_certificate"]["name"];
+            $cc_name = "CC-".$custAcid."-".$_FILES["scanDoc_chairman_certificate"]["name"];
             $cc_path = "scaned/" . $cc_name;
             if (($_FILES["scanDoc_chairman_certificate"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -359,12 +355,12 @@ elseif (isset($_POST['submit2'])) {
     $image_name = $_FILES["nominee_picture"]["name"];
     if($image_name=="")
         {
-            $image_name= "picture" . "-" . $_POST['nomimagename'];
+            $image_name= "nom-".$custAcid."-".$_POST['nomimagename'];
              $image_path = "pic/" . $image_name;
         }
         else
         {
-            $image_name = "picture" . "-" . $_FILES["nominee_picture"]["name"];
+            $image_name = "nom-".$custAcid."-".$_FILES["nominee_picture"]["name"];
             $image_path = "pic/" . $image_name;
             if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -739,7 +735,7 @@ elseif (isset($_POST['submit5'])) {
                     <tr><td colspan="4" ></td>
                         <?php
                         if ($msg != "") {
-                            echo '<tr> <td colspan="2" style="text-allign: center; color: green; font-size: 15px"><b>' . $msg . '</b></td></tr>';
+                            echo '<tr> <td colspan="2" style="text-align: center; color: green; font-size: 15px"><b>' . $msg . '</b></td></tr>';
                         }
                         ?>
                     </tr>
@@ -780,8 +776,8 @@ elseif (isset($_POST['submit5'])) {
                 <table class="formstyle" style=" width: 90%; padding-left: 15px; padding-top: 5px;padding-bottom: 8px;" >            
                <tr><td colspan="4" ></td></tr>
                     <tr>
-                        <td width="219" >পেশা</td>
-                        <td width="223">:   <input class="box" type="text" id="cust_occupation" name="cust_occupation" value="<?php echo $db_custOccu;?>"/></td>                   
+                        <td width="212" >পেশা</td>
+                        <td width="234">:   <input class="box" type="text" id="cust_occupation" name="cust_occupation" value="<?php echo $db_custOccu;?>"/></td>                   
                     </tr>
                     <tr>
                         <td>ধর্ম</td>
@@ -798,8 +794,8 @@ elseif (isset($_POST['submit5'])) {
                     <tr>
                         <td >জন্ম সনদ নং</td>
                         <td>:   <input class="box" type="text" id="birth_certificate_no" name="birth_certificate_no" value="<?php echo $db_custDOBID;?>"/></td>
-                        <td width="200"  font-weight="bold" >জন্ম সনদ </td>
-                        <td width="234">: <img src="<?php echo $db_custDOBC;?>" width="80px" height="80px"/> <input class="box5" type="file" id="scanDoc_birth_certificate" name="scanDoc_birth_certificate" style="font-size:10px;"/><input type="hidden" name="DOBCname" value="<?php echo $DOBCname;?>"/> </td> 
+                        <td width="208"  font-weight="bold" >জন্ম সনদ </td>
+                        <td width="222">: <img src="<?php echo $db_custDOBC;?>" width="80px" height="80px"/> <input class="box5" type="file" id="scanDoc_birth_certificate" name="scanDoc_birth_certificate" style="font-size:10px;"/><input type="hidden" name="DOBCname" value="<?php echo $DOBCname;?>"/> </td> 
                         
                     </tr>                
                     <tr>
@@ -846,7 +842,7 @@ elseif (isset($_POST['submit5'])) {
                     </tr>
                     <tr>
                         <td>পরিবারের সদস্য সংখ্যা  </td>
-                        <td>:   <input class="box" type="text" id="cust_family_member" name="cust_family_member" value="<?php echo $custFamilyNo;?>"/> জন</td>			
+                        <td>:   <input class="box" type="text" id="cust_family_member" name="cust_family_member" value="<?php echo $custFamilyNo;?>"/>জন</td>			
                     </tr>
                     <tr>
                         <td colspan="4" ><hr /></td>
@@ -1126,8 +1122,8 @@ elseif (isset($_POST['submit5'])) {
             <form method="POST" onsubmit=""  enctype="multipart/form-data" action="" id="cust_form1" name="cust_form1">	
                 <table class="formstyle" style=" width: 90%; padding-left: 15px; padding-top: 5px; padding-bottom: 8px;" >      
                     <tr>
-                        <td width="22%" >নমিনির নাম</td>
-                        <td width="24%">:   <input class="box" type="text" id="nominee_name" name="nominee_name" value="<?php echo $db_nomName;?>"/><input type="hidden" name="nomineeID" value="<?php echo $db_nomID?>"/></td>
+                        <td width="19%" >নমিনির নাম</td>
+                        <td width="27%">:   <input class="box" type="text" id="nominee_name" name="nominee_name" value="<?php echo $db_nomName;?>"/><input type="hidden" name="nomineeID" value="<?php echo $db_nomID?>"/></td>
                     </tr>   
                     <tr>
                         <td >বয়স</td>
@@ -1168,8 +1164,8 @@ elseif (isset($_POST['submit5'])) {
                     <tr>
                         <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td >: <input class="box" type="text" id="n_house" name="n_house" value="<?php echo $nompreHouse;?>"/></td>
-                        <td width="30%"  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        <td width="24%" >: <input class="box" type="text" id="np_house" name="np_house" value="<?php echo $nomperHouse;?>"/></td>
+                        <td width="26%"  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                        <td width="28%" >: <input class="box" type="text" id="np_house" name="np_house" value="<?php echo $nomperHouse;?>"/></td>
                     </tr>
                     <tr>
                         <td  >বাড়ি নং</td>

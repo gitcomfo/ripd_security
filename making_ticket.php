@@ -51,6 +51,13 @@ if(isset($_POST['submit']))
     status = "This field accepts numbers only.";
     return false;
 }
+function setProgram(progNo,progid)
+{
+        document.getElementById('prgrm_number').value = progNo;
+        document.getElementById('prgrm_id').value = progid;
+        document.getElementById('offResult').style.display = "none";
+        getall(progid);
+}
 </script>
 <script  type="text/javascript">
     function getname(type)
@@ -97,7 +104,33 @@ if(isset($_POST['submit']))
         xmlhttp.open("GET","includes/getPresentations.php?v="+val,true);
         xmlhttp.send();
     }
-     
+
+function getProgram(key)
+{
+var xmlhttp;
+    if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if(key.length ==0)
+                {
+                   document.getElementById('progResult').style.display = "none";
+               }
+                else
+                    {document.getElementById('progResult').style.visibility = "visible";
+                document.getElementById('progResult').setAttribute('style','position:absolute;top:38%;left:62.2%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                    }
+                document.getElementById('progResult').innerHTML=xmlhttp.responseText;
+        }
+        xmlhttp.open("GET","includes/getPrograms.php?key="+key,true);
+        xmlhttp.send();	
+}
 </script>
 <?php
 if($_GET['step']=='02')
@@ -196,6 +229,12 @@ $whoinbangla =  getProgramer($P_type);
                         <td colspan="2"><?php if($msg!=""){echo $msg; } ?></td>
                     </tr>
                     <tr>
+                        <td>প্রেজেন্টেশন / প্রোগ্রাম / ট্রেইনিং / ট্রাভেল এর নম্বর</td>
+                        <td>:  <input class="box" type="text" id="prgrm_number" name="prgrm_number" onkeyup="getProgram(this.value);"/>
+                            <div id="progResult"></div><input type="hidden" name="prgrm_id" id="prgrm_id"/>
+                        </td>
+                    </tr>
+<!--                    <tr>
                         <td style="width: 40%">বিষয়</td>
                         <td>: 
                             <select class="selectOption" name="type" id="type" onchange="getname(this.value)" style="width: 167px !important;">
@@ -210,7 +249,7 @@ $whoinbangla =  getProgramer($P_type);
                     <tr>
                         <td>প্রেজেন্টেশন / প্রোগ্রাম / ট্রেইনিং / ট্রাভেল এর নাম</td>
                         <td>:  <span id="p_name"></span> </td>
-                    </tr>
+                    </tr>-->
                     <tr>
                         <td colspan="2" id="pall">
                         </td>
