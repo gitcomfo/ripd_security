@@ -18,19 +18,22 @@ include_once 'includes/header.php';
            <!-- Begin DWUser_EasyRotator -->
         <script type="text/javascript" src="javascripts/easy_rotator.min.js"></script>
         <div class="dwuserEasyRotator"
-             style="width: 950px; height: 320px; position: relative; text-align: left;"
+             style="width: 960px; height: 320px; position: relative; text-align: center;"
              data-erConfig="{autoplayEnabled:true, lpp:'102-105-108-101-58-47-47-47-67-58-47-85-115-101-114-115-47-115-104-97-109-111-108-47-68-111-99-117-109-101-110-116-115-47-69-97-115-121-82-111-116-97-116-111-114-80-114-101-118-105-101-119-47-112-114-101-118-105-101-119-95-115-119-102-115-47', wv:1}"
              data-erName="slider" data-erTID="{xs8z6fwz4w1652742631631}">
             <div data-ertype="content" style="display: none;">
                 <ul data-erlabel="Main Category">
-                    <li><img class="main" src="images/slider/people-shadow-globe.jpg" /> <img
-                            class="thumb" src="images/slider/people-shadow-globe.jpg" />
+                    <li><img class="main" src="images/slider/pic6.jpg" /> <img
+                            class="thumb" src="images/slider/pic6.jpg" />
                     </li>
                     <li><img class="main" src="images/slider/pic1.jpg" /> <img
                             class="thumb" src="images/slider/pic1.jpg" />
                     </li>
-                    <li><img class="main" src="images/slider/pic3.jpg" /> <img
-                            class="thumb" src="images/slider/pic3.jpg" />
+                    <li><img class="main" src="images/slider/people-shadow-globe.jpg" /> <img
+                            class="thumb" src="images/slider/people-shadow-globe.jpg" />
+                    </li>
+                    <li><img class="main" src="images/slider/Super-shop_01.jpg" /> <img
+                            class="thumb" src="images/slider/Super-shop_01.jpg" />
                     </li>
                     <li><img class="main" src="images/slider/pic4.jpg" /> <img
                             class="thumb" src="images/slider/pic4.jpg" />
@@ -41,8 +44,8 @@ include_once 'includes/header.php';
                     <li><img class="main" src="images/slider/pic5.jpg" /> <img
                             class="thumb" src="images/slider/pic5.jpg" />
                     </li>
-                    <li><img class="main" src="images/slider/pic6.jpg" /> <img
-                            class="thumb" src="images/slider/pic6.jpg" />
+                    <li><img class="main" src="images/slider/pic3.jpg" /> <img
+                            class="thumb" src="images/slider/pic3.jpg" />
                     </li>
                 </ul>
             </div>
@@ -110,7 +113,7 @@ include_once 'includes/columnLeftIndexHome.php';
                             রিপ্‌ড ইউনিভার্সেল মূলত আপনারই প্রতিষ্ঠান। আপনার স্বপ্ন পূরণে সার্বক্ষণিক নিজের কাছে অঙ্গিকারাবদ্ধ। রিপ্‌ড হচ্ছে সিস্টেম তথা সিস্টেমিক প্রতিষ্ঠান, যা একটি 
                             অত্যাধুনিক সফটওয়ারের মাধ্যমে আপনার সাথে মিশে থাকবে সারাক্ষণ। এই সফটের মাধ্যমে আপনি অনেক পরিসেবাই পেতে পারেন সম্পূর্ণ ফ্রি। যেগুলো আপনার 
                             নানাবিধ স্বপ্ন পূরণে সহায়ক বলে বিভিন্নভাবে বিবেচিত। এটির মাধ্যমে আপনি বাড়াতে পারবেন, নিজের জ্ঞানের পরিধি, পরস্পরে মেইলিং যোগাযোগ। জানতে পারবেন 
-                            সব ধরনের নিউজ এবং ব্যক্তি জীবনের ঘটনাপ্রবাহ ও হিসাব নিকাশের জন্য ব্যবহার করতে পারবেন সিস্টেমিক নোটবুক। এই সফটের মাধ্যমে আপনি বাড়ি বসেও 
+                            সব ধরনের নিউজ এবং ব্যক্তি জীবনের ঘটনাপ্রবাহ ও হিসাব নিকাশের জন্য ব্যবহার করতে পারবেন সিস্টেমিক নোটবুক। <br/><br/>এই সফটের মাধ্যমে আপনি বাড়ি বসেও 
                             অনলাইনে কেনাকাটা করতে পারবেন। প্রয়োজনে ক্রেডিটেও কেনাকাটা করার সিস্টেম আছে। আর সমস্ত কেনাকাটার উপরই চাই তা অনলাইনে হোক বা স্বশরীরেই 
                             হোক; পাচ্ছেন সার্বক্ষণিক ৪৩.২০% ডিসকাউন্ট, যারমাঝে ২৮.৮% সরাসরি, বাকি ২৪.৪% সিস্টেমিক। এই সিস্টেমিক ডিসকাউন্ট আপনার লাইফে আশির্বাদ স্বরূপ। 
                             যা ব্যক্তিগত অর্থনৈতিক ঘূর্ণন ঘটিয়ে, ফিন্যান্সিয়াল সাপোর্টিং এর মাধ্যমে, ধীরে ধীরে জীবনযাত্রা নির্বাহকরা কেবলই সহজ থেকে আরো সহজতর করে তুলবে একেবারে 
@@ -140,7 +143,7 @@ include_once 'includes/columnLeftIndexHome.php';
                     <div class="small_title">নতুন নতুন অফারসমূহ</div>
 
                     <div class="offer_box">
-                        <img src="images/p1.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
+                        <img src="images/Green-Oil.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
                         <div class="offer_info">
                             <span>বিক্রয়ের জন্য</span>
                             <p class="offer">ঘরে বসেই হাতের কাছে পেয়ে যাচ্ছেন সব পণ্য। ঘরে বসে আরাম করে সব কেনাকাটা করুন কিংবা প্রিয়জনদের উপহার দিন। অর্ডার দেওয়া মাত্র প্রিয়জনদের হাতে পৌঁছে দেওয়া হবে আপনার উপহার। </p>
@@ -151,10 +154,10 @@ include_once 'includes/columnLeftIndexHome.php';
                     </div>
 
                     <div class="offer_box">
-                        <img src="images/p2.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
+                        <img src="images/baby_food.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
                         <div class="offer_info">
                             <span>বিক্রয়ের জন্য</span>
-                            <p class="offer">শীত, গ্রীষ্ম বা বর্ষা এখন কোনোই ব্যাপার না। যখন দরকার তখনই হাতের নাগালে পাওয়া যাবে সবকিছু। 
+                            <p class="offer">শীত, গ্রীষ্ম বা বর্ষা এখন কোনোই ব্যাপার না। যখন দরকার তখনই হাতের নাগালে পাওয়া যাবে সবকিছু।আর এই জন্য রিপড ইউনিভার্সাল আপনাকে সবসময় সুবিধা দিতে অঙ্গিকারাবদ্ধ থাকবে। 
                             </p>
                             <div class="more">
                                 <a href="#">...বিস্তারিত</a>
@@ -163,10 +166,10 @@ include_once 'includes/columnLeftIndexHome.php';
                     </div>
                     
                     <div class="offer_box">
-                        <img src="images/p1.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
+                        <img src="images/OGB-00426-0.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
                         <div class="offer_info">
                             <span>বিক্রয়ের জন্য</span>
-                            <p class="offer">ঘরে বসেই হাতের কাছে পেয়ে যাচ্ছেন সব পণ্য। ঘরে বসে আরাম করে সব কেনাকাটা করুন কিংবা প্রিয়জনদের উপহার দিন। অর্ডার দেওয়া মাত্র প্রিয়জনদের হাতে পৌঁছে দেওয়া হবে আপনার উপহার। </p>
+                            <p class="offer">বাচ্চাদের ত্বক সবসময় সেনসিটিভ থাকে। বিশেষ করে শীতে তাদের নানা রকম সমস্যা দেখা দেয়। তাদের সমস্যা সমাধানে Hilsk Harval নিয়ে এসেছে একটি ভিন্নধর্মী পণ্য যেটা ব্যবহারে খুব সহজে</p>
                             <div class="more">
                                 <a href="#">...বিস্তারিত</a>
                             </div>

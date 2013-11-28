@@ -26,25 +26,20 @@ include_once 'includes/showTables.php';
     }
 </script>
 
+<div class="page_header_div">
+    <div class="page_header_title">সেলসস্টোর এন্ড কন্টাক্ট</div>
+</div>
 <fieldset id="award_fieldset_style">
-
-    <div id="table_header_style">
-        <table border="0" style="width: 100%; height: 72%;font-size: 17px" align="center">
-            <tr align="center">
-                <td><b>সেলসস্টোর টেবিল</b></td>
-            </tr>
-        </table>
+    <div style="float: left;">
+        <?php
+        include_once('includes/areaSearch.php');
+        getArea("infoFromThana()");
+        ?>
     </div>
-
-    <?php
-    include_once 'includes/areaSearch.php';
-    getArea("infoFromThana()");
-    ?>
-
-    <input type="hidden" id="method" value="infoFromThana()">
-
-    সার্চ/খুঁজুন:  <input type="text" id="search_box_filter">
-
+    <div style="float: right; margin-right: 10px;">        
+        <input type="hidden" id="method" value="infoFromThana()">
+        সার্চ/খুঁজুন:  <input type = "text" id ="search_box_filter">
+    </div>
     <span id="office">
         <br /><br />
         <div>
@@ -53,9 +48,7 @@ include_once 'includes/showTables.php';
                     <tr align="left" id="table_row_odd">
                         <th><?php echo "সেলস স্টোর নং"; ?></th>
                         <th><?php echo "সেলস স্টোর নেইম"; ?></th>
-                        <th><?php echo "সেলস স্টোর নম্বর"; ?></th>
-                        <th><?php echo "একাউন্ট নম্বর"; ?></th>
-                        <th><?php echo "ঠিকানা"; ?></th>
+                        <th><?php echo "সেলস স্টোর ঠিকানা"; ?></th>
                         <th><?php echo "ই-মেইল"; ?></th>
                     </tr>
                 </thead>
@@ -77,8 +70,6 @@ include_once 'includes/showTables.php';
                         echo "<tr>";
                         echo "<td>$db_slNo</td>";
                         echo "<td>$db_salesStoreName</td>";
-                        echo "<td>$db_salesStoreNumber</td>";
-                        echo "<td>$db_salesStoreAN</td>";
                         echo "<td>$db_salesStoreAddress</td>";
                         echo "<td>$db_salesStoreEmail</td>";
                         echo "</tr>";

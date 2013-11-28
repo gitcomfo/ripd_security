@@ -5,17 +5,15 @@ include_once 'includes/showTables.php';
 <script type="text/javascript" src="javascripts/external/mootools.js"></script>
 <script type="text/javascript" src="javascripts/dg-filter.js"></script>
 
+<div class="page_header_div">
+    <div class="page_header_title">এওয়ার্ডসমূহ</div>
+</div>
 <fieldset id="award_fieldset_style">
-    <br />
-    <div style="text-align: right;padding-right: 1%;">সার্চ/খুঁজুন:<input type = "text" id ="search_box_filter"><br /></div>
-    <br />    
+    <div style="text-align: right;padding-right: 1%;margin-bottom: 5px;">সার্চ/খুঁজুন:<input type = "text" id ="search_box_filter"><br /></div>
     <span id="office">
         <div>
             <table id="office_info_filter" border="1" align="center" width= 99%" cellpadding="5px" cellspacing="0px">                    
                 <thead>
-                    <tr align="center">
-                        <th colspan="5" style="color: navy;"><b>এওয়ার্ড</b></th>
-                    </tr>
                     <tr align="left" id="table_row_odd">
                         <th><?php echo "ক্রম"; ?></th>
                         <th><?php echo "এওয়ার্ড টাইপ"; ?></th>

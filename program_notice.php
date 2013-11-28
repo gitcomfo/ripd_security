@@ -1,7 +1,6 @@
 <?php
-include 'includes/header.php';
+include_once 'includes/header.php';
 ?>
-
 <script type="text/javascript" src="javascripts/area.js"></script>
 <script type="text/javascript" src="javascripts/external/mootools.js"></script>
 <script type="text/javascript" src="javascripts/dg-filter.js"></script>
@@ -47,79 +46,77 @@ include 'includes/header.php';
         xmlhttp.send();
     }
 </script>
+<div class="page_header_div">
+    <div class="page_header_title">প্রোগ্রাম সিডিউল</div>
+</div>
 
 <fieldset id="award_fieldset_style">
-
-    <div id="table_header_style">
-        <table border="0" style="width: 100%; height: 100%;font-size: 17px" align="center">
-            <tr align="center">
-                <td><b>প্রোগ্রাম সিডিউল</b></td>
-            </tr>
-        </table>
+    <div style="float: left;">
+            <?php
+            include_once('includes/areaSearch.php');
+            getArea("infoProgramFromThana()");
+            ?>
     </div>
-    <div style="padding-bottom: 10px;">
-        <?php
-        include_once 'includes/areaSearch.php';
-        getArea("infoProgramFromThana()");
-        ?>
-        সার্চ/খুঁজুন:  <input type="text" id="search_box_filter">
-    </div>
+    <div style="float: right; margin-right: 10px;">        
+        <input type="hidden" id="method" value="infoProgramFromThana()">
+        সার্চ/খুঁজুন:  <input type = "text" id ="search_box_filter">
+    </div>    
 
-    <div style="padding-bottom: 10px;">
+    <div style="float: left; width: 100%; padding-bottom: 10px;padding-top: 10px; margin-left: 0px;">
         <b>শুরুর তারিখঃ</b><input type="text" name="date_from" id="date_from" placeholder="Date From"  style="">&nbsp;&nbsp;
         <b>শেষের তারিখঃ</b> <input type="text" name="date_to" id="date_to" placeholder="Date To"  onclick="infoProgramFromThana()">
         <input type="hidden" id="method" value="infoProgramFromThana()">
         <input type="submit" onclick="infoProgramFromThana()" value="সাবমিট">
     </div>
-    <span id="office">
-        <div>
+    
+    <span id="office" >
+        <div class="presen_pro_training_travel_table">
             <table id="office_info_filter" border="1" align="center" width= 99%" cellpadding="5px" cellspacing="0px">
                 <tr align="left" id="table_row_odd">
-                    <th><?php echo "ক্রম"; ?></th>
-                    <th><?php echo "প্রোগ্রাম নাম"; ?></th>
-                    <th><?php echo "প্রোগ্রাম নম্বর"; ?></th>
-                    <th><?php echo "উপস্থাপক"; ?></th>                            
+                    <th><?php echo "প্রোগ্রাম নাম"; ?></th>                      
                     <th><?php echo "লোকেশন"; ?></th>
                     <th><?php echo "বিষয়" ?></th>
                     <th><?php echo "তারিখ"; ?></th>
                     <th><?php echo "সময়"; ?></th>
+                    <th><?php echo "উপস্থাপক"; ?></th>      
+                    <th><?php echo "অফিস নাম"; ?></th>
+                    <th><?php echo "অফিস ঠিকানা"; ?></th>
                 </tr>
                 <tbody>
                     <?php
-                    $sql_salesStoreTable = "SELECT * from " . $dbname . ".program where program_type = 'program' AND program_date between curdate() and '2099-12-31' ORDER BY program_date ASC";
+                    $sql_programTable = "SELECT * from program, office where program_type = 'program' AND Office_idOffice =idOffice AND program_date between curdate() and '2099-12-31' ORDER BY program_date ASC";
                     $db_slNo = 0;
-                    $rs = mysql_query($sql_salesStoreTable);
-
-
+                    $rs = mysql_query($sql_programTable);
                     while ($row = mysql_fetch_array($rs)) {
                         $db_slNo = $db_slNo + 1;
+                        $db_programId = $row['idprogram'];
                         $db_programName = $row['program_name'];
-                        $db_programNumber = $row['program_no'];
-                        $db_program_host_id = $row['Employee_idEmployee'];
-                        $db_programLocationId = $row['program_location'];
+                        $db_programLocation = $row['program_location'];
                         $db_programDate = $row['program_date'];
-                        $db_programTime = $row['program_time'];
+                        $db_programTime = $row['program_time'];           
+                        $db_programSubject = $row['subject'];          
+                        $db_program_office_name = $row_location['office_name'];   
+                        $db_program_office_address = $row_location['office_details_address'];
+                        
+                        $demonastrators = '';
                         ///////////////////////////////////
-                        $sql_program_host_name = "SELECT employee_name FROM " . $dbname . ".employee_information WHERE Employee_idEmployee = $db_program_host_id ";
-                        $rs_host_name = mysql_query($sql_program_host_name);
-                        $rowName = mysql_fetch_array($rs_host_name);
-                        $db_program_host_name = $rowName['employee_name'];
+                        $sql_demonastrators_name = "SELECT * FROM presenter_list, employee, cfs_user WHERE fk_idprogram = '$db_programId' AND fk_Employee_idEmployee = idEmployee AND cfs_user_idUser = idUser";
+                        $row_demonastrators_name = mysql_query($sql_demonastrators_name);
+                        while ($row_names = mysql_fetch_array($row_demonastrators_name)){
+                            $db_demons_name = $row_names['account_name'];
+                            $demonastrators = $demonastrators. ", ".$db_demons_name;
+                        }
+                        
                         ///////////////////////////////////
-                        $sql_location = "SELECT office_name, office_details_address FROM " . $dbname . ".office where idOffice = $db_programLocationId";
-                        $rs_location = mysql_query($sql_location);
-                        $row_location = mysql_fetch_array($rs_location);
-                        $db_program_location = $row_location['office_details_address'];
-                        ///////////////////////////////////
-                        $db_programSubject = $row['subject'];
                         echo "<tr>";
-                        echo "<td>$db_slNo</td>";
                         echo "<td>$db_programName</td>";
-                        echo "<td>$db_programNumber</td>";
-                        echo "<td>$db_program_host_name</td>";
                         echo "<td>$db_program_location</td>";
                         echo "<td>$db_programSubject</td>";
                         echo "<td>$db_programDate</td>";
                         echo "<td>$db_programTime</td>";
+                        echo "<td>$demonastrators</td>";
+                        echo "<td>$db_program_office_name</td>";
+                        echo "<td>$db_program_office_address</td>";
                         echo "</tr>";
                     }
                     ?>
@@ -132,8 +129,8 @@ include 'includes/header.php';
 
 <script type="text/javascript">
     var filter = new DG.Filter({
-        filterField : $('search_box_filter'),
-        filterEl : $('office_info_filter')
+//        filterField : $('search_box_filter'),
+//        filterEl : $('office_info_filter')
     });
 </script>
 
