@@ -76,7 +76,12 @@ if(isset($_POST['submit']))
    
          $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["picture"]["name"]));
-        $image_name =$sales_acc."_". $_FILES["picture"]["name"];
+        $image_name = $_FILES["picture"]["name"];
+        if($image_name != "")
+        {
+            $image_name =$sales_acc."-". $_FILES["picture"]["name"];
+        }
+        
         $image_path = "pic/" . $image_name;
         if (($_FILES["picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
@@ -89,7 +94,11 @@ if(isset($_POST['submit']))
                 
                   $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["signature"]["name"]));
-        $sign_name = $sales_acc."_". $_FILES["signature"]["name"];
+        $sign_name = $_FILES["signature"]["name"];
+        if($sign_name != "")
+        {
+            $sign_name = $sales_acc."-". $_FILES["signature"]["name"];
+        }
         $sing_path = "sign/" . $sign_name;
         if (($_FILES["signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
@@ -103,7 +112,11 @@ if(isset($_POST['submit']))
                 
                 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["owner_finger_print"]["name"]));
-        $finger_name = $sales_acc."_". $_FILES["owner_finger_print"]["name"];
+        $finger_name = $_FILES["owner_finger_print"]["name"];
+        if($finger_name != "")
+        {
+            $finger_name = $sales_acc."-". $_FILES["owner_finger_print"]["name"];
+        }
         $finger_path = "fingerprints/".$finger_name;
         if (($_FILES["owner_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
@@ -115,10 +128,13 @@ if(isset($_POST['submit']))
                 echo "Invalid file format.";
                 }
                 
-                
                 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["scanDoc"]["name"]));
-         $scan_name = $sales_acc."_". $_FILES["scanDoc"]["name"];
+        $scan_name = $_FILES["scanDoc"]["name"];
+        if($scan_name != "")
+        {
+            $scan_name = $sales_acc."-". $_FILES["scanDoc"]["name"];
+        }
           $scan_path = "scaned/".$scan_name;
         if (($_FILES["scanDoc"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
@@ -137,9 +153,14 @@ if(isset($_POST['submit']))
     
      $ownsql = "INSERT INTO ". $dbname .".`ons_deed` (`owner_name` ,`owner_address` ,`cell_number` ,`owner_email` ,`owner_photo` ,`owner_signature` ,`expire_date` ,`scan_documents` ,`ons_relation_idons_relation`,`owner_fingerprint` ) VALUES  ( '$own_name', '$own_add' , '$own_mbl' , '$own_mail'  , '$image_path' , '$sing_path'  , '$own_valid' , '$scan_path' , '$ons', '$finger_path');";
      $ownreslt = mysql_query($ownsql) or exit('query failed: '.mysql_error());
-     
+
+     // ****************** default insert into post_in_ons ***************************************
+     $sel_post = mysql_query("SELECT * FROM post WHERE post_name='এডমিন'");
+     $postrow = mysql_fetch_assoc($sel_post);
+     $postid = $postrow['idPost'];
      $ins_postinons = mysql_query("INSERT INTO post_in_ons (number_of_post, free_post, post_onstype, used_post, post_onsid, Post_idPost)
-                                                        VALUES (1, 1, 's_store', 0, $off, 11)");
+                                                        VALUES (1, 1, 's_store', 0, $off, $postid)");   
+     
      if($reslt && $sreslt && $ireslt && $oreslt && $ownreslt && $ins_postinons)
      {
          mysql_query("COMMIT");
@@ -323,7 +344,7 @@ var xmlhttp;
                }
                 else
                     {document.getElementById('pwrResult').style.visibility = "visible";
-                document.getElementById('pwrResult').setAttribute('style','position:absolute;top:64%;left:43%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('pwrResult').setAttribute('style','position:absolute;top:69.5%;left:51%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('pwrResult').innerHTML=xmlhttp.responseText;
         }
@@ -350,7 +371,7 @@ var xmlhttp;
                }
                 else
                     {document.getElementById('offResult').style.visibility = "visible";
-                document.getElementById('offResult').setAttribute('style','position:absolute;top:68%;left:39%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('offResult').setAttribute('style','position:absolute;top:74%;left:47%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('offResult').innerHTML=xmlhttp.responseText;
         }

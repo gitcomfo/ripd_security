@@ -122,7 +122,25 @@ if(isset($_POST['submit0']))
     
      $ownsql = "INSERT INTO ". $dbname .".`ons_deed` (`owner_name` ,`owner_address` ,`cell_number` ,`owner_email` ,`owner_photo` ,`owner_signature`  ,`expire_date` ,`scan_documents` ,`ons_relation_idons_relation`,`owner_fingerprint`) VALUES  ( '$own_name', '$own_add' , '$own_mbl' , '$own_mail'  , '$image_path' , '$sing_path'  , '$own_valid' , '$scan_path' , '$ons' , '$finger_path');";
      $ownreslt = mysql_query($ownsql) or exit('query failed: '.mysql_error());
-    if($reslt && $sreslt && $ireslt && $oreslt && $ownreslt)
+     
+       // ****************** default insert into post_in_ons ***************************************
+     $sel_post = mysql_query("SELECT * FROM post WHERE post_name='এডমিন'");
+     $noOfRows = mysql_num_rows($sel_post);
+     if($noOfRows < 1)
+     {
+         $ins_post = mysql_query("INSERT INTO post (post_name, responsibility_desc) VALUES ('এডমিন' , 'এডমিনিস্ট্রেশন')");
+         $postid = mysql_insert_id();
+         $ins_postinons = mysql_query("INSERT INTO post_in_ons (number_of_post, free_post, post_onstype, used_post, post_onsid, Post_idPost)
+                                                        VALUES (1, 1, 'office', 0, $off, $postid)");
+     }
+ else {
+     $postrow = mysql_fetch_assoc($sel_post);
+     $postid = $postrow['idPost'];
+     $ins_postinons = mysql_query("INSERT INTO post_in_ons (number_of_post, free_post, post_onstype, used_post, post_onsid, Post_idPost)
+                                                        VALUES (1, 1, 'office', 0, $off, $postid)");   
+     }
+     
+    if($reslt && $sreslt && $ireslt && $oreslt && $ownreslt && $ins_postinons)
      {
          mysql_query("COMMIT");
          $msg = "পাওয়ার স্টোর তৈরি হয়েছে";

@@ -212,4 +212,19 @@ function getAwardType($aType){
     $arr_award_type = array('company'=>'কোম্পানী', 'employee'=>'কর্মচারী', 'customer'=>'কাস্টমার');
     return $arr_award_type[$aType];
 }
+function getRandomPassword()
+{
+        $new_pass_str = "";
+    for ($i = 0; $i < 8; $i++) {
+        $arr_rand_generator = array("num", "cap");
+        $rand_controller = array_rand($arr_rand_generator);
+        if ($rand_controller == "num")
+            $new_pass_str .= chr(rand(48, 57));
+        else if ($rand_controller == "cap")
+            $new_pass_str .= chr(rand(65, 90));
+        else
+            $new_pass_str .= chr(rand(97, 122)); // this numbers refer to numbers of the ascii table (small-caps)
+    }
+    return $new_pass_str;
+}
 ?>

@@ -1,6 +1,5 @@
 <?php
 //error_reporting(0);
-include 'session.php';
 include_once 'includes/MiscFunctions.php';
 include 'includes/connectionPDO.php';
 $storeName= $_SESSION['offname'];

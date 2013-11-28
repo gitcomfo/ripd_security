@@ -1,5 +1,5 @@
 <?php
-include 'session.php';
+//include 'session.php';
 include 'includes/connectionPDO.php';
 $G_onsid=$_SESSION['onsid'];
 error_reporting(0);

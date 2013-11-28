@@ -3,7 +3,7 @@ error_reporting(0);
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
-$g_id = $_GET['empInfoID'];
+$g_id= base64_decode($_GET['empInfoID']);
 ?>
 <title>ক্রিয়েট কর্মচারী অ্যাকাউন্ট</title>
 <style type="text/css">@import "css/bush.css";</style>
@@ -259,32 +259,69 @@ mysql_query("START TRANSACTION");
         $msg_scan_doc = "ভুল হয়েছে";
     }
 }
+//  ########################## select main info from cfs_user ########################################
+$sql_emp_sel = mysql_query("SELECT * FROM employee_information, employee, cfs_user 
+                                                            WHERE idUser=cfs_user_idUser AND  Employee_idEmployee = idEmployee AND idEmployee = $g_id ") ;
+     $employeerow = mysql_fetch_assoc($sql_emp_sel);
+     $db_empName = $employeerow['account_name'];
+     $db_empAcc = $employeerow['account_number'];
+     $db_empMail = $employeerow['email'];
+     $db_ripdMail = $employeerow['ripd_email'];
+     $db_empMob = $employeerow['mobile'];
 ?>
-<!-- *****************************Form Number 1********************************-->
+
 <div class="column6">
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
         <div class="domtab">
             <ul class="domtabs">
-                <li class="current"><a href="#01">মূল তথ্য</a></li><li class="current"><a href="#02">নমিনির তথ্য</a></li><li class="current"><a href="#03">শিক্ষাগত যোগ্যতা</a></li><li class="current"><a href="#04">প্রয়োজনীয় ডকুমেন্টস</a></li>
+                <li class="current"><a href="#01">মূল তথ্য</a></li><li class="current"><a href="#02">ব্যক্তিগত তথ্য</a></li><li class="current"><a href="#03">নমিনির তথ্য</a></li><li class="current"><a href="#04">শিক্ষাগত যোগ্যতা</a></li><li class="current"><a href="#05">প্রয়োজনীয় ডকুমেন্টস</a></li>
             </ul>
         </div>  
-
-        <div>
+        
+         <div>
             <h2><a name="01" id="01"></a></h2><br/>
-            <form method="POST" onsubmit="" style=" padding-right: 70px;" enctype="multipart/form-data" action="" id="emp_form" name="emp_form">	
-                <table class="formstyle" > 
-                    <tr><th colspan="4" style="text-align: center" colspan="2"><h1>কর্মচারীর একাউন্ট তৈরির ফর্ম</h1></th></tr>
-                    <tr>
-                        <td colspan="4" ><hr /></td>
+            <form method="POST" onsubmit="" enctype="multipart/form-data" action="" id="emp_form1" name="emp_form1">	
+                <table  class="formstyle">     
+                    <tr><th colspan="4" style="text-align: center" colspan="2"><h1>কর্মচারীর মূল তথ্য</h1></th></tr>
+                    <tr><td colspan="4" ></td>
+                        <?php
+                        if ($msg != "") {
+                            echo '<tr> <td colspan="2" style="text-align: center; color: green; font-size: 15px"><b>' . $msg . '</b></td></tr>';
+                        }
+                        ?>
                     </tr>
-                    <?php
-                    if ($msg != "") {
-                        echo '<tr><td colspan="4" style="text-align: center; color: green; font-size: 15px"><b>' . $msg . '</b></td></tr>';
-                    }
-                    ?>
-                    <tr>	
-                        <td  colspan="4" style =" font-size: 14px"><b>ব্যাক্তিগত  তথ্য</b></td>                            
+                   <tr>
+                        <td>কর্মচারীর নাম</td>
+                        <td>:   <input class='box' style="width: 220px;" type='text' id='name' name='name' readonly="" value="<?php echo $db_empName;?>"/></td>			
+                    </tr>
+                    <tr>
+                        <td >একাউন্ট নাম্বার</td>
+                        <td>:   <input class='box' style="width: 220px;" type='text' id='acc_num' name='acc_num' readonly value="<?php echo $db_empAcc;?>"/></td>			
+                    </tr>
+                    <tr>
+                        <td >ই মেইল</td>
+                        <td>:   <input class='box' style="width: 220px;" type='text' id='email' name='email' readonly="" value="<?php echo $db_empMail;?>" /></td>			
+                    </tr>
+                    <tr>
+                        <td >রিপড ইমেইল</td>
+                        <td>:   <input class='box' style="width: 220px;" type='text' id='ripdemail' name='ripdemail' readonly="" value="<?php echo $db_ripdMail;?>" /></td>			
+                    </tr>
+                    <tr>
+                        <td >মোবাইল</td>
+                        <td>:   <input class='box' style="width: 220px;" type='text' id='mobile' name='mobile' readonly="" value="<?php echo $db_empMob;?>" /></td>		
+                    </tr>
+                </table>
+                </fieldset>
+            </form>
+        </div>
+        <div>
+            <h2><a name="02" id="02"></a></h2><br/>
+            <form method="POST" onsubmit="" enctype="multipart/form-data" action="" id="emp_form" name="emp_form">	
+                <table class="formstyle" > 
+                    <tr><th colspan="4" style="text-align: center" colspan="4"><h1>কর্মচারীর একাউন্ট তৈরির ফর্ম</h1></th></tr>
+                    <tr>
+                        <td  colspan="4" style =" font-size: 14px;text-align: center;"><b>ব্যাক্তিগত  তথ্য</b></td>                            
                     </tr>
                     <tr>
                         <td >বাবার নাম </td>
@@ -420,10 +457,10 @@ mysql_query("START TRANSACTION");
             </form>
         </div>
 
-        <!--******************Form Number 2********************************* -->
+        <!--******************Form Number 3********************************* -->
         <div>
-            <h2><a name="02" id="02"></a></h2><br/>
-            <form method="POST" onsubmit="" style=" padding-right: 70px;" enctype="multipart/form-data" action="" id="emp_form1" name="emp_form1">	
+            <h2><a name="03" id="03"></a></h2><br/>
+            <form method="POST" onsubmit="" enctype="multipart/form-data" action="" id="emp_form1" name="emp_form1">	
                 <table  class="formstyle">     
                     <tr><th colspan="4" style="text-align: center" colspan="2"><h1>কর্মচারীর একাউন্ট তৈরির ফর্ম</h1></th></tr>
                     <tr>
@@ -546,10 +583,10 @@ mysql_query("START TRANSACTION");
                 </fieldset>
             </form>
         </div>
-        <!--********************Form number 3****************** -->
+        <!--********************Form number 4****************** -->
 
         <div>
-            <h2><a name="03" id="03"></a></h2><br/>
+            <h2><a name="04" id="04"></a></h2><br/>
             <form method="POST" onsubmit="">	
                 <table  class="formstyle">          
                     <tr><th colspan="4" style="text-align: center" colspan="2"><h1>কর্মচারীর একাউন্ট তৈরির ফর্ম</h1></th></tr>
@@ -627,10 +664,10 @@ mysql_query("START TRANSACTION");
                 </table>
             </form>
         </div>
-        <!-- **********************Form Number 4***************************-->
+        <!-- **********************Form Number 5***************************-->
 
         <div>
-            <h2><a name="04" id="04"></a></h2><br/>
+            <h2><a name="05" id="05"></a></h2><br/>
             <form name="scanDoc_form" method="POST" enctype="multipart/form-data" onsubmit="">	
                 <table  class="formstyle">     
                     <tr><th colspan="4" style="text-align: center" colspan="2"><h1>কর্মচারীর একাউন্ট তৈরির ফর্ম</h1></th></tr>               

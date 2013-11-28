@@ -91,7 +91,11 @@ if(isset($_POST['submit0']))
      
          $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["image"]["name"]));
-        $image_name = $off_acc."-".$_FILES["image"]["name"];
+        $image_name = $_FILES["image"]["name"];
+        if($image_name != "")
+        {
+            $image_name = $off_acc."-".$_FILES["image"]["name"];
+        }
         $image_path = "pic/" . $image_name;
         if( $_FILES["image"]["name"] != ""){
             if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
@@ -106,7 +110,11 @@ if(isset($_POST['submit0']))
                 
                   $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["signature"]["name"]));
-        $sign_name = $off_acc."-". $_FILES["signature"]["name"];
+        $sign_name = $_FILES["signature"]["name"];
+        if($sign_name != "")
+        {
+           $sign_name = $off_acc."-". $_FILES["signature"]["name"];
+        }
         $sing_path = "sign/" . $sign_name;
         if( $_FILES["signature"]["name"] != ""){
             if (($_FILES["signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
@@ -119,7 +127,11 @@ if(isset($_POST['submit0']))
                 
                 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["owner_finger_print"]["name"]));
-        $finger_name = $off_acc."-".$_FILES["owner_finger_print"]["name"];
+        $finger_name = $_FILES["owner_finger_print"]["name"];
+        if($finger_name != "")
+        {
+            $finger_name = $off_acc."-".$_FILES["owner_finger_print"]["name"];
+        }
         $finger_path = "fingerprints/".$finger_name;
         if( $_FILES["owner_finger_print"]["name"] != ""){
             if (($_FILES["owner_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
@@ -134,7 +146,11 @@ if(isset($_POST['submit0']))
                 
                 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG","pdf");
         $extension = end(explode(".", $_FILES["scanDoc"]["name"]));
-         $scan_name = $off_acc."-".$_FILES["scanDoc"]["name"];
+        $scan_name = $_FILES["scanDoc"]["name"];
+        if($scan_name != "")
+        {
+            $scan_name = $off_acc."-".$_FILES["scanDoc"]["name"];
+        }
           $scan_path = "scaned/".$scan_name;
           if( $_FILES["scanDoc"]["name"] != ""){
             if (($_FILES["scanDoc"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
@@ -154,8 +170,21 @@ if(isset($_POST['submit0']))
      $ownsql = "INSERT INTO ". $dbname .".`ons_deed` (`owner_name` ,`owner_address` ,`cell_number` ,`owner_email` ,`owner_photo` ,`owner_signature`  ,`expire_date` ,`scan_documents` ,`ons_relation_idons_relation`,`owner_fingerprint`) VALUES  ( '$own_name', '$own_add' , '$own_mbl' , '$own_mail'  , '$image_path' , '$sing_path'  , '$own_valid' , '$scan_path' , '$ons' , '$finger_path');";
      $ownreslt = mysql_query($ownsql) or exit('query failed: '.mysql_error());
      // ****************** default insert into post_in_ons ***************************************
+     $sel_post = mysql_query("SELECT * FROM post WHERE post_name='এডমিন'");
+     $noOfRows = mysql_num_rows($sel_post);
+     if($noOfRows < 1)
+     {
+         $ins_post = mysql_query("INSERT INTO post (post_name, responsibility_desc) VALUES ('এডমিন' , 'এডমিনিস্ট্রেশন')");
+         $postid = mysql_insert_id();
+         $ins_postinons = mysql_query("INSERT INTO post_in_ons (number_of_post, free_post, post_onstype, used_post, post_onsid, Post_idPost)
+                                                        VALUES (1, 1, 'office', 0, $off, $postid)");
+     }
+ else {
+     $postrow = mysql_fetch_assoc($sel_post);
+     $postid = $postrow['idPost'];
      $ins_postinons = mysql_query("INSERT INTO post_in_ons (number_of_post, free_post, post_onstype, used_post, post_onsid, Post_idPost)
-                                                        VALUES (1, 1, 'office', 0, $off, 11)");
+                                                        VALUES (1, 1, 'office', 0, $off, $postid)");   
+     }
      
      if($reslt && $sreslt && $ireslt && $oreslt && $ownreslt && $ins_postinons)
      {
@@ -355,7 +384,7 @@ function getParentOfiice(str_key) // for searching parent offices
                }
                 else
                     {document.getElementById('parentResult').style.visibility = "visible";
-                document.getElementById('parentResult').setAttribute('style','position:absolute;top:76%;left:37.5%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('parentResult').setAttribute('style','position:absolute;top:82%;left:47.5%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('parentResult').innerHTML=xmlhttp.responseText;
         }

@@ -10,6 +10,7 @@ $current_page_name = basename($_SERVER["SCRIPT_NAME"]);
 <div class="columnSubmodule">
     <table class="formstyle"> 
         <?php
+        //$_SESSION['changedPathPos'] = "pos/"; //Set Session variable for POS
         include_once 'includes/showSubModules_pages.php';
         ?>
     </table>

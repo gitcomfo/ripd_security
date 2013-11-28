@@ -1,6 +1,5 @@
 <?php
 error_reporting(0);
-include 'session.php';
 include 'includes/connectionPDO.php';
 $sql = "INSERT INTO sales_temp(sales_receiptid ,sales_product_code ,sales_product_name ,sales_inventory_sumid ,sales_buying_price, sales_product_sellprice ,sales_product_qty , sales_totalamount ,sales_pv) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";

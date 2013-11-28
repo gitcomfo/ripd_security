@@ -4,7 +4,7 @@ if($_GET['step'] == 1)
 {
 $g_emptype = $_GET['type'];
 
-  echo  ": <select class='box' onchange='showSalaryRange(this.value)' name='employee_grade'>
+  echo  ": <select class='box' onchange='showSalaryRange(this.value)' name='employee_grade'><em2> *</em2>
       <option value=0> -সিলেক্ট করুন- </option>";
     $sql_paygrade= mysql_query("SELECT * FROM `pay_grade` WHERE employee_type = '$g_emptype';");
     while($paygraderow = mysql_fetch_assoc($sql_paygrade))
@@ -60,7 +60,7 @@ $onsrow = mysql_fetch_assoc($sel_ons);
 $db_onstype = $onsrow['catagory'];
 $db_onsid = $onsrow['add_ons_id'];
 
-  echo  ": <select class='box' name='post' onchange='showTypeBox()'><option value=0> -সিলেক্ট করুন- </option>";
+  echo  ": <select class='box' name='post' onchange='showTypeBox()'><em2> *</em2><option value=0> -সিলেক্ট করুন- </option>";
     $sql_post= mysql_query("SELECT * FROM `post`, `post_in_ons` WHERE Post_idPost = 	idPost AND post_onsid = '$db_onsid' AND post_onstype='$db_onstype' AND free_post > '0';");
     while($postrow = mysql_fetch_assoc($sql_post))
     {

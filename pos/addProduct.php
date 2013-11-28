@@ -1,6 +1,5 @@
 <?php
 //error_reporting(0);
-include 'session.php';
 include './includes/connectionPDO.php';
 include './includes/ConnectDB.inc';
 $sqlpv = mysql_query("SELECT * FROM running_pv;");

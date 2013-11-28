@@ -3,8 +3,7 @@ error_reporting(0);
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
-$proprietorID = $_GET['proID'];
-
+$proprietorID = base64_decode($_GET['proID']);
 ?>
 <title>প্রোপ্রাইটার ফর্ম পূরণ</title>
 <style type="text/css">@import "css/bush.css";</style>
@@ -37,9 +36,7 @@ $proprietorID = $_GET['proID'];
 </script>
 <?php
 if (isset($_POST['submit1'])) {
-    $proprietorTableID = $_POST['proprietorID'];
-    //$sql_proprie_sel = mysql_query("SELECT * FROM proprietor_account WHERE idpropaccount= $proprietorTableID ");
-    
+    $proprietorTableID = $_POST['proprietorID']; 
     $prop_father_name = $_POST['prop_father_name'];
     $prop_motherName = $_POST['prop_motherName'];
     $prop_spouseName = $_POST['prop_spouseName'];
@@ -123,7 +120,8 @@ if (isset($_POST['submit1'])) {
         mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
-}elseif (isset($_POST['submit2'])) {
+}
+elseif (isset($_POST['submit2'])) {
     $nominee_name = $_POST['nominee_name'];
     $nominee_age = $_POST['nominee_age'];
     $nominee_relation = $_POST['nominee_relation'];
@@ -178,7 +176,8 @@ mysql_query("START TRANSACTION");
         mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
-} elseif (isset($_POST['submit3'])) {
+} 
+elseif (isset($_POST['submit3'])) {
     //customer education
     $e_ex_name = $_POST['e_ex_name'];
     $e_pass_year = $_POST['e_pass_year'];
@@ -245,50 +244,84 @@ elseif (isset($_POST['submit4'])) {
         $msg = "ভুল হয়েছে";
     }
 }
+//  ########################## select main info from cfs_user ########################################
+    $sql_proprie_sel = mysql_query("SELECT * FROM proprietor_account,cfs_user WHERE idUser=cfs_user_idUser AND  idpropaccount= $proprietorID ");
+     $proprietorrow = mysql_fetch_assoc($sql_proprie_sel);
+     $db_proprietorName = $proprietorrow['account_name'];
+     $db_proprietorAcc = $proprietorrow['account_number'];
+     $db_proprietorMail = $proprietorrow['email'];
+     $db_ripdMail = $proprietorrow['ripd_email'];
+     $db_proprietorMob = $proprietorrow['mobile'];
 ?>
 <div class="column6">
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="office_sstore_management.php"><b>ফিরে যান</b></a></div>
         <div class="domtab">
             <ul class="domtabs">
-                <li class="current"><a href="#01">মূল তথ্য</a></li><li class="current"><a href="#02">নমিনির তথ্য</a></li><li class="current"><a href="#03">শিক্ষাগত যোগ্যতা</a></li><li class="current"><a href="#04">প্রয়োজনীয় ডকুমেন্টস</a></li>
+                <li class="current"><a href="#01">মূল তথ্য</a></li><li class="current"><a href="#02">ব্যাক্তিগত  তথ্য</a></li><li class="current"><a href="#03">নমিনির তথ্য</a></li><li class="current"><a href="#04">শিক্ষাগত যোগ্যতা</a></li><li class="current"><a href="#05">প্রয়োজনীয় ডকুমেন্টস</a></li>
             </ul>
-        </div>  
-        <div>
+        </div>
+         <div>
             <h2><a name="01" id="01"></a></h2><br/>
+            <form method="POST" onsubmit=""  enctype="multipart/form-data" action="" >	
+                <table  class="formstyle">     
+                    <tr><th colspan="4" style="text-align: center" colspan="2"><h1>প্রোপ্রাইটারের মূল তথ্য</h1></th></tr>
+                    <tr><td colspan="4" ></td>
+                        <?php
+                        if ($msg != "") {
+                            echo '<tr> <td colspan="2" style="text-align: center; color: green; font-size: 15px"><b>' . $msg . '</b></td></tr>';
+                        }
+                        ?>
+                    </tr>
+                   <tr>
+                        <td>প্রোপ্রাইটারের নাম</td>
+                        <td>: <input class='box' style="width: 220px;" type='text' id='name' name='name' readonly="" value="<?php echo $db_proprietorName;?>"/></td>			
+                    </tr>
+                    <tr>
+                        <td >একাউন্ট নাম্বার</td>
+                        <td>:   <input class='box' style="width: 220px;" type='text' id='acc_num' name='acc_num' readonly value="<?php echo $db_proprietorAcc;?>"/></td>			
+                    </tr>
+                    <tr>
+                        <td >ই মেইল</td>
+                        <td>:   <input class='box' style="width: 220px;" type='text' id='email' name='email' readonly="" value="<?php echo $db_proprietorMail;?>" /></td>			
+                    </tr>
+                    <tr>
+                        <td >রিপড ইমেইল</td>
+                        <td>:   <input class='box' style="width: 220px;" type='text' id='ripdemail' name='ripdemail' readonly="" value="<?php echo $db_ripdMail;?>" /></td>			
+                    </tr>
+                    <tr>
+                        <td >মোবাইল</td>
+                        <td>:   <input class='box' style="width: 220px;" type='text' id='mobile' name='mobile' readonly="" value="<?php echo $db_proprietorMob;?>" /></td>		
+                    </tr>
+                </table>
+                </fieldset>
+            </form>
+        </div>
+        <div>
+            <h2><a name="02" id="02"></a></h2><br/>
             <form method="POST" onsubmit="" enctype="multipart/form-data" action="" id="prop_form" name="prop_form">	
                 <table  class="formstyle">  
                     <tr><th colspan="4" style="text-align: center" colspan="2"><h1>পাওয়ারস্টোর ওউনার একাউন্ট তৈরির ফর্ম</h1></th></tr>
-                    <tr><td colspan="4" ></td></tr>
-                    <?php
-                    if ($msg != "") {
-                        echo '<tr><td ></td><td colspan="4" style="text-allign: center; color: red; font-size: 15px"><blink>' . $msg . '</blink></td></tr>';
-                    }
-                    ?>
-                    <tr>	
-                        <td  colspan="4" style =" font-size: 14px"><b>ব্যাক্তিগত  তথ্য</b></td>                            
-                    </tr>
-                    <tr>
-                        <td>স্বত্বাধিকারীর নাম</td>
-                        <td>:  <input  class="box" type="text" id="prop_name" name="prop_name" /><input type="hidden" name="proprietorID" value="<?php echo $proprietorID;?>"/></td>   
-                        <td font-weight="bold" >ছবি </td>
-                        <td>:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/><<em2> *</em2>/td>               
+                        <td  colspan="4" style =" font-size: 14px;text-align: center;"><b>ব্যাক্তিগত  তথ্য</b></td>                            
                     </tr>
                     <tr>
                         <td >বাবার নাম </td>
-                        <td>:  <input class="box" type="text" id="prop_father_name" name="prop_father_name" /></td>	
-                        <td font-weight="bold" >স্বাক্ষর</td>
-                        <td >:   <input class="box" type="file" id="scanDoc_signature" name="scanDoc_signature" style="font-size:10px;"/> <em2> *</em2></td> 
+                        <td>:  <input class="box" type="text" id="prop_father_name" name="prop_father_name" /><input type="hidden" name="proprietorID" value="<?php echo $proprietorID;?>"/></td>	
+                       <td font-weight="bold" >ছবি </td>
+                        <td>:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/><em2> *</em2></td>             
                     </tr>
                     <tr>
                         <td >মার নাম </td>
                         <td>:  <input class="box" type="text" id="prop_motherName" name="prop_motherName"/></td>
-                        <td font-weight="bold" > টিপসই</td>
-                        <td >:   <input class="box" type="file" id="scanDoc_finger_print" name="scanDoc_finger_print" style="font-size:10px;"/><em2> *</em2> </td> 
+                         <td font-weight="bold" >স্বাক্ষর</td>
+                        <td >:   <input class="box" type="file" id="scanDoc_signature" name="scanDoc_signature" style="font-size:10px;"/> <em2> *</em2></td> 
+                        
                     </tr>
                     <tr>
                         <td >দম্পতির নাম  </td>
-                        <td>:  <input class="box" type="text" id="prop_spouseName" name="prop_spouseName" /> </td>			
+                        <td>:  <input class="box" type="text" id="prop_spouseName" name="prop_spouseName" /> </td>
+                        <td font-weight="bold" > টিপসই</td>
+                        <td >:   <input class="box" type="file" id="scanDoc_finger_print" name="scanDoc_finger_print" style="font-size:10px;"/><em2> *</em2> </td> 
                     </tr>
                     <tr>
                         <td >পেশা</td>
@@ -417,9 +450,9 @@ elseif (isset($_POST['submit4'])) {
                     </tr>                        
                     <tr>
                         <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd"></span><em2> *</em2></td>      
+                        <td>: <span id="tidd"></span></td>      
                         <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd2"></span><em2> *</em2></td>
+                        <td>: <span id="tidd2"></span></td>
                     </tr>
                     <tr>
                         <td >পোষ্ট অফিস</td>
@@ -443,8 +476,8 @@ elseif (isset($_POST['submit4'])) {
         </div>
 
         <div>
-            <h2><a name="02" id="02"></a></h2><br/>
-            <form method="POST" onsubmit="" style=" padding-right: 70px;" enctype="multipart/form-data" action="" id="emp_form1" name="emp_form1">	
+            <h2><a name="03" id="03"></a></h2><br/>
+            <form method="POST" onsubmit="" enctype="multipart/form-data" action="" id="emp_form1" name="emp_form1">	
                 <table  class="formstyle">     
                     <tr><th colspan="4" style="text-align: center" colspan="2"><h1>পাওয়ারস্টোর ওউনার একাউন্ট তৈরির ফর্ম</h1></th></tr>
                     <tr>
@@ -569,7 +602,7 @@ elseif (isset($_POST['submit4'])) {
         </div>
 
          <div>
-            <h2><a name="03" id="03"></a></h2><br/>
+            <h2><a name="04" id="04"></a></h2><br/>
             <form method="POST" onsubmit="">	
                 <table  class="formstyle">          
                     <tr><th colspan="4" style="text-align: center" colspan="2"><h1>পাওয়ারস্টোর ওউনার একাউন্ট তৈরির ফর্ম</h1></th></tr>
@@ -649,7 +682,7 @@ elseif (isset($_POST['submit4'])) {
         </div>
 
          <div>
-            <h2><a name="04" id="04"></a></h2><br/>
+            <h2><a name="05" id="05"></a></h2><br/>
             <form name="scanDoc_form" method="POST" enctype="multipart/form-data" onsubmit="">	
                 <table  class="formstyle">     
                     <tr><th colspan="4" style="text-align: center" colspan="2"><h1>পাওয়ারস্টোর ওউনার একাউন্ট তৈরির ফর্ম</h1></th></tr>        

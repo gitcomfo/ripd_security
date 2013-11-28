@@ -1,8 +1,7 @@
 <?php
 error_reporting(0);
-include 'includes/ConnectDB.inc';
-include 'includes/connectionPDO.php';
-include 'session.php';
+include_once 'includes/ConnectDB.inc';
+include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 $storeName= $_SESSION['offname'];
 $cfsID = $_SESSION['cfsid'];
@@ -223,7 +222,7 @@ function getUpdate(xprofit) // after update pckg prices
     <div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
-    <div style="width: 33%;height: 100%; float: left;"><a href="packageWelcome.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
+    <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
     <div style="width: 33%;height: 100%; float: left;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div>
     <div style="width: 33%;height: 100%;float: left;text-align: right;font-family: SolaimanLipi !important;"><a href="" style="text-decoration: none;" onclick="javasrcipt:window.open('package_list.php');return false;"><img src="images/packagelist.png" style="width: 100px;height: 70px;"/></br>প্যাকেজ লিস্ট</a></div>
 </div>

@@ -1,8 +1,8 @@
 <?php
 error_reporting(0);
-include 'session.php';
-include 'includes/ConnectDB.inc';
+include_once 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
+
 function get_catagory()
 {
     echo  "<option value=0> -সিলেক্ট করুন- </option>";

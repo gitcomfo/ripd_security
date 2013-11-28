@@ -44,7 +44,6 @@ include_once 'includes/header.php';
         $omail=$deed_row['owner_email'];
         $ophoto=$deed_row['owner_photo'];
         $ophotoname = end(explode("/", $ophoto));
-      
         $osign=$deed_row['owner_signature'];
         $osignname = end(explode("/", $osign));
         $oscanDoc=$deed_row['scan_documents'];
@@ -104,6 +103,7 @@ include_once 'includes/header.php';
     $off_add = $_POST['sales_address'];
     $offup="UPDATE `ripd_db_comfosys`.`sales_store` SET `salesStore_number` = '$off_no', `salesStore_details_address` = '$off_add', `salesStore_email` = '$mail' WHERE `sales_store`.`idSales_store` =$salesid AND `sales_store`.`Thana_idThana` =$sale_thana;";
     $offupsql = mysql_query($offup) or exit('query failed: '.mysql_error());
+    echo "<script type='text/javascript'>window.location.href = window.location; </script>";
   }
   if(isset($_POST['submit02']))
   {
@@ -112,6 +112,7 @@ include_once 'includes/header.php';
     $b_floor = $_POST['floor_number'];
     $infoup="UPDATE `ripd_db_comfosys`.`ons_information` SET `space` = '$b_space', `building_type` = '$b_type', `floor` = '$floor' WHERE `ons_information`.`idons_information` =$info_id  AND `ons_information`.`ons_relation_idons_relation` =$idons;";
     $infoupsql = mysql_query($infoup) or exit('query failed: '.mysql_error());
+    echo "<script type='text/javascript'>window.location.href = window.location; </script>";
   }
    if(isset($_POST['submit01']))
   {
@@ -155,6 +156,7 @@ include_once 'includes/header.php';
         }
         else
         {
+            $image_name = $sales_acc."-".$image_name;
         $image_path = "pic/" . $image_name;
         if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
@@ -181,6 +183,7 @@ include_once 'includes/header.php';
         }
         else
         {
+            $sign_name = $sales_acc."-".$sign_name;
         $sing_path = "sign/" . $sign_name;
         if (($_FILES["signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
@@ -207,6 +210,7 @@ include_once 'includes/header.php';
         }
         else
         {
+            $finger_name = $sales_acc."-".$finger_name;
         $finger_path = "fingerprints/".$finger_name;
         if (($_FILES["owner_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
@@ -234,6 +238,7 @@ include_once 'includes/header.php';
         }
         else
         {
+            $scan_name = $sales_acc."-".$scan_name;
         $scan_path = "scaned/".$scan_name;
         if (($_FILES["scanDoc"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
@@ -258,7 +263,7 @@ include_once 'includes/header.php';
      $own_valid = $_POST['validity'];
     $deedup="UPDATE `ripd_db_comfosys`.`ons_deed` SET `owner_name`='$own_name',`owner_address` = '$own_add', `cell_number` = '$own_mbl', `owner_email`='$mail', `owner_photo`='$image_path', `owner_signature`='$sing_path', `expire_date`='$own_valid', `scan_documents`='$scan_path', `owner_fingerprint`='$finger_path' WHERE `ons_deed`.`idons_deed` =$deedid AND `ons_deed`.`ons_relation_idons_relation` =$idons;";
     $deedupsql = mysql_query($deedup) or exit('query failed: '.mysql_error());
-
+echo "<script type='text/javascript'>window.location.href = window.location; </script>";
   }
 ?>
 <title>আপডেট সেলসস্টোর</title>
