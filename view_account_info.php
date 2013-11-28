@@ -29,7 +29,6 @@ include 'includes/header.php';
             <div style="padding-left: 110px;"><a href="account_management.php"><b>ফিরে যান</b></a></div>
               <div id='iftee'>
             <form method="POST" enctype="multipart/form-data" action="" style=" width: 100%; " id="cust_form" name="cust_form">	
-                 <table class="formstyle" style=" width: 85%; padding-left: 15px; padding-top: 5px;padding-bottom: 8px;" >    
                     <?php
                     $session_user_id = $_SESSION['userIDUser'];
                     $result0 = mysql_query("Select  * from $dbname.cfs_user where idUser=$session_user_id");
