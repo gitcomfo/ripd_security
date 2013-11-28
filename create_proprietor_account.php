@@ -45,7 +45,7 @@ if (isset($_POST['submit']) || isset($_POST['retry'])) {
             $ripdemailid = "";
         }
 
-        $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= 'প্রোপ্রাইটার' ");
+        $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= 'proprietor' ");
         $securityrolesrow = mysql_fetch_assoc($sel_securityroles);
         $roleid = $securityrolesrow['idsecurityrole'];
         $ins_cfsuser = mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email, cfs_account_status, security_roles_idsecurityrole, user_type)
@@ -97,7 +97,7 @@ if (isset($_POST['submitwithpass'])) {
         $ripdemailid = "";
     }
 
-    $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= 'প্রোপ্রাইটার' ");
+    $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= 'proprietor' ");
     $securityrolesrow = mysql_fetch_assoc($sel_securityroles);
     $roleid = $securityrolesrow['idsecurityrole'];
     $ins_cfsuser = mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email, cfs_account_status, security_roles_idsecurityrole, user_type)
