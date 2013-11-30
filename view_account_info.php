@@ -1,8 +1,8 @@
 <?php
 error_reporting(0);
 include_once 'includes/MiscFunctions.php';
-include 'includes/ConnectDB.inc';
-include 'includes/header.php';
+include_once 'includes/ConnectDB.inc';
+include_once 'includes/header.php';
 ?>
 <title>ভিউ একাউন্ট</title>
 <style type="text/css">@import "css/bush.css";</style>
@@ -78,7 +78,7 @@ include 'includes/header.php';
                     $cust_gurdian_nationalID_no = $row['cust_gurdian_nationalID_no'];
                     $cust_gurdian_passportID_no = $row['cust_gurdian_passportID_no'];
                     $cust_date_of_birth = $row['cust_date_of_birth'];
-                    echo "<table  class='formstyle'>";
+                    echo "<table  class='formstyle' style='float: left;'>";
                     echo "<tr>
                                 <th colspan='7' style='text-align: center'><h2><font color=\"red\">$account_name </font>'র একাউন্ট</h2></th>
                             <div style='width: 80%; float: left;'>  
@@ -651,5 +651,5 @@ include 'includes/header.php';
         </div>
     </div>
     <?php
-    include 'includes/footer.php';
+    include_once 'includes/footer.php';
     ?>
