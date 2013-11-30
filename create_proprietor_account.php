@@ -49,7 +49,7 @@ if (isset($_POST['submit']) || isset($_POST['retry'])) {
         $securityrolesrow = mysql_fetch_assoc($sel_securityroles);
         $roleid = $securityrolesrow['idsecurityrole'];
         $ins_cfsuser = mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email, cfs_account_status, security_roles_idsecurityrole, user_type)
-                                                                            VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email','$ripdemailid', 'active', 0, 'owner')") or exit(mysql_error());
+                                                                            VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email','$ripdemailid', 'active', $roleid, 'owner')") or exit(mysql_error());
         $cfs_user_id = mysql_insert_id();
         $pwrHeadAccNo = $_POST['powerStore_accountNumber'];
         $sel_pwrID = mysql_query("SELECT * FROM office WHERE account_number = '$pwrHeadAccNo' ");
@@ -101,7 +101,7 @@ if (isset($_POST['submitwithpass'])) {
     $securityrolesrow = mysql_fetch_assoc($sel_securityroles);
     $roleid = $securityrolesrow['idsecurityrole'];
     $ins_cfsuser = mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email, cfs_account_status, security_roles_idsecurityrole, user_type)
-                                                                            VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email','$ripdemailid', 'active', 0, 'owner')") or exit(mysql_error());
+                                                                            VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email','$ripdemailid', 'active', $roleid, 'owner')") or exit(mysql_error());
     $cfs_user_id = mysql_insert_id();
     $pwrHeadAccNo = $_POST['powerStore_accountNumber'];
     $sel_pwrID = mysql_query("SELECT * FROM office WHERE account_number = '$pwrHeadAccNo' ");

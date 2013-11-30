@@ -26,6 +26,8 @@ if(isset($_POST['submit']))
         $cfs_user_id = $_SESSION['userIDUser'] ;
         $password = md5($_POST['new_password']);
         $sql_update_password->execute(array($password, $cfs_user_id));
+        $msg = "পাসওয়ার্ড সঠিকভাবে পরিবর্তন করা হয়েছে";
+        $flag = "true";
         }
 ?>
 
@@ -41,22 +43,31 @@ function checkPass(passvalue) // check password in repeat
                 document.getElementById('new_password2').focus();
                 document.getElementById('passcheck').style.color='red';
                 document.getElementById('passcheck').innerHTML = "পাসওয়ার্ড সঠিক হয় নি";
+                document.getElementById('submit').style.backgroundColor='gray';
                 document.getElementById('submit').disabled= true;
                 }
         else
                 {
-                document.getElementById('passcheck').style.color='green';
-                document.getElementById('passcheck').innerHTML="পাসওয়ার্ড মিলেছে";
-                document.getElementById('submit').disabled= false;
+                var oldPassCheck = document.getElementById("showError").innerHTML;
+                if(oldPassCheck == "পাসওয়ার্ড সঠিক")
+                        {
+                        document.getElementById('passcheck').style.color='green';
+                        document.getElementById('passcheck').innerHTML="পাসওয়ার্ড মিলেছে";
+                        document.getElementById('submit').style.backgroundColor='';
+                        document.getElementById('submit').disabled= false;
+                        }
+                else
+                        {
+                        document.getElementById('passcheck').style.color='red';
+                        document.getElementById('passcheck').innerHTML="পুরনো পাসওয়ার্ড ম্যাচ করেনি";
+                        }
                 }
         }
         
-function beforeSave()
+function blankRePass()
         {
-        if(document.getElementById('showError').innerHTML != "") 
-                {
-                document.getElementById('submit').disabled= true;
-                }
+        document.getElementById('new_password2').value='';
+        document.getElementById('submit').disabled= true;
         }
 
 function  checkCorrectPass() // match password with account
@@ -75,8 +86,18 @@ function  checkCorrectPass() // match password with account
                 {
                 if (xmlhttp.readyState==4 && xmlhttp.status==200)
                         {
-                        document.getElementById('showError').style.color='red';
-                        document.getElementById("showError").innerHTML=xmlhttp.responseText;
+                        var flagError = xmlhttp.responseText;
+                        if(flagError == 1)
+                            {
+                            document.getElementById('showError').style.color='red';
+                            document.getElementById("showError").innerHTML= 'দুঃখিত, আপনার পাসওয়ার্ডটি ম্যাচ হয়নি';
+                            document.getElementById('submit').disabled= true;
+                            }
+                        else
+                            {
+                            document.getElementById('showError').style.color='green';
+                            document.getElementById("showError").innerHTML= 'পাসওয়ার্ড সঠিক';
+                            }
                         }
                 }
         xmlhttp.open("GET","includes/matchPassword.php?pass="+pass,true);
@@ -97,14 +118,14 @@ function  checkCorrectPass() // match password with account
                 </tr>
                 <tr>
                     <td style="text-align: right; width: 30%;">নতুন পাসওয়ার্ড</td>
-                    <td>: <input  class="box" type="password" name="new_password"  id="new_password" /></td>   
+                    <td>: <input  class="box" type="password" name="new_password"  id="new_password" onkeyup='blankRePass();'/></td>   
                 </tr>
                  <tr>
                     <td style="text-align: right; width: 30%;">নতুন পাসওয়ার্ড(পুনরায়)</td>
                     <td>: <input  class="box" type="password" name="new_password2"  id="new_password2" onkeyup='checkPass(this.value); '/><span id="passcheck"></span></td>   
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: center"></br><input type="submit" class="btn" onclick='beforeSave();' name="submit" id="submit" disabled value="ঠিক আছে"></td>
+                    <td colspan="2" style="text-align: center"></br><input type="submit" style="background-color: gray;" class="btn" name="submit" id="submit" disabled value="ঠিক আছে"></td>
                 </tr>
                     <tr>
                     <td colspan="2" id="passwordbox"></td>
