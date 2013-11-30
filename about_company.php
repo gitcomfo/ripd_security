@@ -1,9 +1,9 @@
 <?php
 include_once 'includes/header.php';
 ?>
-<div style="padding-left: 50px; padding-right: 30px;">
-            <h2>আমাদের সম্পর্কে</h2>
-            <p>
+    <div style="margin-left: 6%;margin-top: 25px; float: left; width: 70%;"> 
+        <h2 style=" font-family: Siyam Rupali,sans-serif !important;text-align: left; font-size: 12px;">আমাদের সম্পর্কে</h2>
+        <p style=" font-family: Siyam Rupali,sans-serif !important;text-align: left; font-size: 12px;">
                 রিপ্‌ড ইউনিভার্সেল মূলত আপনারই প্রতিষ্ঠান। আপনার স্বপ্ন পূরণে সার্বক্ষণিক নিজের কাছে অঙ্গিকারাবদ্ধ। রিপ্‌ড হচ্ছে সিস্টেম তথা সিস্টেমিক প্রতিষ্ঠান, যা একটি 
                 অত্যাধুনিক সফটওয়ারের মাধ্যমে আপনার সাথে মিশে থাকবে সারাক্ষণ। এই সফটের মাধ্যমে আপনি অনেক পরিসেবাই পেতে পারেন সম্পূর্ণ ফ্রি। যেগুলো আপনার 
                             নানাবিধ স্বপ্ন পূরণে সহায়ক বলে বিভিন্নভাবে বিবেচিত। এটির মাধ্যমে আপনি বাড়াতে পারবেন, নিজের জ্ঞানের পরিধি, পরস্পরে মেইলিং যোগাযোগ। জানতে পারবেন 
@@ -13,7 +13,12 @@ include_once 'includes/header.php';
                             হোক; পাচ্ছেন সার্বক্ষণিক ৪৩.২০% ডিসকাউন্ট, যারমাঝে ২৮.৮% সরাসরি, বাকি ২৪.৪% সিস্টেমিক। এই সিস্টেমিক ডিসকাউন্ট আপনার লাইফে আশির্বাদ স্বরূপ। 
                             যা ব্যক্তিগত অর্থনৈতিক ঘূর্ণন ঘটিয়ে, ফিন্যান্সিয়াল সাপোর্টিং এর মাধ্যমে, ধীরে ধীরে জীবনযাত্রা নির্বাহকরা কেবলই সহজ থেকে আরো সহজতর করে তুলবে একেবারে 
                             অজানেত্মই। এগুলো ছাড়া থাকছে আরো অনেক কিছু! যা আপনাকে অবাক করে রিপ্‌ড এর সাথে নিবিড় বন্ধনে আবদ্ধ করে রাখবে।</p>
+    </div>
 
+<div style="background-image:url(images/about_us_01.jpg);
+background-repeat:no-repeat;
+background-position:right top;
+margin-right:100px; width: 100%; margin-top: 10px; float: top; padding-left: 0px; height: 500px;">
         
 </div>
 

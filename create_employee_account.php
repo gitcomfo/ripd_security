@@ -1,10 +1,18 @@
 <?php
 error_reporting(0);
+include_once 'includes/session.inc';
 include_once 'includes/MiscFunctions.php';
 include_once 'includes/makeAccountNumbers.php';
 include_once 'includes/checkAccountNo.php';
 include_once 'includes/email_conf.php';
 include_once './includes/sms_send_function.php';
+function showRoles() {
+    echo "<option value=0> -সিলেক্ট করুন- </option>";
+    $sql_office = mysql_query("SELECT * FROM security_roles WHERE role_type='emp' ORDER BY role_name;");
+    while ($headrow = mysql_fetch_assoc($sql_office)) {
+        echo "<option value=" . $headrow['idsecurityrole'] . ">" . $headrow['role_name'] . "</option>";
+    }
+}
 
 if (isset($_POST['submit']) || isset($_POST['retry']))
         {
@@ -40,9 +48,10 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
             } else {
                 $ripdemailid = "";
             }
-//            $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= 'প্রোপ্রাইটার' ");
+             $roleid = $_POST['role'];;
+//            $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= '$p_employee_type'");
 //            $securityrolesrow = mysql_fetch_assoc($sel_securityroles);
-            $roleid =0; //$securityrolesrow['idsecurityrole'];
+//            $roleid =$securityrolesrow['idsecurityrole'];
             $ins_cfsuser=mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email, cfs_account_status, security_roles_idsecurityrole,user_type)
                                                                         VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile', '$account_email', '$ripdemailid','active', $roleid, '$p_employee_type')") or exit(mysql_error()." sorry");
              $cfs_user_id = mysql_insert_id();
@@ -105,9 +114,10 @@ if (isset($_POST['submitwithpass']))
             } else {
                 $ripdemailid = "";
             }
-//            $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= 'প্রোপ্রাইটার' ");
+             $roleid = $_POST['role'];
+//            $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= '$p_employee_type'");
 //            $securityrolesrow = mysql_fetch_assoc($sel_securityroles);
-            $roleid =0; //$securityrolesrow['idsecurityrole'];
+//            $roleid =$securityrolesrow['idsecurityrole'];
             $ins_cfsuser=mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email, cfs_account_status, security_roles_idsecurityrole,user_type)
                                                                         VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile', '$account_email', '$ripdemailid','active', $roleid, '$p_employee_type')") or exit(mysql_error()." sorry");
              $cfs_user_id = mysql_insert_id();
@@ -227,7 +237,8 @@ if (isset($_POST['submitwithpass']))
                 && (document.getElementById('salary').value != "")
                 && (document.getElementById('SalaryRange').innerHTML != "")
                 && (document.getElementById('showerror').innerHTML == "")
-                && ((radio[0].checked) || (radio[1].checked)) )
+                && (document.getElementById('role').value != 0)
+                && ((radio[0].checked) || (radio[1].checked)))
         {
             document.getElementById('save').readonly = false;
             return true;
@@ -244,6 +255,7 @@ if (isset($_POST['submitwithpass']))
                 && (document.getElementById('salary').value != "")
                 && (document.getElementById('SalaryRange').innerHTML != "")
                 && (document.getElementById('showerror').innerHTML == "")
+                && (document.getElementById('role').value != 0)
                 && ((radio[0].checked) || (radio[1].checked))
                 && (document.getElementById('passcheck').innerHTML == "OK"))
         {
@@ -262,6 +274,7 @@ if (isset($_POST['submitwithpass']))
                 && (document.getElementById('salary').value != "")
                 && (document.getElementById('SalaryRange').innerHTML != "")
                 && (document.getElementById('showerror').innerHTML == "")
+                && (document.getElementById('role').value != 0)
                 && ((radio[0].checked) || (radio[1].checked))
                 && (document.getElementById('passcheck').innerHTML == ""))
         {
@@ -388,7 +401,7 @@ function passminlength(pass)
             else
             {
                 document.getElementById('offResult').style.visibility = "visible";
-                document.getElementById('offResult').setAttribute('style', 'position:absolute;top:87%;left:48%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('offResult').setAttribute('style', 'position:absolute;top:83%;left:56%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
             }
             document.getElementById('offResult').innerHTML = xmlhttp.responseText;
         }
@@ -458,7 +471,6 @@ function passminlength(pass)
                 {
                     document.getElementById('mobile').focus();
                 }
-                //document.getElementById('save').disabled= false;
             }
         }
         xmlhttp.open("GET", "includes/mobileNoValidation.php?mobile=" + mblno, true);
@@ -486,7 +498,7 @@ function passminlength(pass)
                     </tr>
                     <tr>
                         <td >একাউন্ট নাম্বার</td>
-                        <td>:   <input class='box' type='text' id='acc_num' name='acc_num' readonly value= ".getPersonalAccount()." /></td>			
+                        <td>:   <input class='box' type='text' id='acc_num' name='acc_num' readonly value= '$account_number1' /></td>			
                     </tr>
                     <tr>
                         <td >ই মেইল</td>
@@ -552,6 +564,12 @@ function passminlength(pass)
                         <td>: <input class='box' type='text' id='date' placeholder='Date' name='date' value='$p_joiningdate'/>
                         </td>            
                     </tr>
+                    <tr>
+                     <td>কর্মচারীর রোল</td>
+                      <td>:   <select  class='box'  name='role' id='role' style =' font-size: 14px'>";
+                      showRoles();
+                        echo "</select><em2> *</em2></td>
+                    </tr>   
                     <tr>
                         <td>পাসওয়ার্ড</td>
                        <td>: <input class='box' type='password' id='user_password' name='user_password' maxlength='15' onblur='passminlength(this.value)'/><em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span style='color:red;' id='minlengtherror'></span></td>
@@ -648,6 +666,12 @@ function passminlength(pass)
                         <td>: <input class='box' type='text' id='date' placeholder='Date' name='date' value=''/>
                         </td>            
                     </tr>
+                    <tr>
+                     <td>কর্মচারীর রোল</td>
+                      <td>:   <select  class='box'  name='role' id='role' style =' font-size: 14px'>";
+                      showRoles();
+                        echo "</select><em2> *</em2></td>
+                    </tr>   
                     <tr>                    
                     <td colspan='4' style='padding-left: 250px; '>
                  <input class='btn' style ='font-size: 12px;width:200px;' type='submit' name='submit' id='save' value='সেভ এন্ড সেন্ড পাসওয়ার্ড' readonly onclick='return beforeSave();'/>

@@ -11,6 +11,11 @@ $dbname = 'ripd_db_comfosys';
 //$dbuser = 'root';
 //$dbpassword = '';
 //$dbname = 'ripd_db_comfosys';
+
+$host = 'localhost';
+$dbuser = 'root';
+$dbpassword = '';
+$dbname = 'ripd_db_comfosys';
  
  
 

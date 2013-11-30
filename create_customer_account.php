@@ -1,9 +1,11 @@
 <?php
 error_reporting(0);
+include_once 'includes/session.inc';
 include_once 'includes/MiscFunctions.php';
 include_once 'includes/makeAccountNumbers.php';
 include_once 'includes/checkAccountNo.php';
 include_once 'includes/email_conf.php';
+include_once './includes/sms_send_function.php';
 
 if (isset($_POST['submit']) || isset($_POST['retry']))
   {
@@ -15,28 +17,28 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
         $account_mobile = $_POST['mobile'];
         $account_mobile1 = "88".$account_mobile;
         $account_number1 = checkAccountNo($account_number);
-        $emailusername = str_replace("-", "", $account_number1);
-        $ripdemailid = $emailusername . "@ripduniversal.com";
+        //$emailusername = str_replace("-", "", $account_number1);
+        //$ripdemailid = $emailusername . "@ripduniversal.com";
           // ****************** password create & send ******************************************
         $pass = getRandomPassword();
         $passwrd = md5($pass);
 
-        $send_sms_content = "Dear User,Your\nACC.# $account_number\nUsername: $user_username\nRIPD email: $ripdemailid\nPassword: $pass\nThanks";
+        $send_sms_content = "Dear User,Your\nACC.# $account_number\nUsername: $user_username\nPassword: $pass\nThanks";
         $sendResult = SendSMSFuntion($account_mobile1, $send_sms_content);
         $sendStatus = substr($sendResult, 0, 4);
 
         if ($sendStatus == '1701') {
             mysql_query("START TRANSACTION");
-        //************************* create official email *************************************************
-             $email_create_status = CreateEmailAccount($emailusername, $pass);
-            if ($email_create_status == '777') {
-                $ripdemailid = $emailusername . "@ripduniversal.com";
-            } else {
+//        //************************* create official email *************************************************
+//             $email_create_status = CreateEmailAccount($emailusername, $pass);
+//            if ($email_create_status == '777') {
+//                $ripdemailid = $emailusername . "@ripduniversal.com";
+//            } else {
                 $ripdemailid = "";
-            }
-//            $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= 'প্রোপ্রাইটার' ");
-//            $securityrolesrow = mysql_fetch_assoc($sel_securityroles);
-            $roleid =0; //$securityrolesrow['idsecurityrole'];
+                $roleid = 0;
+            $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= 'customer' ");
+            $securityrolesrow = mysql_fetch_assoc($sel_securityroles);
+            $roleid =$securityrolesrow['idsecurityrole'];
             
             $ins_cfsuser=mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email,cfs_account_status, security_roles_idsecurityrole, user_type)
                                                                         VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile', '$account_email', '$ripdemailid','active', $roleid,'customer')") or exit(mysql_error()." sorry");
@@ -55,9 +57,14 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
                     $ins_custaccount=mysql_query("INSERT INTO customer_account (opening_pin_no, referer_id, Account_type_idAccount_type, Designation_idDesignation, cfs_user_idUser)
                                             VALUES ('$pin_number', $db_referid, $db_accounttypeID, 1, $cfs_user_id )") or exit(mysql_error());
                     $cust_acc_id= mysql_insert_id();
-                    if ($ins_cfsuser && $ins_custaccount) {
+          // **************************** update pinmakingused table ******************************** 
+                    $up_pinmakingused = mysql_query("UPDATE pin_makingused SET pin_state= 'newaccount', pin_used_date=NOW(), pin_usedby_cfsuserid = $cfs_user_id
+                                                            WHERE pin_no= '$pin_number'");
+                    
+                    $encodedID = base64_encode($cust_acc_id);
+                    if ($ins_cfsuser && $ins_custaccount && $up_pinmakingused) {
                         mysql_query("COMMIT");
-                        header( 'Location: create_customer_account_inner.php?custACid='.$cust_acc_id);
+                        header( 'Location: create_customer_account_inner.php?custACid='.$encodedID);
                     } else {
                         mysql_query("ROLLBACK");
                         $msg = "দুঃখিত, কর্মচারী তৈরি হয়নি";
@@ -78,22 +85,22 @@ if (isset($_POST['submitwithpass']))
         $account_mobile = $_POST['mobile'];
         $account_mobile1 = "88".$account_mobile;
         $account_number1 = checkAccountNo($account_number);
-        $emailusername = str_replace("-", "", $account_number1);
-        $ripdemailid = $emailusername . "@ripduniversal.com";
+//        $emailusername = str_replace("-", "", $account_number1);
+//        $ripdemailid = $emailusername . "@ripduniversal.com";
         $pass = $_POST['reap_password'];
         $passwrd = md5($pass);
 
             mysql_query("START TRANSACTION");
-        //************************* create official email *************************************************
-             $email_create_status = CreateEmailAccount($emailusername, $pass);
-            if ($email_create_status == '777') {
-                $ripdemailid = $emailusername . "@ripduniversal.com";
-            } else {
+//        //************************* create official email *************************************************
+//             $email_create_status = CreateEmailAccount($emailusername, $pass);
+//            if ($email_create_status == '777') {
+//                $ripdemailid = $emailusername . "@ripduniversal.com";
+//            } else {
                 $ripdemailid = "";
-            }
-//            $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= 'প্রোপ্রাইটার' ");
-//            $securityrolesrow = mysql_fetch_assoc($sel_securityroles);
-            $roleid =0; //$securityrolesrow['idsecurityrole'];
+             $roleid = 0;
+            $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= 'customer' ");
+            $securityrolesrow = mysql_fetch_assoc($sel_securityroles);
+            $roleid =$securityrolesrow['idsecurityrole'];
             
             $ins_cfsuser=mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email,cfs_account_status, security_roles_idsecurityrole, user_type)
                                                                         VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile', '$account_email', '$ripdemailid','active', $roleid,'customer')") or exit(mysql_error()." sorry");
@@ -112,9 +119,14 @@ if (isset($_POST['submitwithpass']))
                     $ins_custaccount=mysql_query("INSERT INTO customer_account (opening_pin_no, referer_id, Account_type_idAccount_type, Designation_idDesignation, cfs_user_idUser)
                                             VALUES ('$pin_number', $db_referid, $db_accounttypeID, 1, $cfs_user_id )") or exit(mysql_error());
                     $cust_acc_id= mysql_insert_id();
+           // **************************** update pinmakingused table ******************************** 
+                    $up_pinmakingused = mysql_query("UPDATE pin_makingused SET pin_state= 'newaccount', pin_used_date=NOW(), pin_usedby_cfsuserid = $cfs_user_id
+                                                            WHERE pin_no= '$pin_number'");
+                    
+                     $encodedID = base64_encode($cust_acc_id);
                     if ($ins_cfsuser && $ins_custaccount) {
                         mysql_query("COMMIT");
-                        header( 'Location: create_customer_account_inner.php?custACid='.$cust_acc_id);
+                        header( 'Location: create_customer_account_inner.php?custACid='.$encodedID);
                     } else {
                         mysql_query("ROLLBACK");
                         $msg = "দুঃখিত, কর্মচারী তৈরি হয়নি";
@@ -196,7 +208,10 @@ if (isset($_POST['submitwithpass']))
     }
     function beforeSave()
     {
-        if ((document.getElementById('usernamecheck').innerHTML == "") && (document.getElementById('powerStore_accountNumber').value != ""))
+        if ((document.getElementById('usernamecheck').innerHTML == "")
+                && (document.getElementById('user_username').value != "")
+                && (document.getElementById('pin_num').value != "")
+                && (document.getElementById('pinerror').innerHTML == ""))
         {
             document.getElementById('save').readonly = false;
             return true;
@@ -208,7 +223,10 @@ if (isset($_POST['submitwithpass']))
     }
     function beforeSave2()
     {
-        if ((document.getElementById('usernamecheck').innerHTML == "") && (document.getElementById('powerStore_accountNumber').value != "") && (document.getElementById('passcheck').innerHTML == "OK"))
+        if ((document.getElementById('usernamecheck').innerHTML == "") 
+                && (document.getElementById('pin_num').value != "")
+                && (document.getElementById('pinerror').innerHTML == "")
+                && (document.getElementById('passcheck').innerHTML == "OK"))
         {
             document.getElementById('save2').readonly = false;
             return true;
@@ -220,7 +238,10 @@ if (isset($_POST['submitwithpass']))
     }
     function beforeSaveRetry()
     {
-        if ((document.getElementById('usernamecheck').innerHTML == "") && (document.getElementById('powerStore_accountNumber').value != "") && (document.getElementById('passcheck').innerHTML == ""))
+        if ((document.getElementById('usernamecheck').innerHTML == "")
+                && (document.getElementById('pin_num').value != "")
+                && (document.getElementById('pinerror').innerHTML == "")
+                && (document.getElementById('passcheck').innerHTML == ""))
         {
             document.getElementById('retry').readonly = false;
             return true;
@@ -415,10 +436,29 @@ function passminlength(pass)
                 {
                     document.getElementById('mobile').focus();
                 }
-                //document.getElementById('save').disabled= false;
             }
         }
         xmlhttp.open("GET", "includes/mobileNoValidation.php?mobile=" + mblno, true);
+        xmlhttp.send();
+    }
+    function pinValidation(pin)
+    {
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function()
+        {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+            {
+                document.getElementById("pinerror").innerHTML = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET", "includes/pinNumberValidation.php?pin=" +pin, true);
         xmlhttp.send();
     }
 </script>
@@ -443,20 +483,20 @@ function passminlength(pass)
                     </tr>
                     <tr>
                         <td >একাউন্ট নাম্বার</td>
-                        <td>:   <input class='box' type='text' id='acc_num' name='acc_num' readonly value= ".getPersonalAccount()." /></td>			
+                        <td>:   <input class='box' type='text' id='acc_num' name='acc_num' readonly value= '$account_number1' /></td>			
                     </tr>
                     <tr>
                         <td >ই মেইল</td>
-                       <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' value='$account_email' /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
+                       <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' value='$account_email' /> <em>ইংরেজিতে লিখুন</em></br><span id='error_msg' style='margin-left: 5px'></span></td>			
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
                         <td>: <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' onblur='validateMobile(this.value)' style='font-size:16px;' placeholder='01XXXXXXXXX' value='$account_mobile' />
-                        <em2>*</em2><em>ইংরেজিতে লিখুন</em> <span id='mblValidationMsg'></span></td>		
+                        <em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span id='mblValidationMsg'></span></td>		
                     </tr>
                     <tr>
                         <td >পিন নাম্বার</td>
-                        <td>:   <input class='box' type='text' id='pin_num' name='pin_num' /><em2>*</em2><em>ইংরেজিতে লিখুন</em></td>		
+                        <td>:   <input class='box' type='text' id='pin_num' name='pin_num' onblur='pinValidation(this.value)' /><em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span id='pinerror' style='color:red;'></span></td>		
                     </tr>
                    <tr>
                         <td>ইউজারের নাম</td>
@@ -473,8 +513,8 @@ function passminlength(pass)
                     </tr>
                     <tr>                    
                         <td colspan='4' style='padding-left: 250px; '>
-                         <input class='btn' style ='font-size: 12px;width:200px;' type='submit' name='submitwithpass' id='save2' value='সেভ' readonly onclick='return beforeSave2();'/>                   
-                        <input class='btn' style ='font-size: 12px;width:200px;' type='submit' name='retry' id='retry' value='রি ট্রাই' onclick='return beforeSaveRetry()'/>
+                         <input class='btn' style ='font-size: 12px;' type='submit' name='submitwithpass' id='save2' value='সেভ' readonly onclick='return beforeSave2();'/>                   
+                        <input class='btn' style ='font-size: 12px;' type='submit' name='retry' id='retry' value='রি ট্রাই' onclick='return beforeSaveRetry()'/>
                    </td>                           
                     </tr>             
                 </table>";
@@ -498,16 +538,16 @@ function passminlength(pass)
                     </tr>
                     <tr>
                         <td >ই মেইল</td>
-                       <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
+                       <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' /> <em>ইংরেজিতে লিখুন</em></br><span id='error_msg' style='margin-left: 5px'></span></td>			
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
                         <td>: <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' onblur='validateMobile(this.value)' style='font-size:16px;' placeholder='01XXXXXXXXX' />
-                        <em2>*</em2><em>ইংরেজিতে লিখুন</em> <span id='mblValidationMsg'></span></td>		
+                        <em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span id='mblValidationMsg'></span></td>		
                     </tr>
                     <tr>
                         <td >পিন নাম্বার</td>
-                        <td>:   <input class='box' type='text' id='pin_num' name='pin_num' /><em2>*</em2><em>ইংরেজিতে লিখুন</em></td>		
+                        <td>:   <input class='box' type='text' id='pin_num' name='pin_num' onblur='pinValidation(this.value)'/><em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span id='pinerror' style='color:red;'></span></td>		
                     </tr>
                    <tr>
                         <td>ইউজারের নাম</td>

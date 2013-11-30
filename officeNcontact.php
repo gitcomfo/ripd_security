@@ -26,25 +26,20 @@ include_once 'includes/showTables.php';
     }
 </script>
 
+<div class="page_header_div">
+    <div class="page_header_title">অফিস এন্ড কন্টাক্ট</div>
+</div>
 <fieldset id="award_fieldset_style">
-
-    <div id="table_header_style">
-        <table border="0" style="width: 100%; height: 100%;font-size: 17px" align="center">
-            <tr align="center">
-                <td><b>অফিস টেবিল</b></td>
-            </tr>
-        </table>
+    <div style="float: left;">
+        <?php
+        include_once('includes/areaSearch.php');
+        getArea("infoFromThana()");
+        ?>
     </div>
-
-    <?php
-    include_once('includes/areaSearch.php');
-    getArea("infoFromThana()");
-    ?>
-
-    <input type="hidden" id="method" value="infoFromThana()">
-
-    সার্চ/খুঁজুন:  <input type = "text" id ="search_box_filter">
-
+    <div style="float: right; margin-right: 10px;">        
+        <input type="hidden" id="method" value="infoFromThana()">
+        সার্চ/খুঁজুন:  <input type = "text" id ="search_box_filter">
+    </div>
     <span id="office">
         <?php
         officeTableHead();

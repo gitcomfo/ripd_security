@@ -1,25 +1,29 @@
 <?php
 include_once 'includes/header.php';
 ?>
+<script type="text/javascript" src="javascripts/area.js"></script>
+<script type="text/javascript" src="javascripts/external/mootools.js"></script>
+<script type="text/javascript" src="javascripts/dg-filter.js"></script>
 
-<style>
-    #tooltip{
-        position:absolute;
-        border:1px solid #333;
-        background:#f7f5d1;
-        font-size: 15px;
-        padding:2px 5px;
-        color:#333;
-        display:none;        
+<script type="text/javascript">
+    function infoFromThana()
+    {
+        var xmlhttp;
+        if (window.XMLHttpRequest) xmlhttp=new XMLHttpRequest();
+        else xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) 
+                document.getElementById('office').innerHTML=xmlhttp.responseText;
+        }
+        var division_id, district_id, thana_id;
+        division_id = document.getElementById('division_id').value;
+        district_id = document.getElementById('district_id').value;
+        thana_id = document.getElementById('thana_id').value;
+        xmlhttp.open("GET","includes/infoOfficeFromThana.php?dsd="+district_id+"&dvd="+division_id+"&ttid="+thana_id,true);
+        xmlhttp.send();
     }
-    .date {
-        text-decoration: none;
-        color: #434849;
-        height: 100px;
-        width: 120px;
-    }
-
-</style>
+</script>
 <?php 
 if($_GET['action'] == 'viewCalendar'){
     $current_office_id = $_GET['officeId'];
@@ -58,17 +62,17 @@ if($_GET['action'] == 'viewCalendar'){
         function makeCalendar($current_office_id, $current_office_name) {
             echo '<table class ="cal_table" cellspacing="4" ><tr>';
             echo '<td colspan="7"><b>অফিস ('.$current_office_name.') ডে এন্ড অফ ডে</b></td></tr><tr>';
-            echo '<td width = 10% height =40px><a href="?apps=OD&action=viewCalendar&officeId='.$current_office_id.'&office_name='.$current_office_name.'&date=' . PREV_MONTH . '"><img src="images/back.ico" height="35px" width="35px"></img></a></td>';
+            echo '<td><a href="office_day_calendar.php?action=viewCalendar&officeId='.$current_office_id.'&office_name='.$current_office_name.'&date=' . PREV_MONTH . '" style="display:block;width:100%;height:100%;text-decoration:none;"><img src="images/left_back_2.png" style="display:block;width:100%;height:100%;text-decoration:none;"></img></a></td>';
             echo '<td colspan="5" style="text-align:center">' . CURRENT_MONTH_A . ' - ' . CURRENT_YEAR . '</td>';
-            echo '<td width = 10% height =40px><a href="?apps=OD&action=viewCalendar&officeId='.$current_office_id.'&office_name='.$current_office_name.'&date=' . NEXT_MONTH . '"><img src="images/back_right.bmp" height="35px" width="35px" style="-moz-transform: rotate(-180deg);"></img></a></td>';
+            echo '<td><a href="office_day_calendar.php?action=viewCalendar&officeId='.$current_office_id.'&office_name='.$current_office_name.'&date=' . NEXT_MONTH . '" style="display:block;width:100%;height:100%;text-decoration:none;"><img src="images/right_back_2.png" style="display:block;width:100%;height:100%;text-decoration:none;"></img></a></td>';
             echo '</tr><tr bgcolor = #06ACE5>';
-            echo '<td width = 10% height =40px>রবি</td>';
-            echo '<td width = 10% height =40px>সোম</td>';
-            echo '<td width = 10% height =40px>মঙ্গল</td>';
-            echo '<td width = 10% height =40px>বুধ</td>';
-            echo '<td width = 10% height =40px>বৃহস্পতি</td>';
-            echo '<td width = 10% height =40px>শুক্র</td>';
-            echo '<td width = 10% height =40px>শনি</td>';
+            echo '<td>রবি</td>';
+            echo '<td>সোম</td>';
+            echo '<td>মঙ্গল</td>';
+            echo '<td>বুধ</td>';
+            echo '<td>বৃহস্পতি</td>';
+            echo '<td>শুক্র</td>';
+            echo '<td>শনি</td>';
             echo '</tr><tr>';
             /// Weekly Holyday **************        
             /// Weekly Holyday **************        
@@ -122,9 +126,9 @@ if($_GET['action'] == 'viewCalendar'){
                             $colorValueHDay = 'green';
                         }
                         if($SODayDesc!=""){
-                            echo "<td bgcolor= '$colorValueHDay' width = 11% height = 40px><a class='tooltip date' title='$SODayDesc' href='#'><div height='40px' width = '100%'>" . $monthDate . "</div></a></td>";
+                            echo "<td bgcolor= '$colorValueHDay' class='tooltip_calender' title='$SODayDesc'>" . $monthDate . "</td>";
                         }else{
-                        echo "<td bgcolor= '$colorValueHDay' width = 11% height = 40px><a class='tooltip date' title='$weekly_holiday_desc' href='#'> <div height='40px' width = '100%'>" . $monthDate . "</div></a></td>";                         
+                        echo "<td bgcolor= '$colorValueHDay' class='tooltip_calender' title='$weekly_holiday_desc'>" . $monthDate . "</td>";                         
                         }
                         if (($i % $WHdayValue) == 0) {
                             $WHdayValue = $WHdayValue + 7;
@@ -147,9 +151,9 @@ if($_GET['action'] == 'viewCalendar'){
                                 $colorValueOnDay = 'green';
                             }
                             if ($specialOnDay!="") {
-                                echo "<td bgcolor= '$colorValueOnDay' width = 11% height =40px><a class='tooltip date' title='$specialOnDay' href='#'><div height='40px' width = '100%'>" . $monthDate . "</div></a></td>";
+                                echo "<td bgcolor= '$colorValueOnDay' class='tooltip_calender' title='$specialOnDay'>" . $monthDate . "</td>";
                             } else {
-                                echo "<td bgcolor= '$colorValueHDay' width = 11% height =40px><a class='tooltip date' title='$RGHDayDesc' href='#'><div height='40px' width = '100%'>" . $monthDate . "</div></a></td>";
+                                echo "<td bgcolor= '$colorValueHDay' class='tooltip_calender' title='$RGHDayDesc'>" . $monthDate . "</td>";
                             }
                         } else {
                             $sql_spOffDay = "SELECT * from ".$dbname.".special_offday where sp_off_day_date = '$CurDate' And office_type='office' And office_store_id='$current_office_id'";
@@ -159,9 +163,9 @@ if($_GET['action'] == 'viewCalendar'){
                                 $colorValueOnDay = 'yellow';
                             }
                             if($specialOffDay!=""){
-                                echo "<td bgcolor= '$colorValueOnDay' width = 11% height =40px><a class='tooltip date' title='$specialOffDay' href='#'><div height='40px' width = '100%'>" . $monthDate . "</div></a></td>";
+                                echo "<td bgcolor= '$colorValueOnDay' class='tooltip_calender' title='$specialOffDay'>" . $monthDate . "</td>";
                             }else{
-                                echo "<td bgcolor= '$colorValueOnDay' width = 11% height =40px>" . $monthDate . "</td>";
+                                echo "<td bgcolor= '$colorValueOnDay'>" . $monthDate . "</td>";
                             }
                          }
                     }
@@ -169,13 +173,13 @@ if($_GET['action'] == 'viewCalendar'){
                     if (($i % $WHdayValue) == 0 OR ($i % $WHdayValue2) == 0) {
                         if (($i % $WHdayValue) == 0) {
                             $WHdayValue = $WHdayValue + 7;
-                            echo "<td bgcolor= '#F05656' width = 11% height = 40px></td>";
+                            echo "<td bgcolor= '#F05656'></td>";
                         }else{
                             $WHdayValue2 = $WHdayValue2 + 7;
-                        echo "<td bgcolor= '#F05656' width = 11% height = 40px></td>";
+                        echo "<td bgcolor= '#F05656'></td>";
                         }
                     }else{
-                    echo "<td bgcolor= '#DBEAF9' width = 11% height = 40px></td>";
+                    echo "<td bgcolor= '#DBEAF9'></td>";
                     }
                 }
 
@@ -185,7 +189,7 @@ if($_GET['action'] == 'viewCalendar'){
                 }
             }
             //echo "Row_number: ".$row_number."Column: ".COLUMNS." Num_of_day: ".NUM_OF_DAYS." Start_day: ".START_DAY;
-            echo str_repeat('<td width = 11% height =40px style="background-color: #DBEAF9">&nbsp;</td>', (COLUMNS * ($row_number)) - (NUM_OF_DAYS + START_DAY)) . '</tr></table>';
+            echo str_repeat('<td style="background-color: #DBEAF9">&nbsp;</td>', (COLUMNS * ($row_number)) - (NUM_OF_DAYS + START_DAY)) . '</tr></table>';
         }
 
     }
@@ -197,27 +201,16 @@ if($_GET['action'] == 'viewCalendar'){
 <?php 
 }else{    
 ?>
+<div class="page_header_div">
+    <div class="page_header_title">অফিস ক্যালেন্ডার</div>
+</div>
 <fieldset id="award_fieldset_style">
-
-    <div id="table_header_style">
-        <table border="0" style="width: 100%; height: 72%;font-size: 17px" align="center">
-            <tr align="center">
-                <td><b><?php echo 'অফিস তালিকা';?></b></td>
-            </tr>
-        </table>
+    <div style="text-align: right;padding-right: 1%;margin-bottom: 5px;">
+        <input type="hidden" id="method" value="infoFromThana()">
+        সার্চ/খুঁজুন:<input type = "text" id ="search_box_filter"><br />
     </div>
-
-    <?php
-    include_once 'includes/areaSearch.php';
-    getArea("infoFromThana()");
-    ?>
-
-    <input type="hidden" id="method" value="infoFromThana()">
-
-    সার্চ/খুঁজুন:  <input type="text" id="search_box_filter">
-
+    
     <span id="office">
-        <br /><br />
         <div>
             <form method="POST" onsubmit="">
             <table id="office_info_filter" border="1" align="center" width= 99%" cellpadding="5px" cellspacing="0px">

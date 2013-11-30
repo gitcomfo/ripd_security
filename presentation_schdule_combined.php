@@ -10,7 +10,7 @@ $whoinbangla =  getProgramer($type);
 $whoType = getProgramerType($type);
 
 $sql_cfs_emp_sel = $conn->prepare("SELECT idEmployee FROM cfs_user, employee WHERE cfs_user_idUser = idUser AND account_number= ?");
-$sql_program_ins = $conn->prepare("INSERT INTO  $dbname .program (program_no, program_name, program_date, program_time, program_type, Office_idOffice) 
+$sql_program_ins = $conn->prepare("INSERT INTO program (program_no, program_name, program_date, program_time, program_type, Office_idOffice) 
               VALUES (?, ?, ?, ?, ?, ?)");
  $sql_presenterlist_ins = $conn->prepare("INSERT INTO presenter_list (fk_idprogram, fk_Employee_idEmployee) VALUES (?, ?)");
 
@@ -43,28 +43,42 @@ $sql_program_ins = $conn->prepare("INSERT INTO  $dbname .program (program_no, pr
                 $conn->commit();
                 
     if ($y==1) {
-        $msg = "তথ্য সংরক্ষিত হয়েছে";
+        $msg = "<font color:green>তথ্য সংরক্ষিত হয়েছে</font>";
     } else {
-        $msg = "ভুল হয়েছে";
+        $msg = "<font color:red>ভুল হয়েছে</font>";
     }
 }
 //###################UPDATE QUERY#######################
 elseif (isset($_POST['submit1'])) {
+    $P_prstn_id = $_POST['pesentation_id'];
     $P_prstn_unumber = $_POST['presentation_number'];
     $P_prstn_uname = $_POST['presentation_name'];
     $P_prstn_udate = $_POST['presentation_date'];
-    //echo $prstn_udate;
     $P_prstn_utime = $_POST['presentation_time'];
-    $P_presenter_uname = $_POST['user_name'];
-    
-    $sql_up = mysql_query("UPDATE $dbname.program 
+    $P_presenter_name = $_POST['presenters'];
+     $str_presenter_list = substr($P_presenter_name, 0, -2);
+    $arr_presenter = explode(", ", $str_presenter_list);
+    $no_ofpresenters = count($arr_presenter);
+     mysql_query("START TRANSACTION");
+    $sql_up = mysql_query("UPDATE program 
                                  SET program_name='$P_prstn_uname', program_date='$P_prstn_udate', 
-                                 program_time='$P_prstn_utime', Employee_idEmployee='$P_presenter_uname'
+                                 program_time='$P_prstn_utime' 
                                  WHERE program_no='$P_prstn_unumber'");
-    if ($sql_up) {
-        $msgi = "তথ্য সংরক্ষিত হয়েছে";
+    $del_prsnterlist = mysql_query("DELETE FROM presenter_list WHERE fk_idprogram='$P_prstn_id' ");
+     for($i=0;$i<$no_ofpresenters;$i++)
+             {
+                 $account = $arr_presenter[$i];
+                 $sql = mysql_query("SELECT idEmployee FROM cfs_user, employee WHERE cfs_user_idUser = idUser AND account_number= '$account'");
+                 $getrow = mysql_fetch_assoc($sql);
+                 $empid = $getrow['idEmployee'];
+                 $y =mysql_query("INSERT INTO presenter_list (fk_idprogram, fk_Employee_idEmployee) VALUES ($P_prstn_id,$empid)");
+             }
+    if ($sql_up && $del_prsnterlist && $y) {
+        mysql_query("COMMIT");
+        $msgi = "<font color:green>তথ্য সংরক্ষিত হয়েছে</font>";
     } else {
-        $msgi = "ভুল হয়েছে";
+         mysql_query("ROLLBACK");
+        $msgi = "<font color:red>ভুল হয়েছে</font>";
     }
 }
 ?>
@@ -133,6 +147,18 @@ function setOffice(office,offid)
         document.getElementById('parent_id').value = offid;
         document.getElementById('parentResult').style.display = "none";
 }
+function beforeSave()
+    {
+        if (document.getElementById('presenters').value != "")
+        {
+            document.getElementById('submit1').readonly = false;
+            return true;
+        }
+        else {
+            document.getElementById('submit1').readonly = true;
+            return false;
+        }
+    }
 </script>
 <script>
 function getOffice(str_key) // for searching parent offices
@@ -154,7 +180,7 @@ function getOffice(str_key) // for searching parent offices
                }
                 else
                     {document.getElementById('parentResult').style.visibility = "visible";
-                document.getElementById('parentResult').setAttribute('style','position:absolute;top:41%;left:37.5%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('parentResult').setAttribute('style','position:absolute;top:45%;left:52%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('parentResult').innerHTML=xmlhttp.responseText;
         }
@@ -282,7 +308,13 @@ if ($_GET['action'] == 'first') {
                 <tr>
                     <th colspan="2">  মেইক <?php echo $typeinbangla;?></th>
                 </tr>
-
+                <?php
+               if ($msg != "") {
+                    echo "<tr>
+                    <td colspan='2' style='text-align: center;font-size:16px;'>$msg </td>
+                </tr>";
+                }
+                ?>
                 <tr>
                     <td ><?php echo $typeinbangla;?> নাম</td>               
                     <td>: <input  class="box" type="text" name="presentation_name" value="" /></td>   
@@ -307,13 +339,6 @@ if ($_GET['action'] == 'first') {
                     <td > সময় </td>
                     <td>: <input  class="box" type="time" name="presentation_time" value=""/></td>  
                 </tr>
-                <?php
-               if ($msg != "") {
-                    echo "<tr>
-                    <td colspan='2' style='text-allign: center;font-size:16px;'> <font color='green'>$msg</font> </td>
-                </tr>";
-                }
-                ?>
                 <tr>
                     <td colspan="2" style="text-align: center"><input type="submit" class="btn" name="new_submit" value="সেভ" >
                         &nbsp;
@@ -339,34 +364,35 @@ if ($_GET['action'] == 'first') {
         $row_edit = mysql_fetch_array($db_result_edit);
         $db_rl_presentation_number = $row_edit['program_no'];
         $db_rl_presentation_name = $row_edit['program_name'];
-        $db_rl_prstnr_name = $row_edit['user_name'];
         $db_rl_presentation_date = $row_edit['program_date'];
         $db_rl_presentation_time = $row_edit['program_time'];
-        $sql_prsntr_list = mysql_query("SELECT * FROM presenter_list, employee, cfs_user 
-                            WHERE idUser=cfs_user_idUser AND idEmployee= fk_Employee_idEmployee AND fk_idprogram=$db_programID ");
-                         while ($row_prsnter = mysql_fetch_array($sql_prsntr_list)) {
-                             $str_presenter_list = $row_prsnter['account_name'].",\n".$str_presenter_list;
-                             $str_presenter_email_list = $row_prsnter['email'].",\n".$str_presenter_email_list;
-                         }
+      
         ?>
         <form method="POST"> <!--Redirect from one page to another -->
             <table class="formstyle" style =" width:78%" id="presentation_fillter">       
                 <tr>
                     <th colspan="2">  এডিট সিডিউল </th>
                 </tr>
+              <?php
+                if ($msgi != "") {
+                    echo "<tr>
+                    <td colspan='2' style='text-align: center;font-size:16px;'>$msgi</font> 
+                </tr>";
+                }
+                ?>
                 <tr>
                     <td style="width:40%" ><?php echo $typeinbangla;?> নাম্বার</td>
                     <td>: <input  class="box" type="text" name="presentation_number" readonly  value="<?php echo $db_rl_presentation_number; ?>"/></td>   
                 </tr>
                 <tr>
                     <td ><?php echo $typeinbangla;?> নাম</td>               
-                    <td>: <input  class="box" type="text" name="presentation_name" value="<?php echo $db_rl_presentation_name; ?>"/></td>   
+                    <td>: <input  class="box" type="text" name="presentation_name" value="<?php echo $db_rl_presentation_name; ?>"/>
+                        <input type="hidden" name="pesentation_id" value="<?php echo $G_presentation_id;?>"</td>   
                 </tr>
                 <tr>
                     <td ><?php echo $whoinbangla?>-এর নাম</td>   <!--Writing query for drop-down list -->            
-                    <td>: <input class="box" id="presenters" name="presenters" value="<?php echo $str_presenter_list;?>" />
+                    <td>: <input class="box" id="presenters" name="presenters" />
                     </td>
-
                 </tr>
                 <tr>
                     <td >তারিখ</td>
@@ -377,16 +403,8 @@ if ($_GET['action'] == 'first') {
                     <td > সময় </td>
                     <td>: <input  class="box" type="time" name="presentation_time" value="<?php echo $db_rl_presentation_time; ?>"/></td>
                 </tr> 
-                <?php
-                if ($msgi != "") {
-                    echo "<tr>
-                    <td colspan=\"2\" style=\"text-allign: center\"> <font color='green'>$msgi</td></font> 
-                </tr>";
-                }
-                ?>
-
                 <tr>
-                    <td colspan="2" style="text-align: center"><input type="submit" class="btn" name="submit1" value="সেভ" > 
+                    <td colspan="2" style="text-align: center"><input type="submit" class="btn" name="submit1" id="submit1" readonly="" onclick="return beforeSave();" value="সেভ" > 
                         &nbsp;<input type="reset" class="btn" name="reset" value="রিসেট"></td>
                 </tr>
             </table>
@@ -519,7 +537,6 @@ if ($_GET['action'] == 'first') {
         filterEl: $('make_presentation_fillter')
     });
     </script>
-
     <?php
 }
 include_once 'includes/footer.php';

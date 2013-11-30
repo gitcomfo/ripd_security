@@ -2,7 +2,7 @@
 error_reporting(0);
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
-$custAcid = $_GET['custACid'];
+$custAcid = base64_decode($_GET['custACid']);
 ?>
 <title>ক্রিয়েট কাস্টমার অ্যাকাউন্ট</title>
 <style type="text/css">@import "css/bush.css";</style>
@@ -117,7 +117,7 @@ if (isset($_POST['submit1'])) {
     // picture, sign, fingerprint**********************************************************************************************
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["image"]["name"]));
-    $image_name = "picture" . "-" . $_FILES["image"]["name"];
+    $image_name = "cust-".$custAcid."-". $_FILES["image"]["name"];
     $image_path = "pic/" . $image_name;
     if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
@@ -127,7 +127,7 @@ if (isset($_POST['submit1'])) {
 
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_signature"]["name"]));
-    $sign_name = "signature" . "-" . $_FILES["scanDoc_signature"]["name"];
+    $sign_name = "cust-".$custAcid."-".$_FILES["scanDoc_signature"]["name"];
     $sing_path = "sign/" . $sign_name;
     if (($_FILES["scanDoc_signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_signature"]["tmp_name"], "sign/" . $sign_name);
@@ -137,7 +137,7 @@ if (isset($_POST['submit1'])) {
 
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_finger_print"]["name"]));
-    $finger_name = "fingerprint" . "-" . $_FILES["scanDoc_finger_print"]["name"];
+    $finger_name = "cust-".$custAcid."-".$_FILES["scanDoc_finger_print"]["name"];
     $finger_path = "fingerprints/" . $finger_name;
     if (($_FILES["scanDoc_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
@@ -147,7 +147,7 @@ if (isset($_POST['submit1'])) {
 
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["cust_gurd_scanpic"]["name"]));
-    $gimage_name = "gurd_pic" . "-" . $_FILES["cust_gurd_scanpic"]["name"];
+    $gimage_name = "gurd-".$custAcid."-".$_FILES["cust_gurd_scanpic"]["name"];
     $gimage_path = "pic/" . $gimage_name;
     if (($_FILES["cust_gurd_scanpic"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["cust_gurd_scanpic"]["tmp_name"], "pic/" . $gimage_name);
@@ -158,7 +158,7 @@ if (isset($_POST['submit1'])) {
     
      $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_birth_certificate"]["name"]));
-    $dob_name = "DOB" . "-" . $_FILES["scanDoc_birth_certificate"]["name"];
+    $dob_name = "DOB-".$custAcid."-".$_FILES["scanDoc_birth_certificate"]["name"];
     $dob_path = "scaned/" . $dob_name;
     if (($_FILES["scanDoc_birth_certificate"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_birth_certificate"]["tmp_name"], "scaned/" . $dob_name);
@@ -168,7 +168,7 @@ if (isset($_POST['submit1'])) {
      
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_national_id"]["name"]));
-    $nid_name = "NID" . "-" . $_FILES["scanDoc_national_id"]["name"];
+    $nid_name = "NID-".$custAcid."-".$_FILES["scanDoc_national_id"]["name"];
     $nid_path = "scaned/" . $nid_name;
     if (($_FILES["scanDoc_national_id"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_national_id"]["tmp_name"], "scaned/" . $nid_name);
@@ -178,7 +178,7 @@ if (isset($_POST['submit1'])) {
      
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_chairman_certificate"]["name"]));
-    $cc_name = "CC" . "-" . $_FILES["scanDoc_chairman_certificate"]["name"];
+    $cc_name = "CC-".$custAcid."-".$_FILES["scanDoc_chairman_certificate"]["name"];
     $cc_path = "scaned/" . $cc_name;
     if (($_FILES["scanDoc_chairman_certificate"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_chairman_certificate"]["tmp_name"], "scaned/" . $cc_name);
@@ -227,7 +227,7 @@ elseif (isset($_POST['submit2'])) {
     //Insert Into Nominee table **************************************************
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["nominee_picture"]["name"]));
-    $image_name = "picture" . "-" . $_FILES["nominee_picture"]["name"];
+    $image_name = "nom-".$custAcid."-". $_FILES["nominee_picture"]["name"];
     $image_path = "pic/" . $image_name;
     if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["nominee_picture"]["tmp_name"], "pic/" . $image_name);
@@ -367,26 +367,66 @@ elseif (isset($_POST['submit4'])) {
         $msg = "ভুল হয়েছে";
     }
 }
+//########################## main info from cfsuser ##################################
+$sql_cust_sel = mysql_query("SELECT * FROM customer_account, cfs_user WHERE idUser=cfs_user_idUser AND  idCustomer_account =  $custAcid ") ;
+     $custrow = mysql_fetch_assoc($sql_cust_sel);
+     $db_cfsuserid = $custrow['cfs_user_idUser'];
+     $db_custName = $custrow['account_name'];
+     $db_custAcc = $custrow['account_number'];
+     $db_custMail = $custrow['email'];
+     $db_custMob = $custrow['mobile'];
+     $db_custPIN = $custrow['opening_pin_no'];
 ?>
 <div class="column6">
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="crm_management.php"><b>ফিরে যান</b></a></div> 
         <div class="domtab">
             <ul class="domtabs">
-                <li class="current"><a href="#02">ব্যাক্তিগত  তথ্য</a></li> <li class="current"><a href="#03">নমিনির তথ্য</a></li><li class="current"><a href="#04">শিক্ষাগত যোগ্যতা</a></li><li class="current"><a href="#05"> যোগাযোগের ঠিকানা</a></li>
+                <li class="current"><a href="#01">মূল তথ্য</a></li><li class="current"><a href="#02">ব্যাক্তিগত  তথ্য</a></li> <li class="current"><a href="#03">নমিনির তথ্য</a></li><li class="current"><a href="#04">শিক্ষাগত যোগ্যতা</a></li><li class="current"><a href="#05"> যোগাযোগের ঠিকানা</a></li>
             </ul>
         </div>   
 
+         <div>
+            <h2><a name="01" id="01"></a></h2><br/>
+            <form method="POST" onsubmit="" enctype="multipart/form-data" action="" id="emp_form1" name="emp_form1">	
+                <table  class="formstyle">     
+                    <tr><th colspan="4" style="text-align: center" colspan="2"><h1>কাস্টমারের মূল তথ্য</h1></th></tr>
+                    <tr><td colspan="4" ></td>
+                        <?php
+                        if ($msg != "") {
+                            echo '<tr> <td colspan="2" style="text-align: center; color: green; font-size: 15px"><b>' . $msg . '</b></td></tr>';
+                        }
+                        ?>
+                    </tr>
+                   <tr>
+                        <td>কাস্টমারের নাম</td>
+                        <td>:   <input class='box' type='text' id='name' name='name' readonly="" value="<?php echo $db_custName;?>"/>
+                            <input type='hidden' name='cfsid' value="<?php echo $db_cfsuserid;?>"/></td>			
+                    </tr>
+                    <tr>
+                        <td >একাউন্ট নাম্বার</td>
+                        <td>:   <input class='box' type='text' id='acc_num' name='acc_num' readonly value="<?php echo $db_custAcc;?>"/></td>			
+                    </tr>
+                    <tr>
+                        <td >ই মেইল</td>
+                        <td>:   <input class='box' type='text' id='email' name='email' readonly="" value="<?php echo $db_custMail;?>" /></td>			
+                    </tr>
+                    <tr>
+                        <td >মোবাইল</td>
+                        <td>:   <input class='box' type='text' id='mobile' name='mobile' readonly="" value="<?php echo $db_custMob;?>" /></td>		
+                    </tr>
+                    <tr>
+                        <td >পিন নাম্বার</td>
+                        <td>:   <input class='box' type='text' readonly="" id='pin_num' name='pin_num' value="<?php echo $db_custPIN;?>"/></td>		
+                    </tr>
+                </table>
+                </fieldset>
+            </form>
+        </div>
         <div>
             <h2><a name="02" id="02"></a></h2><br/>
             <form method="POST" onsubmit="" enctype="multipart/form-data" action="" id="cust_form" name="cust_form">	
                 <table class="formstyle" style=" width: 90%; padding-left: 15px; padding-top: 5px;padding-bottom: 8px;" >            
-                    <tr><td colspan="4" ></td></tr>
-                    <?php
-                    if ($msg != "") {
-                        echo '<tr><td ></td><td colspan="4" style="text-allign: center; color: green; font-size: 15px"><b>' . $msg . '</b></td></tr>';
-                    }
-                    ?>
                     <tr><td colspan="4" ></td></tr>
                     <tr>
                         <td >পেশা</td>

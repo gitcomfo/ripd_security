@@ -6,7 +6,7 @@ $sumeryid = $_GET['ssumid'];
 $check=1;
 while($check==1)
 {
-$str_pin= "sales";
+$str_pin= "pin";
 for($i=0;$i<3;$i++)
     {
         $str_random_no=(string)mt_rand (0 ,9999 );
