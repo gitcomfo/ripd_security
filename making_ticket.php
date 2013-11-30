@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
 include_once 'includes/session.inc';
-include 'includes/header.php';
+include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
 if(isset($_POST['submit_ticket']))
