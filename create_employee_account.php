@@ -401,7 +401,7 @@ function passminlength(pass)
             else
             {
                 document.getElementById('offResult').style.visibility = "visible";
-                document.getElementById('offResult').setAttribute('style', 'position:absolute;top:87%;left:48%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('offResult').setAttribute('style', 'position:absolute;top:83%;left:56%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
             }
             document.getElementById('offResult').innerHTML = xmlhttp.responseText;
         }

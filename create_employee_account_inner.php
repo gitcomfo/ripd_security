@@ -292,8 +292,8 @@ $sql_emp_sel = mysql_query("SELECT * FROM employee_information, employee, cfs_us
                         ?>
                     </tr>
                    <tr>
-                        <td>কর্মচারীর নাম</td>
-                        <td>:   <input class='box' style="width: 220px;" type='text' id='name' name='name' readonly="" value="<?php echo $db_empName;?>"/></td>			
+                       <td style="width: 50%">কর্মচারীর নাম</td>
+                        <td style="width: 50%">:   <input class='box' style="width: 220px;" type='text' id='name' name='name' readonly="" value="<?php echo $db_empName;?>"/></td>			
                     </tr>
                     <tr>
                         <td >একাউন্ট নাম্বার</td>
