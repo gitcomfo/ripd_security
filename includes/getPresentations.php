@@ -49,23 +49,23 @@ $sql = "SELECT * FROM cfs_user,employee WHERE idUser =  cfs_user_idUser AND idEm
         $str_emp_email = $e_mail.", ".$str_emp_email;
     }
     echo ' <table> ';
-    echo " <tr><td style='width: 280px; padding-left: 0px !important;'>$typeinbangla-এর নাম্বার</td>
+    echo " <tr><td style='width: 310px; padding-left: 0px !important;'>$typeinbangla-এর নাম্বার</td>
                         <td>:    $p_no</td >                
                     </tr>
                     <tr>
-                        <td style='width: 280px; padding-left: 0px !important;'>$whoinbangla-এর নাম</td>
+                        <td style='padding-left: 0px !important;'>$whoinbangla-এর নাম</td>
                         <td>:    $str_emp_name </td>            
                     </tr>
                     <tr>
-                        <td style='width: 280px; padding-left: 0px !important;'>$whoinbangla-এর ইমেইল</td>
+                        <td style='padding-left: 0px !important;'>$whoinbangla-এর ইমেইল</td>
                         <td>:    $str_emp_email</td>            
                     </tr>
                     <tr>
-                        <td style='width: 280px; padding-left: 0px !important;'>তারিখ</td>
+                        <td style='padding-left: 0px !important;'>তারিখ</td>
                         <td>:   $p_date </td>            
                     </tr>
                     <tr>
-                        <td style='width: 280px; padding-left: 0px !important;'>সময়</td>
+                        <td style='padding-left: 0px !important;'>সময়</td>
                         <td>:  $p_time  </td>
                     </tr>
                     <tr><td>

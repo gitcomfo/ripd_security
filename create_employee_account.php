@@ -200,10 +200,6 @@ if (isset($_POST['submitwithpass']))
             document.getElementById('passcheck').innerHTML = "OK";
         }
     }
-    function showAccountNo(account)
-    {
-        document.getElementById('powerStore_accountNumber').value = account;
-    }
 
     function checkSalaryRange(sal)
     {
