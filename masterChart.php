@@ -1,13 +1,11 @@
 <?php
 include_once 'includes/header.php';
 ?>
+<div class="page_header_div">
+    <div class="page_header_title">মূল পণ্য তালিকা (মাস্টার চার্ট)</div>
+</div>
 <div>
     <table id="master_chart">
-    <thead>
-        <tr align="center" id="table_row_odd">
-            <th align="center" colspan="3">মূল পণ্য তালিকা (মাস্টার চার্ট)</th>
-        </tr>
-    </thead>
     <tbody>
         <?php
         $sql_productCategory = "SELECT * from $dbname.product_catagory";

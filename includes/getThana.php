@@ -23,7 +23,7 @@
                     }
                    // echo $gt_methodT;
             echo "<select name='thana_id' id='thana_id' class='box2' onChange='$gt_methodT'>
-                            <option value='all'>-থানা-</option>";
+                            <option value='all'>----থানা----</option>";
             while($thana_rows = mysql_fetch_array($thana_sql))
                     {
                     $db_thana_id = $thana_rows['idThana'];

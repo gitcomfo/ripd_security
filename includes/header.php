@@ -15,9 +15,15 @@ include_once 'connectionPDO.php';
             ?>
     </head>
     <body>
-
+<?php
+                    if ($_SESSION['loggedInOfficeName'] == 'সারাবাংলা সেলসস্টোর'){
+                        $banner_url = 'background-image: url(images/'.'sara_bangla_banner.png'.')';
+                    }else{
+                        $banner_url = '';
+                    }
+?>
         <div id="main_container">
-            <div id="header">
+            <div id="header" style="<?php echo $banner_url;?>">
                 <div id="logo"></div>
                 <div class="banner_adds"></div>
                 <div class="banner_sub_adds"></div>
