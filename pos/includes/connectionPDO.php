@@ -1,16 +1,10 @@
 <?php
 
-/*
- * $dbhost     = "192.168.1.100";
+ $dbhost     = "192.168.1.100";
 $dbname     = "ripd_db_comfosys";
-$dbuser     = "cfs_jessy";
-$dbpass     = "jesy4321";
-
-*/
-$dbhost     = "localhost";
-$dbname     = "ripd_db_comfosys";
-$dbuser     = "root";
+$dbuser     = "cfs_iftee";
 $dbpass     = "";
+
 
 
 // database connection

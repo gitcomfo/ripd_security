@@ -100,7 +100,7 @@ if (isset($_POST['submit'])) {
 <title>প্রোডাক্ট ইন</title>
 <style type="text/css">@import "css/bush.css";</style>
 <script type="text/javascript">
-    function isfillinput()
+function isfillinput()
     {
         $('#pro_unit').blur(function(){
             if($(this).val().length != 0){
@@ -108,11 +108,21 @@ if (isset($_POST['submit'])) {
             }       
         });
     }
+
+function makeProductName()
+        {
+        var brand = document.getElementById('pttid').value;
+        var classification = document.getElementById('pttid2').value;
+        var type = document.getElementById('pro_classification').value;
+        var unit = document.getElementById('new_unit').value;
+        //alert(brand+classification+type+unit);
+        }
+        
 </script>
 <script type="text/javascript" src="javascripts/product.js"></script>
 
     <div class="main_text_box">
-        <div style="padding-left: 112px;"><a href="product_info_management.php"><b>ফিরে যান</b></a><a style="padding-left: 500px;" href="make_product_cat_type.php"><b>মেইক প্রোডাক্ট ক্যাটাগরি এন্ড টাইপ</b></a></div>
+        <div style="padding-left: 112px;"><a href="product_info_management.php"><b>ফিরে যান</b></a><a style="padding-left: 60%;" href="make_product_cat_type.php"><b>মেইক প্রোডাক্ট ক্যাটাগরি এন্ড টাইপ</b></a></div>
         <div>           
             <form method="POST" onsubmit ="" enctype="multipart/form-data" action="" id="product_form" name="product_form">	
                 <table class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          
@@ -163,7 +173,7 @@ if (isset($_POST['submit'])) {
                                 echo "<option style='width: 96%' value='$db_product_unit_name'>$db_product_unit_name</option>";
                             }
                             echo '</select>
-                            অথবা <input class="box" type="text" id="new_unit" name="new_unit" />';
+                            অথবা <input class="box" type="text" id="new_unit" name="new_unit" onblur="makeProductName()"/>';
                             ?>      
                         </td>
                     </tr>           

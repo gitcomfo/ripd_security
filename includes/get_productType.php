@@ -1,7 +1,7 @@
 <?php
 include_once 'ConnectDB.inc';
 error_reporting(0);
-//get product name
+//get product type
 $pc_id = $_GET['pcid'];
 if ($pc_id != null) {
     $product_type_sql = mysql_query("SELECT DISTINCT pro_type, idproduct_catagory FROM $dbname.product_catagory where pro_cat_code='$pc_id' ");
@@ -17,7 +17,12 @@ if ($pc_id != null) {
 }
 //get product brand
 $pt_id = $_GET['ptid'];
+$pro_cat_code = $_GET['pcat'];
 if ($pt_id != null) {
+    $product_category_id = array();
+    $sql_pro_category_id = mysql_query("SELECT idproduct_catagory FROM product_catagory WHERE pro_cat_code='$pro_cat_code'");
+    while($row_pro_cat_id = mysql_fetch_array($sql_pro_category_id)) $product_category_id[] = $row_pro_cat_id['idproduct_catagory'];
+    //var_dump($product_category_id);
     $function = "getproduct_unit()";
     $product_brand_sql = mysql_query("SELECT DISTINCT pro_brand_or_grp FROM  $dbname.product_chart WHERE product_catagory_idproduct_catagory=$pt_id");
    

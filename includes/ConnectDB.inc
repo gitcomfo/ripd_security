@@ -7,18 +7,6 @@ $dbuser = 'cfs_iftee';
 $dbpassword = '';
 $dbname = 'ripd_db_comfosys';
 
-//$host = 'localhost';
-//$dbuser = 'root';
-//$dbpassword = '';
-//$dbname = 'ripd_db_comfosys';
-
-$host = 'localhost';
-$dbuser = 'root';
-$dbpassword = '';
-$dbname = 'ripd_db_comfosys';
- 
- 
-
 // Make sure it IS global, regardless of our context
 if (!isset($mysqlport)){
 	$mysqlport = 3306;
