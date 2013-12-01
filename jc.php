@@ -8,9 +8,23 @@
 </script>-->
 <?php
 include_once 'includes/header.php';
+$firstname = "jesy";
+$lastname= "";
+
+function show($value)
+{
+    if($value!="")
+    {
+        $string =  " ' ".$value." ' readonly";
+    }
+ else {
+        $string =  "'".$value."'";
+    }
+    echo $string;
+}
 ?>
-<div id="owner_info" style="position: absolute;top: 300px;left: 220px;-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);    ">
-                                            <span>স্বত্তাধিকারীর নামঃ </span></br>
-                                            <span>স্বত্তাধিকারীর মোবাইল নাম্বারঃ </span></br>
-                                            <span style="text-align: right;">আসন নাম্বারঃ ০০</span></br>
-</div>
+<form>
+    <input type="text" name="firstname" value=<?php show($firstname);?> /></br></br>
+    <input type="text" name="lastname" value=<?php show($lastname);?>  />
+</form>
+</br>
