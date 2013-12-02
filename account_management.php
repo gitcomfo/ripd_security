@@ -51,6 +51,9 @@ if(!file_exists($aab_picture)) $aab_picture = "pic/default_profile.jpg";
                     <td>
                         <table>
                             <tr>
+                                <td style='font-size: 20px; text-align:center;' colspan="2"><b>আপনার একাউন্টে স্বাগতম</b></td>
+                            </tr>                            
+                            <tr>
                                 <td><b>রেফারার নামঃ </b></td>
                                 <td><?php echo $ar_referrer;?></td>
                             </tr>
@@ -74,7 +77,7 @@ if(!file_exists($aab_picture)) $aab_picture = "pic/default_profile.jpg";
                     </td>
                     <?php
                     }
-                    else echo "<td style='font-size: 20px;'>আপনার একাউন্টে স্বাগতম</td>";
+                    else echo "<td style='font-size: 20px; text-align:center;'><b>আপনার একাউন্টে স্বাগতম</b></td>";
                     ?>
                     <td style="width: 35%; text-align: center;">
                         <table >
