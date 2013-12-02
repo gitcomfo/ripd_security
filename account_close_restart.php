@@ -291,7 +291,7 @@ if ($_GET['action'] == 'new' or isset($_GET['id'])) {
                         <td><a href=\"$scan_doc\" target=\"_blank\">স্ক্যান ডকুমেন্ট</a></td>
                         <td>$action_date</td>";
                     if ($account_status == "temporarily_closed") {
-                        echo "<td><a onclick='update($account_cfs_userid)' style='cursor:pointer;color:blue;'><u>স্থায়ী বন্ধ/পুনরায় চালু</u></a></td></tr>";
+                        echo "<td><a onclick='update($account_cfs_userid)' style='cursor:pointer;color:blue;'>স্থায়ী বন্ধ/পুনরায় চালু</a></td></tr>";
                     } else {
                         echo "<td>একাউন্টটি বন্ধ</td></tr>";
                     }

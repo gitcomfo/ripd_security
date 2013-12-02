@@ -109,5 +109,5 @@ if (isset($_POST['pro_submit'])) {
         </div>   
 
 <?php
-include_once ''; 'includes/footer.php';
+include_once 'includes/footer.php';
 ?>
