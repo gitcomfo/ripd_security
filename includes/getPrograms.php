@@ -5,7 +5,7 @@ include_once './connectionPDO.php';
 
 if (isset($_GET['key']) && ($_GET['key'] != '')) {
 	$str_key = $_GET['key'];
-                  $suggest_query = "SELECT * FROM program WHERE program_no LIKE('$str_key%') ORDER BY program_no";
+                  $suggest_query = "SELECT * FROM program WHERE program_no LIKE('$str_key%') AND program_date >= NOW() ORDER BY program_no";
 	$reslt= mysql_query($suggest_query);
 	while($suggest = mysql_fetch_assoc($reslt)) {
                     $pNo = $suggest['program_no'];

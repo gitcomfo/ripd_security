@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
@@ -43,9 +44,9 @@ $sql_program_ins = $conn->prepare("INSERT INTO program (program_no, program_name
                 $conn->commit();
                 
     if ($y==1) {
-        $msg = "<font color:green>তথ্য সংরক্ষিত হয়েছে</font>";
+        $msg = "<font style='color:green'>তথ্য সংরক্ষিত হয়েছে</font>";
     } else {
-        $msg = "<font color:red>ভুল হয়েছে</font>";
+        $msg = "<font style='color:red''>ভুল হয়েছে</font>";
     }
 }
 //###################UPDATE QUERY#######################
@@ -75,10 +76,10 @@ elseif (isset($_POST['submit1'])) {
              }
     if ($sql_up && $del_prsnterlist && $y) {
         mysql_query("COMMIT");
-        $msgi = "<font color:green>তথ্য সংরক্ষিত হয়েছে</font>";
+        $msgi = "<font style='color:green'>তথ্য সংরক্ষিত হয়েছে</font>";
     } else {
          mysql_query("ROLLBACK");
-        $msgi = "<font color:red>ভুল হয়েছে</font>";
+        $msgi = "<font style='color:red'>ভুল হয়েছে</font>";
     }
 }
 ?>

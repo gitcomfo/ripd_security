@@ -41,7 +41,7 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
             $roleid =$securityrolesrow['idsecurityrole'];
             
             $ins_cfsuser=mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email,cfs_account_status, security_roles_idsecurityrole, user_type)
-                                                                        VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile', '$account_email', '$ripdemailid','active', $roleid,'customer')") or exit(mysql_error()." sorry");
+                                                                        VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email', '$ripdemailid','active', $roleid,'customer')") or exit(mysql_error()." sorry");
             $cfs_user_id = mysql_insert_id();
        
              // **************************get referer ID*****************************
@@ -103,7 +103,7 @@ if (isset($_POST['submitwithpass']))
             $roleid =$securityrolesrow['idsecurityrole'];
             
             $ins_cfsuser=mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email,cfs_account_status, security_roles_idsecurityrole, user_type)
-                                                                        VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile', '$account_email', '$ripdemailid','active', $roleid,'customer')") or exit(mysql_error()." sorry");
+                                                                        VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email', '$ripdemailid','active', $roleid,'customer')") or exit(mysql_error()." sorry");
             $cfs_user_id = mysql_insert_id();
        
              // **************************get referer ID*****************************
@@ -175,37 +175,7 @@ if (isset($_POST['submitwithpass']))
             document.getElementById('passcheck').innerHTML = "OK";
         }
     }
-    function showAccountNo(account)
-    {
-        document.getElementById('powerStore_accountNumber').value = account;
-//                document.getElementById('retry').disabled= false;
-    }
 
-    function checkSalaryRange(sal)
-    {
-        var range = document.getElementById('SalaryRange').innerText;
-        var myarr = range.split("-");
-        var min = myarr[0];
-        var max = myarr[1];
-        var sal = Number(sal);
-        if ((sal <= max) && (sal >= min))
-        {
-            document.getElementById('showerror').innerHTML = "";
-        }
-        else {
-            document.getElementById('showerror').innerHTML = "দুঃখিত, সেলারি রেঞ্জ অতিক্রম করেছে";
-        }
-    }
-    function setParent(office, offid)
-    {
-        document.getElementById('officesearch').value = office;
-        document.getElementById('ospID').value = offid;
-        document.getElementById('offResult').style.display = "none";
-    }
-    function showTypeBox()
-    {
-        document.getElementById('postingbox').style.visibility = 'visible';
-    }
     function beforeSave()
     {
         if ((document.getElementById('usernamecheck').innerHTML == "")
@@ -303,98 +273,6 @@ function passminlength(pass)
         xmlhttp.send();
     }
 
-    function setTypeGrade(emptype) // for select grade according to type of employee
-    {
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function()
-        {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-            {
-                document.getElementById("showGrade").innerHTML = xmlhttp.responseText;
-            }
-        }
-        xmlhttp.open("GET", "includes/getGradeForEmployeeType.php?type=" + emptype + "&step=1", true);
-        xmlhttp.send();
-    }
-
-    function showSalaryRange(paygrdid) // for selecting salary range according to grade
-    {
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function()
-        {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-            {
-                document.getElementById("SalaryRange").innerHTML = xmlhttp.responseText;
-            }
-        }
-        xmlhttp.open("GET", "includes/getGradeForEmployeeType.php?paygrdid=" + paygrdid + "&step=2", true);
-        xmlhttp.send();
-    }
-
-    function searchOSP(keystr)
-    {
-        var xmlhttp;
-        var type = document.querySelector('input[name = "whatoffice"]:checked').value;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function()
-        {
-            if (keystr.length == 0)
-            {
-                document.getElementById('offResult').style.display = "none";
-            }
-            else
-            {
-                document.getElementById('offResult').style.visibility = "visible";
-                document.getElementById('offResult').setAttribute('style', 'position:absolute;top:87%;left:48%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
-            }
-            document.getElementById('offResult').innerHTML = xmlhttp.responseText;
-        }
-        xmlhttp.open("GET", "includes/getGradeForEmployeeType.php?searchkey=" + keystr + "&step=3&type=" + type, true);
-        xmlhttp.send();
-    }
-
-    function showPost()
-    {
-        var onsid = document.getElementById('ospID').value;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function()
-        {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-            {
-                document.getElementById("getPost").innerHTML = xmlhttp.responseText;
-            }
-        }
-        xmlhttp.open("GET", "includes/getGradeForEmployeeType.php?onsid=" + onsid + "&step=4", true);
-        xmlhttp.send();
-    }
     function checkUserName(uname)
     {
         if (window.XMLHttpRequest)

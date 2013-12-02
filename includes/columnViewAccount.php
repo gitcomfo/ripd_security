@@ -6,7 +6,7 @@
             <div class="box_title"><span>প্রোফাইল</span> ম্যানেজমেন্ট</div>
             <div class="navbox">
                 <ul class="nav">
-                    <li><a href="view_account_info.php">ভিউ একাউন্ট</a></li>
+                    <li><a href="view_customer_account.php">ভিউ একাউন্ট</a></li>
                     <li><a href="amount_transfer.php">এমাউন্ট ট্রান্সফার</a></li>
                     <li><a href="#">চেক মেকিং</a></li>
                     <li><a href="systemtree.php">সিস্টেম ট্রি</a></li>

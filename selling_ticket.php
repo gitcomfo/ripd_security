@@ -1,6 +1,7 @@
 <?php
+error_reporting(0);
 include_once 'includes/session.inc';
-include 'includes/header.php';
+include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
 $loginUSERname = $_SESSION['UserID'] ;
@@ -10,8 +11,18 @@ $db_onsid = $emprow['idUser'];
 $sqlerror="";$str_emp_name="";$str_emp_email="";
 ?>
 <title>টিকেট সেলিং</title>
-<style type="text/css">@import "css/bush.css";</style>
+<link href="css/bush.css" rel="stylesheet" type="text/css"/>
 <link href="css/print.css" rel="stylesheet" type="text/css" media="print"/>
+<script type="text/css">
+    .rotare {
+        text-align: center;
+        vertical-align: middle;
+        display: table-cell;
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+}
+</script>
 <script  type="text/javascript">
     function getname(type)
     {
@@ -77,7 +88,53 @@ $sqlerror="";$str_emp_name="";$str_emp_email="";
         xmlhttp.open("GET","includes/getTotal.php?TP="+ticket_prize+"&MP="+making_prize+"&seat="+seat,true);
         xmlhttp.send();
     }
-       
+function getProgram(key)
+{
+var xmlhttp;
+    if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if(key.length ==0)
+                {
+                   document.getElementById('progResult').style.display = "none";
+               }
+                else
+                    {document.getElementById('progResult').style.visibility = "visible";
+                document.getElementById('progResult').setAttribute('style','position:absolute;top:38%;left:59.5%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                    }
+                document.getElementById('progResult').innerHTML=xmlhttp.responseText;
+        }
+        xmlhttp.open("GET","includes/getPrograms.php?key="+key,true);
+        xmlhttp.send();	
+}
+function checkProgramForTicket(progID) 
+{
+        var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                document.getElementById('programcheck').innerHTML=xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","includes/checkProgramForTicket.php?progID="+progID,true);
+        xmlhttp.send();
+}  
 </script>
 <script type="text/javascript">
     var iCounter = 0;
@@ -128,18 +185,37 @@ return count;
     status = "This field accepts numbers only.";
     return false;
 }
+function setProgram(progNo,progid)
+{
+        document.getElementById('prgrm_number').value = progNo;
+        document.getElementById('prgrm_id').value = progid;
+        document.getElementById('progResult').style.display = "none";
+        checkProgramForTicket(progid); 
+}
+function beforeProceed()
+{
+        if (document.getElementById('programcheck').innerHTML == "")
+        {
+            document.getElementById('okk').readonly = false;
+            return true;
+        }
+        else {
+            document.getElementById('okk').readonly = true;
+            return false;
+        }
+}
 </script>
 <?php
 if(isset($_POST['submit'])) 
 {
-    $P_value=$_POST['ProgName'];
-    $P_type = $_POST['type'];
-    $allsql="SELECT * FROM " . $dbname . ".program WHERE idprogram= $P_value ;";
+    $P_value=$_POST['prgrm_id'];
+    $allsql="SELECT * FROM program WHERE idprogram= $P_value ;";
     $allrslt=mysql_query($allsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন';
     while($all=  mysql_fetch_assoc($allrslt))
         {
             $p_name=$all['program_name'];
             $p_no=$all['program_no'];
+            $p_type=$all['program_type'];
             $p_date=$all['program_date'];
             $p_time=$all['program_time'];
             $p_place=$all['program_location'];
@@ -337,10 +413,10 @@ function showTicket($Tid)
         {
         echo "<div id='front' style='width: 768px; height: 384px; border: blue dashed 2px; margin: 0 auto;background-image: url(images/watermark.png);background-repeat: no-repeat;background-size:100% 100%; '>
                                     <div id='front_left' style='width: 192px; height: 384px;border-right:blue dotted 1px; float: left;'>
-                                         <div style='width: 180px; float: left;padding-left: 4px;text-align: center;'><span style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'><span style='color: black;'>$progName</span></span></div>
-                                         <div id='entry' style='width: 180px;float:left;padding-top: 5px;text-align: center;'><span style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'>এন্ট্রি পাস</span></div>
+                                         <div style='width: 180px; float: left;padding-left: 4px;text-align: center;'><span class='rotare' style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'><span style='color: black;'>$progName</span></span></div>
+                                         <div id='entry' style='width: 180px;float:left;padding-top: 5px;text-align: center;'><span class='rotare' style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'>এন্ট্রি পাস</span></div>
                                           <div id='owner_info' style='width: 180px; float: left;padding-left: 4px;padding-top: 10px;'>
-                                            <span>স্বত্তাধিকারীর নামঃ <span style='color: black;'>$name</span></span></br>
+                                            <span class='rotare'>স্বত্তাধিকারীর নামঃ <span style='color: black;'>$name</span></span></br>
                                             <span>স্বত্তাধিকারীর মোবাইল নাম্বারঃ <span style='color: black;'>$mobil</span></span></br>
                                             <span style='text-align: right;'>আসন নাম্বারঃ <span style='color: black;'>$arr_seats[$i]</span></span></br>
                                             <span>তারিখঃ <span style='color: black;'> $date</span></span></br><span>সময়ঃ <span style='color: black;'>$time</span></span>
@@ -437,7 +513,7 @@ function QueryFailedMsg($msg)
 
 <?php
 if ($_GET['opt']=='submit_ticket') { 
-  $whoinbangla =  getProgramer($P_type);
+  $whoinbangla =  getProgramer($p_type);
     ?>
     <div class="column6">
         <div class="main_text_box">
@@ -471,7 +547,7 @@ if ($_GET['opt']=='submit_ticket') {
                         $countSeats = countSeat($P_value);
                         $countXseats = countXtra($P_value);
                         if($countXseats ==0 && $countSeats==0){?>
-             <table  class="formstyle" style="color: #3333CC; font-weight:600; font-family: SolaimanLipi !important;">          
+                        <table  class="formstyle" style="color: #3333CC; font-weight:600; font-family: SolaimanLipi !important;">          
                         <tr><th colspan="4" style="text-align: center;">টিকেট সেলিং</th></tr>
                         <tr><td colspan="2" style="padding-left: 0;"></br>
                                 <span style="color: red;font-size: 15px; text-decoration: blink;padding-left: 200px;"><?php echo "দুঃখিত, এই প্রোগ্রামের সকল টিকেট বিক্রি হয়ে গিয়েছে "; ?></span>
@@ -498,10 +574,10 @@ if ($_GET['opt']=='submit_ticket') {
                             <td colspan="2" style="padding-left: 0;">
                                 <div id="front" style="width: 768px; height: 384px; border: blue dashed 2px; margin: 0 auto;background-image: url(images/watermark.png);background-repeat: no-repeat;background-size:100% 100%; ">
                                     <div id="front_left" style="width: 192px; height: 384px;border-right:blue dotted 1px; float: left;">
-                                         <div style="width: 180px; float: left;padding-left: 4px;text-align: center;"><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;"><span style="color: black;"><?php echo $p_name;?></span></span></div>
-                                         <div id="entry" style="width: 180px;float:left;padding-top: 5px;text-align: center;"><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;">এন্ট্রি পাস</span></div>
-                                          <div id="owner_info" style="width: 180px; float: left;padding-left: 4px;padding-top: 10px;">
-                                            <span>স্বত্তাধিকারীর নামঃ </span></br>
+                                         <div style="width: 180px; float: left;padding-left: 4px;text-align: center;position: absolute;top: 300px;left: 220px;-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg); "><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;"><span style="color: black;"><?php echo $p_name;?></span></span></div>
+                                         <div id="entry" style="width: 180px;float:left;padding-top: 5px;text-align: center;position: absolute;top: 300px;left: 220px;-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg); "><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;">এন্ট্রি পাস</span></br></div>
+                                          <div class='rotare' id="owner_info" style="width: 180px; float: left;padding-left: 4px;padding-top: 10px;position: absolute;top: 300px;left: 220px;-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg); ">
+                                            <span >স্বত্তাধিকারীর নামঃ </span></br>
                                             <span>স্বত্তাধিকারীর মোবাইল নাম্বারঃ </span></br>
                                             <span style="text-align: right;">আসন নাম্বারঃ ০০</span></br>
                                             <span>তারিখঃ <span style="color: black;"><?php echo $p_date;?></span></span></br><span>সময়ঃ <span style="color: black;"><?php echo $p_time;?></span></span>
@@ -700,23 +776,25 @@ elseif ($_GET['opt']=='submit_account') {
                 <form method="POST" onsubmit="" action="selling_ticket.php?opt=submit_ticket">	
                     <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
                         <tr><th colspan="4" style="text-align: center;">টিকেট সেলিং</th></tr>
-                        <tr>  
-                        </tr>
+                         <tr>                    
+                        <td colspan= "2" style="text-align: center; padding-top: 10px; " ><span id="programcheck"></span></td>                           
+                        </tr> 
                         <tr>
-                            <td style="width: 40%">বিষয়</td>
-                            <td>: 
-                                <select class="selectOption" name="type" id="type" onchange="getname(this.value)" style="width: 170px !important;">
+                            <td style="width: 40%">প্রেজেন্টেশন / প্রোগ্রাম / ট্রেইনিং / ট্রাভেল এর নম্বর</td>
+                            <td>: <input class="box" type="text" id="prgrm_number" name="prgrm_number" onkeyup="getProgram(this.value);"/>
+                            <div id="progResult"></div><input type="hidden" name="prgrm_id" id="prgrm_id"/>
+<!--                                <select class="selectOption" name="type" id="type" onchange="getname(this.value)" style="width: 170px !important;">
                                     <option value=" ">----টাইপ সিলেক্ট করুন-----</option>
                                     <option value="presentation">প্রেজেন্টেশন</option>
                                     <option value="program">প্রোগ্রাম</option>
                                     <option value="training">ট্রেইনিং</option>
                                     <option value="travel">ট্রাভেল</option>
-                                </select>  
+                                </select>  -->
                             </td>      
-                        </tr>         
-                        <tr>
-                        <td colspan="2" style="padding-left: 0px !important; ">  <span id="p_name"></span> </td>                      
                         </tr>
+                        <tr>                    
+                            <td colspan= "2" style="padding-left: 310px ; padding-top: 10px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" id="okk" value="ঠিক আছে" readonly="" onclick="return beforeProceed()" /></td>                           
+                      </tr> 
                     </table>
                 </form>
             </div>
