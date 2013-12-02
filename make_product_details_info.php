@@ -126,7 +126,7 @@ function makeProductName(unit)
     var proclass = document.getElementById("pro_classification").value;
     var productname = brand+" "+proclass+" "+protype+" ("+unit+")";
     document.getElementById("pro_productname").value = productname;
-    alert(productname);
+    //alert(productname);
 }
 </script>
 
