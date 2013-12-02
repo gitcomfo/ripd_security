@@ -4,7 +4,6 @@ html, body {
     font-family: "Lucida Grande", Verdana;
     font-size: 0.9em;
     text-align: center;
-    background-color:#3452F2;
 }
 
 input, select {
@@ -28,7 +27,7 @@ a {
 }
 
 #container {
-    width: 1000px;
+    width: 970px;
     height: 600px;
     margin:0 auto;
     position:relative;
@@ -43,7 +42,7 @@ a {
 }
 
 #left-container, #right-container {
-    width:200px;
+    width:100px;
     color:#686c70;
     text-align: left;
     overflow: auto;
@@ -72,9 +71,9 @@ a {
 }
 
 #center-container {
-    width:600px;
-    left:200px;
-    background-color:black;
+    width:770px;
+    left:100px;
+    background-color:#CED6B7;
     color:#ccc;
 }
 

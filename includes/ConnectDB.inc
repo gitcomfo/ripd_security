@@ -3,21 +3,14 @@ session_start();
 global  $db;
 
 $host = '192.168.1.100';
-$dbuser = 'cfs_iftee';
-$dbpassword = '';
+$dbuser = 'cfs_ibrahim';
+$dbpassword = 'ibrahim4321';
 $dbname = 'ripd_db_comfosys';
 
 //$host = 'localhost';
 //$dbuser = 'root';
 //$dbpassword = '';
 //$dbname = 'ripd_db_comfosys';
-
-$host = 'localhost';
-$dbuser = 'root';
-$dbpassword = '';
-$dbname = 'ripd_db_comfosys';
- 
- 
 
 // Make sure it IS global, regardless of our context
 if (!isset($mysqlport)){

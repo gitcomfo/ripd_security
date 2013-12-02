@@ -5,6 +5,15 @@ include_once 'includes/showTables.php';
 <script type="text/javascript" src="javascripts/area.js"></script>
 <script type="text/javascript" src="javascripts/external/mootools.js"></script>
 <script type="text/javascript" src="javascripts/dg-filter.js"></script>
+<link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
+<script src="javascripts/tinybox.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    function send_mail(emailAddress)
+    {
+        TINY.box.show({iframe:'send_email.php?office_sstore='+emailAddress,width:600,height:300,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});
+    }
+</script>
 
 <script type="text/javascript">
     function infoFromThana()
@@ -50,6 +59,7 @@ include_once 'includes/showTables.php';
                         <th><?php echo "সেলস স্টোর নেইম"; ?></th>
                         <th><?php echo "সেলস স্টোর ঠিকানা"; ?></th>
                         <th><?php echo "ই-মেইল"; ?></th>
+                        <th><?php echo ""; ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,6 +82,7 @@ include_once 'includes/showTables.php';
                         echo "<td>$db_salesStoreName</td>";
                         echo "<td>$db_salesStoreAddress</td>";
                         echo "<td>$db_salesStoreEmail</td>";
+                        echo "<td><a onclick=send_mail('$db_salesStoreEmail') style='cursor:pointer;color:blue;'>Send Mail</a></td>";
                         echo "</tr>";
                     }
                     ?>

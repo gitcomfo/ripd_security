@@ -1,6 +1,6 @@
 <?php
 error_reporting(0);
-include 'includes/ConnectDB.inc';
+include_once 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 $user_id = $_SESSION['userIDUser'];
 //echo "$loginUSERname";
