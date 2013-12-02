@@ -1,10 +1,10 @@
 <?php
 error_reporting(0);
 include 'includes/ConnectDB.inc';
-$storeName= $_SESSION['offname'];
-$cfsID = $_SESSION['cfsid'];
-$storeID = $_SESSION['offid'];
-$scatagory = $_SESSION['catagory'];
+$storeName= $_SESSION['loggedInOfficeName'];
+$cfsID = $_SESSION['userIDUser'];
+$storeID = $_SESSION['loggedInOfficeID'];
+$scatagory =$_SESSION['loggedInOfficeType'];
 $G_sellingType = $_GET['selltype'];
 $str_recipt= "RIPD";
 $forwhileloop = 1;

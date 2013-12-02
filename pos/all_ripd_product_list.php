@@ -66,6 +66,11 @@ if (a!=0) {document.getElementById("addtoCart").disabled = false;}
       }
       return i
     }
+
+function goBack()
+    {
+        window.history.go(-1);
+    }
     </script>
 	
 <!--===========================================================================================================================-->
@@ -88,7 +93,7 @@ function showTypes(catagory) // for types dropdown list
                 document.getElementById('showtype').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","includes/searchProcess.php?id=t&catagory="+catagory,true);
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=t&catagory="+catagory,true);
         xmlhttp.send();	
 }
 function showBrands(type) // for brand dropdown list
@@ -109,7 +114,7 @@ function showBrands(type) // for brand dropdown list
                 document.getElementById('brand').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","includes/searchProcess.php?id=b&type="+type,true);
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=b&type="+type,true);
         xmlhttp.send();	
 }
 function showClass(brand,protype) // for product name dropdown list
@@ -130,7 +135,7 @@ function showClass(brand,protype) // for product name dropdown list
                 document.getElementById('classi').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","includes/searchProcess.php?id=c&brand="+brand+"&type="+protype,true);
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=c&brand="+brand+"&type="+protype,true);
         xmlhttp.send();	
 }
 function showProduct(productChartId,idbrand,cataID) // show product details from selecting product from dropdown
@@ -151,7 +156,7 @@ function showProduct(productChartId,idbrand,cataID) // show product details from
                 document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","includes/searchProcess.php?id=all&chartID="+productChartId+"&idbrand="+idbrand+"&cataID="+cataID,true);
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=all&chartID="+productChartId+"&idbrand="+idbrand+"&cataID="+cataID,true);
         xmlhttp.send();
 }
 function showTypeProducts(proCatID) // show products from selecting types
@@ -172,7 +177,7 @@ function showTypeProducts(proCatID) // show products from selecting types
                 document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","includes/searchProcess.php?id=type&proCatID="+proCatID,true);
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=type&proCatID="+proCatID,true);
         xmlhttp.send();
 }
 
@@ -194,7 +199,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                 document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","includes/searchProcess.php?id=brnd&brandCode="+brandcode+"&procatid="+procatid,true);
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=brnd&brandCode="+brandcode+"&procatid="+procatid,true);
         xmlhttp.send();
 }
 </script>  
@@ -202,21 +207,16 @@ function showBrandProducts(brandcode,procatid) // show products from brand
     
 <body onLoad="ShowTime()">
 
-    <div id="maindiv">
-<div id="header" style="width:100%;height:100px;background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
+<div id="maindiv">
+    <div id="header" style="width:100%;height:100px;background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
-         <div style="width: 40%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
-    <div style="width: 60%;height: 100%;float: left;font-family: SolaimanLipi !important;text-align: left;font-size: 36px;"><?php echo $storeName;?></div></br>
-</div>
+        <div style="width: 40%;height: 100%; float: left;"><a onclick="goBack();" style="cursor: pointer;"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
+   </div>
     
 <div class="wraper" style="width: 80%;font-family: SolaimanLipi !important;">
 <fieldset style="border-width: 3px;width: 100%;">
          <legend style="color: brown;">প্রোডাক্ট লিস্ট ফিল্টার</legend>
     <div class="top" style="width: 100%;height: auto;">
-        <div class="topleft" style="width: 100%;"><b>পণ্য খুঁজুন&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-            : <input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('product_list.php');" autocomplete="off" style="width: 300px;"/></br>
-        <div style="position:absolute;top:262px;left:400px;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult"></div>
-    </div></br></br>
     <div style="float: left;width: 25%;"><b>পণ্যের ক্যাটাগরি</b></br>
       <select id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value)" style="width: 200px;font-family: SolaimanLipi !important;">
                 <?php echo get_catagory(); ?>
@@ -248,34 +248,30 @@ function showBrandProducts(brandcode,procatid) // show products from brand
           <td width="8%"><div align="center"><strong>ক্রমিক নং</strong></div></td>
         <td width="23%"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
         <td width="30%"><div align="center"><strong>প্রোডাক্ট-এর নাম</strong></div></td>
-        <td width="11%"><div align="center"><strong>পর্যাপ্ত পরিমাণ</strong></div></td>
-        <td width="12%"><div align="center"><strong>খুচরা মূল্য</strong></div></td>
-        <td width="10%"><div align="center"><strong>পি.ভি.</strong></div></td>
-        <td width="6%"><div align="center"><strong>করনীয়</strong></div></td>
+        <td width="11%"><div align="center"><strong>একক</strong></div></td>
+        <td width="12%"><div align="center"><strong>আর্টিকেল</strong></div></td>
       </tr>
     <?php
-if (isset($_GET['code']))
-     	{	
-                    $G_summaryID = $_GET['code'];
-                    $result = mysql_query("SELECT * FROM inventory WHERE idinventory = '$G_summaryID';");
-                        $row = mysql_fetch_assoc($result);
-                        $db_proname=$row["ins_productname"];
-                        $db_price=english2bangla($row["ins_sellingprice"]);
-                        $db_qty=english2bangla($row["ins_how_many"]);
-                        $db_procode=$row["ins_product_code"];
-                        $db_proPV=english2bangla($row["ins_pv"]);
-                        $inventoryID= $row['idinventory'];
-                        
-      echo '<tr>';
-      echo '<td><div align="center">১</div></td>';
-      echo '<td><div align="left">'.$db_procode.'</div></td>';
-        echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
-        echo '<td><div align="center">'.$db_qty.'</div></td>';
-        echo '<td><div align="center">'.$db_price.'</div></td>';
-        echo '<td><div align="center">'.$db_proPV.'</div></td>';
-        echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
-        echo '</tr>';
-        }
+//if (isset($_GET['code']))
+//     	{	
+//                    $G_summaryID = $_GET['code'];
+                        $slNo = 1;
+                    $result = mysql_query("SELECT * FROM product_chart ORDER BY pro_code ");
+                        while ($row = mysql_fetch_assoc($result))
+                        {
+                            $db_proname=$row["pro_productname"];
+                            $db_unit=$row["pro_unit"];
+                            $db_article=$row["pro_article"];
+                            $db_procode=$row["pro_code"];
+                            echo '<tr>';
+                            echo '<td><div align="center">'.english2bangla($slNo).'</div></td>';
+                            echo '<td><div align="left">'.$db_procode.'</div></td>';
+                              echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
+                              echo '<td><div align="center">'.$db_unit.'</div></td>';
+                              echo '<td><div align="center">'.$db_article.'</div></td>';
+                              echo '</tr>';
+                              $slNo++;
+                        }
 ?>
 </table>
 </div>

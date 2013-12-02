@@ -1,12 +1,13 @@
 <?php
 error_reporting(0);
+session_start();
 include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
-$storeName= $_SESSION['offname'];
-$cfsID = $_SESSION['cfsid'];
-$storeID = $_SESSION['offid'];
-$scatagory = $_SESSION['catagory'];
+$storeName= $_SESSION['loggedInOfficeName'];
+$cfsID = $_SESSION['userIDUser'];
+$storeID = $_SESSION['loggedInOfficeID'];
+$scatagory =$_SESSION['loggedInOfficeType'];
 
 $selsql ="SELECT * FROM package_info WHERE idpckginfo = ANY(SELECT pckg_infoid FROM package_details WHERE product_chartid = ?)";
 $selstmt = $conn->prepare($selsql);

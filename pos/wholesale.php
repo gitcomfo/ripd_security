@@ -1,9 +1,10 @@
 <?php
 error_reporting(0);
+session_start();
 include 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 
-$storeName= $_SESSION['offname'];
+$storeName= $_SESSION['loggedInOfficeName'];
 $timestamp=time(); //current timestamp
 $da=date("m/d/Y", $timestamp);
 ?>
