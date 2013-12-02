@@ -3,7 +3,7 @@ error_reporting(0);
 session_start();
 include_once 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
-
+$storeName= $_SESSION['loggedInOfficeName'];
 function get_catagory()
 {
     echo  "<option value=0> -সিলেক্ট করুন- </option>";
@@ -204,7 +204,11 @@ function showBrandProducts(brandcode,procatid) // show products from brand
 
     <div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
-    <div style="width: 100%;height: 50px;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div></br>
+    <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
+         <div style="width: 40%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
+    <div style="width: 60%;height: 100%;float: left;font-family: SolaimanLipi !important;text-align: left;font-size: 36px;"><?php echo $storeName;?></div></br>
+</div>
+    
 <div class="wraper" style="width: 80%;font-family: SolaimanLipi !important;">
 <fieldset style="border-width: 3px;width: 100%;">
          <legend style="color: brown;">প্রোডাক্ট লিস্ট ফিল্টার</legend>
