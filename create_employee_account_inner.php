@@ -81,7 +81,7 @@ if (isset($_POST['submit1'])) {
                                      employee_motherName='$employee_motherName', employee_spouseName='$employee_spouseName', 
                                      employee_occupation='$employee_occupation', employee_religion='$employee_religion', employee_natonality='$employee_natonality',
                                      employee_national_ID='$employee_national_ID', employee_passport='$employee_passport', employee_date_of_birth='$dob',
-                                     employee_birth_certificate_No='$employee_birth_certificate_No' ,emplo_scanDoc_signature='$image_path', emplo_scanDoc_picture='$sing_path',  scanDoc_finger_print='$finger_path'
+                                     employee_birth_certificate_No='$employee_birth_certificate_No' ,emplo_scanDoc_signature='$sing_path', emplo_scanDoc_picture='$image_path',  scanDoc_finger_print='$finger_path'
                                      WHERE idEmployee_information=$g_id");
 
     $result = mysql_query("SELECT  * FROM $dbname.employee_information WHERE idEmployee_information='$g_id'");

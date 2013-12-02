@@ -1,8 +1,7 @@
 <?php
 include 'ConnectDB.inc';
 include_once 'MiscFunctions.php';
-$storeID = $storeID = $_SESSION['loggedInOfficeID'];
-$scatagory = $_SESSION['loggedInOfficeType'];
+
 if ($_GET['id']== 't')
 {
     $G_catCode= $_GET['catagory'];
