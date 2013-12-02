@@ -13,6 +13,9 @@ if (isset($_POST['submit_email'])) {
     $sender_message = $_POST['message'];
     $sender_msg_subject = $_POST['subject'];
     $receiver_email = $receiver_office_sstore_email;
+    
+    $affiliation= "Dear Admin,";
+    $sender_moblie_number = "My Contact Number: ".$sender_mobile;
 
     //echo "Sender Name: " . $sender_name . " Email: " . $sender_email . "Mobile " . $sender_mobile . "Subject " . $sender_msg_subject . "Message " . $sender_message . "R-email: " . $receiver_email . "<br/>";
 
@@ -21,7 +24,7 @@ if (isset($_POST['submit_email'])) {
     //$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     //$sendMailValue = mail($receiver_email, $sender_msg_subject, $sender_message, "$headers \r\n From: $sender_email");
     
-    $sendMailValue = mail($receiver_email, $sender_msg_subject, $sender_message, "From: $sender_email");
+    $sendMailValue = mail($receiver_email, $sender_msg_subject, "$affiliation \n $sender_moblie_number \n\n $sender_message", "From: $sender_email");
     if ($sendMailValue){
         $msg = "আপনার মেসেজটি সফলভাবে পাঠানো হয়েছে";
     } else {
@@ -117,12 +120,12 @@ if (isset($_POST['submit_email'])) {
                     <tr>
                         <td>Message</td>
                         <td>:</td>
-                        <td style="padding-left: 0px"><textarea id='message' name='message' style='width: 90%;'><?php echo $sender_message; ?></textarea><em2>*</em2>
+                        <td><textarea id='message' name='message' style='width: 90%;'><?php echo $sender_message; ?></textarea><em2>*</em2>
                     </tr>
                     <tr>                    
-                        <td colspan="3" style="padding-left: 25%; " >                            
+                        <td colspan="3" style="text-align:center;">                            
                               <input class="btn" style =" font-size: 12px; " type="submit" name="submit_email" value="সেন্ড করুন"/>
-                            <input class="btn" style =" font-size: 12px" type="reset" name="reset" value="রিসেট করুন" />
+                              <input class="btn" style =" font-size: 12px" type="reset" name="reset" value="রিসেট করুন" />
                         </td>                        
                     </tr>    
                     <?php

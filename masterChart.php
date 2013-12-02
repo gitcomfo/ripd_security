@@ -26,7 +26,8 @@ include_once 'includes/header.php';
             $rs_productName = mysql_query($sql_productName);
             while ($row_productName = mysql_fetch_array($rs_productName)) {
                 $db_pro_classification = $row_productName['pro_classification'];
-                echo "<tr><td>$db_pro_classification</td></tr>";
+                $db_pro_producname = $row_productName['pro_productname'];                
+                echo "<tr><td>$db_pro_producname</td></tr>";
             }
             echo "</table></td>";
             $loopValue = $loopValue + 1;
