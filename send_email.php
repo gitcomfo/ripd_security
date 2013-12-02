@@ -4,7 +4,7 @@ include_once 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 
 $msg = "";
-$receiver_office_sstore_email = $_GET['emailAddress'];
+$receiver_office_sstore_email = $_GET['office_sstore_mail'];
 
 if (isset($_POST['submit_email'])) {
     $sender_name = $_POST['name'];
@@ -12,7 +12,7 @@ if (isset($_POST['submit_email'])) {
     $sender_mobile = $_POST['mobile'];
     $sender_message = $_POST['message'];
     $sender_msg_subject = $_POST['subject'];
-    $receiver_email = $receiver_office_sstore_email;
+    $receiver_email = $_POST['office_store_email'];
     
     $affiliation= "Dear Admin,";
     $sender_moblie_number = "My Contact Number: ".$sender_mobile;
@@ -99,7 +99,7 @@ if (isset($_POST['submit_email'])) {
                         <td style="width: 1%">:</td>
                         <td style="width: 55%">
                             <input type="text"  name="name" value="<?php echo $sender_name; ?>" placeholder="Type your Name"/><em2>*</em2>
-                            <input type="hidden" name="account_cfs_user" id="account_cfs_user" value="<?php echo $account_cfs_user; ?>"/>
+                            <input type="hidden" name="office_store_email" id="office_store_email" value="<?php echo $receiver_office_sstore_email; ?>"/>
                         </td>                                      
                     </tr>
                     <tr>

@@ -11,7 +11,7 @@ include_once 'includes/showTables.php';
 <script type="text/javascript">
     function send_mail(emailAddress)
     {
-        TINY.box.show({iframe:'send_email.php?office_sstore='+emailAddress,width:600,height:300,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});
+        TINY.box.show({iframe:'send_email.php?office_sstore_mail='+emailAddress,width:600,height:300,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});
     }
 </script>
 
