@@ -1,16 +1,17 @@
 <?php
 error_reporting(0);
+session_start();
 include 'includes/ConnectDB.inc';
 include 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
-$storeName= $_SESSION['offname'];
-$cfsID = $_SESSION['cfsid'];
-$storeID = $_SESSION['offid'];
-$scatagory = $_SESSION['catagory'];
+$storeName= $_SESSION['loggedInOfficeName'];
+$cfsID = $_SESSION['userIDUser'];
+$storeID = $_SESSION['loggedInOfficeID'];
+$scatagory =$_SESSION['loggedInOfficeType'];
 $msg ="";
-$sql_runningpv = mysql_query("SELECT * FROM running_pv ;"); 
+$sql_runningpv = mysql_query("SELECT * FROM running_command ;"); 
 $pvrow = mysql_fetch_assoc($sql_runningpv);
-$current_pv = $pvrow['value_in_pv'];
+$current_pv = $pvrow['pv_value'];
 
  $selsql ="SELECT * FROM package_details WHERE pckg_infoid=?";
  $selstmt = $conn->prepare($selsql);

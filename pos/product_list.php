@@ -1,5 +1,6 @@
 <?php
 error_reporting(0);
+session_start();
 include_once 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 

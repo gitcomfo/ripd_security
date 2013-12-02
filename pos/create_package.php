@@ -5,10 +5,10 @@ include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 $timestamp=time(); //current timestamp
 $da=date("d/m/Y", $timestamp);
-$storeName= $_SESSION['offname'];
-$cfsID = $_SESSION['cfsid'];
-$storeID = $_SESSION['offid'];
-$scatagory = $_SESSION['catagory'];
+$storeName= $_SESSION['loggedInOfficeName'];
+$cfsID = $_SESSION['userIDUser'];
+$storeID = $_SESSION['loggedInOfficeID'];
+$scatagory =$_SESSION['loggedInOfficeType'];
 $msg = "";
 // ********************* package_info-e entry হওয়ার জন্য*******************************************
 if(isset($_POST['ok']))

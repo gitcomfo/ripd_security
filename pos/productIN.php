@@ -24,7 +24,7 @@ if(isset($_POST['entry']))
     $all = $selectstmt->fetchAll();
     foreach($all as $row)
     {
-       echo  $db_storetype=$row['store_type'];
+       $db_storetype=$row['store_type'];
         $db_proCode=$row['pro_code'];
         $db_proname=$row['pro_name'];
         $db_buy=$row['buying_price'];

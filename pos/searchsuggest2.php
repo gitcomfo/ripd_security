@@ -1,8 +1,8 @@
 <?php
 error_reporting(0);
 include 'includes/ConnectDB.inc';
-$storeID = $_SESSION['offid'];
-$scatagory = $_SESSION['catagory'];
+$storeID = $_SESSION['loggedInOfficeID'];
+$scatagory =$_SESSION['loggedInOfficeType'];
 
 if (isset($_GET['searchs']) && $_GET['searchs'] != '') {
 	//Add slashes to any quotes to avoid SQL problems.
