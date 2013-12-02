@@ -332,6 +332,7 @@ if($np_Village_idVillage !="all")
     }
 } 
 elseif (isset($_POST['submit3'])) {
+    $p_custAcid = $_POST['custAcID'];
     //customer education
     $c_ex_name = $_POST['c_ex_name'];
     $c_pass_year = $_POST['c_pass_year'];
@@ -340,14 +341,16 @@ elseif (isset($_POST['submit3'])) {
     $c_gpa = $_POST['c_gpa'];
     $a = count($c_ex_name);
     mysql_query("START TRANSACTION");
-   $del_c_edu = mysql_query("DELETE FROM education WHERE education_type='cust' AND cepn_id=$custAcid");
+if($c_ex_name[0] != "")
+{
     for ($i = 0; $i < $a; $i++) {
-        $sql_insert_cus_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) 
-                                            VALUES ('$c_ex_name[$i]', '$c_pass_year[$i]','$c_institute[$i]','$c_board[$i]','$c_gpa[$i]','cust','$custAcid');";
+        $sql_insert_cus_edu = "INSERT INTO `education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) 
+                                            VALUES ('$c_ex_name[$i]', '$c_pass_year[$i]','$c_institute[$i]','$c_board[$i]','$c_gpa[$i]','cust','$p_custAcid');";
         $cus_edu = mysql_query($sql_insert_cus_edu);
     }
+}
     //nominee education
-    $sel_nominee = mysql_query("SELECT * FROM nominee WHERE cep_nominee_id= $custAcid AND cep_type='cust'");
+    $sel_nominee = mysql_query("SELECT * FROM nominee WHERE cep_nominee_id= $p_custAcid AND cep_type='cust'");
     $nomrow = mysql_fetch_assoc($sel_nominee);
     $db_nomID = $nomrow['idNominee'];
     $n_ex_name = $_POST['n_ex_name'];
@@ -356,18 +359,19 @@ elseif (isset($_POST['submit3'])) {
     $n_board = $_POST['n_board'];
     $n_gpa = $_POST['n_gpa'];
     $b = count($n_ex_name);
-    $del_n_edu = mysql_query("DELETE FROM education WHERE education_type='nmn' AND cepn_id=$db_nomID");
-    for ($i = 0; $i < $b; $i++) {
-        $sql_insert_nom_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) 
-                                                VALUES ('$n_ex_name[$i]', '$n_pass_year[$i]','$n_institute[$i]','$n_board[$i]','$n_gpa[$i]','nmn','$db_nomID');";
-        $nom_edu = mysql_query($sql_insert_nom_edu);
+    if($n_ex_name[0] != "")
+    {
+        for ($i = 0; $i < $b; $i++) {
+            $sql_insert_nom_edu = "INSERT INTO `education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) 
+                                                    VALUES ('$n_ex_name[$i]', '$n_pass_year[$i]','$n_institute[$i]','$n_board[$i]','$n_gpa[$i]','nmn','$db_nomID');";
+            $nom_edu = mysql_query($sql_insert_nom_edu);
+        }
     }
-    if (($del_c_edu && $cus_edu) || ($del_n_edu && $nom_edu)) {
+    if (($cus_edu) || ($nom_edu)) {
         mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
          mysql_query("ROLLBACK");
-        $msg = "ভুল হয়েছে";
     }
 } 
 elseif (isset($_POST['submit4'])) {
@@ -414,6 +418,10 @@ elseif (isset($_POST['submit4'])) {
 elseif (isset($_POST['submit5'])) {
   $p_email = $_POST['email'];
   $p_mobile = $_POST['mobile'];
+if(strlen($p_mobile) == 11)
+  {
+      $p_mobile = "88".$p_mobile;
+  }
   $p_cfsid = $_POST['cfsid'];
   $sql_update_cfs = mysql_query("UPDATE cfs_user SET email='$p_email', mobile='$p_mobile' WHERE idUser=$p_cfsid ");
     if ($sql_update_cfs) {
@@ -1232,7 +1240,7 @@ elseif (isset($_POST['submit5'])) {
             <form method="POST" onsubmit="">
                 <table class="formstyle" style=" padding-top: 5px; padding-bottom: 8px;" >                                
                     <tr>
-                        <td colspan="2" >
+                        <td colspan="2" ><input type='hidden' name='custAcID' value="<?php echo $db_custAcID;?>" />
                             <table width="100%">
                                 <tr>	
                                     <td  colspan="2"   style =" font-size: 14px"><b>ব্যক্তির শিক্ষাগত যোগ্যতা</b></td>                                                
@@ -1247,16 +1255,24 @@ elseif (isset($_POST['submit5'])) {
                                                 <td>বোর্ড / বিশ্ববিদ্যালয়</td>
                                                 <td>জি.পি.এ / বিভাগ</td>      
                                             </tr>
-                                            <?php
-                                                            echo "<tr><td><input class='textfield'  name='c_ex_name[]' type='text' value='$db_p_xmname[0]'/></td><td><input class='box5'  name='c_pass_year[]' type='text' value='$db_p_xmyear[0]'/></td><td><input class='textfield'  name='c_institute[]' type='text' value='$db_p_xminstitute[0]'/>
-                                                                                </td><td><input class='textfield'  name='c_board[]' type='text' value='$db_p_xmboard[0]'/></td><td><input class='box5' name='c_gpa[]' type='text' value='$db_p_xmgpa[0]'/></td><td><input type='button' class='add2' /></td></tr>";
-                                                                for($i=1;$i<$p_count;$i++)
+                                        <?php
+                                            if($p_count == 0) { ?>
+                                            <tr>
+                                                <td><input class="textfield"  name="c_ex_name[]" type="text" /></td>
+                                                <td><input class="box5"  name="c_pass_year[]" type="text" /></td>
+                                                <td><input class="textfield" name="c_institute[]" type="text" /></td>
+                                                <td><input class="textfield"  name="c_board[]" type="text" /></td>
+                                                <td style="padding-right: 45px;"><input class="box5"  name="c_gpa[]" type="text" /></td>                                             
+                                                <td  ><input type="button" class="add2" /></td>
+                                            </tr>
+                                            <?php } else { 
+                                                 for($i=0;$i<$p_count;$i++)
                                                                 {
-                                                                    echo "<tr><td><input class='textfield'  name='c_ex_name[]' type='text' value='$db_p_xmname[$i]'/></td><td><input class='box5'  name='c_pass_year[]' type='text' value='$db_p_xmyear[$i]'/></td><td><input class='textfield'  name='c_institute[]' type='text' value='$db_p_xminstitute[$i]'/>
-                                                                                </td><td><input class='textfield'  name='c_board[]' type='text' value='$db_p_xmboard[$i]'/></td><td><input class='box5' name='c_gpa[]' type='text' value='$db_p_xmgpa[$i]'/></td>";
-                                                                   echo "<td><input type='button' class='del2' /></td><td><input type='button' class='add2' /></td></tr>";
+                                                                    echo "<tr><td><input class='textfield' readonly type='text' value='$db_p_xmname[$i]'/></td><td><input class='box5' readonly type='text' value='$db_p_xmyear[$i]'/></td><td><input class='textfield' readonly type='text' value='$db_p_xminstitute[$i]'/>
+                                                                                </td><td><input class='textfield' readonly type='text' value='$db_p_xmboard[$i]'/></td><td><input class='box5' readonly type='text' value='$db_p_xmgpa[$i]'/></td>";
+                                                                   echo "<td></td><td></td></tr>";
                                                                 }
-                                            ?>
+                                            }?>
                                         </table>
                                     </td>
                                 </tr>                                                               
@@ -1284,15 +1300,23 @@ elseif (isset($_POST['submit5'])) {
                                                 <td>জি.পি.এ / বিভাগ</td>      
                                             </tr>
                                             <?php
-                                                            echo "<tr><td><input class='textfield'  name='n_ex_name[]' type='text' value='$db_n_xmname[0]'/></td><td><input class='box5'  name='n_pass_year[]' type='text' value='$db_n_xmyear[0]'/></td><td><input class='textfield'  name='n_institute[]' type='text' value='$db_n_xminstitute[0]'/>
-                                                                                </td><td><input class='textfield'  name='n_board[]' type='text' value='$db_n_xmboard[0]'/></td><td><input class='box5' name='n_gpa[]' type='text' value='$db_n_xmgpa[0]'/></td><td><input type='button' class='add3' /></td></tr>";
-                                                                for($i=1;$i<$n_count;$i++)
+                                            if($n_count == 0) { ?>
+                                            <tr>
+                                                <td><input class="textfield"  name="n_ex_name[]" type="text" /></td>
+                                                <td><input class="box5"  name="n_pass_year[]" type="text" /></td>
+                                                <td><input class="textfield"  name="n_institute[]" type="text" /></td>
+                                                <td><input class="textfield"  name="n_board[]" type="text" /></td>
+                                                <td style="padding-right: 45px;"><input class="box5"  name="n_gpa[]" type="text" /></td>                                             
+                                                <td ><input type="button" class="add3" /></td>
+                                            </tr>
+                                            <?php } else {
+                                                  for($i=0;$i<$n_count;$i++)
                                                                 {
-                                                                    echo "<tr><td><input class='textfield'  name='n_ex_name[]' type='text' value='$db_n_xmname[$i]'/></td><td><input class='box5'  name='n_pass_year[]' type='text' value='$db_n_xmyear[$i]'/></td><td><input class='textfield'  name='n_institute[]' type='text' value='$db_n_xminstitute[$i]'/>
-                                                                                </td><td><input class='textfield'  name='n_board[]' type='text' value='$db_n_xmboard[$i]'/></td><td><input class='box5' name='n_gpa[]' type='text' value='$db_n_xmgpa[$i]'/></td>";
-                                                                   echo "<td><input type='button' class='del3' /></td><td><input type='button' class='add3' /></td></tr>";
+                                                                    echo "<tr><td><input class='textfield' readonly type='text' value='$db_n_xmname[$i]'/></td><td><input class='box5' readonly type='text' value='$db_n_xmyear[$i]'/></td><td><input class='textfield' readonly type='text' value='$db_n_xminstitute[$i]'/>
+                                                                                </td><td><input class='textfield' readonly type='text' value='$db_n_xmboard[$i]'/></td><td><input class='box5' readonly type='text' value='$db_n_xmgpa[$i]'/></td>";
+                                                                   echo "<td></td><td></td></tr>";
                                                                 }
-                                            ?>
+                                            }?>
                                         </table>
                                     </td>
                                 </tr>

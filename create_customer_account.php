@@ -41,7 +41,7 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
             $roleid =$securityrolesrow['idsecurityrole'];
             
             $ins_cfsuser=mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email,cfs_account_status, security_roles_idsecurityrole, user_type)
-                                                                        VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile', '$account_email', '$ripdemailid','active', $roleid,'customer')") or exit(mysql_error()." sorry");
+                                                                        VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email', '$ripdemailid','active', $roleid,'customer')") or exit(mysql_error()." sorry");
             $cfs_user_id = mysql_insert_id();
        
              // **************************get referer ID*****************************
@@ -103,7 +103,7 @@ if (isset($_POST['submitwithpass']))
             $roleid =$securityrolesrow['idsecurityrole'];
             
             $ins_cfsuser=mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email,cfs_account_status, security_roles_idsecurityrole, user_type)
-                                                                        VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile', '$account_email', '$ripdemailid','active', $roleid,'customer')") or exit(mysql_error()." sorry");
+                                                                        VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email', '$ripdemailid','active', $roleid,'customer')") or exit(mysql_error()." sorry");
             $cfs_user_id = mysql_insert_id();
        
              // **************************get referer ID*****************************

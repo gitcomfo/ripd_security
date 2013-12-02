@@ -304,6 +304,10 @@ elseif (isset($_POST['submit5'])) {
   $p_name = $_POST['name'];
    $p_email = $_POST['email'];
     $p_mobile = $_POST['mobile'];
+ if(strlen($p_mobile) == 11)
+  {
+      $p_mobile = "88".$p_mobile;
+  }
    $p_cfsid = $_POST['cfsid'];
 
   $sql_update_cfs = mysql_query("UPDATE cfs_user SET account_name='$p_name', email='$p_email', mobile='$p_mobile' WHERE idUser=$p_cfsid ");
@@ -463,7 +467,7 @@ elseif (isset($_POST['submit5'])) {
             $("#container_others33:last").after(appendTxt);           
         }  
         count4 = count4 + 1;        
-    })    
+    })
 </script>
 
 <div class="column6">
@@ -502,7 +506,7 @@ elseif (isset($_POST['submit5'])) {
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
-                        <td>:   <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' value="<?php echo $db_empMob;?>" /> <em>ইংরেজিতে লিখুন</em></td>		
+                        <td>:   <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' value="<?php echo $db_empMob;?>" /></td>		
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-top: 10px; padding-left: 250px;padding-bottom: 5px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit5" value="সেভ করুন" />
