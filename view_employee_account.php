@@ -15,8 +15,8 @@ function show($value) // check if value will be shown or not *************
 }
 // ************************** update query ***********************************
 if (isset($_POST['submit1'])) {
-
-     $employee_fatherName = $_POST['employee_fatherName'];
+    $employeeID = $_POST['employeeID'];
+    $employee_fatherName = $_POST['employee_fatherName'];
     $employee_motherName = $_POST['employee_motherName'];
     $employee_spouseName = $_POST['employee_spouseName'];
     $employee_occupation = $_POST['employee_occupation'];
@@ -50,55 +50,12 @@ if (isset($_POST['submit1'])) {
                     }
         }
 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
-    $extension = end(explode(".", $_FILES["scanDoc_signature"]["name"]));
-    $sign_name = $_FILES["scanDoc_signature"]["name"];
-    if($sign_name=="")
-        {
-            $sign_name= "signature" . "-" . $_POST['signname'];
-             $sing_path = "sign/" . $sign_name;
-        }
-        else
-        {
-            $sign_name = "signature" . "-" . $_FILES["scanDoc_signature"]["name"];
-            $sing_path = "sign/" . $sign_name;
-            if (($_FILES["scanDoc_signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
-                    {
-                        move_uploaded_file($_FILES["scanDoc_signature"]["tmp_name"], "sign/" . $sign_name);
-                    } 
-            else 
-                    {
-                    echo "Invalid file format.";
-                    }
-        }
- 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
-    $extension = end(explode(".", $_FILES["scanDoc_finger_print"]["name"]));
-    $finger_name = $_FILES["scanDoc_finger_print"]["name"];
-    if($finger_name=="")
-        {
-            $finger_name= "fingerprint" . "-" . $_POST['fingername'];
-             $finger_path = "fingerprints/" . $finger_name;
-        }
-        else
-        {
-            $finger_name = "fingerprint" . "-" . $_FILES["scanDoc_finger_print"]["name"];
-            $finger_path = "fingerprints/" . $finger_name;
-            if (($_FILES["scanDoc_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
-                    {
-                        move_uploaded_file($_FILES["scanDoc_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
-                    } 
-            else 
-                    {
-                    echo "Invalid file format.";
-                    }
-        }
 mysql_query("START TRANSACTION");
     $sql_update_employee = mysql_query("UPDATE employee_information SET employee_fatherName='$employee_fatherName', 
                                      employee_motherName='$employee_motherName', employee_spouseName='$employee_spouseName', 
                                      employee_occupation='$employee_occupation', employee_religion='$employee_religion', employee_natonality='$employee_natonality',
                                      employee_national_ID='$employee_national_ID', employee_passport='$employee_passport', employee_date_of_birth='$dob',
-                                     employee_birth_certificate_No='$employee_birth_certificate_No' ,emplo_scanDoc_signature='$image_path', emplo_scanDoc_picture='$sing_path',  scanDoc_finger_print='$finger_path'
+                                     employee_birth_certificate_No='$employee_birth_certificate_No' ,emplo_scanDoc_picture='$image_path'
                                      WHERE Employee_idEmployee=$employeeID") or exit(mysql_error());
       
     //proprietor's Current Address Infromation
@@ -118,26 +75,19 @@ mysql_query("START TRANSACTION");
     $ep_road = $_POST['ep_road'];
     $ep_post_code = $_POST['ep_post_code'];   
    //address_type=Present
-    $sql_sel_present_adrs= mysql_query("SELECT * FROM address WHERE adrs_cepng_id=$employeeID AND address_whom='emp' AND address_type='Present' ");
-    if(mysql_num_rows($sql_sel_present_adrs)<1)
+ if($e_Village_idVillage !="all")
     {
         $sql_e_insert_current_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana, post_idpost, village_idvillage ,adrs_cepng_id)
                                      VALUES ('Present', '$e_house', '$e_house_no', '$e_road', 'emp', '$e_post_code','$e_Thana_idThana','$e_Post_idPost', '$e_Village_idVillage', '$employeeID')")or exit(mysql_error()." sorryyyyyy sroryrr") ;
     }
-    else {$sql_e_insert_current_address = mysql_query("UPDATE address 
-                                                                    SET house='$e_house', house_no='$e_house_no', road='$e_road', post_code='$e_post_code',Thana_idThana='$e_Thana_idThana', post_idpost='$e_Post_idPost', village_idvillage='$e_Village_idVillage'  WHERE adrs_cepng_id=$employeeID AND address_whom='emp' AND address_type='Present' ");}
     //address_type=Permanent
-     $sql_sel_permanent_adrs= mysql_query("SELECT * FROM address WHERE adrs_cepng_id=$employeeID AND address_whom='emp' AND address_type='Permanent' ");
-    if(mysql_num_rows($sql_sel_permanent_adrs)<1)
+  if($ep_Village_idVillage !="all")
     {
         $sql_ep_insert_permanent_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
                                      VALUES ('Permanent', '$ep_house', '$ep_house_no', '$ep_road', 'emp', '$ep_post_code','$ep_Thana_idThana', '$ep_Post_idPost', '$ep_Village_idVillage', '$employeeID')");
     }
-   else {$sql_ep_insert_permanent_address = mysql_query("UPDATE address 
-                                                                         SET house='$ep_house', house_no='$ep_house_no', road='$ep_road', post_code='$ep_post_code',Thana_idThana='$ep_Thana_idThana', post_idpost='$ep_Post_idPost', village_idvillage='$ep_Village_idVillage'  WHERE adrs_cepng_id=$employeeID AND address_whom='emp' AND address_type ='Permanent' ") or exit(mysql_error()." hi hi hi"); }
-
     if ($sql_update_employee || $sql_e_insert_current_address || $sql_ep_insert_permanent_address) {
         mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
@@ -147,6 +97,7 @@ mysql_query("START TRANSACTION");
     }
 }
 elseif (isset($_POST['submit2'])) {
+    $employeeID = $_POST['employeeID'];
     $nominee_name = $_POST['nominee_name'];
     $nominee_age = $_POST['nominee_age'];
     $nominee_relation = $_POST['nominee_relation'];
@@ -177,17 +128,17 @@ elseif (isset($_POST['submit2'])) {
                     echo "Invalid file format.";
                     }
         }
-
     $sql_sel_nominee = mysql_query("SELECT * FROM nominee WHERE idNominee = $nominee_id");
-    mysql_query("START TRANSACTION");
+mysql_query("START TRANSACTION");
     if(mysql_num_rows($sql_sel_nominee) <1)
     {
-         $sql_nominee = mysql_query("INSERT INTO nominee(nominee_name, nominee_relation, nominee_mobile,
+        $sql_nominee = mysql_query("INSERT INTO nominee(nominee_name, nominee_relation, nominee_mobile,
                                        nominee_email, nominee_national_ID, nominee_age, nominee_passport_ID, nominee_picture,cep_type, cep_nominee_id) 
                                        VALUES('$nominee_name','$nominee_relation','$nominee_mobile','$nominee_email','$nominee_national_ID',
-                                       '$nominee_age','$nominee_passport_ID','$image_path','emp','$employeeID')") or exit(mysql_error());
+                                       '$nominee_age','$nominee_passport_ID','$image_path','emp','$employeeID')");
+        $nominee_id = mysql_insert_id(); 
     }
-    else   {$sql_nominee = mysql_query("UPDATE nominee SET nominee_name='$nominee_name', nominee_picture='$image_path', nominee_relation='$nominee_relation', 
+     else   {$sql_nominee = mysql_query("UPDATE nominee SET nominee_name='$nominee_name', nominee_picture='$image_path', nominee_relation='$nominee_relation', 
                                                         nominee_mobile='$nominee_mobile', nominee_email='$nominee_email', nominee_national_ID='$nominee_national_ID', nominee_age='$nominee_age', 
                                                         nominee_passport_ID='$nominee_passport_ID' WHERE idNominee = $nominee_id"); }
     //Current Address Infromation
@@ -207,31 +158,20 @@ elseif (isset($_POST['submit2'])) {
     $np_road = $_POST['np_road'];
     $np_post_code = $_POST['np_post_code'];
     //nominee address_type=Present
-     $sql_n_sel_present_adrs= mysql_query("SELECT * FROM address WHERE adrs_cepng_id=$nominee_id AND address_whom='nmn' AND address_type='Present' ");
-    if(mysql_num_rows($sql_n_sel_present_adrs) < 1)
+ if($n_Village_idVillage !="all")
     {
-        $sql_n_insert_current_address = mysql_query("INSERT INTO address 
+            $sql_n_insert_current_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no,road, address_whom, post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
-                                     VALUES ('Present', '$n_house', '$n_house_no', '$n_road', 'nmn', '$n_post_code', '$n_Thana_idThana', '$n_Post_idPost', '$n_Village_idVillage','$nominee_id')")or exit(mysql_error());
+                                     VALUES ('Present', '$n_house', '$n_house_no', '$n_road', 'nmn', '$n_post_code', '$n_Thana_idThana', '$n_Post_idPost', '$n_Village_idVillage','$nominee_id')")or exit(mysql_error()."dkfjalskdjf");
     }
-    else {
-        $sql_n_insert_current_address = mysql_query("UPDATE address 
-                                                                    SET house='$n_house', house_no='$n_house_no', road='$n_road', post_code='$n_post_code',Thana_idThana='$n_Thana_idThana', post_idpost='$n_Post_idPost', village_idvillage='$n_Village_idVillage'  
-                                                                    WHERE adrs_cepng_id=$nominee_id AND address_whom='nmn' AND address_type='Present' ");}
     //nominee address_type=Permanent
-    $sql_n_sel_permanent_adrs= mysql_query("SELECT * FROM address WHERE adrs_cepng_id=$nominee_id AND address_whom='nmn' AND address_type='Permanent' ");
-    if(mysql_num_rows($sql_n_sel_permanent_adrs)<1)
+    if($np_Village_idVillage !="all")
     {
-         $sql_np_insert_permanent_address = mysql_query("INSERT INTO address 
+           $sql_np_insert_permanent_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no, road, address_whom,post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
                                      VALUES ('Permanent', '$np_house', '$np_house_no','$np_road', 'nmn',  '$np_post_code','$np_Thana_idThana','$np_Post_idPost', '$np_Village_idVillage','$nominee_id')");
     }
-    else {
-        $sql_np_insert_permanent_address = mysql_query("UPDATE address 
-                                                                    SET house='$np_house', house_no='$np_house_no', road='$np_road', post_code='$np_post_code',Thana_idThana='$np_Thana_idThana', post_idpost='$np_Post_idPost', village_idvillage='$np_Village_idVillage'  
-                                                                    WHERE adrs_cepng_id=$nominee_id AND address_whom='nmn' AND address_type='Permanent' ");
-    }    
-   
+
     if ($sql_nominee || $sql_n_insert_current_address || $sql_np_insert_permanent_address) {
         mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
@@ -362,10 +302,15 @@ elseif (isset($_POST['submit5'])) {
      $preRode = $presentAddrow['road'];
      $prePostCode = $presentAddrow['post_code'];
      $prePostID = $presentAddrow['idPost_office'];
+     $prePostname = $presentAddrow['post_offc_name'];
      $preVilID = $presentAddrow['idvillage'];
+     $preVilname = $presentAddrow['village_name'];
      $preThanaID = $presentAddrow['idThana'];
+     $preThananame = $presentAddrow['thana_name'];
      $preDisID = $presentAddrow['idDistrict'];
+     $preDisname = $presentAddrow['district_name'];
      $preDivID = $presentAddrow['idDivision'];
+     $preDivname = $presentAddrow['division_name'];
           
      $sql_emp_Padrs_sel = mysql_query("SELECT * FROM address, division, district, thana, post_office, village WHERE address_whom='emp' AND adrs_cepng_id=$employeeID AND address_type='Permanent'
                                                                     AND village_idvillage=idvillage AND post_idpost=idPost_office AND idDivision = Division_idDivision AND idDistrict= District_idDistrict AND idThana=address.Thana_idThana");
@@ -375,10 +320,15 @@ elseif (isset($_POST['submit5'])) {
      $perRode = $permenentAddrow['road'];
      $perPostCode = $permenentAddrow['post_code'];
      $perPostID = $permenentAddrow['idPost_office'];
+     $perPostname = $permenentAddrow['post_offc_name'];
      $perVilID = $permenentAddrow['idvillage'];
+     $perVilname = $permenentAddrow['village_name'];
      $perThanaID = $permenentAddrow['idThana'];
+     $perThananame = $permenentAddrow['thana_name'];
      $perDisID = $permenentAddrow['idDistrict'];
+     $perDisname = $permenentAddrow['district_name'];
      $perDivID = $permenentAddrow['idDivision'];
+      $perDivname = $permenentAddrow['division_name'];
 
 // *************************************** for nominee ****************************************************************************** 
      $sql_nomi_sel = mysql_query("SELECT * FROM nominee WHERE cep_type='emp' AND  cep_nominee_id= $employeeID ");
@@ -402,10 +352,15 @@ elseif (isset($_POST['submit5'])) {
      $nompreRode = $nompresentAddrow['road'];
      $nomprePostCode = $nompresentAddrow['post_code'];
      $nomprePostID = $nompresentAddrow['idPost_office'];
+     $nomprePostname = $nompresentAddrow['post_offc_name'];
      $nompreVilID = $nompresentAddrow['idvillage'];
+     $nompreVilname = $nompresentAddrow['village_name'];
      $nompreThanaID = $nompresentAddrow['idThana'];
+     $nompreThananame = $nompresentAddrow['thana_name'];
      $nompreDisID = $nompresentAddrow['idDistrict'];
+     $nompreDisname = $nompresentAddrow['district_name'];
      $nompreDivID = $nompresentAddrow['idDivision'];
+     $nompreDivname = $nompresentAddrow['division_name'];
           
      $sql_Padrs_sel = mysql_query("SELECT * FROM address, division, district, thana, post_office, village WHERE address_whom='nmn' AND adrs_cepng_id=$db_nomID AND address_type='Permanent'
                                                                     AND village_idvillage=idvillage AND post_idpost=idPost_office AND idDivision = Division_idDivision AND idDistrict= District_idDistrict AND idThana=address.Thana_idThana");
@@ -415,10 +370,15 @@ elseif (isset($_POST['submit5'])) {
      $nomperRode = $nompermenentAddrow['road'];
      $nomperPostCode = $nompermenentAddrow['post_code'];
      $nomperPostID = $nompermenentAddrow['idPost_office'];
+     $nomperPostname = $nompermenentAddrow['post_offc_name'];
      $nomperVilID = $nompermenentAddrow['idvillage'];
+     $nomperVilname = $nompermenentAddrow['village_name'];
      $nomperThanaID = $nompermenentAddrow['idThana'];
+     $nomperThananame = $nompermenentAddrow['thana_name'];
      $nomperDisID = $nompermenentAddrow['idDistrict'];
+     $nomperDisname = $nompermenentAddrow['district_name'];
      $nomperDivID = $nompermenentAddrow['idDivision'];
+     $nomperDivname = $nompermenentAddrow['division_name'];
      
      // *************************************** for education ****************************************************************************** 
      $p_count =0;
@@ -538,7 +498,8 @@ elseif (isset($_POST['submit5'])) {
                     <tr><td colspan="4" ></td></tr>
                    <tr>
                         <td >বাবার নাম </td>
-                        <td>:  <input class="box" type="text" id="employee_fatherName" name="employee_fatherName" value=<?php show($db_empFather);?>/></td>
+                        <td>:  <input class="box" type="text" id="employee_fatherName" name="employee_fatherName" value=<?php show($db_empFather);?> />
+                            <input type="hidden" name="employeeID" value="<?php echo $employeeID;?>" /></td>
                         <td>ছবি : </td>
                         <?php
                             if($picname == "") {
@@ -574,7 +535,7 @@ elseif (isset($_POST['submit5'])) {
                         <td>:  <input class="box" type="text" id="employee_natonality" name="employee_natonality" value=<?php show($db_empNation);?>/> </td>			
                     </tr>
                     <td>জন্মতারিখ</td>
-                    <?php
+                        <?php
                             if($db_empDOB == "") {
                         ?>
                         <td >: <input class="box" type="date" name="dob"  /></td>
@@ -652,38 +613,54 @@ elseif (isset($_POST['submit5'])) {
                         </td>                            
                         <td colspan="2" >
                             <table>
-                                
+                                 <tr>                       
+                                    <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                                    <td >:   <input class="box" type="text" id="ep_house" name="ep_house" value="<?php echo $perHouse;?>"/></td>
+                                </tr>
+                                <tr>                      
+                                    <td >বাড়ি নং</td>
+                                    <td>:   <input class="box" type="text" id="ep_house_no" name="ep_house_no" value="<?php echo $perHouseNo;?>"/></td>
+                                </tr>
+                                <tr>                       
+                                    <td >রোড নং</td>
+                                    <td>:   <input class="box" type="text" id="ep_road" name="ep_road" value="<?php echo $perRode;?>" /></td>
+                                </tr>
+                                <tr>
+                                    <td >পোষ্ট কোড</td>
+                                    <td>:   <input class="box" type="text" id="ep_post_code" name="ep_post_code" value="<?php echo $perPostCode;?>"/></td>
+                                </tr> 
+                                <tr>
+                                 <?php 
+                                    if($perDivID == "") { ?>
+                                    <td colspan="2"><?php getArea2($perDivID,$perDisID,$perThanaID,$perPostID,$perVilID); ?></td>
+                                    <?php }
+                                    else {?>
+                                    <tr>
+                                        <td >বিভাগ</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $perDivname;?> /></td>
+                                    </tr>
+                                    <tr>
+                                        <td >জেলা</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $perDisname;?> /></td>
+                                    </tr>
+                                    <tr>
+                                        <td >থানা</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $perThananame;?> /></td>
+                                    </tr>
+                                   <tr>
+                                        <td >পোস্টঅফিস</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $perPostname;?> /></td>
+                                    </tr>
+                                    <tr>
+                                        <td >গ্রাম/পাড়া/প্রোজেক্ট</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $perVilname;?> /></td>
+                                    </tr>
+                            <?php }?>
+                                </tr>
                             </table>
                         </td>
                     </tr>  
-                      <tr>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        <td >:   <input class="box" type="text" id="ep_house" name="ep_house" value="<?php echo $perHouse;?>"/></td>
-                    </tr>
-                    <tr>
-                        <td  >বাড়ি নং</td>
-                        
-                        <td >বাড়ি নং</td>
-                        <td>:   <input class="box" type="text" id="ep_house_no" name="ep_house_no" value="<?php echo $perHouseNo;?>"/></td>
-                    </tr>
-                    <tr>
-                        <td >রোড নং</td>
-                        
-                        <td >রোড নং</td>
-                        <td>:   <input class="box" type="text" id="ep_road" name="ep_road" value="<?php echo $perRode;?>" /></td>
-                    </tr>
-                    <tr>
-                        <td >পোষ্ট কোড</td>
-                       
-                        <td >পোষ্ট কোড</td>
-                        <td>:   <input class="box" type="text" id="ep_post_code" name="ep_post_code" value="<?php echo $perPostCode;?>"/></td>
-                    </tr> 
-                    <tr>
-                       
-                        <td colspan="2"><?php getArea2($perDivID,$perDisID,$perThanaID,$perPostID,$perVilID); ?></td>
-                    </tr>
+                     
                     <tr>                    
                         <td colspan="4" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit1" value="সেভ করুন" />
                             <input class="btn" style =" font-size: 12px" type="reset" name="reset" value="রিসেট করুন" /></td>                           
@@ -702,33 +679,40 @@ elseif (isset($_POST['submit5'])) {
                     </tr>
                     <tr>
                         <td >নমিনির নাম</td>
-                        <td>:  <input class="box" type="text" id="nominee_name" name="nominee_name" value="<?php echo $db_nomName;?>"/><input type="hidden" name="nomineeID" value="<?php echo $db_nomID?>"/></td>	
+                        <td>:  <input class="box" type="text" id="nominee_name" name="nominee_name" value=<?php show($db_nomName);?> /><input type="hidden" name="nomineeID" value="<?php echo $db_nomID?>"/></td>	
                         <td>পাসপোর্ট ছবি </td>
+                        <?php
+                            if($nompicName == "") { ?>
                         <td >:  <img src="<?php echo $db_nomPic;?>" width="80px" height="80px"/><input type="hidden" name="nomimage" value="<?php echo $nompicName;?>"/> &nbsp;<input class="box" type="file" id="nominee_picture" name="nominee_picture" style="font-size:10px;"/></td>
+                        <?php }
+                            else { ?>
+                        <td >:  <img src="<?php echo $db_nomPic;?>" width="80px" height="80px"/><input type="hidden" name="nomimage" value="<?php echo $nompicName;?>"/> </td>
+                        <?php }?>   
                     </tr>     
                     <tr>
                         <td >বয়স</td>
-                        <td>:  <input class="box" type="text" id="nominee_age" name="nominee_age" value="<?php echo $db_nomAge;?>"/></td>
+                        <td>:  <input class="box" type="text" id="nominee_age" name="nominee_age" value=<?php show($db_nomAge);?> />
+                        <input type='hidden' name='employeeID' value="<?php echo $employeeID;?>" /></td>
                     </tr>     
                     <tr>
                         <td >সম্পর্ক </td>
-                        <td>:  <input class="box" type="text" id="nominee_relation" name="nominee_relation" value="<?php echo $db_nomRel;?>"/> </td>			
+                        <td>:  <input class="box" type="text" id="nominee_relation" name="nominee_relation" value=<?php show($db_nomRel);?> /> </td>			
                     </tr>
                     <tr>
                         <td >মোবাইল নং</td>
-                        <td>:  <input class="box" type="text" id="nominee_mobile" name="nominee_mobile" value="<?php echo $db_nomMobl;?>"/></td>			
+                        <td>:  <input class="box" type="text" id="nominee_mobile" name="nominee_mobile" value=<?php show($db_nomMobl);?>/></td>			
                     </tr>
                     <tr>
                         <td >ইমেইল</td>
-                        <td>:  <input class="box" type="text" id="nominee_email" name="nominee_email" value="<?php echo $db_nomEmail;?>"/></td>			
+                        <td>:  <input class="box" type="text" id="nominee_email" name="nominee_email" value=<?php show($db_nomEmail);?> /></td>			
                     </tr>
                     <tr>
                         <td >জাতীয় পরিচয়পত্র নং</td>
-                        <td>:  <input class="box" type="text" id="nominee_national_ID" name="nominee_national_ID" value="<?php echo $db_nomNID;?>"/></td>			
+                        <td>:  <input class="box" type="text" id="nominee_national_ID" name="nominee_national_ID" value=<?php show($db_nomNID);?> /></td>			
                     </tr>
                     <tr>
                         <td >পাসপোর্ট আইডি নং</td>
-                        <td>:  <input class="box" type="text" id="nominee_passport_ID" name="nominee_passport_ID" value="<?php echo $db_nomPID;?>"/></td>			
+                        <td>:  <input class="box" type="text" id="nominee_passport_ID" name="nominee_passport_ID" value=<?php show($db_nomPID);?> /></td>			
                     </tr> 
                     <tr>
                         <td colspan="4" ><hr /></td>
@@ -737,33 +721,103 @@ elseif (isset($_POST['submit5'])) {
                         <td  colspan="2" style =" font-size: 14px"><b>বর্তমান ঠিকানা </b></td>                            
                         <td colspan="2" style =" font-size: 14px"><b> স্থায়ী ঠিকানা   </b></td>
                     </tr>
-                    <tr>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        <td >:   <input class="box" type="text" id="n_house" name="n_house" value="<?php echo $nompreHouse;?>"/></td>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        <td >:   <input class="box" type="text" id="np_house" name="np_house" value="<?php echo $nomperHouse;?>"/></td>
-                    </tr>
-                    <tr>
-                        <td  >বাড়ি নং</td>
-                        <td >:   <input class="box" type="text" id="n_house_no" name="n_house_no" value="<?php echo $nompreHouseNo;?>"/></td>
-                        <td >বাড়ি নং</td>
-                        <td>:   <input class="box" type="text" id="np_house_no" name="np_house_no" value="<?php echo $nomperHouseNo;?>"/></td>
-                    </tr>
-                    <tr>
-                        <td >রোড নং</td>
-                        <td>:   <input class="box" type="text" id="n_road" name="n_road" value="<?php echo $nompreRode;?>"/> </td>
-                        <td >রোড নং</td>
-                        <td>:   <input class="box" type="text" id="np_road" name="np_road" value="<?php echo $nomperRode;?>"/></td>
-                    </tr>
-                    <tr>
-                        <td >পোষ্ট কোড</td>
-                        <td>:   <input class="box" type="text" id="n_post_code" name="n_post_code" value="<?php echo $nomprePostCode;?>"/></td>
-                        <td >পোষ্ট কোড</td>
-                        <td>:   <input class="box" type="text" id="np_post_code" name="np_post_code" value="<?php echo $nomperPostCode;?>"/></td>
-                    </tr>
-                     <tr>
-                        <td colspan="2"><?php getArea3($nompreDivID,$nompreDisID,$nompreThanaID,$nomprePostID,$nompreVilID); ?></td>
-                        <td colspan="2"><?php getArea4($nomperDivID,$nomperDisID,$nomperThanaID,$nomperPostID,$nomperVilID); ?></td>
+                    <tr>	
+                        <td  colspan="2" >
+                            <table>
+                                <tr>
+                                   <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                                    <td >: <input class="box" type="text" id="n_house" name="n_house" value="<?php echo $nompreHouse;?>"/></td>
+                                </tr>
+                                <tr>
+                                    <td  >বাড়ি নং</td>
+                                    <td >: <input class="box" type="text" id="n_house_no" name="n_house_no" value="<?php echo $nompreHouseNo;?>"/></td>
+                                </tr>
+                                <tr>
+                                    <td >রোড নং</td>
+                                    <td>:   <input class="box" type="text" id="n_road" name="n_road" value="<?php echo $nompreRode;?>"/> </td>
+                                </tr>
+                                <tr>
+                                    <td >পোষ্ট কোড</td>
+                                    <td>:   <input class="box" type="text" id="n_post_code" name="n_post_code" value="<?php echo $nomprePostCode;?>"/></td>
+                                </tr>
+                                <?php 
+                                    if($nompreDivID == "") { ?>
+                                    <tr>
+                                        <td colspan="2"><?php getArea3($nompreDivID,$nompreDisID,$nompreThanaID,$nomprePostID,$nompreVilID); ?></td>
+                                    </tr>
+                                    <?php }
+                                    else {?>
+                                    <tr>
+                                        <td >বিভাগ</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $nompreDivname;?> /></td>
+                                    </tr>
+                                    <tr>
+                                        <td >জেলা</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $nompreDisname;?> /></td>
+                                    </tr>
+                                    <tr>
+                                        <td >থানা</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $nompreThananame;?> /></td>
+                                    </tr>
+                                   <tr>
+                                        <td >পোস্টঅফিস</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $nomprePostname;?> /></td>
+                                    </tr>
+                                    <tr>
+                                        <td >গ্রাম/পাড়া/প্রোজেক্ট</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $nompreVilname;?> /></td>
+                                    </tr>
+                                <?php }?>
+                             </table>
+                        </td>                            
+                        <td colspan="2" >
+                            <table>
+                                <tr>
+                                       <td width="26%"  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                                       <td width="28%" >: <input class="box" type="text" id="np_house" name="np_house" value="<?php echo $nomperHouse;?>"/></td>
+                                 </tr>
+                                        <tr>
+                                            <td >বাড়ি নং</td>
+                                            <td>: <input class="box" type="text" id="np_house_no" name="np_house_no" value="<?php echo $nomperHouseNo;?>"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td >রোড নং</td>
+                                            <td>:   <input class="box" type="text" id="np_road" name="np_road" value="<?php echo $nomperRode;?>"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td >পোষ্ট কোড</td>
+                                            <td>:   <input class="box" type="text" id="np_post_code" name="np_post_code" value="<?php echo $nomperPostCode;?>"/></td>
+                                        </tr>
+                               <?php 
+                                    if($nomperDivID == "") { ?>
+                                    <tr>
+                                        <td colspan="2"><?php getArea4($nomperDivID,$nomperDisID,$nomperThanaID,$nomperPostID,$nomperVilID); ?></td>
+                                    </tr>
+                                    <?php }
+                                    else {?>
+                                    <tr>
+                                        <td >বিভাগ</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $nomperDivname;?> /></td>
+                                    </tr>
+                                    <tr>
+                                        <td >জেলা</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $nomperDisname;?> /></td>
+                                    </tr>
+                                    <tr>
+                                        <td >থানা</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $nomperThananame;?> /></td>
+                                    </tr>
+                                   <tr>
+                                        <td >পোস্টঅফিস</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $nomperPostname;?> /></td>
+                                    </tr>
+                                    <tr>
+                                        <td >গ্রাম/পাড়া/প্রোজেক্ট</td>
+                                        <td>: <input class="box" type="text" readonly value=<?php echo $nomperVilname;?> /></td>
+                                    </tr>
+                                <?php }?>
+                            </table>
+                        </td>
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-top: 10px; padding-left: 250px;padding-bottom: 5px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit2" value="সেভ করুন" />

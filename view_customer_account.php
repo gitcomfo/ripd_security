@@ -523,15 +523,15 @@ if(strlen($p_mobile) == 11)
      $perRode = $permenentAddrow['road'];
      $perPostCode = $permenentAddrow['post_code'];
      $perPostID = $permenentAddrow['idPost_office'];
-     $perPostname = $presentAddrow['post_offc_name'];
+     $perPostname = $permenentAddrow['post_offc_name'];
      $perVilID = $permenentAddrow['idvillage'];
-     $perVilname = $presentAddrow['village_name'];
+     $perVilname = $permenentAddrow['village_name'];
      $perThanaID = $permenentAddrow['idThana'];
-     $perThananame = $presentAddrow['thana_name'];
+     $perThananame = $permenentAddrow['thana_name'];
      $perDisID = $permenentAddrow['idDistrict'];
-     $perDisname = $presentAddrow['district_name'];
+     $perDisname = $permenentAddrow['district_name'];
      $perDivID = $permenentAddrow['idDivision'];
-      $perDivname = $presentAddrow['division_name'];
+      $perDivname = $permenentAddrow['division_name'];
 
      $sql_custG_adrs_sel = mysql_query("SELECT * FROM address, division, district, thana, post_office, village WHERE address_whom='cust_prnt' AND adrs_cepng_id=$db_custAcID AND address_type='Present'
                                                                     AND village_idvillage=idvillage AND post_idpost=idPost_office AND idDivision = Division_idDivision AND idDistrict= District_idDistrict AND idThana=address.Thana_idThana");
