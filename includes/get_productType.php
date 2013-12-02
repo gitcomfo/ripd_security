@@ -4,7 +4,7 @@ error_reporting(0);
 //get product name
 $pc_id = $_GET['pcid'];
 if ($pc_id != null) {
-    $product_type_sql = mysql_query("SELECT DISTINCT pro_type, idproduct_catagory FROM $dbname.product_catagory where pro_cat_code='$pc_id' ");
+    $product_type_sql = mysql_query("SELECT DISTINCT pro_type, idproduct_catagory FROM product_catagory where pro_cat_code='$pc_id' ");
     $function = "getproduct_brand();getproduct_class();";
     echo "<select  class='box2' style = 'border: 1px gray inset;width: 150px;' name='product_type' id='product_type' onchange='$function'>
                     <option value='all'>- প্রোডাক্ট টাইপ -</option>";
@@ -19,7 +19,8 @@ if ($pc_id != null) {
 $pt_id = $_GET['ptid'];
 if ($pt_id != null) {
     $function = "getproduct_unit()";
-    $product_brand_sql = mysql_query("SELECT DISTINCT pro_brand_or_grp FROM  $dbname.product_chart WHERE product_catagory_idproduct_catagory=$pt_id");
+    $product_brand_sql = mysql_query("SELECT DISTINCT pro_brand_or_grp FROM product_chart WHERE product_catagory_idproduct_catagory= 
+        ANY(SELECT idproduct_catagory FROM product_catagory WHERE pro_cat_code= '$pt_id')");
    
     echo ": <select  class='box2' style = 'border: 1px gray inset;width: 150px;' name='product_brand_name' id='product_brand_name' onchange='$function'>
                     <option value='0'>- ব্র্যান্ড/গ্রুপ -</option>";
