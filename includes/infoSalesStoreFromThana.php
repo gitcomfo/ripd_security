@@ -4,7 +4,7 @@
     <span id="office">
         <br /><br />
         <div>
-            <table id="office_info_filter" border="1" align="center" width= 100%" cellpadding="5px" cellspacing="0px">
+            <table id="office_info_filter" border="1" align="center" width= 99%" cellpadding="5px" cellspacing="0px">
                 <thead>
                     <tr align="left" id="table_row_odd">
                         <th><?php echo "সেলস স্টোর নং"; ?></th>

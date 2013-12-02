@@ -62,8 +62,8 @@ if (isset($_POST['pro_submit'])) {
     }
 </script>
         <div class="main_text_box">
-            <div style="padding-left: 112px;"><a href="product_info_management.php"><b>ফিরে যান</b></a></div>
-            <div>           
+        <div style="padding-left: 112px;"><a href="product_info_management.php"><b>ফিরে যান</b></a><a style="padding-left: 565px;" href="make_product_details_info.php"><b>প্রোডাক্ট ইনফরমেশন ইন</b></a></div>
+       <div>           
                 <form method="POST" onsubmit="" >	
                     <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          
                         <tr><th style="text-align: center" colspan="2"><h1>মেইক প্রোডাক্ট ক্যাটাগরি এন্ড টাইপ</h1>
