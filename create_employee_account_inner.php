@@ -77,14 +77,14 @@ if (isset($_POST['submit1'])) {
         echo "Invalid file format.";
     }
     mysql_query("START TRANSACTION");
-    $sql_update_employee = mysql_query("UPDATE $dbname.employee_information SET employee_fatherName='$employee_fatherName', 
+    $sql_update_employee = mysql_query("UPDATE employee_information SET employee_fatherName='$employee_fatherName', 
                                      employee_motherName='$employee_motherName', employee_spouseName='$employee_spouseName', 
                                      employee_occupation='$employee_occupation', employee_religion='$employee_religion', employee_natonality='$employee_natonality',
                                      employee_national_ID='$employee_national_ID', employee_passport='$employee_passport', employee_date_of_birth='$dob',
                                      employee_birth_certificate_No='$employee_birth_certificate_No' ,emplo_scanDoc_signature='$sing_path', emplo_scanDoc_picture='$image_path',  scanDoc_finger_print='$finger_path'
                                      WHERE idEmployee_information=$g_id");
 
-    $result = mysql_query("SELECT  * FROM $dbname.employee_information WHERE idEmployee_information='$g_id'");
+    $result = mysql_query("SELECT  * FROM employee_information WHERE idEmployee_information='$g_id'");
     $employee_id = mysql_fetch_array($result);
     $emp = $employee_id['Employee_idEmployee'];
     //Current Address Infromation
@@ -224,10 +224,11 @@ mysql_query("START TRANSACTION");
         mysql_query("ROLLBACK");
         $msg = "ভুল হয়েছে";
     }
-}elseif (isset($_POST['submit4'])) {
-    $result = mysql_query("Select  * from $dbname.employee_information where Employee_idEmployee='1'");
+}
+elseif (isset($_POST['submit4'])) {
+    $result = mysql_query("SELECT  * FROM $dbname.employee_information WHERE idEmployee_information='$g_id'");
     $employee_id = mysql_fetch_array($result);
-    $emp3 = $employee_id['idEmployee_information'];
+    $emp3 = $employee_id['Employee_idEmployee'];
     $pathArray = array();
     for ($i = 1; $i < 12; $i++) {
         $scan_document = "";
@@ -235,10 +236,9 @@ mysql_query("START TRANSACTION");
         $scanDoc = "scanDoc" . $i;
         $files_sequence = array(1 => "ssc", "nationalID", "hsc", "birth_certificate", "onars", "chairman_cert", "masters", "other");
         $file_name = $files_sequence[$i];
-        $t = time();
         $extension = end(explode(".", $_FILES[$scanDoc]['name']));
-        $scan_doc_name = $account_number . "_" . $file_name . "_" . $t . "_" . $_FILES[$scanDoc]['name'];
-        $scan_doc_path_temp = "images/scan_documents/" . $scan_doc_name;
+        $scan_doc_name = $file_name."-".$emp3."-".$_FILES[$scanDoc]['name'];
+        $scan_doc_path_temp = "scaned/" . $scan_doc_name;
         if (($_FILES[$scanDoc]['size'] < 999999999999) && in_array($extension, $allowedExts)) {
             move_uploaded_file($_FILES[$scanDoc]['tmp_name'], $scan_doc_path_temp);
             $scan_document = $scan_doc_path_temp;
@@ -249,10 +249,9 @@ mysql_query("START TRANSACTION");
             echo "Invalid file format.</br>";
         }
     }
-    $sql_images_scan_doc = mysql_query("INSERT INTO $dbname.ep_certificate_scandoc_extra
-                                 (emplo_scanDoc_national_id, emplo_scanDoc_birth_certificate, emplo_scanDoc_chairman_certificate, scanDoc_ssc, scanDoc_hsc, scanDoc_onars, scanDoc_masters, scanDoc_other, emp_type, emp_id)
-                                 VALUES('$pathArray[2]', '$pathArray[4]', '$pathArray[6]', '$pathArray[1]', '$pathArray[3]', 
-                                 '$pathArray[5]',  '$pathArray[7]', '$pathArray[8]', 'emp','$emp3')");
+    $sql_images_scan_doc = mysql_query("INSERT INTO ep_certificate_scandoc_extra
+                                 (emplo_scanDoc_national_id, emplo_scanDoc_birth_certificate, emplo_scanDoc_chairman_certificate, scanDoc_ssc, scanDoc_hsc, scanDoc_hons, scanDoc_masters, scanDoc_other, emp_type, ep_id)
+                                 VALUES('$pathArray[2]', '$pathArray[4]', '$pathArray[6]', '$pathArray[1]', '$pathArray[3]', '$pathArray[5]',  '$pathArray[7]', '$pathArray[8]', 'emp','$emp3')");
     if ($sql_images_scan_doc) {
         $msg_scan_doc = "তথ্য সংরক্ষিত হয়েছে";
     } else {
