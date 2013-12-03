@@ -288,7 +288,6 @@ function passminlength(pass)
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
             {
                 document.getElementById("usernamecheck").innerHTML = xmlhttp.responseText;
-                document.getElementById('save').disabled = false;
             }
         }
         xmlhttp.open("GET", "includes/checkUserName.php?strkey=" + uname, true);

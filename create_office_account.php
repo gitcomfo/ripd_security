@@ -4,6 +4,7 @@ include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once  'includes/makeAccountNumbers.php';
 include_once  'includes/checkAccountNo.php';
+include_once 'includes/email_conf.php';
 $RaccNo = getRoAccount();
 $PwaccNo = getPwAccount();
 
@@ -14,7 +15,6 @@ if(isset($_POST['submit0']))
     $br_name = $_POST['branch_name'];
     $off_add = $_POST['office_address'];
     $off_no = $_POST['office_no'];
-    $mail = $_POST['office_mail'];
     $off_acc = $_POST['office_acc'];
     $accType = current(explode("-", $off_acc));
     $off_acc1 = checkAccountNo2($off_acc,$accType);
@@ -40,22 +40,29 @@ if(isset($_POST['submit0']))
       }
       elseif (($selected_type == 'pwr') && $topparent_id != 0) { $topparent_id = $topparent_id;}
     $thana = $_POST['thana_id'];
-    
+    $emailusername = str_replace("-", "", $off_acc1);
+    $ripdemailid = $emailusername . "@ripduniversal.com";
+    $passwrd = $emailusername;
+    //************************* create official email *************************************************
+             $email_create_status = CreateEmailAccount($emailusername, $passwrd);
+            if ($email_create_status != '777') {
+                $ripdemailid = "";
+            }
     mysql_query("START TRANSACTION");
    
-    $sql= "INSERT INTO ". $dbname .".`office` (`office_type` ,`office_selection`, `parent_id`, `top_parent`, `office_name` ,`office_number` ,`account_number` ,`branch_name` ,`office_email` ,`Thana_idThana`,`office_details_address` ) 
-            VALUES ( '$off_type','$selected_type', '$parent_id','$topparent_id',  '$name','$off_no' , '$off_acc1', '$br_name','$mail' , '$thana', '$off_add')";
+    $sql= "INSERT INTO `office` (`office_type` ,`office_selection`, `parent_id`, `top_parent`, `office_name` ,`office_number` ,`account_number` ,`branch_name` ,`office_email` ,email_password, `Thana_idThana`,`office_details_address` ) 
+            VALUES ( '$off_type','$selected_type', '$parent_id','$topparent_id',  '$name','$off_no' , '$off_acc1', '$br_name','$ripdemailid' ,'$passwrd', '$thana', '$off_add')";
     $reslt=mysql_query($sql);
     $off = mysql_insert_id();
     
-     $ssql = "INSERT INTO ". $dbname .".`ons_relation` ( `catagory` ,`insert_date` ,`add_ons_id`) VALUES (  'office', NOW(), '$off');";
+     $ssql = "INSERT INTO `ons_relation` ( `catagory` ,`insert_date` ,`add_ons_id`) VALUES (  'office', NOW(), '$off');";
     $sreslt = mysql_query($ssql);
     $ons = mysql_insert_id();
     
     $b_space = $_POST['office_space'];
     $b_type = $_POST['building_type'];
     $b_floor = $_POST['floor_number'];
-    $isql = "INSERT INTO ". $dbname .".`ons_information` ( `space` ,`building_type` ,`floor` ,`ons_relation_idons_relation`) VALUES ( '$b_space', '$b_type', '$b_floor', '$ons');";
+    $isql = "INSERT INTO `ons_information` ( `space` ,`building_type` ,`floor` ,`ons_relation_idons_relation`) VALUES ( '$b_space', '$b_type', '$b_floor', '$ons');";
     $ireslt = mysql_query($isql);
       
      $rent1 = $_POST['office_rent1'];
@@ -478,10 +485,10 @@ function getParentOfiice(str_key) // for searching parent offices
                         <td>অফিসের নাম্বার</td>
                         <td>:    <input  class ="textfield" type="text" id="office_no" name="office_no" /></td>
                     </tr>
-                     <tr>
+<!--                     <tr>
                         <td>অফিসের ইমেইল</td>
                         <td>:    <input  class ="textfield" type="text" id="office_mail" name="office_mail" onblur="check(this.value)"  /><em> (ইংরেজিতে লিখুন)</em><div id="error_msg" style="margin-left: 5px"></div></td>
-                    </tr>
+                    </tr>-->
                     <tr>
                         <td colspan="2">অফিস সিলেক্ট করুন <input  class ="textfield" type="radio"  id="whatoffice" name="whatoffice" value ="ripd" />রিপড অফিস 
                             <input  class ="textfield" type="radio" id="whatoffice" name="whatoffice" value ="pwr"  /> পাওয়ারস্টোর অফিস</td>

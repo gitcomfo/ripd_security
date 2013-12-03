@@ -11,6 +11,7 @@
                         <th><?php echo "সেলস স্টোরের নাম"; ?></th>
                         <th><?php echo "সেলস স্টোর নম্বর"; ?></th>
                         <th><?php echo "একাউন্ট নম্বর"; ?></th>
+                         <th><?php echo "ইমেইল"; ?></th>
                         <th><?php echo "ঠিকানা"; ?></th>
                         <th><?php echo "করনীয়"; ?></th>
                         </tr>
@@ -26,11 +27,13 @@
                         $db_salesStoreNumber = $row_officeNcontact['salesStore_number'];
                         $db_salesStoreAN = $row_officeNcontact['account_number'];
                         $db_salesStoreAddress = $row_officeNcontact['salesStore_details_address'];
+                        $db_salesStoreEmail = $row_officeNcontact['salesStore_email'];
                         $db_salesID = $row_officeNcontact['idSales_store'];
                         echo "<tr>";
                          echo "<td>$db_salesStoreName</td>";
                         echo "<td>$db_salesStoreNumber</td>";
                         echo "<td>$db_salesStoreAN</td>";
+                        echo "<td>$db_salesStoreEmail</td>";
                         echo "<td>$db_salesStoreAddress</td>";
                         $v = base64_encode($db_salesID);
                         echo "<td><a href='update_salesStore.php?id=$v'>আপডেট</a></td>";
