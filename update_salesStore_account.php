@@ -31,14 +31,13 @@ include_once 'includes/header.php';
         xmlhttp.send();
     }
 </script>
-<div class="column6">
     <div class="main_text_box">      
         <div style="padding-left: 110px;"><a href="office_sstore_management.php"><b>ফিরে যান</b></a></br></br>
-        <div style="border: 1px solid grey;">
+        <div style="border: 1px solid grey;width: 90%;">
             <table  style=" width: 100%; margin-bottom: 10px;" > 
                     <tr><th style="text-align: center; background-image: radial-gradient(circle farthest-corner at center top , #FFFFFF 0%, #0883FF 100%);height: 45px;padding-bottom: 5px;padding-top: 5px;" colspan="2" ><h1>আপডেট সেলস স্টোর ইনফরমেশন</h1></th></tr>
             </table>
-            <fieldset id="fieldset_style" style=" width: 90% !important; margin-left: 30px !important;" >
+            <fieldset id="fieldset_style" style=" width: 95% !important; margin-left: 20px !important;" >
 
     
 
@@ -56,6 +55,7 @@ include_once 'includes/header.php';
                         <th><?php echo "সেলস স্টোরের নাম"; ?></th>
                         <th><?php echo "সেলস স্টোর নম্বর"; ?></th>
                         <th><?php echo "একাউন্ট নম্বর"; ?></th>
+                        <th><?php echo "ইমেইল"; ?></th>
                         <th><?php echo "ঠিকানা"; ?></th>
                         <th><?php echo "করনীয়"; ?></th>
                     </tr>
@@ -77,6 +77,7 @@ include_once 'includes/header.php';
                         echo "<td>$db_salesStoreName</td>";
                         echo "<td>$db_salesStoreNumber</td>";
                         echo "<td>$db_salesStoreAN</td>";
+                        echo "<td>$db_salesStoreEmail</td>";
                         echo "<td>$db_salesStoreAddress</td>";
                          $v = base64_encode($db_salesID);
                         echo "<td><a href='update_salesStore.php?id=$v'>আপডেট</a></td>";
@@ -91,7 +92,6 @@ include_once 'includes/header.php';
         </div>
             </div>
     </div>
-</div>
 
 <script type="text/javascript">
     var filter = new DG.Filter({

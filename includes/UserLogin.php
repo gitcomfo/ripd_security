@@ -49,6 +49,7 @@ function userLogin($Name, $Password) {
                 //......................... find out assingend office'owner','customer','employee','programmer','presenter','trainer','patent'
                 $logedInUserId = $myrow['idUser'];
                 $logedInUserType = $myrow['user_type'];
+                $_SESSION['userType'] = $logedInUserType;
                 if ($logedInUserType == 'employee' || $logedInUserType == 'presenter' || $logedInUserType == 'programmer' || $logedInUserType == 'trainer') {
                     $queryemp_ons = mysql_query("SELECT * FROM employee, ons_relation WHERE cfs_user_idUser = '$logedInUserId' AND emp_ons_id=idons_relation");
                     $emp_onsrow = mysql_fetch_assoc($queryemp_ons);

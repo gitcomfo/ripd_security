@@ -12,6 +12,7 @@
                         <th><?php echo "অফিসের নাম"; ?></th>
                         <th><?php echo "অফিসের নাম্বার"; ?></th>
                         <th><?php echo "অফিসের অ্যাকাউন্ট নাম্বার"; ?></th>
+                        <th><?php echo "অফিসের ইমেইল"; ?></th>
                         <th><?php echo "অফিসের ঠিকানা"; ?></th>
                         <th><?php echo "করনীয়"; ?></th>
                     </tr>
@@ -35,11 +36,13 @@
                         $db_offNumber = $row_officeNcontact['office_number'];
                         $db_offAN = $row_officeNcontact['account_number'];
                         $db_offAddress = $row_officeNcontact['office_details_address'];
+                        $db_offemail = $row_officeNcontact['office_email'];
                         $db_offID = $row_officeNcontact['idOffice'];
                         echo "<tr>";
                         echo "<td>$db_offName</td>";
                         echo "<td>$db_offNumber</td>";
                         echo "<td>$db_offAN</td>";
+                        echo "<td>$db_offemail</td>";
                         echo "<td>$db_offAddress</td>";
                         $v = base64_encode($db_offID);
                         echo "<td><a href='update_account_off_pstore.php?id=$v&type=$gettype'>আপডেট</a></td>";

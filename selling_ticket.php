@@ -574,9 +574,9 @@ if ($_GET['opt']=='submit_ticket') {
                             <td colspan="2" style="padding-left: 0;">
                                 <div id="front" style="width: 768px; height: 384px; border: blue dashed 2px; margin: 0 auto;background-image: url(images/watermark.png);background-repeat: no-repeat;background-size:100% 100%; ">
                                     <div id="front_left" style="width: 192px; height: 384px;border-right:blue dotted 1px; float: left;">
-                                         <div style="width: 180px; float: left;padding-left: 4px;text-align: center;position: absolute;top: 300px;left: 220px;-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg); "><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;"><span style="color: black;"><?php echo $p_name;?></span></span></div>
-                                         <div id="entry" style="width: 180px;float:left;padding-top: 5px;text-align: center;position: absolute;top: 300px;left: 220px;-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg); "><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;">এন্ট্রি পাস</span></br></div>
-                                          <div class='rotare' id="owner_info" style="width: 180px; float: left;padding-left: 4px;padding-top: 10px;position: absolute;top: 300px;left: 220px;-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg); ">
+                                         <div style="width: 180px; float: left;padding-left: 4px;text-align: center; "><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;"><span style="color: black;"><?php echo $p_name;?></span></span></div>
+                                         <div id="entry" style="width: 180px;float:left;padding-top: 5px;text-align: center;"><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;">এন্ট্রি পাস</span></br></div>
+                                          <div class='rotare' id="owner_info" style="width: 180px; float: left;padding-left: 4px;padding-top: 10px;">
                                             <span >স্বত্তাধিকারীর নামঃ </span></br>
                                             <span>স্বত্তাধিকারীর মোবাইল নাম্বারঃ </span></br>
                                             <span style="text-align: right;">আসন নাম্বারঃ ০০</span></br>
@@ -634,7 +634,7 @@ if ($_GET['opt']=='submit_ticket') {
                         </tr>
                           <tr>
                             <td style="width: 40%;color: darkblue;"> আসন নাম্বার</td>
-                            <td>: <div id="showSeat" style="overflow: scroll; height:auto; width: 300px;border:gray inset 1px;padding: 3px;background-color:#CDE3FA"><?php showSeats($P_value);?></div>
+                            <td>: <div id="showSeat" style="overflow: scroll; height:auto; width: 400px;border:gray inset 1px;padding: 3px;background-color:#CDE3FA"><?php showSeats($P_value);?></div>
                             </td>                           
                         </tr>
                         <?php $avaiable= countSeat($P_value); 
@@ -646,7 +646,7 @@ if ($_GET['opt']=='submit_ticket') {
                         </tr>
                         <tr>
                             <td style="width: 40%;color: darkblue;">অতিরিক্ত খালি আসন নাম্বার</td>
-                            <td>: <div id="showSeat" style="overflow: scroll; height:auto; width: 300px;border:gray inset 1px;padding: 3px;background-color:#CDE3FA"><?php showXtraSeats($P_value);?></div></td>                           
+                            <td>: <div id="showSeat" style="overflow: scroll; height:auto; width: 400px;border:gray inset 1px;padding: 3px;background-color:#CDE3FA"><?php showXtraSeats($P_value);?></div></td>                           
                         </tr>
                         <?php }?>
                         <tr>                    

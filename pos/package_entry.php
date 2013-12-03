@@ -158,7 +158,7 @@ function searchPckg(str_key) // for all packages search
                }
                 else
                     {document.getElementById('searchResult').style.visibility = "visible";
-                document.getElementById('searchResult').setAttribute('style','position:absolute;top:36%;left:30.5%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('searchResult').setAttribute('style','position:absolute;top:41.5%;left:33%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('searchResult').innerHTML=xmlhttp.responseText;
         }
