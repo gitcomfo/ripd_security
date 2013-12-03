@@ -101,7 +101,7 @@ if (isset($_POST['submit'])) {
 <style type="text/css">@import "css/bush.css";</style>
 <script type="text/javascript" src="javascripts/product.js"></script>
 <script type="text/javascript">
-    function isfillinput()
+function isfillinput()
     {
         $('#pro_unit').blur(function(){
             if($(this).val().length != 0){
@@ -131,7 +131,7 @@ function makeProductName(unit)
 </script>
 
     <div class="main_text_box">
-        <div style="padding-left: 112px;"><a href="product_info_management.php"><b>ফিরে যান</b></a><a style="padding-left: 500px;" href="make_product_cat_type.php"><b>মেইক প্রোডাক্ট ক্যাটাগরি এন্ড টাইপ</b></a></div>
+        <div style="padding-left: 112px;"><a href="product_info_management.php"><b>ফিরে যান</b></a><a style="padding-left: 60%;" href="make_product_cat_type.php"><b>মেইক প্রোডাক্ট ক্যাটাগরি এন্ড টাইপ</b></a></div>
         <div>           
             <form method="POST" onsubmit ="" enctype="multipart/form-data" action="" id="product_form" name="product_form">	
                 <table class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          

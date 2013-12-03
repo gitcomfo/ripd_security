@@ -269,30 +269,40 @@ elseif (isset($_POST['submit2'])) {
 }
 elseif (isset($_POST['submit4'])) {
     $pathArray = array();
-    for ($i = 1; $i < 12; $i++) {
+    $p_scanname =$_POST['scan'];
+    
+    for ($i = 1; $i < 9; $i++) {
         $scan_document = "";
         $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG", "pdf"); //File Type
         $scanDoc = "scanDoc" . $i;
         $files_sequence = array(1 => "ssc", "nationalID", "hsc", "birth_certificate", "onars", "chairman_cert", "masters", "other");
         $file_name = $files_sequence[$i];
-        $t = time();
         $extension = end(explode(".", $_FILES[$scanDoc]['name']));
-        $scan_doc_name = $account_number . "_" . $file_name . "_" . $t . "_" . $_FILES[$scanDoc]['name'];
-        $scan_doc_path_temp = "images/scan_documents/" . $scan_doc_name;
+        $scan_doc_name =  $file_name."-".$proprietorID."-".$_FILES[$scanDoc]['name'];
+        $scan_doc_path_temp = "scaned/".$scan_doc_name;
         if (($_FILES[$scanDoc]['size'] < 999999999999) && in_array($extension, $allowedExts)) {
             move_uploaded_file($_FILES[$scanDoc]['tmp_name'], $scan_doc_path_temp);
             $scan_document = $scan_doc_path_temp;
             $pathArray[$i] = $scan_document;
         } elseif ($_FILES[$scanDoc]['size'] == 0) {
-            $pathArray[$i] = NULL;
+            $pathArray[$i] ="scaned/".$file_name."-".$proprietorID."-".$p_scanname[$i];
         } else {
             echo "Invalid file format.</br>";
         }
     }
-    $sql_images_scan_doc = mysql_query("INSERT INTO $dbname.ep_certificate_scandoc_extra
-                                 (emplo_scanDoc_national_id, emplo_scanDoc_birth_certificate, emplo_scanDoc_chairman_certificate, scanDoc_ssc, scanDoc_hsc, scanDoc_onars, scanDoc_masters, scanDoc_other, emp_type, emp_id)
+$sql_scandoc= mysql_query("SELECT * FROM ep_certificate_scandoc_extra WHERE ep_id=$proprietorID AND emp_type='pwr'");
+    if(mysql_num_rows($sql_scandoc) < 1)
+    {
+    $sql_images_scan_doc = mysql_query("INSERT INTO ep_certificate_scandoc_extra
+                                 (emplo_scanDoc_national_id, emplo_scanDoc_birth_certificate, emplo_scanDoc_chairman_certificate, scanDoc_ssc, scanDoc_hsc, scanDoc_hons, scanDoc_masters, scanDoc_other, emp_type, ep_id)
                                  VALUES('$pathArray[2]', '$pathArray[4]', '$pathArray[6]', '$pathArray[1]', '$pathArray[3]', 
                                  '$pathArray[5]',  '$pathArray[7]', '$pathArray[8]', 'pwr','$proprietorID')");
+    }
+    else {
+        $sql_images_scan_doc = mysql_query("UPDATE ep_certificate_scandoc_extra SET emplo_scanDoc_national_id= '$pathArray[2]', emplo_scanDoc_birth_certificate='$pathArray[4]',
+                                                emplo_scanDoc_chairman_certificate='$pathArray[6]', scanDoc_ssc='$pathArray[1]', scanDoc_hsc='$pathArray[3]',
+                                                scanDoc_hons='$pathArray[5]', scanDoc_masters=  '$pathArray[7]', scanDoc_other='$pathArray[8]' WHERE emp_type= 'pwr' AND ep_id='$proprietorID' ") or exit(mysql_error());
+    }
     if ($sql_images_scan_doc) {
         $msg = "তথ্য সংরক্ষিত হয়েছে";
     } else {
@@ -326,6 +336,7 @@ if(strlen($p_mobile) == 11)
      $db_proprietorName = $proprietorrow['account_name'];
      $db_proprietorAcc = $proprietorrow['account_number'];
      $db_proprietorMail = $proprietorrow['email'];
+     $db_empRipdMail = $proprietorrow['ripd_email'];
      $db_proprietorMob = $proprietorrow['mobile'];
      $db_proprietorFather = $proprietorrow['prop_father_name'];
      $db_proprietorMother = $proprietorrow['prop_motherName'];
@@ -435,6 +446,25 @@ if(strlen($p_mobile) == 11)
          $db_n_xmgpa [$n_count] = $nedu_row['gpa'];
          $n_count++;
      }
+      // **************************************** for প্রয়োজনীয় ডকুমেন্টস ***************************************************************************
+       $sql_scandoc= mysql_query("SELECT * FROM ep_certificate_scandoc_extra WHERE ep_id=$proprietorID AND emp_type='pwr'");
+        $scan_row = mysql_fetch_assoc($sql_scandoc);
+        $db_scan_NID = $scan_row['emplo_scanDoc_national_id'];
+        $NID_name = end(explode("-", $db_scan_NID));
+        $db_scan_DOB = $scan_row['emplo_scanDoc_birth_certificate'];
+        $DOB_name = end(explode("-", $db_scan_DOB));
+        $db_scan_CC = $scan_row['emplo_scanDoc_chairman_certificate'];
+        $CC_name = end(explode("-", $db_scan_CC));
+        $db_scan_ssc = $scan_row['scanDoc_ssc'];
+        $ssc_name = end(explode("-", $db_scan_ssc));
+        $db_scan_hsc = $scan_row['scanDoc_hsc'];
+        $hsc_name = end(explode("-", $db_scan_hsc));
+        $db_scan_hons = $scan_row['scanDoc_hons'];
+        $hons_name = end(explode("-", $db_scan_hons));
+        $db_scan_masters = $scan_row['scanDoc_masters'];
+        $masters_name = end(explode("-", $db_scan_masters));
+        $db_scan_other = $scan_row['scanDoc_other'];
+        $other_name = end(explode("-", $db_scan_other));
 ?>
 <title>প্রোপ্রাইটার অ্যাকাউন্ট</title>
 <style type="text/css">@import "css/bush.css";</style>
@@ -499,7 +529,11 @@ if(strlen($p_mobile) == 11)
                         <td>:   <input class='box' type='text' id='acc_num' name='acc_num' readonly value="<?php echo $db_proprietorAcc;?>"/></td>			
                     </tr>
                     <tr>
-                        <td >ই মেইল</td>
+                        <td>অফিশিয়াল ই মেইল</td>
+                        <td>:   <input class='box' style="width:220px;" type='text' readonly="" value="<?php echo $db_empRipdMail;?>" /></td>			
+                    </tr>
+                    <tr>
+                        <td >ব্যক্তিগত ই মেইল</td>
                        <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' value="<?php echo $db_proprietorMail;?>" /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
                     </tr>
                     <tr>
@@ -789,27 +823,27 @@ if(strlen($p_mobile) == 11)
                     </tr>                  
                     <tr>	
                         <td  style="width: 110px;" font-weight="bold" > এস.এস.সির সার্টিফিকেট</td>
-                        <td>:  <input class="box" type="file" id="scanDoc1" name="scanDoc1" style="font-size:10px;"/></td>
+                        <td>:  <img src="<?php echo $db_scan_ssc;?>" width="80px" height="80px"/><input type="hidden" name="scan[1]" value="<?php echo $ssc_name;?>"/> &nbsp;<input class="box5" type="file" id="scanDoc1" name="scanDoc1" style="font-size:10px;"/></td>
                         <td  font-weight="bold" > জাতীয় পরিচয়পত্র</td>
-                        <td>:  <input class="box" type="file" id="scanDoc2" name="scanDoc2" style="font-size:10px;"/></td>
+                        <td>: <img src="<?php echo $db_scan_NID;?>" width="80px" height="80px"/><input type="hidden" name="scan[2]" value="<?php echo $NID_name;?>"/> &nbsp;<input class="box5" type="file" id="scanDoc2" name="scanDoc2" style="font-size:10px;"/></td>
                     </tr>
                     <tr>	
                         <td  font-weight="bold"  style="width: 112px;">এইচ.এস.সির সার্টিফিকেট</td>
-                        <td>:  <input class="box" type="file" id="scanDoc3" name="scanDoc3" style="font-size:10px;"/></td>
+                        <td>: <img src="<?php echo $db_scan_hsc;?>" width="80px" height="80px"/><input type="hidden" name="scan[3]" value="<?php echo $hsc_name;?>"/> &nbsp;<input class="box5" type="file" id="scanDoc3" name="scanDoc3" style="font-size:10px;"/></td>
                         <td  font-weight="bold" >জন্ম সনদ</td>
-                        <td>:  <input class="box" type="file" id="scanDoc4" name="scanDoc4" style="font-size:10px;"/></td>
+                        <td>: <img src="<?php echo $db_scan_DOB;?>" width="80px" height="80px"/><input type="hidden" name="scan[4]" value="<?php echo $DOB_name;?>"/> &nbsp;<input class="box5" type="file" id="scanDoc4" name="scanDoc4" style="font-size:10px;"/></td>
                     </tr>
                     <tr>	
                         <td  font-weight="bold" >অনার্সের সার্টিফিকেট</td>
-                        <td>:  <input class="box" type="file" id="scanDoc5" name="scanDoc5" style="font-size:10px;"/></td>
+                        <td>: <img src="<?php echo $db_scan_hons;?>" width="80px" height="80px"/><input type="hidden" name="scan[5]" value="<?php echo $hons_name;?>"/> &nbsp;<input class="box5" type="file" id="scanDoc5" name="scanDoc5" style="font-size:10px;"/></td>
                         <td  font-weight="bold" >চারিত্রিক সনদ</td>
-                        <td>:  <input class="box" type="file" id="scanDoc6" name="scanDoc6" style="font-size:10px;"/></td>
+                        <td>: <img src="<?php echo $db_scan_CC;?>" width="80px" height="80px"/><input type="hidden" name="scan[6]" value="<?php echo $CC_name;?>"/> &nbsp;<input class="box5" type="file" id="scanDoc6" name="scanDoc6" style="font-size:10px;"/></td>
                     </tr>
                     <tr>	
                         <td  font-weight="bold" >মাস্টার্সের  সার্টিফিকেট</td>
-                        <td>:  <input class="box" type="file" id="scanDoc7" name="scanDoc7" style="font-size:10px;"/></td>
+                        <td>: <img src="<?php echo $db_scan_masters;?>" width="80px" height="80px"/><input type="hidden" name="scan[7]" value="<?php echo $masters_name;?>"/> &nbsp;<input class="box5" type="file" id="scanDoc7" name="scanDoc7" style="font-size:10px;"/></td>
                         <td  font-weight="bold" >অন্যান্য </td>
-                        <td>:  <input class="box" type="file" id="scanDoc8" name="scanDoc8" style="font-size:10px;"/></td>
+                        <td>: <img src="<?php echo $db_scan_other;?>" width="80px" height="80px"/><input type="hidden" name="scan[8]" value="<?php echo $other_name;?>"/> &nbsp;<input class="box5" type="file" id="scanDoc8" name="scanDoc8" style="font-size:10px;"/></td>
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-top: 10px; padding-left: 250px;padding-bottom: 5px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit4" value="সেভ করুন" />

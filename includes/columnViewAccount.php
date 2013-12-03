@@ -1,11 +1,8 @@
 <?php
-include_once './UserLogin.php';
-if($logedInUserType == 'customer')
-{
-    $view_link = "view_customer_account.php";
-}
-elseif ($logedInUserType == 'owner') { $view_link = "view_proprietor_account.php";}
-else { $view_link = "view_employee_account.php"; }
+$logedInUserType = $_SESSION['userType'];
+if($logedInUserType == 'customer') $view_link = "view_customer_account.php";
+elseif ($logedInUserType == 'owner') $view_link = "view_proprietor_account.php";
+else $view_link = "view_employee_account.php"; 
 ?>
 <div class="column1">
     <div class="left_box">
@@ -18,7 +15,7 @@ else { $view_link = "view_employee_account.php"; }
                     <li><a href="<?php echo $view_link;?>">ভিউ একাউন্ট</a></li>
                     <li><a href="amount_transfer.php">এমাউন্ট ট্রান্সফার</a></li>
                     <li><a href="#">চেক মেকিং</a></li>
-                    <li><a href="#">সিস্টেম ট্রি</a></li>
+                    <?php if($logedInUserType == 'customer') echo '<li><a href="systemtree.php">সিস্টেম ট্রি</a></li>';?>
                     <li><a href="password_change.php">পাসওয়ার্ড পরিবর্তন</a></li>
                     <li><a href="">ই-মেইল</a></li>
                 </ul>

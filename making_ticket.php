@@ -13,7 +13,6 @@ if(isset($_POST['submit']))
 {
     $place=$_POST['place'];
     $t_prize=$_POST['ticket_prize'];
-    $m_prize=$_POST['making_prize'];
     $seat=$_POST['number_of_seat'];
     $xtra_seat=$_POST['extra_seat'];
     $programID=$_POST['programID'];
@@ -25,7 +24,7 @@ if(isset($_POST['submit']))
     $P_description = $_POST['description'];
     $P_type = $_POST['type'];
     
-    $pupsql = "UPDATE `program` SET `program_location` = '$place',`total_seat` = '$seat',`extra_seat` = '$xtra_seat', `ticket_prize` = '$t_prize', `making_charge`=$m_prize, `subject`= '$P_description' WHERE `program`.`idprogram` = '$programID' ;";
+    $pupsql = "UPDATE `program` SET `program_location` = '$place',`total_seat` = '$seat',`extra_seat` = '$xtra_seat', `ticket_prize` = '$t_prize', `subject`= '$P_description' WHERE `program`.`idprogram` = '$programID' ;";
     $pusresult=mysql_query($pupsql) or exit('query failed: '.mysql_error());
 }
 ?>
@@ -147,16 +146,13 @@ $whoinbangla =  getProgramer($P_type);
                         <tr><th colspan="4" style="text-align: center;">টিকেট মেইকিং </th></tr>
                         <tr><td style="text-align: center"><span style="color: green;font-size: 15px;"><?php if($msg != '') {echo $msg;}?></span></td></tr>
                         <tr>
-                            <td>টিকেট প্রাইজঃ <span style="color: black;"><?php echo $t_prize;?> TK /Ticket</span></td>
+                            <td style="text-align: center;">টিকেট প্রাইজঃ <span style="color: black;"><?php echo $t_prize;?> TK /Ticket</span></td>
                         </tr>
                         <tr>
-                            <td>টিকেট মেইকিং চার্জঃ <span style="color: black;"><?php echo $m_prize;?> TK/Ticket</span></td>
+                            <td style="text-align: center;">মোট আসন সংখ্যাঃ <span style="color: black;"><?php echo $seat;?></span></td>
                         </tr>
                         <tr>
-                            <td>মোট আসন সংখ্যাঃ <span style="color: black;"><?php echo $seat;?></span></td>
-                        </tr>
-                        <tr>
-                            <td>অতিরিক্ত আসন সংখ্যাঃ <span style="color: black;"><?php echo $xtra_seat;?></span></td>
+                            <td style="text-align: center;">অতিরিক্ত আসন সংখ্যাঃ <span style="color: black;"><?php echo $xtra_seat;?></span></td>
                         </tr>
                         <tr>  
                             <td colspan="2" style="padding-left: 0;">
@@ -266,10 +262,6 @@ $whoinbangla =  getProgramer($P_type);
                     <tr>
                         <td>টিকেট প্রাইজ</td>
                         <td>:    <input  class="box" type="text" id="ticket_prize" name="ticket_prize" onkeypress="return checkIt(event)" /> TK/ Ticket<em> (ইংরেজিতে লিখুন)</em></td>            
-                    </tr>
-                    <tr>
-                        <td>টিকেট মেইকিং চার্জ</td>
-                        <td>:    <input  class="box" type="text" id="making_prize" name="making_prize" onkeypress="return checkIt(event)" /> TK/ Ticket<em> (ইংরেজিতে লিখুন)</em></td>            
                     </tr>
                     <tr>
                         <td>আসন সংখ্যা </td>

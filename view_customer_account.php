@@ -221,7 +221,7 @@ mysql_query("START TRANSACTION");
     $gp_road = $_POST['gp_road'];
     $gp_post_code = $_POST['gp_post_code'];
     //gurdian address_type=Present
-    if($g_Village_idVillage !="all")
+    if($g_Village_idVillage !="")
     {
          $sql_g_insert_current_address = mysql_query("INSERT INTO address 
                                          (address_type, house, house_no, road, address_whom, post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
@@ -229,7 +229,7 @@ mysql_query("START TRANSACTION");
     }
 
 //gurdian address_type=Permanent
- if($gp_Village_idVillage !="all")
+ if($gp_Village_idVillage !="")
     {
 
          $sql_gp_insert_present_address = mysql_query("INSERT INTO address 
@@ -308,7 +308,7 @@ mysql_query("START TRANSACTION");
     $np_road = $_POST['np_road'];
     $np_post_code = $_POST['np_post_code'];
     //nominee address_type=Present
- if($n_Village_idVillage !="all")
+ if($n_Village_idVillage !="")
     {
         $sql_n_insert_current_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no,road, address_whom, post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
@@ -316,7 +316,7 @@ mysql_query("START TRANSACTION");
     }
    
     //nominee address_type=Permanent
-if($np_Village_idVillage !="all")
+if($np_Village_idVillage !="")
     {
          $sql_np_insert_permanent_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no, road, address_whom,post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
@@ -394,13 +394,13 @@ elseif (isset($_POST['submit4'])) {
     $p_custAcid = $_POST['custAcID'];
     //customer address_type=Present
     mysql_query("START TRANSACTION");
-     if($c_Village_idVillage !="all")
+     if($c_Village_idVillage !="")
     {
         $sql_c_insert_current_address = mysql_query("INSERT INTO $dbname.address 
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana, post_idpost, village_idvillage ,adrs_cepng_id)
                                      VALUES ('Present', '$c_house', '$c_house_no', '$c_road', 'cust', '$c_post_code','$c_Thana_idThana','$c_Post_idPost', '$c_Village_idVillage', '$p_custAcid')");
     }
-   if($cp_Village_idVillage !="all")
+   if($cp_Village_idVillage !="")
     {
      $sql_cp_insert_permanent_address = mysql_query("INSERT INTO $dbname.address 
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
@@ -718,7 +718,7 @@ if(strlen($p_mobile) == 11)
                     <tr>
                         <td>জন্মতারিখ</td>
                         <?php
-                            if($db_custDOB == "") {
+                            if(($db_custDOB == "") || ($db_custDOB == "0000-00-00") ) {
                         ?>
                         <td >: <input class="box" type="date" name="dob"  /></td>
                             <?php } else {?>

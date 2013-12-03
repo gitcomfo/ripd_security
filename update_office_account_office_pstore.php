@@ -32,14 +32,14 @@ $g_type = $_GET['pwr'];
         xmlhttp.send();
     }
 </script>
-<div class="column6">
+
     <div class="main_text_box">      
         <div style="padding-left: 110px;"><a href="office_sstore_management.php"><b>ফিরে যান</b></a></br></br>
-        <div style="border: 1px solid grey;">
+        <div style="border: 1px solid grey;width: 90%;">
             <table  style=" width: 100%; margin-bottom: 10px;" > 
                     <tr><th style="text-align: center; background-image: radial-gradient(circle farthest-corner at center top , #FFFFFF 0%, #0883FF 100%);height: 45px;padding-bottom: 5px;padding-top: 5px;" colspan="2" ><h1>আপডেট অফিস ইনফরমেশন</h1></th></tr>
             </table>
-            <fieldset id="fieldset_style" style=" width: 90% !important; margin-left: 30px !important;" >
+            <fieldset id="fieldset_style" style=" width: 95% !important; margin-left: 20px !important;" >
                 <?php
                     include_once 'includes/areaSearch.php';
                     getArea("infoFromThana()");
@@ -54,6 +54,7 @@ $g_type = $_GET['pwr'];
                         <th><?php echo "অফিসের নাম"; ?></th>
                         <th><?php echo " অফিসের নাম্বার"; ?></th>
                         <th><?php echo "অফিসের অ্যাকাউন্ট নাম্বার"; ?></th>
+                        <th><?php echo "অফিসের ইমেইল"; ?></th>
                         <th><?php echo "অফিসের ঠিকানা"; ?></th>
                         <th><?php echo "করনীয়"; ?></th>
                     </tr>
@@ -75,11 +76,13 @@ $g_type = $_GET['pwr'];
                         $db_offNumber = $row_officeNcontact['office_number'];
                         $db_offAN = $row_officeNcontact['account_number'];
                         $db_offAddress = $row_officeNcontact['office_details_address'];
+                        $db_offemail = $row_officeNcontact['office_email'];
                         $db_offID = $row_officeNcontact['idOffice'];
                         echo "<tr>";
                         echo "<td>$db_offName</td>";
                         echo "<td>$db_offNumber</td>";
                         echo "<td>$db_offAN</td>";
+                        echo "<td>$db_offemail</td>";
                         echo "<td>$db_offAddress</td>";
                         $v = base64_encode($db_offID);
                         echo "<td><a href='update_account_off_pstore.php?id=$v&type=$g_type'>আপডেট</a></td>";
@@ -94,7 +97,7 @@ $g_type = $_GET['pwr'];
         </div>
             </div>
     </div>
-</div>
+
 
 <script type="text/javascript">
     var filter = new DG.Filter({

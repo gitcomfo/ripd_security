@@ -222,8 +222,8 @@ elseif (isset($_POST['submit4'])) {
         $file_name = $files_sequence[$i];
         $t = time();
         $extension = end(explode(".", $_FILES[$scanDoc]['name']));
-        $scan_doc_name = $account_number . "_" . $file_name . "_" . $t . "_" . $_FILES[$scanDoc]['name'];
-        $scan_doc_path_temp = "images/scan_documents/" . $scan_doc_name;
+        $scan_doc_name =  $file_name."-".$proprietorID."-".$_FILES[$scanDoc]['name'];
+        $scan_doc_path_temp = "scaned/".$scan_doc_name;
         if (($_FILES[$scanDoc]['size'] < 999999999999) && in_array($extension, $allowedExts)) {
             move_uploaded_file($_FILES[$scanDoc]['tmp_name'], $scan_doc_path_temp);
             $scan_document = $scan_doc_path_temp;
@@ -235,7 +235,7 @@ elseif (isset($_POST['submit4'])) {
         }
     }
     $sql_images_scan_doc = mysql_query("INSERT INTO $dbname.ep_certificate_scandoc_extra
-                                 (emplo_scanDoc_national_id, emplo_scanDoc_birth_certificate, emplo_scanDoc_chairman_certificate, scanDoc_ssc, scanDoc_hsc, scanDoc_onars, scanDoc_masters, scanDoc_other, emp_type, emp_id)
+                                 (emplo_scanDoc_national_id, emplo_scanDoc_birth_certificate, emplo_scanDoc_chairman_certificate, scanDoc_ssc, scanDoc_hsc, scanDoc_hons, scanDoc_masters, scanDoc_other, emp_type, ep_id)
                                  VALUES('$pathArray[2]', '$pathArray[4]', '$pathArray[6]', '$pathArray[1]', '$pathArray[3]', 
                                  '$pathArray[5]',  '$pathArray[7]', '$pathArray[8]', 'pwr','$proprietorID')");
     if ($sql_images_scan_doc) {

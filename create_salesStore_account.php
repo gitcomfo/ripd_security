@@ -4,12 +4,12 @@ include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/makeAccountNumbers.php';
 include_once 'includes/checkAccountNo.php';
+include_once 'includes/email_conf.php';
 if(isset($_POST['submit']))
 {
     $name = $_POST['sales_name'];
     $sales_add = $_POST['sales_address'];
     $sales_no = $_POST['sales_no'];
-    $sales_mail = $_POST['sales_mail'];
     $sales_acc = $_POST['sales_acc'];
     $accType = current(explode("-", $sales_acc));
     $sales_acc1 = checkAccountNo2($sales_acc,$accType);
@@ -24,9 +24,17 @@ if(isset($_POST['submit']))
     else {$powrid = 0; $topparent_id = 0;}
     $officeID = $_POST['parentOff_id'];
    $thana = $_POST['thana_id'];
+   $emailusername = str_replace("-", "", $sales_acc1);
+    $ripdemailid = $emailusername . "@ripduniversal.com";
+    $passwrd = $emailusername;
+    //************************* create official email *************************************************
+             $email_create_status = CreateEmailAccount($emailusername, $passwrd);
+            if ($email_create_status != '777') {
+                $ripdemailid = "";
+            }
     mysql_query("START TRANSACTION");
-   $sql= "INSERT INTO ". $dbname .".`sales_store` (`salesStore_name` ,`salesStore_number` ,`account_number` ,`salesStore_details_address` ,`salesStore_email` ,`office_id`, `powerstore_officeid`,`top_pwr`, `Thana_idThana`) 
-            VALUES ( '$name','$sales_no' , '$sales_acc', '$sales_add','$sales_mail', '$officeID', '$powrid', '$topparent_id', '$thana')";
+   $sql= "INSERT INTO `sales_store` (`salesStore_name` ,`salesStore_number` ,`account_number` ,`salesStore_details_address` ,`salesStore_email` ,email_password, `office_id`, `powerstore_officeid`,`top_pwr`, `Thana_idThana`) 
+            VALUES ( '$name','$sales_no' , '$sales_acc1', '$sales_add','$ripdemailid','$passwrd' ,'$officeID', '$powrid', '$topparent_id', '$thana')";
     $reslt=mysql_query($sql) or exit('query failed insert into sales store: '.mysql_error());
     $off = mysql_insert_id();
     
@@ -459,10 +467,6 @@ var xmlhttp;
                            <tr>
                         <td>সেলস স্টোরের  নাম্বার</td>
                         <td>:    <input  class ="textfield" type="text" id="sales_no" name="sales_no" /></td>
-                    </tr>
-                     <tr>
-                        <td>সেলস স্টোরের  ইমেইল</td>
-                        <td>:    <input  class ="textfield" type="text" id="sales_mail" name="sales_mail" onblur="check(this.value)"  /><em> (ইংরেজিতে লিখুন)</em><div id="error_msg" style="margin-left: 5px"></div></td>
                     </tr>
                      <tr>
                         <td>সেলস স্টোরের  অ্যাকাউন্ট</td>

@@ -3,6 +3,7 @@ error_reporting(0);
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/makeAccountNumbers.php';
+include_once 'includes/email_conf.php';
 $msg = "";
 
 if(isset($_POST['submit0']))
@@ -10,12 +11,19 @@ if(isset($_POST['submit0']))
     $name = $_POST['office_name'];
     $off_add = $_POST['office_address'];
     $off_no = $_POST['office_no'];
-    $mail = $_POST['office_mail'];
     $off_acc = $_POST['office_acc'];
     $thana = $_POST['thana_id'];
+     $emailusername = str_replace("-", "", $off_acc);
+    $ripdemailid = $emailusername . "@ripduniversal.com";
+    $passwrd = $emailusername;
+    //************************* create official email *************************************************
+             $email_create_status = CreateEmailAccount($emailusername, $passwrd);
+            if ($email_create_status != '777') {
+                $ripdemailid = "";
+            }
      mysql_query("START TRANSACTION");
-   $sql= "INSERT INTO ". $dbname .".`office` (`office_type` ,`office_selection` ,`office_name` ,`office_number` ,`account_number` ,`office_email` ,`Thana_idThana`,`office_details_address`) 
-              VALUES ( 'pwr_head', 'pwr','$name' , '$off_no', '$off_acc','$mail' , '$thana', '$off_add')";
+   $sql= "INSERT INTO ". $dbname .".`office` (`office_type` ,`office_selection` ,`office_name` ,`office_number` ,`account_number` ,`office_email` ,email_password, `Thana_idThana`,`office_details_address`) 
+              VALUES ( 'pwr_head', 'pwr','$name' , '$off_no', '$off_acc','$ripdemailid' ,'$passwrd' , '$thana', '$off_add')";
     $reslt=mysql_query($sql);
     $off = mysql_insert_id();
     
@@ -385,10 +393,6 @@ xmlhttp.send();
                            <tr>
                         <td>পাওয়ারস্টোরের নাম্বার</td>
                         <td>:    <input  class ="textfield" type="text" id="office_no" name="office_no" /></td>
-                    </tr>
-                     <tr>
-                        <td>পাওয়ারস্টোরের ইমেইল</td>
-                        <td>:    <input  class ="textfield" type="text" id="office_mail" name="office_mail" onblur="check(this.value)"  /><em> (ইংরেজিতে লিখুন)</em><div id="error_msg" style="margin-left: 5px"></div></td>
                     </tr>
                     <tr>
                         <td colspan="2" ><hr /></td>
