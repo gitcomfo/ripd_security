@@ -147,19 +147,19 @@ function  checkCorrectPass() // match password with account
                 </tr>
                 <?php showMessage($flag, $msg);?>
                 <tr>
-                    <td style="text-align: right; width: 30%;">অ্যাকাউন্ট নং</td>
+                    <td style="text-align: right; width: 37%;">অ্যাকাউন্ট নং</td>
                     <td>: <input  class="box" type="text" name="accountNo"  id="accountNo" value=""/> <em>(ইংরেজিতে লিখুন)</em></td>   
                 </tr>
                 <tr>
-                    <td style="text-align: right; width: 30%;">টাকার পরিমান</td>
+                    <td style="text-align: right;">টাকার পরিমান</td>
                     <td>: <input  class="box" type="text" name="amount1"  id="amount1"  onkeypress="return checkIt(event)" /> টাকা </td>   
                 </tr>
                  <tr>
-                    <td style="text-align: right; width: 30%;">টাকার পরিমান (পুনরায়)</td>
+                    <td style="text-align: right;">টাকার পরিমান (পুনরায়)</td>
                     <td>: <input  class="box" type="text" name="amount2"  id="amount2"  onkeypress="return checkIt(event)" onblur="checkAmount(this.value);"/> টাকা <span id="errormsg"></span></td>   
                 </tr>
                 <tr>
-                    <td style="text-align: right; width: 30%;">ট্রান্সফারের কারন</td>
+                    <td style="text-align: right;">ট্রান্সফারের কারন</td>
                     <td> <textarea  class="box" type="text" name="trans_des"  id="trans_des" value=""></textarea></td>   
                 </tr>
                 <tr>

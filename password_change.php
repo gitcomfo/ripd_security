@@ -113,15 +113,15 @@ function  checkCorrectPass() // match password with account
                 </tr>
                 <?php showMessage($flag, $msg);?>
                 <tr>
-                    <td style="text-align: right; width: 30%;">পুরানো পাসওয়ার্ড</td>
+                    <td style="text-align: right; width: 40%;">পুরানো পাসওয়ার্ড</td>
                     <td>: <input  class="box" type="password" name="old_password"  id="old_password" onblur='checkCorrectPass();'/><span id='showError'></span></td>   
                 </tr>
                 <tr>
-                    <td style="text-align: right; width: 30%;">নতুন পাসওয়ার্ড</td>
+                    <td style="text-align: right;">নতুন পাসওয়ার্ড</td>
                     <td>: <input  class="box" type="password" name="new_password"  id="new_password" onkeyup='blankRePass();'/></td>   
                 </tr>
                  <tr>
-                    <td style="text-align: right; width: 30%;">নতুন পাসওয়ার্ড(পুনরায়)</td>
+                    <td style="text-align: right;">নতুন পাসওয়ার্ড(পুনরায়)</td>
                     <td>: <input  class="box" type="password" name="new_password2"  id="new_password2" onkeyup='checkPass(this.value); '/><span id="passcheck"></span></td>   
                 </tr>
                 <tr>

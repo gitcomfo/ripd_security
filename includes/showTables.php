@@ -9,7 +9,7 @@
                     <thead>
                         <tr align="left" id="table_row_odd">
                             <th><?php echo "নাম";?></th>
-                            <th><?php echo "ধরন";?></th>
+                            <th><?php echo "অফিস ধরন";?></th>
                             <th><?php echo "ব্রাঞ্চ নাম";?></th>
                             <th><?php echo "ঠিকানা";?></th>
                             <th><?php echo "ই-মেইল";?></th>     
