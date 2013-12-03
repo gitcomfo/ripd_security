@@ -1,6 +1,7 @@
 <?php
+error_reporting(0);
 include_once 'includes/session.inc';
-include 'includes/header.php';
+include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
 if(isset($_POST['submit_ticket']))
@@ -55,7 +56,7 @@ function setProgram(progNo,progid)
 {
         document.getElementById('prgrm_number').value = progNo;
         document.getElementById('prgrm_id').value = progid;
-        document.getElementById('offResult').style.display = "none";
+        document.getElementById('progResult').style.display = "none";
         getall(progid);
 }
 </script>

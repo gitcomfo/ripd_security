@@ -1,5 +1,4 @@
 <?php
-
 include_once 'ConnectDB.inc';
 /*  Performs login checks and $_SESSION initialisation */
 /* $Id: UserLogin.php 4847 2012-01-29 03:10:08Z daintree $ */

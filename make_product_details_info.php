@@ -99,6 +99,7 @@ if (isset($_POST['submit'])) {
 ?>
 <title>প্রোডাক্ট ইন</title>
 <style type="text/css">@import "css/bush.css";</style>
+<script type="text/javascript" src="javascripts/product.js"></script>
 <script type="text/javascript">
 function isfillinput()
     {
@@ -108,18 +109,26 @@ function isfillinput()
             }       
         });
     }
-
-function makeProductName()
+    
+function makeProductName(unit)
+{
+    var t = document.getElementById("product_type");
+    var protype = t.options[t.selectedIndex].text;
+    var b = document.getElementById("product_brand_name").value;
+    if(b == 0)
         {
-        var brand = document.getElementById('pttid').value;
-        var classification = document.getElementById('pttid2').value;
-        var type = document.getElementById('pro_classification').value;
-        var unit = document.getElementById('new_unit').value;
-        //alert(brand+classification+type+unit);
+            var brand = document.getElementById("new_brand").value;
         }
-        
+    else {
+        var b = document.getElementById("product_brand_name");
+        var brand = b.options[b.selectedIndex].text;
+    }
+    var proclass = document.getElementById("pro_classification").value;
+    var productname = brand+" "+proclass+" "+protype+" ("+unit+")";
+    document.getElementById("pro_productname").value = productname;
+    //alert(productname);
+}
 </script>
-<script type="text/javascript" src="javascripts/product.js"></script>
 
     <div class="main_text_box">
         <div style="padding-left: 112px;"><a href="product_info_management.php"><b>ফিরে যান</b></a><a style="padding-left: 60%;" href="make_product_cat_type.php"><b>মেইক প্রোডাক্ট ক্যাটাগরি এন্ড টাইপ</b></a></div>
@@ -166,40 +175,40 @@ function makeProductName()
                         <td>: 
                             <?php
                             $product_unit_sql = mysql_query("SELECT DISTINCT prounit_name FROM  $dbname.product_unit");
-                            echo "<select  class='box2' style = 'border: 1px gray inset;width: 150px;' name='pro_unit' id='pro_unit'>
-                    <option value= '0'>- একক -</option>";
+                            echo "<select  class='box2' style = 'border: 1px gray inset;width: 150px;' name='pro_unit' id='pro_unit' onchange='makeProductName(this.value)'>
+                                        <option value= '0'>- একক -</option>";
                             while ($product_unit_rows = mysql_fetch_array($product_unit_sql)) {
                                 $db_product_unit_name = $product_unit_rows['prounit_name'];
                                 echo "<option style='width: 96%' value='$db_product_unit_name'>$db_product_unit_name</option>";
                             }
                             echo '</select>
-                            অথবা <input class="box" type="text" id="new_unit" name="new_unit" onblur="makeProductName()"/>';
+                            অথবা <input class="box" type="text" id="new_unit" name="new_unit" onblur="makeProductName(this.value)" />';
                             ?>      
                         </td>
                     </tr>           
                     <tr>
                         <td>প্রোডাক্ট নেইম</td>
-                        <td>:   <input class="box" type="text" id="pro_productname" name="pro_productname" /></td>
+                        <td>:   <input class="box" style="width: 250px;" type="text" id="pro_productname" name="pro_productname" /></td>
                     </tr>
                     <tr>
                         <td >আটিকেল</td>
-                        <td>:   <input class="box" type="text" id="pro_article" name="pro_article" /> </td>                          
+                        <td>:   <input class="box" style="width: 250px;" type="text" id="pro_article" name="pro_article" /> </td>                          
                     </tr>
                     <tr>
                         <td>গ্যারান্টি</td>
-                        <td>:    <input  class="box" type="text" id="pro_guarantee" name="pro_guarantee" /></td>            
+                        <td>:    <input  class="box" style="width: 250px;" type="text" id="pro_guarantee" name="pro_guarantee" /></td>            
                     </tr>
                     <tr>
                         <td>ওয়ারেন্টি</td>
-                        <td>:    <input  class="box" type="text" id="pro_warantee" name="pro_warantee" /></td>            
+                        <td>:    <input  class="box" style="width: 250px;" type="text" id="pro_warantee" name="pro_warantee" /></td>            
                     </tr>
                     <tr>
                         <td>তৈরীকৃত প্রতিষ্ঠানের নাম </td>
-                        <td>:    <input  class="box" type="text" id="pro_companyname" name="pro_companyname" /></td>            
+                        <td>:    <input  class="box" style="width: 250px;" type="text" id="pro_companyname" name="pro_companyname" /></td>            
                     </tr>
                     <tr>
                         <td> মেড ইন</td>
-                        <td>:    <input  class="box" type="text" id="pro_madein" name="pro_madein" /></td>            
+                        <td>:    <input  class="box" style="width: 250px;" type="text" id="pro_madein" name="pro_madein" /></td>            
                     </tr>        
                     <tr>
                         <td >প্রোডাক্টের ছবি </td> 

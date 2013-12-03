@@ -1,20 +1,19 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 include_once 'includes/MiscFunctions.php';
 include 'includes/connectionPDO.php';
-$storeName= $_SESSION['offname'];
+$storeName= $_SESSION['loggedInOfficeName'];
 $g_proid = $_GET['proid'];
 $sql_inven_sel = $conn->prepare("SELECT * FROM inventory WHERE idinventory = ?;");
 $upquery_inven = $conn->prepare(" UPDATE `inventory` SET `ins_extra_profit` = ?, `ins_sellingprice` = ?, `ins_profit` = ?,ins_pv =?, `ins_lastupdate` = NOW()  WHERE `idinventory` =?; ");
 
-$sqlpv = $conn->prepare("SELECT * FROM running_pv;");
+$sqlpv = $conn->prepare("SELECT * FROM running_command;");
 $rslt =$sqlpv->execute(array());
 $pvrow = $sqlpv->fetchAll();
 foreach ($pvrow as $row) {
-    $pvinvalue= $row['value_in_pv'];
-$pvintaka= $row['value_in_tk'];
+    $pvinvalue= $row['pv_value'];
 }
- $unitpv = $pvinvalue / $pvintaka;
+ $unitpv = $pvinvalue / 100;
 
 $result_inven = $sql_inven_sel->execute(array($g_proid));
 $getresult = $sql_inven_sel->fetchAll();

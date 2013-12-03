@@ -1,7 +1,6 @@
 <?php
 include_once 'includes/MiscFunctions.php';
-include 'includes/ConnectDB.inc';
-include 'includes/header.php';
+include_once 'includes/header.php';
 error_reporting(0);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -24,7 +23,7 @@ error_reporting(0);
 
 <body onload="init();">
 <div id="container">
-<div id="center-container">
+    <div id="center-container" style="margin-top: 0px; margin-bottom: 0px;">
     <div id="infovis">
         <?php
             /*$child_array = "{id:'1', name: 'আব্দুর_রহিম', data:{},
@@ -56,7 +55,7 @@ error_reporting(0);
             
             $array_tree = array();
                     
-            recurrance_tree(1, 1);
+            recurrance_tree(3, 1);
             array_push($array_tree, array(0, "id:'1', name: 'আব্দুর_রহিম', data:{}")); //it should be made from query by session user id
             $reversed_array = array_reverse($array_tree);
             array_push($reversed_array, array(0, "blank"));
@@ -116,10 +115,10 @@ error_reporting(0);
 <table>
     <tr>
          <td>
-            <label for="r-top">top </label>
+            <label for="r-top">top</label>
          </td>
          <td>
-            <input type="radio" id="r-top" name="orientation" checked="checked" value="top" />
+            <input type="radio" id="r-top" name="orientation" checked="" value="top" />
          </td>
     </tr>
     <tr>
@@ -371,5 +370,6 @@ function init(){
 
 }
 </script>
-
-</html>
+<?php 
+    include_once 'includes/footer.php';
+?>

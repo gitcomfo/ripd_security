@@ -2,17 +2,16 @@
 //error_reporting(0);
 include './includes/connectionPDO.php';
 include './includes/ConnectDB.inc';
-$sqlpv = mysql_query("SELECT * FROM running_pv;");
+$sqlpv = mysql_query("SELECT * FROM running_command;");
 $row = mysql_fetch_assoc($sqlpv);
-$pvinvalue= $row['value_in_pv'];
-$pvintaka= $row['value_in_tk'];
+$pvinvalue= $row['pv_value'];
 
 $sql = "INSERT INTO product_temp(store_type ,store_id ,pro_code ,pro_name ,buying_price ,selling_price , profit ,xtra_profit, pv, qty, product_chart_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 
- $unitpv = $pvinvalue / $pvintaka;
-    $G_s_type = $_SESSION['catagory'];
-    $G_s_id= $_SESSION['offid'];
+ $unitpv = $pvinvalue / 100;
+    $G_s_type = $_SESSION['loggedInOfficeType'];
+    $G_s_id= $_SESSION['loggedInOfficeID'];
     
     $P_procode=$_POST['pcode'];    
     $P_pname=$_POST['pname'];

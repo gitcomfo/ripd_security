@@ -1,11 +1,12 @@
 <?php 
 error_reporting(0);
+session_start();
 include 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 $G_rID= $_SESSION['SESS_MEMBER_ID'];
 $G_s_type = $_SESSION['catagory'];
-$G_s_id= $_SESSION['offid'];
-$cfsID = $_SESSION['cfsid'];
+$G_s_id= $_SESSION['loggedInOfficeID'];
+$cfsID = $_SESSION['loggedInOfficeType'];
 if(isset($_POST['print']))
 {
      if($_POST['customerType']== 2)
@@ -95,7 +96,7 @@ $result1= mysql_query("SELECT * FROM `sales_summery` where sal_invoiceno='$id';"
 </head>
 <body>
     <div align="center" style="font-family: SolaimanLipi !important;"><strong>রিপড ইউনিভার্সাল (রিলীভ এন্ড ইমপ্রুভমেন্ট প্ল্যান অব ডেপ্রাইভড) </strong></br>
-পাইকারি বিক্রয় চালান পত্র</br><?php echo $_SESSION['offname'];?></br>
+পাইকারি বিক্রয় চালান পত্র</br><?php echo $_SESSION['loggedInOfficeName'];?></br>
 চালান নং: <?php echo $_SESSION['SESS_MEMBER_ID'];?></div></br>
 <div style="float:left">ক্রেতার নাম: <?php echo $P_custname;?><br />ক্রেতার অ্যাকাউন্ট নং : <?php echo $P_accNo;?>ক্রেতার মোবাইল নং : <?php echo $P_custmbl;?></div><div style="float:right">তারিখ : <?php echo english2bangla(date('d/m/Y')) ;?>
 সময়ঃ <?php echo english2bangla(date('g:i a' , strtotime('+4 hour')));?></div></br></br>

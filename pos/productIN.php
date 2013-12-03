@@ -1,15 +1,16 @@
 <?php
 error_reporting(0);
+session_start();
 include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 $timestamp=time(); //current timestamp
 $da=date("d/m/Y", $timestamp);
 	
-$storeName= $_SESSION['offname'];
-$cfsID = $_SESSION['cfsid'];
-$storeID = $_SESSION['offid'];
-$scatagory = $_SESSION['catagory'];
+$storeName= $_SESSION['loggedInOfficeName'];
+$cfsID = $_SESSION['userIDUser'];
+$storeID = $_SESSION['loggedInOfficeID'];
+$scatagory =$_SESSION['loggedInOfficeType'];
 $msg = "";
 $sql2 = "SELECT * FROM product_temp WHERE store_id = ? AND store_type= ?";
 $selectstmt = $conn->prepare($sql2);
@@ -23,7 +24,7 @@ if(isset($_POST['entry']))
     $all = $selectstmt->fetchAll();
     foreach($all as $row)
     {
-       echo  $db_storetype=$row['store_type'];
+       $db_storetype=$row['store_type'];
         $db_proCode=$row['pro_code'];
         $db_proname=$row['pro_name'];
         $db_buy=$row['buying_price'];
@@ -197,7 +198,8 @@ function searchName(where) // productlist-er name search box
 <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
     <div style="width: 33%;height: 100%; float: left;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div>
-    <div style="width: 33%;height: 100%;float: left;text-align: right;font-family: SolaimanLipi !important;"><a href="" onclick="javasrcipt:window.open('product_list.php');return false;"><img src="images/productList.png" style="width: 100px;height: 70px;"/></br>প্রোডাক্ট লিস্ট</a></div>
+    <div style="width: 33%;height: 100%;float: left;text-align: right;font-family: SolaimanLipi !important;"><a href="" onclick="javasrcipt:window.open('product_list.php');return false;" style="float: right;text-align: center;padding-left: 20px;"><img src="images/productList.png" style="width: 100px;height: 70px;"/></br>সেলসস্টোর প্রোডাক্ট লিস্ট</a>
+        <a href="" onclick="javasrcipt:window.open('all_ripd_product_list.php');return false;" style="float: right"><img src="images/allproductlist.png" style="width: 100px;height: 70px;"/></br>অল প্রোডাক্ট লিস্ট</a></div>
 </div>
 </br>
 <div align="center" style="color: green;font-size: 26px; font-weight: bold; width: 90%;height: 20px;margin: 0 5% 0 5%;float: none;"><?php if($msg != "") echo $msg;?></div></br>

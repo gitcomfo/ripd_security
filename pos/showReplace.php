@@ -39,7 +39,7 @@ if(isset($_POST['replace']))
 <body>
 
     <div align="center" style="font-family: SolaimanLipi !important;"><strong>রিপড ইউনিভার্সাল (রিলীভ এন্ড ইমপ্রুভমেন্ট প্ল্যান অব ডেপ্রাইভড) </strong></br>
-বিক্রয় চালান পত্র</br><?php echo $_SESSION['offname'];?></br>
+বিক্রয় চালান পত্র</br><?php echo $_SESSION['loggedInOfficeName'];?></br>
 চালান নং: <?php echo $P_invoiceno;?> (পরিবর্তিত)</div></br>
 <div style="float:left;font-family: SolaimanLipi !important;">ক্রেতার নাম: <?php echo $P_buyername;?></br>ক্রেতার অ্যাকাউন্ট নং / ক্রেতার মোবাইল নং :  <?php echo $P_buyeracc;?></div>
 <div style="float:right;font-family: SolaimanLipi !important;">তারিখ : <?php echo english2bangla(date('d/m/Y'));?> সময়ঃ <?php echo english2bangla(date('g:i a' , strtotime('+4 hour')));?></div></br></br></br>

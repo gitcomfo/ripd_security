@@ -2,10 +2,10 @@
 error_reporting(0);
 include 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
-$storeName= $_SESSION['offname'];
-$cfsID = $_SESSION['cfsid'];
-$storeID = $_SESSION['offid'];
-$scatagory = $_SESSION['catagory'];
+$storeName= $_SESSION['loggedInOfficeName'];
+$cfsID = $_SESSION['userIDUser'];
+$storeID = $_SESSION['loggedInOfficeID'];
+$scatagory =$_SESSION['loggedInOfficeType'];
 $oldrecipt = $_SESSION['recipt'];
 
 if(isset($_POST['print']))
@@ -93,7 +93,7 @@ $result= mysql_query("SELECT * FROM `sales_summery` where sal_invoiceno='$id';")
 <body>
 
     <div align="center" style="font-family: SolaimanLipi !important;"><strong>রিপড ইউনিভার্সাল (রিলীভ এন্ড ইমপ্রুভমেন্ট প্ল্যান অব ডেপ্রাইভড) </strong></br>
-বিক্রয় চালান পত্র</br><?php echo $_SESSION['offname'];?></br>
+বিক্রয় চালান পত্র</br><?php echo $storeName;?></br>
 চালান নং: <?php echo $_SESSION['SESS_MEMBER_ID'];?></br>
 পরিবর্তিত চালান নং:<?php echo $_SESSION['recipt'];?>(পরিবর্তিত) </div></br>
 <div style="float:left">ক্রেতার নাম: <?php echo $db_custname;?><br />ক্রেতার অ্যাকাউন্ট নং/  ক্রেতার মোবাইল নং : <?php echo $db_accNo;?></div><div style="float:right">তারিখ : <?php echo english2bangla(date('d/m/Y'));?>

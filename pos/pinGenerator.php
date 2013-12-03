@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
 include 'includes/ConnectDB.inc';
-$cfsid= $_SESSION['cfsid'];
+$cfsID = $_SESSION['userIDUser'];
 $sumeryid = $_GET['ssumid'];
 $check=1;
 while($check==1)
@@ -24,7 +24,7 @@ if($row['pin_no']!= $str_pin)
         {
             $g_totalpv = $_GET['pv']; 
             $inssql= "INSERT INTO pin_makingused (`pin_no` ,`pin_state`, pin_totalpv, pin_making_date, pin_madeby_cfsuserid, sales_summery_idsalessummery) 
-                                    VALUES ('$str_pin', 'open', $g_totalpv, CURDATE(), $cfsid, $sumeryid);";
+                                    VALUES ('$str_pin', 'open', $g_totalpv, CURDATE(), $cfsID, $sumeryid);";
 	$insreslt = mysql_query($inssql) or exit ("sorry have problem");
 	$check=2;
         }

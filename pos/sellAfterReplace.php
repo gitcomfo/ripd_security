@@ -3,10 +3,10 @@ error_reporting(0);
 include 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 $G_replaceRecipt= $_SESSION['recipt'];
-$storeName= $_SESSION['offname'];
-$cfsID = $_SESSION['cfsid'];
-$storeID = $_SESSION['offid'];
-$scatagory = $_SESSION['catagory'];
+$storeName= $_SESSION['loggedInOfficeName'];
+$cfsID = $_SESSION['userIDUser'];
+$storeID = $_SESSION['loggedInOfficeID'];
+$scatagory =$_SESSION['loggedInOfficeType'];
 $timestamp=time(); //current timestamp
 $da=date("m/d/Y", $timestamp);
 ?>

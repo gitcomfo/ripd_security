@@ -1,19 +1,17 @@
 <?php
             include_once 'getSelectedThana.php';
 ?>
-
     <span id="office">
         <br /><br />
         <div>
-            <table id="office_info_filter" border="1" align="center" width= 100%" cellpadding="5px" cellspacing="0px">
+            <table id="office_info_filter" border="1" align="center" width= 99%" cellpadding="5px" cellspacing="0px">
                 <thead>
                     <tr align="left" id="table_row_odd">
                         <th><?php echo "সেলস স্টোর নং"; ?></th>
                         <th><?php echo "সেলস স্টোর নেইম"; ?></th>
-                        <th><?php echo "সেলস স্টোর নম্বর"; ?></th>
-                        <th><?php echo "একাউন্ট নম্বর"; ?></th>
                         <th><?php echo "ঠিকানা"; ?></th>
                         <th><?php echo "ই-মেইল"; ?></th>
+                        <th><?php echo ""; ?></th>
                     </tr>
                 </thead>
                 <tbody>                    
@@ -34,10 +32,9 @@
                         echo "<tr>";
                         echo "<td>$db_slNo</td>";
                         echo "<td>$db_salesStoreName</td>";
-                        echo "<td>$db_salesStoreNumber</td>";
-                        echo "<td>$db_salesStoreAN</td>";
                         echo "<td>$db_salesStoreAddress</td>";
                         echo "<td>$db_salesStoreEmail</td>";
+                        echo "<td><a onclick=send_mail('$db_salesStoreEmail') style='cursor:pointer;color:blue;'>Send Mail</a></td>";
                         echo "</tr>";
                     }
                     ?>

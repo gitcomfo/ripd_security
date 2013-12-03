@@ -3,9 +3,9 @@ error_reporting(0);
 include 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 $G_rID= $_SESSION['SESS_MEMBER_ID'];
-$G_s_type = $_SESSION['catagory'];
-$G_s_id= $_SESSION['offid'];
-$cfsID = $_SESSION['cfsid'];
+$G_s_type = $_SESSION['loggedInOfficeType'];
+$G_s_id= $_SESSION['loggedInOfficeID'];
+$cfsID = $_SESSION['userIDUser'];
 if(isset($_POST['print']))
 {
     if($_POST['customerType']== 1)
@@ -104,7 +104,7 @@ $result= mysql_query("SELECT * FROM `sales_summery` where sal_invoiceno='$id';")
 <body>
 
 <div align="center" style="font-family: SolaimanLipi !important;"><strong>রিপড ইউনিভার্সাল (রিলীভ এন্ড ইমপ্রুভমেন্ট প্ল্যান অব ডেপ্রাইভড) </strong></br>
-বিক্রয় চালান পত্র</br><?php echo $_SESSION['offname'];?></br>
+বিক্রয় চালান পত্র</br><?php echo $_SESSION['loggedInOfficeName'];?></br>
 চালান নং: <?php echo $_SESSION['SESS_MEMBER_ID'];?></div></br>
 <div style="font-family: SolaimanLipi !important; width: 100%;">
     <div style="float:left">ক্রেতার নাম: <?php echo $P_custname;?><br />ক্রেতার অ্যাকাউন্ট নং : <?php echo $P_accNo;?> ক্রেতার মোবাইল নং : <?php echo $P_custmbl;?></div>

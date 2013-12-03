@@ -2,9 +2,9 @@
 error_reporting(0);
 include 'includes/ConnectDB.inc';
 $G_rID= $_SESSION['SESS_MEMBER_ID'];
-$G_s_type = $_SESSION['catagory'];
-$G_s_id= $_SESSION['offid'];
-$cfsID = $_SESSION['cfsid'];
+//$G_s_type = $_SESSION['loggedInOfficeType'];
+//$G_s_id= $_SESSION['loggedInOfficeID'];
+//$cfsID = $_SESSION['userIDUser'];
 
 if($_GET['selltype']==1)
 {

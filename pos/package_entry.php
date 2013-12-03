@@ -1,19 +1,20 @@
 <?php
 error_reporting(0);
+session_start();
 include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
-$storeName= $_SESSION['offname'];
-$cfsID = $_SESSION['cfsid'];
-$storeID = $_SESSION['offid'];
-$scatagory = $_SESSION['catagory'];
+$storeName= $_SESSION['loggedInOfficeName'];
+$cfsID = $_SESSION['userIDUser'];
+$storeID = $_SESSION['loggedInOfficeID'];
+$scatagory =$_SESSION['loggedInOfficeType'];
 $check = 0; $msg ="";
 $arr_left_qty= array();
 $arr_ri8_qty = array();
 
-$sql_runningpv = mysql_query("SELECT * FROM running_pv ;"); 
+$sql_runningpv = mysql_query("SELECT * FROM running_command ;"); 
 $pvrow = mysql_fetch_assoc($sql_runningpv);
-$current_pv = $pvrow['value_in_pv'];
+$current_pv = $pvrow['pv_value'];
 
 $sql ="SELECT * FROM package_inventory WHERE pckg_infoid=? AND ons_type=? AND ons_id=?";
 $stmt = $conn->prepare($sql);
