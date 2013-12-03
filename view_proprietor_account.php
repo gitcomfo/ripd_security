@@ -340,6 +340,7 @@ if(strlen($p_mobile) == 11)
      $db_proprietorName = $proprietorrow['account_name'];
      $db_proprietorAcc = $proprietorrow['account_number'];
      $db_proprietorMail = $proprietorrow['email'];
+     $db_empRipdMail = $proprietorrow['ripd_email'];
      $db_proprietorMob = $proprietorrow['mobile'];
      $db_proprietorFather = $proprietorrow['prop_father_name'];
      $db_proprietorMother = $proprietorrow['prop_motherName'];
@@ -532,7 +533,11 @@ if(strlen($p_mobile) == 11)
                         <td>:   <input class='box' type='text' id='acc_num' name='acc_num' readonly value="<?php echo $db_proprietorAcc;?>"/></td>			
                     </tr>
                     <tr>
-                        <td >ই মেইল</td>
+                        <td>অফিশিয়াল ই মেইল</td>
+                        <td>:   <input class='box' style="width:220px;" type='text' readonly="" value="<?php echo $db_empRipdMail;?>" /></td>			
+                    </tr>
+                    <tr>
+                        <td >ব্যক্তিগত ই মেইল</td>
                        <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' value="<?php echo $db_proprietorMail;?>" /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
                     </tr>
                     <tr>

@@ -458,7 +458,7 @@ elseif (isset($_POST['submit5'])) {
                     </tr>
                     <tr>
                         <td>অফিশিয়াল ই মেইল</td>
-                        <td>:   <input class='box' style="width:220px;" type='text' id='email' name='email' readonly="" value="<?php echo $db_empRipdMail;?>" /></td>			
+                        <td>:   <input class='box' style="width:220px;" type='text' id='ripdemail' name='ripdemail' readonly="" value="<?php echo $db_empRipdMail;?>" /></td>			
                     </tr>
                     <tr>
                         <td >ব্যাক্তিগত ই মেইল</td>
