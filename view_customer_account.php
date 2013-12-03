@@ -718,7 +718,7 @@ if(strlen($p_mobile) == 11)
                     <tr>
                         <td>জন্মতারিখ</td>
                         <?php
-                            if($db_custDOB == "") {
+                            if(($db_custDOB == "") || ($db_custDOB == "0000-00-00") ) {
                         ?>
                         <td >: <input class="box" type="date" name="dob"  /></td>
                             <?php } else {?>

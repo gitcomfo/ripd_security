@@ -524,7 +524,7 @@ elseif (isset($_POST['submit5'])) {
                     </tr>
                     <td>জন্মতারিখ</td>
                         <?php
-                            if($db_empDOB == "") {
+                            if(($db_empDOB == "") || ($db_empDOB == "0000-00-00")  ) {
                         ?>
                         <td >: <input class="box" type="date" name="dob"  /></td>
                             <?php } else {?>
