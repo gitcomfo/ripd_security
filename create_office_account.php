@@ -406,7 +406,7 @@ function getParentOfiice(str_key) // for searching parent offices
         <div>           
             <form style="padding-right: 20px;font-family: SolaimanLipi !important;" method="POST" enctype="multipart/form-data" action="" id="off_form" name="off_form">
                 
-                <table class="formstyle"  style=" width: 70%;font-family: SolaimanLipi !important; ">          
+                <table class="formstyle"  style=" width: 80%;font-family: SolaimanLipi !important; ">          
                     <tr><th style="text-align: center" colspan="2"><h1>অফিস একাউন্ট তৈরির ফর্ম</h1></th></tr>
 
                     <tr><td colspan="2" style="text-align: center;color: green;font-size: 16px;"><?php if($msg != "") echo $msg;?></td></tr>
@@ -502,7 +502,12 @@ function getParentOfiice(str_key) // for searching parent offices
                         <td>:    
                             <select class="box2" name="off_type" id="off_type">
                                 <option value="all">-সিলেক্ট করুন-</option> 
+                                <?php 
+                                    $sel_office = mysql_query("SELECT * FROM office WHERE office_type='ripd_head'");
+                                    if(mysql_num_rows($sel_office) < 1) {
+                                ?>
                                 <option value="ripd_head">রিপড হেড অফিস</option>
+                                    <?php }?>
                                 <option value="Division">বিভাগীয় হেড অফিস</option> 
                                 <option value="Div_local">বিভাগীয় লোকাল অফিস</option> 
                                 <option value="District">জেলা হেড অফিস</option>
