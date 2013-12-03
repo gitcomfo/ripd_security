@@ -1,5 +1,5 @@
 <?php
-include_once './UserLogin.php';
+$logedInUserType = $_SESSION['userType'];
 if($logedInUserType == 'customer')
 {
     $view_link = "view_customer_account.php";
