@@ -1,30 +1,25 @@
-<!--<script type="text/css">
-    .rotare {
--webkit-transform: rotate(-90deg); 
--moz-transform: rotate(-90deg);	
-    }
-
-
-</script>-->
 <?php
-include_once 'includes/header.php';
-$firstname = "jesy";
-$lastname= "";
-
-function show($value)
+function show()
 {
-    if($value!="")
-    {
-        $string =  " ' ".$value." ' readonly";
-    }
- else {
-        $string =  "'".$value."'";
-    }
-    echo $string;
+for($i=0;$i<5;$i++)
+{
+    echo "
+        <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed magna vehicula, viverra mauris a, porttitor tellus. Sed placerat convallis tempor. Cras sed magna commodo, placerat urna sit amet, suscipit tellus. 
+        Proin iaculis dolor lectus, vel eleifend lorem vehicula ac. 
+        Fusce varius consequat neque sed suscipit. Aenean sed porttitor elit. Etiam porttitor nibh et sollicitudin interdum. 
+        Maecenas risus est, varius sed dapibus in, fermentum in nibh. Morbi dictum mi est, vitae rutrum velit blandit at. Aliquam ac dictum magna.
+        </div>
+        <DIV style='page-break-after:always'></DIV>
+        ";
+}
 }
 ?>
-<form>
-    <input type="text" name="firstname" value=<?php show($firstname);?> /></br></br>
-    <input type="text" name="lastname" value=<?php show($lastname);?>  />
-</form>
-</br>
+<body>
+    <table>
+        <tr>
+            <td>
+                <?php show(); ?>
+            </td>
+        </tr>
+    </table>
+</body>
