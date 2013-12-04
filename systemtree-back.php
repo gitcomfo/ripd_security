@@ -1,62 +1,41 @@
 <?php
 include_once 'includes/MiscFunctions.php';
 include_once 'includes/header.php';
+include_once 'includes/selectQueryPDO.php';
 error_reporting(0);
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Spacetree - SpaceTree with on-demand nodes</title>
+<title>জেনোলজি ট্রি</title>
 
 <!-- CSS Files -->
 <link type="text/css" href="css/base.css" rel="stylesheet" />
 <link type="text/css" href="css/Spacetree.css" rel="stylesheet" />
-
-<!--[if IE]><script language="javascript" type="text/javascript" src="../../Extras/excanvas.js"></script><![endif]-->
-
 <!-- JIT Library File -->
 <script language="javascript" type="text/javascript" src="javascripts/jit-yc.js"></script>
 
-</head>
 
-
+    <div style="padding-top: 10px;">    
+        <div style="padding-left: 0%; width: 45%;"><a href="account_management.php"><b>ফিরে যান</b></a></div>
+    </div>
+<div>
 <body onload="init();">
 <div id="container">
     <div id="center-container">
     <div id="infovis">
-        <?php
-            /*$child_array = "{id:'1', name: 'আব্দুর_রহিম', data:{},
-                                                children:[
-                                                            {id:'40', name: 'জেসি_হক', data:{}},
-                                                            {id:'3', name: 'সালেহ', data:{},
-                                                                        children:[
-                                                                                    {id:'41', name: 'লিসা', data:{}},
-                                                                                    {id:'8', name: 'রহিম_তালুকদার', data:{},
-                                                                                                children:[
-                                                                                                            {id:'38', name: 'আবুল', data:{}},
-                                                                                                            {id:'35', name: 'করিম', data:{}},
-                                                                                                            ]},
-                                                                                    ]},
-                                                            {id:'2', name: 'মীর_জাফর', data:{},
-                                                                        children:[
-                                                                                    {id:'39', name: 'নতুন_ভাই', data:{}},
-                                                                                    {id:'7', name: 'আব্দুন_নূর_তুষার', data:{},
-                                                                                                children:[
-                                                                                                            {id:'34', name: 'কামাল', data:{}},
-                                                                                                            {id:'33', name: 'জামাল', data:{}},
-                                                                                                            ]},
-                                                                                    {id:'4', name: 'নাইম', data:{},
-                                                                                                children:[
-                                                                                                            { id:'11', name: 'বশির', data:{} },
-                                                                                                            ]},
-                                                                                    ]},
-                                                        ]}";*/
-            
+        <?php            
             $array_tree = array();
-                    
-            recurrance_tree(3, 1);
-            array_push($array_tree, array(0, "id:'1', name: 'আব্দুর_রহিম', data:{}")); //it should be made from query by session user id
+            
+            $session_user_id = $_SESSION['userIDUser'];
+            recurrance_tree($session_user_id, 1, $sql_genology_tree);
+            $sql_select_cfs_user_all->execute(array($session_user_id));
+            $arr_parent_name = $sql_select_cfs_user_all->fetchAll();
+            foreach($arr_parent_name as $apn)
+                {
+                $parent_name = $apn['account_name'];
+                $apn_changed_name = str_replace(" ", "_", $parent_name);
+                $apn_json_str = "id: '".$session_user_id."', name: '".$apn_changed_name."', data:{}";
+                array_push($array_tree, array(0, $apn_json_str));
+                }
+            //array_push($array_tree, array(0, "id:'1', name: 'আব্দুর_রহিম', data:{}")); //it should be made from query by session user id
             $reversed_array = array_reverse($array_tree);
             array_push($reversed_array, array(0, "blank"));
             //print_r($reversed_array);
@@ -86,16 +65,18 @@ error_reporting(0);
                     }
             //echo $send_json_string;
             
-            function recurrance_tree($parent_ID, $level)
+            function recurrance_tree($parent_ID, $level, $sql_genology_tree)
                     {
                     global $array_tree;
-                    $tree_sql = mysql_query("select  * from $dbname.customer_account where referer_id = $parent_ID");
-                    while($row_sql=  mysql_fetch_array($tree_sql))
+                    $sql_genology_tree->execute(array($parent_ID));
+                    $arr_cfs_user = $sql_genology_tree->fetchAll();
+                    foreach ($arr_cfs_user as $tree)
                             {
-                            $self_id = $row_sql['idCustomer_account'];
-                            $self_name = $row_sql['cust_father_name'];
+                            $self_id = $tree['cfs_user_idUser'];
+                            $self_name = $tree['account_name'];
+                            //if($self_id == 0) break;
                             $changed_name = str_replace(" ", "_", $self_name);
-                            if($level < 5) recurrance_tree($self_id, $level+1);
+                            if($level < 5) recurrance_tree($self_id, $level+1, $sql_genology_tree);
                             $json_str = "id: '".$self_id."', name: '".$changed_name."', data:{}";
                             array_push($array_tree, array($level, $json_str));
                             }
@@ -107,23 +88,19 @@ error_reporting(0);
 </div>
 <div id="left-container">
 
-</div>
-
-<div id="right-container">
-
-<h4>Change Tree Orientation</h4>
+<h4>বিভিন্ন ভাবে ট্রি দেখুন</h4><br />
 <table>
     <tr>
          <td>
-            <label for="r-top">top </label>
+            <label for="r-top">উপর থেকে নীচে</label>
          </td>
          <td>
-            <input type="radio" id="r-top" name="orientation" checked="checked" value="top" />
+            <input type="radio" id="r-top" name="orientation" checked="" value="top" />
          </td>
     </tr>
     <tr>
         <td>
-            <label for="r-left">left </label>
+            <label for="r-left">বাম থেকে ডানে</label>
         </td>
         <td>
             <input type="radio" id="r-left" name="orientation" value="left" />
@@ -131,7 +108,7 @@ error_reporting(0);
     </tr>
     <tr>
          <td>
-            <label for="r-bottom">bottom </label>
+            <label for="r-bottom">নীচে থেকে উপরে</label>
           </td>
           <td>
             <input type="radio" id="r-bottom" name="orientation" value="bottom" />
@@ -139,20 +116,20 @@ error_reporting(0);
     </tr>
     <tr>
           <td>
-            <label for="r-right">right </label>
+            <label for="r-right">ডান থেকে বামে</label>
           </td> 
           <td> 
            <input type="radio" id="r-right" name="orientation" value="right" />
           </td>
     </tr>
 </table>
-
-
 </div>
+
 
 <div id="log"></div>
 </div>
 </body>
+</div>
     
 <!-- Example File -->
 <script language="javascript" type="text/javascript">
@@ -232,20 +209,20 @@ function init(){
     var st = new $jit.ST({
         'injectInto': 'infovis',
         //set duration for the animation
-        duration: 800,
+        duration: 500,
         //set animation transition type
         transition: $jit.Trans.Quart.easeInOut,
         //set distance between node and its children
         levelDistance: 50,
         //set max levels to show. Useful when used with
         //the request method for requesting trees of specific depth
-        levelsToShow: 2,
+        levelsToShow: 3,
         //set node and edge styles
         //set overridable=true for styling individual
         //nodes or edges
         Node: {
-            height: 20,
-            width: 90,
+            height: 30,
+            width: 150,
             //use a custom
             //node rendering function
             type: 'nodeline',
@@ -280,7 +257,7 @@ function init(){
         },
         
         onAfterCompute: function(){
-            Log.write("ট্রি সম্পন্ন হয়েছে");
+            Log.write("জেনোলোজি ট্রি");
         },
         
         //This method is called on DOM label creation.
@@ -294,12 +271,12 @@ function init(){
             };
             //set label styles
             var style = label.style;
-            style.width = 40 + 'px';
-            style.height = 17 + 'px';            
+            style.width = 150 + 'px';
+            style.height = 30 + 'px';            
             style.cursor = 'pointer';
-            style.color = '#fff';
+            style.color = 'black';
             //style.backgroundColor = '#1a1a1a';
-            style.fontSize = '0.8em';
+            style.fontSize = '1.0em';
             style.textAlign= 'center';
             style.textDecoration = 'underline';
             style.paddingTop = '3px';
@@ -350,7 +327,7 @@ function init(){
     };
 
     var top = get('r-top'), 
-    left = get('r-left'), 
+    left = get('r-left'),
     bottom = get('r-bottom'), 
     right = get('r-right');
     

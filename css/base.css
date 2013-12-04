@@ -18,7 +18,7 @@ table {
 h4 {
     font-size:1.1em;
     text-decoration:none;
-    font-weight:normal;
+    font-weight: bold;
     color:#23A4FF;
 }
 
@@ -36,26 +36,27 @@ a {
 #left-container, 
 #right-container, 
 #center-container {
-    height:600px;
+    height:100%;
     position:absolute;
     top:0;
 }
 
 #left-container, #right-container {
-    width:100px;
+    width:17%;
+    height: 90%;
+    margin-left: 2%;
+    padding-top: 2%;
     color:#686c70;
     text-align: left;
     overflow: auto;
     background-color:#fff;
     background-repeat:no-repeat;
-    border-bottom:1px solid #ddd;
 }
 
 #left-container {
     left:0;
     background-image:url('col2.png');
     background-position:center right;
-    border-left:1px solid #ddd;
     
 }
 
@@ -71,8 +72,8 @@ a {
 }
 
 #center-container {
-    width:770px;
-    left:100px;
+    width:78%;
+    left:20%;
     background-color:#B5D9FB;
     color:#ccc;
 }
@@ -92,14 +93,14 @@ a {
     top:10px;
     font-size:1.0em;
     font-weight:bold;
-    color:#23A4FF;
+    color:green;
 }
 
 
 #infovis {
     position:relative;
-    width:600px;
-    height:600px;
+    width:95%;
+    height:100%;
     margin:auto;
     overflow:hidden;
 }

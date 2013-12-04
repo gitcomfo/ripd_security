@@ -16,7 +16,7 @@ include_once 'connectionPDO.php';
     </head>
     <body>
 <?php
-                    if ($_SESSION['loggedInOfficeName'] == 'সারা বাংলা চেইন সপ'){
+                    if ($_SESSION['loggedInOfficeName'] == 'সারা বাংলা চেইন শপ'){
                         $banner_url = 'background-image: url(images/'.'sara_bangla_banner_1.png'.')';
                     }else{
                         $banner_url = '';

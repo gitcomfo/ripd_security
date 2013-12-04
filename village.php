@@ -17,7 +17,7 @@ if (isset($_POST['submit']) && ($_GET['action'] == 'new')) {
     $village_name = $_POST['village_name'];
     $sql = "insert into village (village_name, post_office_idPost_office) values('$village_name','$post_id')";
     if (mysql_query($sql)) {
-        $msg = "আপনি সফলভাবে ". $village_name . " নামে নতুন গ্রামটি তৈরি করেছেন";
+        $msg = "আপনি সফলভাবে ". $village_name . " নামে নতুন গ্রাম/পাড়া/প্রোজেক্ট তৈরি করেছেন";
         $flag = 'true';
     } else {
         $msg = "দুঃখিত, আবার চেষ্টা করুন";
@@ -30,7 +30,7 @@ if (isset($_POST['submit']) && ($_GET['action'] == 'edit')) {
     $village_name = $_POST['village_name'];
     $sql3 = "update village set village_name='$village_name' where idvillage='$village_id'";
     if (mysql_query($sql3)) {
-        $msg = "আপনি সফলভাবে " . $village_name . " নামে গ্রাম তথ্য পরিবর্তন করেছেন";
+        $msg = "আপনি সফলভাবে " . $village_name . " নামে গ্রাম/পাড়া/প্রোজেক্ট তথ্য পরিবর্তন করেছেন";
         $flag = 'true';
     } else {
         $msg = "দুঃখিত, আবার চেষ্টা করুন";
@@ -38,7 +38,7 @@ if (isset($_POST['submit']) && ($_GET['action'] == 'edit')) {
     }
 }
 ?>
-<title>গ্রাম</title>
+<title>গ্রাম/পাড়া/প্রোজেক্ট</title>
 <script type="text/javascript" src="javascripts/division_district_thana.js"></script>
 <script type="text/javascript" src="javascripts/external/mootools.js"></script>
 <script type="text/javascript" src="javascripts/dg-filter.js"></script>
@@ -48,7 +48,7 @@ if (isset($_POST['submit']) && ($_GET['action'] == 'edit')) {
         var x=document.forms["village"]["village_name"].value;
         if (x== null || x== "")
         {
-            alert("গ্রামের নাম পূরণ করুন");
+            alert("গ্রাম/পাড়া/প্রোজেক্ট নাম পূরণ করুন");
             return false;
         }
     }
@@ -58,7 +58,7 @@ if (isset($_POST['submit']) && ($_GET['action'] == 'edit')) {
         var y=document.forms["village"]["village_name"].value;;
         if (y == null || y == "")
         {
-            alert("গ্রামের নাম পূরণ করুন");
+            alert("গ্রাম/পাড়া/প্রোজেক্ট নাম পূরণ করুন");
             return false;
         }
     }     
@@ -70,14 +70,14 @@ if (isset($_POST['submit']) && ($_GET['action'] == 'edit')) {
 if ($_GET['action'] == 'edit') {
     ?>
     <div style="padding-top: 10px;">    
-        <div style="padding-left: 110px; width: 65%; float: left"><a href="area_management.php"><b>ফিরে যান</b></a></div>
-        <div ><a href="village.php?action=new"> নতুন গ্রাম</a>&nbsp;&nbsp;<a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">গ্রামের লিস্ট</a></div>
+        <div style="padding-left: 110px; width: 52%; float: left"><a href="area_management.php"><b>ফিরে যান</b></a></div>
+        <div ><a href="village.php?action=new">নতুন গ্রাম/পাড়া/প্রোজেক্ট</a>&nbsp;&nbsp;<a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">গ্রাম/পাড়া/প্রোজেক্ট লিস্ট</a></div>
     </div>
     <div>
         <form name="village" action="" onsubmit ="return isBlankVillage_edit()" method="post">
             <table class="formstyle" style =" width:78%">    
                 <tr>
-                    <th colspan="2">এডিট গ্রাম</th>
+                    <th colspan="2">এডিট গ্রাম/পাড়া/প্রোজেক্ট</th>
                 </tr>
                 <?php
                 showMessage($flag, $msg);
@@ -176,7 +176,7 @@ if ($_GET['action'] == 'edit') {
                     </td>
                 </tr>
                 <tr>
-                    <td>গ্রাম</td>
+                    <td>গ্রাম/পাড়া/প্রোজেক্ট</td>
                     <td>:  <input  class ="textfield" type="text" id="village_name" name="village_name" value="<?php echo $selected_village_name; ?>"/></td>
                 </tr>
                 <tr>                    
@@ -190,14 +190,14 @@ if ($_GET['action'] == 'edit') {
 } elseif ($_GET['action'] == 'new') {
     ?>
     <div style="padding-top: 10px;">    
-        <div style="padding-left: 110px; width: 65%; float: left"><a href="area_management.php"><b>ফিরে যান</b></a></div>
-        <div ><a href="village.php?action=new">নতুন গ্রাম</a>&nbsp;&nbsp;<a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">গ্রামের লিস্ট</a></div>
+        <div style="padding-left: 110px; width: 52%; float: left"><a href="area_management.php"><b>ফিরে যান</b></a></div>
+        <div ><a href="village.php?action=new">নতুন গ্রাম/পাড়া/প্রোজেক্ট</a>&nbsp;&nbsp;<a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">গ্রাম/পাড়া/প্রোজেক্ট লিস্ট</a></div>
     </div>
     <div>
         <form name="village" action="" onsubmit ="return isBlankVillage_new()" method="post">
             <table class="formstyle" style =" width:78%">    
                 <tr>
-                    <th colspan="4">নতুন গ্রাম</th>
+                    <th colspan="4">নতুন গ্রাম/পাড়া/প্রোজেক্ট</th>
                 </tr>
                 <?php
                 showMessage($flag, $msg);
@@ -229,7 +229,7 @@ if ($_GET['action'] == 'edit') {
                         <td>: <span id="pidd"></span></td> 
                 </tr>
                 <tr>
-                    <td>গ্রাম</td>
+                    <td>গ্রাম/পাড়া/প্রোজেক্ট</td>
                     <td>:<input  class ="textfield" type="text" id="village_name" name="village_name" /></td>
                 </tr>
                 <tr>                    
@@ -243,14 +243,14 @@ if ($_GET['action'] == 'edit') {
 } else {
     ?>
     <div style="padding-top: 10px;">    
-        <div style="padding-left: 110px; width: 65%; float: left"><a href="area_management.php"><b>ফিরে যান</b></a></div>
-        <div ><a href="village.php?action=new"> নতুন গ্রাম</a>&nbsp;&nbsp;<a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">গ্রামের লিস্ট</a></div>
+        <div style="padding-left: 110px; width: 52%; float: left"><a href="area_management.php"><b>ফিরে যান</b></a></div>
+        <div ><a href="village.php?action=new">নতুন গ্রাম/পাড়া/প্রোজেক্ট</a>&nbsp;&nbsp;<a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">গ্রাম/পাড়া/প্রোজেক্ট লিস্ট</a></div>
     </div>
     <div>
         <form method="POST" onsubmit="">	
             <table class="formstyle"  style=" width: 78%; ">      
                 <tr>
-                    <th colspan="6">গ্রাম</th>
+                    <th colspan="6">গ্রাম/পাড়া/প্রোজেক্ট</th>
                 </tr>
                 <tr>
                     <td>                
@@ -259,8 +259,8 @@ if ($_GET['action'] == 'edit') {
                     <td style="background-color: #89C2FA" >জেলার নাম </td>
                     <td style="background-color: #89C2FA">থানার  নাম </td>
                     <td style="background-color: #89C2FA">পোস্ট অফিসের নাম </td>
-                    <td style="background-color: #89C2FA">গ্রামের নাম </td>
-                    <td style="background-color: #89C2FA " width="25%">অপশন</td>
+                    <td style="background-color: #89C2FA">গ্রাম/পাড়া/প্রোজেক্ট</td>
+                    <td style="background-color: #89C2FA">অপশন</td>
                 </tr>
                 <?php
                 $result = mysql_query("SELECT * FROM division,district,thana,post_office,village where idDivision=Division_idDivision and idDistrict=District_idDistrict AND idThana=Thana_idThana AND idPost_office=post_office_idPost_office");
@@ -281,7 +281,7 @@ if ($_GET['action'] == 'edit') {
                                           <td>$thana_name</td>
                                           <td>$post_offc_name</td>
                                           <td>$village_name</td>
-                        <td style='text-align: center ' > <a href='village.php?action=edit&vid=$village_id'>এডিট গ্রাম</a></td></tr>";
+                        <td style='text-align: center ' > <a href='village.php?action=edit&vid=$village_id'>এডিট</a></td></tr>";
                 }
                 ?>
             </table>
