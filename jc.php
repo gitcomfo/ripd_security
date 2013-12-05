@@ -1,25 +1,29 @@
-<?php
-function show()
-{
-for($i=0;$i<5;$i++)
-{
-    echo "
-        <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed magna vehicula, viverra mauris a, porttitor tellus. Sed placerat convallis tempor. Cras sed magna commodo, placerat urna sit amet, suscipit tellus. 
-        Proin iaculis dolor lectus, vel eleifend lorem vehicula ac. 
-        Fusce varius consequat neque sed suscipit. Aenean sed porttitor elit. Etiam porttitor nibh et sollicitudin interdum. 
-        Maecenas risus est, varius sed dapibus in, fermentum in nibh. Morbi dictum mi est, vitae rutrum velit blandit at. Aliquam ac dictum magna.
-        </div>
-        <DIV style='page-break-after:always'></DIV>
-        ";
-}
-}
-?>
+<link href="css/print.css" rel="stylesheet" type="text/css" media="print"/>
 <body>
-    <table>
-        <tr>
-            <td>
-                <?php show(); ?>
-            </td>
-        </tr>
-    </table>
+
+<!--    <div id="large" style=" height:800px;
+      border:2px solid #000;
+    margin:30px;">
+    <p>content</p>
+    <p>content</p>
+</div>
+<div id="large"  style=" height:800px;
+      border:2px solid #000;
+    margin:30px;">
+    <p>content</p>
+    <p>content</p>
+</div>-->
+
+<table style="page-break-inside: auto;">
+    <?php
+    for($i=0;$i<5;$i++)
+    {
+//        echo "<tr style='page-break-after:always;display:block;'><td><div style='width:100%'><div style='float:left;'> 1 dfafda </div><div style='float:left;'> 2 sfdzd </div></div>
+//            </td></tr>";
+        echo "<tr><td><div style='width:100%'><div style='float:left;'> 1 dfafda </div><div style='float:left;'> 2 sfdzd </div></div>
+            </td></tr><tr><td id='jc'></td></tr>";
+    }
+    ?>
+            
+</table>
 </body>

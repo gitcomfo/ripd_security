@@ -530,7 +530,7 @@ function showTicket($Tid)
     {
         for ($i=0; $i<$countseats; $i++)
         {
-        echo "<div id='front' style='width: 768px; height: 384px; border: blue dashed 2px; margin: 0 auto;background-image: url(images/watermark.png);background-repeat: no-repeat;background-size:100% 100%; '>
+        echo "<tr><td><div id='front' style='width: 768px; height: 384px; border: blue dashed 2px; margin: 0 auto;background-image: url(images/watermark.png);background-repeat: no-repeat;background-size:100% 100%; '>
                                     <div id='front_left' style='width: 192px; height: 384px;border-right:blue dotted 1px; float: left;'>
                                          <div style='width: 180px; float: left;padding-left: 4px;text-align: center;'><span class='rotare' style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'><span style='color: black;'>$progName</span></span></div>
                                          <div id='entry' style='width: 180px;float:left;padding-top: 5px;text-align: center;'><span class='rotare' style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'>এন্ট্রি পাস</span></div>
@@ -562,22 +562,21 @@ function showTicket($Tid)
                                             </div>
                                     </div>
                                 </div>
-                                <div id='back' style='width: 768px; height: 384px;  border: blue dashed 2px;background-color: #fff; margin: 0 auto;'>
+                                <div id='back' style='width: 768px; height: 384px;  border: blue dashed 2px;background-color: #fff; margin: 0 auto;page-break-after:always;'>
                                     <div id='back_ri8' style='width: 574px; height: 384px; float: left;border-right: blue dotted 1px;'>
                                         <div id='back_head' style='text-align: center;padding-top: 10px;'>
                                         <span style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'> কার্যবিবরণী</span>
                                         </div>
                                   </div>
-                                </div>";
-        echo "<div style='page-break-after:always'></div>";
-        }
+                                </div></td></tr><tr><td id='jc'></td></tr>";
+             }
     }
     
     if($arr_xtraseats[0] != "")
     {
         for ($j=0; $j<$countxtra; $j++)
         {
-        echo "<div id='front' style='width: 768px; height: 384px; border: blue dashed 2px; margin: 0 auto;background-image: url(images/watermark.png);background-repeat: no-repeat;background-size:100% 100%; '>
+        echo "<tr><td><div id='front' style='width: 768px; height: 384px; border: blue dashed 2px; margin: 0 auto;background-image: url(images/watermark.png);background-repeat: no-repeat;background-size:100% 100%; '>
                                     <div id='front_left' style='width: 192px; height: 384px;border-right:blue dotted 1px; float: left;'>
                                          <div style='width: 180px; float: left;padding-left: 4px;text-align: center;'><span style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'><span style='color: black;'>$progName</span></span></div>
                                          <div id='entry' style='width: 180px;float:left;padding-top: 5px;text-align: center;'><span style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'>এন্ট্রি পাস</span></div>
@@ -615,7 +614,7 @@ function showTicket($Tid)
                                         <span style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'> কার্যবিবরণী</span>
                                         </div>
                                         </div>
-                                </div><div class='page-break'></div>";
+                                </div></td></tr><tr><td id='jc'></td></tr>";
         }
     }
 }
@@ -843,18 +842,15 @@ if ($_GET['opt']=='submit_ticket') {
             <div id="noprint"style="padding-left: 110px;"><a href="selling_ticket.php"><b>ফিরে যান</b></a></div> 
             <div>
                 <form method="POST" onsubmit="" action="selling_ticket.php?opt=submit_account">	
-                    <table  class="formstyle" style="color: #3333CC; font-weight:600;">          
+                    <table  class="formstyle" style="color: #3333CC; font-weight:600;page-break-inside: auto;">          
                         <tr><th colspan="4" style="text-align: center;">টিকেট সেলিং</th></tr>
                         <?php if($printstatus == 'no') {?>
                             <tr>  
                                 <td colspan="2" style="padding-left: 0;text-align: center;color: green;">ধন্যবাদ, আপনার ক্রয়কৃত টিকেট আপনার অ্যাকাউন্ট হতে প্রিন্ট করেনিন</td>
                             </tr>
                         <?php } else {?>
-                            <tr>  
-                            <td colspan="2" style="padding-left: 0;">
                                 <?php showTicket($TicketID);?>
-                                </td>
-                                </tr>
+
                                   <tr>                    
                             <td colspan="2" style="text-align: center" ></td>
                             </tr>    
