@@ -20,8 +20,14 @@ elseif (isset ($_GET['ticketprize']))
 elseif (isset ($_GET['ticketprizeForAcc'])) 
     {
      $ticketTaka = $_GET['ticketprizeForAcc'];
-    echo " <td colspan='4' style='padding-left: 278px; ' > <input type= 'hidden' name='totalTaka' value='$ticketTaka' />
+     { 
+       // code throgh send sms here ....................................................  
+     }
+    echo " <td colspan='4' style='text-align:center; ' > <input type= 'hidden' name='totalTaka' value='$ticketTaka' />
         <input type= 'hidden' name='paymenttype' value='account' />
- <input class = 'btn' style =' font-size: 12px; ' type = 'submit' name='submit_ticket' value='ক্রয় করা হল' /></td>";
+        ভ্যারিফিকেশন কোডঃ <input class='box' name='varificationCode' onkeyup='checkVarificationCode(this.value)' /><span id='checkmsg'></span></br></br>
+        অথবা &nbsp;&nbsp;
+        <input class='btn' type='button' name='sendEmail' value='সেন্ড ইমেইল' /></br>
+ <input class = 'btn' style =' font-size: 12px;visibility: hidden; ' type = 'submit' name='submit_ticket' value='ক্রয় করা হল'  /></td>";
 }
 ?>
