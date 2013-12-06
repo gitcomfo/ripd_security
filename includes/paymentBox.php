@@ -27,7 +27,7 @@ elseif (isset ($_GET['ticketprizeForAcc']))
         <input type= 'hidden' name='paymenttype' value='account' />
         ভ্যারিফিকেশন কোডঃ <input class='box' name='varificationCode' onkeyup='checkVarificationCode(this.value)' /><span id='checkmsg'></span></br></br>
         অথবা &nbsp;&nbsp;
-        <input class='btn' type='button' name='sendEmail' value='সেন্ড ইমেইল' /></br>
- <input class = 'btn' style =' font-size: 12px;visibility: hidden; ' type = 'submit' name='submit_ticket' value='ক্রয় করা হল'  /></td>";
+        <input class='btn' type='button' name='sendEmail' value='সেন্ড ইমেইল' /></br></br></br>
+ <input class = 'btn' style =' font-size: 12px;visibility: hidden; ' type = 'submit' name='submit_ticket' id='submit_ticket' value='ক্রয় করা হল'  /></td>";
 }
 ?>

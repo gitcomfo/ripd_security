@@ -255,6 +255,10 @@ function checkVarificationCode(code)
             if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
                 document.getElementById('checkmsg').innerHTML=xmlhttp.responseText;
+                if(document.getElementById('checkmsg').innerHTML == "ok")
+                    {
+                        document.getElementById('submit_ticket').style.visibility = 'visible';
+                    }
             }
         }
         xmlhttp.open("GET","includes/ticketAccountVarification.php?code="+code,true);
