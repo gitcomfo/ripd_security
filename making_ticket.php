@@ -11,7 +11,6 @@ if(isset($_POST['submit_ticket']))
 
 if(isset($_POST['submit']))
 {
-    $place=$_POST['place'];
     $t_prize=$_POST['ticket_prize'];
     $seat=$_POST['number_of_seat'];
     $xtra_seat=$_POST['extra_seat'];
@@ -24,7 +23,7 @@ if(isset($_POST['submit']))
     $P_description = $_POST['description'];
     $P_type = $_POST['type'];
     
-    $pupsql = "UPDATE `program` SET `program_location` = '$place',`total_seat` = '$seat',`extra_seat` = '$xtra_seat', `ticket_prize` = '$t_prize', `subject`= '$P_description' WHERE `program`.`idprogram` = '$programID' ;";
+    $pupsql = "UPDATE `program` SET `total_seat` = '$seat',`extra_seat` = '$xtra_seat', `ticket_prize` = '$t_prize', `subject`= '$P_description' WHERE `program`.`idprogram` = '$programID' ;";
     $pusresult=mysql_query($pupsql) or exit('query failed: '.mysql_error());
 }
 ?>
@@ -250,10 +249,6 @@ $whoinbangla =  getProgramer($P_type);
                     <tr>
                         <td colspan="2" id="pall">
                         </td>
-                    </tr>
-                    <tr>
-                        <td>স্থান</td>
-                        <td>:    <input  class="box" type="text" id="place" name="place" /></td>            
                     </tr>
                      <tr>
                         <td>কার্যবিবরণী / বিষয়বস্তু</td>
