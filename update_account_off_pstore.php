@@ -8,7 +8,7 @@ include_once 'includes/header.php';
 $type  = $_GET['type'];     
 $x= $_GET['id'];
       $ofid= base64_decode($x);
-      $all = "SELECT * from ".$dbname.".office WHERE idOffice=$ofid ";
+      $all = "SELECT * FROM office WHERE idOffice=$ofid ";
       $allsql = mysql_query($all) or exit('query failed: '.mysql_error());
      while( $off_row = mysql_fetch_assoc($allsql))
      {      
@@ -98,10 +98,9 @@ $x= $_GET['id'];
     //********************** update query**************
   if(isset($_POST['submit03']))
   {
-     $off_no = $_POST['office_no'];
-    $mail = $_POST['office_mail'];
+     $off_name = $_POST['office_name'];
     $off_add = $_POST['office_address'];
-    $offup="UPDATE `ripd_db_comfosys`.`office` SET `office_number` = '$off_no', `office_details_address` = '$off_add', `office_email` = '$mail' WHERE `office`.`idOffice` =$ofid AND `office`.`Thana_idThana` =$off_thana;";
+    $offup="UPDATE `ripd_db_comfosys`.`office` SET `office_name` = '$off_name', `office_details_address` = '$off_add' WHERE `office`.`idOffice` =$ofid AND `office`.`Thana_idThana` =$off_thana;";
     $offupsql = mysql_query($offup) or exit('query failed: '.mysql_error());
     echo "<script type='text/javascript'>window.location.href = window.location; </script>";
      }
@@ -518,17 +517,21 @@ xmlhttp.send();
                                              <tr>	
                                                 <td  colspan="2" style =" font-size: 14px"><b>ঠিকানা</b></td>    
                                             </tr>
+                                            <tr>
+                                                <td>অফিসের নাম</td>
+                                                <td>:    <input  class ="textfield" type="text" id="office_name_" name="office_name" value="<?php echo $name;?>" /></td>
+                                            </tr>
                                              <tr>
                                                 <td>অফিসের ঠিকানা</td>
                                                 <td>:    <input  class ="textfield" type="text" id="office_address_" name="office_address" value="<?php echo $off_add;?>" /></td>
                                             </tr>
                                                    <tr>
                                                 <td>অফিসের নাম্বার</td>
-                                                <td>:    <input  class ="textfield" type="text" id="office_no" name="office_no" value="<?php echo $off_no;?>"/></td>
+                                                <td>:    <input  class ="textfield" type="text" readonly="" id="office_no" name="office_no" value="<?php echo $off_no;?>"/></td>
                                             </tr>
                                              <tr>
                                                 <td>অফিসের ইমেইল</td>
-                                                <td>:    <input  class ="textfield" type="text" id="office_mail" name="office_mail" onblur="check(this.value)" value="<?php echo $mail;?>" /><em> (ইংরেজিতে লিখুন)</em><div id="error_msg" style="margin-left: 5px"></div></td>
+                                                <td>:    <input  class ="textfield" type="text" readonly="" id="office_mail" name="office_mail" value="<?php echo $mail;?>" /><em> (ইংরেজিতে লিখুন)</em><div id="error_msg" style="margin-left: 5px"></div></td>
                                             </tr>
                                             <tr>                    
                                             <td colspan="4" style="padding-left: 250px; " >
