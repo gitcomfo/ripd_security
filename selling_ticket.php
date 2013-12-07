@@ -169,7 +169,6 @@ function showPaymentBox(taka)
             if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
                 document.getElementById('paymentBox').innerHTML=xmlhttp.responseText;
-                document.getElementById('printORnot').value="yes";
             }
         }
         xmlhttp.open("GET","includes/paymentBox.php?paytaka="+taka,true);
@@ -191,7 +190,6 @@ function showPaymentBox2(taka)
             if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
                 document.getElementById('paymentBox').innerHTML=xmlhttp.responseText;
-                 document.getElementById('printORnot').value="no";
             }
         }
         xmlhttp.open("GET","includes/paymentBox.php?paytaka="+taka,true);
@@ -333,13 +331,14 @@ function beforeProceed()
             return false;
         }
 }
-function setBuyer(acc,name,mbl)
+function setBuyer(acc,name,mbl,image)
 {
        var n = decodeURIComponent(name);
        var name2 = n.replace(/\+/g," ");
-        document.getElementById('buyername').innerHTML = acc;
-        document.getElementById('buyermobile').innerHTML = name2;
-        document.getElementById('buyerACC').innerHTML=mbl;
+       document.getElementById('buyerimage').setAttribute('src', image);
+        document.getElementById('buyername').innerHTML = name2;
+        document.getElementById('buyermobile').innerHTML = mbl;
+        document.getElementById('buyerACC').innerHTML= acc;
         document.getElementById('owner_name').value = name2;
         document.getElementById('owner_name').readOnly=true;
         document.getElementById('owner_mbl').value=mbl;
@@ -350,6 +349,9 @@ function setBuyer(acc,name,mbl)
 <?php
 if(isset($_POST['submit'])) 
 {
+    $sel_charge = mysql_query("SELECT * FROM charge WHERE charge_criteria='ticket making charge' ");
+    $chargerow = mysql_fetch_assoc($sel_charge);
+    $making_prize=$chargerow['charge_amount'];
     $P_value=$_POST['prgrm_id'];
     $allsql="SELECT * FROM program WHERE idprogram= $P_value ;";
     $allrslt=mysql_query($allsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন';
@@ -362,7 +364,6 @@ if(isset($_POST['submit']))
             $p_time=$all['program_time'];
             $p_place=$all['program_location'];
             $ticket_prize=$all['ticket_prize'];
-            $making_prize=$all['making_charge'];
             $db_description = $all['subject'];
         }
     $sql = "SELECT * FROM cfs_user,employee WHERE idUser =  cfs_user_idUser AND idEmployee = ANY( SELECT fk_Employee_idEmployee FROM presenter_list WHERE fk_idprogram = $P_value);";
@@ -378,13 +379,12 @@ if(isset($_POST['submit']))
 
 if(isset($_POST['submit_ticket'])) 
 {
-   $printstatus=$_POST['printORnot'];
-      $paymentType=$_POST['paymenttype'];
+   $paymentType=$_POST['paymenttype'];
     $valueID=$_POST['progID'];
    $ownerName=$_POST['owner_name'];
    $ownerMbl=$_POST['owner_mbl'];
    //$takaPerTicket=$_POST['ticket'];
-   $makePerTicket = $_POST['Maketicket'];
+  // $makePerTicket = $_POST['Maketicket'];
    $arr_checkbox1 = $_POST['checkbox_Seat'];
    $str_SelectedSeat = implode(",", $arr_checkbox1);
    $arr_checkbox2 = $_POST['checkbox_Xtra'];
@@ -663,6 +663,9 @@ if ($_GET['opt']=='submit_ticket') {
         <div class="main_text_box">
             <?php  if($_GET['programID']!=0)
                         { 
+                            $sel_charge = mysql_query("SELECT * FROM charge WHERE charge_criteria='ticket making charge' ");
+                            $chargerow = mysql_fetch_assoc($sel_charge);
+                            $making_prize=$chargerow['charge_amount'];
                             $value = $_GET['programID']; 
                             $allsql="SELECT * FROM " . $dbname . ".program WHERE idprogram=$value;";
                                 $allrslt=mysql_query($allsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন';
@@ -674,7 +677,6 @@ if ($_GET['opt']=='submit_ticket') {
                                         $p_time=$all['program_time'];
                                         $p_place=$all['program_location'];
                                         $ticket_prize=$all['ticket_prize'];
-                                        $making_prize=$all['making_charge'];
                                         $db_description = $all['subject'];
                                     }
                                     
@@ -768,15 +770,17 @@ if ($_GET['opt']=='submit_ticket') {
                             <td colspan="2">
                                 <table>
                                     <tr>
-                                        <td style=" color: darkblue;">ক্রেতার নাম</td>
+                                        <td style=" color: darkblue;padding-left: 0px !important;">ক্রেতার নাম</td>
                                         <td>:   <input class="box" type="text" id="owner_name" name="owner_name" /></td>
                                         <td style=" color: darkblue;">খুজুন : <input class="box" type="text" name="searchBuyer" id="searchBuyer" onkeyup="getBuyer(this.value);"/>
                                         <div id="accountfound"></div></td>
                                     </tr>
                                     <tr>
-                                        <td style="color: darkblue;"> ক্রেতার মোবাইল নাম্বার </td>
+                                        <td style="color: darkblue;padding-left: 0px !important;"> ক্রেতার মোবাইল নাম্বার </td>
                                         <td>:   <input class="box" type="text" id="owner_mbl" name="owner_mbl" onkeypress=' return numbersonly(event)' /><em> (ইংরেজিতে লিখুন)</em></td>
-                                        <td style=" color: darkblue;">একাউন্টধারীর নামঃ <span style=" color: black;" id="buyername"></span></br>
+                                        <td style=" color: darkblue;">
+                                            <img src="" width="128px" height="128px" alt="" id="buyerimage"></br>
+                                            একাউন্টধারীর নামঃ <span style=" color: black;" id="buyername"></span></br>
                                             একাউন্টধারীর মোবাইল নং : <span style=" color: black;" id="buyermobile"></span></br>
                                             একাউন্ট নং : <span style=" color: black;" id="buyerACC"></span></br>
                                         </td>
@@ -789,7 +793,7 @@ if ($_GET['opt']=='submit_ticket') {
                             <td>:  <span style="color: black;"><?php echo countSeat($P_value);?></span></td>                           
                         </tr>
                           <tr>
-                            <td style="width: 40%;color: darkblue;"> আসন নাম্বার<input type="hidden" id="printORnot" name="printORnot" /></td>
+                            <td style="width: 40%;color: darkblue;"> আসন নাম্বার</td>
                             <td>: <div id="showSeat" style="overflow: scroll; height:auto; width: 400px;border:gray inset 1px;padding: 3px;background-color:#CDE3FA"><?php showSeats($P_value);?></div>
                             </td>                           
                         </tr>
@@ -869,13 +873,7 @@ if ($_GET['opt']=='submit_ticket') {
                 <form method="POST" onsubmit="" action="selling_ticket.php?opt=submit_account">	
                     <table  class="formstyle" style="color: #3333CC; font-weight:600;page-break-inside: auto;">          
                         <tr><th colspan="4" style="text-align: center;">টিকেট সেলিং</th></tr>
-                        <?php if($printstatus == 'no') {?>
-                            <tr>  
-                                <td colspan="2" style="padding-left: 0;text-align: center;color: green;">ধন্যবাদ, আপনার ক্রয়কৃত টিকেট আপনার অ্যাকাউন্ট হতে প্রিন্ট করেনিন</td>
-                            </tr>
-                        <?php } else {?>
                                 <?php showTicket($TicketID);?>
-
                                   <tr>                    
                             <td colspan="2" style="text-align: center" ></td>
                             </tr>    
@@ -888,48 +886,8 @@ if ($_GET['opt']=='submit_ticket') {
             </div>
         </div>      
     </div>
-<?php }}
-elseif ($_GET['opt']=='submit_account') {
-    ?>
-    <div class="column6">
-        <div class="main_text_box">
-            <?php if($sqlerror !="") { QueryFailedMsg($sqlerror);} else{ ?>
-            <div style="padding-left: 110px;"><a href="selling_ticket.php"><b>ফিরে যান</b></a></div> 
-            <div> 
-                <form method="POST" onsubmit="" action="">	
-                    <table  class="formstyle" style="color: #3333CC; font-weight:600;font-family: SolaimanLipi !important;">          
-                        <tr><th colspan="4" style="text-align: center;">টিকেট সেলিং</th></tr>
-                        <tr>  
-                            <td colspan="2" style="padding-left: 0;">
-                                <?php echo "অ্যাকাউন্টধারীর অ্যাকাউন্ট-এর ভিসিবল এখানে থাকবে";?>
-                                </br></br></br></td>
-                                </tr> 
-                                <tr>
-                            <td style="width: 40%">ব্যালেন্স এমাউন্ট</td>
-                            <td>: <span style="color: black;"> Taka </span> </td>                           
-                        </tr>
-                        <tr>
-                            <td style="width: 40%">ইন এমাউন্ট</td>
-                            <td>:  <input class="box" type="text" id="in_amount" name="in_amount" />Taka </span> </td>                           
-                        </tr>
-                        <tr>                    
-                            <td colspan="2" style="text-align: center" ></td>
-                        </tr>    
-                        <tr>                    
-                            <td colspan="2" style="text-align: center" ><a class="btn" style="text-decoration: none;padding: 5px;" href="javascript: window.print()"> প্রিন্ট</a></td>                           
-                        </tr>
-                        <tr>
-                            <td colspan="2" id="acount">
-                            </td>                           
-                        </tr>
-                    </table>
-                </form>
-                
-            </div>
-        </div>      
-    </div>
-<?php
-            }} else {
+<?php }
+else {
     ?>
     <div class="column6">
         <div class="main_text_box">
