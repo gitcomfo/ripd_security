@@ -1,10 +1,10 @@
 <?php
 error_reporting(0);
+session_start();
 include_once 'includes/header.php';
 include_once 'includes/columnViewAccount.php';
 include_once 'includes/selectQueryPDO.php';
 include_once 'includes/MiscFunctions.php';
-session_start();
 
 $session_user_id = $_SESSION['userIDUser'];
 $sql_select_cfs_user_all->execute(array($session_user_id));
@@ -16,7 +16,7 @@ foreach ($arr_cfs_user as $acu)
         $aab_open_date = english2bangla($acu['account_open_date']);
         $aab_mobile = english2bangla($acu['mobile']);
         $aab_email = $acu['email'];
-        $aab_user_type = $acu['user_type'];
+       $aab_user_type = $acu['user_type'];
         $cfs_user_id = $acu['idUser'];
         }
 if($aab_user_type == 'customer')
@@ -57,7 +57,6 @@ if(!file_exists($aab_picture)) $aab_picture = "pic/default_profile.jpg";
 
 <title>প্রোফাইল ম্যানেজমেন্ট</title>
 <style type="text/css">@import "css/domtab.css";</style>
-
 
 <div class="columnSubmodule">
         <table class="formstyle">    
