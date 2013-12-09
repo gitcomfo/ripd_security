@@ -162,7 +162,7 @@ function searchPckgPro(keystr) // show products from brand
                             echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$pckgname.'</div></td>';
                             echo '<td><div align="center">'.$pckgqty.'</div></td>';
                             echo '<td><div align="center">'.$status.'</div></td>';
-                            echo '<td><div align="center"><a onclick="packageDetails('.$pckgid.')" style="cursor:pointer;" ><input class="btn" type="button" value="বিস্তারিত" style="font-family: SolaimanLipi !important;"/></a></div></td>';
+                            echo '<td><div align="center"><a onclick="packageDetails('.$pckgid.')" style="cursor:pointer;" ><input  type="button" value="বিস্তারিত" style="font-family: SolaimanLipi !important;"/></a></div></td>';
                             echo '</tr>';
                             $sl++;
                             }
@@ -198,7 +198,7 @@ function searchPckgPro(keystr) // show products from brand
                             echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$pckgname.'</div></td>';
                             echo '<td><div align="center">'.english2bangla($pckgqty).'</div></td>';
                             echo '<td><div align="center">'.$status.'</div></td>';
-                            echo '<td><div align="center"><a onclick="packageDetails('.$pckgid.')" style="cursor:pointer;" ><input class="btn" type="button" value="বিস্তারিত" style="font-family: SolaimanLipi !important;"/></a></div></td>';
+                            echo '<td><div align="center"><a onclick="packageDetails('.$pckgid.')" style="cursor:pointer;" ><input  type="button" value="বিস্তারিত" style="font-family: SolaimanLipi !important;"/></a></div></td>';
                             echo '</tr>';
                             $sl++;
                       }

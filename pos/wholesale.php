@@ -403,7 +403,7 @@ while($row = mysql_fetch_array($getresult))
 	<label style='margin-left: 63px;'><b>টাকা ফেরত : </b>
 	  <input name='change' id='change' type='text' readonly/> টাকা</label>
   </div></br></br>
-      <input name="print" id="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:50%;font-family: SolaimanLipi !important;" />
+<input class="btn" name="print" id="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" />
     </fieldset>
   </form>
 <div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
