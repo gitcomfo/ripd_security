@@ -29,14 +29,14 @@ include_once 'includes/header.php';
                     <li><img class="main" src="images/slider/pic1.jpg" /> <img
                             class="thumb" src="images/slider/pic1.jpg" />
                     </li>
-                    <li><img class="main" src="images/slider/people-shadow-globe.jpg" /> <img
-                            class="thumb" src="images/slider/people-shadow-globe.jpg" />
-                    </li>
                     <li><img class="main" src="images/slider/Super-shop_01.jpg" /> <img
                             class="thumb" src="images/slider/Super-shop_01.jpg" />
                     </li>
-                    <li><img class="main" src="images/slider/pic4.jpg" /> <img
-                            class="thumb" src="images/slider/pic4.jpg" />
+                    <li><img class="main" src="images/slider/pic7.jpg" /> <img
+                            class="thumb" src="images/slider/pic7.jpg" />
+                    </li>
+                    <li><img class="main" src="images/slider/people-shadow-globe.jpg" /> <img
+                            class="thumb" src="images/slider/people-shadow-globe.jpg" />
                     </li>
                     <li><img class="main" src="images/slider/pic2.jpg" /> <img
                             class="thumb" src="images/slider/pic2.jpg" />
@@ -44,8 +44,8 @@ include_once 'includes/header.php';
                     <li><img class="main" src="images/slider/pic5.jpg" /> <img
                             class="thumb" src="images/slider/pic5.jpg" />
                     </li>
-                    <li><img class="main" src="images/slider/pic3.jpg" /> <img
-                            class="thumb" src="images/slider/pic3.jpg" />
+                    <li><img class="main" src="images/slider/Super-shop_02.jpg" /> <img
+                            class="thumb" src="images/slider/Super-shop_02.jpg" />
                     </li>
                 </ul>
             </div>
