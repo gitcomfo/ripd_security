@@ -521,24 +521,24 @@ if(strlen($p_mobile) == 11)
                     </tr>
                    <tr>
                         <td>প্রোপ্রাইটারের নাম</td>
-                        <td>:   <input class='box' type='text' id='name' name='name' value="<?php echo $db_proprietorName;?>"/>
+                        <td>:   <input class='box' style="width:220px;" type='text' id='name' name='name' value="<?php echo $db_proprietorName;?>"/>
                             <input type='hidden' name='cfsid' value="<?php echo $db_cfsuserid;?>"/></td>			
                     </tr>
                     <tr>
                         <td >একাউন্ট নাম্বার</td>
-                        <td>:   <input class='box' type='text' id='acc_num' name='acc_num' readonly value="<?php echo $db_proprietorAcc;?>"/></td>			
+                        <td>:   <input class='box' style="width:220px;" type='text' id='acc_num' name='acc_num' readonly value="<?php echo $db_proprietorAcc;?>"/></td>			
                     </tr>
                     <tr>
                         <td>অফিশিয়াল ই মেইল</td>
-                        <td>:   <input class='box' style="width:220px;" type='text' readonly="" value="<?php echo $db_empRipdMail;?>" /></td>			
+                        <td>:   <input class='box' style="width:220px;" style="width:220px;" type='text' readonly="" value="<?php echo $db_empRipdMail;?>" /></td>			
                     </tr>
                     <tr>
                         <td >ব্যক্তিগত ই মেইল</td>
-                       <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' value="<?php echo $db_proprietorMail;?>" /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
+                       <td>:   <input class='box' style="width:220px;" type='text' id='email' name='email' onblur='check(this.value)' value="<?php echo $db_proprietorMail;?>" /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
-                        <td>:   <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' value="<?php echo $db_proprietorMob;?>" /></td>		
+                        <td>:   <input class='box' style="width:220px;" type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' value="<?php echo $db_proprietorMob;?>" /></td>		
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-top: 10px; padding-left: 250px;padding-bottom: 5px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit5" value="সেভ করুন" />

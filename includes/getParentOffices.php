@@ -50,4 +50,13 @@ if (isset($_GET['key']) && ($_GET['key'] != '') && ($_GET['off']==1)) {
         	}
                 
 }
+if (isset($_GET['office'])) {
+	//Add slashes to any quotes to avoid SQL problems.
+	$offid = $_GET['office'];
+                   $suggest_query = "SELECT * FROM  office WHERE idOffice= $offid";
+	$reslt= mysql_query($suggest_query);
+	$suggest = mysql_fetch_assoc($reslt);
+                  $db_address = $suggest['office_details_address'];
+        	echo $db_address;
+}
 ?>

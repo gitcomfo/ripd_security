@@ -105,7 +105,7 @@ function searchPckgPro(keystr) // product in packages search***************
 <body onLoad="ShowTime()">
 
     <div id="maindiv">
-<div id="header" style="width:100%;height:100px;background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
+<div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 100%;height: 50px;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div></br>
 <div class="wraper" style="width: 80%;font-family: SolaimanLipi !important;">
 <fieldset style="border-width: 3px;width: 100%;">

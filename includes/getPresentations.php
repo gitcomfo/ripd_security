@@ -36,6 +36,7 @@ while($all=  mysql_fetch_assoc($allrslt))
     $p_date=$all['program_date'];
     $p_time=$all['program_time'];
     $p_type = $all['program_type'];
+    $p_location = $all['program_location'];
 }
 $typeinbangla = getProgramType($p_type);
 $whoinbangla =  getProgramer($p_type);
@@ -49,8 +50,8 @@ $sql = "SELECT * FROM cfs_user,employee WHERE idUser =  cfs_user_idUser AND idEm
         $str_emp_email = $e_mail.", ".$str_emp_email;
     }
     echo ' <table> ';
-    echo " <tr><td style='width: 310px; padding-left: 0px !important;'>$typeinbangla-এর নাম্বার</td>
-                        <td>:    $p_no</td >                
+    echo " <tr><td style='width: 310px; padding-left: 0px !important;'>$typeinbangla-এর নাম</td>
+                        <td>:    $p_name</td >                
                     </tr>
                     <tr>
                         <td style='padding-left: 0px !important;'>$whoinbangla-এর নাম</td>
@@ -59,6 +60,10 @@ $sql = "SELECT * FROM cfs_user,employee WHERE idUser =  cfs_user_idUser AND idEm
                     <tr>
                         <td style='padding-left: 0px !important;'>$whoinbangla-এর ইমেইল</td>
                         <td>:    $str_emp_email</td>            
+                    </tr>
+                    <tr>
+                        <td style='padding-left: 0px !important;'>স্থান</td>
+                        <td>: $p_location</td>            
                     </tr>
                     <tr>
                         <td style='padding-left: 0px !important;'>তারিখ</td>

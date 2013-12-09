@@ -250,7 +250,7 @@ function checkNumeric(objName)
 <body onLoad="ShowTime()">
 
     <div id="maindiv">
-<div id="header" style="width:100%;height:100px;background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
+<div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
 <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
     <div style="width: 33%;height: 100%; float: left;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div>
@@ -368,23 +368,41 @@ while($row = mysql_fetch_array($getresult))
 <legend style="color: brown;">মূল্য পরিশোধ এবং ক্রেতার তথ্য</legend>
 
 <b>কাস্টমার টাইপ :</b>
-<select name="customerType" id="customerType" onchange="showCustInfo(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
+&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(1)"/>নন-রেজিস্টার কাস্টমার
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(2)"/>সেলস স্টোর
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(3)"/>অফিস
+<!--<select name="customerType" id="customerType" onchange="showCustInfo(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
     <option value="0">---সিলেক্ট করুন---</option>
     <option value="1">নন-রেজিস্টার কাস্টমার</option>
     <option value="2">সেলস স্টোর</option>
     <option value="3">অফিস</option>
-</select>
+</select>-->
 </br>
-<div id="customerInfo" style="width: 100%; margin-top: 20px;"></div>
+<div id="customerInfo" style="width: 100%; margin-top: 20px;">
+    <table width='100%' cellspacing='0' cellpadding='0' style='border: #000000 inset 1px; font-size:20px;'><tr>
+            <td>কাস্টমারের নামঃ <input id='custName' name='custName' /><em style='font-size: 10px;color:#03C;'>* অবশ্য পূরণীয়</em></td>
+           <td>কাস্টমারের মোবাইল নং :<input id='custMbl' name='custMbl' onkeypress='return checkIt(event)' /><em style='font-size: 10px;color:#03C;'>* অবশ্য পূরণীয়</em></td>
+            <td>কাস্টমারের পেশাঃ <input id='custOccupation' name='custOccupation' /></td>
+           </tr><tr><td colspan ='4'>&nbsp;&nbsp;</td></tr>
+            <tr><td colspan='4'>কাস্টমারের ঠিকানাঃ <input id='custAdrss' name='custAdrss' style='width:600px;'/></td></tr>
+            </table>
+</div>
 </br>
 <b>পেমেন্ট টাইপ :</b>
-<select name="payType" id="payType" onchange="showPayType(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
+&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(1)" checked />ক্যাশ
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(2)"/>অ্যাকাউন্ট
+<!--<select name="payType" id="payType" onchange="showPayType(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
     <option value="0">-সিলেক্ট করুন-</option>
     <option value="1">ক্যাশ</option>
     <option value="2">অ্যাকাউন্ট</option>
-</select>
+</select>-->
 </br>
-  <div id="payInfo" class="text" style="margin-top: 10px;"></div></br></br>
+  <div id="payInfo" class="text" style="margin-top: 10px;">
+      <label style='margin-left:200px;'><b>টাকা গ্রহন&nbsp;&nbsp;:</b>
+	  <input name='cash' id='cash' type='text' onkeypress='return checkIt(event)' onkeyup='minus()' /> টাকা</label>
+	<label style='margin-left: 63px;'><b>টাকা ফেরত : </b>
+	  <input name='change' id='change' type='text' readonly/> টাকা</label>
+  </div></br></br>
       <input name="print" id="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:50%;font-family: SolaimanLipi !important;" />
     </fieldset>
   </form>

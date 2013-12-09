@@ -11,20 +11,31 @@ if($totalseat == 0)
 }
 else
 {
-$total_taka = ($tkPerTicket+$mpPerTicket)*$totalseat;
+$total_ticketprize = $tkPerTicket*$totalseat;
+$total_makingcharge = $mpPerTicket*$totalseat;
+$total_amount = $total_ticketprize + $total_makingcharge;
     echo ' <table style="color: darkblue;"> ';
     echo " <tr>
-    </br><td style='width: 40%; padding-left: 0px !important;'>মোট টিকেট</td>
-    <td>: <span style='color: black;'>$totalseat টি</span></td>
+    <td style='padding-left: 0px !important;'>মোট টিকেট</td>
+    <td >: <span style='color: black;'>$totalseat টি</span></td><td style='width:30%;'></td><td style='width:20%;'></td>
     </tr>
     <tr>
-    <td style='width: 40%; padding-left: 0px !important;'>মোট টিকেট প্রাইজ</td>
-    <td>: <span style='color: black;'>$total_taka TK</span></td>
+    <td style='padding-left: 0px !important;'>মোট টিকেট প্রাইজ</td>
+    <td style='color: black;'>: $total_ticketprize TK</td>
+     </tr>
+     <tr>
+     <td style='padding-left: 0px !important;'>মোট মেকিং চার্জ</td>
+    <td style='color: black;'>: $total_makingcharge TK</td>
     </tr>
-    <tr>                    
-    <td colspan='2' style='padding-left: 278px; ' > 
-    <input class = 'btn' style =' font-size: 12px; ' type = 'submit' name='submit_ticket' value='ক্রয় করা হল' />
-    </tr>";
-    echo '</table>';
+    <tr>
+     <td style='padding-left: 0px !important;'>মোট টিকেট বিক্রয়মূল্য</td>
+    <td style='color: black;'>: $total_amount TK</td>
+    </tr>
+    <tr>
+    <td style='width:50%;padding-left: 0px !important;text-align:center;'><input type='radio' name='bycash' onclick='paycash($total_amount)' />পেমেন্ট বাই ক্যাশ</td>
+    <td style='width:50%;text-align:center;'><input type='radio' name='bycash' onclick='paybyaccount($total_amount)'/>পেমেন্ট বাই অ্যাকাউন্ট</td>
+    </tr><table>
+";
+
 }
 ?>

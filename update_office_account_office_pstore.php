@@ -5,6 +5,10 @@
 error_reporting(0); 
 include_once 'includes/header.php'; 
 $g_type = $_GET['pwr'];
+$logedinOfficeId = $_SESSION['loggedInOfficeID'];
+$sel_office = mysql_query("SELECT * FROM office WHERE idOffice = $logedinOfficeId");
+$officerow = mysql_fetch_assoc($sel_office);
+$db_selectedOffice = $officerow['office_selection'];
 ?>
 <title>আপডেট অফিস অ্যাকাউন্ট</title>
 <style type="text/css">@import "css/style.css";</style>
@@ -63,11 +67,11 @@ $g_type = $_GET['pwr'];
                     <?php
                     if($g_type==1)
                     {
-                    $sql_officeTable = "SELECT * from $dbname.office WHERE office_type = 'pwr_head' ORDER BY office_name ASC";
+                    $sql_officeTable = "SELECT * from office WHERE office_type = 'pwr_head' ORDER BY office_name ASC";
                     $rs = mysql_query($sql_officeTable);
                     }
                     else{
-                    $sql_officeTable = "SELECT * from ".$dbname.".office WHERE office_type <> 'pwr_head' ORDER BY office_name ASC";
+                    $sql_officeTable = "SELECT * from office WHERE office_type <> 'pwr_head' AND office_selection= '$db_selectedOffice' ORDER BY office_name ASC";
                     $rs = mysql_query($sql_officeTable);
                     }
                     //echo mysql_num_rows($rs);

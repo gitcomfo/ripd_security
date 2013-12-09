@@ -396,13 +396,13 @@ elseif (isset($_POST['submit4'])) {
     mysql_query("START TRANSACTION");
      if($c_Village_idVillage !="")
     {
-        $sql_c_insert_current_address = mysql_query("INSERT INTO $dbname.address 
+        $sql_c_insert_current_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana, post_idpost, village_idvillage ,adrs_cepng_id)
                                      VALUES ('Present', '$c_house', '$c_house_no', '$c_road', 'cust', '$c_post_code','$c_Thana_idThana','$c_Post_idPost', '$c_Village_idVillage', '$p_custAcid')");
     }
    if($cp_Village_idVillage !="")
     {
-     $sql_cp_insert_permanent_address = mysql_query("INSERT INTO $dbname.address 
+     $sql_cp_insert_permanent_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
                                      VALUES ('Permanent', '$cp_house', '$cp_house_no', '$cp_road', 'cust', '$cp_post_code','$cp_Thana_idThana', '$cp_Post_idPost', '$cp_Village_idVillage', '$p_custAcid')");
     }
