@@ -92,7 +92,7 @@ function searchPckgPro(keystr) // show products from brand
                }
                 else
                     {document.getElementById('searchResult').style.visibility = "visible";
-                document.getElementById('searchResult').setAttribute('style','position:absolute;top:35%;left:33%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('searchResult').setAttribute('style','position:absolute;top:41%;left:36%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('searchResult').innerHTML=xmlhttp.responseText;
         }
@@ -210,7 +210,7 @@ function searchPckgPro(keystr) // show products from brand
 </div>
 </fieldset>
 
-<div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
+<div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
          RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
 </div>

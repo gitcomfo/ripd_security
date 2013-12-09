@@ -209,9 +209,9 @@ function searchName(where) // productlist-er name search box
     <div class="top" style="width: 100%;">
         <div class="topleft" style="float: left;width: 30%;"><b>প্রোডাক্ট কোড :</b>
       <input type="text" id="amots" name="amots" onKeyUp="searchCode('productIN.php');" autocomplete="off" style="width: 200px;"/>
-      <div id="layer2"style="width:200px;position:absolute;top:41.5%;left:16.5%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
+      <div id="layer2"style="width:200px;position:absolute;top:52%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
       <b>প্রোডাক্ট নাম&nbsp;&nbsp; : </b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchName('productIN.php');" autocomplete="off" style="width: 200px;"/>
-      <div  id="searchResult"style="position:absolute;top:49%;left:16.5%;width:200px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
+      <div  id="searchResult"style="position:absolute;top:64%;left:8%;width:200px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
     </div>
     <div class="topright" style="float:left; width: 70%;">
 <?php
@@ -287,7 +287,7 @@ while($row = mysql_fetch_array($getresult))
 <form action="productIN.php" method="post" >
     <input class="btn" name="entry" id="entry" type="submit" value="এন্ট্রি করুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" /></br></br>
 </form>
-<div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
+<div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
          RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
 </div>

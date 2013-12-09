@@ -239,7 +239,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
     <div class="top" style="width: 100%;height: auto;">
         <div class="topleft" style="width: 100%;"><b>পণ্য খুঁজুন&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
             : <input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('product_list.php');" autocomplete="off" style="width: 300px;"/></br>
-        <div style="position:absolute;top:262px;left:400px;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult"></div>
+        <div style="position:absolute;top:38%;left:30.5%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult"></div>
     </div></br></br>
     <div style="float: left;width: 25%;"><b>পণ্যের ক্যাটাগরি</b></br>
       <select id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value);showCatProducts(this.value);" style="width: 200px;font-family: SolaimanLipi !important;">
@@ -328,7 +328,7 @@ if (isset($_GET['code']))
 </div>
 </fieldset>
 
-<div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
+<div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
          RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
 </div>

@@ -229,6 +229,9 @@ function getUpdate(xprofit) // after update pckg prices
 </div>
 </br>
 <div class="wraper" style="width: 80%;font-family: SolaimanLipi !important;float: none;">
+     <?php if($msg != "") { ?>
+<div align="center" style="color: green;font-size: 26px; font-weight: bold; width: 90%;height: 20px;margin: 0 5% 0 5%;float: none;"><?php echo $msg;?></div></br>
+    <?php } ?>
 <fieldset style="border-width: 3px;width: 100%;">
          <legend style="color: brown;">প্যাকেজ খুঁজুন</legend>
     <div class="top" style="width: 100%;height: auto;">
@@ -390,8 +393,8 @@ if($_GET['step']==1) {
                                     <p>
                                         <?php if($check !=1) {?>
                                         <input type="hidden"  id="check"  /><span id="show" style="color: red;"></span></br>
-                                        <input  id="okok" type="button" value="ঠিক আছে" style="cursor:pointer;font-family: SolaimanLipi !important;" />
-                                      <input name="ok" id="ok" type="submit" value="এন্ট্রি" style="cursor:pointer;font-family: SolaimanLipi !important;" />
+                                        <input  id="okok" type="button" value="ঠিক আছে" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" />
+                                      <input name="ok" id="ok" type="submit" value="এন্ট্রি" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" />
                                       <?php } else { echo "<span style='color:red;'>দুঃখিত, এই প্যাকেজটি এন্ট্রি করার জন্য প্রয়োজনীয় পরিমান পণ্য নেই </span>";}?>
                                     </p>
                                     </br></br>
@@ -401,15 +404,8 @@ if($_GET['step']==1) {
         </div>
 </form>
 </div>
-<?php } elseif($_GET['step']==2) { ?>
+<?php } elseif(($_GET['step']==2) && ($msg == "") ) { ?>
     <!-- ************************যদি প্যাকেজ আগে এই দোকানে ব্যাবহার করা হয়*****************************-->
-    <?php
-    if($msg != "")
-    {
-?>
-<div align="center" style="color: green;font-size: 26px; font-weight: bold; width: 90%;height: 20px;margin: 0 5% 0 5%;float: none;"><?php if($msg != "") echo $msg;?></div></br>
-    <?php } 
-    else { ?>
     </br></br>
     <div id="bush" style="width: 99.9%;font-family: SolaimanLipi !important;float: none;border: solid 1px #000;">
     <form method="post" action="">
@@ -608,8 +604,8 @@ if($_GET['step']==1) {
                                     <p>
                                         <?php if($check !=1) {?>
                                         <input type="hidden"  id="check"  /><span id="show" style="color: red;"></span></br>
-                                        <input  id="okok" type="button" value="ঠিক আছে" style="cursor:pointer;font-family: SolaimanLipi !important;" />
-                                      <input name="update" id="update" type="submit" value="আপডেট" style="cursor:pointer;font-family: SolaimanLipi !important;" />
+                                        <input  id="okok" type="button" value="ঠিক আছে" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" />
+                                      <input name="update" id="update" type="submit" value="আপডেট" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" />
                                       <?php } else { echo "<span style='color:red;'>দুঃখিত, এই প্যাকেজটি এন্ট্রি করার জন্য প্রয়োজনীয় পরিমান পণ্য নেই </span>";}?>
                                     </p>
                                     </br></br>
@@ -622,8 +618,8 @@ if($_GET['step']==1) {
         </div>
 </form>
 </div>
-<?php }}?>
-<div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
+<?php }?>
+<div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
          RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
 </div>
