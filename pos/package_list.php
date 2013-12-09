@@ -92,7 +92,7 @@ function searchPckgPro(keystr) // product in packages search***************
                }
                 else
                     {document.getElementById('searchResult').style.visibility = "visible";
-                document.getElementById('searchResult').setAttribute('style','position:absolute;top:35%;left:33%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('searchResult').setAttribute('style','position:absolute;top:38%;left:36%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('searchResult').innerHTML=xmlhttp.responseText;
         }
@@ -152,7 +152,7 @@ function searchPckgPro(keystr) // product in packages search***************
                             echo '<td><div align="left">&nbsp;&nbsp'.$pckgcode.'</div></td>';
                             echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$pckgname.'</div></td>';
                             echo '<td><div align="center">'.$status.'</div></td>';
-                            echo '<td><div align="center"><a onclick="packageDetails('.$pckgid.')" style="cursor:pointer;" ><input class="btn" type="button" value="বিস্তারিত" style="font-family: SolaimanLipi !important;"/></a></div></td>';
+                            echo '<td><div align="center"><a onclick="packageDetails('.$pckgid.')" style="cursor:pointer;" ><input type="button" value="বিস্তারিত" style="font-family: SolaimanLipi !important;"/></a></div></td>';
                             echo '</tr>';
                             $sl++;
                       }
@@ -178,7 +178,7 @@ function searchPckgPro(keystr) // product in packages search***************
                             echo '<td><div align="left">&nbsp;&nbsp'.$pckgcode.'</div></td>';
                             echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$pckgname.'</div></td>';
                             echo '<td><div align="center">'.$status.'</div></td>';
-                            echo '<td><div align="center"><a onclick="packageDetails('.$pckgid.')" style="cursor:pointer;" ><input class="btn" type="button" value="বিস্তারিত" style="font-family: SolaimanLipi !important;"/></a></div></td>';
+                            echo '<td><div align="center"><a onclick="packageDetails('.$pckgid.')" style="cursor:pointer;" ><input type="button" value="বিস্তারিত" style="font-family: SolaimanLipi !important;"/></a></div></td>';
                             echo '</tr>';
                             $sl++;
                       }
