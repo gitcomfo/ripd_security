@@ -155,6 +155,35 @@ function getXMLHTTP() {
                                                   }
 		 return xmlhttp;
 }
+function checkQty(qty)
+{
+    var inventoryid = document.getElementById('inventoryID').value;
+   var reqst = getXMLHTTP();		
+	if (reqst) 
+	{
+                    reqst.onreadystatechange = function()
+		{
+		if (reqst.readyState == 4) 
+			{			
+                                                        if (reqst.status == 200)
+				{
+                                                                            var jc= document.getElementById('checkresult').innerHTML=reqst.responseText;
+                                                                            if(jc == 1) {multiply();}
+                                                                                else {                                                                                     
+                                                                                    document.getElementById('TOTAL').value=0;
+                                                                                    document.getElementById("QTY").value = 0;
+                                                                                    alert("দুঃখিত, পর্যাপ্ত পরিমান প্রোডাক্ট নেই");
+                                                                                   
+                                                                                }
+                                                                         } 
+				else 
+				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+			}				
+		 }			
+		 reqst.open("GET","includes/checkProductQty.php?qty="+qty+"&id="+inventoryid, true);
+		 reqst.send(null);
+	}	
+}
 function showCustInfo(custType)
 {
     var reqst = getXMLHTTP();		
@@ -288,7 +317,7 @@ function checkNumeric(objName)
 <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
   <tr>
       <td width="43%" height="50"><span style="color: #03C;font-size: 25px;"> প্রোডাক্ট-এর নাম: </span><input name="PNAME" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 250px;" readonly/>
-       <input name="inventoryID" type="hidden" value="<?php echo $db_inventoryid; ?>"/>      
+       <input name="inventoryID" id="inventoryID" type="hidden" value="<?php echo $db_inventoryid; ?>"/>      
       <input name="procode" type="hidden" value="<?php echo $db_procode; ?>"/><input name="propv" id="ProPV" type="hidden" value="<?php echo $db_proPV; ?>"/>
       <input name="profit" id="Profit" type="hidden" value="<?php echo $db_profit; ?>"/>
       <input name="xtraprofit" id="XProfit" type="hidden" value="<?php echo $db_xtraProfit; ?>"/>
@@ -300,7 +329,7 @@ function checkNumeric(objName)
   <tr>
       <td  width="43%"><span style="color: #03C;font-size: 25px;">প্রোডাক্ট-এর মূল্য: </span><input name="PPRICE" id="PPRICE" type="text" value="<?php echo $db_price ;?>" style="border:0px;font-size: 18px;width: 250px;"/><input name="buyprice" id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>
       <td width="14%"><span style="color: #03C;"> পরিমাণ</span></br>
-        <input name="QTY" id="QTY" type="text" onkeyup="multiply()" onkeypress="return checkIt(event)" style="width:100px;"/></td>
+        <input name="QTY" id="QTY" type="text" onkeyup="checkQty(this.value);" onkeypress="return checkIt(event)" style="width:100px;"/><input type="hidden" id="checkresult" value=""/></td>
       <td width="15%"><span style="color: #03C;">এক্সট্রা প্রফিট</span></br><input name="subxtraProfit" id="subxtraProfit" type="text"  readonly style="width:100px;"/></td>
           <td width="14%"><span style="color: #03C;"> প্রফিট </span></br><input name="subprofit" id="subprofit" type="text"  readonly style="width:100px;"/></td>
      

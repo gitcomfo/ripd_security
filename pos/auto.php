@@ -136,7 +136,35 @@ function getXMLHTTP() {
 		 return xmlhttp;
 }
 	
-
+function checkQty(qty)
+{
+    var inventoryid = document.getElementById('inventoryID').value;
+   var reqst = getXMLHTTP();		
+	if (reqst) 
+	{
+                    reqst.onreadystatechange = function()
+		{
+		if (reqst.readyState == 4) 
+			{			
+                                                        if (reqst.status == 200)
+				{
+                                                                            var jc= document.getElementById('checkresult').innerHTML=reqst.responseText;
+                                                                            if(jc == 1) {multiply();}
+                                                                                else {                                                                                     
+                                                                                    document.getElementById('TOTAL').value=0;
+                                                                                    document.getElementById("QTY").value = 0;
+                                                                                    alert("দুঃখিত, পর্যাপ্ত পরিমান প্রোডাক্ট নেই");
+                                                                                   
+                                                                                }
+                                                                         } 
+				else 
+				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+			}				
+		 }			
+		 reqst.open("GET","includes/checkProductQty.php?qty="+qty+"&id="+inventoryid, true);
+		 reqst.send(null);
+	}	
+}
 
 function showCustInfo(custType)
 {
@@ -272,7 +300,7 @@ function checkNumeric(objName)
         <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
   <tr>
       <td width="60%" height="50"><span style="color: #03C;font-size: 25px;"> প্রোডাক্ট-এর নাম: </span><input name="PNAME" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width:250px;" readonly/>
-        <input name="inventoryID" type="hidden" value="<?php echo $db_inventoryid; ?>"/>      
+        <input name="inventoryID" id="inventoryID" type="hidden" value="<?php echo $db_inventoryid; ?>"/>      
       <input name="procode" type="hidden" value="<?php echo $db_procode; ?>"/><input name="propv" id="ProPV" type="hidden" value="<?php echo $db_proPV; ?>"/>
       <input name="less" type="hidden"/></td>
       <td colspan="2"><span style="color: #03C;"> তারিখ ও সময়: </span><input name="date" style="width:75px;"type="text" value="<?php echo $da; ?>" readonly/>
@@ -281,7 +309,7 @@ function checkNumeric(objName)
   </tr>
   <tr>
       <td  width="60%"><span style="color: #03C;font-size: 25px;">প্রোডাক্ট-এর মূল্য: </span><input name="PPRICE" id="PPRICE" type="text" value="<?php echo $db_price ;?>" style="border:0px;font-size: 18px;width:250px;"/><input name="buyprice" id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>
-      <td><span style="color: #03C;"> পরিমাণ : </span><input name="QTY" id="QTY" type="text" onkeyup="multiply()" onkeypress="return checkIt(event)" style="width:100px;"/></td>
+      <td><span style="color: #03C;"> পরিমাণ : </span><input name="QTY" id="QTY" type="text" onkeyup="checkQty(this.value);" onkeypress="return checkIt(event)" style="width:100px;"/><input type="hidden" id="checkresult" value=""/></td>
       <td width="8%" rowspan="2"><input type="submit" name="addButton" style="height:100px; width: 100px;background-image: url('images/add to cart.jpg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
     </tr>
   <tr>
@@ -375,7 +403,7 @@ while($row = mysql_fetch_array($getresult))
 	<label style='margin-left: 63px;'><b>টাকা ফেরত : </b>
 	  <input name='change' id='change' type='text' readonly/> টাকা</label>
   </div></br></br>
-    <input name="print" id="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:42%;font-family: SolaimanLipi !important;" />
+<input class="btn" name="print" id="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:42%;font-family: SolaimanLipi !important;" />
     </fieldset>
   </form>
 <div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">

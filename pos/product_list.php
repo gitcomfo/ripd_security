@@ -4,6 +4,9 @@ session_start();
 include_once 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 $storeName= $_SESSION['loggedInOfficeName'];
+$cfsID = $_SESSION['userIDUser'];
+$storeID = $_SESSION['loggedInOfficeID'];
+$scatagory =$_SESSION['loggedInOfficeType'];
 function get_catagory()
 {
     echo  "<option value=0> -সিলেক্ট করুন- </option>";
@@ -275,6 +278,29 @@ if (isset($_GET['code']))
         echo '<td><div align="center">'.$db_proPV.'</div></td>';
         echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
         echo '</tr>';
+        }
+   else
+     	{	
+                    $result = mysql_query("SELECT * FROM inventory WHERE ins_ons_id = '$storeID' AND ins_ons_type='$scatagory' AND ins_product_type='general';");
+                        while ($row = mysql_fetch_assoc($result))
+                        {
+                            $db_proname=$row["ins_productname"];
+                            $db_price=english2bangla($row["ins_sellingprice"]);
+                            $db_qty=english2bangla($row["ins_how_many"]);
+                            $db_procode=$row["ins_product_code"];
+                            $db_proPV=english2bangla($row["ins_pv"]);
+                            $inventoryID= $row['idinventory'];
+
+                            echo '<tr>';
+                            echo '<td><div align="center">১</div></td>';
+                            echo '<td><div align="left">'.$db_procode.'</div></td>';
+                              echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
+                              echo '<td><div align="center">'.$db_qty.'</div></td>';
+                              echo '<td><div align="center">'.$db_price.'</div></td>';
+                              echo '<td><div align="center">'.$db_proPV.'</div></td>';
+                              echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
+                              echo '</tr>';
+                        }
         }
 ?>
 </table>
