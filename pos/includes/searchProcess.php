@@ -94,6 +94,43 @@ elseif ($_GET['id']== 'all')
         echo "</table>";
 
 }
+// ---------------------------- products for specific catagory-----------------------------------------------------------
+elseif ($_GET['id']== 'catagory')
+{
+   echo " <table width='100%' border='1' cellspacing='0' cellpadding='0' style='border-color:#000000; border-width:thin; font-size:18px;'>
+      <tr>
+          <td width='8%'><div align='center'><strong>ক্রমিক নং</strong></div></td>
+        <td width='23%'><div align='center'><strong>প্রোডাক্ট কোড</strong></div></td>
+        <td width='30%'><div align='center'><strong>প্রোডাক্ট-এর নাম</strong></div></td>
+        <td width='11%'><div align='center'><strong>পর্যাপ্ত পরিমাণ</strong></div></td>
+        <td width='12%'><div align='center'><strong>খুচরা মূল্য</strong></div></td>
+        <td width='10%'><div align='center'><strong>পি.ভি.</strong></div></td>
+        <td width='6%'><div align='center'><strong>করনীয়</strong></div></td>
+      </tr>";
+        if (isset($_GET['proCatCode']))
+                {
+                            $SL= 1;
+                            $G_productCatCode = $_GET['proCatCode'];
+                            $result = mysql_query("SELECT * FROM inventory WHERE ins_ons_id=$storeID AND ins_ons_type='$scatagory' AND ins_product_type= 'general' AND ins_productid = 
+                                ANY( SELECT idproductchart FROM product_chart,product_catagory WHERE product_catagory_idproduct_catagory =idproduct_catagory AND pro_cat_code= '$G_productCatCode');");
+                                while($row = mysql_fetch_assoc($result))
+                                {
+                                    $inventoryID= $row['idinventory']; 
+                                    echo '<tr>';
+                                      echo '<td><div align="center">'.english2bangla($SL).'</div></td>';
+                                      echo '<td><div align="left">'.$row["ins_product_code"].'</div></td>';
+                                        echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row["ins_productname"].'</div></td>';
+                                        echo '<td><div align="center">'.english2bangla($row["ins_how_many"]).'</div></td>';
+                                        echo '<td><div align="center">'.english2bangla($row["ins_sellingprice"]).'</div></td>';
+                                        echo '<td><div align="center">'.english2bangla($row["ins_pv"]).'</div></td>';
+                                        echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
+                                        echo '</tr>';
+                                        $SL++;
+                                }
+                }
+        echo "</table>";
+
+}
 // ---------------------------- products for specific type-----------------------------------------------------------
 elseif ($_GET['id']== 'type')
 {

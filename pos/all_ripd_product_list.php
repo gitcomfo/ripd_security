@@ -159,6 +159,27 @@ function showProduct(productChartId,idbrand,cataID) // show product details from
         xmlhttp.open("GET","includes/searchProcessForAll.php?id=all&chartID="+productChartId+"&idbrand="+idbrand+"&cataID="+cataID,true);
         xmlhttp.send();
 }
+function showCatProducts(code) // show products from selecting catagory
+{
+    var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=catagory&proCatCode="+code,true);
+        xmlhttp.send();
+}
 function showTypeProducts(proCatID) // show products from selecting types
 {
     var xmlhttp;
@@ -218,7 +239,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
          <legend style="color: brown;">প্রোডাক্ট লিস্ট ফিল্টার</legend>
     <div class="top" style="width: 100%;height: auto;">
     <div style="float: left;width: 25%;"><b>পণ্যের ক্যাটাগরি</b></br>
-      <select id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value)" style="width: 200px;font-family: SolaimanLipi !important;">
+      <select id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value);showCatProducts(this.value);" style="width: 200px;font-family: SolaimanLipi !important;">
                 <?php echo get_catagory(); ?>
             </select>
         </div>
