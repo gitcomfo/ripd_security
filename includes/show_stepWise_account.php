@@ -29,6 +29,7 @@ error_reporting(0);
                         <td><b>সর্বমোট</b></td>
                     </tr>
                     <?php
+                                $total_account = 0;
                                 for($a=1; $a<=5; $a++)
                                         {
                                         if($a==1) 
@@ -64,12 +65,16 @@ error_reporting(0);
                                                         $count_number = english2bangla($count_number);
                                                         echo "<td style='text-align: center;'>$count_number টি</td>";
                                                         }
+                                                $total_account = $total_account + $sub_total;
                                                 $sub_total = english2bangla($sub_total);
                                                 echo "<td style='text-align: center;'><b>$sub_total টি</b></td>";
                                                 echo "</tr>";
                                                 }
                                         else break;
                                         }
+                                $total_account = english2bangla($total_account);
+                                echo "<tr><td colspan='7'><hr></td></tr>";
+                                echo "<tr><td colspan='6' style='text-align: right;'><b>সর্বমোট একাউন্ট :</b></td><td><b>$total_account টি</b></td></tr>";
                     ?>
             </table>
     </body>
