@@ -93,7 +93,7 @@ window.onclick = function()
 
 <div class="column6" style="width: 100% !important;">
     <div class="main_text_box" style="width: 100% !important;height: 500px;">
-        <div style="padding-left: 10px;"><a href="index.php?apps=ACM"><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 10px;"><a href="tree_view.php"><b>ফিরে যান</b></a></div>
         <div>
             <form method="POST" onsubmit="" name="" action="cheque_make_out.php">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important; margin:0 !important;width: 98% !important; height: 480px !important;">          
