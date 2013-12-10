@@ -16,4 +16,5 @@ $sql_select_cust_basic = $conn->prepare("SELECT designation_name, designation_st
                                                                                     WHERE idDesignation=Designation_idDesignation 
                                                                                         AND cfs_user_idUser = ?");
 $sql_genology_tree = $conn->prepare("SELECT account_name, cfs_user_idUser FROM cfs_user, customer_account WHERE idUser=cfs_user_idUser AND referer_id = ?");
+$sql_select_accountType = $conn->prepare("SELECT account_name FROM account_type");
 ?>
