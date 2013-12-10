@@ -5,12 +5,10 @@ include_once 'includes/header.php';
 include_once 'includes/columnViewAccount.php';
 include_once 'includes/connectionPDO.php';
 
-?>
-<?php
 $flag = 'false';
 function showMessage($flag, $msg) 
         {
-        if (!empty($msg)) 
+        if (!empty($msg))
                 {
                 if ($flag == 'true') 
                     {
@@ -163,7 +161,7 @@ function  checkCorrectPass() // match password with account
                     <td> <textarea  class="box" type="text" name="trans_des"  id="trans_des" value=""></textarea></td>   
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: center"></br><input type="button" class="btn" name="submit" id="submit" value="ঠিক আছে" onclick="getPassword();" disabled=""></td>
+                    <td colspan="2" style="text-align: center"></br><input type="button" class="btn" style="background-color: gray;"  name="submit" id="submit" disabled value="ঠিক আছে" onclick="getPassword();" disabled=""></td>
                 </tr>
                     <tr>
                     <td colspan="2" id="passwordbox"></td>
