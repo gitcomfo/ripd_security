@@ -38,7 +38,7 @@
                          echo "<td>$db_officeBranch</td>";
                          echo "<td>$db_officeAddress</td>";
                          echo "<td>$db_officeEmail</td>";
-                         echo "<td><a onclick=send_mail('$db_officeEmail') style='cursor:pointer;color:blue;'>Send Mail</a></td>";
+                         echo "<td><a onclick=send_mail('$db_officeEmail') style='cursor:pointer;color:blue;'>ই-মেইল করুন</a></td>";
                          echo "</tr>";
                          }
                 //if(mysql_num_rows($rs_officeNcontact)==0) echo "এখানে কোন অফিসের ঠিকানা পাওয়া যাচ্ছে না";

@@ -9,8 +9,16 @@ error_reporting(0);
 <!-- CSS Files -->
 <link type="text/css" href="css/base.css" rel="stylesheet" />
 <link type="text/css" href="css/Spacetree.css" rel="stylesheet" />
+<link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
 <!-- JIT Library File -->
 <script language="javascript" type="text/javascript" src="javascripts/jit-yc.js"></script>
+<script src="javascripts/tinybox.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function show_stepWise_account()
+    {
+        TINY.box.show({iframe:'includes/show_stepWise_account.php',width:800,height:300,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});
+    }
+</script>
 
 
     <div style="padding-top: 10px;">    
@@ -123,6 +131,9 @@ error_reporting(0);
           </td>
     </tr>
 </table>
+
+<a onclick='show_stepWise_account()' style='cursor:pointer;'><b>প্রতি স্টেপে টোটাল একাউন্টধারীর সংখ্যা</b></a>
+
 </div>
 
 
