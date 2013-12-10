@@ -320,7 +320,7 @@ function getUpdate(xprofit)
                         <input type="hidden"  id="check"  value="0" /><span id="show" style="color: red;"></span></br>
                         <input  id="ok" type="button" value="ঠিক আছে" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" />
                         <input name="break" id="break" type="submit" value="ব্রেক" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br></br>
-                        <?php } else { echo "<span style='color:red;'>দুঃখিত, এই প্যাকেজটি এন্ট্রি করার জন্য প্রয়োজনীয় পরিমান পণ্য নেই </span>";}?>
+                        <?php } else { echo "<span style='color:red;'>দুঃখিত, এই প্যাকেজটি ব্রেক করার জন্য প্রয়োজনীয় পরিমান পণ্য নেই </span>";}?>
                     </td>
                 </tr>
             </table>
