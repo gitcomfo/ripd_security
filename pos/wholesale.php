@@ -155,6 +155,35 @@ function getXMLHTTP() {
                                                   }
 		 return xmlhttp;
 }
+function checkQty(qty)
+{
+    var inventoryid = document.getElementById('inventoryID').value;
+   var reqst = getXMLHTTP();		
+	if (reqst) 
+	{
+                    reqst.onreadystatechange = function()
+		{
+		if (reqst.readyState == 4) 
+			{			
+                                                        if (reqst.status == 200)
+				{
+                                                                            var jc= document.getElementById('checkresult').innerHTML=reqst.responseText;
+                                                                            if(jc == 1) {multiply();}
+                                                                                else {                                                                                     
+                                                                                    document.getElementById('TOTAL').value=0;
+                                                                                    document.getElementById("QTY").value = 0;
+                                                                                    alert("দুঃখিত, পর্যাপ্ত পরিমান প্রোডাক্ট নেই");
+                                                                                   
+                                                                                }
+                                                                         } 
+				else 
+				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+			}				
+		 }			
+		 reqst.open("GET","includes/checkProductQty.php?qty="+qty+"&id="+inventoryid, true);
+		 reqst.send(null);
+	}	
+}
 function showCustInfo(custType)
 {
     var reqst = getXMLHTTP();		
@@ -250,7 +279,7 @@ function checkNumeric(objName)
 <body onLoad="ShowTime()">
 
     <div id="maindiv">
-<div id="header" style="width:100%;height:100px;background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
+<div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
 <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
     <div style="width: 33%;height: 100%; float: left;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div>
@@ -288,7 +317,7 @@ function checkNumeric(objName)
 <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
   <tr>
       <td width="43%" height="50"><span style="color: #03C;font-size: 25px;"> প্রোডাক্ট-এর নাম: </span><input name="PNAME" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 250px;" readonly/>
-       <input name="inventoryID" type="hidden" value="<?php echo $db_inventoryid; ?>"/>      
+       <input name="inventoryID" id="inventoryID" type="hidden" value="<?php echo $db_inventoryid; ?>"/>      
       <input name="procode" type="hidden" value="<?php echo $db_procode; ?>"/><input name="propv" id="ProPV" type="hidden" value="<?php echo $db_proPV; ?>"/>
       <input name="profit" id="Profit" type="hidden" value="<?php echo $db_profit; ?>"/>
       <input name="xtraprofit" id="XProfit" type="hidden" value="<?php echo $db_xtraProfit; ?>"/>
@@ -300,7 +329,7 @@ function checkNumeric(objName)
   <tr>
       <td  width="43%"><span style="color: #03C;font-size: 25px;">প্রোডাক্ট-এর মূল্য: </span><input name="PPRICE" id="PPRICE" type="text" value="<?php echo $db_price ;?>" style="border:0px;font-size: 18px;width: 250px;"/><input name="buyprice" id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>
       <td width="14%"><span style="color: #03C;"> পরিমাণ</span></br>
-        <input name="QTY" id="QTY" type="text" onkeyup="multiply()" onkeypress="return checkIt(event)" style="width:100px;"/></td>
+        <input name="QTY" id="QTY" type="text" onkeyup="checkQty(this.value);" onkeypress="return checkIt(event)" style="width:100px;"/><input type="hidden" id="checkresult" value=""/></td>
       <td width="15%"><span style="color: #03C;">এক্সট্রা প্রফিট</span></br><input name="subxtraProfit" id="subxtraProfit" type="text"  readonly style="width:100px;"/></td>
           <td width="14%"><span style="color: #03C;"> প্রফিট </span></br><input name="subprofit" id="subprofit" type="text"  readonly style="width:100px;"/></td>
      
@@ -368,27 +397,45 @@ while($row = mysql_fetch_array($getresult))
 <legend style="color: brown;">মূল্য পরিশোধ এবং ক্রেতার তথ্য</legend>
 
 <b>কাস্টমার টাইপ :</b>
-<select name="customerType" id="customerType" onchange="showCustInfo(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
+&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(1)"/>নন-রেজিস্টার কাস্টমার
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(2)"/>সেলস স্টোর
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(3)"/>অফিস
+<!--<select name="customerType" id="customerType" onchange="showCustInfo(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
     <option value="0">---সিলেক্ট করুন---</option>
     <option value="1">নন-রেজিস্টার কাস্টমার</option>
     <option value="2">সেলস স্টোর</option>
     <option value="3">অফিস</option>
-</select>
+</select>-->
 </br>
-<div id="customerInfo" style="width: 100%; margin-top: 20px;"></div>
+<div id="customerInfo" style="width: 100%; margin-top: 20px;">
+    <table width='100%' cellspacing='0' cellpadding='0' style='border: #000000 inset 1px; font-size:20px;'><tr>
+            <td>কাস্টমারের নামঃ <input id='custName' name='custName' /><em style='font-size: 10px;color:#03C;'>* অবশ্য পূরণীয়</em></td>
+           <td>কাস্টমারের মোবাইল নং :<input id='custMbl' name='custMbl' onkeypress='return checkIt(event)' /><em style='font-size: 10px;color:#03C;'>* অবশ্য পূরণীয়</em></td>
+            <td>কাস্টমারের পেশাঃ <input id='custOccupation' name='custOccupation' /></td>
+           </tr><tr><td colspan ='4'>&nbsp;&nbsp;</td></tr>
+            <tr><td colspan='4'>কাস্টমারের ঠিকানাঃ <input id='custAdrss' name='custAdrss' style='width:600px;'/></td></tr>
+            </table>
+</div>
 </br>
 <b>পেমেন্ট টাইপ :</b>
-<select name="payType" id="payType" onchange="showPayType(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
+&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(1)" checked />ক্যাশ
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(2)"/>অ্যাকাউন্ট
+<!--<select name="payType" id="payType" onchange="showPayType(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
     <option value="0">-সিলেক্ট করুন-</option>
     <option value="1">ক্যাশ</option>
     <option value="2">অ্যাকাউন্ট</option>
-</select>
+</select>-->
 </br>
-  <div id="payInfo" class="text" style="margin-top: 10px;"></div></br></br>
-      <input name="print" id="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:50%;font-family: SolaimanLipi !important;" />
+  <div id="payInfo" class="text" style="margin-top: 10px;">
+      <label style='margin-left:200px;'><b>টাকা গ্রহন&nbsp;&nbsp;:</b>
+	  <input name='cash' id='cash' type='text' onkeypress='return checkIt(event)' onkeyup='minus()' /> টাকা</label>
+	<label style='margin-left: 63px;'><b>টাকা ফেরত : </b>
+	  <input name='change' id='change' type='text' readonly/> টাকা</label>
+  </div></br></br>
+<input class="btn" name="print" id="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" />
     </fieldset>
   </form>
-<div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
+<div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
          RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
 </div>

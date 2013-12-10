@@ -547,6 +547,7 @@ elseif (isset($_POST['submit5'])) {
      $db_custName = $custrow['account_name'];
      $db_custAcc = $custrow['account_number'];
      $db_custMail = $custrow['email'];
+     $db_custRipdMail = $employeerow['ripd_email'];
      $db_custMob = $custrow['mobile'];
      $db_custPIN = $custrow['opening_pin_no'];
      $db_custFather = $custrow['cust_father_name'];
@@ -745,24 +746,28 @@ elseif (isset($_POST['submit5'])) {
                     </tr>
                    <tr>
                         <td>কাস্টমারের নাম</td>
-                        <td>:   <input class='box' type='text' id='name' name='name' value="<?php echo $db_custName;?>"/>
+                        <td>:   <input class='box' style="width:220px;" type='text' id='name' name='name' value="<?php echo $db_custName;?>"/>
                             <input type='hidden' name='cfsid' value="<?php echo $db_cfsuserid;?>"/></td>			
                     </tr>
                     <tr>
                         <td >একাউন্ট নাম্বার</td>
-                        <td>:   <input class='box' type='text' id='acc_num' name='acc_num' readonly value="<?php echo $db_custAcc;?>"/></td>			
+                        <td>:   <input class='box' style="width:220px;" type='text' id='acc_num' name='acc_num' readonly value="<?php echo $db_custAcc;?>"/></td>			
                     </tr>
                     <tr>
-                        <td >ই মেইল</td>
-                       <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' value="<?php echo $db_custMail;?>" /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
+                        <td>অফিশিয়াল ই মেইল</td>
+                        <td>:   <input class='box' style="width:220px;" type='text' id='ripdemail' name='ripdemail' readonly="" value="<?php echo $db_custRipdMail;?>" /></td>			
+                    </tr>
+                    <tr>
+                        <td >ব্যাক্তিগত ই মেইল</td>
+                       <td>:   <input class='box' style="width:220px;" type='text' id='email' name='email' onblur='check(this.value)' value="<?php echo $db_custMail;?>" /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
-                        <td>:   <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event);' value="<?php echo $db_custMob;?>" /></td>		
+                        <td>:   <input class='box' style="width:220px;" type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event);' value="<?php echo $db_custMob;?>" /></td>		
                     </tr>
                     <tr>
                         <td >পিন নাম্বার</td>
-                        <td>:   <input class='box' type='text' readonly="" id='pin_num' name='pin_num' value="<?php echo $db_custPIN;?>"/></td>		
+                        <td>:   <input class='box' style="width:220px;"  type='text' readonly="" id='pin_num' name='pin_num' value="<?php echo $db_custPIN;?>"/></td>		
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-top: 10px; padding-left: 250px;padding-bottom: 5px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit5" value="সেভ করুন" />

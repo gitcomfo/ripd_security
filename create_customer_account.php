@@ -17,24 +17,24 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
         $account_mobile = $_POST['mobile'];
         $account_mobile1 = "88".$account_mobile;
         $account_number1 = checkAccountNo($account_number);
-        //$emailusername = str_replace("-", "", $account_number1);
-        //$ripdemailid = $emailusername . "@ripduniversal.com";
-          // ****************** password create & send ******************************************
+        $emailusername = str_replace("-", "", $account_number1);
+        $ripdemailid = $emailusername . "@ripduniversal.com";
+         //  ****************** password create & send ******************************************
         $pass = getRandomPassword();
         $passwrd = md5($pass);
 
-        $send_sms_content = "Dear User,Your\nACC.# $account_number\nUsername: $user_username\nPassword: $pass\nThanks";
+        $send_sms_content = "Dear User,Your\nACC.# $account_number\nUsername: $user_username\nRIPD email: $ripdemailid\nPassword: $pass\nThanks";
         $sendResult = SendSMSFuntion($account_mobile1, $send_sms_content);
         $sendStatus = substr($sendResult, 0, 4);
 
         if ($sendStatus == '1701') {
             mysql_query("START TRANSACTION");
-//        //************************* create official email *************************************************
-//             $email_create_status = CreateEmailAccount($emailusername, $pass);
-//            if ($email_create_status == '777') {
-//                $ripdemailid = $emailusername . "@ripduniversal.com";
-//            } else {
-                $ripdemailid = "";
+        //************************* create official email *************************************************
+             $email_create_status = CreateEmailAccount($emailusername, $pass);
+            if ($email_create_status == '777') {
+                $ripdemailid = $emailusername . "@ripduniversal.com";
+            } else {
+            $ripdemailid = "";}
                 $roleid = 0;
             $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= 'customer' ");
             $securityrolesrow = mysql_fetch_assoc($sel_securityroles);
@@ -85,18 +85,18 @@ if (isset($_POST['submitwithpass']))
         $account_mobile = $_POST['mobile'];
         $account_mobile1 = "88".$account_mobile;
         $account_number1 = checkAccountNo($account_number);
-//        $emailusername = str_replace("-", "", $account_number1);
-//        $ripdemailid = $emailusername . "@ripduniversal.com";
+        $emailusername = str_replace("-", "", $account_number1);
+        $ripdemailid = $emailusername . "@ripduniversal.com";
         $pass = $_POST['reap_password'];
         $passwrd = md5($pass);
 
             mysql_query("START TRANSACTION");
 //        //************************* create official email *************************************************
-//             $email_create_status = CreateEmailAccount($emailusername, $pass);
-//            if ($email_create_status == '777') {
-//                $ripdemailid = $emailusername . "@ripduniversal.com";
-//            } else {
-                $ripdemailid = "";
+             $email_create_status = CreateEmailAccount($emailusername, $pass);
+            if ($email_create_status == '777') {
+                $ripdemailid = $emailusername . "@ripduniversal.com";
+            } else {
+            $ripdemailid = "";}
              $roleid = 0;
             $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= 'customer' ");
             $securityrolesrow = mysql_fetch_assoc($sel_securityroles);

@@ -449,7 +449,7 @@ elseif (isset($_POST['submit5'])) {
                     </tr>
                    <tr>
                         <td>কর্মচারীর নাম</td>
-                        <td>:   <input class='box' style="width:220px;" type='text' id='name' name='name' value="<?php echo $db_empName;?>"/>
+                        <td>:   <input class='box' style="width:220px;" type='text' id='name' readonly name='name' value="<?php echo $db_empName;?>"/>
                             <input type='hidden' name='cfsid' value="<?php echo $userID;?>"/></td>			
                     </tr>
                     <tr>

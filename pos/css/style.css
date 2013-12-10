@@ -104,6 +104,28 @@ color:#FFFFFF;
 background-color:#00CCFF;
 
 }
+.btn{
+    background: #ff0000;
+    color: whitesmoke;
+    height: 30px;
+    width: 100px;
+    font-weight: bold;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 2px 2px 5px #888;
+    -webkit-box-shadow: 2px 2px 5px #888;
+    box-shadow: 2px 2px 5px #888;
+    text-align: center;
+}
+.btn:hover{
+    background: #009933;
+    color: black;
+    -moz-border-radius: 5px;
+    border-radius: 8px;
+    -moz-box-shadow: 2px 2px 5px #888;
+    -webkit-box-shadow: 2px 2px 5px #888;
+    box-shadow: 2px 2px 5px #888;
+}
 
 .tbox {position:absolute; display:none; padding:14px 17px; z-index:900}
 .tinner {padding:15px; -moz-border-radius:5px; border-radius:5px; background:#fff url(../images/preload.gif) no-repeat 50% 50%; border-right:1px solid #333; border-bottom:1px solid #333}

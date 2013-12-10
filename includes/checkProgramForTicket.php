@@ -31,7 +31,7 @@ include_once 'MiscFunctions.php';
 //        
 //}
 $g_progid = $_GET['progID'];
-$sel_program = mysql_query("SELECT * FROM program WHERE idprogram = $g_progid AND program_location IS NULL");
+$sel_program = mysql_query("SELECT * FROM program WHERE idprogram = $g_progid AND ticket_prize IS NULL");
 if(mysql_num_rows($sel_program)>0)
 {
     echo "<font style='color:red;font-size:16px;'>দুঃখিত, এই প্রোগ্রামের টিকেট তৈরি হয়নি</font>";

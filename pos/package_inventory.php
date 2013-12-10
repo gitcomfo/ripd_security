@@ -92,7 +92,7 @@ function searchPckgPro(keystr) // show products from brand
                }
                 else
                     {document.getElementById('searchResult').style.visibility = "visible";
-                document.getElementById('searchResult').setAttribute('style','position:absolute;top:35%;left:33%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('searchResult').setAttribute('style','position:absolute;top:41%;left:36%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('searchResult').innerHTML=xmlhttp.responseText;
         }
@@ -105,7 +105,7 @@ function searchPckgPro(keystr) // show products from brand
 <body onLoad="ShowTime()">
 
     <div id="maindiv">
-<div id="header" style="width:100%;height:100px;background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
+<div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
     <div style="width: 33%;height: 100%; float: left;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div>
@@ -162,7 +162,7 @@ function searchPckgPro(keystr) // show products from brand
                             echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$pckgname.'</div></td>';
                             echo '<td><div align="center">'.$pckgqty.'</div></td>';
                             echo '<td><div align="center">'.$status.'</div></td>';
-                            echo '<td><div align="center"><a onclick="packageDetails('.$pckgid.')" style="cursor:pointer;" ><input class="btn" type="button" value="বিস্তারিত" style="font-family: SolaimanLipi !important;"/></a></div></td>';
+                            echo '<td><div align="center"><a onclick="packageDetails('.$pckgid.')" style="cursor:pointer;" ><input  type="button" value="বিস্তারিত" style="font-family: SolaimanLipi !important;"/></a></div></td>';
                             echo '</tr>';
                             $sl++;
                             }
@@ -198,7 +198,7 @@ function searchPckgPro(keystr) // show products from brand
                             echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$pckgname.'</div></td>';
                             echo '<td><div align="center">'.english2bangla($pckgqty).'</div></td>';
                             echo '<td><div align="center">'.$status.'</div></td>';
-                            echo '<td><div align="center"><a onclick="packageDetails('.$pckgid.')" style="cursor:pointer;" ><input class="btn" type="button" value="বিস্তারিত" style="font-family: SolaimanLipi !important;"/></a></div></td>';
+                            echo '<td><div align="center"><a onclick="packageDetails('.$pckgid.')" style="cursor:pointer;" ><input  type="button" value="বিস্তারিত" style="font-family: SolaimanLipi !important;"/></a></div></td>';
                             echo '</tr>';
                             $sl++;
                       }
@@ -210,7 +210,7 @@ function searchPckgPro(keystr) // show products from brand
 </div>
 </fieldset>
 
-<div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
+<div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
          RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
 </div>

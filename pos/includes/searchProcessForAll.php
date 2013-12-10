@@ -120,6 +120,41 @@ elseif ($_GET['id']== 'type')
         echo "</table>";
 
 }
+// ---------------------------- products for specific catagory-----------------------------------------------------------
+elseif ($_GET['id']== 'catagory')
+{
+   echo " <table width='100%' border='1' cellspacing='0' cellpadding='0' style='border-color:#000000; border-width:thin; font-size:18px;'>
+      <tr>
+          <td width='8%'><div align='center'><strong>ক্রমিক নং</strong></div></td>
+        <td width='23%'><div align='center'><strong>প্রোডাক্ট কোড</strong></div></td>
+        <td width='30%'><div align='center'><strong>প্রোডাক্ট-এর নাম</strong></div></td>
+        <td width='11%'><div align='center'><strong>একক</strong></div></td>
+        <td width='12%'><div align='center'><strong>আর্টিকেল</strong></div></td>
+      </tr>";
+        if (isset($_GET['proCatCode']))
+                {
+                            $SL= 1;
+                            $G_productCatCode = $_GET['proCatCode'];
+                            $result = mysql_query("SELECT * FROM product_chart ,product_catagory WHERE product_catagory_idproduct_catagory =idproduct_catagory AND pro_cat_code= '$G_productCatCode'");
+                                while($row = mysql_fetch_assoc($result))
+                                {
+                                        $db_proname=$row["pro_productname"];
+                                        $db_unit=$row["pro_unit"];
+                                        $db_article=$row["pro_article"];
+                                        $db_procode=$row["pro_code"];
+                                    echo '<tr>';
+                                    echo '<td><div align="center">'.english2bangla($SL).'</div></td>';
+                                    echo '<td><div align="left">'.$db_procode.'</div></td>';
+                                      echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
+                                      echo '<td><div align="center">'.$db_unit.'</div></td>';
+                                      echo '<td><div align="center">'.$db_article.'</div></td>';
+                                      echo '</tr>';
+                                    $SL++;
+                                }
+                }
+        echo "</table>";
+
+}
 //***************************products list for specific brand*******************************
 elseif ($_GET['id']== 'brnd')
 {

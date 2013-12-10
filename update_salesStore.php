@@ -7,16 +7,16 @@ include_once 'includes/header.php';
 
       $x= $_GET['id'];
       $salesid= base64_decode($x);
-      $all = "SELECT * from ".$dbname.".sales_store WHERE idSales_store=$salesid ";
+      $all = "SELECT * FROM sales_store WHERE idSales_store=$salesid ";
       $allsql = mysql_query($all) or exit('query failed????????: '.mysql_error());
      while( $sale_row = mysql_fetch_assoc($allsql))
      {      
-    $name = $sale_row['salesStore_name'];
-    $sales_add = $sale_row['salesStore_details_address'];
-    $sales_no = $sale_row['salesStore_number'];
-    $sales_mail = $sale_row['salesStore_email'];
-    $sales_acc = $sale_row['account_number'];
-    $sale_thana = $sale_row['Thana_idThana'];
+        $name = $sale_row['salesStore_name'];
+        $sales_add = $sale_row['salesStore_details_address'];
+        $sales_no = $sale_row['salesStore_number'];
+        $sales_mail = $sale_row['salesStore_email'];
+        $sales_acc = $sale_row['account_number'];
+        $sale_thana = $sale_row['Thana_idThana'];
     }
     $onsq = "SELECT * FROM ".$dbname.".`ons_relation` WHERE add_ons_id=$salesid AND catagory= 's_store' ";
     $onssql = mysql_query($onsq) or exit('query failed: '.mysql_error());
@@ -98,10 +98,9 @@ include_once 'includes/header.php';
     //********************** update query**************
   if(isset($_POST['submit03']))
   {
-     $off_no = $_POST['sales_no'];
-    $mail = $_POST['sales_mail'];
+     $off_name = $_POST['sales_name'];
     $off_add = $_POST['sales_address'];
-    $offup="UPDATE `ripd_db_comfosys`.`sales_store` SET `salesStore_number` = '$off_no', `salesStore_details_address` = '$off_add', `salesStore_email` = '$mail' WHERE `sales_store`.`idSales_store` =$salesid AND `sales_store`.`Thana_idThana` =$sale_thana;";
+    $offup="UPDATE `ripd_db_comfosys`.`sales_store` SET `salesStore_name` = '$off_name', `salesStore_details_address` = '$off_add' WHERE `sales_store`.`idSales_store` =$salesid AND `sales_store`.`Thana_idThana` =$sale_thana;";
     $offupsql = mysql_query($offup) or exit('query failed: '.mysql_error());
     echo "<script type='text/javascript'>window.location.href = window.location; </script>";
   }
@@ -363,8 +362,6 @@ xmlhttp.open("GET","includes/check.php?x="+str,true);
 xmlhttp.send();
 }
 </script>
-
-
  
 <div class="column6">
     <div class="main_text_box">
@@ -542,17 +539,21 @@ xmlhttp.send();
                                              <tr>	
                                                 <td  colspan="2" style =" font-size: 14px"><b>ঠিকানা</b></td>    
                                             </tr>
+                                            <tr>
+                                                <td>সেলস স্টোরের নাম</td>
+                                                <td>:    <input  class ="textfield" type="text" id="sales_name" name="sales_name" value="<?php echo $name;?>" /></td>
+                                            </tr>
                                              <tr>
                                                 <td>সেলস স্টোরের  ঠিকানা</td>
                                                 <td>:    <input  class ="textfield" type="text" id="sales_address" name="sales_address" value="<?php echo $sales_add;?>" /></td>
                                             </tr>
                                                    <tr>
                                                 <td>সেলস স্টোরের  নাম্বার</td>
-                                                <td>:    <input  class ="textfield" type="text" id="sales_no" name="sales_no" value="<?php echo $sales_no;?>"/></td>
+                                                <td>:    <input  class ="textfield" type="text" readonly="" id="sales_no" name="sales_no" value="<?php echo $sales_no;?>"/></td>
                                             </tr>
                                              <tr>
                                                 <td>সেলস স্টোরের  ইমেইল</td>
-                                                <td>:    <input  class ="textfield" type="text" id="sales_mail" name="sales_mail" onblur="check(this.value)" value="<?php echo $sales_mail;?>" /><em> (ইংরেজিতে লিখুন)</em><div id="error_msg" style="margin-left: 5px"></div></td>
+                                                <td>:    <input  class ="textfield" type="text" readonly="" id="sales_mail" name="sales_mail" value="<?php echo $sales_mail;?>" /><em> (ইংরেজিতে লিখুন)</em><div id="error_msg" style="margin-left: 5px"></div></td>
                                             </tr>
                                             <tr>                    
                                             <td colspan="4" style="padding-left: 250px; " >

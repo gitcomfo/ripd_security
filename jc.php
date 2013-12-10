@@ -1,30 +1,29 @@
-<!--<script type="text/css">
-    .rotare {
--webkit-transform: rotate(-90deg); 
--moz-transform: rotate(-90deg);	
-    }
+<link href="css/print.css" rel="stylesheet" type="text/css" media="print"/>
+<body>
 
+<!--    <div id="large" style=" height:800px;
+      border:2px solid #000;
+    margin:30px;">
+    <p>content</p>
+    <p>content</p>
+</div>
+<div id="large"  style=" height:800px;
+      border:2px solid #000;
+    margin:30px;">
+    <p>content</p>
+    <p>content</p>
+</div>-->
 
-</script>-->
-<?php
-include_once 'includes/header.php';
-$firstname = "jesy";
-$lastname= "";
-
-function show($value)
-{
-    if($value!="")
+<table style="page-break-inside: auto;">
+    <?php
+    for($i=0;$i<5;$i++)
     {
-        $string =  " ' ".$value." ' readonly";
+//        echo "<tr style='page-break-after:always;display:block;'><td><div style='width:100%'><div style='float:left;'> 1 dfafda </div><div style='float:left;'> 2 sfdzd </div></div>
+//            </td></tr>";
+        echo "<tr><td><div style='width:100%'><div style='float:left;'> 1 dfafda </div><div style='float:left;'> 2 sfdzd </div></div>
+            </td></tr><tr><td id='jc'></td></tr>";
     }
- else {
-        $string =  "'".$value."'";
-    }
-    echo $string;
-}
-?>
-<form>
-    <input type="text" name="firstname" value=<?php show($firstname);?> /></br></br>
-    <input type="text" name="lastname" value=<?php show($lastname);?>  />
-</form>
-</br>
+    ?>
+            
+</table>
+</body>

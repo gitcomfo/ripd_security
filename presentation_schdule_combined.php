@@ -11,13 +11,14 @@ $whoinbangla =  getProgramer($type);
 $whoType = getProgramerType($type);
 
 $sql_cfs_emp_sel = $conn->prepare("SELECT idEmployee FROM cfs_user, employee WHERE cfs_user_idUser = idUser AND account_number= ?");
-$sql_program_ins = $conn->prepare("INSERT INTO program (program_no, program_name, program_date, program_time, program_type, Office_idOffice) 
-              VALUES (?, ?, ?, ?, ?, ?)");
+$sql_program_ins = $conn->prepare("INSERT INTO program (program_no, program_name, program_location, program_date, program_time, program_type, Office_idOffice) 
+              VALUES (?, ?, ?, ?, ?, ?, ?)");
  $sql_presenterlist_ins = $conn->prepare("INSERT INTO presenter_list (fk_idprogram, fk_Employee_idEmployee) VALUES (?, ?)");
 
  if (($_POST['new_submit'])) {
     $P_prstn_name = $_POST['presentation_name'];
     $P_prstn_date = $_POST['presentation_date'];
+    $P_prstn_location = $_POST['place'];
      $str_random_no=(string)mt_rand (0 ,9999 );
      $str_program_random= str_pad($str_random_no,4, "0", STR_PAD_LEFT);
     $prstn_number_final = $type."-".$str_program_random;
@@ -29,7 +30,7 @@ $sql_program_ins = $conn->prepare("INSERT INTO program (program_no, program_name
     $P_officeID = $_POST['parent_id'];
 
     $conn->beginTransaction();
-               $sql_program_ins->execute(array($prstn_number_final,$P_prstn_name,$P_prstn_date, $P_prstn_time, $type, $P_officeID ));
+               $sql_program_ins->execute(array($prstn_number_final,$P_prstn_name,$P_prstn_location, $P_prstn_date, $P_prstn_time, $type, $P_officeID ));
                $db_last_insert_id = $conn->lastInsertId();
              for($i=0;$i<$no_ofpresenters;$i++)
              {
@@ -54,6 +55,7 @@ elseif (isset($_POST['submit1'])) {
     $P_prstn_id = $_POST['pesentation_id'];
     $P_prstn_unumber = $_POST['presentation_number'];
     $P_prstn_uname = $_POST['presentation_name'];
+    $P_prstn_location = $_POST['place'];
     $P_prstn_udate = $_POST['presentation_date'];
     $P_prstn_utime = $_POST['presentation_time'];
     $P_presenter_name = $_POST['presenters'];
@@ -63,7 +65,7 @@ elseif (isset($_POST['submit1'])) {
      mysql_query("START TRANSACTION");
     $sql_up = mysql_query("UPDATE program 
                                  SET program_name='$P_prstn_uname', program_date='$P_prstn_udate', 
-                                 program_time='$P_prstn_utime' 
+                                 program_time='$P_prstn_utime' ,program_location= '$P_prstn_location'
                                  WHERE program_no='$P_prstn_unumber'");
     $del_prsnterlist = mysql_query("DELETE FROM presenter_list WHERE fk_idprogram='$P_prstn_id' ");
      for($i=0;$i<$no_ofpresenters;$i++)
@@ -147,6 +149,7 @@ function setOffice(office,offid)
         document.getElementById('off_name').value = office;
         document.getElementById('parent_id').value = offid;
         document.getElementById('parentResult').style.display = "none";
+        setLocation(offid);
 }
 function beforeSave()
     {
@@ -166,7 +169,7 @@ function getOffice(str_key) // for searching parent offices
 {
     var xmlhttp;
        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
+        {
             xmlhttp=new XMLHttpRequest();
         }
         else
@@ -181,12 +184,26 @@ function getOffice(str_key) // for searching parent offices
                }
                 else
                     {document.getElementById('parentResult').style.visibility = "visible";
-                document.getElementById('parentResult').setAttribute('style','position:absolute;top:45%;left:52%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('parentResult').setAttribute('style','position:absolute;top:45%;left:57%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('parentResult').innerHTML=xmlhttp.responseText;
         }
         xmlhttp.open("GET","includes/getParentOffices.php?search="+str_key+"&office=1",true);
         xmlhttp.send();	
+}
+
+function setLocation(offid)
+{     
+       var xmlhttp;
+        if (window.XMLHttpRequest) xmlhttp=new XMLHttpRequest();
+        else xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) 
+                document.getElementById('place').value=xmlhttp.responseText;
+        }
+        xmlhttp.open("GET","includes/getParentOffices.php?office="+offid,true);
+        xmlhttp.send();
 }
     function infoFromThana()
     {
@@ -241,7 +258,7 @@ if ($_GET['action'] == 'first') {
 
                     <!--######################SELECT QUERY########################## -->
                     <?php
-                    $sql = "SELECT * FROM $dbname.program WHERE program_type = '$type'";
+                    $sql = "SELECT * FROM program WHERE program_type = '$type'";
                     $str_presenter_list = "";
                     $str_presenter_email_list = "";
                     $db_result_presenter_name = mysql_query($sql);
@@ -321,7 +338,7 @@ if ($_GET['action'] == 'first') {
                     <td>: <input  class="box" type="text" name="presentation_name" value="" /></td>   
                 </tr>
                 <tr>
-                    <td ><?php echo $whoinbangla?>-এর নাম</td>               
+                    <td ><?php echo $whoinbangla?>-এর একাউন্ট নাম্বার</td>               
                     <td>: <input class="box" id="presenters" name="presenters" />
                     </td>
                 </tr>          
@@ -330,7 +347,11 @@ if ($_GET['action'] == 'first') {
                     <td>: <input class="box" id="off_name" name="offname" onkeyup="getOffice(this.value);" /><em> (অ্যাকাউন্ট নাম্বার)</em>
                        <div id="parentResult"></div><input type="hidden" name="parent_id" id="parent_id"/>
                     </td>
-                </tr>          
+                </tr>
+                <tr>
+                        <td>স্থান</td>
+                        <td>:    <input  class="box" type="text" id="place" name="place" value=""/></td>            
+                    </tr>
                 <tr>
                     <td >তারিখ </td>
                     <td>: <input class="box"type="text" id="presentation_date" placeholder="Date"  style="" name="presentation_date" value=""/></td>   
@@ -360,13 +381,14 @@ if ($_GET['action'] == 'first') {
         <!--PHP coding for SHOWING THE DATA IN EDIT SCHEDULE -->     
         <?php
         $G_presentation_id = $_GET['id'];
-        $sql_edit = "SELECT * FROM $dbname.program WHERE program_type = '$type'";
+        $sql_edit = "SELECT * FROM program WHERE idprogram =$G_presentation_id ";
         $db_result_edit = mysql_query($sql_edit);
         $row_edit = mysql_fetch_array($db_result_edit);
         $db_rl_presentation_number = $row_edit['program_no'];
         $db_rl_presentation_name = $row_edit['program_name'];
         $db_rl_presentation_date = $row_edit['program_date'];
         $db_rl_presentation_time = $row_edit['program_time'];
+        $db_rl_presentation_location = $row_edit['program_location'];
       
         ?>
         <form method="POST"> <!--Redirect from one page to another -->
@@ -391,10 +413,14 @@ if ($_GET['action'] == 'first') {
                         <input type="hidden" name="pesentation_id" value="<?php echo $G_presentation_id;?>"</td>   
                 </tr>
                 <tr>
-                    <td ><?php echo $whoinbangla?>-এর নাম</td>   <!--Writing query for drop-down list -->            
+                    <td ><?php echo $whoinbangla?>-এর একাউন্ট নাম্বার</td>   <!--Writing query for drop-down list -->            
                     <td>: <input class="box" id="presenters" name="presenters" />
                     </td>
                 </tr>
+                <tr>
+                        <td>স্থান</td>
+                        <td>:    <input  class="box" type="text" id="place" name="place" value="<?php echo $db_rl_presentation_location;?>"/></td>            
+                    </tr>
                 <tr>
                     <td >তারিখ</td>
                     <td>: <input class="box" type="text" id="presentation_date" placeholder="Date"  style="" name="presentation_date" value="<?php echo $db_rl_presentation_date; ?>"/></td>
@@ -456,7 +482,7 @@ if ($_GET['action'] == 'first') {
                              AND Thana_idThana=idThana AND idDistrict= District_idDistrict AND idDivision=Division_idDivision";
                 $db_result_presenter_info = mysql_query($sql_list); //Saves the query of Presenter Infromation
                 while ($row_prstn = mysql_fetch_array($db_result_presenter_info)) {
-                    $db_rl_presenter_name = $row_prstn['user_name'];
+                    $db_rl_presenter_name = $row_prstn['account_name'];
                     $db_rl_presenter_acc = $row_prstn['account_number'];
                     $db_rl_presenter_mobile = $row_prstn['mobile'];
                     $db_rl_presenter_email = $row_prstn['email'];

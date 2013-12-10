@@ -159,6 +159,27 @@ function showProduct(productChartId,idbrand,cataID) // show product details from
         xmlhttp.open("GET","includes/searchProcessForAll.php?id=all&chartID="+productChartId+"&idbrand="+idbrand+"&cataID="+cataID,true);
         xmlhttp.send();
 }
+function showCatProducts(code) // show products from selecting catagory
+{
+    var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=catagory&proCatCode="+code,true);
+        xmlhttp.send();
+}
 function showTypeProducts(proCatID) // show products from selecting types
 {
     var xmlhttp;
@@ -208,7 +229,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
 <body onLoad="ShowTime()">
 
 <div id="maindiv">
-    <div id="header" style="width:100%;height:100px;background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
+    <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
         <div style="width: 40%;height: 100%; float: left;"><a onclick="goBack();" style="cursor: pointer;"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
    </div>
@@ -218,7 +239,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
          <legend style="color: brown;">প্রোডাক্ট লিস্ট ফিল্টার</legend>
     <div class="top" style="width: 100%;height: auto;">
     <div style="float: left;width: 25%;"><b>পণ্যের ক্যাটাগরি</b></br>
-      <select id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value)" style="width: 200px;font-family: SolaimanLipi !important;">
+      <select id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value);showCatProducts(this.value);" style="width: 200px;font-family: SolaimanLipi !important;">
                 <?php echo get_catagory(); ?>
             </select>
         </div>
@@ -277,7 +298,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
 </div>
 </fieldset>
 
-<div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
+<div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
          RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
 </div>

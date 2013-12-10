@@ -13,16 +13,6 @@ $sqlerror="";$str_emp_name="";$str_emp_email="";
 <title>টিকেট সেলিং</title>
 <link href="css/bush.css" rel="stylesheet" type="text/css"/>
 <link href="css/print.css" rel="stylesheet" type="text/css" media="print"/>
-<script type="text/css">
-    .rotare {
-        text-align: center;
-        vertical-align: middle;
-        display: table-cell;
-        -webkit-transform: rotate(-90deg);
-        -moz-transform: rotate(-90deg);
-        -o-transform: rotate(-90deg);
-}
-</script>
 <script  type="text/javascript">
     function getname(type)
     {
@@ -134,7 +124,144 @@ function checkProgramForTicket(progID)
         }
         xmlhttp.open("GET","includes/checkProgramForTicket.php?progID="+progID,true);
         xmlhttp.send();
-}  
+}
+
+function getBuyer(keystr) //search employee by account number***************
+    {
+        var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if(keystr.length ==0)
+            {
+                document.getElementById('accountfound').style.display = "none";
+            }
+            else
+            {document.getElementById('accountfound').style.visibility = "visible";
+                document.getElementById('accountfound').setAttribute('style','position:absolute;top:171%;left:65%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+            }
+            document.getElementById('accountfound').innerHTML=xmlhttp.responseText;
+        }
+        xmlhttp.open("GET","includes/buyerSearch.php?key="+keystr,true);
+        xmlhttp.send();	
+    }
+    
+function showPaymentBox(taka)
+{
+    var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                document.getElementById('paymentBox').innerHTML=xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","includes/paymentBox.php?paytaka="+taka,true);
+        xmlhttp.send();
+}
+function showPaymentBox2(taka)
+{
+    var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                document.getElementById('paymentBox').innerHTML=xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","includes/paymentBox.php?paytaka="+taka,true);
+        xmlhttp.send();
+}
+function paybyaccount(ticketprize)
+{
+    var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                document.getElementById('payByCash').innerHTML=xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","includes/paymentBox.php?ticketprizeForAcc="+ticketprize,true);
+        xmlhttp.send();
+}
+function paycash(ticketprize)
+{
+    var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                document.getElementById('payByCash').innerHTML=xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","includes/paymentBox.php?ticketprize="+ticketprize,true);
+        xmlhttp.send();
+}
+function checkVarificationCode(code)
+{
+    var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                document.getElementById('checkmsg').innerHTML=xmlhttp.responseText;
+                if(document.getElementById('checkmsg').innerHTML == "ok")
+                    {
+                        document.getElementById('submit_ticket').style.visibility = 'visible';
+                    }
+            }
+        }
+        xmlhttp.open("GET","includes/ticketAccountVarification.php?code="+code,true);
+        xmlhttp.send();
+}
 </script>
 <script type="text/javascript">
     var iCounter = 0;
@@ -204,10 +331,27 @@ function beforeProceed()
             return false;
         }
 }
+function setBuyer(acc,name,mbl,image)
+{
+       var n = decodeURIComponent(name);
+       var name2 = n.replace(/\+/g," ");
+       document.getElementById('buyerimage').setAttribute('src', image);
+        document.getElementById('buyername').innerHTML = name2;
+        document.getElementById('buyermobile').innerHTML = mbl;
+        document.getElementById('buyerACC').innerHTML= acc;
+        document.getElementById('owner_name').value = name2;
+        document.getElementById('owner_name').readOnly=true;
+        document.getElementById('owner_mbl').value=mbl;
+        document.getElementById('owner_mbl').readOnly=true;
+        document.getElementById('accountfound').style.display = "none";
+}
 </script>
 <?php
 if(isset($_POST['submit'])) 
 {
+    $sel_charge = mysql_query("SELECT * FROM charge WHERE charge_criteria='ticket making charge' ");
+    $chargerow = mysql_fetch_assoc($sel_charge);
+    $making_prize=$chargerow['charge_amount'];
     $P_value=$_POST['prgrm_id'];
     $allsql="SELECT * FROM program WHERE idprogram= $P_value ;";
     $allrslt=mysql_query($allsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন';
@@ -220,7 +364,6 @@ if(isset($_POST['submit']))
             $p_time=$all['program_time'];
             $p_place=$all['program_location'];
             $ticket_prize=$all['ticket_prize'];
-            $making_prize=$all['making_charge'];
             $db_description = $all['subject'];
         }
     $sql = "SELECT * FROM cfs_user,employee WHERE idUser =  cfs_user_idUser AND idEmployee = ANY( SELECT fk_Employee_idEmployee FROM presenter_list WHERE fk_idprogram = $P_value);";
@@ -236,11 +379,12 @@ if(isset($_POST['submit']))
 
 if(isset($_POST['submit_ticket'])) 
 {
-   $valueID=$_POST['progID'];
+   $paymentType=$_POST['paymenttype'];
+    $valueID=$_POST['progID'];
    $ownerName=$_POST['owner_name'];
    $ownerMbl=$_POST['owner_mbl'];
-   $takaPerTicket=$_POST['ticket'];
-   $makePerTicket = $_POST['Maketicket'];
+   //$takaPerTicket=$_POST['ticket'];
+  // $makePerTicket = $_POST['Maketicket'];
    $arr_checkbox1 = $_POST['checkbox_Seat'];
    $str_SelectedSeat = implode(",", $arr_checkbox1);
    $arr_checkbox2 = $_POST['checkbox_Xtra'];
@@ -250,9 +394,9 @@ if(isset($_POST['submit_ticket']))
    $no_of_seats=count($arr_checkbox1);
    $no_of_xtra=count($arr_checkbox2);
    $total_no_of_seat=$no_of_seats+$no_of_xtra;
-   $totalTicketPrize=$total_no_of_seat * $takaPerTicket;
-   $totalMakingCharge=$total_no_of_seat * $makePerTicket;
-   $totalamount= $totalTicketPrize + $totalMakingCharge;
+   $totalTicketPrize=$_POST['totalTaka'];        //$total_no_of_seat * $takaPerTicket;
+   //$totalMakingCharge=$total_no_of_seat * $makePerTicket;
+   $totalamount= $totalTicketPrize ;
     
    if(($no_of_seats<=10 && $no_of_seats>0) || ($no_of_xtra<=$freeXtra && $no_of_xtra >0))
    {
@@ -283,8 +427,8 @@ if(isset($_POST['submit_ticket']))
                $arr_matchXtra= array_intersect($arr_checkbox2, $arr_Xtra);
                if (count($arr_matchSeat) == 0  && count($arr_matchXtra) == 0 )
                {
-                   $tsql="INSERT INTO `ripd_db_comfosys`.`ticket` (`ticket_owner_name` ,`ticket_owner_mobile` ,`no_ofTicket_purchase` ,`seat_no` ,`xtra_seat` ,`total_ticket_prize` ,`total_makingCharge` ,`total_amount`,`ticket_seller_id`, `Program_idprogram`) 
-                            VALUES ('$ownerName', '$ownerMbl', $total_no_of_seat , '$str_SelectedSeat' , '$str_SelectedXSeat', $totalTicketPrize, $totalMakingCharge, $totalamount, $db_onsid, $valueID );";
+                   $tsql="INSERT INTO `ripd_db_comfosys`.`ticket` (`ticket_owner_name` ,`ticket_owner_mobile` ,`no_ofTicket_purchase` ,`seat_no` ,`xtra_seat` ,`total_ticket_prize` ,`total_amount`,`ticket_seller_id`, `Program_idprogram`) 
+                            VALUES ('$ownerName', '$ownerMbl', $total_no_of_seat , '$str_SelectedSeat' , '$str_SelectedXSeat', $totalTicketPrize,  $totalamount, $db_onsid, $valueID );";
                     $treslt=mysql_query($tsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৭';
                     $TicketID = mysql_insert_id();
                }
@@ -372,12 +516,12 @@ function countXtra($progID)
 
 function showTicket($Tid)
 {
-    $sql = "SELECT * FROM ". $dbname . ".`ticket` WHERE idticket= $Tid ; ";
+    $sql = "SELECT * FROM `ticket` WHERE idticket= $Tid ; ";
     $result = mysql_query($sql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন১';
     $row = mysql_fetch_assoc($result);
     $db_pID = $row ['Program_idprogram'];
     
-    $sql2 = "SELECT * FROM ". $dbname . ".`program` WHERE idprogram = $db_pID ; ";
+    $sql2 = "SELECT * FROM `program` WHERE idprogram = $db_pID ; ";
     $result2 = mysql_query($sql2) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন২';
     $row2 = mysql_fetch_assoc($result2);
     
@@ -411,7 +555,7 @@ function showTicket($Tid)
     {
         for ($i=0; $i<$countseats; $i++)
         {
-        echo "<div id='front' style='width: 768px; height: 384px; border: blue dashed 2px; margin: 0 auto;background-image: url(images/watermark.png);background-repeat: no-repeat;background-size:100% 100%; '>
+        echo "<tr><td><div id='front' style='width: 768px; height: 384px; border: blue dashed 2px; margin: 0 auto;background-image: url(images/watermark.png);background-repeat: no-repeat;background-size:100% 100%; '>
                                     <div id='front_left' style='width: 192px; height: 384px;border-right:blue dotted 1px; float: left;'>
                                          <div style='width: 180px; float: left;padding-left: 4px;text-align: center;'><span class='rotare' style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'><span style='color: black;'>$progName</span></span></div>
                                          <div id='entry' style='width: 180px;float:left;padding-top: 5px;text-align: center;'><span class='rotare' style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'>এন্ট্রি পাস</span></div>
@@ -443,21 +587,21 @@ function showTicket($Tid)
                                             </div>
                                     </div>
                                 </div>
-                                <div id='back' style='width: 768px; height: 384px;  border: blue dashed 2px;background-color: #fff; margin: 0 auto;'>
+                                <div id='back' style='width: 768px; height: 384px;  border: blue dashed 2px;background-color: #fff; margin: 0 auto;page-break-after:always;'>
                                     <div id='back_ri8' style='width: 574px; height: 384px; float: left;border-right: blue dotted 1px;'>
                                         <div id='back_head' style='text-align: center;padding-top: 10px;'>
                                         <span style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'> কার্যবিবরণী</span>
                                         </div>
-                                        </div>
-                                </div></br><div class='page-break'></div>";
-        }
+                                  </div>
+                                </div></td></tr><tr><td id='jc'></td></tr>";
+             }
     }
     
     if($arr_xtraseats[0] != "")
     {
         for ($j=0; $j<$countxtra; $j++)
         {
-        echo "<div id='front' style='width: 768px; height: 384px; border: blue dashed 2px; margin: 0 auto;background-image: url(images/watermark.png);background-repeat: no-repeat;background-size:100% 100%; '>
+        echo "<tr><td><div id='front' style='width: 768px; height: 384px; border: blue dashed 2px; margin: 0 auto;background-image: url(images/watermark.png);background-repeat: no-repeat;background-size:100% 100%; '>
                                     <div id='front_left' style='width: 192px; height: 384px;border-right:blue dotted 1px; float: left;'>
                                          <div style='width: 180px; float: left;padding-left: 4px;text-align: center;'><span style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'><span style='color: black;'>$progName</span></span></div>
                                          <div id='entry' style='width: 180px;float:left;padding-top: 5px;text-align: center;'><span style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'>এন্ট্রি পাস</span></div>
@@ -495,7 +639,7 @@ function showTicket($Tid)
                                         <span style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'> কার্যবিবরণী</span>
                                         </div>
                                         </div>
-                                </div></br><div class='page-break'></div>";
+                                </div></td></tr><tr><td id='jc'></td></tr>";
         }
     }
 }
@@ -519,6 +663,9 @@ if ($_GET['opt']=='submit_ticket') {
         <div class="main_text_box">
             <?php  if($_GET['programID']!=0)
                         { 
+                            $sel_charge = mysql_query("SELECT * FROM charge WHERE charge_criteria='ticket making charge' ");
+                            $chargerow = mysql_fetch_assoc($sel_charge);
+                            $making_prize=$chargerow['charge_amount'];
                             $value = $_GET['programID']; 
                             $allsql="SELECT * FROM " . $dbname . ".program WHERE idprogram=$value;";
                                 $allrslt=mysql_query($allsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন';
@@ -530,7 +677,6 @@ if ($_GET['opt']=='submit_ticket') {
                                         $p_time=$all['program_time'];
                                         $p_place=$all['program_location'];
                                         $ticket_prize=$all['ticket_prize'];
-                                        $making_prize=$all['making_charge'];
                                         $db_description = $all['subject'];
                                     }
                                     
@@ -621,12 +767,26 @@ if ($_GET['opt']=='submit_ticket') {
                             </td>
                         </tr>
                         <tr>
-                            <td style="width: 40%; color: darkblue;">ক্রেতার নাম</td>
-                            <td>:   <input class="box" type="text" id="owner_name" name="owner_name" />                           
-                        </tr>
-                        <tr>
-                            <td style="width: 40%;color: darkblue;"> ক্রেতার মোবাইল নাম্বার </td>
-                            <td>:   <input class="box" type="text" id="owner_mbl" name="owner_mbl" onkeypress=' return numbersonly(event)' /><em> (ইংরেজিতে লিখুন)</em></td>                           
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td style=" color: darkblue;padding-left: 0px !important;">ক্রেতার নাম</td>
+                                        <td>:   <input class="box" type="text" id="owner_name" name="owner_name" /></td>
+                                        <td style=" color: darkblue;">খুজুন : <input class="box" type="text" name="searchBuyer" id="searchBuyer" onkeyup="getBuyer(this.value);"/>
+                                        <div id="accountfound"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: darkblue;padding-left: 0px !important;"> ক্রেতার মোবাইল নাম্বার </td>
+                                        <td>:   <input class="box" type="text" id="owner_mbl" name="owner_mbl" onkeypress=' return numbersonly(event)' /><em> (ইংরেজিতে লিখুন)</em></td>
+                                        <td style=" color: darkblue;">
+                                            <img src="" width="128px" height="128px" alt="" id="buyerimage"></br>
+                                            একাউন্টধারীর নামঃ <span style=" color: black;" id="buyername"></span></br>
+                                            একাউন্টধারীর মোবাইল নং : <span style=" color: black;" id="buyermobile"></span></br>
+                                            একাউন্ট নং : <span style=" color: black;" id="buyerACC"></span></br>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>                         
                         </tr>
                         <tr>
                             <td style="width: 40%;color: darkblue;">খালি আসন সংখ্যা<input type='hidden' name='progID' value=<?php echo $P_value;?> /></td>
@@ -656,6 +816,12 @@ if ($_GET['opt']=='submit_ticket') {
                         <tr>
                             <td colspan="2" id="prize">
                             </td>                           
+                        </tr>
+                        <tr>
+                            <td colspan="2" id="paymentBox">
+                            </td>                           
+                        </tr>
+                        <tr  id="payByCash" style="color: darkblue;">                                               
                         </tr>
                         </table>
                 </form>
@@ -705,69 +871,23 @@ if ($_GET['opt']=='submit_ticket') {
             <div id="noprint"style="padding-left: 110px;"><a href="selling_ticket.php"><b>ফিরে যান</b></a></div> 
             <div>
                 <form method="POST" onsubmit="" action="selling_ticket.php?opt=submit_account">	
-                    <table  class="formstyle" style="color: #3333CC; font-weight:600;">          
+                    <table  class="formstyle" style="color: #3333CC; font-weight:600;page-break-inside: auto;">          
                         <tr><th colspan="4" style="text-align: center;">টিকেট সেলিং</th></tr>
-                        <tr>  
-                            <td colspan="2" style="padding-left: 0;">
                                 <?php showTicket($TicketID);?>
-                                </tr>
                                   <tr>                    
                             <td colspan="2" style="text-align: center" ></td>
-                        </tr>    
-                        <tr id="noprint">  
-                            <td colspan="2" style="text-align: center" ><a class="btn" style="text-decoration: none" href="javascript: window.print()">পেইডআপ এন্ড প্রিন্ট</a>
-                                <input class="btn" style =" font-size: 12px; width: auto" type="button" name="payment_by_account" value="পেমেন্ট বাই একাউন্ট" onclick="getAccount()" /></td>                           
-                        </tr>
-                        <tr id="noprint">
-                            <td colspan="2" id="acount"></td>                           
-                        </tr>
+                            </tr>    
+                            <tr id="noprint">  
+                                <td colspan="2" style="text-align: center" ><a class="btn" style="text-decoration: none" href="javascript: window.print()">পেইডআপ এন্ড প্রিন্ট</a></td>                           
+                            </tr>
+                        <?php }?>
                     </table>
                 </form>
             </div>
         </div>      
     </div>
-<?php }}
-elseif ($_GET['opt']=='submit_account') {
-    ?>
-    <div class="column6">
-        <div class="main_text_box">
-            <?php if($sqlerror !="") { QueryFailedMsg($sqlerror);} else{ ?>
-            <div style="padding-left: 110px;"><a href="selling_ticket.php"><b>ফিরে যান</b></a></div> 
-            <div> 
-                <form method="POST" onsubmit="" action="">	
-                    <table  class="formstyle" style="color: #3333CC; font-weight:600;font-family: SolaimanLipi !important;">          
-                        <tr><th colspan="4" style="text-align: center;">টিকেট সেলিং</th></tr>
-                        <tr>  
-                            <td colspan="2" style="padding-left: 0;">
-                                <?php echo "অ্যাকাউন্টধারীর অ্যাকাউন্ট-এর ভিসিবল এখানে থাকবে";?>
-                                </br></br></br></td>
-                                </tr> 
-                                <tr>
-                            <td style="width: 40%">ব্যালেন্স এমাউন্ট</td>
-                            <td>: <span style="color: black;"> Taka </span> </td>                           
-                        </tr>
-                        <tr>
-                            <td style="width: 40%">ইন এমাউন্ট</td>
-                            <td>:  <input class="box" type="text" id="in_amount" name="in_amount" />Taka </span> </td>                           
-                        </tr>
-                        <tr>                    
-                            <td colspan="2" style="text-align: center" ></td>
-                        </tr>    
-                        <tr>                    
-                            <td colspan="2" style="text-align: center" ><a class="btn" style="text-decoration: none;padding: 5px;" href="javascript: window.print()"> প্রিন্ট</a></td>                           
-                        </tr>
-                        <tr>
-                            <td colspan="2" id="acount">
-                            </td>                           
-                        </tr>
-                    </table>
-                </form>
-                
-            </div>
-        </div>      
-    </div>
-<?php
-            }} else {
+<?php }
+else {
     ?>
     <div class="column6">
         <div class="main_text_box">

@@ -141,8 +141,8 @@ function searchInventoryPckg(str_key) // for searching packages from own invento
                    document.getElementById('searchResult').style.display = "none";
                }
                 else
-                    {document.getElementById('searchResult').style.visibility = "visible";
-                document.getElementById('searchResult').setAttribute('style','position:absolute;top:38%;left:30%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                    {   document.getElementById('searchResult').style.visibility = "visible";
+                         document.getElementById('searchResult').setAttribute('style','position:absolute;top:41%;left:33.5%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('searchResult').innerHTML=xmlhttp.responseText;
         }
@@ -200,7 +200,7 @@ function getUpdate(xprofit)
 <body onLoad="ShowTime()">
 
     <div id="maindiv">
-<div id="header" style="width:100%;height:100px;background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
+<div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
     <div style="width: 33%;height: 100%; float: left;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div>
@@ -274,9 +274,9 @@ function getUpdate(xprofit)
                                                         }
                                                     }
                                          ?>
-                                         <b>প্যাকেজের নাম : </b><input type="text" id="pckgName" name="pckgName" readonly value="<?php echo $db_pckgname;?>" style="width: 300px;"/><input type="hidden" name="pckgID"  value="<?php echo $pckgid;?>"/></br>
-                                         <b>প্যাকেজ কোড &nbsp;: </b> <input type="text" id="pckgCode" name="pckgCode" readonly value="<?php echo $db_pckgcode;?>" style="width: 300px;"/></br>
-                                         <b>প্যাকেজের পরিমাণ : </b> <input type="text" id="pckgQty" name="pckgQty" style="width: 300px;" readonly value="<?php echo $db_pckgqty;?>" /></br>
+                                         <b>প্যাকেজের নাম&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" id="pckgName" name="pckgName" readonly value="<?php echo $db_pckgname;?>" style="width: 300px;"/><input type="hidden" name="pckgID"  value="<?php echo $pckgid;?>"/></br>
+                                         <b>প্যাকেজ কোড&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b> <input type="text" id="pckgCode" name="pckgCode" readonly value="<?php echo $db_pckgcode;?>" style="width: 300px;"/></br>
+                                         <b>প্যাকেজের পরিমাণ :</b> <input type="text" id="pckgQty" name="pckgQty" style="width: 300px;" readonly value="<?php echo $db_pckgqty;?>" /></br>
                                          <input type='hidden' name='pckgproid' value='<?php echo serialize($arr_pro_chartid); ?>' />
                                          <input type='hidden' name='pckgqty' value='<?php echo serialize($arr_pro_qty); ?>' /></br>
                                          <table border="">
@@ -318,8 +318,8 @@ function getUpdate(xprofit)
                         <?php if($check !=1) {?>
                         <b>যতটা প্যাকেজ ভাঙতে চাই : </b> <input type="text" id="breakingQty" name="breakingQty" onkeypress=' return numbersonly(event)' style="width: 200px;"/></br>
                         <input type="hidden"  id="check"  value="0" /><span id="show" style="color: red;"></span></br>
-                        <input  id="ok" type="button" value="ঠিক আছে" style="cursor:pointer;font-family: SolaimanLipi !important;" />
-                        <input name="break" id="break" type="submit" value="ব্রেক" style="cursor:pointer;font-family: SolaimanLipi !important;" /></br></br>
+                        <input  id="ok" type="button" value="ঠিক আছে" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" />
+                        <input name="break" id="break" type="submit" value="ব্রেক" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br></br>
                         <?php } else { echo "<span style='color:red;'>দুঃখিত, এই প্যাকেজটি এন্ট্রি করার জন্য প্রয়োজনীয় পরিমান পণ্য নেই </span>";}?>
                     </td>
                 </tr>
@@ -328,7 +328,7 @@ function getUpdate(xprofit)
 </form>
 </div>
 <?php }?>
-<div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
+<div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
          RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
 </div>

@@ -4,6 +4,9 @@ session_start();
 include_once 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 $storeName= $_SESSION['loggedInOfficeName'];
+$cfsID = $_SESSION['userIDUser'];
+$storeID = $_SESSION['loggedInOfficeID'];
+$scatagory =$_SESSION['loggedInOfficeType'];
 function get_catagory()
 {
     echo  "<option value=0> -সিলেক্ট করুন- </option>";
@@ -154,6 +157,27 @@ function showProduct(productChartId,idbrand,cataID) // show product details from
         xmlhttp.open("GET","includes/searchProcess.php?id=all&chartID="+productChartId+"&idbrand="+idbrand+"&cataID="+cataID,true);
         xmlhttp.send();
 }
+function showCatProducts(code) // show products from selecting catagory
+{
+    var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","includes/searchProcess.php?id=catagory&proCatCode="+code,true);
+        xmlhttp.send();
+}
 function showTypeProducts(proCatID) // show products from selecting types
 {
     var xmlhttp;
@@ -203,7 +227,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
 <body onLoad="ShowTime()">
 
     <div id="maindiv">
-<div id="header" style="width:100%;height:100px;background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
+<div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
          <div style="width: 40%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
     <div style="width: 60%;height: 100%;float: left;font-family: SolaimanLipi !important;text-align: left;font-size: 36px;"><?php echo $storeName;?></div></br>
@@ -215,10 +239,10 @@ function showBrandProducts(brandcode,procatid) // show products from brand
     <div class="top" style="width: 100%;height: auto;">
         <div class="topleft" style="width: 100%;"><b>পণ্য খুঁজুন&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
             : <input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('product_list.php');" autocomplete="off" style="width: 300px;"/></br>
-        <div style="position:absolute;top:262px;left:400px;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult"></div>
+        <div style="position:absolute;top:38%;left:30.5%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult"></div>
     </div></br></br>
     <div style="float: left;width: 25%;"><b>পণ্যের ক্যাটাগরি</b></br>
-      <select id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value)" style="width: 200px;font-family: SolaimanLipi !important;">
+      <select id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value);showCatProducts(this.value);" style="width: 200px;font-family: SolaimanLipi !important;">
                 <?php echo get_catagory(); ?>
             </select>
         </div>
@@ -276,12 +300,35 @@ if (isset($_GET['code']))
         echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
         echo '</tr>';
         }
+   else
+     	{	
+                    $result = mysql_query("SELECT * FROM inventory WHERE ins_ons_id = '$storeID' AND ins_ons_type='$scatagory' AND ins_product_type='general';");
+                        while ($row = mysql_fetch_assoc($result))
+                        {
+                            $db_proname=$row["ins_productname"];
+                            $db_price=english2bangla($row["ins_sellingprice"]);
+                            $db_qty=english2bangla($row["ins_how_many"]);
+                            $db_procode=$row["ins_product_code"];
+                            $db_proPV=english2bangla($row["ins_pv"]);
+                            $inventoryID= $row['idinventory'];
+
+                            echo '<tr>';
+                            echo '<td><div align="center">১</div></td>';
+                            echo '<td><div align="left">'.$db_procode.'</div></td>';
+                              echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
+                              echo '<td><div align="center">'.$db_qty.'</div></td>';
+                              echo '<td><div align="center">'.$db_price.'</div></td>';
+                              echo '<td><div align="center">'.$db_proPV.'</div></td>';
+                              echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
+                              echo '</tr>';
+                        }
+        }
 ?>
 </table>
 </div>
 </fieldset>
 
-<div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
+<div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
          RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
 </div>

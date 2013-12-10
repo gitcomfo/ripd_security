@@ -16,7 +16,7 @@ include_once 'includes/header.php';
                                                     height="98" class="img_left" alt="" title="" border="0" /> </a>
                         <div class="offer_info">
 
-                            <p class="offer">ঘরে বসেই হাতের কাছে পেয়ে যাচ্ছেন সব পণ্য। ঘরে বসে আরাম করে সব কেনাকাটা করুন কিংবা প্রিয়জনদের উপহার দিন। অর্ডার দেওয়া মাত্র</p>
+                            <p class="offer"> শাড়ি বাংলাদেশসহ ভারতীয় উপমহাদেশের মহিলাদের ঐতিহ্যবাহী ও নিত্যনৈমিত্তিক পরিধেয় বস্ত্র। পুরো উপমহাদেশীয় সংস্কৃতিতেই শাড়ির একটা বেশ গ্লামারাস ছোঁয়া পাওয়া যায়। আর তা যদি ....</p>
                             <div class="more">
                                 <a href="#">...বিস্তারিত</a>
                             </div>
@@ -30,7 +30,7 @@ include_once 'includes/header.php';
                                                     height="98" class="img_left" alt="" title="" border="0" /> </a>
                         <div class="offer_info">
 
-                            <p class="offer">শীত, গ্রীষ্ম বা বর্ষা এখন কোনোই ব্যাপার না। যখন দরকার তখনই হাতের নাগালে পাওয়া যাবে সবকিছু। 
+                            <p class="offer">স্বাভাবিক দিনযাপনের জন্য বিভিন্ন ধরনের প্রসাধন সামগ্রী ব্যবহার করার দরকার হয়ে পড়ে। সাবান, শ্যম্পু থেকে শুরু করে পারফিউম, হেয়ার জেল, লিপষ্টিক, নেইল পলিশ, লিপ বাম, সানস্ক্রিন ক্রিমসহ...
                             </p>
                             <div class="more">
                                 <a href="#">...বিস্তারিত</a>
@@ -45,7 +45,7 @@ include_once 'includes/header.php';
                                                     height="98" class="img_left" alt="" title="" border="0" /> </a>
                         <div class="offer_info">
 
-                            <p class="offer">শীত, গ্রীষ্ম বা বর্ষা এখন কোনোই ব্যাপার না। যখন দরকার তখনই হাতের নাগালে পাওয়া যাবে সবকিছু। 
+                            <p class="offer">আমাদের প্রতিদিনের খাদ্য তালিকায় থাকে রকমারী মুখরোচক খাদ্য। এখানে পাবেন সব দেশী-বিদেশী মুখরোচক খাদ্য।  
                             </p>
                             <div class="more">
                                 <a href="#">...বিস্তারিত</a>
@@ -65,7 +65,7 @@ include_once 'includes/header.php';
                                                     height="98" class="img_left" alt="" title="" border="0" /> </a>
                         <div class="offer_info">
 
-                            <p class="offer">ঘরে বসেই হাতের কাছে পেয়ে যাচ্ছেন সব পণ্য। ঘরে বসে আরাম করে সব কেনাকাটা করুন কিংবা প্রিয়জনদের উপহার দিন। </p>
+                            <p class="offer">বিভিন্ন রঙের কাপড় দিয়ে তৈরী মেয়েদের সৌখিন ব্যাগ থেকে শুরু করে স্কুল ব্যাগ, ট্রাভেল ব্যাগ সবই পাওয়া যায় এখানে। </p>
                             <div class="more">
                                 <a href="#">...বিস্তারিত</a>
                             </div>
@@ -79,7 +79,7 @@ include_once 'includes/header.php';
                                                     height="98" class="img_left" alt="" title="" border="0" /> </a>
                         <div class="offer_info">
 
-                            <p class="offer">শীত, গ্রীষ্ম বা বর্ষা এখন কোনোই ব্যাপার না। যখন দরকার তখনই হাতের নাগালে পাওয়া যাবে সবকিছু। 
+                            <p class="offer">বিভিন্ন ব্র্যান্ডের দেশী-বিদেশী জুতা পাওয়া যবে এখানে। 
                             </p>
                             <div class="more">
                                 <a href="#">...বিস্তারিত</a>
@@ -88,13 +88,13 @@ include_once 'includes/header.php';
                     </div>
                 </div>
                 <div class="product_info_column" style="width:32%;">
-                    <div  class="small_title">স্পেশাল ক্ষীর</div>
+                    <div  class="small_title">স্পেশাল মিষ্টি</div>
                     <div class="offer_box">
                         <a href="details.html"><img src="images/blended-baby-food.jpg" width="130"
                                                     height="98" class="img_left" alt="" title="" border="0" /> </a>
                         <div class="offer_info">
 
-                            <p class="offer">শীত, গ্রীষ্ম বা বর্ষা এখন কোনোই ব্যাপার না। যখন দরকার তখনই হাতের নাগালে পাওয়া যাবে সবকিছু। 
+                            <p class="offer">দেশের ঐতিহ্যবাহী মিষ্টি জাতীয় খাদ্যসামগ্রী পাওয়া যাবে খুব সহজেই। গুড়ের সন্দেশ, স্পঞ্জ রসগোল্লা, মালাইচপ, লালমোহন, ছাঁচের সন্দেশ, রসমালাইসহ আরো হরেক...
                             </p>
                             <div class="more">
                                 <a href="#">...বিস্তারিত</a>
@@ -114,7 +114,7 @@ include_once 'includes/header.php';
                                                     height="98" class="img_left" alt="" title="" border="0" /> </a>
                         <div class="offer_info">
 
-                            <p class="offer">ঘরে বসেই হাতের কাছে পেয়ে যাচ্ছেন সব পণ্য। ঘরে বসে আরাম করে সব কেনাকাটা করুন কিংবা প্রিয়জনদের উপহার দিন।</p>
+                            <p class="offer">সাবান আমাদের নিত্য প্রয়োজনীয় একটি দ্রব্য। প্রতিদিন নানান কাজে আমরা সাবান ব্যবহার করি। এখানে পাওয়া যাবে দেশী-বিদেশি সাবান।</p>
                             <div class="more">
                                 <a href="#">...বিস্তারিত</a>
                             </div>
@@ -127,7 +127,7 @@ include_once 'includes/header.php';
                         <a href="details.html"><img src="images/shampoo.jpg" width="130" 
                                                     height="98" class="img_left" alt="" title="" border="0" /> </a>
                         <div class="offer_info">                
-                            <p class="offer">শীত, গ্রীষ্ম বা বর্ষা এখন কোনোই ব্যাপার না। যখন দরকার তখনই হাতের নাগালে পাওয়া যাবে সবকিছু। 
+                            <p class="offer">শ্যাম্পু চুলের যত্নে ব্যবহৃত একটি নিত্যনৈমিত্তিক পণ্য। নামী ব্র্যান্ডের সবধরণের শ্যাম্পু পাবেন এখানে।
                             </p>
                             <div class="more">
                                 <a href="#">...বিস্তারিত</a>
@@ -142,7 +142,7 @@ include_once 'includes/header.php';
                                                     height="98" class="img_left" alt="" title="" border="0" /> </a>
                         <div class="offer_info">
 
-                            <p class="offer">শীত, গ্রীষ্ম বা বর্ষা এখন কোনোই ব্যাপার না। যখন দরকার তখনই হাতের নাগালে পাওয়া যাবে সবকিছু। 
+                            <p class="offer">ফ্যাশন হাউস ছাড়াও পাঞ্জাবি কিনতে চলে আসতে পারেন আমাদের কাছে। স্বল্পদামে নানা ডিজাইনের পাঞ্জাবি কিনতে পারবেন এখান থেকে। 
                             </p>
                             <div class="more">
                                 <a href="#">...বিস্তারিত</a>

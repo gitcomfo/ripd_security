@@ -1,6 +1,10 @@
 <?php
             include_once 'getSelectedThana.php';
             $gettype = $_GET['type'];
+            $logedinOfficeId = $_SESSION['loggedInOfficeID'];
+$sel_office = mysql_query("SELECT * FROM office WHERE idOffice = $logedinOfficeId");
+$officerow = mysql_fetch_assoc($sel_office);
+$db_selectedOffice = $officerow['office_selection'];
 ?>
 
     <span id="office">
@@ -26,7 +30,7 @@
                     $rs = mysql_query($sql_officeTable);
                     }
                     else{
-                    $sql_officeTable = "SELECT * from ".$dbname.".office WHERE office_type <> 'pwr_head' AND Thana_idThana IN ($joinArray) ORDER BY office_name ASC";
+                    $sql_officeTable = "SELECT * from ".$dbname.".office WHERE office_type <> 'pwr_head' AND office_selection= '$db_selectedOffice' AND Thana_idThana IN ($joinArray) ORDER BY office_name ASC";
                     $rs = mysql_query($sql_officeTable);
                     }
 
