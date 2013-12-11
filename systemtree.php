@@ -22,7 +22,7 @@ error_reporting(0);
 
 
     <div style="padding-top: 10px;">    
-        <div style="padding-left: 0%; width: 47%;"><a href="account_management.php"><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 0%; width: 47%;"><a href="tree_view.php"><b>ফিরে যান</b></a></div>
     </div>
 <div>
 <body onload="init();">
