@@ -140,13 +140,6 @@ function checkQty(qty)
             document.getElementById('break').disabled = true;
         }
 }
-function setUnit()
-{
-    var unit = document.getElementById('unitbox').value;
-    var n = decodeURIComponent(unit);
-    var unitname = n.replace(/\+/g," ");
-    document.getElementById('unit').innerHTML = unitname;
-}
 function calculate1(convertedQty, breakingqty)
 {
     var unitQty = Number(document.getElementById('breakingunit').value);
@@ -328,26 +321,17 @@ function getValues(procode)
                         <tr>
                             <td width="45%" style="border: 1px black solid;text-align:right;">রূপান্তরযোগ্য প্রোডাক্টের <?php echo $db_breakingProUnit;?></td>
                             <td width="10%" style="border: 1px black solid;text-align: center;"> = </td>
-                            <td width="45%" style="border: 1px black solid;"><input type="text" name="breakingunit" id="breakingunit" />
-<!--                                <select name="unit" id="unitbox" onchange="setUnit()">
-                                    <?php // showUnit($sel_unit);?>
-                                </select>-->
-                                <select name="unit" id="unitbox" onchange="setUnit()">
-                                    <option value="0">-একক-</option>
-                                    <option value="কেজি">কেজি</option>
-                                    <option value="লিটার">লিটার</option>
-                                </select>
-                            </td>
+                            <td width="45%" style="border: 1px black solid;"><input type="text" name="breakingunit" id="breakingunit" /> একক</td>
                         </tr>
                         <tr>
                             <td  style="border: 1px black solid;text-align:right;">রূপান্তরিত প্রোডাক্টের ১ <?php echo $db_ProUnit;?></td>
                             <td  style="border: 1px black solid;text-align: center;"> = </td>
-                            <td style="border: 1px black solid;"><input type="text" id="tobreakunit" name="tobreakunit" onkeyup="calculate1(this.value,'<?php echo $p_breakingqty?>');"/> <span id="unit"></span></td>
+                            <td style="border: 1px black solid;"><input type="text" id="tobreakunit" name="tobreakunit" onkeyup="calculate1(this.value,'<?php echo $p_breakingqty?>');"/> একক</td>
                         </tr>
                         <tr>
                             <td  style="border: 1px black solid;text-align:right;">রূপান্তরযোগ্য প্রোডাক্টের  <?php echo $p_breakingqty." টি " ; echo $db_breakingProUnit;?></td>
                              <td  style="border: 1px black solid;text-align: center;"> = </td>
-                             <td style="border: 1px black solid;"><input readonly id="totalqty" /> <span><?php echo $db_ProUnit;?></span> রূপান্তরিত প্রোডাক্ট</td>
+                             <td style="border: 1px black solid;"><input readonly id="totalqty" /> টি রূপান্তরিত প্রোডাক্ট</td>
                         </tr>
                     </table>
                     </fieldset>
@@ -356,7 +340,7 @@ function getValues(procode)
             <tr>
                 <td width="50%">
                     <fieldset style="border-width: 3px;width: 90%;">
-                        <legend style="color: brown;">রূপান্তরিত প্রোডাক্ট</legend>
+                        <legend style="color: brown;">রূপান্তরিত প্রোডাক্টের চলমান মূল্যতালিকা</legend>
                             <table width="100%" align="center" >
                             <tr>
                                 <td width="50%" style="border: 1px black solid;text-align:right;">ক্রয়মূল্য </td>
@@ -383,7 +367,7 @@ function getValues(procode)
                 </td>
                 <td width="50%">
                      <fieldset style="border-width: 3px;width: 90%;">
-                        <legend style="color: brown;">রূপান্তরযোগ্য প্রোডাক্ট</legend>
+                        <legend style="color: brown;">রূপান্তরিত প্রোডাক্টের হিসাবকৃত মূল্যতালিকা</legend>
                             <table width="100%" align="center" >
                                 <tr>
                                     <td width="50%" style="border: 1px black solid;text-align:right;">একক ক্রয়মূল্য </td>
