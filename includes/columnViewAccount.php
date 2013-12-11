@@ -14,9 +14,9 @@ else $view_link = "view_employee_account.php";
                     <li><a href="<?php echo $view_link;?>">ভিউ একাউন্ট</a></li>
                     <li><a href="amount_transfer.php">এমাউন্ট ট্রান্সফার</a></li>
                     <li><a href="#">চেক মেকিং</a></li>
-                    <?php if($logedInUserType == 'customer') echo '<li><a href="systemtree.php">সিস্টেম ট্রি</a></li>';?>
+                    <?php if($logedInUserType == 'customer') echo '<li><a href="tree_view.php">ট্রি দেখুন</a></li>';?>
                     <li><a href="password_change.php">পাসওয়ার্ড পরিবর্তন</a></li>
-                    <li><a href="">ই-মেইল</a></li>
+                    <li><a href="https://mail.ripduniversal.com" target="_blank">ই-মেইল</a></li>
                 </ul>
             </div>
         </div>
