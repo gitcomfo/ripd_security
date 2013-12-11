@@ -13,20 +13,6 @@ $msg ="";
 $sel_inventory = $conn->prepare("SELECT * FROM inventory,product_chart WHERE idproductchart= ins_productid AND ins_product_type = 'general' AND idinventory = ?");
 $sel_prochart = $conn->prepare("SELECT * FROM product_chart WHERE idproductchart=?");
 $sel_inventory2 = $conn->prepare("SELECT * FROM inventory WHERE ins_ons_id= ? AND ins_ons_type=? AND ins_product_type='general' AND ins_productid=?");
-$sel_unit = $conn->prepare("SELECT * FROM product_unit ORDER BY prounit_name");
-// $sqlins = "INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_selling_price ,pckg_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?)";
-// $insstmt = $conn ->prepare($sqlins);
- 
-//function showUnit($stmt) {
-//    
-//    echo "<option value=0> -একক- </option>";
-//    $stmt->execute(array());
-//    $allunit = $stmt->fetchAll();
-//    foreach ($allunit as $unitrow) {
-//        $unit = urlencode($unitrow['prounit_name']);
-//                echo "<option value=" .$unit. ">" . $unitrow['prounit_name'] . "</option>";
-//    }
-//}
 
 if(isset($_POST['break']))
 {
@@ -45,9 +31,6 @@ if(isset($_POST['break']))
         $db_ProUnit = $row2['pro_unit'];
     }
     $sel_inventory2->execute(array($storeID,$scatagory,$p_chartID));
-//    echo $count = $sel_inventory2->countRow();
-//    if($count > 0)
-//    {
         $all3 = $sel_inventory2->fetchAll();
         if(count($all3) > 0 ) {
         foreach ($all3 as $row3) {
