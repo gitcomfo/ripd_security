@@ -6,8 +6,7 @@ else $view_link = "view_employee_account.php";
 ?>
 <div class="column1">
     <div class="left_box">
-        <div class="top_left_box">
-        </div>
+        <div class="top_left_box"></div>
         <div class="center_left_box">
             <div class="box_title"><span>প্রোফাইল</span> ম্যানেজমেন্ট</div>
             <div class="navbox">

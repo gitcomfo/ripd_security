@@ -226,10 +226,10 @@ function checkIt(evt) // float value-er jonno***********************
 </div>
     </fieldset>
  </div>
-    <input name="entry" id="entry" type="submit" value="সেভ করুন"style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" /></br></br>
+    <input name="entry" id="entry" type="submit" value="সেভ করুন"style="cursor:pointer;margin-left:45%;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br></br>
     </from> <?php }?>
 </div>
-<div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
+<div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
          RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
 </div>

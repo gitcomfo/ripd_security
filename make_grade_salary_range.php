@@ -40,6 +40,19 @@ function checkIt(evt) {
     status = "This field accepts numbers only.";
     return false;
 }
+function beforSubmit()
+{
+    var getoption = document.getElementById('catagory');
+    if (getoption.options[getoption.selectedIndex].value != "")
+        {
+            document.getElementById('save').readonly = false;
+            return true;
+        }
+        else {
+            document.getElementById('save').readonly = true;
+            return false;
+        }
+}
 </script>
 
 <div class="column6">
@@ -62,8 +75,8 @@ function checkIt(evt) {
                     </tr>
                     <tr>
                         <td>ক্যাটাগরি</td>
-                        <td>: <select class="selectOption" name="catagory" style="width: 167px !important;font-family: SolaimanLipi !important; font-size: 14px;">
-                                <option value=" ">--ক্যাটাগরি সিলেক্ট করুন--</option>
+                        <td>: <select class="selectOption" name="catagory" id="catagory" style="width: 167px !important;font-family: SolaimanLipi !important; font-size: 14px;">
+                                <option value="">--ক্যাটাগরি সিলেক্ট করুন--</option>
                                 <option value="presenter">প্রেজেন্টার</option>
                                 <option value="programmer">প্রোগ্রামার</option>
                                 <option value="trainer">ট্রেইনার</option>
@@ -88,7 +101,7 @@ function checkIt(evt) {
                         <td>:   <input class="box" type="text" id="pension" name="pension" onkeypress="return checkIt(event)"/> %</td>                                  
                     </tr>
                     <tr>                    
-                        <td colspan="2" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="সেভ করুন" />
+                        <td colspan="2" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" id="save" name="submit" readonly="" onclick="return beforSubmit()" value="সেভ করুন" />
                         <input class="btn" style =" font-size: 12px" type="reset" name="reset" value="রিসেট করুন" /></td>                           
                     </tr>    
                 </table>

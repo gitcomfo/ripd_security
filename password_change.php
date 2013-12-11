@@ -113,7 +113,7 @@ function  checkCorrectPass() // match password with account
                 </tr>
                 <?php showMessage($flag, $msg);?>
                 <tr>
-                    <td style="text-align: right; width: 40%;">পুরানো পাসওয়ার্ড</td>
+                    <td style="text-align: right; width: 35%;">পুরানো পাসওয়ার্ড</td>
                     <td>: <input  class="box" type="password" name="old_password"  id="old_password" onblur='checkCorrectPass();'/><span id='showError'></span></td>   
                 </tr>
                 <tr>

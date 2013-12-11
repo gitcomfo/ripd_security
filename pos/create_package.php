@@ -10,7 +10,7 @@ $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
 $msg = "";
-// ********************* package_info-e entry হওয়ার জন্য*******************************************
+// ********************* package_info-e entry হওয়ার জন্য*******************************************
 if(isset($_POST['ok']))
 {
     $infosql = "INSERT INTO package_info(pckg_name ,pckg_code ,pckg_image ,pckg_makedate ,pckg_makerid) VALUES (?, ?, ?, ?, ?)";
@@ -54,7 +54,7 @@ else
     $yUpdate= str_pad($str_y,4, "0", STR_PAD_LEFT);
     $pckgCode = "pckg-".$yUpdate;
 }
-// ********************* package_details-e entry হওয়ার জন্য*******************************************
+// ********************* package_details-e entry হওয়ার জন্য*******************************************
 
 $sql2 = "SELECT * FROM package_temp WHERE pckg_code= ?";
 $selectstmt = $conn ->prepare($sql2);
@@ -240,15 +240,16 @@ function searchName(where) // productlist-er name search box
     {
 ?>
     <form action="create_package.php" enctype="multipart/form-data" method="post" name="abc">
-          <fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
+          <fieldset style="width:70%;border-width: 3px;margin:0 20px 0 200px;font-family: SolaimanLipi !important;">
               <legend style="color: brown;">প্যাকেজ তৈরি</legend>
               <div style="width: 100%;">
                   <b>প্যাকেজের নাম&nbsp;&nbsp; : </b><input type="text" name="pckg_name" style="width: 200px;"/></br>
                   <b>প্যাকেজ কোড&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" name="pckg_code" readonly value="<?php echo $pckgCode;?>" style="width: 200px;"/></br>
                   <b>প্যাকেজ ছবি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : </b><input type="file" name="pckg_pic" style="width: 200px;"/>
               </div>
-              <input name="ok" id="ok" type="submit" value="ঠিক আছে" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" /></br>
+              <input name="ok" id="ok" type="submit" value="ঠিক আছে" style="cursor:pointer;margin-left:45%;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br>
 </fieldset>
+        </br></br></br></br></br></br></br></br>
     </form>
     
     <?php }
@@ -262,13 +263,13 @@ function searchName(where) // productlist-er name search box
             <b>প্যাকেজের নাম : </b><input type="text" name="pckg_name" readonly value="<?php echo $_SESSION['pckgname'];?>" style="width: 200px;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <b>প্যাকেজ কোড : </b><input type="text" name="pckg_code" readonly value="<?php echo $_SESSION['pckgcode'];?>" style="width: 200px;"/>
         </div></br>
-        <div class="topleft" style="float: left;width: 30%;"><b>প্রোডাক্ট কোড</b></br>
+        <div class="topleft" style="float: left;width: 25%;"><b>প্রোডাক্ট কোড</b></br>
       <input type="text" id="amots" name="amots" onKeyUp="searchCode('create_package.php');" autocomplete="off" style="width: 200px;"/>
-      <div id="layer2"style="width:200px;position:absolute;top:52.5%;left:7.5%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
+      <div id="layer2"style="width:200px;position:absolute;top:60.5%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
       <b>প্রোডাক্ট নাম&nbsp;&nbsp;  </b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchName('create_package.php');" autocomplete="off" style="width: 200px;"/>
-      <div  id="searchResult"style="position:absolute;top:60%;left:16%;width:200px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
+      <div  id="searchResult"style="position:absolute;top:72.5%;left:8%;width:200px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
     </div>
-    <div class="topright" style="float:left; width: 70%;">
+    <div class="topright" style="float:left; width: 75%;">
 <?php
 	if (isset($_GET['code']))
      	{
@@ -289,9 +290,9 @@ function searchName(where) // productlist-er name search box
     </td>
   </tr>
   <tr>
-      <td width="51%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 22px;width: 250px;" readonly/>
-      <td width="49%"><span style="color: #03C;"> পরিমাণ :</span> <input name="QTY" id="QTY" type="text" onkeypress=' return numbersonly(event)'  style="width:100px;"/></td>
-      <td width="49%" rowspan="2"><input type="submit" name="addButton" style="height:100px; width: 100px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
+      <td width="53%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 20px;width: 400px;" readonly/></td>
+      <td width="47%"><span style="color: #03C;"> পরিমাণ :</span> <input name="QTY" id="QTY" type="text" onkeypress=' return numbersonly(event)'  style="width:100px;"/></td>
+      <td width="47%" rowspan="2"><input type="submit" name="addButton" style="height:100px; width: 100px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
   </tr>
   <tr>   
     <td width="51%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর একক:</span>
@@ -328,13 +329,13 @@ function searchName(where) // productlist-er name search box
 </table>
 </fieldset>
 <form action="create_package.php" method="post" >
-<input name="entry" id="entry" type="submit" value="এন্ট্রি করুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" /></br></br>
+<input name="entry" id="entry" type="submit" value="এন্ট্রি করুন" style="cursor:pointer;margin-left:45%;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br></br>
 </form>
     <?php }?>
-<div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
+    </div>
+<div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;width: 82%; margin: 0 auto;" >
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
          RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
 </div>
-  </div>
 </body>
 </html>

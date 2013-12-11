@@ -194,7 +194,7 @@ function searchName(where) // productlist-er name search box
 <body onLoad="ShowTime()">
 
     <div id="maindiv">
-<div id="header" style="width:100%;height:100px;background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
+<div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
 <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
     <div style="width: 33%;height: 100%; float: left;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div>
@@ -209,9 +209,9 @@ function searchName(where) // productlist-er name search box
     <div class="top" style="width: 100%;">
         <div class="topleft" style="float: left;width: 30%;"><b>প্রোডাক্ট কোড :</b>
       <input type="text" id="amots" name="amots" onKeyUp="searchCode('productIN.php');" autocomplete="off" style="width: 200px;"/>
-      <div id="layer2"style="width:200px;position:absolute;top:41.5%;left:16.5%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
+      <div id="layer2"style="width:200px;position:absolute;top:52%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
       <b>প্রোডাক্ট নাম&nbsp;&nbsp; : </b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchName('productIN.php');" autocomplete="off" style="width: 200px;"/>
-      <div  id="searchResult"style="position:absolute;top:49%;left:16.5%;width:200px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
+      <div  id="searchResult"style="position:absolute;top:64%;left:8%;width:200px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
     </div>
     <div class="topright" style="float:left; width: 70%;">
 <?php
@@ -234,7 +234,7 @@ function searchName(where) // productlist-er name search box
     </td>
   </tr>
   <tr>
-      <td width="43%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 22px;width: 250px;" readonly/>
+      <td width="43%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 310px;" readonly/>
       <td width="16%"><span style="color: #03C;"> ক্রয়মূল্য</span></br><input name="buyPrice" id="buyPrice" type="text" onkeypress="return checkIt(event)" style="width:100px;"/> টাকা</td>
       <td width="16%"><span style="color: #03C;"> বিক্রয়মূল্য </span></br><input name="sellPrice" id="sellPrice" type="text" style="width:100px;" onkeypress="return checkIt(event)"/> টাকা</td>
        <td width="5%" rowspan="2"><input type="submit" name="addButton" style="height:100px; width: 100px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
@@ -285,9 +285,9 @@ while($row = mysql_fetch_array($getresult))
 </table>
 </fieldset>
 <form action="productIN.php" method="post" >
-<input name="entry" id="entry" type="submit" value="এন্ট্রি করুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" /></br></br>
+    <input class="btn" name="entry" id="entry" type="submit" value="এন্ট্রি করুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" /></br></br>
 </form>
-<div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
+<div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
          RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
 </div>
