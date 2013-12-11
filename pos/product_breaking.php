@@ -11,21 +11,22 @@ $scatagory =$_SESSION['loggedInOfficeType'];
 $msg ="";
 
 $sel_inventory = $conn->prepare("SELECT * FROM inventory,product_chart WHERE idproductchart= ins_productid AND ins_product_type = 'general' AND idinventory = ?");
-$sel_inventory2 = $conn->prepare("SELECT * FROM product_chart WHERE idproductchart=?");
+$sel_prochart = $conn->prepare("SELECT * FROM product_chart WHERE idproductchart=?");
+$sel_inventory2 = $conn->prepare("SELECT * FROM inventory WHERE ins_ons_id= ? AND ins_ons_type=? AND ins_product_type='general' AND ins_productid=?");
 $sel_unit = $conn->prepare("SELECT * FROM product_unit ORDER BY prounit_name");
 // $sqlins = "INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_selling_price ,pckg_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?)";
 // $insstmt = $conn ->prepare($sqlins);
  
-function showUnit($stmt) {
-    
-    echo "<option value=0> -একক- </option>";
-    $stmt->execute(array());
-    $allunit = $stmt->fetchAll();
-    foreach ($allunit as $unitrow) {
-        $unit = urlencode($unitrow['prounit_name']);
-                echo "<option value=" .$unit. ">" . $unitrow['prounit_name'] . "</option>";
-    }
-}
+//function showUnit($stmt) {
+//    
+//    echo "<option value=0> -একক- </option>";
+//    $stmt->execute(array());
+//    $allunit = $stmt->fetchAll();
+//    foreach ($allunit as $unitrow) {
+//        $unit = urlencode($unitrow['prounit_name']);
+//                echo "<option value=" .$unit. ">" . $unitrow['prounit_name'] . "</option>";
+//    }
+//}
 
 if(isset($_POST['break']))
 {
@@ -38,10 +39,32 @@ if(isset($_POST['break']))
         $db_breakingProUnit = $row1['pro_unit'];
     }
     
-    $sel_inventory2->execute(array($p_chartID));
-    $all2 = $sel_inventory2->fetchAll();
+    $sel_prochart->execute(array($p_chartID));
+    $all2 = $sel_prochart->fetchAll();
     foreach ($all2 as $row2) {
         $db_ProUnit = $row2['pro_unit'];
+    }
+    $sel_inventory2->execute(array($storeID,$scatagory,$p_chartID));
+//    echo $count = $sel_inventory2->countRow();
+//    if($count > 0)
+//    {
+        $all3 = $sel_inventory2->fetchAll();
+        if(count($all3) > 0 ) {
+        foreach ($all3 as $row3) {
+            $db_buyingprice = $row3['ins_buying_price'];
+            $db_sellingprice = $row3['ins_sellingprice'];
+            $db_xtraprofit = $row3['ins_extra_profit'];
+            $db_profit = $row3['ins_profit'];
+            $db_pv = $row3['ins_pv'];
+        }
+    }
+    else 
+    {
+        $db_buyingprice = 0;
+        $db_sellingprice = 0;
+        $db_xtraprofit = 0;
+        $db_profit = 0;
+        $db_pv = 0;
     }
 //    $type = 'making';
 //    $instype = 'breaking';
@@ -129,6 +152,17 @@ function calculate1(convertedQty, breakingqty)
     var unitQty = Number(document.getElementById('breakingunit').value);
     var totalqty = (breakingqty * unitQty) / convertedQty;
     document.getElementById('totalqty').value = totalqty;
+    var procode = '<?php echo $p_breakingID;?>';
+    getValues(procode);
+}
+function setNewValues(getstring3)
+{
+    var array3 = getstring3.split(',');
+    document.getElementById('newBuyingPrice').value = array3[0];
+    document.getElementById('newSellingPrice').value = array3[1];
+    document.getElementById('newProfit').value = array3[2];
+    document.getElementById('newXtraprofit').value = array3[3];
+    document.getElementById('newPV').value = array3[4];
 }
 </script>
 	
@@ -249,27 +283,26 @@ function checkqty(qty,left,ri8)
         xmlhttp.send();
 }
 
-function getUpdate(xprofit)
+function getValues(procode)
 {
-   var profit = Number(document.getElementById('updateprofit').value);
-   var totalprft = profit + Number(xprofit);
-    var curprft = Number(document.getElementById('currentpckgprft').value);
-    var curxprft = Number(document.getElementById('currentpckgxprft').value);
-    var totalcurprft = curprft + curxprft;
-    if(totalprft < totalcurprft)
-        {
-            var difference = totalcurprft - totalprft;
-            var currentsell = Number(document.getElementById('currentpckgprz').value);
-            var updatesell = currentsell - difference;
-            document.getElementById('updatesellprz').value = updatesell;
+    var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
         }
         else
-            {
-                var difference = totalprft - totalcurprft;
-                var currentsell = Number(document.getElementById('currentpckgprz').value);
-                var updatesell = currentsell +difference;
-                document.getElementById('updatesellprz').value = updatesell;
-            }
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+          var get3=xmlhttp.responseText;
+          setNewValues(get3);
+        }
+        var qty1 = document.getElementById('breakingunit').value;
+        var qty2 = document.getElementById('tobreakunit').value;
+        xmlhttp.open("GET","includes/searchProductForBreak.php?code="+procode+"&qty1="+qty1+"&qty2="+qty2,true);
+        xmlhttp.send();	
 }
 </script>  
     </head>    
@@ -296,20 +329,25 @@ function getUpdate(xprofit)
                             <td width="45%" style="border: 1px black solid;text-align:right;">রূপান্তরযোগ্য প্রোডাক্টের <?php echo $db_breakingProUnit;?></td>
                             <td width="10%" style="border: 1px black solid;text-align: center;"> = </td>
                             <td width="45%" style="border: 1px black solid;"><input type="text" name="breakingunit" id="breakingunit" />
+<!--                                <select name="unit" id="unitbox" onchange="setUnit()">
+                                    <?php // showUnit($sel_unit);?>
+                                </select>-->
                                 <select name="unit" id="unitbox" onchange="setUnit()">
-                                    <?php showUnit($sel_unit);?>
+                                    <option value="0">-একক-</option>
+                                    <option value="কেজি">কেজি</option>
+                                    <option value="লিটার">লিটার</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td  style="border: 1px black solid;text-align:right;">রূপান্তরিত প্রোডাক্টের ১ <?php echo $db_ProUnit;?></td>
                             <td  style="border: 1px black solid;text-align: center;"> = </td>
-                            <td style="border: 1px black solid;"><input type="text" name="breakingunit" onkeyup="calculate1(this.value,'<?php echo $p_breakingqty?>');"/> <span id="unit"></span></td>
+                            <td style="border: 1px black solid;"><input type="text" id="tobreakunit" name="tobreakunit" onkeyup="calculate1(this.value,'<?php echo $p_breakingqty?>');"/> <span id="unit"></span></td>
                         </tr>
                         <tr>
-                            <td  style="border: 1px black solid;text-align:left;">রূপান্তরযোগ্য প্রোডাক্টের  <?php echo $p_breakingqty." টি " ; echo $db_breakingProUnit;?></td>
+                            <td  style="border: 1px black solid;text-align:right;">রূপান্তরযোগ্য প্রোডাক্টের  <?php echo $p_breakingqty." টি " ; echo $db_breakingProUnit;?></td>
                              <td  style="border: 1px black solid;text-align: center;"> = </td>
-                            <td style="border: 1px black solid;"><input id="totalqty" /> <span><?php echo $db_ProUnit;?></span></td>
+                             <td style="border: 1px black solid;"><input readonly id="totalqty" /> <span><?php echo $db_ProUnit;?></span> রূপান্তরিত প্রোডাক্ট</td>
                         </tr>
                     </table>
                     </fieldset>
@@ -321,16 +359,24 @@ function getUpdate(xprofit)
                         <legend style="color: brown;">রূপান্তরিত প্রোডাক্ট</legend>
                             <table width="100%" align="center" >
                             <tr>
-                                <td width="50%" style="border: 1px black solid;text-align:right;">প্রোডাক্টের ক্রয়মূল্য </td>
-                                <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly value="" /></td>
+                                <td width="50%" style="border: 1px black solid;text-align:right;">ক্রয়মূল্য </td>
+                                <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" readonly value="<?php echo $db_buyingprice?>" /></td>
                             </tr>
                             <tr>
-                                <td width="50%" style="border: 1px black solid;text-align:right;">প্রোডাক্টের বিক্রয়মূল্য </td>
-                                <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly value="" /></td>
+                                <td width="50%" style="border: 1px black solid;text-align:right;">বিক্রয়মূল্য </td>
+                                <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly style="text-align: right;" value="<?php echo $db_sellingprice?>" /></td>
                             </tr>
                             <tr>
                                 <td width="50%" style="border: 1px black solid;text-align:right;">এক্সট্রা প্রফিট </td>
-                                <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly value="" /></td>
+                                <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly style="text-align: right;" value="<?php echo $db_xtraprofit?>" /></td>
+                            </tr>
+                            <tr>
+                                <td width="50%" style="border: 1px black solid;text-align:right;">প্রফিট </td>
+                                <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly style="text-align: right;" value="<?php echo $db_profit?>" /></td>
+                            </tr>
+                            <tr>
+                                <td width="50%" style="border: 1px black solid;text-align:right;"> পিভি</td>
+                                <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly style="text-align: right;" value="<?php echo $db_pv?>" /></td>
                             </tr>
                         </table>
                     </fieldset>
@@ -340,16 +386,24 @@ function getUpdate(xprofit)
                         <legend style="color: brown;">রূপান্তরযোগ্য প্রোডাক্ট</legend>
                             <table width="100%" align="center" >
                                 <tr>
-                                    <td width="50%" style="border: 1px black solid;text-align:right;">প্রোডাক্টের ক্রয়মূল্য </td>
-                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" value="" /></td>
+                                    <td width="50%" style="border: 1px black solid;text-align:right;">একক ক্রয়মূল্য </td>
+                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newBuyingPrice" id="newBuyingPrice"  /></td>
                                 </tr>
                                 <tr>
-                                    <td width="50%" style="border: 1px black solid;text-align:right;">প্রোডাক্টের বিক্রয়মূল্য </td>
-                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" value="" /></td>
+                                    <td width="50%" style="border: 1px black solid;text-align:right;">একক বিক্রয়মূল্য </td>
+                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newSellingPrice" id="newSellingPrice" /></td>
                                 </tr>
                                 <tr>
-                                    <td width="50%" style="border: 1px black solid;text-align:right;">এক্সট্রা প্রফিট </td>
-                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" value="" /></td>
+                                    <td width="50%" style="border: 1px black solid;text-align:right;">একক এক্সট্রা প্রফিট </td>
+                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newXtraprofit" id="newXtraprofit" /></td>
+                                </tr>
+                                <tr>
+                                    <td width="50%" style="border: 1px black solid;text-align:right;">একক প্রফিট </td>
+                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newProfit" id="newProfit" /></td>
+                                </tr>
+                                <tr>
+                                    <td width="50%" style="border: 1px black solid;text-align:right;">একক পিভি</td>
+                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newPV" id="newPV" /></td>
                                 </tr>
                             </table>
                     </fieldset>
