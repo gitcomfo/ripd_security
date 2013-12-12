@@ -31,7 +31,7 @@ if(isset($_POST['save']))
 <script type="text/javascript">
  function getPassword() // for showing the password box
         {
-        var acc = document.getElementById('accountNo').value; 
+        var acc = document.getElementById('mobileNo').value; 
         var xmlhttp;
         if (window.XMLHttpRequest)
             {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -64,7 +64,15 @@ function checkIt(evt) // float value-er jonno***********************
         status = "This field accepts numbers only.";
         return false;
         }
-        
+function numbersonly(e)
+   {
+        var unicode=e.charCode? e.charCode : e.keyCode
+            if (unicode!=8)
+            { //if the key isn't the backspace key (which we should allow)
+                if (unicode<48||unicode>57) //if not a number
+                return false //disable key press
+            }
+}        
 function checkAmount(checkvalue) // check amount value in repeat
         {
         var amount = document.getElementById('amount1').value;
@@ -135,31 +143,13 @@ function  checkCorrectPass() // match password with account
         xmlhttp.send();
   }
 
-function getEmployee(accountNo) //search employee by account number***************
-{
-    var xmlhttp;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function()
-        {
-             document.getElementById('recieverInfo').innerHTML=xmlhttp.responseText;
-        }
-        xmlhttp.open("GET","includes/employeeSearch.php?account="+accountNo,true);
-        xmlhttp.send();	
-}
 </script>
  
  <div class="columnSubmodule" style="font-size: 14px;">
     <form  action="" id="amountTransForm" method="post" style="font-family: SolaimanLipi !important;">
             <table class="formstyle" style ="width: 100%; margin-left: 0px; font-family: SolaimanLipi !important;">        
                 <tr>
-                    <th colspan="3">ব্যাক্তিগত অ্যামাউন্ট ট্রান্সফার</th>
+                    <th colspan="3">সেন্ড এমাউন্ট</th>
                 </tr>
                 <?php showMessage($flag, $msg);?>
                 <tr>
@@ -180,9 +170,8 @@ function getEmployee(accountNo) //search employee by account number*************
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: right; width: 25%;padding-left: 10px;">প্রাপকের অ্যাকাউন্ট নং</td>
-                    <td style="text-align: left; width: 45%;">: <input  class="box" type="text" name="accountNo"  id="accountNo" maxlength="15" onblur="getEmployee(this.value)" /> <em>(ইংরেজিতে লিখুন)</em></td>
-                    <td rowspan="4" style="text-align: right; width: 30%; padding-left: 0px;" id='recieverInfo' ></td>
+                    <td style="text-align: right; width: 50%;padding-left: 10px;">প্রাপকের মোবাইল নাম্বার</td>
+                    <td style="text-align: left; width: 50%;">: <input  class="box" type="text" name="mobileNo" id="mobileNo" maxlength="11" onkeypress=' return numbersonly(event)'  /> </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;padding-left: 10px;">টাকার পরিমান</td>
@@ -194,11 +183,11 @@ function getEmployee(accountNo) //search employee by account number*************
                         </br><span id="errormsg"></span></td>   
                 </tr>
                 <tr>
-                    <td style="text-align: right; padding-left: 10px;">ট্রান্সফারের কারন</td>
+                    <td style="text-align: right; padding-left: 10px;">সেন্ডের কারন</td>
                     <td> <textarea  class="box" type="text" name="trans_des"  id="trans_des" value=""></textarea></td>   
                 </tr>
                 <tr>
-                    <td colspan="3" style="text-align: center"></br><input type="button" class="btn"  name="submit" id="submit" value="ঠিক আছে" onclick="getPassword();" disabled=""></td>
+                    <td colspan="3" style="text-align: center"></br><input type="button" class="btn"  name="submit" id="submit" disabled value="ঠিক আছে" onclick="getPassword();" ></td>
                 </tr>
                     <tr>
                     <td colspan="3" id="passwordbox"></td>
