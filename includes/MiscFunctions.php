@@ -227,4 +227,80 @@ function getRandomPassword()
     }
     return $new_pass_str;
 }
+
+function convert_number($number)
+{
+    if (($number < 0) || ($number > 999999999))
+    {
+        throw new Exception("Number is out of range");
+    }
+
+    $Gn = floor($number / 100000);  /* Millions (giga) */
+    $number -= $Gn * 100000;
+    $kn = floor($number / 1000);     /* Thousands (kilo) */
+    $number -= $kn * 1000;
+    $Hn = floor($number / 100);      /* Hundreds (hecto) */
+    $number -= $Hn * 100;
+    $Dn = floor($number / 10);       /* Tens (deca) */
+    $n = $number % 10;               /* Ones */
+
+    $res = "";
+
+    if ($Gn)
+    {
+        $res .= convert_number($Gn) . " Lac";
+    }
+
+    if ($kn)
+    {
+        $res .= (empty($res) ?" ": " ") .
+        convert_number($kn) . " Thousand";
+    }
+
+    if ($Hn)
+    {
+        $res .= (empty($res) ? " " : " ") .
+        convert_number($Hn) . " Hundrad";
+    }
+
+    $ones = array("", "One", "Two", "Three", "Four", "Five", "Six","Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen","Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eightteen","Nineteen");
+    $tens = array("", "", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty","Seventy", "Eigthy", "Ninety");
+
+    if ($Dn || $n)
+    {
+        if (!empty($res))
+        {
+            $res .= " and ";
+        }
+        if ($Dn < 2)
+        {
+            $res .= $ones[$Dn * 10 + $n];
+        }
+        else
+        {
+            $res .= $tens[$Dn];
+            if ($n)
+            {
+                $res .= "-" . $ones[$n];
+            }
+        }
+     }
+    if (empty($res))
+        {
+            $res = "zero";
+        }
+        return $res;
+}
+function getChequeNo()
+{
+      $str_random_no=(string)mt_rand (0 ,9999 );
+      $str_checque_no= str_pad($str_random_no,4, "0", STR_PAD_LEFT);
+    for($i=0;$i<3;$i++)
+    {
+        $str_random_no=(string)mt_rand (0 ,9999 );
+        $str_cheque= str_pad($str_random_no,4, "0", STR_PAD_LEFT);
+        $str_checque_no = $str_checque_no."-".$str_cheque;
+    }
+   return $str_checque_no;
+}
 ?>
