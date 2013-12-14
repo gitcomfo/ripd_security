@@ -234,7 +234,7 @@ function searchName(where) // productlist-er name search box
     </td>
   </tr>
   <tr>
-      <td width="43%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 22px;width: 250px;" readonly/>
+      <td width="43%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 310px;" readonly/>
       <td width="16%"><span style="color: #03C;"> ক্রয়মূল্য</span></br><input name="buyPrice" id="buyPrice" type="text" onkeypress="return checkIt(event)" style="width:100px;"/> টাকা</td>
       <td width="16%"><span style="color: #03C;"> বিক্রয়মূল্য </span></br><input name="sellPrice" id="sellPrice" type="text" style="width:100px;" onkeypress="return checkIt(event)"/> টাকা</td>
        <td width="5%" rowspan="2"><input type="submit" name="addButton" style="height:100px; width: 100px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>

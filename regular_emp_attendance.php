@@ -152,7 +152,7 @@ function getdate(selecteddate,onsid) // date by date employee leave condition ch
         <div style="padding-left: 10px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
           <div>
            <form method="POST"  name="frm" action="">	
-               <table  class="formstyle" style="width: 100% !important; font-family: SolaimanLipi !important;margin:0 !important;">          
+               <table  class="formstyle" style="width: 98% !important; font-family: SolaimanLipi !important;margin:0 !important;">          
                     <tr><th colspan="2" style="text-align: center;">নিয়মিত কর্মচারী হাজিরা শিট</th></tr>
                     <tr>
                     <td colspan="2">

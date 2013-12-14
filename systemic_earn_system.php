@@ -31,7 +31,7 @@ if(isset($_POST['save']))
 <script type="text/javascript">
  function getPassword() // for showing the password box
         {
-        var acc = document.getElementById('accountNo').value; 
+        var acc = document.getElementById('mobileNo').value; 
         var xmlhttp;
         if (window.XMLHttpRequest)
             {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -64,7 +64,15 @@ function checkIt(evt) // float value-er jonno***********************
         status = "This field accepts numbers only.";
         return false;
         }
-        
+function numbersonly(e)
+   {
+        var unicode=e.charCode? e.charCode : e.keyCode
+            if (unicode!=8)
+            { //if the key isn't the backspace key (which we should allow)
+                if (unicode<48||unicode>57) //if not a number
+                return false //disable key press
+            }
+}        
 function checkAmount(checkvalue) // check amount value in repeat
         {
         var amount = document.getElementById('amount1').value;
@@ -135,73 +143,48 @@ function  checkCorrectPass() // match password with account
         xmlhttp.send();
   }
 
-function getEmployee(accountNo) //search employee by account number***************
-{
-    var xmlhttp;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function()
-        {
-             document.getElementById('recieverInfo').innerHTML=xmlhttp.responseText;
-        }
-        xmlhttp.open("GET","includes/employeeSearch.php?account="+accountNo,true);
-        xmlhttp.send();	
-}
 </script>
  
  <div class="columnSubmodule" style="font-size: 14px;">
     <form  action="" id="amountTransForm" method="post" style="font-family: SolaimanLipi !important;">
             <table class="formstyle" style ="width: 100%; margin-left: 0px; font-family: SolaimanLipi !important;">        
                 <tr>
-                    <th colspan="3">ব্যাক্তিগত অ্যামাউন্ট ট্রান্সফার</th>
+                    <th colspan="2">সিস্টেমিক আর্ন স্টেটমেন্ট</th>
                 </tr>
                 <?php showMessage($flag, $msg);?>
                 <tr>
-                    <td colspan="3">
-                        <fieldset style="border: #686c70 solid 3px;width: 80%;margin-left: 10%;">
-                            <legend style="color: brown;">একাউন্ট স্ট্যাটাস</legend>
-                                <table width="100%" align="center" >
-                                    <tr>
-                                        <td style="text-align: right; width: 50%;">টোটাল ব্যালেন্স :</td>
-                                        <td style="width: 50%;padding-left: 0px;"><input class="box" type="text" readonly="" /> টাকা</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right;">শেষ উত্তোলনের তারিখ :</td>
-                                        <td style="padding-left: 0px;"><input class="box" type="text" readonly="" /></td>
-                                    </tr>
-                                </table>
-                        </fieldset>
+                    <td style="text-align: right; width: 40%;">মাধ্যম</td>
+                    <td style="text-align: left; width: 60%;">: <select class="box">
+                            <option>-সিলেক্ট করুন-</option>
+                            <option>পিভি</option>
+                            <option>চেক ইন</option>
+                            <option>ট্রান্সফার এমাউন্ট</option>
+                        </select></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <?php
+                            echo "<table border='1' cellpadding='0' cellspacing='0'>
+                                        <tr id='table_row_odd'>
+                                            <td style='border:1px black solid;'>ক্রম</td>
+                                            <td style='border:1px black solid;'>তারিখ</td>
+                                            <td style='border:1px black solid;'>এমাউন্ট</td>
+                                            <td style='border:1px black solid;'>মাধ্যম</td>
+                                            <td style='border:1px black solid;'>ট্যাক্স / চার্জ</td>
+                                        </tr>";
+                            for($i=0;$i<5;$i++)
+                            {
+                                echo "<tr>
+                                    <td style='border:1px black solid;'> </br></td>
+                                            <td style='border:1px black solid;'> </br></td>
+                                            <td style='border:1px black solid;'> </br></td>
+                                            <td style='border:1px black solid;'> </br></td>
+                                            <td style='border:1px black solid;'> </br></td>
+                                    </tr>";
+                            }
+                            echo "</table>";
+                        ?>
                     </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right; width: 25%;padding-left: 10px;">প্রাপকের অ্যাকাউন্ট নং</td>
-                    <td style="text-align: left; width: 45%;">: <input  class="box" type="text" name="accountNo"  id="accountNo" maxlength="15" onblur="getEmployee(this.value)" /> <em>(ইংরেজিতে লিখুন)</em></td>
-                    <td rowspan="4" style="text-align: right; width: 30%; padding-left: 0px;" id='recieverInfo' ></td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;padding-left: 10px;">টাকার পরিমান</td>
-                    <td>: <input  class="box" type="text" name="amount1"  id="amount1"  onkeypress="return checkIt(event)" /> টাকা </td>   
-                </tr>
-                 <tr>
-                    <td style="text-align: right; padding-left: 10px;">টাকার পরিমান (পুনরায়)</td>
-                    <td>: <input  class="box" type="text" name="amount2"  id="amount2"  onkeypress="return checkIt(event)" onblur="checkAmount(this.value);"/> টাকা 
-                        </br><span id="errormsg"></span></td>   
-                </tr>
-                <tr>
-                    <td style="text-align: right; padding-left: 10px;">ট্রান্সফারের কারন</td>
-                    <td> <textarea  class="box" type="text" name="trans_des"  id="trans_des" value=""></textarea></td>   
-                </tr>
-                <tr>
-                    <td colspan="3" style="text-align: center"></br><input type="button" class="btn"  name="submit" id="submit" value="ঠিক আছে" onclick="getPassword();" disabled=""></td>
-                </tr>
-                    <tr>
-                    <td colspan="3" id="passwordbox"></td>
                 </tr>
             </table>
         </form>

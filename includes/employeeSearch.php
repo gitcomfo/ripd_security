@@ -1,6 +1,7 @@
 <?php
 error_reporting(0);
 include 'ConnectDB.inc';
+include_once 'selectQueryPDO.php';
 if (isset($_GET['key']) && $_GET['key'] != '') {
 	//Add slashes to any quotes to avoid SQL problems.
 	$str_key = $_GET['key'];
@@ -12,7 +13,7 @@ if (isset($_GET['key']) && $_GET['key'] != '') {
         	}            
 }
 
-if (isset($_GET['paygradid']) && $_GET['paygradid'] != '') {
+elseif (isset($_GET['paygradid']) && $_GET['paygradid'] != '') {
 	//Add slashes to any quotes to avoid SQL problems.
 	$emp_paygrdid = $_GET['paygradid'];
                     $lvpolicyid = $_GET['lvpolicyid'];
@@ -37,5 +38,59 @@ if (isset($_GET['paygradid']) && $_GET['paygradid'] != '') {
                        }
                     }
                     echo $grantedleavedays;                
+}
+elseif (isset($_GET['account'])) {
+	$g_accontNo = $_GET['account'];
+	$suggest_query = "SELECT * FROM  cfs_user WHERE cfs_account_status = 'active' AND account_number= '$g_accontNo' ";
+	$reslt= mysql_query($suggest_query);
+                    if(mysql_num_rows($reslt) > 0)
+                    {
+                        $suggest = mysql_fetch_assoc($reslt);
+                        $name = $suggest['account_name'];
+                        $mobile = $suggest['mobile'];
+                        $cfs_user_id = $suggest['idUser'];
+                        $aab_user_type = $suggest['user_type'];
+                        if($aab_user_type == 'customer')
+                            {
+                                $sql_select_cust_basic->execute(array($cfs_user_id));
+                                $arr_cust_basic = $sql_select_cust_basic->fetchAll();
+                                foreach ($arr_cust_basic as $aab) 
+                                        {
+                                        $aab_picture = $aab['scanDoc_picture'];
+                                          }
+                            }
+                            elseif($aab_user_type == 'owner')
+                            {
+                                $sql_select_propritor_basic->execute(array($cfs_user_id));
+                                $arr_proprietor_basic = $sql_select_propritor_basic->fetchAll();
+                                foreach ($arr_proprietor_basic as $aab) 
+                                        {
+                                            $aab_picture = $aab['prop_scanDoc_picture'];
+                                        }
+                            }
+                            else
+                            {
+                                $sql_select_employee_basic->execute(array($cfs_user_id));
+                                $arr_employee_basic = $sql_select_employee_basic->fetchAll();
+                                foreach ($arr_employee_basic as $aab) 
+                                        {
+                                          $aab_picture = $aab['emplo_scanDoc_picture'];
+                                        }
+                            }
+                        echo "<table><tr><td colspan='2'><img src='$aab_picture' width='128px' height='128px' alt=''></td></tr>
+                            <tr>
+                                <td>নাম :</td>
+                                <td>$name</td>
+                            </tr>
+                            <tr>
+                                <td>মোবাইল :</td>
+                                <td>$mobile</td>
+                            </tr>
+                            </table>";
+                    }
+ else {
+                    echo "দুঃখিত, একাউন্ট নাম্বারটি সঠিক নয়";    
+                    }
+	                   	            
 }
 ?>
