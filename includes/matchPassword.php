@@ -10,11 +10,11 @@ $cfs_query = mysql_query("SELECT * FROM cfs_user WHERE user_name= '$p_user_name'
 $y = mysql_num_rows($cfs_query);
 if($y <= 0)
 {
-    echo "1";
-    //echo "দুঃখিত, আপনার পাসওয়ার্ডটি ম্যাচ হয়নি";
+    //echo "1";
+    echo "দুঃখিত, আপনার পাসওয়ার্ডটি ম্যাচ হয়নি";
 }
  else {
-     echo "2";
+     echo "";
     //echo "<font style='color: green;'>পাসওয়ার্ড সঠিক</font>";
 }
 ?>
