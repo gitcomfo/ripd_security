@@ -192,6 +192,4 @@ function getdate(selecteddate,onsid) // date by date employee leave condition ch
             </form>
         </div>                 
     </div>
-    <?php
-    include_once 'includes/footer.php';
-    ?>
+    <?php include_once 'includes/footer.php';?>

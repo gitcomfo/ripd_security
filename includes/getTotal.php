@@ -64,7 +64,7 @@ elseif ($_GET['ticketTotal']) {
          </tr>
          <tr>
              <td style='padding-left: 0px !important;'>পাসওয়ার্ড</td>
-            <td style='color: black;'>: <input type= 'password' name='password' onblur='checkCorrectPass(this.value);'/> <span id='passmsg'></span></td>
+            <td style='color: black;'>: <input class='box' type= 'password' name='password' onblur='checkCorrectPass(this.value);'/> <span id='passmsg'></span></td>
          </tr>
          <tr>
             <td colspan='2' style='text-align:center;' ><input class = 'btn' style =' font-size: 12px;' type = 'submit' readonly name='submit_ticket' id='submit_ticket' onclick='return beforeSave()' value='ক্রয় করা হল'  /></td>
