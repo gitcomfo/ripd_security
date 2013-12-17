@@ -19,4 +19,6 @@ $sql_select_employee_basic = $conn->prepare("SELECT * FROM employee,employee_inf
 $sql_select_propritor_basic = $conn->prepare("SELECT * FROM proprietor_account WHERE cfs_user_idUser = ?");
 $sql_genology_tree = $conn->prepare("SELECT account_name, cfs_user_idUser FROM cfs_user, customer_account WHERE idUser=cfs_user_idUser AND referer_id = ?");
 $sql_select_accountType = $conn->prepare("SELECT account_name FROM account_type");
+$sql_select_office = $conn->prepare("SELECT * FROM office WHERE idOffice = ?");
+$sql_select_sales_store = $conn->prepare("SELECT * FROM sales_store WHERE idSales_store = ?");
 ?>

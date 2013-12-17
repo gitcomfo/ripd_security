@@ -57,4 +57,24 @@ elseif (isset($_GET['id2'])) {
                     $str_sent2 = $db_productcode.",".$db_productname.",".$db_unit.",".$db_inventoryqty.",".$chartID;
                   echo $str_sent2;
 }
+elseif (isset($_GET['code'])) {
+	$g_proID = $_GET['code'];
+                     $g_qty1 = $_GET['qty1'];
+                    $g_qty2 = $_GET['qty2'];
+                    $sel_invnetory = mysql_query("SELECT * FROM inventory WHERE idinventory=$g_proID ");
+                    while ($inventoryrow = mysql_fetch_assoc($sel_invnetory)) {
+                        $db_buyingprice = $inventoryrow['ins_buying_price'];
+                        $db_sellingprice = $inventoryrow['ins_sellingprice'];
+                        $db_profit = $inventoryrow['ins_profit'];
+                        $db_xtraprofit = $inventoryrow['ins_extra_profit'];
+                        $db_pv = $inventoryrow['ins_pv'];
+                    }
+                   $newbuyingprice = ($db_buyingprice / $g_qty1) * $g_qty2;
+                   $newsellingprice = ($db_sellingprice / $g_qty1) * $g_qty2;
+                   $newprofit = ($db_profit / $g_qty1) * $g_qty2;
+                   $newxtraprofit = ($db_xtraprofit / $g_qty1) * $g_qty2;
+                   $newpv = ($db_pv / $g_qty1) * $g_qty2;
+                    $str_sent3 = $newbuyingprice.",".$newsellingprice.",".$newprofit.",".$newxtraprofit.",".$newpv;
+                  echo $str_sent3;
+}
 ?>
