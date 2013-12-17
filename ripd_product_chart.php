@@ -15,9 +15,11 @@ function get_catagory()
 ?>
 <title>মেইক প্রোডাক্ট ক্যাটাগরি এন্ড টাইপ</title>
 <style type="text/css">@import "css/bush.css";</style>
+<link rel="stylesheet" href="css/tinybox.css" type="text/css" />
+<script src="javascripts/tinybox.js" type="text/javascript"></script>
 <script type="text/javascript">
- function productUpdate(id)
-	{ TINY.box.show({iframe:'updateProduct.php?proid='+id,width:800,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+ function details()
+{   TINY.box.show({url:'includes/ripd_product_details.php',width:800,height:550,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
  </script>
 <!--===========================================================================================================================-->
 <script>
@@ -204,12 +206,13 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                                </fieldset>
                             </td> 
                         </tr>
+                        <tr><td></br></td></tr>
                         <tr>
                             <td>
                                 <fieldset   style="border: 3px solid #686c70 ; width: 99%;font-family: SolaimanLipi !important;">
                                     <legend style="color: brown;font-size: 14px;">পণ্যের তালিকা</legend>
                                     <div id="resultTable">
-                                        <table style="width: 98%;margin: 0 auto;" cellspacing="0" cellpadding="0">
+                                        <table style="width: 96%;margin: 0 auto;" cellspacing="0" cellpadding="0">
                                             <thead>
                                           <tr id="table_row_odd">
                                               <td width="11%" style="border: solid black 1px;"><div align="center"><strong>ক্রমিক নং</strong></div></td>
@@ -237,17 +240,19 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                                                                 echo '<td  style="border: solid black 1px;"><div align="left">'.$db_procode.'</div></td>';
                                                                   echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
                                                                   echo '<td  style="border: solid black 1px;"><div align="center">'.$db_unit.'</div></td>';
-                                                                  echo '<td style="border: solid black 1px;"><div align="center"><a href="">বিস্তারিত</a></div></td>';
+                                                                  echo '<td style="border: solid black 1px;"><div align="center"><a onclick="details()" style="cursor:pointer;color:blue;"><u>বিস্তারিত<u></a></div></td>';
                                                                   echo '</tr>';
                                                                   $slNo++;
                                                             }
                                     ?>
                                           </tbody>
+                                          <tr>
                                     </table>
                                     </div>
                                  </fieldset>
                             </td>
                         </tr>
+                        <tr><td></br></td></tr>
                     </table>
                 </form>
             </div>
