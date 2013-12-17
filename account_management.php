@@ -90,8 +90,7 @@ if (!file_exists($aab_picture))
 
                 <?php
             }
-            else
-                
+            else{                
                 ?>
             <td>
                 <table>
@@ -124,6 +123,9 @@ if (!file_exists($aab_picture))
                     </tr>
                 </table>
             </td>
+            <?php
+            }
+            ?>
 
             <td style="width: 35%; text-align: center;">
                 <table >
@@ -141,19 +143,6 @@ if (!file_exists($aab_picture))
                     </tr>
                 </table>
             </td>
-        <tr>
-            <td colspan="2" ><hr /></td>
-        </tr>
-        <tr>
-            <td style="padding-left: 20px;"><b>চাকরিতে সর্বপ্রথম যোগদানঃ </b></td>
-            <td></td>
-        </tr>
-
-        <tr>
-            <td style="padding-left: 20px;"><b>ইন গ্রেডঃ </b></td>
-            <td></td>
-        </tr>
-        </tr>
         <?php
         if ($aab_user_type == "customer") {
             ?>
@@ -168,8 +157,24 @@ if (!file_exists($aab_picture))
                 </td>
             </tr>
             <?php
+        }else{
+        ?>            
+        <tr>
+            <td colspan="2" ><hr /></td>
+        </tr>
+        <tr>
+            <td style="padding-left: 20px;"><b>চাকরিতে সর্বপ্রথম যোগদানঃ </b></td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td style="padding-left: 20px;"><b>ইন গ্রেডঃ </b></td>
+            <td></td>
+        </tr>
+        </tr>
+            <?php
         }
-        ?>
+            ?>
     </table>
 </div>
 
