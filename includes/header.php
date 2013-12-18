@@ -39,7 +39,7 @@ include_once 'connectionPDO.php';
                                 <li><a href="awards.php" title="">এওয়ার্ড</a></li>
                             </ul>
                         </li>
-                        <li><a href="masterChart.php">মূল পণ্যতালিকা</a></li>
+                        <li><a href="masterChart_part_1.php">মূল পণ্যতালিকা</a></li>
                         <li><a>যোগাযোগ</a>
                             <ul>
                                 <li><a href="officeNcontact.php">অফিস এন্ড কন্টাক্ট</a></li>
