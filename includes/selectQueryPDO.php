@@ -29,5 +29,5 @@ $sql_select_cat_by_brand = $conn->prepare ("SELECT DISTINCT pro_catagory, pro_ca
 $sql_select_type_by_brand = $conn->prepare("SELECT DISTINCT pro_type FROM product_catagory,product_chart WHERE  idproduct_catagory = product_catagory_idproduct_catagory AND pro_brnd_or_grp_code=? AND pro_cat_code= ?");
 $sql_select_all_type_by_cat = $conn ->prepare("SELECT * FROM product_catagory WHERE pro_cat_code = 
     ANY(SELECT pro_cat_code FROM product_catagory WHERE idproduct_catagory = ?)");
-$sql_select_brand_by_type = $conn->prepare("SELECT DISTINCT pro_brand_or_grp, pro_brnd_or_grp_code FROM product_chart WHERE idproductchart = ?");
+$sql_select_product_by_type = $conn->prepare("SELECT * FROM product_chart WHERE product_catagory_idproduct_catagory = ?");
 ?>
