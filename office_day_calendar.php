@@ -243,7 +243,7 @@ if($_GET['action'] == 'viewCalendar'){
                         echo "<td>$db_officeName</td>";
                         echo "<td>$db_officeNumber</td>";                        
                         echo "<td>$db_officeAddress</td>";
-                        echo "<td><a href='?apps=OD&action=viewCalendar&officeId=$office_id&office_name=$db_officeName'>ভিউ ক্যালেন্ডার</td>";                        
+                        echo "<td><a href='?action=viewCalendar&officeId=$office_id&office_name=$db_officeName'>ভিউ ক্যালেন্ডার</td>";                        
                         echo "</tr>";
                     }
                     ?>

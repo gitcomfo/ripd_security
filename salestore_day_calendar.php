@@ -244,7 +244,7 @@ if($_GET['action'] == 'viewCalendar'){
                         echo "<td>$db_salesStoreName</td>";
                         echo "<td>$db_salesStoreNumber</td>";                        
                         echo "<td>$db_salesStoreAddress</td>";
-                        echo "<td><a href='?apps=SD&action=viewCalendar&salestoreId=$salestore_id&salesStore_name=$db_salesStoreName'>ভিউ ক্যালেন্ডার</td>";                        
+                        echo "<td><a href='?action=viewCalendar&salestoreId=$salestore_id&salesStore_name=$db_salesStoreName'>ভিউ ক্যালেন্ডার</td>";                        
                         echo "</tr>";
                     }
                     ?>
