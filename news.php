@@ -214,6 +214,31 @@ error_reporting(0);
                                             </tr>
                                         </table>
                             </div>
+                                <h3>অন্যান্য</h3>
+                                <div>	
+                                <form method="POST" onsubmit="" name="frm">	
+                                        <table class="formstyle">                                         
+                                            <tr>    
+                                                <td width="50%">
+                                                    <table  class="newsstyle">
+                                                        <tr>
+                                                            <td><a href="http://ebanglalibrary.com/" target="_blank"><img src="images/news/online_bangla_library.jpg"/></a></td>
+                                                            <td><a href="http://www.ebanglahealth.com/" target="_blank"><img src="images/news/online_bangla_health.jpg"/></a></td>
+                                                        </tr>                                                        
+                                                    </table>
+                                                </td>
+
+                                                <td>
+                                                    <table class="newsstyle">
+                                                        <tr>
+                                                            <td><a href="http://bengali.evergreenbangla.com/" target="_blank"><img src="images/news/famous_bangali.jpg"/></a></td>
+                                                            <td><a href="http://www.bangladesh.gov.bd/" target="_blank"><img src="images/news/bangladesh.jpg"/></a></td>
+                                                         </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                            </div>
                           </div>
                             </td>
                         </tr>
