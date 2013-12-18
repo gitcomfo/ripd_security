@@ -17,15 +17,9 @@ if ($pc_id != null) {
 }
 //get product brand
 $pt_id = $_GET['ptid'];
-$pro_cat_code = $_GET['pcat'];
 if ($pt_id != null) {
-    $product_category_id = array();
-    $sql_pro_category_id = mysql_query("SELECT idproduct_catagory FROM product_catagory WHERE pro_cat_code='$pro_cat_code'");
-    while($row_pro_cat_id = mysql_fetch_array($sql_pro_category_id)) $product_category_id[] = $row_pro_cat_id['idproduct_catagory'];
-    //var_dump($product_category_id);
     $function = "getproduct_unit()";
-    $product_brand_sql = mysql_query("SELECT DISTINCT pro_brand_or_grp FROM product_chart WHERE product_catagory_idproduct_catagory= 
-        ANY(SELECT idproduct_catagory FROM product_catagory WHERE pro_cat_code= '$pt_id')");
+    $product_brand_sql = mysql_query("SELECT DISTINCT pro_brand_or_grp FROM product_chart");
    
     echo ": <select  class='box2' style = 'border: 1px gray inset;width: 150px;' name='product_brand_name' id='product_brand_name' onchange='$function'>
                     <option value='0'>- ব্র্যান্ড/গ্রুপ -</option>";
