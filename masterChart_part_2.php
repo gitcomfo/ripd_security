@@ -12,10 +12,10 @@
             echo  "<option value=".$catrow['pro_type_code'].">".$catrow['pro_type']."</option>";
         }
     }
- function showBrand($sql,$id)
+ function showBrand($sql)
     {
          echo  "<option value=0> -সিলেক্ট করুন- </option>";
-        $sql->execute(array($id));
+        $sql->execute(array());
         $arr_brandRslt = $sql->fetchAll();
         foreach ($arr_brandRslt as $brandrow) {
             echo  "<option value=".$brandrow['pro_brnd_or_grp_code'].">".$brandrow['pro_brand_or_grp']."</option>";
@@ -28,29 +28,30 @@
 <script src="javascripts/jquery-ui.js"></script>
 <style type="text/css">
 .toggler {
-width: 200px;
+width: 250px;
 height: auto;
 margin: 5px 10px;
 }
 .effect {
 position: relative;
-width: 200px;
+width: 250px;
 height: 135px;
 padding: 0.4em;
 }
-.innerLinks {
+.detailsLinks {
     display:block;
     text-decoration: none;
     text-align:center;
     cursor:pointer;
     color:green;
-    background-color:#fcefa1;
+    background-color:greenyellow;
     margin:3px 0px;
-    border:1px solid green;
+    border:1px solid black;
+    border-radius: 5px;
 }
 h3 {
     text-align: center;
-    width: 200px;
+    width: 250px !important;
     cursor: pointer;
 }
 </style>
@@ -81,7 +82,7 @@ return false;
             <td style="text-align: center;"> <b> অথবা </b></td>
             <td>ব্র্যান্ড / গ্রুপ :
                 <select class="box">
-                    <?php showBrand($sql_select_brand_by_type,$g_catID)?>
+                    <?php showBrand($sql_select_all_brand)?>
                 </select>            
             </td>
         </tr>
@@ -89,29 +90,43 @@ return false;
             <td colspan="3" style="border: 1px inset #555;">
                         <div id="catagoryShowcage" style="width: 100%;height: auto;" >
                             <?php
-                                    // ******************************** catagory ****************************
-//                                    $sql_select_all_catagory->execute();
-//                                    $arr_catagory = $sql_select_all_catagory->fetchAll();
-//                                    foreach ($arr_catagory as $value) {
-//                                    $db_catName = $value['pro_catagory'];
-//                                    $db_catCode = $value['pro_cat_code'];
+                                    // ******************************** type ****************************
+                                    $sql_select_product_by_type->execute(array($g_catID));
+                                    $arr_product = $sql_select_product_by_type->fetchAll();
+                                    foreach ($arr_product as $value) {
+                                    $db_proName = $value['pro_productname'];
+                                    $db_proCode = $value['pro_code'];
+                                    $db_proBrand = $value['pro_brand_or_grp'];
+                                    $db_proArticle = $value['pro_article'];
+                                    $db_proUnit = $value['pro_unit'];
                             ?>
                         <div class="toggler" style="float: left; ">
-                                <h3 class="ui-state-default ui-corner-all button" style="text-align: center;width: 200px;"><?php echo $db_catName;?></h3>
+                                <h3 class="ui-state-default ui-corner-all button" ><?php echo $db_proName;?></h3>
                                <div  class="ui-widget-content ui-corner-all effect">
-                                   <?php
-                                        // ********************************* type ******************************
-//                                        $sql_select_type->execute(array($db_catCode));
-//                                        $arr_type_rslt = $sql_select_type->fetchAll();
-//                                        foreach ($arr_type_rslt as $typerow) {
-//                                            $db_typeName = $typerow['pro_type'];
-//                                            $db_catagoryID = $typerow['idproduct_catagory'];
-//                                            echo "<a class='innerLinks' href='masterChart_part_2.php?type=$db_catagoryID'> $db_typeName </a>";
-//                                        }
-                                   ?>
+                                   <table style="margin-left: 0px;">
+                                       <tr>
+                                           <td>ব্র্যান্ড</td>
+                                           <td>: <?php echo $db_proBrand;?></td>
+                                       </tr>
+                                       <tr>
+                                           <td>একক</td>
+                                           <td>: <?php echo $db_proUnit;?></td>
+                                       </tr>
+                                       <tr>
+                                           <td>কোড</td>
+                                           <td>: <?php echo $db_proCode;?></td>
+                                       </tr>
+                                       <tr>
+                                           <td>আর্টিকেল</td>
+                                           <td>: <?php echo $db_proArticle;?></td>
+                                       </tr>
+                                       <tr>
+                                           <td colspan="2" style="text-align: center"><a class='detailsLinks'>বিস্তারিত</a></td>
+                                       </tr>
+                                   </table>
                                </div>
                            </div>
-                                <?php// }?>
+                                <?php }?>
                 </div>
             </td>
         </tr>

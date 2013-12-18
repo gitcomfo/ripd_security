@@ -29,10 +29,10 @@ include 'includes/header.php';
         ?>
         <div>
             <form onsubmit="" method="post">
-            <?php
-            $employee_id = $_GET['i001d1'];
-            $employee_name = 'মোঃ মোখলেছুর রহমান'; //sql query
-            echo "<table  class='formstyle'>";
+                <?php
+                $employee_id = $_GET['i001d1'];
+                $employee_name = 'মোঃ মোখলেছুর রহমান'; //sql query
+                echo "<table  class='formstyle'>";
                 echo "<tr >
                                 <th colspan='4' style='text-align: center'>
                                 <div style='width: 80%; float: left; padding-top: 18px;'>
@@ -45,103 +45,102 @@ include 'includes/header.php';
                             </tr>";
                 echo "<tr><td colspan='4'><hr></td></tr>";
                 echo '<tr>
+                     <td colspan="4">
                      <fieldset style="border:3px solid #686c70;width: 99%;">
-                            <legend style="color: brown;font-size: 14px;">সার্চ করুন</legend>
-                            </filedset>
+                            <legend style="color: brown;font-size: 14px;">বর্তমান অবস্থা</legend>
+                            <table>
+                            <tr>
+                                <td style="width: 25%; text-align:right">গ্রেড</td>
+                                <td style="width: 25%; text-align:left">: </td>
+                                <td style="width: 25%; text-align:right">পোস্ট</td>
+                                <td style="width: 25%; text-align:left">: </td>
+                            </tr>
+                            <tr>
+                               <td style="width: 25%; text-align:right">অফিস</td>
+                                <td style="width: 25%; text-align:left">: </td>
+                                <td style="width: 25%; text-align:right">কর্মচারীর ধরন</td>
+                                <td style="width: 25%; text-align:left">: </td>
+                            </tr>
+                            <tr>
+                               <td style="width: 25%; text-align:right">যোগদানের তারিখ</td>
+                                <td style="width: 25%; text-align:left">: </td>
+                                <td style="width: 25%; text-align:right">বেতন</td>
+                                <td style="width: 25%; text-align:left">: </td>
+                            </tr>
+                            </table>
+                            </filedset></td>
                     </tr>';
-                echo "<tr id='table_row_odd'>
-                                <td colspan='2' style='width: 50%'>সামগ্রিক কর্মজীবন</td>
-                                <td colspan='2'>সর্বশেষ কর্মজীবন</td>
+
+                echo '<tr>
+                     <td colspan="4">
+                     <fieldset style="border:3px solid #686c70;width: 99%;">
+                            <legend style="color: brown;font-size: 14px;">সামগ্রিক কর্মজীবন</legend>
+                            <table>
+                            <tr>
+                                <td colspan="2" style="width: 50%; text-align:right">কর্মজীবন</td>
+                                <td colspan="2" style="width: 50%; text-align:left">: </td>     
+                            </tr>
+                            <tr>
+                               <td style="width: 25%; text-align:right">উপস্থিতির হার</td>
+                                <td style="width: 25%; text-align:left">: </td>
+                                <td style="width: 25%; text-align:right">মোট কর্মদিবস</td>
+                                <td style="width: 25%; text-align:left">: </td>
+                            </tr>
+                            <tr>
+                               <td style="width: 25%; text-align:right">প্রেজেন্ড ডে</td>
+                                <td style="width: 25%; text-align:left">: </td>
+                                <td style="width: 25%; text-align:right">অ্যাবসেন্ট</td>
+                                <td style="width: 25%; text-align:left">: </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="width: 50%; text-align:right">ছুটি</td>
+                                <td colspan="2" style="width: 50%; text-align:left">: </td>     
+                            </tr>
+                            <tr>
+                            <td colspan="4"><div align="center"><a onclick="detailsWithPrice()" style="cursor:pointer;color:blue;">উপস্থিতির বিস্তারিত তথ্য</a></div></td>
+                            </tr>
+                            </table>
+                            </filedset></td>
+                    </tr>';
+
+                echo '<tr>
+                     <td colspan="4">
+                     <fieldset style="border:3px solid #686c70;width: 99%;">
+                            <legend style="color: brown;font-size: 14px;">পোস্টিং এ</legend>
+                            <table>
+                            <tr>
+                            <td colspan="4"><div align="center"><a onclick="detailsWithPrice()" style="cursor:pointer;color:blue;">প্রমোশন এন্ড সেলারি আপডেট</a></div></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 30%; text-align:right">পোস্টিং অফিস</td>
+                                <td style="width: 40%"><input type="text" class="box" name="promotion"/></td>
+                                <td colspan="2"><div align="center"><a onclick="detailsWithPrice()" style="cursor:pointer;color:blue;">সিলেক্ট অফিস</a></div></td>  
+                            </tr>
+                            <tr>
+                                <td style="width: 30%; text-align:right">পোস্টি</td>
+                                <td colspan="3" style="width: 40%"><input type="text" class="box" name="promotion"/></td>
+                             </tr>
+                             
+                            <tr>
+                                <td style="width: 30%; text-align:right">পোস্টিং তারিখ</td>
+                                <td colspan="3" style="width: 40%"><input type="date" class="box" name="promotion"/></td>
+                             </tr>
+                             <tr>
+                                <td style="width: 30%; text-align:right">পোস্টিং ধরণ</td>
+                                <td colspan="3" style="width: 40%"><input type="text" class="box" name="promotion"/></td>
+                             </tr>
+                            </table>
+                            </filedset></td>
+                    </tr>';
+                echo "<tr>                    
+                                    <td colspan='4' style='text-align: center' ><input class='btn' style ='font-size: 12px' type='reset' name='reset' value='পোস্টিং' /></td>                           
                             </tr>";
-                echo "<tr>
-                                <td>কর্মজীবন</td>
-                                <td>: ৩ বছর ২ মাস</td>
-                                <td>কর্মজীবন</td>
-                                <td>: ১৭ মাস</td>
-                            </tr>";
-                echo "<tr>
-                                <td>গ্যাপ টাইম</td>
-                                <td>: ৯ মাস</td>
-                                <td>গ্যাপ টাইম</td>
-                                <td>: ১ মাস</td>
-                            </tr>";
-                echo "<tr>
-                                <td>অতিরিক্ত সময়</td>
-                                <td>: ২ মাস</td>
-                                <td>অতিরিক্ত সময়</td>
-                                <td>: ১৩ দিন</td>
-                            </tr>";
-                echo "<tr><td colspan='4'><hr></td></tr>";
-                echo "<tr>
-                                <td colspan='4' style='text-align:center;'><a href='#'><b>উপস্থিতির বিস্তারিত তথ্য</b></a></td>
-                                 </tr>";
-                echo "<tr><td colspan='4'><hr></td></tr>";
-                echo "<tr>
-                                <td>প্রোমশন দিন</td>
-                                <td>: <select class='box' >
-                                            <option value='grade-a'>- গ্রেড -</option>
-                                            <option value='grade-a'>গ্রেড - এ</option>
-                                            <option value='grade-b'>গ্রেড - বি</option>
-                                            <option value='grade-c'>গ্রেড - সি</option>
-                                        </select> 
-                                </td>
-                                <td>বেতন</td>
-                                <td>: <input type='text' class='box' name='promotion' value=''> টাকা</td>
-                            </tr>";
-                echo "<tr>
-                                <td>পোস্টিং করুন</td>
-                                <td>: <select class='box' >
-                                            <option value='grade-a'>- অফিসের নাম -</option>
-                                            <option value='grade-a'>অফিস - এ</option>
-                                            <option value='grade-b'>অফিস - বি</option>
-                                            <option value='grade-c'>অফিস - সি</option>
-                                        </select> 
-                                </td>
-                                </tr>";
-                echo "<tr>
-                                <td>পোস্টিং-এর তারিখ</td>
-                                <td>: <input type='text' class='box' name='posting_date' id='posting_date' placeholder='তারিখ লিখুন' /> ইং</td>
-                            </tr>";
-                echo "<tr>
-                                <td>পোস্টিং ধরণ</td>
-                                <td>: <select class='box' >
-                                            <option value='grade-b'>স্থায়ী দায়িত্ব</option>
-                                            <option value='grade-c'>ভারপ্রাপ্ত</option>
-                                        </select> 
-                                </td>
-                                 </tr>";
-                    echo "<tr>                    
-                                    <td colspan='4' style='text-align: center' ><input class='btn' style ='font-size: 12px;' type='submit' name='submit' value='সেভ করুন' />
-                                        <input class='btn' style ='font-size: 12px' type='reset' name='reset' value='রিসেট করুন' /></td>                           
-                            </tr>";
-            echo "</table>";
-            ?>
+                echo "</table>";
+                ?>
             </form>
         </div>
     </div>
-    
-<?php
-include 'includes/footer.php';
-?>
 
-    echo "<tr id='table_row_odd'>
-                                <td colspan='4' style='width: 50%'>বর্তমান অবস্থা</td>
-                            </tr>";
-                echo "<tr>
-                                <td>গ্রেড</td>
-                                <td>: </td>
-                                <td>পোস্ট</td>
-                                <td>: </td>
-                            </tr>";
-                echo "<tr>
-                                <td>অফিস</td>
-                                <td>: </td>
-                                <td>কর্মচারীর ধরন</td>
-                                <td>: </td>
-                            </tr>";
-                echo "<tr>
-                                <td>যোগদানের তারিখ</td>
-                                <td>: </td>
-                                <td>বেতন</td>
-                                <td>: </td>
-                            </tr>";
+    <?php
+    include 'includes/footer.php';
+    ?>
