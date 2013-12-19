@@ -11,7 +11,7 @@
      <ul class="footer_menu">
         <li><a href="about_company.php" class="nav_footer">এবাউট কোম্পানী</a></li>
         <li><a href="product_info.php" class="nav_footer">প্রোডাক্ট ইনফরমেশন</a></li>
-        <li><a href="masterChart.php" class="nav_footer">মূল পণ্যতালিকা</a></li>
+        <li><a href="masterChart_part_1.php" class="nav_footer">মূল পণ্যতালিকা</a></li>
         <li><a href="patent.php" class="nav_footer">প্যাটেন্ট</a></li>
         <li><a href="programProfile.php" class="nav_footer">অনুষ্ঠানসূচি</a></li>
         <li><a href="awards.php" class="nav_footer">এওয়ার্ড</a></li>
