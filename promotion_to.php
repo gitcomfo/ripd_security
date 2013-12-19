@@ -2,6 +2,15 @@
 error_reporting(0);
 include_once 'includes/MiscFunctions.php';
 include 'includes/header.php';
+
+function get_catagory() {
+    echo "<option value=0> -সিলেক্ট করুন- </option>";
+    $catagoryRslt = mysql_query("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory;");
+    while ($catrow = mysql_fetch_assoc($catagoryRslt)) {
+        echo "<option value=" . $catrow['pro_cat_code'] . ">" . $catrow['pro_catagory'] . "</option>";
+    }
+}
+
 ?>
 <style type="text/css">
     @import "css/bush.css";
@@ -23,6 +32,11 @@ include 'includes/header.php';
 <script type="text/javascript">
     function selectOffice()
     { TINY.box.show({iframe:'includes/select_office.php',width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+    
+    function promotionSalaryUpdate()
+    {
+        TINY.box.show({iframe:'includes/promotion_salary_update.php',width:650,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); 
+    }
 </script>
 
 <div class="column6">
@@ -112,31 +126,39 @@ include 'includes/header.php';
                 echo '<tr>
                      <td colspan="4">
                      <fieldset style="border:3px solid #686c70;width: 99%;">
-                            <legend style="color: brown;font-size: 14px;">পোস্টিং এ</legend>
+                            <legend style="color: brown;font-size: 14px;">প্রমোশন এন্ড সেলারি আপডেট</legend>
                             <table>
                             <tr>
-                                <td style="width: 30%; text-align:right">পোস্টিং অফিস</td>
-                                <td style="width: 40%"><input type="text" class="box" name="promotion"/></td>
-                                <td colspan="2"><div align="center"><a onclick="selectOffice()" style="cursor:pointer;color:blue;">সিলেক্ট অফিস</a></div></td>  
+                            <td colspan="2" style="width: 50%; text-align:right">কর্মচারীর ধরণ</td>
+                            <td colspan="2" style="width: 50%; text-align:left"> : </td>
                             </tr>
                             <tr>
-                                <td style="width: 30%; text-align:right">পোস্টিং</td>
-                                <td colspan="3" style="width: 40%"><input type="text" class="box" name="promotion"/></td>
-                             </tr>
-                             
+                                <td style="width: 20%; text-align:right">রানিং গ্রেড</td>
+                                <td style="width: 30%; text-align:left">: </td>
+                                <td style="width: 20%; text-align:right">নেক্সট গ্রেড</td>
+                                <td style="width: 30%; text-align:left">: <input type="text" class="box" name="promotion"/></td>
+                            </tr>
                             <tr>
-                                <td style="width: 30%; text-align:right">পোস্টিং তারিখ</td>
-                                <td colspan="3" style="width: 40%"><input type="date" class="box" name="promotion"/></td>
-                             </tr>
+                                <td style="width: 20%; text-align:right">রানিং সেলারি</td>
+                                <td style="width: 30%; text-align:left">: </td>
+                                <td style="width: 20%; text-align:right">নেক্সট সেলারি</td>
+                                <td style="width: 30%; text-align:left">: <input type="text" class="box" name="promotion"/></td>
+                            </tr>
                              <tr>
-                                <td style="width: 30%; text-align:right">পোস্টিং ধরণ</td>
-                                <td colspan="3" style="width: 40%"><input type="text" class="box" name="promotion"/></td>
-                             </tr>
+                                <td style="width: 20%; text-align:right">রানিং দায়িত্ব / পোস্ট</td>
+                                <td style="width: 30%; text-align:left">: </td>
+                                <td style="width: 20%; text-align:right">নেক্সট পোস্ট</td>
+                                <td style="width: 30%; text-align:left">: <select class="box" id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value);showCatProducts(this.value);" style="width: 180px;font-family: SolaimanLipi !important;">
+                                            <?php echo get_catagory(); ?>
+                                        </select></td>
+                            </tr>
+                           
+                           
                             </table>
                             </filedset></td>
                     </tr>';
                 echo "<tr>                    
-                                    <td colspan='4' style='text-align: center' ><input class='btn' style ='font-size: 12px' type='reset' name='reset' value='পোস্টিং' /></td>                           
+                                    <td colspan='4' style='text-align: center' ><input class='btn' style ='font-size: 12px' type='reset' name='reset' value='প্রমোশন' /></td>                           
                             </tr>";
                 echo "</table>";
                 ?>
