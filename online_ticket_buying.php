@@ -660,7 +660,7 @@ else {
     ?>
     <div class="column6">
         <div class="main_text_box">
-            <div style="padding-left: 110px;"><a href=""><b>ফিরে যান</b></a></div> 
+            <div style="padding-left: 110px;"><a href="account_management.php"><b>ফিরে যান</b></a></div> 
             <div>
                 <form method="POST" onsubmit="" action="online_ticket_buying.php?opt=submit_ticket">	
                     <table  class="formstyle" style="font-family: SolaimanLipi !important;">          

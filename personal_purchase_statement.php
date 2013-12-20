@@ -171,7 +171,7 @@ function get_catagory() {
 </script>  
 
 <div class="main_text_box">
-    <div style="padding-left: 112px;"><a href=""><b>ফিরে যান</b></a></div>
+    <div style="padding-left: 112px;"><a href="personal_reporting.php"><b>ফিরে যান</b></a></div>
     <div>           
         <form method="POST" onsubmit="" >	
             <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          
