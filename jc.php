@@ -18,18 +18,23 @@ height: 135px;
 padding: 0.4em;
 }
 </style>
-<script>
+<!--<script type="text/javascript">
 $(function() {
-$( ".effect" ).hide();
-$( ".button" ).click(function() {
-var selectedEffect = 'blind';
-var content = $(this).next();
-  $(content).toggle( selectedEffect, 500 );
-  $(content).next().toggle( selectedEffect, 500 );
-return false;
+    $(".effect").hide();
+var first = $(".effect:first"); 
+first.show();
+$( ".h3button" ).click(function() {
+    $('.h3button').not(this).each(function(){
+        var content = $(this).next();
+        $(content).hide();
+    });
+        var selectedEffect = 'blind';
+        var content = $(this).next();
+        $(content).toggle( selectedEffect, 500 );
+        return false;
+    });
 });
-});
-</script>
+</script>-->
 </head>
 <body>
  <?php

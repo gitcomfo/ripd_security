@@ -34,7 +34,7 @@ margin: 5px 10px;
 .effect {
 position: relative;
 width: 200px;
-height: 135px;
+height: auto;
 padding: 0.4em;
 }
 .innerLinks {
@@ -52,16 +52,22 @@ h3 {
     width: 200px;
     cursor: pointer;
 }
+h3:hover,
+h3:active {
+    background: #c2bdbd;
+    border: 1px solid black;
+}
 </style>
 <script type="text/javascript">
 $(function() {
-$( ".effect" ).hide();
-$( ".button" ).click(function() {
-var selectedEffect = 'blind';
-var content = $(this).next();
-  $(content).toggle( selectedEffect, 500 );
-  $(content).next().toggle( selectedEffect, 500 );
-return false;
+    $(".effect").hide();
+    var first = $(".effect:first"); 
+    first.show();
+    $( ".h3button" ).click(function() {
+        var selectedEffect = 'blind';
+        var content = $(this).next();
+        $(content).toggle( selectedEffect, 500 );
+        return false;
     });
 });
 </script>
@@ -114,18 +120,18 @@ function showCatagoryForBrand(brand)
 }
 </script>
 <div class="page_header_div">
-    <div class="page_header_title">মূল পণ্য তালিকা (মাস্টার চার্ট) ধাপ -১</div>
+    <div class="page_header_title">মূল পণ্য তালিকা (মাস্টার চার্ট)</div>
 </div>
 <div>
     <table>
         <tr>
-            <td style="text-align: right;">ক্যাটাগরি :
+            <td style="text-align: right;color: #000099;font-size:14px;">ক্যাটাগরি :
                 <select id='catagory' class="box" onchange= "showSpecificCatagory(this.value)">
                     <?php showCatagory($sql_select_all_catagory)?>
                 </select>
             </td>
-            <td style="text-align: center;"> <b>অথবা </b></td>
-            <td>ব্র্যান্ড / গ্রুপ :
+            <td style="text-align: center;color: red;"> <b>অথবা </b></td>
+            <td style="color: #000099;font-size:14px;">ব্র্যান্ড / গ্রুপ :
                 <select class="box" onchange='showCatagoryForBrand(this.value)'>
                     <?php showBrand($sql_select_all_brand)?>
                 </select>            
@@ -143,7 +149,7 @@ function showCatagoryForBrand(brand)
                                 $db_catCode = $value['pro_cat_code'];
                         ?>
                     <div class="toggler" style="float: left; ">
-                            <h3 class="ui-state-default ui-corner-all button" style="text-align: center;width: 200px;"><?php echo $db_catName;?></h3>
+                            <h3 class="ui-state-default ui-corner-all h3button" style="text-align: center;width: 200px;"><?php echo $db_catName;?></h3>
                            <div  class="ui-widget-content ui-corner-all effect">
                                <?php
                                     // ********************************* type ******************************
@@ -164,5 +170,3 @@ function showCatagoryForBrand(brand)
     </table>
 </div>
 <?php include_once 'includes/footer.php';?>
-
-
