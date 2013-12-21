@@ -51,6 +51,9 @@ padding: 0.4em;
     border:1px solid black;
     border-radius: 5px;
 }
+.detailsLinks:hover {
+    background-color:#00CCFF ;
+}
 h3 {
     text-align: center;
     width: 255px !important;
@@ -65,7 +68,7 @@ h3:active {
 </style>
 <script type="text/javascript">
 $(function() {
-$( ".effect" ).hide();
+//$( ".effect" ).hide();
 $( ".h3button" ).click(function() {
 var selectedEffect = 'blind';
 var content = $(this).next();
