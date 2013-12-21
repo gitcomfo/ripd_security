@@ -1,6 +1,8 @@
 <?php
+error_reporting(0);
 //include 'includes/session.inc';
 include_once 'includes/header.php';
+include_once 'includes/areaSearchForProduct.php';
 $msg = "";
 function get_catagory()
 {
@@ -13,8 +15,28 @@ function get_catagory()
 }
 
 ?>
-<title>মেইক প্রোডাক্ট ক্যাটাগরি এন্ড টাইপ</title>
 <style type="text/css">@import "css/bush.css";</style>
+<script type="text/javascript" src="javascripts/area3.js"></script>
+<script type="text/javascript">
+    function getOfficeFromThana()
+    {
+        var type = <?php echo $g_type;?>;
+        var xmlhttp;
+        if (window.XMLHttpRequest) xmlhttp=new XMLHttpRequest();
+        else xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) 
+                document.getElementById('office').innerHTML=xmlhttp.responseText;
+        }
+        var division_id, district_id, thana_id;
+        division_id = document.getElementById('division_id').value;
+        district_id = document.getElementById('district_id').value;
+        thana_id = document.getElementById('thana_id').value;
+        xmlhttp.open("GET","includes/updateOfficeFromThana.php?dsd="+district_id+"&dvd="+division_id+"&ttid="+thana_id+"&type="+type,true);
+        xmlhttp.send();
+    }
+</script>
 <!--===========================================================================================================================-->
 <script>
 function showTypes(catagory) // for types dropdown list
@@ -184,19 +206,13 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                                         <legend style="color: brown;font-size: 14px;">সার্চ করুন</legend>
                                         <table>
                                             <tr>
-                                                <td><b>বিভাগ</b></br>
-                                                    <select class="box" id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value);showCatProducts(this.value);" style="width: 120px;font-family: SolaimanLipi !important;">
-                                                        <?php echo get_catagory(); ?>
+                                                <td><?php
+                                                            getAreaOffice();
+                                                        ?>
+                                                </td>
+                                                <td><select class="box" id="offNsales" name="offNsales" style="width: 200px;font-family: SolaimanLipi !important;">
+                                                        <option value="0">-- অফিস / সেলসস্টোর --</option>
                                                     </select>
-                                                </td>
-                                                <td><b>জেলা</b></br>
-                                                    <span id="showtype"><select class="box" style="width: 120px;font-family: SolaimanLipi !important;"></select></span>
-                                                </td>
-                                                <td><b>থানা</b></br>
-                                                    <span id="brand"><select class="box" id="brandSearch" name="brandSearch" style="width: 120px;font-family: SolaimanLipi !important;"></select></span>
-                                                </td>
-                                                <td><b>অফিস / সেলসস্টোর</b></br>
-                                                    <span id="brand"><select class="box" id="brandSearch" name="brandSearch" style="width: 200px;font-family: SolaimanLipi !important;"></select></span>
                                                 </td>
                                             </tr>
                                         </table>
@@ -237,9 +253,6 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                                           </thead>
                                           <tbody style="background-color: #FCFEFE">
                                         <?php
-                                    //if (isset($_GET['code']))
-                                    //     	{	
-                                    //                    $G_summaryID = $_GET['code'];
                                                             $slNo = 1;
                                                         $result = mysql_query("SELECT * FROM product_chart ORDER BY pro_code ");
                                                             while ($row = mysql_fetch_assoc($result))

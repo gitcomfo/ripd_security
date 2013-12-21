@@ -121,7 +121,8 @@ elseif ($_GET['id']== 'type')
                                         echo '<td  style="border: solid black 1px;"><div align="left">'.$db_procode.'</div></td>';
                                         echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
                                         echo '<td  style="border: solid black 1px;"><div align="center">'.$db_unit.'</div></td>';
-                                        echo '<td style="border: solid black 1px;"><div align="center"><a onclick='.$function.' style="cursor:pointer;color:blue;"><u>বিস্তারিত<u></a></div></td>';
+                                        echo '<td style="border: solid black 1px;"><div align="center"><a onclick='.$function.' style="cursor:pointer;color:blue;"><u>বিস্তারিত<u></a></div>
+                                            <input type="hidden" id="fun" value='.$functionName.' /></td>';
                                         echo '</tr>';
                                     $SL++;
                                 }
@@ -162,7 +163,8 @@ elseif ($_GET['id']== 'catagory')
                                         echo '<td  style="border: solid black 1px;"><div align="left">'.$db_procode.'</div></td>';
                                         echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
                                         echo '<td  style="border: solid black 1px;"><div align="center">'.$db_unit.'</div></td>';
-                                        echo '<td style="border: solid black 1px;"><div align="center"><a onclick='.$function.' style="cursor:pointer;color:blue;"><u>বিস্তারিত<u></a></div></td>';
+                                        echo '<td style="border: solid black 1px;"><div align="center"><a onclick='.$function.' style="cursor:pointer;color:blue;"><u>বিস্তারিত<u></a></div>
+                                            <input type="hidden" id="fun" value='.$functionName.' /></td>';
                                         echo '</tr>';
                                     $SL++;
                                 }
@@ -211,7 +213,8 @@ elseif ($_GET['id']== 'brnd')
                                         echo '<td  style="border: solid black 1px;"><div align="left">'.$db_procode.'</div></td>';
                                         echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
                                         echo '<td  style="border: solid black 1px;"><div align="center">'.$db_unit.'</div></td>';
-                                        echo '<td style="border: solid black 1px;"><div align="center"><a onclick='.$function.' style="cursor:pointer;color:blue;"><u>বিস্তারিত<u></a></div></td>';
+                                        echo '<td style="border: solid black 1px;"><div align="center"><a onclick='.$function.' style="cursor:pointer;color:blue;"><u>বিস্তারিত<u></a></div>
+                                            <input type="hidden" id="fun" value='.$functionName.' /></td>';
                                         echo '</tr>';
                                         $SL++;
                                 }

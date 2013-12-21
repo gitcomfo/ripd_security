@@ -11,7 +11,7 @@ $g_chartID = $_GET['chartID'];
 <div class="main_text_box">
     <div>           
         <form method="POST" onsubmit="" >	
-            <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          
+            <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 95%;margin-left: 10px;">          
                 <tr><th style="text-align: center" colspan="2"><h1>বিভিন্ন অফিস / সেলসস্টোরে পণ্যটির মূল্য</h1></th></tr>
                 <tr>
                     <td>

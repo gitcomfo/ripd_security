@@ -12,7 +12,7 @@ $g_chartID = $_GET['chartID'];
     <div class="main_text_box">
             <div>           
                 <form method="POST" onsubmit="" >	
-                    <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          
+                    <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 95%;margin-left: 10px;">          
                         <tr><th style="text-align: center" colspan="2"><h1>যে সকল অফিস / সেলসস্টোরে প্রাপ্য</h1></th></tr>
                         <tr>
                             <td>

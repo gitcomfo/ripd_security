@@ -11,14 +11,13 @@ function get_catagory()
 	echo  "<option value=".$catrow['pro_cat_code'].">".$catrow['pro_catagory']."</option>";
     }
 }
-
 ?>
 <style type="text/css">@import "css/bush.css";</style>
 <link rel="stylesheet" href="css/tinybox.css" type="text/css">
 <script src="javascripts/tinybox.js" type="text/javascript"></script>
 <script type="text/javascript">
  function detailsWithPrice(id)
-	{ TINY.box.show({url:'includes/ripd_product_details_price.php?chartID='+id,width:700,height:550,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+	{ TINY.box.show({url:'includes/ripd_product_details_price.php?chartID='+id,width:600,height:550,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
  </script>
 <!--===========================================================================================================================-->
 <script>
