@@ -225,6 +225,9 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                                           </thead>
                                           <tbody style="background-color: #FCFEFE">
                                         <?php
+                                    //if (isset($_GET['code']))
+                                    //     	{	
+                                    //                    $G_summaryID = $_GET['code'];
                                                             $slNo = 1;
                                                         $result = mysql_query("SELECT * FROM product_chart ORDER BY pro_code ");
                                                             while ($row = mysql_fetch_assoc($result))
@@ -243,9 +246,8 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                                                                   echo '</tr>';
                                                                   $slNo++;
                                                             }
-                                            ?>
+                                    ?>
                                           </tbody>
-                                          <tr>
                                     </table>
                                     </div>
                                  </fieldset>

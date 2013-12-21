@@ -1,6 +1,10 @@
 <?php
+error_reporting(0);
 //include 'includes/session.inc';
-include_once './ConnectDB.inc';
+include_once './connectionPDO.php';
+include_once './selectQueryPDO.php';
+include_once './MiscFunctions.php';
+$g_chartID = $_GET['chartID'];
 
 ?>
 <style type="text/css">@import "css/bush.css";</style> 
@@ -22,25 +26,44 @@ include_once './ConnectDB.inc';
                                           </thead>
                                           <tbody style="background-color: #FCFEFE">
                                         <?php
-                                    //if (isset($_GET['code']))
-                                    //     	{	
-                                    //                    $G_summaryID = $_GET['code'];
-                                                            $slNo = 1;
-                                                        $result = mysql_query("SELECT * FROM product_chart ORDER BY pro_code ");
-                                                            while ($row = mysql_fetch_assoc($result))
-                                                            {
-                                                                $db_proname=$row["pro_productname"];
-                                                                $db_unit=$row["pro_unit"];
-                                                                $db_article=$row["pro_article"];
-                                                                $db_procode=$row["pro_code"];
-                                                                echo '<tr>';
-                                                                echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($slNo).'</div></td>';
-                                                                echo '<td  style="border: solid black 1px;"><div align="left">'.$db_procode.'</div></td>';
-                                                                  echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
-                                                                  echo '</tr>';
-                                                                  $slNo++;
-                                                            }
-                                    ?>
+                                                $sl = 1;
+                                                $sql_select_product_from_inventory ->execute(array($g_chartID));
+                                                $arr_inventory = $sql_select_product_from_inventory->fetchAll();
+                                                foreach ($arr_inventory as $value) {
+                                                    $db_sellingprice = $value['ins_sellingprice'];
+                                                    $db_onsID = $value['ins_ons_id'];
+                                                    $db_onsType = $value['ins_ons_type'];
+                                                    if( $db_onsType == 'office')
+                                                    {
+                                                        $sql_select_office->execute(array($db_onsID));
+                                                        $arr_office = $sql_select_office->fetchAll();
+                                                        foreach ($arr_office as $offrow) {
+                                                            $db_offname = $offrow['office_name'];
+                                                            $db_offaddress = $offrow['office_details_address'];
+                                                            $db_offmail = $offrow['office_email'];
+                                                            $db_offmbl = $offrow[''];
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        $sql_select_store->execute(array($db_onsID));
+                                                        $arr_office = $sql_select_store->fetchAll();
+                                                        foreach ($arr_office as $offrow) {
+                                                            $db_offname = $offrow['salesStore_name'];
+                                                            $db_offaddress = $offrow['salesStore_details_address'];
+                                                            $db_offmail = $offrow['salesStore_email'];
+                                                            $db_offmbl = $offrow[''];
+                                                        }
+                                                    }
+                                                    $slNo = english2bangla($sl);
+                                                    echo "<tr>
+                                                            <td style='border: 1px solid black'>$slNo</td>
+                                                            <td style='border: 1px solid black'>$db_offname</td>
+                                                            <td style='border: 1px solid black'></td>
+                                                        </tr>";
+                                                    $sl++;
+                                                }
+                                            ?>
                                           </tbody>
                                           <tr>
                                     </table>

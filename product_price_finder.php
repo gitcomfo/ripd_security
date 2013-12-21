@@ -13,13 +13,12 @@ function get_catagory()
 }
 
 ?>
-<title>মেইক প্রোডাক্ট ক্যাটাগরি এন্ড টাইপ</title>
 <style type="text/css">@import "css/bush.css";</style>
 <link rel="stylesheet" href="css/tinybox.css" type="text/css">
 <script src="javascripts/tinybox.js" type="text/javascript"></script>
 <script type="text/javascript">
- function detailsWithPrice()
-	{ TINY.box.show({url:'includes/ripd_product_details_price.php',width:550,height:530,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+ function detailsWithPrice(id)
+	{ TINY.box.show({url:'includes/ripd_product_details_price.php?chartID='+id,width:700,height:550,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
  </script>
 <!--===========================================================================================================================-->
 <script>
@@ -41,7 +40,7 @@ function showTypes(catagory) // for types dropdown list
                 document.getElementById('showtype').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=t&catagory="+catagory,true);
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=t&catagory="+catagory,true);
         xmlhttp.send();	
 }
 function showBrands(type) // for brand dropdown list
@@ -62,7 +61,7 @@ function showBrands(type) // for brand dropdown list
                 document.getElementById('brand').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=b&type="+type,true);
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=b&type="+type,true);
         xmlhttp.send();	
 }
 function showClass(brand,protype) // for product name dropdown list
@@ -83,7 +82,7 @@ function showClass(brand,protype) // for product name dropdown list
                 document.getElementById('classi').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=c&brand="+brand+"&type="+protype,true);
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=c&brand="+brand+"&type="+protype,true);
         xmlhttp.send();	
 }
 function showProduct(productChartId,idbrand,cataID) // show product details from selecting product from dropdown
@@ -104,7 +103,7 @@ function showProduct(productChartId,idbrand,cataID) // show product details from
                 document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=all&chartID="+productChartId+"&idbrand="+idbrand+"&cataID="+cataID,true);
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=all&chartID="+productChartId+"&idbrand="+idbrand+"&cataID="+cataID,true);
         xmlhttp.send();
 }
 function showCatProducts(code) // show products from selecting catagory
@@ -125,7 +124,8 @@ function showCatProducts(code) // show products from selecting catagory
                 document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=catagory&proCatCode="+code,true);
+        var fun = document.getElementById('fun').value;
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=catagory&proCatCode="+code+"&function="+fun,true);
         xmlhttp.send();
 }
 function showTypeProducts(proCatID) // show products from selecting types
@@ -146,7 +146,8 @@ function showTypeProducts(proCatID) // show products from selecting types
                 document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=type&proCatID="+proCatID,true);
+        var fun = document.getElementById('fun').value;
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=type&proCatID="+proCatID+"&function="+fun,true);
         xmlhttp.send();
 }
 
@@ -168,7 +169,8 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                 document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=brnd&brandCode="+brandcode+"&procatid="+procatid,true);
+        var fun = document.getElementById('fun').value;
+        xmlhttp.open("GET","includes/searchProcessForAll.php?id=brnd&brandCode="+brandcode+"&procatid="+procatid+"&function="+fun,true);
         xmlhttp.send();
 }
 </script>  
@@ -223,23 +225,21 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                                           </thead>
                                           <tbody style="background-color: #FCFEFE">
                                         <?php
-                                    //if (isset($_GET['code']))
-                                    //     	{	
-                                    //                    $G_summaryID = $_GET['code'];
                                                             $slNo = 1;
                                                         $result = mysql_query("SELECT * FROM product_chart ORDER BY pro_code ");
                                                             while ($row = mysql_fetch_assoc($result))
                                                             {
                                                                 $db_proname=$row["pro_productname"];
                                                                 $db_unit=$row["pro_unit"];
-                                                                $db_article=$row["pro_article"];
                                                                 $db_procode=$row["pro_code"];
+                                                                 $db_proChartID = $row["idproductchart"];
                                                                 echo '<tr>';
                                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($slNo).'</div></td>';
                                                                 echo '<td  style="border: solid black 1px;"><div align="left">'.$db_procode.'</div></td>';
                                                                   echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
                                                                   echo '<td  style="border: solid black 1px;"><div align="center">'.$db_unit.'</div></td>';
-                                                                  echo '<td style="border: solid black 1px;"><div align="center"><a onclick="detailsWithPrice()" style="cursor:pointer;color:blue;">বিস্তারিত</a></div></td>';
+                                                                  echo '<td style="border: solid black 1px;"><div align="center"><a onclick="detailsWithPrice('.$db_proChartID.')" style="cursor:pointer;color:blue;">বিস্তারিত</a></div>
+                                                                      <input type="hidden" id="fun" value="detailsWithPrice" /></td>';
                                                                   echo '</tr>';
                                                                   $slNo++;
                                                             }
