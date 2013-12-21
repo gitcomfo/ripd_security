@@ -17,26 +17,6 @@ function get_catagory()
 ?>
 <style type="text/css">@import "css/bush.css";</style>
 <script type="text/javascript" src="javascripts/area3.js"></script>
-<script type="text/javascript">
-    function getOfficeFromThana()
-    {
-        var type = <?php echo $g_type;?>;
-        var xmlhttp;
-        if (window.XMLHttpRequest) xmlhttp=new XMLHttpRequest();
-        else xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        xmlhttp.onreadystatechange=function()
-        {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200) 
-                document.getElementById('office').innerHTML=xmlhttp.responseText;
-        }
-        var division_id, district_id, thana_id;
-        division_id = document.getElementById('division_id').value;
-        district_id = document.getElementById('district_id').value;
-        thana_id = document.getElementById('thana_id').value;
-        xmlhttp.open("GET","includes/updateOfficeFromThana.php?dsd="+district_id+"&dvd="+division_id+"&ttid="+thana_id+"&type="+type,true);
-        xmlhttp.send();
-    }
-</script>
 <!--===========================================================================================================================-->
 <script>
 function showTypes(catagory) // for types dropdown list
@@ -57,7 +37,7 @@ function showTypes(catagory) // for types dropdown list
                 document.getElementById('showtype').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=t&catagory="+catagory,true);
+        xmlhttp.open("GET","includes/searchProcessForFind.php?id=t&catagory="+catagory,true);
         xmlhttp.send();	
 }
 function showBrands(type) // for brand dropdown list
@@ -78,7 +58,7 @@ function showBrands(type) // for brand dropdown list
                 document.getElementById('brand').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=b&type="+type,true);
+        xmlhttp.open("GET","includes/searchProcessForFind.php?id=b&type="+type,true);
         xmlhttp.send();	
 }
 function showClass(brand,protype) // for product name dropdown list
@@ -99,7 +79,7 @@ function showClass(brand,protype) // for product name dropdown list
                 document.getElementById('classi').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=c&brand="+brand+"&type="+protype,true);
+        xmlhttp.open("GET","includes/searchProcessForFind.php?id=c&brand="+brand+"&type="+protype,true);
         xmlhttp.send();	
 }
 function showProduct(productChartId,idbrand,cataID) // show product details from selecting product from dropdown
@@ -120,7 +100,7 @@ function showProduct(productChartId,idbrand,cataID) // show product details from
                 document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=all&chartID="+productChartId+"&idbrand="+idbrand+"&cataID="+cataID,true);
+        xmlhttp.open("GET","includes/searchProcessForFind.php?id=all&chartID="+productChartId+"&idbrand="+idbrand+"&cataID="+cataID,true);
         xmlhttp.send();
 }
 function showCatProducts(code) // show products from selecting catagory
@@ -141,7 +121,8 @@ function showCatProducts(code) // show products from selecting catagory
                 document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=catagory&proCatCode="+code,true);
+        var invStr = document.getElementById('invStr').value;
+        xmlhttp.open("GET","includes/searchProcessForFind.php?id=catagory&proCatCode="+code+"&invStr="+invStr,true);
         xmlhttp.send();
 }
 function showTypeProducts(proCatID) // show products from selecting types
@@ -162,7 +143,8 @@ function showTypeProducts(proCatID) // show products from selecting types
                 document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=type&proCatID="+proCatID,true);
+        var invStr = document.getElementById('invStr').value;
+        xmlhttp.open("GET","includes/searchProcessForFind.php?id=type&proCatID="+proCatID+"&invStr="+invStr,true);
         xmlhttp.send();
 }
 
@@ -184,7 +166,8 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                 document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","pos/includes/searchProcessForAll.php?id=brnd&brandCode="+brandcode+"&procatid="+procatid,true);
+        var invStr = document.getElementById('invStr').value;
+        xmlhttp.open("GET","includes/searchProcessForFind.php?id=brnd&brandCode="+brandcode+"&procatid="+procatid+"&invStr="+invStr,true);
         xmlhttp.send();
 }
 </script>  
@@ -210,7 +193,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                                                             getAreaOffice();
                                                         ?>
                                                 </td>
-                                                <td><select class="box" id="offNsales" name="offNsales" style="width: 200px;font-family: SolaimanLipi !important;">
+                                                <td><select class="box" id="offNsales" name="offNsales" style="width: 200px;font-family: SolaimanLipi !important;" onchange='showProductsForOnS(this.value)'>
                                                         <option value="0">-- অফিস / সেলসস্টোর --</option>
                                                     </select>
                                                 </td>
@@ -271,7 +254,6 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                                                             }
                                     ?>
                                           </tbody>
-                                          <tr>
                                     </table>
                                     </div>
                                  </fieldset>

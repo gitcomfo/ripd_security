@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
             include_once 'ConnectDB.inc';
             //get district name
             $g_id = $_GET['thanaid'];
