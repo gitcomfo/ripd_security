@@ -12,7 +12,7 @@ if(isset($_POST['check']))
 <style type="text/css"> @import "css/bush.css";</style>
 
     <div class="main_text_box">
-        <div id="noprint" style="padding-left: 110px;"><a href=""><b>ফিরে যান</b></a></div>
+        <div id="noprint" style="padding-left: 110px;"><a href="accounting_sys_management.php"><b>ফিরে যান</b></a></div>
         <div>           
             <form method="POST" onsubmit="" name="cheque" action="">	
                 <table  class="formstyle" style="width: 80%;font-family: SolaimanLipi !important; font-size: 14px;">          

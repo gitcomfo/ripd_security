@@ -193,7 +193,7 @@ function get_catagory() {
                     <table style="margin: 0 auto;" cellspacing="0" cellpadding="0">
                         <thead>
                             <tr id="table_row_odd">
-                                <td width="11%" style="border: solid black 1px;"><div align="center"><strong>ক্রমিক নং</strong></div></td>
+                                <td width="11%" style="border: solid black 1px;"><div align="center"><strong>ক্রম</strong></div></td>
                                 <td width="20%"  style="border: solid black 1px;"><div align="center"><strong>তারিখ</strong></div></td>
                                 <td width="30%"  style="border: solid black 1px;"><div align="center"><strong>পে আউট মাধ্যম</strong></div></td>
                                 <td width="11%"  style="border: solid black 1px;"><div align="center"><strong>ট্যাক্স / চার্জ</strong></div></td>
@@ -226,6 +226,7 @@ function get_catagory() {
                             ?>
                         </tbody>
                     </table>
+                </td>
             </tr>
         </table>
     </div>

@@ -16,8 +16,8 @@ $logedInUserType = $_SESSION['userType'];
             <th colspan="2">এটেন্ডেন্স স্টেটমেন্ট</th>
         </tr>
         <tr>
-            <td><a href="">কারেন্ট (চলতি)</a></td>
-            <td><a href="">প্রিভিয়াস (পুরাতন)</a></td>
+            <td><a href="current_attendance_statement_own.php">কারেন্ট (চলতি)</a></td>
+            <td><a href="previous_attendance_statement_own.php">প্রিভিয়াস (পুরাতন)</a></td>
         </tr>
         <?php 
         }else{            
@@ -26,8 +26,8 @@ $logedInUserType = $_SESSION['userType'];
             <th colspan="2">প্রোগ্রাম, প্রেজেন্টেশন, ট্রেইনিং সিডিউল</th>
         </tr>
         <tr>
-            <td><a href="">কারেন্ট এন্ড কামিং সিডিউল</a></td>
-            <td><a href="">প্রিভিয়াস সিডিউল এন্ড এটেন্ডেন্স স্টেটমেন্ট</a></td>
+            <td><a href="program_schedule_statement.php">কারেন্ট এন্ড কামিং সিডিউল</a></td>
+            <td><a href="previous_program_schedule_own.php">প্রিভিয়াস সিডিউল এন্ড এটেন্ডেন্স স্টেটমেন্ট</a></td>
         </tr>
         <?php 
         }
@@ -36,19 +36,19 @@ $logedInUserType = $_SESSION['userType'];
             <th colspan="2">প্রোমোশন, পোস্টিং, সেলারী, পেনশন</th>
         </tr>
         <tr>
-            <td><a href="">প্রোমোশন ডেসক্রিপশন</a></td>
-            <td><a href="payment_statement_chart.php">পোস্টিং ডেসক্রিপশন</a></td>
+            <td><a href="promotion_description.php">প্রোমোশন ডেসক্রিপশন</a></td>
+            <td><a href="posting_description.php">পোস্টিং ডেসক্রিপশন</a></td>
         </tr>
         <tr>
-            <td><a href="">সেলারী ডেসক্রিপশন</a></td>
-            <td><a href="">পেনশন</a></td>
+            <td><a href="salary_description.php">সেলারী ডেসক্রিপশন</a></td>
+            <td><a href="view_current_pension_amount.php">পেনশন</a></td>
         </tr>
         <tr>
             <th colspan="2">লোন স্টেটমেন্ট</th>
         </tr>
         <tr>
-            <td><a href="">কারেন্ট (চলতি) লোন</a></td>
-            <td><a href="">প্রিভিয়াস (পুরাতন) লোন</a></td>
+            <td><a href="current_loan.php">কারেন্ট (চলতি) লোন</a></td>
+            <td><a href="previous_loan_statement.php">প্রিভিয়াস (পুরাতন) লোন</a></td>
         </tr>
     </table>
 </div>
