@@ -6,7 +6,7 @@ include_once 'includes/header.php';
 <link rel="stylesheet" type="text/css" media="all" href="css/bush.css" />
 <link rel="stylesheet" type="text/css" media="all" href="javascripts/jsDatePick_ltr.min.css" />
 <div class="main_text_box">
-    <div style="padding-left: 10px;"><a href="update_office_account_office_pstore.php?pwr=<?php echo $type; ?>"><b>ফিরে যান</b></a></div>
+    <div style="padding-left: 10px;"><a href="personal_reporting.php"><b>ফিরে যান</b></a></div>
     <div class="domtab " >
         <ul class="domtabs" style="padding-left: 200px">
             <li class="current"><a href="#01">ইন এমাউন্ট</a></li><li class="current"><a href="#02">আউট এমাউন্ট</a></li>

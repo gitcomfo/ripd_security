@@ -10,9 +10,13 @@ include_once 'includes/columnViewAccount.php';
         <tr>
             <th colspan="2">সকল প্রকার ট্রি</th>
         </tr>
-        <tr><td><a href="systemtree.php">সিস্টেম ট্রি</a></td></tr>
-        <tr><td><a href="genology_tree.php">জেনলোজি ট্রি</a></td></tr>
-        <tr><td><a href="dropdown_tree.php">ড্রপ-ডাউন ট্রি</a></td></tr>
+        <tr>
+            <td><a href="systemtree.php">সিস্টেম ট্রি</a></td>
+            <td><a href="genology_tree.php">জেনলোজি ট্রি</a></td>
+        </tr>
+        <tr>
+            <td><a href="dropdown_tree.php">ড্রপ-ডাউন ট্রি</a></td>
+        </tr>
     </table>
 </div>
 <?php

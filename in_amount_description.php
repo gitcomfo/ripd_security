@@ -5,7 +5,7 @@ include_once 'includes/showTables.php';
 <script type="text/javascript" src="javascripts/external/mootools.js"></script>
 <script type="text/javascript" src="javascripts/dg-filter.js"></script>
 <div class="main_text_box">
-    <div style="padding-left: 5px;"><a href="#"><b>ফিরে যান</b></a></div>
+    <div style="padding-left: 5px;"><a href="personal_reporting.php"><b>ফিরে যান</b></a></div>
     <div>
 <div class="page_header_div">
     <div class="page_header_title">ইন ডেসক্রিপশন</div>
