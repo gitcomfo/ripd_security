@@ -6,7 +6,7 @@ include_once 'includes/insertQueryPDO.php';
 include_once 'includes/selectQueryPDO.php';
 include_once 'includes/updateQueryPDO.php';
 include_once 'includes/MiscFunctions.php';
-
+$msg = "";
 if ($_POST['submit_command']) {
     $p_commman_no = $_POST['command_no'];
     $p_commman_desc = $_POST['command_desc'];
@@ -16,12 +16,12 @@ if ($_POST['submit_command']) {
     if ($pv_value == $p_pv_value_in_1) {
         $sql = $sql_insert_command->execute(array($p_commman_no, $p_commman_desc, $pv_value));
         if($sql == 1)
-        echo 'done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!';
+       $msg = "সফলভাবে সেভ হয়েছে";
         else
-            echo "দুঃখিত, আবার চেষ্টা করুন";
+            $msg = "দুঃখিত, আবার চেষ্টা করুন";
     }
     else
-        echo "পি,ভি এর মান সমান হয়নি।";
+        $msg = "পি,ভি এর মান সমান হয়নি।";
 }
 else if ($_POST['edit_command']){
     $p_id_command = $_POST['idcommand'];
@@ -33,13 +33,11 @@ else if ($_POST['edit_command']){
     if ($pv_value == $p_pv_value_in_1) {
         $sql = $sql_update_command->execute(array($p_commman_no, $p_commman_desc, $pv_value, $p_id_command));
          if ($sql == 1) {
-        $msg = "আপনি সফলভাবে " . $p_commman_no . " বিভাগ নামে তথ্য পরিবর্তন করেছেন";
-        echo $msg;
+        $msg = "আপনি সফলভাবে " . english2bangla($p_commman_no) . " কমান্ড নামের তথ্য পরিবর্তন করেছেন";
         $flag = 'true';
     } else {
         $msg = "দুঃখিত, আবার চেষ্টা করুন";
         $flag = 'false';
-        echo $msg;
     }
     }
     else
@@ -75,6 +73,7 @@ else if ($_POST['edit_command']){
 <?php
 if ($_GET['action'] == 'edit') {
     $command_id = $_GET['id'];
+    $command_idShow = english2bangla($command_id);
     $sql_select_commandEdit->execute(array($command_id));
     $arr_command_details = $sql_select_commandEdit->fetchAll();
     foreach ($arr_command_details as $acd_key) {
@@ -88,7 +87,10 @@ if ($_GET['action'] == 'edit') {
             <form  name="division" action="" onsubmit="return isBlankDivision_edit()" method="post">
                 <table class="formstyle" style =" width:78%;">        
                     <tr>
-                        <th colspan="2">কমান্ড তৈরি করুন</th>
+                        <th colspan="2">কমান্ড নং <?php echo $command_idShow;?></th>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center"><b><?php echo $msg;?></b></td>
                     </tr>
                     <tr>
                         <td style="text-align: right; width: 40%;">কমান্ড নম্বর</td>
@@ -96,7 +98,7 @@ if ($_GET['action'] == 'edit') {
                     </tr>
                     <tr>
                         <td style="text-align: right; width: 40%;">কমান্ড বর্ণনা</td>
-                        <td><textarea  class="box" name="command_desc"><?php echo $acd_key['command_desc']; ?></textarea></td>   
+                        <td> : <textarea  class="box" name="command_desc"><?php echo $acd_key['command_desc']; ?></textarea></td>   
                     </tr>
                     <tr>
                         <td style="text-align: right; width: 40%;">১০০ টাকা </td>
@@ -129,12 +131,15 @@ if ($_GET['action'] == 'edit') {
                     <th colspan="2">কমান্ড তৈরি করুন</th>
                 </tr>
                 <tr>
+                    <td colspan="2" style="text-align: center"><b><?php echo $msg; ?></b></td>
+                </tr>
+                <tr>
                     <td style="text-align: right; width: 40%;">কমান্ড নম্বর</td>
                     <td>: <input  class="box" type="text" name="command_no"/></td>   
                 </tr>
                 <tr>
                     <td style="text-align: right; width: 40%;">কমান্ড বর্ণনা</td>
-                    <td><textarea  class="box" name="command_desc"></textarea></td>   
+                    <td> : <textarea  class="box" name="command_desc"></textarea></td>   
                 </tr>
                 <tr>
                     <td style="text-align: right; width: 40%;">১০০ টাকা </td>
