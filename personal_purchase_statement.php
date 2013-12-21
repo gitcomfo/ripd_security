@@ -201,7 +201,7 @@ function get_catagory() {
                 </tr>
                 <tr>
                     <td>
-                        <fieldset   style="border: 3px solid #686c70 ; width: 99%;font-family: SolaimanLipi !important;">
+                        <fieldset style="border: 3px solid #686c70 ; width: 99%;font-family: SolaimanLipi !important;">
                             <legend style="color: brown;font-size: 14px;">personal perchase statement</legend>
                             <div id="resultTable">
                                 <table style="width: 98%;margin: 0 auto;" cellspacing="0" cellpadding="0">

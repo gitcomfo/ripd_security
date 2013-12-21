@@ -1,6 +1,7 @@
 <?php
 include_once 'connectionPDO.php';
 $sql_select_command = $conn->prepare("SELECT * FROM command ORDER BY commandno ASC");
+$sql_select_commandEdit = $conn->prepare("SELECT * FROM command WHERE idcommand = ?");
 $sql_select_account_type = $conn->prepare("SELECT idAccount_type, account_name FROM account_type LIMIT 5");
 $sql_pv_view = $conn->prepare("SELECT
                                                                     cust_type, sales_type, store_type, less_amount, selling_earn, patent_nh,
