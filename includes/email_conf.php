@@ -2,10 +2,12 @@
 function CreateEmailAccount($euser, $epass)
             {
             // cPanel info
+			//$euser = "bulbul";
+			//$epass = "**bul**321";
             $cpuser = 'ripduniv'; // cPanel username
             $cppass = '**ripd54321'; // cPanel password
             $cpdomain = 'ripduniversal.com'; // cPanel domain or IP
-            $cpskin = 'rsx3';  // cPanel skin. Mostly x or x2. 
+            $cpskin = 'x3';  // cPanel skin. Mostly x or x2. 
             $edomain = 'ripduniversal.com'; // email domain (usually same as cPanel domain above)
             $equota = 20; // amount of space in megabytes
             $msg = '';

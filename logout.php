@@ -18,7 +18,7 @@ $AllowAnyone=True; /* Allow all users to log off  */
 
             <div class="form">
                 <form method ="post" action ="index.php">
-                   <!-- <input type =" hidden" name =" FormID" value =" <?php echo $_SESSION['FormID'] ?>" /> -->
+                   <!-- <input type =" hidden" name =" FormID" value =" <?php //echo $_SESSION['FormID'] ?>" /> -->
 
                     <div>
                         <pre>রিপড এর পক্ষ থেকে আপনাকে ধন্যবাদ</pre>
