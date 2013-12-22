@@ -4,22 +4,62 @@ include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
 $loginUSERname = $_SESSION['acc_holder_name'] ;
+ $loginUSERid = $_SESSION['userIDUser'] ;
+
+if(isset($_POST['submit']))
+{
+    $p_month = $_POST['month'];;
+    $p_year = $_POST['year'];
+    $select_attendance = mysql_query("SELECT COUNT(idempattend) FROM employee,employee_attendance 
+    WHERE   year_no ='$p_year' AND month_no='$p_month' AND  cfs_user_idUser = $loginUSERid AND idEmployee = emp_user_id ");
+    $row = mysql_fetch_assoc($select_attendance);
+    $workingDays = $row['COUNT(idempattend)'];
+
+    $sql_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? AND  year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
+    $status1 = "present";
+    $sql_attend->execute(array($status1,$p_year,$p_month,$loginUSERid));
+    $row1 = $sql_attend->fetchAll();
+    foreach ($row1 as $value) {
+        $presentDays = $value['COUNT(idempattend)'];
+    }
+    $status2 ="absent";
+    $sql_attend->execute(array($status2,$p_year,$p_month,$loginUSERid));
+    $row2 = $sql_attend->fetchAll();
+    foreach ($row2 as $value) {
+        $absentDays = $value['COUNT(idempattend)'];
+    }
+    $status3 = "leave";
+    $sql_attend->execute(array($status3,$p_year,$p_month,$loginUSERid));
+    $row3 = $sql_attend->fetchAll();
+    foreach ($row3 as $value) {
+        $leaveDays = $value['COUNT(idempattend)'];
+    }
+    $attendPercent = ($presentDays / $workingDays) * 100;
+}
 ?>
 <title>নিয়মিত কর্মচারী হাজিরা</title>
 <style type="text/css"> @import "css/bush.css";</style>
+<style type="text/css">
+    #search {
+        width: 50px;background-color: #009933;border: 2px solid #0077D5;cursor: pointer; color: wheat;
+    }
+    #search:hover {
+        background-color: #0077D5;border: 2px inset #009933;color: wheat;
+    }
+</style>
 
     <div class="main_text_box" style="width: 100% !important;">
         <div style="padding-left: 50px;"><a href="personal_official_profile_employee.php"><b>ফিরে যান</b></a></div>
           <div>
-           <form method="POST"  name="frm" action="">	
                <table  class="formstyle" style="width: 90% !important; font-family: SolaimanLipi !important;margin:0 auto !important;">          
-                    <tr><th colspan="2" style="text-align: center;">কর্মচারী হাজিরা বিবরণ</th></tr>
+                    <tr><th colspan="2" style="text-align: center;">কর্মচারীর ব্যক্তিগত হাজিরা বিবরণ</th></tr>
                     <tr><td colspan="2" style="color: sienna; text-align: center; font-size: 20px;"><b><?php echo $loginUSERname;?></b></td></tr>
                     <tr><td colspan="2" style="color: sienna; text-align: center; font-size: 16px;"> পূর্বের হাজিরা বিবরণ</td></tr>
                     <tr>
                         <td>
                             <fieldset style="border: #686c70 solid 3px;width: 90%;margin-left:5%;">
                                 <legend style="color: brown">সার্চ</legend>
+                                <form method="POST"  name="frm" action="">	
                                 <table>
                                     <tr>
                                         <td >মাস </td>
@@ -41,13 +81,21 @@ $loginUSERname = $_SESSION['acc_holder_name'] ;
                                             </select>
                                         </td>
                                         <td >বছর</td>
-                                        <td ><select class="box" style="width: 50px;" name="year">
-                                                
+                                        <td ><select class="box" style="width: 70px;" name="year">
+                                                <option value="0">-বছর-</option>
+                                                <?php
+                                                    $thisYear = date('Y');
+                                                    $startYear = '2000';
+
+                                                    foreach (range($thisYear, $startYear) as $year) {
+                                                    echo '<option value='.$year.'>'. $year .'</option>'; }
+                                                ?>
                                             </select>
                                         </td>
-                                        <td><input type="button" style="width: 50px;background-color: #009933;border: 2px solid #0077D5;cursor: pointer; color: wheat;" value="দেখুন" /></td>
+                                        <td><input id="search" type="submit" name="submit" value="দেখুন" /></td>
                                     </tr>
                                 </table>
+                                </form>
                             </fieldset>
                         </td>
                         <td>
@@ -86,21 +134,21 @@ $loginUSERname = $_SESSION['acc_holder_name'] ;
                                         <legend style="color: brown">মোট সারসংক্ষেপ</legend>
                                         <table>
                                             <tr>
-                                                <td >হাজিরার হার :</td>
-                                                <td > %</td>
-                                            </tr>
-                                            <tr>
-                                                <td >মোট কার্যদিবস :</td>
-                                                <td > দিন</td>
-                                            </tr>
-                                            <tr>
-                                                <td>উপস্থিতি :</td>
-                                                <td> দিন</td>
-                                                <td>অনুপস্থিতি :</td>
-                                                <td> দিন</td>
-                                                <td>ছুটি :</td>
-                                                <td> দিন</td>
-                                            </tr>
+                                            <td > হাজিরার হার :</td>
+                                            <td ><?php echo english2bangla($attendPercent);?> %</td>
+                                        </tr>
+                                        <tr>
+                                            <td >মোট কার্যদিবস :</td>
+                                            <td ><?php echo english2bangla($workingDays);?> দিন</td>
+                                        </tr>
+                                        <tr>
+                                            <td>উপস্থিতি :</td>
+                                            <td><?php echo english2bangla($presentDays);?> দিন</td>
+                                            <td>অনুপস্থিতি :</td>
+                                            <td><?php echo english2bangla($absentDays);?> দিন</td>
+                                            <td>ছুটি :</td>
+                                            <td><?php echo english2bangla($leaveDays);?> দিন</td>
+                                        </tr>
                                         </table>
                                     </fieldset></br>
                                 </td>
@@ -121,7 +169,6 @@ $loginUSERname = $_SESSION['acc_holder_name'] ;
                            </td>
                     </tr>
                 </table>
-            </form>
         </div>                 
     </div>
     <?php include_once 'includes/footer.php';?>
