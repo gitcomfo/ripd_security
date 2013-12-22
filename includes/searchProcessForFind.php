@@ -19,7 +19,7 @@ elseif ($_GET['id']== 'b')
 {
     $G_proCatID= $_GET['type'];
     $brandReslt =mysql_query("SELECT DISTINCT pro_brnd_or_grp_code, pro_brand_or_grp FROM `product_chart` WHERE product_catagory_idproduct_catagory=$G_proCatID ;") or exit ("sorry. :p..");
-    echo "<select class='box' onchange='showClass(this.value,$G_proCatID);showBrandProducts(this.value,$G_proCatID);' style='width: 200px;font-family: SolaimanLipi !important;'>";
+    echo "<select class='box' onchange='showBrandProducts(this.value,$G_proCatID);' style='width: 200px;font-family: SolaimanLipi !important;'>";
     echo  "<option value=0>-সিলেক্ট করুন-</option>";
     while($brandRow = mysql_fetch_assoc($brandReslt))
     {
@@ -28,66 +28,6 @@ elseif ($_GET['id']== 'b')
     echo "</select>";
 }
 
-elseif ($_GET['id']== 'c')
-{
-    $G_brandCode= $_GET['brand'];
-    $G_chartID = $_GET['type'];
-    $classReslt =mysql_query("SELECT * FROM `product_chart` WHERE pro_brnd_or_grp_code= '$G_brandCode' AND product_catagory_idproduct_catagory=$G_chartID ORDER BY pro_classification;") or exit ("sorry. :p..");
-    echo "<select class='box' onchange='showProduct(this.value,$G_brandCode,$G_chartID)' style='width: 200px;font-family: SolaimanLipi !important;'>";
-    echo  "<option value=0>-সিলেক্ট করুন-</option>";
-        while($classRow = mysql_fetch_assoc($classReslt))
-        {
-                echo  "<option value=".$classRow['idproductchart'].">".$classRow['pro_classification']."</option>";
-        }
-    echo "</select>";
-}
-//**************************** productlist table***************************
-elseif ($_GET['id']== 'all')
-{
-   echo '<table style="width: 96%;margin: 0 auto;" cellspacing="0" cellpadding="0">
-                                            <thead>
-                                          <tr id="table_row_odd">
-                                              <td width="11%" style="border: solid black 1px;"><div align="center"><strong>ক্রমিক নং</strong></div></td>
-                                            <td width="20%"  style="border: solid black 1px;"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
-                                            <td width="30%"  style="border: solid black 1px;"><div align="center"><strong>প্রোডাক্ট-এর নাম</strong></div></td>
-                                            <td width="11%"  style="border: solid black 1px;"><div align="center"><strong>একক</strong></div></td>
-                                            <td width="12%" style="border: solid black 1px;"><div align="center"><strong></strong></div></td>
-                                          </tr>
-                                          </thead>
-                                          <tbody style="background-color: #FCFEFE">';
-        if (isset($_GET['chartID']))
-                {	
-                            $G_productChartID = $_GET['chartID'];
-                           $G_whichBrand = $_GET['idbrand'];
-                            $G_whichtype = $_GET['cataID'];
-                            $SL= 1;
-                            if($G_productChartID == 0)
-                            {
-                                $result = mysql_query("SELECT * FROM product_chart WHERE pro_brnd_or_grp_code ='$G_whichBrand' AND product_catagory_idproduct_catagory='$G_whichtype'") or exit ("hai hai ahia");
-                            }
-                             else
-                            {
-                                 $result = mysql_query("SELECT * FROM product_chart WHERE idproductchart = '$G_productChartID';");
-                            }
-                          while( $row = mysql_fetch_assoc($result))
-                             {
-                                $db_proname=$row["pro_productname"];
-                                $db_unit=$row["pro_unit"];
-                                $db_procode=$row["pro_code"];
-                                $db_proChartID = $row["idproductchart"];
-                            echo '<tr>';
-                            echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($SL).'</div></td>';
-                            echo '<td  style="border: solid black 1px;"><div align="left">'.$db_procode.'</div></td>';
-                            echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
-                            echo '<td  style="border: solid black 1px;"><div align="center">'.$db_unit.'</div></td>';
-                            echo '<td style="border: solid black 1px;"><div align="center"><a onclick="details('.$db_proChartID.')" style="cursor:pointer;color:blue;"><u>বিস্তারিত<u></a></div></td>';
-                            echo '</tr>';
-                            $SL++;
-                               }
-                }
-        echo "</tbody></table>";
-
-}
 // ---------------------------- products for specific type-----------------------------------------------------------
 elseif ($_GET['id']== 'type')
 {
@@ -97,7 +37,7 @@ elseif ($_GET['id']== 'type')
                                               <td width="11%" style="border: solid black 1px;"><div align="center"><strong>ক্রমিক নং</strong></div></td>
                                             <td width="20%"  style="border: solid black 1px;"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
                                             <td width="30%"  style="border: solid black 1px;"><div align="center"><strong>প্রোডাক্ট-এর নাম</strong></div></td>
-                                            <td width="11%"  style="border: solid black 1px;"><div align="center"><strong>মূল্য</strong></div></td>
+                                            <td width="11%"  style="border: solid black 1px;"><div align="center"><strong>মূল্য (টাকা)</strong></div></td>
                                           </tr>
                                           </thead>
                                           <tbody style="background-color: #FCFEFE">';
@@ -109,9 +49,12 @@ elseif ($_GET['id']== 'type')
                             $id = $arr_str[1];
                             $SL= 1;
                             $G_productCatID = $_GET['proCatID'];
-                            $result = mysql_query("SELECT * FROM inventory,product_chart ,product_catagory 
-                                WHERE ins_ons_id = $id AND ins_ons_type='$type' AND ins_productid = idproductchart 
+                            $result = mysql_query("SELECT * FROM inventory,product_chart
+                                WHERE ins_ons_id = $id AND ins_ons_type='$type' AND ins_product_type='general' AND ins_productid = idproductchart 
                                     AND product_catagory_idproduct_catagory =$G_productCatID");
+                            $numberOfRows = mysql_num_rows($result);
+                            if($numberOfRows > 0)
+                            {
                                 while($row = mysql_fetch_assoc($result))
                                 {
                                         $db_proname=$row["pro_productname"];
@@ -121,14 +64,17 @@ elseif ($_GET['id']== 'type')
                                         echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($SL).'</div></td>';
                                         echo '<td  style="border: solid black 1px;"><div align="left">'.$db_procode.'</div></td>';
                                         echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
-                                        echo '<td  style="border: solid black 1px;"><div align="center">'.$db_sellingprice.'</div>
-                                                                       <input type="hidden" id="invStr" value='.$g_str.' /></td>';
+                                        echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($db_sellingprice).'</div>
+                                                                       <input type="hidden" id="invStr" value= "'.$g_str.'" /></td>';
                                         echo '</tr>';
                                     $SL++;
                                 }
+                                 echo "</tbody></table>";
+                            }
+                            else {
+                                echo '<tr><td><input type="hidden" id="invStr" value= "'.$g_str.'" /></td></tr></tbody></table>';
+                            }
                 }
-        echo "</tbody></table>";
-
 }
 // ---------------------------- products for specific catagory-----------------------------------------------------------
 elseif ($_GET['id']== 'catagory')
@@ -139,7 +85,7 @@ elseif ($_GET['id']== 'catagory')
                                               <td width="11%" style="border: solid black 1px;"><div align="center"><strong>ক্রমিক নং</strong></div></td>
                                             <td width="20%"  style="border: solid black 1px;"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
                                             <td width="30%"  style="border: solid black 1px;"><div align="center"><strong>প্রোডাক্ট-এর নাম</strong></div></td>
-                                            <td width="11%"  style="border: solid black 1px;"><div align="center"><strong>মূল্য</strong></div></td>
+                                            <td width="11%"  style="border: solid black 1px;"><div align="center"><strong>মূল্য (টাকা)</strong></div></td>
                                           </tr>
                                           </thead>
                                           <tbody style="background-color: #FCFEFE">';
@@ -152,9 +98,12 @@ elseif ($_GET['id']== 'catagory')
                             $SL= 1;
                             $G_productCatCode = $_GET['proCatCode'];
                             $result = mysql_query("SELECT * FROM inventory,product_chart ,product_catagory 
-                                WHERE ins_ons_id = $id AND ins_ons_type='$type' AND ins_productid = idproductchart 
+                                WHERE ins_ons_id = $id AND ins_ons_type='$type' AND ins_product_type='general' AND ins_productid = idproductchart 
                                     AND product_catagory_idproduct_catagory =idproduct_catagory 
                                     AND pro_cat_code= '$G_productCatCode'");
+                            $numberOfRows = mysql_num_rows($result);
+                            if($numberOfRows > 0)
+                            {
                                 while($row = mysql_fetch_assoc($result))
                                 {
                                         $db_proname=$row["pro_productname"];
@@ -164,14 +113,17 @@ elseif ($_GET['id']== 'catagory')
                                         echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($SL).'</div></td>';
                                         echo '<td  style="border: solid black 1px;"><div align="left">'.$db_procode.'</div></td>';
                                         echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
-                                        echo '<td  style="border: solid black 1px;"><div align="center">'.$db_sellingprice.'</div>
-                                                                      <input type="hidden" id="invStr" value='.$g_str.' /></td></td>';
+                                        echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($db_sellingprice).'</div>
+                                                                      <input type="hidden" id="invStr" value= "'.$g_str.'" /></td></td>';
                                         echo '</tr>';
                                     $SL++;
                                 }
+                                echo "</tbody></table>";
+                            }
+                            else {
+                                echo '<tr><td><input type="hidden" id="invStr" value= "'.$g_str.'" /></td></tr></tbody></table>';
+                            }
                 }
-        echo "</tbody></table>";
-
 }
 //***************************products list for specific brand*******************************
 elseif ($_GET['id']== 'brnd')
@@ -182,7 +134,7 @@ elseif ($_GET['id']== 'brnd')
                                               <td width="11%" style="border: solid black 1px;"><div align="center"><strong>ক্রমিক নং</strong></div></td>
                                             <td width="20%"  style="border: solid black 1px;"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
                                             <td width="30%"  style="border: solid black 1px;"><div align="center"><strong>প্রোডাক্ট-এর নাম</strong></div></td>
-                                            <td width="11%"  style="border: solid black 1px;"><div align="center"><strong>মূল্য</strong></div></td>
+                                            <td width="11%"  style="border: solid black 1px;"><div align="center"><strong>মূল্য (টাকা)</strong></div></td>
                                           </tr>
                                           </thead>
                                           <tbody style="background-color: #FCFEFE">';
@@ -198,15 +150,18 @@ elseif ($_GET['id']== 'brnd')
                             if($G_brandcode == 0)
                             {
                                 $result = mysql_query("SELECT * FROM inventory,product_chart 
-                                    WHERE ins_ons_id = $id AND ins_ons_type='$type' AND ins_productid = idproductchart 
+                                    WHERE ins_ons_id = $id AND ins_ons_type='$type' AND ins_product_type='general' AND ins_productid = idproductchart 
                                     AND  product_catagory_idproduct_catagory=$G_idproductCatagory ");
                             }
                             else
                             {
                                 $result = mysql_query("SELECT * FROM inventory,product_chart 
-                                    WHERE ins_ons_id = $id AND ins_ons_type='$type' AND ins_productid = idproductchart
+                                    WHERE ins_ons_id = $id AND ins_ons_type='$type' AND ins_product_type='general' AND ins_productid = idproductchart
                                     AND pro_brnd_or_grp_code =$G_brandcode AND product_catagory_idproduct_catagory=$G_idproductCatagory");
                             }
+                            $numberOfRows = mysql_num_rows($result);
+                            if($numberOfRows > 0)
+                            {
                                 while($row = mysql_fetch_assoc($result))
                                 {
                                     $db_proname=$row["pro_productname"];
@@ -216,13 +171,16 @@ elseif ($_GET['id']== 'brnd')
                                         echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($SL).'</div></td>';
                                         echo '<td  style="border: solid black 1px;"><div align="left">'.$db_procode.'</div></td>';
                                         echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
-                                        echo '<td  style="border: solid black 1px;"><div align="center">'.$db_sellingprice.'</div>
-                                                                       <input type="hidden" id="invStr" value='.$g_str.' /></td>';
+                                        echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($db_sellingprice).'</div>
+                                                                       <input type="hidden" id="invStr" value="'.$g_str.'" /></td>';
                                         echo '</tr>';
                                         $SL++;
                                 }
+                                 echo "</tbody></table>";
+                            }
+                            else {
+                                echo '<tr><td><input type="hidden" id="invStr" value= "'.$g_str.'" /></td></tr></tbody></table>';
+                            }                                
                 }
-        echo "</tbody></table>";
-
 }
 ?>

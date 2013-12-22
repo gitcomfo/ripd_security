@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include 'ConnectDB.inc';
 include_once 'MiscFunctions.php';
 
@@ -108,7 +109,10 @@ elseif ($_GET['id']== 'type')
                             $SL= 1;
                             $G_productCatID = $_GET['proCatID'];
                             $result = mysql_query("SELECT * FROM product_chart WHERE product_catagory_idproduct_catagory =$G_productCatID");
-                                while($row = mysql_fetch_assoc($result))
+                            $numberOfRows = mysql_num_rows($result);
+                            if($numberOfRows > 0)
+                            {    
+                            while($row = mysql_fetch_assoc($result))
                                 {
                                         $db_proname=$row["pro_productname"];
                                         $db_unit=$row["pro_unit"];
@@ -126,9 +130,12 @@ elseif ($_GET['id']== 'type')
                                         echo '</tr>';
                                     $SL++;
                                 }
+                                echo "</tbody></table>";
+                            }
+                            else {
+                                echo '<tr><td><input type="hidden" id="fun" value='.$functionName.' /></td></tr></tbody></table>';
+                            }                
                 }
-        echo "</tbody></table>";
-
 }
 // ---------------------------- products for specific catagory-----------------------------------------------------------
 elseif ($_GET['id']== 'catagory')
@@ -150,7 +157,10 @@ elseif ($_GET['id']== 'catagory')
                             $SL= 1;
                             $G_productCatCode = $_GET['proCatCode'];
                             $result = mysql_query("SELECT * FROM product_chart ,product_catagory WHERE product_catagory_idproduct_catagory =idproduct_catagory AND pro_cat_code= '$G_productCatCode'");
-                                while($row = mysql_fetch_assoc($result))
+                            $numberOfRows = mysql_num_rows($result);
+                            if($numberOfRows > 0)
+                            {    
+                            while($row = mysql_fetch_assoc($result))
                                 {
                                         $db_proname=$row["pro_productname"];
                                         $db_unit=$row["pro_unit"];
@@ -168,9 +178,12 @@ elseif ($_GET['id']== 'catagory')
                                         echo '</tr>';
                                     $SL++;
                                 }
+                                echo "</tbody></table>";
+                            }
+                            else {
+                                echo '<tr><td><input type="hidden" id="fun" value='.$functionName.' /></td></tr></tbody></table>';
+                            }                
                 }
-        echo "</tbody></table>";
-
 }
 //***************************products list for specific brand*******************************
 elseif ($_GET['id']== 'brnd')
@@ -200,7 +213,10 @@ elseif ($_GET['id']== 'brnd')
                             {
                                 $result = mysql_query("SELECT * FROM product_chart WHERE pro_brnd_or_grp_code =$G_brandcode AND product_catagory_idproduct_catagory=$G_idproductCatagory");
                             }
-                                while($row = mysql_fetch_assoc($result))
+                            $numberOfRows = mysql_num_rows($result);
+                            if($numberOfRows > 0)
+                            {    
+                            while($row = mysql_fetch_assoc($result))
                                 {
                                     $db_proname=$row["pro_productname"];
                                         $db_unit=$row["pro_unit"];
@@ -218,8 +234,11 @@ elseif ($_GET['id']== 'brnd')
                                         echo '</tr>';
                                         $SL++;
                                 }
+                                echo "</tbody></table>";
+                            }
+                            else {
+                                echo '<tr><td><input type="hidden" id="fun" value='.$functionName.' /></td></tr></tbody></table>';
+                            }                
                 }
-        echo "</tbody></table>";
-
 }
 ?>

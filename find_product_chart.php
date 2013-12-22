@@ -3,7 +3,7 @@ error_reporting(0);
 //include 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/areaSearchForProduct.php';
-$msg = "";
+
 function get_catagory()
 {
     echo  "<option value=0> -সিলেক্ট করুন- </option>";
@@ -61,48 +61,7 @@ function showBrands(type) // for brand dropdown list
         xmlhttp.open("GET","includes/searchProcessForFind.php?id=b&type="+type,true);
         xmlhttp.send();	
 }
-function showClass(brand,protype) // for product name dropdown list
-{
-    var xmlhttp;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function()
-        {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-                document.getElementById('classi').innerHTML=xmlhttp.responseText;
-            }
-        }
-        xmlhttp.open("GET","includes/searchProcessForFind.php?id=c&brand="+brand+"&type="+protype,true);
-        xmlhttp.send();	
-}
-function showProduct(productChartId,idbrand,cataID) // show product details from selecting product from dropdown
-{
-    var xmlhttp;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function()
-        {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-                document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
-            }
-        }
-        xmlhttp.open("GET","includes/searchProcessForFind.php?id=all&chartID="+productChartId+"&idbrand="+idbrand+"&cataID="+cataID,true);
-        xmlhttp.send();
-}
+
 function showCatProducts(code) // show products from selecting catagory
 {
     var xmlhttp;
@@ -173,16 +132,10 @@ function showBrandProducts(brandcode,procatid) // show products from brand
 </script>  
 
     <div class="main_text_box">
-        <div style="padding-left: 112px;"><a href=""><b>ফিরে যান</b></a></div>
             <div>           
                 <form method="POST" onsubmit="" >	
                     <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          
-                        <tr><th style="text-align: center" colspan="2"><h1>রিপড প্রোডাক্ট চার্ট</h1></th></tr>
-                        <?php
-                        if ($msg != "") {
-                            echo '<tr><td colspan="2" style="text-align: center;font-size: 16px;color: green;">'.$msg.'</td></tr>';
-                        }
-                        ?>
+                        <tr><th style="text-align: center" colspan="2"><h1>প্রাতিষ্ঠানিক চার্ট</h1></th></tr>
                         <tr>
                             <td>
                                 <fieldset style="border:3px solid #686c70;width: 99%;">

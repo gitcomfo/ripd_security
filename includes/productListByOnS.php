@@ -29,7 +29,7 @@ echo "<table style='width: 96%;margin: 0 auto;' cellspacing='0' cellpadding='0'>
                                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($slNo).'</div></td>';
                                                                 echo '<td  style="border: solid black 1px;"><div align="left">'.$db_procode.'</div></td>';
                                                                   echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
-                                                                  echo '<td  style="border: solid black 1px;"><div align="center">'.$db_sellingprice.'</div>
+                                                                  echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($db_sellingprice).'</div>
                                                                       <input type="hidden" id="invStr" value='.$g_str.' /></td>';
                                                                   echo '</tr>';
                                                                   $slNo++;

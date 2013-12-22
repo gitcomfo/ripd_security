@@ -30,6 +30,7 @@ $g_chartID = $_GET['chartID'];
                                                 $arr_inventory = $sql_select_product_from_inventory->fetchAll();
                                                 foreach ($arr_inventory as $value) {
                                                     $db_sellingprice = $value['ins_sellingprice'];
+                                                    $price = english2bangla($db_sellingprice);
                                                     $db_onsID = $value['ins_ons_id'];
                                                     $db_onsType = $value['ins_ons_type'];
                                                     if( $db_onsType == 'office')
@@ -58,7 +59,7 @@ $g_chartID = $_GET['chartID'];
                                                     echo "<tr>
                                                             <td style='border: 1px solid black'>$slNo</td>
                                                             <td style='border: 1px solid black'>$db_offname</td>
-                                                            <td style='border: 1px solid black;text-align:center;'>$db_sellingprice</td>
+                                                            <td style='border: 1px solid black;text-align:center;'>$price</td>
                                                         </tr>";
                                                     $sl++;
                                                 }
