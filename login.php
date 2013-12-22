@@ -95,12 +95,10 @@ if (isset($_POST['submit'])) {
                 <form method ="post" onsubmit="">
 
                     <div class="form_row">
-                        <label class="left">ইউজারনেমঃ </label><input type="text"
-                                                                     class="form_input" name ="UserNameEntryField"/>
+                        <label class="left">ইউজারনেমঃ </label><input type="text" class="form_input" name ="UserNameEntryField"/>
                     </div>
                     <div class="form_row">
-                        <label class="left">পাসওয়ার্ডঃ </label><input type="password"
-                                                                      class="form_input" name ="Password" />
+                        <label class="left">পাসওয়ার্ডঃ </label><input type="password" class="form_input" name ="Password" />
                     </div>
 
                     <div style="float: right; padding: 10px 25px 0 0;">

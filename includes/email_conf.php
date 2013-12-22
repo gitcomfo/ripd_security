@@ -2,6 +2,8 @@
 function CreateEmailAccount($euser, $epass)
             {
             // cPanel info
+			//$euser = "bulbul";
+			//$epass = "**bul**321";
             $cpuser = 'ripduniv'; // cPanel username
             $cppass = '**ripd54321'; // cPanel password
             $cpdomain = 'ripduniversal.com'; // cPanel domain or IP
