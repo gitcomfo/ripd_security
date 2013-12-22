@@ -80,7 +80,7 @@ if (isset($_POST['submit_new'])) {
             }
             else
             {document.getElementById('accountfound').style.visibility = "visible";
-                document.getElementById('accountfound').setAttribute('style','position:absolute;top:34%;left:61%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('accountfound').setAttribute('style','position:absolute;top:43%;left:63.5%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
             }
             document.getElementById('accountfound').innerHTML=xmlhttp.responseText;
         }

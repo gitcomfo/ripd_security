@@ -93,6 +93,8 @@ elseif (isset($_POST['submit1'])) {
 <script type="text/javascript" src="javascripts/jquery.js"></script>
 <script type="text/javascript" src="javascripts/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="javascripts/area.js"></script>
+<script type="text/javascript" src="javascripts/external/mootools.js"></script>
+<script type="text/javascript" src="javascripts/dg-filter.js"></script>
 <link rel="stylesheet" type="text/css" href="css/jquery.autocomplete.css"/>
 <style type="text/css">@import "css/bush.css";</style>
 <?php
@@ -559,11 +561,11 @@ if ($_GET['action'] == 'first') {
     </form>
     
     <script type="text/javascript">
-    var filter = new DG.Filter({
-        filterField: $('search_filter'),
-        filterEl: $('make_presentation_fillter')
-    });
-    </script>
+                var filter = new DG.Filter({
+                    filterField : $('search_box_filter'),
+                    filterEl : $('storeTable'),
+                    colIndexes : [1,2]
+                }); </script>
     <?php
 }
 include_once 'includes/footer.php';

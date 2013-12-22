@@ -85,7 +85,7 @@ function calculateInstalment(month) // for calculation instalment amount********
                }
                 else
                     {document.getElementById('empfound').style.visibility = "visible";
-                document.getElementById('empfound').setAttribute('style','position:absolute;top:36%;left:62.5%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('empfound').setAttribute('style','position:absolute;top:41%;left:61.5%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('empfound').innerHTML=xmlhttp.responseText;
         }
