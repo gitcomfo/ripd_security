@@ -91,37 +91,37 @@ if($holiday == 0 )
                                         echo "<td style='border: 1px solid #000; padding:0px !important;'><input name= 'empname[$db_slNo]' type='hidden' value='$db_empname' />$db_empname<input name='empid[$db_slNo]' type='hidden' value='$db_emp_id' /></td>";
                                         if($leave == 1)
                                         {
-                                             echo "<td style='border: 1px solid #000; padding:0px !important;'><input type='hidden' id='leave[$db_slNo]' name='atten[$db_slNo]' value='leave' />
+                                                echo "<td style='border: 1px solid #000; padding:0px !important;'><input type='hidden' id='leave[$db_slNo]' name='atten[$db_slNo]' value='leave' />
                                                     <input id='inleave[$db_slNo]' type='text' readonly style='width:100%;height:100%;' name='inleave[$db_slNo]' value='ছুটি' />                                          
                                                     </td>";
-                                             echo "<td style='border: 1px solid #000; padding:0px !important;'><textarea id='cause[$db_slNo]' name='cause[$db_slNo]' style='width:98%;height:100%;margin:0px !important' disabled=''></textarea></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><input id='intime[$db_slNo]' type='time' name='intime[$db_slNo]' value='09:00:00' style='height:100%;' disabled=''/></td>";
-                                        echo "<td  style='border: 1px solid #000; padding:0px !important;'><input id='outtime[$db_slNo]' type='time' name='outtime[$db_slNo]' value='17:00:00' style='height:100%;'disabled=''/></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><select id='min_gap[$db_slNo]' name='min_gap[$db_slNo]' style='width:100%;height:100%;font-size: 12px !important' disabled=''>
-                                        <option>-সিলেক্ট-</option>    
-                                        <option value='0' >নাই</option>    
-                                        <option value='15'>১৫ মিঃ</option>
-                                            <option value='20'>২০ মিঃ</option>
-                                            <option value='30'>৩০ মিঃ</option>
-                                            <option value='40'>৪০ মিঃ</option>
-                                            <option value='50'>৫০ মিঃ</option>
-                                            </select></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><textarea id='min_gap_des[$db_slNo]' name='min_gap_des[$db_slNo]' style='width:98%;height:100%;margin:0px !important' disabled=''></textarea></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><select id='maj_gap[$db_slNo]' name='maj_gap[$db_slNo]' onchange='setWorkandXtra(this.value,$db_slNo)' style='width:100%;height:100%;font-size: 12px !important' disabled=''>
-                                        <option selected>-সিলেক্ট-</option>     
-                                        <option value='0' >নাই</option>    
-                                        <option value='1'>১ ঘণ্টা</option>
-                                            <option value='1.5'>১.৫ ঘণ্টা</option>
-                                            <option value='2'>২ ঘণ্টা</option>
-                                            <option value='2.5'>২.৫ ঘণ্টা</option>
-                                            <option value='3'>৩ ঘণ্টা</option>
-                                            <option value='3.5'>৩.৫ ঘণ্টা</option>
-                                            <option value='4'>৪ ঘণ্টা</option>
-                                            </select></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><textarea id='maj_gap_des[$db_slNo]' name='maj_gap_des[$db_slNo]' style='width:98%;height:100%;margin:0px !important' disabled=''></textarea></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><input id='worktime[$db_slNo]' type='text' readonly style='width:100%;height:100%;' name='worktime[$db_slNo]' disabled=''/></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><input id='xtratime[$db_slNo]' type='text' readonly style='width:100%;height:100%;' name='xtratime[$db_slNo]' disabled=''/></td>";
-                                        echo "</tr>";
+                                                echo "<td style='border: 1px solid #000; padding:0px !important;'><textarea id='cause[$db_slNo]' name='cause[$db_slNo]' style='width:98%;height:100%;margin:0px !important' disabled=''></textarea></td>";
+                                                echo "<td style='border: 1px solid #000; padding:0px !important;'><input id='intime[$db_slNo]' type='time' name='intime[$db_slNo]' value='09:00:00' style='height:100%;' disabled=''/></td>";
+                                                echo "<td  style='border: 1px solid #000; padding:0px !important;'><input id='outtime[$db_slNo]' type='time' name='outtime[$db_slNo]' value='17:00:00' style='height:100%;'disabled=''/></td>";
+                                                echo "<td style='border: 1px solid #000; padding:0px !important;'><select id='min_gap[$db_slNo]' name='min_gap[$db_slNo]' style='width:100%;height:100%;font-size: 12px !important' disabled=''>
+                                                <option>-সিলেক্ট-</option>    
+                                                <option value='0' >নাই</option>    
+                                                <option value='15'>১৫ মিঃ</option>
+                                                    <option value='20'>২০ মিঃ</option>
+                                                    <option value='30'>৩০ মিঃ</option>
+                                                    <option value='40'>৪০ মিঃ</option>
+                                                    <option value='50'>৫০ মিঃ</option>
+                                                    </select></td>";
+                                                echo "<td style='border: 1px solid #000; padding:0px !important;'><textarea id='min_gap_des[$db_slNo]' name='min_gap_des[$db_slNo]' style='width:98%;height:100%;margin:0px !important' disabled=''></textarea></td>";
+                                                echo "<td style='border: 1px solid #000; padding:0px !important;'><select id='maj_gap[$db_slNo]' name='maj_gap[$db_slNo]' onchange='setWorkandXtra(this.value,$db_slNo)' style='width:100%;height:100%;font-size: 12px !important' disabled=''>
+                                                <option selected>-সিলেক্ট-</option>     
+                                                <option value='0' >নাই</option>    
+                                                <option value='1'>১ ঘণ্টা</option>
+                                                    <option value='1.5'>১.৫ ঘণ্টা</option>
+                                                    <option value='2'>২ ঘণ্টা</option>
+                                                    <option value='2.5'>২.৫ ঘণ্টা</option>
+                                                    <option value='3'>৩ ঘণ্টা</option>
+                                                    <option value='3.5'>৩.৫ ঘণ্টা</option>
+                                                    <option value='4'>৪ ঘণ্টা</option>
+                                                    </select></td>";
+                                                echo "<td style='border: 1px solid #000; padding:0px !important;'><textarea id='maj_gap_des[$db_slNo]' name='maj_gap_des[$db_slNo]' style='width:98%;height:100%;margin:0px !important' disabled=''></textarea></td>";
+                                                echo "<td style='border: 1px solid #000; padding:0px !important;'><input id='worktime[$db_slNo]' type='text' readonly style='width:100%;height:100%;' name='worktime[$db_slNo]' disabled=''/></td>";
+                                                echo "<td style='border: 1px solid #000; padding:0px !important;'><input id='xtratime[$db_slNo]' type='text' readonly style='width:100%;height:100%;' name='xtratime[$db_slNo]' disabled=''/></td>";
+                                                echo "</tr>";
                                         }
                                         else
                                         {
@@ -129,34 +129,34 @@ if($holiday == 0 )
                                                     <input type='radio' name='atten[$db_slNo]' value='yes' onclick = 'checkAttendance(this.value,$db_slNo)'/>উপস্থিত</br>
                                                     <input type='radio' name='atten[$db_slNo]' value='no'  onclick = 'checkAttendance(this.value,$db_slNo)' />অনুপস্থিত                                            
                                                     </td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><textarea id='cause[$db_slNo]' name='cause[$db_slNo]' style='width:98%;height:100%;margin:0px !important' disabled=''></textarea></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><input id='intime[$db_slNo]' type='time' name='intime[$db_slNo]' value='09:00:00' style='height:100%;' disabled=''/></td>";
-                                        echo "<td  style='border: 1px solid #000; padding:0px !important;'><input id='outtime[$db_slNo]' type='time' name='outtime[$db_slNo]' value='17:00:00' style='height:100%;' disabled=''/></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><select id='min_gap[$db_slNo]' name='min_gap[$db_slNo]' style='width:100%;height:100%;font-size: 12px !important' disabled=''>
-                                        <option>-সিলেক্ট-</option>    
-                                        <option value='0' >নাই</option>    
-                                        <option value='15'>১৫ মিঃ</option>
-                                            <option value='20'>২০ মিঃ</option>
-                                            <option value='30'>৩০ মিঃ</option>
-                                            <option value='40'>৪০ মিঃ</option>
-                                            <option value='50'>৫০ মিঃ</option>
-                                            </select></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><textarea id='min_gap_des[$db_slNo]' name='min_gap_des[$db_slNo]' style='width:98%;height:100%;margin:0px !important' disabled=''></textarea></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><select id='maj_gap[$db_slNo]' name='maj_gap[$db_slNo]' onchange='setWorkandXtra(this.value,$db_slNo)' style='width:100%;height:100%;font-size: 12px !important' disabled=''>
-                                        <option selected>-সিলেক্ট-</option>     
-                                        <option value='0' >নাই</option>    
-                                        <option value='1'>১ ঘণ্টা</option>
-                                            <option value='1.5'>১.৫ ঘণ্টা</option>
-                                            <option value='2'>২ ঘণ্টা</option>
-                                            <option value='2.5'>২.৫ ঘণ্টা</option>
-                                            <option value='3'>৩ ঘণ্টা</option>
-                                            <option value='3.5'>৩.৫ ঘণ্টা</option>
-                                            <option value='4'>৪ ঘণ্টা</option>
-                                            </select></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><textarea id='maj_gap_des[$db_slNo]' name='maj_gap_des[$db_slNo]' style='width:98%;height:100%;margin:0px !important' disabled=''></textarea></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><input id='worktime[$db_slNo]' type='text' readonly style='width:100%;height:100%;' name='worktime[$db_slNo]' disabled=''/></td>";
-                                        echo "<td style='border: 1px solid #000; padding:0px !important;'><input id='xtratime[$db_slNo]' type='text' readonly style='width:100%;height:100%;' name='xtratime[$db_slNo]' disabled=''/></td>";
-                                        echo "</tr>";
+                                            echo "<td style='border: 1px solid #000; padding:0px !important;'><textarea id='cause[$db_slNo]' name='cause[$db_slNo]' style='width:98%;height:100%;margin:0px !important' disabled=''></textarea></td>";
+                                            echo "<td style='border: 1px solid #000; padding:0px !important;'><input id='intime[$db_slNo]' type='time' name='intime[$db_slNo]' value='09:00:00' style='height:100%;' disabled=''/></td>";
+                                            echo "<td  style='border: 1px solid #000; padding:0px !important;'><input id='outtime[$db_slNo]' type='time' name='outtime[$db_slNo]' value='17:00:00' style='height:100%;' disabled=''/></td>";
+                                            echo "<td style='border: 1px solid #000; padding:0px !important;'><select id='min_gap[$db_slNo]' name='min_gap[$db_slNo]' style='width:100%;height:100%;font-size: 12px !important' disabled=''>
+                                            <option>-সিলেক্ট-</option>    
+                                            <option value='0' >নাই</option>    
+                                            <option value='15'>১৫ মিঃ</option>
+                                                <option value='20'>২০ মিঃ</option>
+                                                <option value='30'>৩০ মিঃ</option>
+                                                <option value='40'>৪০ মিঃ</option>
+                                                <option value='50'>৫০ মিঃ</option>
+                                                </select></td>";
+                                            echo "<td style='border: 1px solid #000; padding:0px !important;'><textarea id='min_gap_des[$db_slNo]' name='min_gap_des[$db_slNo]' style='width:98%;height:100%;margin:0px !important' disabled=''></textarea></td>";
+                                            echo "<td style='border: 1px solid #000; padding:0px !important;'><select id='maj_gap[$db_slNo]' name='maj_gap[$db_slNo]' onchange='setWorkandXtra(this.value,$db_slNo)' style='width:100%;height:100%;font-size: 12px !important' disabled=''>
+                                            <option selected>-সিলেক্ট-</option>     
+                                            <option value='0' >নাই</option>    
+                                            <option value='1'>১ ঘণ্টা</option>
+                                                <option value='1.5'>১.৫ ঘণ্টা</option>
+                                                <option value='2'>২ ঘণ্টা</option>
+                                                <option value='2.5'>২.৫ ঘণ্টা</option>
+                                                <option value='3'>৩ ঘণ্টা</option>
+                                                <option value='3.5'>৩.৫ ঘণ্টা</option>
+                                                <option value='4'>৪ ঘণ্টা</option>
+                                                </select></td>";
+                                            echo "<td style='border: 1px solid #000; padding:0px !important;'><textarea id='maj_gap_des[$db_slNo]' name='maj_gap_des[$db_slNo]' style='width:98%;height:100%;margin:0px !important' disabled=''></textarea></td>";
+                                            echo "<td style='border: 1px solid #000; padding:0px !important;'><input id='worktime[$db_slNo]' type='text' readonly style='width:100%;height:100%;' name='worktime[$db_slNo]' disabled=''/></td>";
+                                            echo "<td style='border: 1px solid #000; padding:0px !important;'><input id='xtratime[$db_slNo]' type='text' readonly style='width:100%;height:100%;' name='xtratime[$db_slNo]' disabled=''/></td>";
+                                            echo "</tr>";
                                         }
                                          $db_slNo++;
                                          $leave = 0;

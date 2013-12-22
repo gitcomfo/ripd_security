@@ -4,6 +4,7 @@ include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
 $loginUSERname = $_SESSION['UserID'] ;
+$loginUSERid = $_SESSION['userIDUser'] ;
 
 $sql = "INSERT INTO employee_attendance(emp_intime, emp_outtime, emp_worktime ,emp_extratime , date_of_atnd , emp_atnd_type , present_type ,emp_atnd_desc, emp_min_gaptime, emp_min_gapdesc, emp_maj_gaptime, emp_maj_gapdesc, atnd_making_date, month_no, year_no,emp_user_id, atnd_maker_id  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,NOW(),?,?,?,?)";
 $stmt = $conn->prepare($sql);
@@ -31,9 +32,7 @@ switch($db_catagory)
                    }          
 if(isset($_POST['submit']))
     {
-    $cfsrslt = mysql_query("SELECT * FROM cfs_user WHERE user_name = '$loginUSERname';");
-    $cfsrow = mysql_fetch_assoc($cfsrslt);
-    $makerid = $cfsrow['idUser'];
+    $makerid = $loginUSERid;
     $atten_date = $_POST['date'];
     $count = $_POST['count'];
     $attendance = $_POST['atten'];
@@ -47,7 +46,7 @@ if(isset($_POST['submit']))
     $maj_gap_des = $_POST['maj_gap_des'];
     $worktime = $_POST['worktime'];
     $xtratime = $_POST['xtratime'];
-    for($i=0;$i<$count;$i++)
+    for($i=1;$i<$count;$i++)
     {
         $month = date("n");
         $year=date('Y');
@@ -121,7 +120,8 @@ function setWorkandXtra(major,i)
         {
             xtratime = xtradiffer;
         }
-            document.getElementById("worktime["+i+"]").value = worktime ;
+        var work = worktime - xtratime;
+            document.getElementById("worktime["+i+"]").value = work ;
             document.getElementById("xtratime["+i+"]").value = xtratime;
 }
 </script>
@@ -177,9 +177,7 @@ function getdate(selecteddate,onsid) // date by date employee leave condition ch
                                         <th style='border-right: 1px solid #000099;border-top: 1px solid #000099;' width="7%">এক্সট্রা টাইম</th>
                                         </tr>
                                 </thead>
-                                <tbody style="font-size: 12px !important" id="show">
-                                
-                                </tbody>
+                                <tbody style="font-size: 12px !important" id="show"></tbody>
                             </table>
                            </td>
                     </tr>    

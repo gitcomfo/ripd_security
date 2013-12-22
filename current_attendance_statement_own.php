@@ -4,8 +4,16 @@ include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
 $loginUSERname = $_SESSION['acc_holder_name'] ;
+$loginUSERid = $_SESSION['userIDUser'] ;
+$currentMonth = date('n');
+$currentYear = date('Y');
+$select_attendance = mysql_query("SELECT COUNT(idempattend) AS countdays FROM employee_attendance 
+    WHERE year_no ='$currentYear' AND month_no='$currentMonth' AND  emp_user_id = $loginUSERid
+     GROUP BY  emp_atnd_type");
+$attenrow = mysql_fetch_assoc($select_attendance);
+$presentdays = $attenrow[0];
+
 ?>
-<title>নিয়মিত কর্মচারী হাজিরা</title>
 <style type="text/css"> @import "css/bush.css";</style>
 
     <div class="main_text_box" style="width: 100% !important;">
@@ -13,7 +21,7 @@ $loginUSERname = $_SESSION['acc_holder_name'] ;
           <div>
            <form method="POST"  name="frm" action="">	
                <table  class="formstyle" style="width: 90% !important; font-family: SolaimanLipi !important;margin:0 auto !important;">          
-                    <tr><th colspan="2" style="text-align: center;">কর্মচারী হাজিরা বিবরণ</th></tr>
+                    <tr><th colspan="2" style="text-align: center;">কর্মচারীর ব্যক্তিগত হাজিরা বিবরণ</th></tr>
                     <tr><td colspan="13" style="color: sienna; text-align: center; font-size: 20px;"><b><?php echo $loginUSERname;?></b></td></tr>
                     <tr><td colspan="13" style="color: sienna; text-align: center; font-size: 16px;"> চলতি মাস (<?php echo date('F');?>)-এর হাজিরা বিবরণ</td></tr>
                     <tr>

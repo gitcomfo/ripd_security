@@ -11,7 +11,6 @@ function get_catagory() {
 }
 
 ?>
-<title>মেইক প্রোডাক্ট ক্যাটাগরি এন্ড টাইপ</title>
 <style type="text/css">@import "css/bush.css";</style>
 <link rel="stylesheet" href="css/tinybox.css" type="text/css">
 <script src="javascripts/tinybox.js" type="text/javascript"></script>
@@ -26,7 +25,7 @@ function get_catagory() {
     <div>           
         <form method="POST" onsubmit="" >	
             <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          
-                <tr><th style="text-align: center" colspan="2"><h1>রিপড প্রোডাক্ট চার্ট</h1></th></tr>
+                <tr><th style="text-align: center" colspan="2"><h1>প্রিভিয়াস প্রোডাক্ট চার্ট</h1></th></tr>
               
                 <tr>
                     <td>
