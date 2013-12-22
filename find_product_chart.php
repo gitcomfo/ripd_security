@@ -242,7 +242,6 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                                                             {
                                                                 $db_proname=$row["pro_productname"];
                                                                 $db_unit=$row["pro_unit"];
-                                                                $db_article=$row["pro_article"];
                                                                 $db_procode=$row["pro_code"];
                                                                 echo '<tr>';
                                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($slNo).'</div></td>';
