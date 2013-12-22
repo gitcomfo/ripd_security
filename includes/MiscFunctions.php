@@ -215,7 +215,7 @@ function getAwardType($aType){
 function getRandomPassword()
 {
         $new_pass_str = "";
-    for ($i = 0; $i < 8; $i++) {
+    for ($i = 0; $i < 10; $i++) {
         $arr_rand_generator = array("num", "cap");
         $rand_controller = array_rand($arr_rand_generator);
         if ($rand_controller == "num")

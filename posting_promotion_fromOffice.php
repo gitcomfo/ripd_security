@@ -30,9 +30,9 @@ include 'includes/header.php';
 
 <div class="column6">
     
-    <?php if($_GET['iffimore']=='1m10a01i11n'){?>
+    <?php if($_GET['iffimore'] != 'll1i1s0t01'){?>
     <div class="main_text_box">
-        <div style="padding-left: 110px;"><a href="index.php?apps=HRE"><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 110px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
         <div>
             <table  class='formstyle'>       
                 <tr><th style='text-align: center;'>সকল অফিসের তালিকা</th></tr>
@@ -84,7 +84,7 @@ include 'includes/header.php';
                                         echo "<td>$db_setteleOfficeAN</td>";
                                         echo "<td>$db_setteleOfficeBranch</td>";
                                         echo "<td>$db_setteleOfficeAddress</td>";
-                                        echo "<td><a href='settle_office.php?iffimore=ll1i1s0t01&i010d10=$db_setteleOfficeID'>কর্মচারীদের তালিকা</a></td>";
+                                        echo "<td><a href='posting_promotion_fromOffice.php?iffimore=ll1i1s0t01&i010d10=$db_setteleOfficeID'>কর্মচারীদের তালিকা</a></td>";
                                         echo "</tr>";
                                         }
                                     ?>
@@ -108,7 +108,7 @@ include 'includes/header.php';
             {
     ?>
         <div class="main_text_box">
-        <div style="padding-left: 110px;"><a href="settle_office.php?iffimore=1m10a01i11n"><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 110px;"><a href="posting_promotion_fromOffice.php"><b>ফিরে যান</b></a></div>
         <div>
             <?php
             $get_office_id = $_GET['i010d10'];
@@ -116,7 +116,7 @@ include 'includes/header.php';
             $row = mysql_fetch_array($sql);
             $office_name = $row['office_name'];
             echo "<table  class='formstyle'>";          
-                echo "<tr><th colspan='9' style='text-align: center;'>$office_name - এ কর্মচারীদের তালিকা</th></tr>";
+                echo "<tr><th colspan='10' style='text-align: center;'>$office_name - এ কর্মচারীদের তালিকা</th></tr>";
                 echo "<tr align='left' id='table_row_odd'>
                     <td>ক্রম</td>
                     <td>কর্মচারীদের নাম</td>
@@ -125,7 +125,7 @@ include 'includes/header.php';
                     <td>গ্রেডের স্থায়িত্বকাল</td>
                     <td>দায়িত্ব</td>
                     <td>অফিসে সময়কাল</td>
-                    <td></td>
+                    <td colspan='3'></td>
                 </tr>";
                 echo "<tr>
                     <td>১</td>
@@ -135,7 +135,9 @@ include 'includes/header.php';
                     <td>২ বছর ৩ মাস</td>
                     <td>কেয়ারটেকার</td>
                     <td>১৬ মাস</td>
-                    <td><a href='posting_to.php?0to1o1ff01i0c1e0=$get_office_id&bkprnt=settle_office.php?iffimore=ll1i1s0t01%%i010d10=$get_office_id'>পোস্টিং করুন</a></td>
+                    <td><a href='posting_to.php?0to1o1ff01i0c1e0=$get_office_id&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t01%%i010d10=$get_office_id'>পোস্টিং করুন</a></td>
+                    <td><a href='promotion_to.php?0to1o1ff01i0c1e0=$get_office_id&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t01%%i010d10=$get_office_id'>প্রোমোশন করুন</a></td>
+                    <td><a href='postingNpromotion.php?0to1o1ff01i0c1e0=$get_office_id&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t01%%i010d10=$get_office_id'>পোস্টিং এন্ড প্রোমোশন</a></td>
                 </tr>"; // give the user id in the the place of $get_office_id
             echo "</table>";
             ?>

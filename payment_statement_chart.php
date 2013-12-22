@@ -172,7 +172,7 @@ function get_catagory() {
 </script>  
 
 <div class="main_text_box">
-    <div style="padding-left: 112px;"><a href=""><b>ফিরে যান</b></a></div>
+    <div style="padding-left: 112px;"><a href="personal_reporting.php"><b>ফিরে যান</b></a></div>
     <div>
         <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          
             <tr><th style="text-align: center" colspan="2"><h1>পেমেন্ট স্টেটমেন্ট চার্ট</h1></th></tr>
@@ -184,7 +184,7 @@ function get_catagory() {
             <tr>
                 <td style="text-align: center"><b>মাধ্যম</b></br>
                     <select class="box" id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value);showCatProducts(this.value);" style="width: 200px;font-family: SolaimanLipi !important;">
-                        <?php echo get_catagory(); ?>
+                        <?php //echo get_catagory(); ?>
                     </select>
                 </td>
             </tr>
@@ -193,7 +193,7 @@ function get_catagory() {
                     <table style="margin: 0 auto;" cellspacing="0" cellpadding="0">
                         <thead>
                             <tr id="table_row_odd">
-                                <td width="11%" style="border: solid black 1px;"><div align="center"><strong>ক্রমিক নং</strong></div></td>
+                                <td width="11%" style="border: solid black 1px;"><div align="center"><strong>ক্রম</strong></div></td>
                                 <td width="20%"  style="border: solid black 1px;"><div align="center"><strong>তারিখ</strong></div></td>
                                 <td width="30%"  style="border: solid black 1px;"><div align="center"><strong>পে আউট মাধ্যম</strong></div></td>
                                 <td width="11%"  style="border: solid black 1px;"><div align="center"><strong>ট্যাক্স / চার্জ</strong></div></td>
@@ -205,6 +205,7 @@ function get_catagory() {
 //if (isset($_GET['code']))
 //     	{	
 //                    $G_summaryID = $_GET['code'];
+                            /*
                             $slNo = 1;
                             $result = mysql_query("SELECT * FROM product_chart ORDER BY pro_code ");
                             while ($row = mysql_fetch_assoc($result)) {
@@ -221,9 +222,11 @@ function get_catagory() {
                                 echo '</tr>';
                                 $slNo++;
                             }
+                             */
                             ?>
                         </tbody>
                     </table>
+                </td>
             </tr>
         </table>
     </div>

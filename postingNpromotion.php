@@ -23,6 +23,11 @@ include 'includes/header.php';
 <script type="text/javascript">
     function selectOffice()
     { TINY.box.show({iframe:'includes/select_office.php',width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+    
+    function promotionSalaryUpdate()
+    {
+        TINY.box.show({iframe:'includes/promotion_salary_update.php',width:800,height:300,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); 
+    }
 </script>
 
 <div class="column6">
@@ -135,8 +140,38 @@ include 'includes/header.php';
                             </table>
                             </filedset></td>
                     </tr>';
+                echo '<tr>
+                     <td colspan="4">
+                     <fieldset style="border:3px solid #686c70;width: 99%;">
+                            <legend style="color: brown;font-size: 14px;">প্রোমোশন</legend>
+                            <table>
+                            <tr>
+                    <td colspan="2"style="width: 50%; text-align: right">কর্মচারীর ধরণ</td>
+                    <td colspan="2" style="width: 50%; text-align: left"> : </td>
+                </tr>
+                            <tr>
+                    <td style="width: 25%; text-align: right">রানিং গ্রেড</td>
+                    <td style="width: 25%; text-align: left"> : </td>
+                    <td style="width: 25%; text-align: right">নেক্সট গ্রেড</td>
+                    <td style="width: 25%; text-align: left"> : <input type="text" class="box" name="promotion" style="width: 100px"/></td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right">রানিং সেলারি</td>
+                    <td style="width: 25%; text-align: left"> : </td>
+                    <td style="width: 25%; text-align: right">নেক্সট সেলারি</td>
+                    <td style="width: 25%; text-align: left"> : <input type="text" class="box" name="promotion" style="width: 100px"/></td>
+                </tr>
+                <tr>
+                    <td style="width: 25%; text-align: right">রানিং দায়িত্ব / পোস্ট</td>
+                    <td style="width: 25%;"> : </td>
+                    <td style="width: 25%; text-align: right">নেক্সট পোস্ট</td>
+                    <td style="width: 25%;"> : <input type="text" class="box" name="promotion" style="width: 100px"/></td>
+                </tr>
+                            </table>
+                            </filedset></td>
+                    </tr>';
                 echo "<tr>                    
-                                    <td colspan='4' style='text-align: center' ><input class='btn' style ='font-size: 12px' type='reset' name='reset' value='পোস্টিং' /></td>                           
+                                    <td colspan='4' style='text-align: center' ><input class='btn' style ='font-size: 12px; width:200px' type='reset' name='reset' value='পোস্টিং এন্ড প্রোমোশন' /></td>                           
                             </tr>";
                 echo "</table>";
                 ?>

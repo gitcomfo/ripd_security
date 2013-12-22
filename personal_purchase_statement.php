@@ -171,7 +171,7 @@ function get_catagory() {
 </script>  
 
 <div class="main_text_box">
-    <div style="padding-left: 112px;"><a href=""><b>ফিরে যান</b></a></div>
+    <div style="padding-left: 112px;"><a href="personal_reporting.php"><b>ফিরে যান</b></a></div>
     <div>           
         <form method="POST" onsubmit="" >	
             <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          
@@ -201,7 +201,7 @@ function get_catagory() {
                 </tr>
                 <tr>
                     <td>
-                        <fieldset   style="border: 3px solid #686c70 ; width: 99%;font-family: SolaimanLipi !important;">
+                        <fieldset style="border: 3px solid #686c70 ; width: 99%;font-family: SolaimanLipi !important;">
                             <legend style="color: brown;font-size: 14px;">personal perchase statement</legend>
                             <div id="resultTable">
                                 <table style="width: 98%;margin: 0 auto;" cellspacing="0" cellpadding="0">

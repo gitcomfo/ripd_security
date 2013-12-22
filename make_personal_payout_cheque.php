@@ -61,7 +61,7 @@ function viewCheque()
 </script>
 
     <div class="main_text_box">
-        <div id="noprint" style="padding-left: 110px;"><a href=""><b>ফিরে যান</b></a></div>
+        <div id="noprint" style="padding-left: 110px;"><a href="personal_accounting_balance.php"><b>ফিরে যান</b></a></div>
         <div>           
             <form method="POST" onsubmit="" name="cheque" action="">	
                 <table  class="formstyle" style="width: 80%;font-family: SolaimanLipi !important; font-size: 14px;">          

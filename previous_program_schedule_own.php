@@ -9,7 +9,7 @@ $loginUSERname = $_SESSION['acc_holder_name'] ;
 <style type="text/css"> @import "css/bush.css";</style>
 
     <div class="main_text_box" style="width: 100% !important;">
-        <div style="padding-left: 50px;"><a href=""><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 50px;"><a href="personal_official_profile_employee.php"><b>ফিরে যান</b></a></div>
           <div>
            <form method="POST"  name="frm" action="">	
                <table  class="formstyle" style="width: 90% !important; font-family: SolaimanLipi !important;margin:0 auto !important;">          
