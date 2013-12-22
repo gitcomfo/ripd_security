@@ -52,7 +52,7 @@ if(isset($_POST['submit']))
         <div style="padding-left: 50px;"><a href="personal_official_profile_employee.php"><b>ফিরে যান</b></a></div>
           <div>
                <table  class="formstyle" style="width: 90% !important; font-family: SolaimanLipi !important;margin:0 auto !important;">          
-                    <tr><th colspan="2" style="text-align: center;">কর্মচারীর ব্যক্তিগত হাজিরা বিবরণ</th></tr>
+                    <tr><th colspan="2" style="text-align: center;">কর্মচারীর বাক্তিগত হাজিরা বিবরণ</th></tr>
                     <tr><td colspan="2" style="color: sienna; text-align: center; font-size: 20px;"><b><?php echo $loginUSERname;?></b></td></tr>
                     <tr><td colspan="2" style="color: sienna; text-align: center; font-size: 16px;"> পূর্বের হাজিরা বিবরণ</td></tr>
                     <tr>
