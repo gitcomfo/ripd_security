@@ -100,7 +100,7 @@ $x= $_GET['id'];
   {
      $off_name = $_POST['office_name'];
     $off_add = $_POST['office_address'];
-    $offup="UPDATE `ripd_db_comfosys`.`office` SET `office_name` = '$off_name', `office_details_address` = '$off_add' WHERE `office`.`idOffice` =$ofid AND `office`.`Thana_idThana` =$off_thana;";
+    $offup="UPDATE `office` SET `office_name` = '$off_name', `office_details_address` = '$off_add' WHERE `office`.`idOffice` =$ofid AND `office`.`Thana_idThana` =$off_thana;";
     $offupsql = mysql_query($offup) or exit('query failed: '.mysql_error());
     echo "<script type='text/javascript'>window.location.href = window.location; </script>";
      }
@@ -109,7 +109,7 @@ $x= $_GET['id'];
       $b_space = $_POST['office_space'];
     $b_type = $_POST['building_type'];
     $b_floor = $_POST['floor_number'];
-    $infoup="UPDATE `ripd_db_comfosys`.`ons_information` SET `space` = '$b_space', `building_type` = '$b_type', `floor` = '$b_floor' WHERE `ons_information`.`idons_information` =$info_id  AND `ons_information`.`ons_relation_idons_relation` =$idons;";
+    $infoup="UPDATE `ons_information` SET `space` = '$b_space', `building_type` = '$b_type', `floor` = '$b_floor' WHERE `ons_information`.`idons_information` =$info_id  AND `ons_information`.`ons_relation_idons_relation` =$idons;";
     $infoupsql = mysql_query($infoup) or exit('query failed: '.mysql_error());
     echo "<script type='text/javascript'>window.location.href = window.location; </script>";
   }
@@ -130,9 +130,9 @@ $x= $_GET['id'];
      $deco1 = $_POST['decoration1'];
      $deco2 = $_POST['decoration2'];
      $deco = $deco1.".".$deco2;
-    $costup="UPDATE `ripd_db_comfosys`.`ons_cost` SET `rent`= '$rent', `current_bill` = '$e_bill', `water_bill` = '$w_bill',`advanced_amount` = '$adv_pay', `decoration` = '$deco' WHERE `ons_cost`.`idons_cost` =$costid AND `ons_cost`.`ons_relation_idons_relation` =$idons;";
+    $costup="UPDATE `ons_cost` SET `rent`= '$rent', `current_bill` = '$e_bill', `water_bill` = '$w_bill',`advanced_amount` = '$adv_pay', `decoration` = '$deco' WHERE `ons_cost`.`idons_cost` =$costid AND `ons_cost`.`ons_relation_idons_relation` =$idons;";
   $costsql = mysql_query($costup) or exit('query failed: '.mysql_error());
-    $otherdel = "DELETE FROM `ripd_db_comfosys`.`ons_cost_others` WHERE `ons_cost_others`.`ons_cost_idons_cost` = $costid;";
+    $otherdel = "DELETE FROM `ons_cost_others` WHERE `ons_cost_others`.`ons_cost_idons_cost` = $costid;";
     $delsql = mysql_query($otherdel) or exit('query failed: '.mysql_error());
     $sub = $_POST['sub'];
     $quan1 = $_POST['quantity1'];
@@ -240,7 +240,7 @@ $x= $_GET['id'];
      $own_mbl = $_POST['mobile_number'];
      $own_mail = $_POST['mail_address'];
      $own_valid = $_POST['validity'];
-    $deedup="UPDATE `ripd_db_comfosys`.`ons_deed` SET `owner_name`='$own_name',`owner_address` = '$own_add', `cell_number` = '$own_mbl', `owner_email`='$own_mail', `owner_photo`='$image_path', `owner_signature`='$sing_path', `expire_date`='$own_valid', `scan_documents`='$scan_path', `owner_fingerprint`='$finger_path' WHERE `ons_deed`.`idons_deed` =$deedid AND `ons_deed`.`ons_relation_idons_relation` =$idons;";
+    $deedup="UPDATE `ons_deed` SET `owner_name`='$own_name',`owner_address` = '$own_add', `cell_number` = '$own_mbl', `owner_email`='$own_mail', `owner_photo`='$image_path', `owner_signature`='$sing_path', `expire_date`='$own_valid', `scan_documents`='$scan_path', `owner_fingerprint`='$finger_path' WHERE `ons_deed`.`idons_deed` =$deedid AND `ons_deed`.`ons_relation_idons_relation` =$idons;";
     $deedupsql = mysql_query($deedup) or exit('query failed: '.mysql_error());
     echo "<script type='text/javascript'>window.location.href = window.location; </script>";
   }
@@ -547,6 +547,5 @@ xmlhttp.send();
                 </fieldset>
             </form>
         </div>
-
      </div>         
 <?php include_once 'includes/footer.php'; ?>

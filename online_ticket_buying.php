@@ -436,7 +436,7 @@ function showTicket($Tid)
 function QueryFailedMsg($msg)
 {
     echo '<table  class="formstyle" style="color: #3333CC; font-weight:600;">          
-              <tr><th colspan="4" style="text-align: center;">টিকেট সেলিং</th></tr>
+              <tr><th colspan="4" style="text-align: center;">টিকেট ক্রয়</th></tr>
               <tr><td colspan="2" style="padding-left: 0;"></br>
               <span style="color: red;font-size: 15px; text-decoration: blink;padding-left: 200px;">';
     echo $msg;
@@ -664,7 +664,7 @@ else {
             <div>
                 <form method="POST" onsubmit="" action="online_ticket_buying.php?opt=submit_ticket">	
                     <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
-                        <tr><th colspan="4" style="text-align: center;">টিকেট সেলিং</th></tr>
+                        <tr><th colspan="4" style="text-align: center;">টিকেট ক্রয়</th></tr>
                         <tr>
                             <td style="width: 40%">প্রেজেন্টেশন / প্রোগ্রাম / ট্রেইনিং / ট্রাভেল</td>
                             <td>: <select class="selectOption" name="type" id="type" onchange="getList(this.value)" style="width: 170px !important;">

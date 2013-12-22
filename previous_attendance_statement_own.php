@@ -13,7 +13,7 @@ $loginUSERname = $_SESSION['acc_holder_name'] ;
           <div>
            <form method="POST"  name="frm" action="">	
                <table  class="formstyle" style="width: 90% !important; font-family: SolaimanLipi !important;margin:0 auto !important;">          
-                    <tr><th colspan="2" style="text-align: center;">কর্মচারী হাজিরা বিবরণ</th></tr>
+                    <tr><th colspan="2" style="text-align: center;">কর্মচারীর বাক্তিগত হাজিরা বিবরণ</th></tr>
                     <tr><td colspan="2" style="color: sienna; text-align: center; font-size: 20px;"><b><?php echo $loginUSERname;?></b></td></tr>
                     <tr><td colspan="2" style="color: sienna; text-align: center; font-size: 16px;"> পূর্বের হাজিরা বিবরণ</td></tr>
                     <tr>
