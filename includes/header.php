@@ -39,7 +39,14 @@ include_once 'connectionPDO.php';
                                 <li><a href="awards.php" title="">এওয়ার্ড</a></li>
                             </ul>
                         </li>
-                        <li><a href="masterChart_part_1.php">মূল পণ্যতালিকা</a></li>
+                        <li><a>প্রোডাক্ট চার্ট</a>
+                            <ul>
+                                <li><a href="masterChart_part_1.php">মূল পণ্যতালিকা</a></li>
+                                <li><a href="product_finder.php" title="">প্রোডাক্ট চার্ট এন্ড ফাইন্ডার</a></li>
+                                <li><a href="product_price_finder.php" title="">প্রোডাক্ট প্রাইজ ফাইন্ডার</a></li>
+                                <li><a href="find_product_chart.php" title="">ফাইন্ড প্রাতিষ্ঠানিক চার্ট</a></li>
+                            </ul>
+                        </li>
                         <li><a>যোগাযোগ</a>
                             <ul>
                                 <li><a href="officeNcontact.php">অফিস এন্ড কন্টাক্ট</a></li>

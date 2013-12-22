@@ -10,7 +10,7 @@ include_once 'includes/MiscFunctions.php';
 <script src="javascripts/tinybox.js" type="text/javascript"></script>
 
 <div class="main_text_box">
-    <div style="padding-left: 110px;"><a href="#"><b>ফিরে যান</b></a></div>
+    <div style="padding-left: 110px;"><a href="personal_official_profile_employee.php"><b>ফিরে যান</b></a></div>
     <div>
         <table  class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          
             <tr><th colspan="2" style="text-align: center;">কারেন্ট পেনশন এমাউন্ট</th></tr>

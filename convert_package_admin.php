@@ -14,7 +14,7 @@ $db_onsid = $emprow['idUser'];
 <link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
 
 <div class="main_text_box">
-    <div style="padding-left: 110px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
+    <div style="padding-left: 110px;"><a href="crm_management.php"><b>ফিরে যান</b></a></div>
     <div>
         <form method="POST" onsubmit="" name="" enctype="multipart/form-data" action="">	
             <table  class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          

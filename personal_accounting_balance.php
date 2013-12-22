@@ -18,7 +18,7 @@ include_once 'includes/columnViewAccount.php';
             <th colspan="2">টাকা উঠানোর সিস্টেম</th>
         </tr>
         <tr>
-            <td colspan="2"><a href="#">চেক মেইকিং ফর আউট</a></td>
+            <td colspan="2"><a href="make_personal_payout_cheque.php">চেক মেইকিং ফর আউট</a></td>
         </tr>
     </table>
 </div>
