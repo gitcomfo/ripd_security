@@ -177,7 +177,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
             <div>           
                 <form method="POST" onsubmit="" >	
                     <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          
-                        <tr><th style="text-align: center" colspan="2"><h1>রিপড প্রোডাক্ট চার্ট</h1></th></tr>
+                        <tr><th style="text-align: center" colspan="2"><h1>প্রোডাক্ট প্রাইজ ফাইন্ডার</h1></th></tr>
                         <tr>
                             <td>
                                 <fieldset style="border:3px solid #686c70;width: 99%;">
