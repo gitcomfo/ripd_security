@@ -5,11 +5,39 @@ include_once 'includes/MiscFunctions.php';
 
 $loginUSERname = $_SESSION['acc_holder_name'] ;
  $loginUSERid = $_SESSION['userIDUser'] ;
+ 
+$select_total_attendance = mysql_query("SELECT COUNT(idempattend) FROM employee,employee_attendance 
+    WHERE  cfs_user_idUser = $loginUSERid AND idEmployee = emp_user_id ");
+    $totalrow = mysql_fetch_assoc($select_total_attendance);
+    $totalworkingDays = $totalrow['COUNT(idempattend)'];
+
+    $sql_total_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
+    $status1 = "present";
+    $sql_total_attend->execute(array($status1,$loginUSERid));
+    $trow1 = $sql_total_attend->fetchAll();
+    foreach ($trow1 as $value) {
+        $total_presentDays = $value['COUNT(idempattend)'];
+    }
+    $status2 ="absent";
+    $sql_total_attend->execute(array($status2,$loginUSERid));
+    $trow2 = $sql_total_attend->fetchAll();
+    foreach ($trow2 as $value) {
+        $total_absentDays = $value['COUNT(idempattend)'];
+    }
+    $status3 = "leave";
+    $sql_total_attend->execute(array($status3,$loginUSERid));
+    $trow3 = $sql_total_attend->fetchAll();
+    foreach ($trow3 as $value) {
+        $total_leaveDays = $value['COUNT(idempattend)'];
+    }
+    $totalattendPercent = ($total_presentDays / $totalworkingDays) * 100;
 
 if(isset($_POST['submit']))
 {
     $p_month = $_POST['month'];;
     $p_year = $_POST['year'];
+    $monthName = date("F", mktime(0, 0, 0, $p_month, 10));
+    
     $select_attendance = mysql_query("SELECT COUNT(idempattend) FROM employee,employee_attendance 
     WHERE   year_no ='$p_year' AND month_no='$p_month' AND  cfs_user_idUser = $loginUSERid AND idEmployee = emp_user_id ");
     $row = mysql_fetch_assoc($select_attendance);
@@ -103,21 +131,21 @@ if(isset($_POST['submit']))
                                 <legend style="color: brown">মোট সারসংক্ষেপ</legend>
                                 <table>
                                     <tr>
-                                        <td >হাজিরার হার :</td>
-                                        <td > %</td>
-                                    </tr>
-                                    <tr>
-                                        <td >মোট কার্যদিবস :</td>
-                                        <td > দিন</td>
-                                    </tr>
-                                    <tr>
-                                        <td>উপস্থিতি :</td>
-                                        <td> দিন</td>
-                                        <td>অনুপস্থিতি :</td>
-                                        <td> দিন</td>
-                                        <td>ছুটি :</td>
-                                        <td> দিন</td>
-                                    </tr>
+                                            <td > হাজিরার হার :</td>
+                                            <td ><?php echo english2bangla($totalattendPercent);?> %</td>
+                                        </tr>
+                                        <tr>
+                                            <td >মোট কার্যদিবস :</td>
+                                            <td ><?php echo english2bangla($totalworkingDays);?> দিন</td>
+                                        </tr>
+                                        <tr>
+                                            <td>উপস্থিতি :</td>
+                                            <td><?php echo english2bangla($total_presentDays);?> দিন</td>
+                                            <td>অনুপস্থিতি :</td>
+                                            <td><?php echo english2bangla($total_absentDays);?> দিন</td>
+                                            <td>ছুটি :</td>
+                                            <td><?php echo english2bangla($total_leaveDays);?> দিন</td>
+                                        </tr>
                                 </table>
                             </fieldset>
                         </td>
@@ -126,10 +154,10 @@ if(isset($_POST['submit']))
                     <td colspan="2">
                         <table cellspacing="0" cellpadding="0">
                             <tr>
-                                <td colspan="4" style="text-align: center;color: sienna; text-align: center; font-size: 20px;"></br> <?php echo "মাস";?> -এর হাজিরা বিবরণ </td>
+                                <td colspan="5" style="text-align: center;color: sienna; text-align: center; font-size: 20px;"></br> <?php echo $monthName.", ".$p_year;?> -এর হাজিরা বিবরণ </td>
                             </tr>
                             <tr>
-                                <td colspan="4" style="text-align: center;">
+                                <td colspan="5" style="text-align: center;">
                                     <fieldset style="border: #686c70 solid 3px;width: 60%;margin-left: 20%;">
                                         <legend style="color: brown">মোট সারসংক্ষেপ</legend>
                                         <table>
@@ -158,11 +186,30 @@ if(isset($_POST['submit']))
                                         <td style='border: 1px solid #000099;text-align: center' >স্ট্যাটাস</td>
                                         <td style='border: 1px solid #000099;text-align: center'>ইন টাইম</td>
                                         <td style='border: 1px solid #000099;text-align: center'>আউট টাইম</td>
+                                        <td style='border: 1px solid #000099;text-align: center'>ওভারটাইম (ঘণ্টা)</td>
                             </tr>
                                 <tbody style="font-size: 12px !important">
-                                <?php
-//                                    $db_cfsid = $_SESSION['userIDUser'];
-//                                    $sel_attendace = mysql_query("SELECT * FROM employee_attendance WHERE ");
+                                 <?php
+                                 if(isset($_POST['submit']))
+                                 {
+                                    $sel_attendace = mysql_query("SELECT * FROM employee,employee_attendance 
+                                    WHERE   year_no ='$p_year' AND month_no='$p_month' AND  cfs_user_idUser = $loginUSERid AND idEmployee = emp_user_id
+                                      ORDER BY date_of_atnd ");
+                                    while($attendRow = mysql_fetch_assoc($sel_attendace))
+                                    {
+                                        $db_date = $attendRow['date_of_atnd'];
+                                        $date = date("d-m-Y",  strtotime($db_date));
+                                        $db_status = $attendRow['emp_atnd_type'];
+                                        $db_inTime = $attendRow['emp_intime'];
+                                        $db_OutTime = $attendRow['emp_outtime'];
+                                        $db_overTime = $attendRow['emp_extratime'];
+                                        echo "<tr><td style='border: 1px solid black; text-align: center'>$date</td>
+                                            <td style='border: 1px solid black; text-align: center'>$db_status</td>
+                                            <td style='border: 1px solid black; text-align: center'>$db_inTime</td>
+                                            <td style='border: 1px solid black; text-align: center'>$db_OutTime</td>
+                                            <td style='border: 1px solid black; text-align: center'>$db_overTime</td></tr>";
+                                    }
+                                 }
                                 ?>
                                 </tbody>
                             </table>
