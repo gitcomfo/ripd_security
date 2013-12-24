@@ -11,7 +11,7 @@ if (isset($_GET['searchs']) && $_GET['searchs'] != '') {
 	$suggest_query = "SELECT * FROM inventory WHERE ins_product_code like('%" .$search . "%') AND ins_ons_id=$storeID AND ins_ons_type='$scatagory' ORDER BY ins_product_code";
 	$reslt= mysql_query($suggest_query);
 	while($suggest = mysql_fetch_assoc($reslt)) {
-                  echo "<a style='text-decoration:none;color:brown;' href=".$location."?code=" . $suggest['idinventory'] . ">" . $suggest['ins_product_code'] . "</a></br>";
+                  echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=".$location."?code=" . $suggest['idinventory'] . ">" . $suggest['ins_product_code'] . "</a>";
                   
 	}
 }
@@ -23,7 +23,7 @@ if (isset($_GET['searchKey']) && $_GET['searchKey'] != '') {
 	$suggest_query = "SELECT * FROM inventory WHERE ins_productname like('$str_key%') AND ins_ons_id=$storeID AND ins_ons_type='$scatagory' ORDER BY ins_productname";
 	$reslt= mysql_query($suggest_query);
 	while($suggest = mysql_fetch_assoc($reslt)) {
-	            echo "<a style='text-decoration:none;color:brown;' href=".$location."?code=" . $suggest['idinventory'] . ">" . $suggest['ins_productname'] . "</a></br>";
+	            echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=".$location."?code=" . $suggest['idinventory'] . ">" . $suggest['ins_productname'] . "</a>";
         	}
 }
 if (isset($_GET['searchcode']) && $_GET['searchcode'] != '') {
@@ -33,7 +33,7 @@ if (isset($_GET['searchcode']) && $_GET['searchcode'] != '') {
 	$suggest_query = "SELECT * FROM  product_chart WHERE pro_code like('%" .$str_key . "%') ORDER BY pro_code";
 	$reslt= mysql_query($suggest_query);
 	while($suggest = mysql_fetch_assoc($reslt)) {
-	            echo "<a style='text-decoration:none;color:brown;' href=".$location."?code=" . $suggest['idproductchart'] . ">" . $suggest['pro_code'] . "</a></br>";
+	            echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=".$location."?code=" . $suggest['idproductchart'] . ">" . $suggest['pro_code']." ".$suggest['pro_productname']."</a>";
         	}
 }
 if (isset($_GET['searchname']) && $_GET['searchname'] != '') {
@@ -43,7 +43,7 @@ if (isset($_GET['searchname']) && $_GET['searchname'] != '') {
 	$suggest_query = "SELECT * FROM  product_chart WHERE pro_productname like('$str_key%') ORDER BY pro_productname";
 	$reslt= mysql_query($suggest_query);
 	while($suggest = mysql_fetch_assoc($reslt)) {
-	            echo "<a style='text-decoration:none;color:brown;' href=".$location."?code=" . $suggest['idproductchart'] . ">" . $suggest['pro_productname'] . "</a></br>";
+	            echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=".$location."?code=" . $suggest['idproductchart'] . ">" . $suggest['pro_productname'] . "</a>";
         	}
 }
 ?>
