@@ -61,18 +61,6 @@ $delstmt->execute(array($storeID,$scatagory));
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
  <script src="scripts/tinybox.js" type="text/javascript"></script>
 <style type="text/css">
-a:link {
-	text-decoration: none;
-}
-a:visited {
-	text-decoration: none;
-}
-a:hover {
-	text-decoration: none;
-}
-a:active {
-	text-decoration: none;
-}
 .prolinks:focus{
     background-color: cadetblue;
     color: yellow !important;
@@ -95,20 +83,19 @@ function ShowTime()
       t=setTimeout('ShowTime()',1000)
       
       a=Number(document.abc.QTY.value);
-if (a!=0) {document.getElementById("addtoCart").disabled = false;}
-  else {document.getElementById("addtoCart").disabled = true;}
+      b= 
+    if (a!=0) {document.getElementById("addtoCart").disabled = false;}
+    else {document.getElementById("addtoCart").disabled = true;}
  }
-    function checkTime(i)
-    {
+
+function checkTime(i)
+{
       if (i<10)
-      {
-        i="0" + i
-      }
+      { i="0" + i }
       return i
-    }
+}
     </script>
 <!--===========================================================================================================================-->
-
 <script LANGUAGE="JavaScript">
 function checkIt(evt) {
     evt = (evt) ? evt : window.event
@@ -120,8 +107,8 @@ function checkIt(evt) {
     status = "This field accepts numbers only."
     return false
 }
-    function numbersonly(e)
-   {
+function numbersonly(e)
+{
         var unicode=e.charCode? e.charCode : e.keyCode
             if (unicode!=8)
             { //if the key isn't the backspace key (which we should allow)
@@ -222,33 +209,31 @@ function searchName(where) // productlist-er name search box
       <div  id="searchResult"style="position:absolute;top:64%;left:8%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
     </div>
     <div class="topright" style="float:left; width: 70%;">
-<?php
-	if (isset($_GET['code']))
-     	{
-                    $G_proChartID = $_GET['code'];
-                    $result = mysql_query("SELECT * FROM product_chart WHERE idproductchart = '$G_proChartID'");
-                        $row = mysql_fetch_assoc($result);
-                        $db_proname=$row["pro_productname"];
-                       $db_procode=$row["pro_code"];
-                       $db_prounit=$row["pro_unit"];
-                 }
-?>
+    <?php
+            if (isset($_GET['code']))
+            {
+                        $G_proChartID = $_GET['code'];
+                        $result = mysql_query("SELECT * FROM product_chart WHERE idproductchart = '$G_proChartID'");
+                            $row = mysql_fetch_assoc($result);
+                            $db_proname=$row["pro_productname"];
+                           $db_procode=$row["pro_code"];
+                           $db_prounit=$row["pro_unit"];
+                     }
+    ?>
 <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
   <tr>
       <td width="43%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর কোড: </span><input name="pcode" id="pcode" type="text" value="<?php echo $db_procode; ?>" style="border:0px;font-size: 18px;width: 250px;" readonly/>
           <input name="proChartID" type="hidden" value="<?php echo $G_proChartID; ?>"/></td>      
       <td colspan="3"><span style="color: #03C;"> তারিখ ও সময়: </span><input name="date" style="width:80px;"type="text" value="<?php echo $da; ?>" readonly/>
-    <input name="time" type="text" id="txt" size="8" readonly/>
-    </td>
+        <input name="time" type="text" id="txt" size="8" readonly/></td>
   </tr>
   <tr>
       <td width="43%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 310px;" readonly/>
       <td width="16%"><span style="color: #03C;"> ক্রয়মূল্য</span></br><input name="buyPrice" id="buyPrice" type="text" onkeypress="return checkIt(event)" style="width:100px;"/> টাকা</td>
       <td width="16%"><span style="color: #03C;"> বিক্রয়মূল্য </span></br><input name="sellPrice" id="sellPrice" type="text" style="width:100px;" onkeypress="return checkIt(event)"/> টাকা</td>
        <td width="5%" rowspan="2"><input type="submit" name="addButton" style="height:100px; width: 100px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
-    </tr>
+  </tr>
   <tr>
-   
     <td width="43%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর একক:</span>
     <input name="unit" id="unit" type="text" readonly="readonly" style="border:0px;font-size: 18px;width: 250px;" value="<?php echo $db_prounit;?>"/></td>
    <td width="16%"><span style="color: #03C;">এক্সট্রা প্রফিট</span></br><input name="xtraprofit" id="xtraprofit" type="text" style="width:100px;" onkeypress="return checkIt(event)"/> টাকা</td>
@@ -286,7 +271,7 @@ while($row = mysql_fetch_array($getresult))
         echo '<td><div align="center">'.english2bangla($row['xtra_profit']).'</div></td>';
         echo '<td><div align="center">'.english2bangla($row['pv']).'</div></td>';
         echo '<td><div align="center">'.english2bangla($row['qty']).'</div></td>';
-        echo "<td><a href=delete.php?storeID=".$storeID."&code=".$row['pro_code']."&storeCat=".$scatagory.">Remove</a></td>";
+        echo "<td><a style='text-decoration:none;' href=delete.php?storeID=".$storeID."&code=".$row['pro_code']."&storeCat=".$scatagory.">Remove</a></td>";
         echo '</tr>';
 }
 ?>
