@@ -71,13 +71,16 @@ $delstmt->execute(array($storeID,$scatagory));
 }
 </style>
 <script type="text/javascript">
-function ShowTime()
-{    alert("djfhskj");
+function beforeSave()
+{
       a=Number(document.abc.QTY.value);
-      //b=Number(document.abc.profit.value);
-    if ((a!=0)) 
-    {document.getElementById("addtoCart").disabled = false;}
-    else {document.getElementById("addtoCart").disabled = true;}
+      b=Number(document.abc.profit.value);
+    if ((a != 0) && (b != 0)) 
+    {
+        document.getElementById("addtoCart").readonly = false; return true;}
+    else {
+        alert("প্রফিট অথবা পরিমান ০ হতে পারবে না");
+            document.getElementById("addtoCart").readonly = true; return false;}
  }
     </script>
 <!--===========================================================================================================================-->
@@ -223,14 +226,14 @@ function searchName(where) // productlist-er name search box
   <tr>
       <td width="43%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 310px;" readonly/>
       <td width="16%"><span style="color: #03C;">এক্সট্রা প্রফিট</span></br><input name="xtraprofit" id="xtraprofit" type="text" style="width:100px;" onkeypress="return checkIt(event)" onkeyup="calculateProfit(this.value)" /> টাকা</td>
-      <td width="16%"><span style="color: #03C;">প্রফিট</span></br><input name="profit" id="profit" type="text" style="width:100px;" readonly /> টাকা</td>
+      <td width="16%"><span style="color: #03C;">প্রফিট</span></br><input name="profit" id="profit" type="text" style="width:100px;" readonly value="0" /> টাকা</td>
       
   </tr>
   <tr>
     <td width="43%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর একক:</span>
     <input name="unit" id="unit" type="text" readonly="readonly" style="border:0px;font-size: 18px;width: 250px;" value="<?php echo $db_prounit;?>"/></td>
-    <td width="16%"><span style="color: #03C;"> পরিমাণ</span></br><input name="QTY" id="QTY" type="text" onkeypress=' return numbersonly(event)'  style="width:100px;"/></td>
-     <td width="5%"><input type="submit" name="addButton" style="height:100px; width: 150px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
+      <td width="16%"><span style="color: #03C;"> পরিমাণ</span></br><input name="QTY" id="QTY" type="text" onkeypress=' return numbersonly(event)'  style="width:100px;" value="0"/></td>
+    <td width="5%"><input type="submit" onclick="return beforeSave();" name="addButton" id="addtoCart" style="height:100px; width: 150px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;"  value="" readonly /></td>
     </tr>
 </table>
 </div>
@@ -264,7 +267,7 @@ while($row = mysql_fetch_array($getresult))
         echo '<td><div align="center">'.english2bangla($row['xtra_profit']).'</div></td>';
         echo '<td><div align="center">'.english2bangla($row['pv']).'</div></td>';
         echo '<td><div align="center">'.english2bangla($row['qty']).'</div></td>';
-        echo "<td><a style='text-decoration:none;' href=delete.php?storeID=".$storeID."&code=".$row['pro_code']."&storeCat=".$scatagory.">Remove</a></td>";
+        echo "<td><a style='text-decoration:none;display:block' href=delete.php?storeID=".$storeID."&code=".$row['pro_code']."&storeCat=".$scatagory.">Remove</a></td>";
         echo '</tr>';
 }
 ?>
