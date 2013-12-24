@@ -26,6 +26,16 @@ $selstmt3 = $conn->prepare($selsql3);
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
 <script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
+<style type="text/css">
+.prolinks:focus{
+    background-color: cadetblue;
+    color: yellow !important;
+}
+.prolinks:hover{
+    background-color: cadetblue;
+    color: yellow !important;
+}
+</style>
  <script src="scripts/tinybox.js" type="text/javascript"></script>
   <script type="text/javascript">
  function packageDetails(id)

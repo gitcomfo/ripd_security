@@ -15,11 +15,11 @@ $scatagory =$_SESSION['loggedInOfficeType'];
                                 $result = mysql_fetch_assoc($query);
                                 if(count($result)!=1)
                                 {
-                                    echo "<a style='text-decoration:none;color:brown;' href=package_entry.php?step=2&id=" . $suggest['idpckginfo'] . ">" . $suggest['pckg_code'] . "</a></br>";
+                                    echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=package_entry.php?step=2&id=" . $suggest['idpckginfo'] . ">" . $suggest['pckg_code'] ." ".$suggest['pckg_name']. "</a>";
                                 }
                                 else
                                 {
-                                    echo "<a style='text-decoration:none;color:brown;' href=package_entry.php?step=1&id=" . $suggest['idpckginfo'] . ">" . $suggest['pckg_code'] . "</a></br>";
+                                    echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=package_entry.php?step=1&id=" . $suggest['idpckginfo'] . ">" . $suggest['pckg_code'] ." ".$suggest['pckg_name']. "</a>";
                                 }
 	            
                     }

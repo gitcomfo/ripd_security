@@ -25,6 +25,16 @@ function get_catagory()
 <title>পণ্যের তালিকা</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
 <script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
+<style type="text/css">
+.prolinks:focus{
+    background-color: cadetblue;
+    color: yellow !important;
+}
+.prolinks:hover{
+    background-color: cadetblue;
+    color: yellow !important;
+}
+</style>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
  <script src="scripts/tinybox.js" type="text/javascript"></script>
   <script type="text/javascript">
