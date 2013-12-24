@@ -11,8 +11,8 @@ if (isset($_GET['searchs']) && $_GET['searchs'] != '') {
 	$suggest_query = "SELECT * FROM inventory WHERE ins_product_code like('%" .$search . "%') AND ins_ons_id=$storeID AND ins_ons_type='$scatagory' ORDER BY ins_product_code";
 	$reslt= mysql_query($suggest_query);
 	while($suggest = mysql_fetch_assoc($reslt)) {
-                  echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=".$location."?code=" . $suggest['idinventory'] . ">" . $suggest['ins_product_code'] . "</a>";
-                  
+                  echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=".$location."?code=" . $suggest['idinventory'] . ">" . $suggest['ins_product_code'] ." ".$suggest['ins_productname'] ."</a>";
+                                                                                                                                                                
 	}
 }
 

@@ -19,6 +19,18 @@ $da=date("m/d/Y", $timestamp);
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
  <script src="scripts/tinybox.js" type="text/javascript"></script>
 <style type="text/css">
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+a:active {
+	text-decoration: none;
+}
 .prolinks:focus{
     background-color: cadetblue;
     color: yellow !important;
