@@ -1,6 +1,7 @@
 <?php
 //include 'includes/session.inc';
 include_once 'includes/header.php';
+include_once 'includes/areaSearchForProduct.php';
 $msg = "";
 
 function get_catagory() {
@@ -13,6 +14,7 @@ function get_catagory() {
 ?>
 <title>মেইক প্রোডাক্ট ক্যাটাগরি এন্ড টাইপ</title>
 <style type="text/css">@import "css/bush.css";</style>
+<script type="text/javascript" src="javascripts/area3.js"></script>
 <!--===========================================================================================================================-->
 <script>
     function showTypes(catagory) // for types dropdown list
@@ -177,24 +179,18 @@ function get_catagory() {
                             <legend style="color: brown;font-size: 14px;">সার্চ করুন</legend>
                             <table>
                                 <tr>
-                                    <td><b>বিভাগ</b></br>
-                                        <select class="box" id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value);showCatProducts(this.value);" style="width: 120px;font-family: SolaimanLipi !important;">
-                                            <?php echo get_catagory(); ?>
+                                    <td><?php
+                                            getAreaOffice();
+                                            ?>
+                                    </td>
+                                    <td><select class="box" id="offNsales" name="offNsales" style="width: 200px;font-family: SolaimanLipi !important;" onchange='showProductsForOnS(this.value)'>
+                                            <option value="0">-- অফিস / সেলসস্টোর --</option>
                                         </select>
                                     </td>
-                                    <td><b>জেলা</b></br>
-                                        <span id="showtype"><select class="box" style="width: 120px;font-family: SolaimanLipi !important;"></select></span>
-                                    </td>
-                                    <td><b>থানা</b></br>
-                                        <span id="brand"><select class="box" id="brandSearch" name="brandSearch" style="width: 120px;font-family: SolaimanLipi !important;"></select></span>
-                                    </td>
-                                    <td style="padding-left: 50px; " ></br><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="কনভার্ট" />
-                                    </td>
                                 </tr>
-                                <tr><td></br></td></tr>
                             </table>
                         </fieldset>
-                        
+
                     </td> 
                 </tr>
                 <tr><td></br></td></tr>
@@ -246,16 +242,21 @@ function get_catagory() {
                                             $db_unit = $row["pro_unit"];
                                             $db_article = $row["pro_article"];
                                             $db_procode = $row["pro_code"];
+                                            $db_gurantee = $row['pro_guarantee'];
+                                            $db_warantee = $row['pro_warantee'];
+                                            $db_company = $row['pro_companyname'];
+                                            $db_made_in = $row['pro_madein'];
+                                            $db_pic = $row['pro_picture'];
                                             echo '<tr>';
                                             echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla($slNo) . '</div></td>';
-                                            echo '<td  style="border: solid black 1px;"><div align="left">' . $db_procode . '</div></td>';
-                                            echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;' . $db_proname . '</div></td>';
-                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_unit . '</div></td>';
-                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_unit . '</div></td>';
-                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_unit . '</div></td>';
-                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_unit . '</div></td>';
-                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_unit . '</div></td>';
-                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_unit . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="left">' . $db_proname . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;' . $db_procode . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_article . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_gurantee . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_warantee . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_company . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_made_in . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_pic . '</div></td>';
                                             echo '</tr>';
                                             $slNo++;
                                         }
