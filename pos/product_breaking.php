@@ -141,6 +141,16 @@ function setNewValues(getstring3)
     document.getElementById('newPV').value = array3[4];
 }
 </script>
+<style type="text/css">
+.prolinks:focus{
+    background-color: cadetblue;
+    color: yellow !important;
+}
+.prolinks:hover{
+    background-color: cadetblue;
+    color: yellow !important;
+}
+</style>
 	
 <!--===========================================================================================================================-->
 <script>
