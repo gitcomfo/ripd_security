@@ -83,7 +83,6 @@ function ShowTime()
       t=setTimeout('ShowTime()',1000)
       
       a=Number(document.abc.QTY.value);
-      b= 
     if (a!=0) {document.getElementById("addtoCart").disabled = false;}
     else {document.getElementById("addtoCart").disabled = true;}
  }
