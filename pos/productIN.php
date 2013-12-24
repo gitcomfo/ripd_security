@@ -73,6 +73,14 @@ a:hover {
 a:active {
 	text-decoration: none;
 }
+.prolinks:focus{
+    background-color: cadetblue;
+    color: yellow !important;
+}
+.prolinks:hover{
+    background-color: cadetblue;
+    color: yellow !important;
+}
 </style>
 <script type="text/javascript">
 function ShowTime()
@@ -208,10 +216,10 @@ function searchName(where) // productlist-er name search box
          <legend style="color: brown;">পণ্য প্রবেশ</legend>
     <div class="top" style="width: 100%;">
         <div class="topleft" style="float: left;width: 30%;"><b>প্রোডাক্ট কোড :</b>
-      <input type="text" id="amots" name="amots" onKeyUp="searchCode('productIN.php');" autocomplete="off" style="width: 200px;"/>
-      <div id="layer2"style="width:200px;position:absolute;top:52%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
-      <b>প্রোডাক্ট নাম&nbsp;&nbsp; : </b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchName('productIN.php');" autocomplete="off" style="width: 200px;"/>
-      <div  id="searchResult"style="position:absolute;top:64%;left:8%;width:200px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
+      <input type="text" id="amots" name="amots" onKeyUp="searchCode('productIN.php');" autocomplete="off" style="width: 300px;"/>
+      <div id="layer2"style="width:400px;position:absolute;top:52%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
+      <b>প্রোডাক্ট নাম&nbsp;&nbsp; : </b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchName('productIN.php');" autocomplete="off" style="width: 300px;"/>
+      <div  id="searchResult"style="position:absolute;top:64%;left:8%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
     </div>
     <div class="topright" style="float:left; width: 70%;">
 <?php
@@ -228,7 +236,7 @@ function searchName(where) // productlist-er name search box
 <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
   <tr>
       <td width="43%" height="50"><span style="color: #03C;"> প্রোডাক্ট-এর কোড: </span><input name="pcode" id="pcode" type="text" value="<?php echo $db_procode; ?>" style="border:0px;font-size: 18px;width: 250px;" readonly/>
-       <input name="proChartID" type="hidden" value="<?php echo $G_proChartID; ?>"/>      
+          <input name="proChartID" type="hidden" value="<?php echo $G_proChartID; ?>"/></td>      
       <td colspan="3"><span style="color: #03C;"> তারিখ ও সময়: </span><input name="date" style="width:80px;"type="text" value="<?php echo $da; ?>" readonly/>
     <input name="time" type="text" id="txt" size="8" readonly/>
     </td>
