@@ -40,19 +40,20 @@ if(isset($_POST['submit0']))
       }
       elseif (($selected_type == 'pwr') && $topparent_id != 0) { $topparent_id = $topparent_id;}
     $thana = $_POST['thana_id'];
-    $emailusername = str_replace("-", "", $off_acc1);
-    $ripdemailid = $emailusername . "@ripduniversal.com";
-    $passwrd = $emailusername;
-    //************************* create official email *************************************************
-             $email_create_status = CreateEmailAccount($emailusername, $passwrd);
-            if ($email_create_status != '777') {
+//    $emailusername = str_replace("-", "", $off_acc1);
+//    $ripdemailid = $emailusername . "@ripduniversal.com";
+//    $passwrd = $emailusername;
+//    //************************* create official email *************************************************
+//             $email_create_status = CreateEmailAccount($emailusername, $passwrd);
+//            if ($email_create_status != '777') {
                 $ripdemailid = "";
-            }
+                $passwrd = "123";
+//            }
     mysql_query("START TRANSACTION");
    
-    $sql= "INSERT INTO `office` (`office_type` ,`office_selection`, `parent_id`, `top_parent`, `office_name` ,`office_number` ,`account_number` ,`branch_name` ,`office_email` ,email_password, `Thana_idThana`,`office_details_address` ) 
-            VALUES ( '$off_type','$selected_type', '$parent_id','$topparent_id',  '$name','$off_no' , '$off_acc1', '$br_name','$ripdemailid' ,'$passwrd', '$thana', '$off_add')";
-    $reslt=mysql_query($sql);
+    $sql= "INSERT INTO `office` (opening_date,`office_type` ,`office_selection`, `parent_id`, `top_parent`, `office_name` ,`office_number` ,`account_number` ,`branch_name` ,`office_email` ,email_password, `Thana_idThana`,`office_details_address` ) 
+            VALUES (NOW() , '$off_type','$selected_type', '$parent_id','$topparent_id',  '$name','$off_no' , '$off_acc1', '$br_name','$ripdemailid' ,'$passwrd', '$thana', '$off_add')";
+    $reslt=mysql_query($sql) or exit(mysql_error());
     $off = mysql_insert_id();
     
      $ssql = "INSERT INTO `ons_relation` ( `catagory` ,`insert_date` ,`add_ons_id`) VALUES (  'office', NOW(), '$off');";

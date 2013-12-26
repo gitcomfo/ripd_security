@@ -175,7 +175,7 @@ function get_catagory() {
     <div>           
         <form method="POST" onsubmit="" >	
             <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          
-                <tr><th style="text-align: center" colspan="2"><h1>personal purchase statement</h1></th></tr>
+                <tr><th style="text-align: center" colspan="2"><h1>পার্সোনাল পারচেজ স্টেটমেন্ট</h1></th></tr>
                 <?php
                 if ($msg != "") {
                     echo '<tr><td colspan="2" style="text-align: center;font-size: 16px;color: green;">' . $msg . '</td></tr>';

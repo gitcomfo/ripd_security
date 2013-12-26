@@ -3,7 +3,10 @@ include_once 'includes/session.inc';
 include_once 'includes/header.php';
 
 if (isset($_POST['submit'])) {
-    print_r($_FILES);
+   // print_r($_FILES);
+    $exp_ons_type = $_SESSION['loggedInOfficeType'];
+    $exp_ons_id = $_SESSION['loggedInOfficeID'];
+    $exp_maker_id = $_SESSION['userIDUser'];
     $indate = $_POST['exp_date'];
     $sub = $_POST['sub'];
     $quan1 = $_POST['quantity1'];
@@ -15,16 +18,17 @@ if (isset($_POST['submit'])) {
     $namevalue = "cost_scandoc$i";
     $extension = end(explode(".", $_FILES["$namevalue"]["name"]));
     $image_name = "_" . $_FILES["$namevalue"]["name"];
-    echo $namevalue."<br/>";
-    echo $image_path = "pic/" .$image_name;
+    $image_path = "scaned/" .$image_name;
     if (($_FILES["$namevalue"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
-        move_uploaded_file($_FILES["$namevalue"]["tmp_name"], "pic/" .$image_name);
+        move_uploaded_file($_FILES["$namevalue"]["tmp_name"], "scaned/" .$image_name);
     } else {
         echo "Invalid file format.";
     }
         $quan[$i] = $quan1[$i] . "." . $quan2[$i];
-        $osql = "INSERT INTO $dbname.`ons_operational_exp`(`exp_date` ,`exp_sector` ,`exp_amount`,`exp_desc`,`exp_scandoc`,`exp_ons_type`,`exp_ons_id`,`exp_maker_id`) VALUES ('$indate','$sub[$i]', '$quan[$i]', '$desc[$i]', '$image_path', 1, 1);";
-        $oreslt = mysql_query($osql);
+        //$osql = "INSERT INTO $dbname.`ons_operational_exp`(`exp_date` ,`exp_sector` ,`exp_amount`,`exp_desc`,`exp_scandoc`,`exp_ons_type`,`exp_ons_id`,`exp_maker_id`) VALUES ('$indate','$sub[$i]', '$quan[$i]', '$desc[$i]', '$image_path', 1, 1);";
+        $osql = "INSERT INTO $dbname.`ons_operational_exp`(`exp_date` ,`exp_sector` ,`exp_amount`,`exp_desc`,`exp_scandoc`,`exp_ons_type`,`exp_ons_id`,`exp_maker_id`) 
+            VALUES ('$indate','$sub[$i]', '$quan[$i]', '$desc[$i]', '$image_path', '$exp_ons_type', '$exp_ons_id', '$exp_maker_id');";
+        $oreslt = mysql_query($osql) or exit(mysql_error());
     }
 }
 ?>
