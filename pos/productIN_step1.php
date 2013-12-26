@@ -4,19 +4,25 @@ session_start();
 include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
-$sel_product_chart =$conn->prepare("SELECT pro_code FROM product_chart");
-$sel_product_chart->execute();
-$result = $sel_product_chart->fetchAll();
-echo $result[0][0];
-$searched = array();
-$input = "VG";
-foreach($result as $value) {
-       if (strpos($input, $value[0]) != false){
-		$searched[] = $value[0];
-       }
-}
-print_r($searched);
 
+//if (!isset($_GET['code']))
+//{
+//    $sel_product_chart =$conn->prepare("SELECT pro_code, pro_productname FROM product_chart");
+//    $sel_product_chart->execute();
+//    $result1 = $sel_product_chart->fetchAll();
+//    //$arr_result = serialize($result1);
+//    //print_r($arr_result);
+//    //echo $result[0][0];
+////    $searched = array();
+////    $input = "c";
+////    foreach($result as $value) {
+////        $pos1 = stripos($value[0], $input);
+////           if ($pos1 !== false){
+////                    $searched[] = $value[0];
+////           }
+////    }
+////    print_r($searched);
+//}
 $timestamp=time(); //current timestamp
 $da=date("d/m/Y", $timestamp);
 	
@@ -87,12 +93,11 @@ $delstmt->execute(array($storeID,$scatagory));
 function beforeSave()
 {
       a=Number(document.abc.QTY.value);
-      b=Number(document.abc.profit.value);
+      b=Number(document.abc.buyPrice.value);
     if ((a != 0) && (b != 0)) 
     {
         document.getElementById("addtoCart").readonly = false; return true;}
     else {
-        alert("প্রফিট অথবা পরিমান ০ হতে পারবে না");
             document.getElementById("addtoCart").readonly = true; return false;}
  }
     </script>
@@ -117,14 +122,14 @@ function numbersonly(e)
                 return false //disable key press
             }
 }
-function calculateProfit(val)
-{
-    var xprofit = Number(val);
-    var buying = Number(document.getElementById('buyPrice').value);
-    var selling = Number(document.getElementById('sellPrice').value);
-    var profit = selling - (buying + xprofit);
-    document.getElementById('profit').value = profit;
-}
+//function calculateProfit(val)
+//{
+//    var xprofit = Number(val);
+//    var buying = Number(document.getElementById('buyPrice').value);
+//    var selling = Number(document.getElementById('sellPrice').value);
+//    var profit = selling - (buying + xprofit);
+//    document.getElementById('profit').value = profit;
+//}
 </script>
 <script>
 function searchCode(where) // productlist-er code search box
@@ -184,11 +189,36 @@ function searchName(where) // productlist-er name search box
             }
         }
         xmlhttp.open("GET","searchsuggest2.php?searchname="+str_key+"&where="+where,true);
-        xmlhttp.send();
-    
+        xmlhttp.send();    
+}
+function addToTable()
+{
+       var xmlhttp;  
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                location.reload();
+            }
+        }
+        var name = document.getElementById("pname").value;
+        var code = document.getElementById("pcode").value;
+        var totalqty = Number(document.getElementById("QTY").value);
+        var totalamount = Number(document.getElementById("buyPrice").value);
+        xmlhttp.open("GET","includes/inProductTemporary.php?name="+name+"&code="+code+"&totalQty="+totalqty+"&amount="+totalamount,true);
+        xmlhttp.send();    
+
+
 }
 </script>  
-
  <script type="text/javascript">
  function pinGenerate()
 	{ TINY.box.show({url:'pinGenerator.php',animate:true,close:true,boxid:'error',top:100,width:400,height:100}); }
@@ -196,7 +226,6 @@ function searchName(where) // productlist-er name search box
 </head>
     
 <body>
-
     <div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
 <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
@@ -212,7 +241,7 @@ function searchName(where) // productlist-er name search box
          <legend style="color: brown;">পণ্য প্রবেশ</legend>
     <div class="top" style="width: 100%;">
         <div class="topleft" style="float: left;width: 30%;"><b>প্রোডাক্ট কোড :</b>
-      <input type="text" id="amots" name="amots" onKeyUp="searchCode('productIN_step1.php');" autocomplete="off" style="width: 300px;"/>
+      <input type="text" id="amots" name="amots" onKeyUp="searchCode('productIN_step1.php')" autocomplete="off" style="width: 300px;"/>
       <div id="layer2"style="width:400px;position:absolute;top:52%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
       <b>প্রোডাক্ট নাম&nbsp;&nbsp; : </b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchName('productIN_step1.php');" autocomplete="off" style="width: 300px;"/>
       <div  id="searchResult"style="position:absolute;top:64%;left:8%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
@@ -239,12 +268,11 @@ function searchName(where) // productlist-er name search box
   <tr>
       <td ><span style="color: #03C;"> প্রোডাক্ট-এর নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 310px;" readonly/></td>
           <td  colspan="2"><span style="color: #03C;">মোট ক্রয়মূল্য</span> <input name="buyPrice" id="buyPrice" type="text" onkeypress="return checkIt(event)" style="width:100px;"/> টাকা</td>
-      
   </tr>
   <tr>
     <td><span style="color: #03C;"> প্রোডাক্ট-এর একক:</span> <input name="unit" id="unit" type="text" readonly="readonly" style="border:0px;font-size: 18px;width: 250px;" value="<?php echo $db_prounit;?>"/></td>
       <td><span style="color: #03C;"> পরিমাণ</span> <input name="QTY" id="QTY" type="text" onkeypress=' return numbersonly(event)'  style="width:100px;" value="0"/></td>
-    <td><input type="submit" onclick="return beforeSave();" name="addButton" id="addtoCart" style="height:100px; width: 100px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;"  value="" readonly /></td>
+    <td><input type="button" onclick="addToTable()" name="addButton" id="addtoCart" style="height:100px; width: 100px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;"  value="" /></td>
     </tr>
 </table>
 </div>
@@ -255,33 +283,15 @@ function searchName(where) // productlist-er name search box
 <legend style="color: brown;">প্রবেশকৃত পণ্যের তালিকা</legend>
     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
       <tr>
-        <td width="15%"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
-        <td width="20%"><div align="center"><strong>প্রোডাক্ট-এর নাম</strong></div></td>
-        <td width="10%"><div align="center"><strong>ক্রয় মূল্য</strong></div></td>
-        <td width="11%"><div align="center"><strong>বিক্রয় মূল্য</strong></div></td>
-        <td width="8%"><div align="center"><strong>প্রফিট</strong></div></td>
-        <td width="11%"><div align="center"><strong>এক্সট্রা প্রফিট</strong></div></td>
-        <td width="7%"><div align="center"><strong>পি.ভি.</strong></div></td>
-         <td width="9%"><div align="center"><strong>পরিমাণ</strong></div></td>
+        <td width="15%"><div align="center"><strong>ক্রম</strong></div></td>
+        <td width="20%"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
+        <td width="10%"><div align="center"><strong>প্রোডাক্টের নাম</strong></div></td>
+        <td width="11%"><div align="center"><strong>পরিমান</strong></div></td>
+        <td width="8%"><div align="center"><strong>সর্বমোট মূল্য</strong></div></td>
+        <td width="11%"><div align="center"><strong>প্রতি একক মূল্য</strong></div></td>
         <td width="9%">&nbsp;</td>
       </tr>
-    <?php
-$getresult = mysql_query("SELECT * FROM product_temp where store_id = $storeID AND store_type='$scatagory' ") or exit ('query failed');
-while($row = mysql_fetch_array($getresult))
-  {
-      echo '<tr>';
-      echo '<td><div align="left">'.$row['pro_code'].'</div></td>';
-        echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row['pro_name'].'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['buying_price']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['selling_price']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['profit']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['xtra_profit']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['pv']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['qty']).'</div></td>';
-        echo "<td><a style='text-decoration:none;display:block' href=delete.php?storeID=".$storeID."&code=".$row['pro_code']."&storeCat=".$scatagory.">Remove</a></td>";
-        echo '</tr>';
-}
-?>
+        <tbody id="tablebody"><?php print_r($_SESSION['proarray']);?></tbody>
 </table>
 </fieldset>
 <form action="productIN.php" method="post" >
