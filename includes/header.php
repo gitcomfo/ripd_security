@@ -68,6 +68,7 @@ include_once 'connectionPDO.php';
                             </ul>
                         </li>
                         <li><a href="makeapplication.php">আবেদনপত্র</a></li>
+                        <li><a href="news.php">ই-মিডিয়া</a></li>
                         <?php
                         if(isset($_SESSION['UserID']) && isset($_SESSION['acc_holder_name']))
                             {

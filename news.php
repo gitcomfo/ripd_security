@@ -16,10 +16,9 @@ error_reporting(0);
 </script>
 <div class="column6">
         <div class="main_text_box">
-            <div style="padding-left: 110px;"><a href="account_management.php"><b>ফিরে যান</b></a></div>
             <div>       
-                    <table class="formstyle">          
-                        <tr><th style="text-align: center; height: 25px; font-size: 20px;">নিউজ</th></tr>
+                <table class="formstyle" style="margin-left: 70px;">          
+                        <tr><th style="text-align: center; height: 25px; font-size: 20px;">ই-মিডিয়া</th></tr>
                         <tr>
                             <td>
                                 <div id="accordion" style="width: 100%;">

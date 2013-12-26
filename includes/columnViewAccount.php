@@ -27,7 +27,6 @@ else $view_link = "view_employee_account.php";
                     <li><a href="<?php echo $view_link;?>">ভিউ একাউন্ট</a></li>
                     <li><a href="password_change.php">পাসওয়ার্ড পরিবর্তন</a></li>
                     <li><a href="https://webmail.ripduniversal.com" target="_blank">ই-মেইল</a></li>
-                    <li><a href="news.php">নিউজ</a></li>
 <!--                    <li><a href="#">ই-কমার্স</a></li>-->
                 </ul>
             </div>
