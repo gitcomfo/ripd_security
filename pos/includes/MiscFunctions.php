@@ -396,4 +396,9 @@ function number($inputs)
     $output =$digits[$inputs];
     return $output;
 }
+function get_time_random_no($len) // random unique number*************
+{
+    $random = substr(number_format(time() * rand(), 0, '', ''), 0, $len);
+    return $random;
+}
 ?>
