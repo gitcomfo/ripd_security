@@ -4,40 +4,20 @@ session_start();
 include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
-
+if(isset($_SESSION['calanArray']))
+    {
+        unset($_SESSION['calanArray']);
+    }
+if (!isset($_SESSION['chalanNO']))
+{
+ $_SESSION['chalanNO'] = get_time_random_no(10);
+}
 $storeName= $_SESSION['loggedInOfficeName'];
 $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
 
 $sel_product_chart = $conn->prepare("SELECT * FROM product_chart WHERE idproductchart = ? ");
-$ins_product_purchase = $conn->prepare("INSERT INTO product_purchase(in_ons_type, in_onsid, in_input_date ,input_type ,in_howmany , in_pv , in_extra_profit ,in_profit, in_buying_price, in_sellingprice, cfs_user_idUser, Product_chart_idproductchart) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" );
-
-if(isset($_POST['entry']))
-{
-    $selectstmt->execute(array($storeID,$scatagory));
-    $all = $selectstmt->fetchAll();
-    foreach($all as $row)
-    {
-        $db_proname=$row['pro_name'];
-        $db_buy=$row['buying_price'];
-        $db_sell=$row['selling_price'];
-        $db_profit=$row['profit'];
-        $db_xtraprofit=$row['xtra_profit'];
-        $db_pv=$row['pv'];
-        $db_qty=$row['qty'];
-        $db_chartid=$row['product_chart_id'];
-        $intype = 'in';
-        $timestamp=time(); //current timestamp
-        $date=date("Y/m/d", $timestamp);
-       $yes = $stmt->execute(array($scatagory, $storeID, $date, $intype, $db_qty, $db_pv,  $db_xtraprofit, $db_profit, $db_buy, $db_sell, $cfsID, $db_chartid));
-       if($yes == 1)
-       {
-           $msg = "প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে";
-       }
-       else { $msg = "দুঃখিত প্রোডাক্ট এন্ট্রি হয়নি";}
-      }
-}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -90,14 +70,6 @@ function beforeSave()
     else {
             document.getElementById("addtoCart").readonly = true; return false;}
  }
-//function calculateProfit(val)
-//{
-//    var xprofit = Number(val);
-//    var buying = Number(document.getElementById('buyPrice').value);
-//    var selling = Number(document.getElementById('sellPrice').value);
-//    var profit = selling - (buying + xprofit);
-//    document.getElementById('profit').value = profit;
-//}
 </script>
 <script>
 function searchCode(where) // productlist-er code search box
@@ -247,7 +219,7 @@ function deleteProduct(id) // to add into temporary array*******************
   <tr>
       <td><span style="color: #03C;"> প্রোডাক্ট-এর কোড: </span><input name="pcode" id="pcode" type="text" value="<?php echo $db_procode; ?>" style="border:0px;font-size: 18px;width: 250px;" readonly/>
           <input id="proChartID" type="hidden" value="<?php echo $G_proChartID; ?>"/></td>
-      <td colspan="2"><span style="color: #03C;">চালান নং </span> <input name="chalanNo" id="chalanNo" type="text" style="width:200px;" readonly value="<?php echo  get_time_random_no(10);?>" /></td>     
+      <td colspan="2"><span style="color: #03C;">চালান নং </span> <input name="chalanNo" id="chalanNo" type="text" style="width:200px;" readonly value="<?php echo $_SESSION['chalanNO'];?>" /></td>     
   </tr>
   <tr>
       <td ><span style="color: #03C;"> প্রোডাক্ট-এর নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 310px;" readonly/></td>
@@ -310,7 +282,7 @@ function deleteProduct(id) // to add into temporary array*******************
         </tr>
         <tr>
             <td>চালান কপি</td>
-            <td>: <input type="file" name="calanCopy" /> </td>
+            <td>: <input type="file" name="calanCopy" /><input type="hidden" /> </td>
         </tr>
     </table>
 </fieldset>
