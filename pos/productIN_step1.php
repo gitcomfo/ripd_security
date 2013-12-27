@@ -283,7 +283,7 @@ function addToTable()
 <legend style="color: brown;">প্রবেশকৃত পণ্যের তালিকা</legend>
     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
       <tr>
-        <td width="15%"><div align="center"><strong>ক্রম</strong></div></td>
+<!--        <td width="15%"><div align="center"><strong>ক্রম</strong></div></td>-->
         <td width="20%"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
         <td width="10%"><div align="center"><strong>প্রোডাক্টের নাম</strong></div></td>
         <td width="11%"><div align="center"><strong>পরিমান</strong></div></td>
@@ -292,6 +292,15 @@ function addToTable()
         <td width="9%">&nbsp;</td>
       </tr>
         <tbody id="tablebody"><?php print_r($_SESSION['proarray']);?></tbody>
+        <?php
+        foreach($_SESSION['proarray'] as $product_id => $proinfo) {
+            echo '<tr><td width="10%"><div align="center"><strong>'.$proinfo['1'].'</strong></div></td>
+                <td width="20%"><div align="center"><strong>'.$proinfo['0'].'</strong></div></td>
+                    <td width="11%"><div align="center"><strong>'.$proinfo['2'].'</strong></div></td>
+                    <td width="8%"><div align="center"><strong>'.$proinfo['3'].'</strong></div></td>
+                    <td width="11%"><div align="center"><strong>ADDD</strong></div></td></tr>';
+        }
+        ?>
 </table>
 </fieldset>
 <form action="productIN.php" method="post" >

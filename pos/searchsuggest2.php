@@ -4,6 +4,24 @@ include 'includes/ConnectDB.inc';
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
 
+//-------------------------- all inventory Product list---------------------
+session_start();
+if (!isset($_SESSION['pro_inventory_array']))
+{
+ $_SESSION['pro_inventory_array'] = array();
+ //echo "hello world";
+    $reslt = mysql_query("SELECT idproductchart, pro_code, pro_productname FROM product_chart ORDER BY pro_code");
+    if (mysql_num_rows($reslt) < 1) {
+        echo "দুঃখিত, এই নাম্বারের কোনো একাউন্ট নেই";
+    }
+    while ($suggest = mysql_fetch_assoc($reslt)){
+        $_SESSION['pro_inventory_array'][] = $suggest;
+    }
+}else{
+    //echo "I am set";
+    //print_r($_SESSION['pro_inventory_array']);
+}
+
 if (isset($_GET['searchs']) && $_GET['searchs'] != '') {
 	//Add slashes to any quotes to avoid SQL problems.
 	$search = $_GET['searchs'];
@@ -26,7 +44,7 @@ if (isset($_GET['searchKey']) && $_GET['searchKey'] != '') {
 	            echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=".$location."?code=" . $suggest['idinventory'] . ">" . $suggest['ins_productname'] . "</a>";
         	}
 }
-if (isset($_GET['searchcode']) && $_GET['searchcode'] != '') {
+/*if (isset($_GET['searchcode']) && $_GET['searchcode'] != '') {
 	//Add slashes to any quotes to avoid SQL problems.
 	$str_key = $_GET['searchcode'];
                   $location = $_GET['where'];
@@ -36,6 +54,20 @@ if (isset($_GET['searchcode']) && $_GET['searchcode'] != '') {
 	            echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=".$location."?code=" . $suggest['idproductchart'] . ">" . $suggest['pro_code']." ".$suggest['pro_productname']."</a>";
         	}
 }
+ * */
+if (isset($_GET['searchcode']) && $_GET['searchcode'] != '') {
+	//Add slashes to any quotes to avoid SQL problems.
+	$str_key = $_GET['searchcode'];
+                  $location = $_GET['where'];
+                  //print_r($_SESSION['pro_inventory_array']);
+    foreach ($_SESSION['pro_inventory_array'] as $k => $v) {
+        if (stripos($v['pro_code'], $str_key) !== false) {
+            echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=".$location."?code=" . $v['idproductchart'] . ">" . $v['pro_code']." ".$v['pro_productname']."</a>";
+        }
+    }
+}
+
+
 if (isset($_GET['searchname']) && $_GET['searchname'] != '') {
 	//Add slashes to any quotes to avoid SQL problems.
 	$str_key = $_GET['searchname'];

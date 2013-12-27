@@ -15,10 +15,10 @@ if (isset($_GET['key']) && $_GET['key'] != '') {
 
     $findme = $_GET['key'];
     $loop = 0;
+        //print_r($suggest_array);
     foreach ($suggest_array as $k => $v) {
-        //print_r($v['account_number']);
         //echo "id=" . $v['1'] . " number: " .$v['account_number']."<br />";
-        if (stripos('$v[account_number]', $findme) == true) {
+        if (stripos($v['account_number'], $findme) !== false) {
             echo "<a style='text-decoration:none;color:brown;'href=" . $location . "?id=" . $v['idUser'] . ">" . $v['account_number'] . "</a></br>";
             //echo "id={$v[id]} text={$v[text]}<br />"; // do something $newdata=array($v[id]=>$v[text])
         }
