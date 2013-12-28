@@ -52,13 +52,12 @@ if (isset($_GET['searchcode']) && $_GET['searchcode'] != '') {
 }
 
 if (isset($_GET['searchname']) && $_GET['searchname'] != '') {
-	//Add slashes to any quotes to avoid SQL problems.
 	$str_key = $_GET['searchname'];
-                    $location = $_GET['where'];
-	$suggest_query = "SELECT * FROM  product_chart WHERE pro_productname like('$str_key%') ORDER BY pro_productname";
-	$reslt= mysql_query($suggest_query);
-	while($suggest = mysql_fetch_assoc($reslt)) {
-	            echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=".$location."?code=" . $suggest['idproductchart'] . ">" . $suggest['pro_productname'] . "</a>";
-        	}
+                  $location = $_GET['where'];
+	foreach ($_SESSION['pro_chart_array'] as $k => $v) {
+                        if (stripos($v['pro_productname'], $str_key) !== false) {
+	            echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=".$location."?code=" . $v['idproductchart'] . ">" . $v['pro_productname'] . "</a>";
+                        }
+                }
 }
 ?>

@@ -165,21 +165,34 @@ function calculate(val,i)
 }
 
 $(document).ready(function() {
-  $('#entry').click(function() {
-    $(".inbox").filter(function() {
+ var notok= 0;
+    function validate() {
+        $(".inbox").filter(function() {
          var val = $(this).val();
         if((val == "") || (val == 0))
             {
-                 $("form").submit(function(e){
-                        e.preventDefault();
-                    })
+                 notok++;
             }
-           else {
-               $("form").get(0).allowDefault = true;
-           }
     });
-  });
-});
+    alert(notok);
+    return notok;
+ }
+ });
+function beforeSave()
+{
+    alert("kjdslkj");
+var jc = validate();
+    if(jc > 0)
+        {
+            document.getElementById('entry').readonly= true;
+            return false;
+        }
+        else {
+             document.getElementById('entry').readonly= false;
+            return true;
+        }
+}
+
 </script>
 </head>
     
@@ -226,7 +239,7 @@ $(document).ready(function() {
 ?>
 </table>
 </fieldset>
-    <input class="btn" name="entry" id="entry" type="submit" value="এন্ট্রি করুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" /></br></br>
+    <input class="btn" readonly onclick="return beforeSave();" name="entry" id="entry" type="submit" value="এন্ট্রি করুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" /></br></br>
 </form>
 <div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
