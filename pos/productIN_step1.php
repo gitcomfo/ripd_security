@@ -4,21 +4,14 @@ session_start();
 include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
-if(isset($_SESSION['calanArray']))
-    {
-        unset($_SESSION['calanArray']);
-    }
-if (!isset($_SESSION['chalanNO']))
-{
- $_SESSION['chalanNO'] = get_time_random_no(10);
-}
+
+if (!isset($_SESSION['chalanNO'])) { $_SESSION['chalanNO'] = get_time_random_no(10); }
 $storeName= $_SESSION['loggedInOfficeName'];
 $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
 
 $sel_product_chart = $conn->prepare("SELECT * FROM product_chart WHERE idproductchart = ? ");
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -62,13 +55,13 @@ function numbersonly(e)
 }
 function beforeSave()
 {
-      a=Number(document.abc.QTY.value);
-      b=Number(document.abc.buyPrice.value);
-    if ((a != 0) && (b != 0)) 
+      a=document.getElementById('transportCost').value;
+      b=document.getElementById('otherCost').value;
+    if ((a != "") && (b != "")) 
     {
-        document.getElementById("addtoCart").readonly = false; return true;}
+        document.getElementById("next").readonly = false; return true;}
     else {
-            document.getElementById("addtoCart").readonly = true; return false;}
+            document.getElementById("next").readonly = true; return false;}
  }
 </script>
 <script>
@@ -133,29 +126,33 @@ function searchName(where) // productlist-er name search box
 }
 function addToTable() // to add into temporary array*******************
 {
-       var xmlhttp;  
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function()
-        {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-                location.reload();
-            }
-        }
-        var id = document.getElementById("proChartID").value;
+    var id = document.getElementById("proChartID").value;
         var name = document.getElementById("pname").value;
         var code = document.getElementById("pcode").value;
         var totalqty = Number(document.getElementById("QTY").value);
         var totalamount = Number(document.getElementById("buyPrice").value);
-        xmlhttp.open("GET","includes/inProductTemporary.php?name="+name+"&code="+code+"&totalQty="+totalqty+"&amount="+totalamount+"&chartID="+id,true);
-        xmlhttp.send();    
+        if((totalqty != 0) && (totalamount != 0))
+            {
+                var xmlhttp;  
+                 if (window.XMLHttpRequest)
+                 {// code for IE7+, Firefox, Chrome, Opera, Safari
+                     xmlhttp=new XMLHttpRequest();
+                 }
+                 else
+                 {// code for IE6, IE5
+                     xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                 }
+                 xmlhttp.onreadystatechange=function()
+                 {
+                     if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                     {
+                         location.reload();
+                     }
+                 }
+                 xmlhttp.open("GET","includes/inProductTemporary.php?name="+name+"&code="+code+"&totalQty="+totalqty+"&amount="+totalamount+"&chartID="+id,true);
+                 xmlhttp.send();
+            }
+            else { alert("দুঃখিত, পরিমান অথবা ক্রয়মূল্য ০ হতে পারবে না") ;}
 }
 function deleteProduct(id) // to add into temporary array*******************
 {
@@ -197,9 +194,9 @@ function deleteProduct(id) // to add into temporary array*******************
         <div class="topleft" style="float: left;width: 30%;">
             <b>প্রোডাক্ট কোড</b>
             <input type="text" id="amots" name="amots" onKeyUp="searchCode('productIN_step1.php')" autocomplete="off" style="width: 300px;"/>
-            <div id="layer2"style="width:400px;position:absolute;top:52%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
+            <div id="layer2"style="width:400px;position:absolute;top:46%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
             <b>প্রোডাক্ট নাম</b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchName('productIN_step1.php');" autocomplete="off" style="width: 300px;"/>
-            <div  id="searchResult"style="position:absolute;top:64%;left:8%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
+            <div  id="searchResult"style="position:absolute;top:58%;left:8%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
         </div>
     <div class="topright" style="float:left; width: 70%;">
     <?php
@@ -234,7 +231,7 @@ function deleteProduct(id) // to add into temporary array*******************
 </div>
 </div>
 </fieldset>
-<form action="productIN_step2.php" method="post" >
+<form action="productIN_step2.php" method="post" enctype="multipart/form-data" >
   <fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
     <legend style="color: brown;">প্রবেশকৃত পণ্যের তালিকা</legend>
     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
@@ -267,26 +264,34 @@ function deleteProduct(id) // to add into temporary array*******************
         </tbody>
 </table>
     <table width="100%" cellspacing="0" cellpadding="0" style="border: 1px solid black;  font-size:18px;">
+        <?php
+             if(isset($_SESSION['chalanArray']))
+             {
+                 $totalTransportCost =$_SESSION['chalanArray'][1];
+                 $comment =$_SESSION['chalanArray'][2];
+                 $totalOtherCost =$_SESSION['chalanArray'][3];
+             }
+        ?>
         <tr>
             <td>সর্বমোট ক্রয়মূল্য</td>
             <td>: <input type="text" id="totalBuyingPrice" name="totalBuyingPrice" style="text-align: right;" readonly value="<?php echo $total?>" /> টাকা</td>
         </tr>
         <tr>
             <td>পরিবহন খরচ</td>
-            <td>: <input type="text" id="transportCost" name="transportCost" style="text-align: right;" onkeypress="return checkIt(event)" /> টাকা</td>
-            <td rowspan="3">মন্তব্য</br><textarea name="transportComment"></textarea></td>
+            <td>: <input type="text" id="transportCost" name="transportCost" style="text-align: right;" onkeypress="return checkIt(event)" value="<?php echo $totalTransportCost;?>" /> টাকা</td>
+            <td rowspan="3">মন্তব্য</br><textarea name="transportComment"><?php echo $comment;?></textarea></td>
         </tr>
         <tr>
             <td>অন্যান্য খরচ</td>
-            <td>: <input type="text" id="otherCost" name="otherCost" style="text-align: right;" onkeypress="return checkIt(event)" /> টাকা</td>
+            <td>: <input type="text" id="otherCost" name="otherCost" style="text-align: right;" onkeypress="return checkIt(event)" value="<?php echo $totalOtherCost;?>" /> টাকা</td>
         </tr>
         <tr>
             <td>চালান কপি</td>
-            <td>: <input type="file" name="calanCopy" /><input type="hidden" /> </td>
+            <td>: <input type="file" name="chalanCopy" /></td>
         </tr>
     </table>
 </fieldset>
-    <input class="btn" name="next" id="next" type="submit" value="বিস্তারিত দেখুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" /></br></br>
+    <input class="btn" onclick="return beforeSave();" name="next" id="next" type="submit" value="বিস্তারিত দেখুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" /></br></br>
 </form>
 <div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 

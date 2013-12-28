@@ -6,15 +6,15 @@ $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
 
 //-------------------------- all Product chart list---------------------
-if (!isset($_SESSION['pro_inventory_array']))
+if (!isset($_SESSION['pro_chart_array']))
 {
- $_SESSION['pro_inventory_array'] = array();
+ $_SESSION['pro_chart_array'] = array();
     $reslt = mysql_query("SELECT idproductchart, pro_code, pro_productname FROM product_chart ORDER BY pro_code");
     if (mysql_num_rows($reslt) < 1) {
         echo "দুঃখিত, এই নাম্বারের কোনো একাউন্ট নেই";
     }
     while ($suggest = mysql_fetch_assoc($reslt)){
-        $_SESSION['pro_inventory_array'][] = $suggest;
+        $_SESSION['pro_chart_array'][] = $suggest;
     }
 }
 
@@ -44,7 +44,7 @@ if (isset($_GET['searchKey']) && $_GET['searchKey'] != '') {
 if (isset($_GET['searchcode']) && $_GET['searchcode'] != '') {
 	$str_key = $_GET['searchcode'];
                   $location = $_GET['where'];
-                    foreach ($_SESSION['pro_inventory_array'] as $k => $v) {
+                    foreach ($_SESSION['pro_chart_array'] as $k => $v) {
                         if (stripos($v['pro_code'], $str_key) !== false) {
                             echo "<a class='prolinks' style='text-decoration:none;color:brown;display:block;' href=".$location."?code=" . $v['idproductchart'] . ">" . $v['pro_code']." ".$v['pro_productname']."</a>";
                         }

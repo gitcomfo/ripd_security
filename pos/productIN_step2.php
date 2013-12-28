@@ -9,7 +9,7 @@ $storeName= $_SESSION['loggedInOfficeName'];
 $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
-//$msg = "";
+
 $sel_command = $conn->prepare("SELECT * FROM running_command");
 $sel_command->execute();
 $arr_rslt = $sel_command->fetchAll();
@@ -17,25 +17,44 @@ foreach ($arr_rslt as $value) {
     $db_pv = $value['pv_value'];
 }
 $ins_purchase_sum = $conn->prepare("INSERT INTO product_purchase_summary(chalan_no, total_chalan_cost, transport_cost ,others_cost ,chalan_comment , chalan_date , cfs_user_idUser ,chalan_scan_copy) VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)");
-$ins_purchase = $conn->prepare("INSERT INTO product_purchase(in_ons_type, in_onsid, in_input_date ,input_type ,in_howmany , in_pv , in_extra_profit ,in_profit, in_buying_price, in_sellingprice, cfs_user_idUser, Product_chart_idproductchart) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$ins_purchase = $conn->prepare("INSERT INTO product_purchase(in_ons_type, in_onsid, in_input_date ,input_type ,in_howmany , in_pv , in_extra_profit ,in_profit, in_buying_price, in_sellingprice, pps_id, Product_chart_idproductchart) VALUES (?, ?, NOW(), 'in', ?, ?, ?, ?, ?, ?, ?, ?)");
 $sel_purchase_sum = $conn->prepare("SELECT * FROM product_purchase_summary WHERE chalan_no= ? ");
+
 if(isset($_POST['next']))
 {
     $p_totalBuyingPrice = $_POST['totalBuyingPrice'];
     $p_totalTransportCost = $_POST['transportCost'];
     $p_comment = $_POST['transportComment'];
-    echo $p_totalotherCost = $_POST['otherCost'];
-    $p_calanCopy = $_POST['calanCopy'];
-    if(!isset($_SESSION['calanArray']))
+    $p_totalotherCost = $_POST['otherCost'];
+    
+      $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+      $extension = end(explode(".", $_FILES["chalanCopy"]["name"]));
+      $chalancopy = $_FILES["chalanCopy"]["name"];
+        if($chalancopy != "")
+        {
+            $chalancopy = "ch-".$_SESSION['chalanNO']."-".$_FILES["chalanCopy"]["name"];
+        }
+        echo $chalancopy_path = "scaned/".$chalancopy;
+        if( $_FILES["chalanCopy"]["name"] != ""){
+            if (($_FILES["chalanCopy"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
+                    {
+                        move_uploaded_file($_FILES["chalanCopy"]["tmp_name"], "../scaned/".$chalancopy);
+                    } 
+            else 
+                    {
+                    echo "Invalid file format.";
+                    }
+        }
+        
+    if(!isset($_SESSION['chalanArray']))
     {
-           array_push($_SESSION['calanArray'],$p_totalBuyingPrice);
-    array_push($_SESSION['calanArray'],$p_totalTransportCost);
-    array_push($_SESSION['calanArray'],$p_comment);
-    array_push($_SESSION['calanArray'],$p_totalotherCost);
-    array_push($_SESSION['calanArray'],$p_calanCopy);
+        $_SESSION['chalanArray']=array();
+        $_SESSION['chalanArray'][0] = $p_totalBuyingPrice;
+        $_SESSION['chalanArray'][1] = $p_totalTransportCost;
+        $_SESSION['chalanArray'][2] = $p_comment;
+        $_SESSION['chalanArray'][3] = $p_totalotherCost;
+        $_SESSION['chalanArray'][4] = $chalancopy_path;
     }
-    print_r($_SESSION['calanArray']);
-
 }
 
 if(isset($_POST['entry']))
@@ -50,36 +69,48 @@ if(isset($_POST['entry']))
         }
         else { $forwhileLoop = 0 ; $chalanNo = $_SESSION['chalanNO'];}
     }
-    foreach ($_SESSION['calanArray'] as $chalan) {
-        $ins_purchase_sum->execute(array($chalanNo,$chalan[0],$chalan[1],$chalan[3],$chalan[2],$cfsID,$chalan[4]));
+   $totalbuying = $_SESSION['chalanArray'][0];
+   $totaltarnsport = $_SESSION['chalanArray'][1];
+   $comment = $_SESSION['chalanArray'][2];
+   $totalother = $_SESSION['chalanArray'][3];
+   $chalancopy = $_SESSION['chalanArray'][4];
+
+   $noRows = count($_SESSION['arrProductTemp']); // how many products
+    $p_chartID = $_POST['chartID']; 
+    $p_buy = $_POST['proBuyingPrice']; 
+    $p_sell = $_POST['proSellingPrice']; 
+    $p_xprofit = $_POST['proXprofit']; 
+    $p_profit = $_POST['proProfit']; 
+    $p_pv = $_POST['proPV']; 
+    $p_qty = $_POST['porQty']; 
+    try {
+          $conn->beginTransaction();
+        $ins_purchase_sum->execute(array($chalanNo,$totalbuying,$totaltarnsport,$totalother,$comment,$cfsID,$chalancopy));
+        $purchase_sum_id = $conn->lastInsertId();
+        for($i=1;$i<=$noRows;$i++)
+        {
+            $buy=$p_buy[$i];
+            $sell=$p_sell[$i];
+            $profit=$p_profit[$i];
+            $xtraprofit=$p_xprofit[$i];
+            $pv=$p_pv[$i];
+            $qty=$p_qty[$i];
+            $chartid=$p_chartID[$i];
+            $ins_purchase->execute(array($scatagory, $storeID, $qty, $pv,  $xtraprofit, $profit, $buy, $sell, $purchase_sum_id, $chartid));
+        }
+         $conn->commit();
+         unset($_SESSION['chalanArray']);
+         unset($_SESSION['chalanNO']);
+         unset($_SESSION['arrProductTemp']);
+         unset($_SESSION['pro_chart_array']);
+         echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>";
+         header('Location:productIN_step1.php');
+    } 
+    catch (Exception $exc) {
+        $conn->rollBack();
+        echo "<script>alert('দুঃখিত,প্রোডাক্ট এন্ট্রি হয়নি')</script>";
     }
-    
-    //$noRows = count($_SESSION['arrProductTemp']);
-
-//    $selectstmt->execute(array($storeID,$scatagory));
-//    $all = $selectstmt->fetchAll();
-//    foreach($all as $row)
-//    {
-//        $db_proname=$row['pro_name'];
-//        $db_buy=$row['buying_price'];
-//        $db_sell=$row['selling_price'];
-//        $db_profit=$row['profit'];
-//        $db_xtraprofit=$row['xtra_profit'];
-//        $db_pv=$row['pv'];
-//        $db_qty=$row['qty'];
-//        $db_chartid=$row['product_chart_id'];
-//        $intype = 'in';
-//        $timestamp=time(); //current timestamp
-//        $date=date("Y/m/d", $timestamp);
-//       $yes = $stmt->execute(array($scatagory, $storeID, $date, $intype, $db_qty, $db_pv,  $db_xtraprofit, $db_profit, $db_buy, $db_sell, $cfsID, $db_chartid));
-//       if($yes == 1)
-//       {
-//           $msg = "প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে";
-//       }
-//       else { $msg = "দুঃখিত প্রোডাক্ট এন্ট্রি হয়নি";}
-//      }
 }
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -89,6 +120,7 @@ if(isset($_POST['entry']))
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
 <script language="JavaScript" type="text/javascript" src="suggest.js"></script>
 <script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/jquery-1.10.2.min.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 <!--===========================================================================================================================-->
 <script LANGUAGE="JavaScript">
@@ -120,9 +152,29 @@ function calculate(val,i)
     var currentpv = Number(document.getElementById("currentPv").value);
     var profit = selling - (buying + xprofit);
     var pv = profit * currentpv;
-    document.getElementById("proProfit["+i+"]").value = profit;
-    document.getElementById("proPV["+i+"]").value = pv;
+    if((selling < buying) || (pv <= 0))
+        {
+            alert("দুঃখিত, বিক্রয়মূল্য < ক্রয়মূল্য হতে পারবে না\n এবং\n পিভি ০ হতে পারবে না");
+        }
+        else {
+                document.getElementById("proProfit["+i+"]").value = profit;
+                document.getElementById("proPV["+i+"]").value = pv;
+        }
 }
+
+$(document).ready(function() {
+  $('#entry').click(function() {
+    $(".inbox").filter(function() {
+         var val = $(this).val();
+        if(val == "")
+            {
+                 $("form").submit(function(e){
+                        e.preventDefault()
+                    })
+            }
+    });
+  });
+});
 </script>
 </head>
     
@@ -132,11 +184,7 @@ function calculate(val,i)
 <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="productIN_step1.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
     <div style="width: 33%;height: 100%; float: left;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div>
-    <div style="width: 33%;height: 100%;float: left;text-align: right;font-family: SolaimanLipi !important;"><a href="" onclick="javasrcipt:window.open('product_list.php');return false;" style="float: right;text-align: center;padding-left: 20px;"><img src="images/productList.png" style="width: 100px;height: 70px;"/></br>সেলসস্টোর প্রোডাক্ট লিস্ট</a>
-        <a href="" onclick="javasrcipt:window.open('all_ripd_product_list.php');return false;" style="float: right"><img src="images/allproductlist.png" style="width: 100px;height: 70px;"/></br>অল প্রোডাক্ট লিস্ট</a></div>
-</div>
-</br>
-<div align="center" style="color: green;font-size: 26px; font-weight: bold; width: 90%;height: 20px;margin: 0 5% 0 5%;float: none;"><?php if($msg != "") echo $msg;?></div></br>
+</div></br>
 <form action="productIN_step2.php" method="post" >  
 <fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
 <legend style="color: brown;">প্রবেশকৃত পণ্যের তালিকা</legend>
@@ -155,7 +203,8 @@ function calculate(val,i)
     <?php
             $sl = 1;
             foreach($_SESSION['arrProductTemp'] as $key => $proinfo) {
-                $buyingprice =  $proinfo['4'] + (($proinfo['3'] * $p_totalTransportCost) / ($p_totalBuyingPrice * $proinfo['2']));
+                $poribohon = $p_totalTransportCost + $p_totalotherCost;
+                $buyingprice =  $proinfo['4'] + (($proinfo['3'] * $poribohon) / ($p_totalBuyingPrice * $proinfo['2']));
                 echo "<tr>
                         <td style='text-align: center;'>".english2bangla($sl)."</td>
                         <td style='text-align: left;padding-left:2px;'>$proinfo[1]</td>
@@ -165,7 +214,7 @@ function calculate(val,i)
                         <td style='text-align: center;padding-right:2px;'><input type='text' name='proSellingPrice[$sl]' id='proSellingPrice[$sl]' style='width:95%;height=100%;text-align:right' onkeypress='return checkIt(event)' /></td>
                         <td style='text-align: center;'><input type='text' name='proXprofit[$sl]' id='proXprofit[$sl]' style='width:92%;height=100%;text-align:right' onkeypress='return checkIt(event)' onkeyup='calculate(this.value,$sl)' /></td>
                         <td style='text-align: center;'><input type='text' name='proProfit[$sl]' id='proProfit[$sl]' readonly style='width:90%;height=100%;text-align:right' /></td>
-                        <td style='text-align: center;'><input type='text' name='proPV[$sl]' id='proPV[$sl]' readonly style='width:90%;height=100%;' /></td>
+                        <td style='text-align: center;'><input class='inbox' type='text' name='proPV[$sl]' id='proPV[$sl]' readonly style='width:90%;height=100%;' /></td>
                         </tr>";
                 $sl ++;
             }

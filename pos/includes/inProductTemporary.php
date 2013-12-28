@@ -13,7 +13,6 @@ if(isset($_GET['name']))
     $g_total = $_GET['amount'];
     $tkPerQty = round(($g_total / $g_qty),2);
     $arr_temp = array($g_name,$g_code,$g_qty,$g_total,$tkPerQty);
-    //array_push($_SESSION['proarray'],$arr_temp);
     $_SESSION['arrProductTemp'][$g_chartID] = $arr_temp;
 }
  elseif (isset ($_GET['type'])) {
