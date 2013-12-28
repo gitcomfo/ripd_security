@@ -164,25 +164,21 @@ function calculate(val,i)
         }
 }
 
-$(document).ready(function() {
- var notok= 0;
-    function validate() {
+function validate() {
+        var notOK= 0;
         $(".inbox").filter(function() {
          var val = $(this).val();
         if((val == "") || (val == 0))
             {
-                 notok++;
+                 notOK++;
             }
     });
-    alert(notok);
-    return notok;
+    return notOK;
  }
- });
 function beforeSave()
 {
-    alert("kjdslkj");
-var jc = validate();
-    if(jc > 0)
+var blank = validate();
+    if(blank > 0)
         {
             document.getElementById('entry').readonly= true;
             return false;
@@ -192,7 +188,6 @@ var jc = validate();
             return true;
         }
 }
-
 </script>
 </head>
     

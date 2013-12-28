@@ -2,9 +2,15 @@
 session_start();
 global  $db;
 
-$host = '192.168.1.100';
-$dbuser = 'cfs_jessy';
-$dbpassword = 'jesy4321';
+//
+//$host = '192.168.1.100';
+//$dbuser = 'cfs_jessy';
+//$dbpassword = 'jesy4321';
+//$dbname = 'ripd_db_comfosys';
+
+$host = 'localhost';
+$dbuser = 'root';
+$dbpassword = '';
 $dbname = 'ripd_db_comfosys';
 
 $_SESSION['DatabaseName'] = $dbname;
