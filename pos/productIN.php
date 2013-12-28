@@ -214,19 +214,19 @@ function deleteProduct(id) // to add into temporary array*******************
     ?>
 <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
   <tr>
-      <td width="40%"><span style="color: #03C;"> প্রোডাক্টের কোড: </span><input name="pcode" id="pcode" type="text" value="<?php echo $db_procode; ?>" style="border:0px;font-size: 18px;width: 150px;" readonly/>
+      <td width="70%"><span style="color: #03C;"> প্রোডাক্টের কোড: </span><input name="pcode" id="pcode" type="text" value="<?php echo $db_procode; ?>" style="border:0px;font-size: 18px;width: 150px;" readonly/>
           <input id="proChartID" type="hidden" value="<?php echo $G_proChartID; ?>"/></td>
-      <td colspan="2"><span style="color: #03C;"> প্রোডাক্টের নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 315px;height: 50px;" readonly/></td>
+          <td colspan="2"><span style="color: #03C;">চালান নং: </span><input name="chalanNo" id="chalanNo" type="text" style="width:100px;text-align: center;" readonly value="<?php echo $_SESSION['chalanNO'];?>" /></td>           
+  </tr>
+  <tr>
+       <td ><span style="color: #03C;"> প্রোডাক্টের নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 315px;height: 50px;" readonly/></td>
+      <td colspan="2"><span style="color: #03C;"> প্রোডাক্টের একক:</span> <input name="unit" id="unit" type="text" readonly="readonly" style="border:0px;font-size: 18px;width: 140px;" value="<?php echo $db_prounit;?>"/></td>    
       
   </tr>
   <tr>
-      <td><span style="color: #03C;"> প্রোডাক্ট-এর একক:</span> <input name="unit" id="unit" type="text" readonly="readonly" style="border:0px;font-size: 18px;width: 140px;" value="<?php echo $db_prounit;?>"/></td>    
-      <td colspan="2"><span style="color: #03C;">চালান নং: </span><input name="chalanNo" id="chalanNo" type="text" style="width:200px;text-align: center;" readonly value="<?php echo $_SESSION['chalanNO'];?>" /></td>     
-  </tr>
-  <tr>
     <td><span style="color: #03C;">মোট ক্রয়মূল্য: </span> <input name="buyPrice" id="buyPrice" type="text" onkeypress="return checkIt(event)" style="width:120px;text-align: right;"/> টাকা</td>
-      <td width="40%"><span style="color: #03C;"> পরিমাণ: </span> <input name="QTY" id="QTY" type="text" onkeypress=' return numbersonly(event)'  style="width:100px;" value="0"/></td>
-    <td width="20%"><input type="button" onclick="addToTable()" name="addButton" id="addtoCart" style="height:100px; width: 100px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;"  value="" /></td>
+      <td width="30%"><span style="color: #03C;"> পরিমাণ: </span> <input name="QTY" id="QTY" type="text" onkeypress=' return numbersonly(event)'  style="width:100px;" value="0"/></td>
+    <td width="10%"><input type="button" onclick="addToTable()" name="addButton" id="addtoCart" style="height:100px; width: 100px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;"  value="" /></td>
     </tr>
 </table>
 </div>

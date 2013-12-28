@@ -34,7 +34,7 @@ if(isset($_POST['next']))
         {
             $chalancopy = "ch-".$_SESSION['chalanNO']."-".$_FILES["chalanCopy"]["name"];
         }
-        echo $chalancopy_path = "scaned/".$chalancopy;
+        $chalancopy_path = "scaned/".$chalancopy;
         if( $_FILES["chalanCopy"]["name"] != ""){
             if (($_FILES["chalanCopy"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -104,7 +104,7 @@ if(isset($_POST['entry']))
          unset($_SESSION['arrProductTemp']);
          unset($_SESSION['pro_chart_array']);
          echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>";
-         header('Location:productIN_step1.php');
+         header('Location:productIN.php');
     } 
     catch (Exception $exc) {
         $conn->rollBack();
@@ -175,9 +175,7 @@ $(document).ready(function() {
                     })
             }
            else {
-               $("form").submit(function(e){
-                       return true;
-                    })
+               $("form").get(0).allowDefault = true;
            }
     });
   });
