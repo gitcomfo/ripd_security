@@ -155,6 +155,8 @@ function calculate(val,i)
     if((selling < buying) || (pv <= 0))
         {
             alert("দুঃখিত, বিক্রয়মূল্য < ক্রয়মূল্য হতে পারবে না\n এবং\n পিভি ০ হতে পারবে না");
+            document.getElementById("proProfit["+i+"]").value = 0;
+            document.getElementById("proPV["+i+"]").value = 0;
         }
         else {
                 document.getElementById("proProfit["+i+"]").value = profit;
@@ -166,12 +168,17 @@ $(document).ready(function() {
   $('#entry').click(function() {
     $(".inbox").filter(function() {
          var val = $(this).val();
-        if(val == "")
+        if((val == "") || (val == 0))
             {
                  $("form").submit(function(e){
-                        e.preventDefault()
+                        e.preventDefault();
                     })
             }
+           else {
+               $("form").submit(function(e){
+                       return true;
+                    })
+           }
     });
   });
 });
@@ -182,10 +189,10 @@ $(document).ready(function() {
 <div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
 <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
-    <div style="width: 33%;height: 100%; float: left;"><a href="productIN_step1.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
+    <div style="width: 33%;height: 100%; float: left;"><a href="productIN.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
     <div style="width: 33%;height: 100%; float: left;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div>
 </div></br>
-<form action="productIN_step2.php" method="post" >  
+<form action="productIN_details.php" method="post" >  
 <fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
 <legend style="color: brown;">প্রবেশকৃত পণ্যের তালিকা</legend>
     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">

@@ -152,7 +152,7 @@ function addToTable() // to add into temporary array*******************
                  xmlhttp.open("GET","includes/inProductTemporary.php?name="+name+"&code="+code+"&totalQty="+totalqty+"&amount="+totalamount+"&chartID="+id,true);
                  xmlhttp.send();
             }
-            else { alert("দুঃখিত, পরিমান অথবা ক্রয়মূল্য ০ হতে পারবে না") ;}
+            else { alert("দুঃখিত, পরিমান অথবা ক্রয়মূল্য ০ হতে পারবে না") ;}
 }
 function deleteProduct(id) // to add into temporary array*******************
 {
@@ -193,9 +193,9 @@ function deleteProduct(id) // to add into temporary array*******************
     <div class="top" style="width: 100%;">
         <div class="topleft" style="float: left;width: 30%;">
             <b>প্রোডাক্ট কোড</b>
-            <input type="text" id="amots" name="amots" onKeyUp="searchCode('productIN_step1.php')" autocomplete="off" style="width: 300px;"/>
+            <input type="text" id="amots" name="amots" onKeyUp="searchCode('productIN.php')" autocomplete="off" style="width: 300px;"/>
             <div id="layer2"style="width:400px;position:absolute;top:46%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
-            <b>প্রোডাক্ট নাম</b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchName('productIN_step1.php');" autocomplete="off" style="width: 300px;"/>
+            <b>প্রোডাক্ট নাম</b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchName('productIN.php');" autocomplete="off" style="width: 300px;"/>
             <div  id="searchResult"style="position:absolute;top:58%;left:8%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
         </div>
     <div class="topright" style="float:left; width: 70%;">
@@ -214,24 +214,25 @@ function deleteProduct(id) // to add into temporary array*******************
     ?>
 <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
   <tr>
-      <td><span style="color: #03C;"> প্রোডাক্ট-এর কোড: </span><input name="pcode" id="pcode" type="text" value="<?php echo $db_procode; ?>" style="border:0px;font-size: 18px;width: 250px;" readonly/>
+      <td width="40%"><span style="color: #03C;"> প্রোডাক্টের কোড: </span><input name="pcode" id="pcode" type="text" value="<?php echo $db_procode; ?>" style="border:0px;font-size: 18px;width: 150px;" readonly/>
           <input id="proChartID" type="hidden" value="<?php echo $G_proChartID; ?>"/></td>
-      <td colspan="2"><span style="color: #03C;">চালান নং </span> <input name="chalanNo" id="chalanNo" type="text" style="width:200px;" readonly value="<?php echo $_SESSION['chalanNO'];?>" /></td>     
+      <td colspan="2"><span style="color: #03C;"> প্রোডাক্টের নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 315px;height: 50px;" readonly/></td>
+      
   </tr>
   <tr>
-      <td ><span style="color: #03C;"> প্রোডাক্ট-এর নাম: </span><input name="pname" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 310px;" readonly/></td>
-          <td  colspan="2"><span style="color: #03C;">মোট ক্রয়মূল্য</span> <input name="buyPrice" id="buyPrice" type="text" onkeypress="return checkIt(event)" style="width:100px;"/> টাকা</td>
+      <td><span style="color: #03C;"> প্রোডাক্ট-এর একক:</span> <input name="unit" id="unit" type="text" readonly="readonly" style="border:0px;font-size: 18px;width: 140px;" value="<?php echo $db_prounit;?>"/></td>    
+      <td colspan="2"><span style="color: #03C;">চালান নং: </span><input name="chalanNo" id="chalanNo" type="text" style="width:200px;text-align: center;" readonly value="<?php echo $_SESSION['chalanNO'];?>" /></td>     
   </tr>
   <tr>
-    <td><span style="color: #03C;"> প্রোডাক্ট-এর একক:</span> <input name="unit" id="unit" type="text" readonly="readonly" style="border:0px;font-size: 18px;width: 250px;" value="<?php echo $db_prounit;?>"/></td>
-      <td><span style="color: #03C;"> পরিমাণ</span> <input name="QTY" id="QTY" type="text" onkeypress=' return numbersonly(event)'  style="width:100px;" value="0"/></td>
-    <td><input type="button" onclick="addToTable()" name="addButton" id="addtoCart" style="height:100px; width: 100px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;"  value="" /></td>
+    <td><span style="color: #03C;">মোট ক্রয়মূল্য: </span> <input name="buyPrice" id="buyPrice" type="text" onkeypress="return checkIt(event)" style="width:120px;text-align: right;"/> টাকা</td>
+      <td width="40%"><span style="color: #03C;"> পরিমাণ: </span> <input name="QTY" id="QTY" type="text" onkeypress=' return numbersonly(event)'  style="width:100px;" value="0"/></td>
+    <td width="20%"><input type="button" onclick="addToTable()" name="addButton" id="addtoCart" style="height:100px; width: 100px;background-image: url('images/addToInventory.jpeg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;"  value="" /></td>
     </tr>
 </table>
 </div>
 </div>
 </fieldset>
-<form action="productIN_step2.php" method="post" enctype="multipart/form-data" >
+<form action="productIN_details.php" method="post" enctype="multipart/form-data" >
   <fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
     <legend style="color: brown;">প্রবেশকৃত পণ্যের তালিকা</legend>
     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
@@ -273,7 +274,7 @@ function deleteProduct(id) // to add into temporary array*******************
              }
         ?>
         <tr>
-            <td>সর্বমোট ক্রয়মূল্য</td>
+            <td>সর্বমোট ক্রয়মূল্য</td>
             <td>: <input type="text" id="totalBuyingPrice" name="totalBuyingPrice" style="text-align: right;" readonly value="<?php echo $total?>" /> টাকা</td>
         </tr>
         <tr>
