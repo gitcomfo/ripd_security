@@ -4,6 +4,10 @@ include_once 'connectionPDO.php';
 //command option insert BASIC
 $sql_insert_command = $conn->prepare("INSERT into command (commandno, command_desc, pv_value) VALUES (?, ?, ?)");    
 
+//award
+$sql_insert_award = $conn->prepare("INSERT into ripd_award (awd_name, awd_provider_name, awd_description,
+                                       awd_date, awd_image, awd_receivers_type, awd_receivers_name, cfs_user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");    
+
 //soft costing command for a particular command
 $columns_scc = array('command_idcommand', 'store_selling_earn', 'direct_sales_cust', 'office', 'staff', 'shariah', 'charity', 'presentation', 'training', 'program', 
                                             'travel', 'patent', 'leadership', 'transport', 'research', 'server', 'bag', 'brochure', 'form', 'money_receipt', 'pad', 'box', 'extra');
