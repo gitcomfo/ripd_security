@@ -209,7 +209,7 @@ function getProgramerType($type)
    return $arr_who_type[$type];
 }
 function getAwardType($aType){
-    $arr_award_type = array('company'=>'কোম্পানী', 'employee'=>'কর্মচারী', 'customer'=>'কাস্টমার');
+    $arr_award_type = array('company'=>'কোম্পানী', 'employee'=>'কর্মচারী', 'customer'=>'কাস্টমার', 'others'=>'অন্যান্য');
     return $arr_award_type[$aType];
 }
 function getRandomPassword()

@@ -1,19 +1,5 @@
 <div class="column1">
 
-    <div class="left_box">
-        <div class="top_left_box"></div>
-        <div class="center_left_box">
-            <div class="box_title"><span>সংস্পর্শে </span>থাকুন</div>
-            <div class="form">
-                <div class="form_row"><label class="left">ইমেইলঃ </label><input type="text" class="form_input"/></div>                    
-                <div style="float:right; padding:10px 25px 0 0;">
-                    <input type="image" src="images/join.gif"/>
-                </div>
-            </div>
-        </div>
-        <div class="bottom_left_box"></div>
-    </div> 
-
 
     <div class="left_box">
         <div class="top_left_box"></div>
