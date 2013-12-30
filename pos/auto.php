@@ -6,7 +6,7 @@ include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 
 $storeName= $_SESSION['loggedInOfficeName'];
-$sel_product_inventory = $conn->prepare("SELECT * FROM inventory WHERE idinventory =? ");
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -311,16 +311,13 @@ function checkNumeric(objName)
 	if (isset($_GET['code']))
      	{	
                         $G_inventoryID = $_GET['code'];
-                        $sel_product_inventory->execute(array($G_inventoryID));
-                        $result = $sel_product_inventory->fetchAll();
-                        foreach ($result as $row) {
-                            $db_proname=$row["ins_productname"];
-                            $db_price=$row["ins_sellingprice"];
-                            $db_inventoryid=$row["idinventory"];
-                            $db_procode=$row["ins_product_code"];
-                            $db_proPV=$row["ins_pv"];
-                            $db_buyingprice = $row['ins_buying_price'];
-                        }
+                        $result = $_SESSION['pro_inventory_array'][$G_inventoryID];
+                            $db_proname=$result["ins_productname"];
+                            $db_price=$result["ins_sellingprice"];
+                            $db_inventoryid=$result["idinventory"];
+                            $db_procode=$result["ins_product_code"];
+                            $db_proPV=$result["ins_pv"];
+                            $db_buyingprice = $result['ins_buying_price'];                        
         }
 ?>
 <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
@@ -356,7 +353,6 @@ function checkNumeric(objName)
         <td width="7%">&nbsp;</td>
       </tr>
     <?php
-        print_r($_SESSION['arrSellTemp']);
         foreach($_SESSION['arrSellTemp'] as $key => $row) {
                     echo '<tr>';
                     echo '<td><div align="left">'.$row[0].'</div></td>';
@@ -364,7 +360,7 @@ function checkNumeric(objName)
                       echo '<td><div align="center">'.english2bangla($row[3]).'</div></td>';
                       echo '<td><div align="center">'.english2bangla($row[4]).'</div></td>';
                       echo '<td><div align="center">'.english2bangla($row[5]).'</div></td>';
-                      echo '<td><a href=delete.php?selltype=auto.php&id='.$key.'><img src="images/del.png" style="cursor:pointer;" width="20px" height="20px" /></a></td>';
+                      echo '<td style="text-align:center"><a href=delete.php?selltype=auto.php&id='.$key.'><img src="images/del.png" style="cursor:pointer;" width="20px" height="20px" /></a></td>';
                       echo '</tr>';
               }
 ?>
@@ -373,22 +369,21 @@ function checkNumeric(objName)
 <form action="preview.php" method="post" name="mn" id="suggestSearch">
 <div align="right" style="margin-top:10px;margin-right:100px;font-family: SolaimanLipi !important;"><b>সর্বমোট :</b>
 <?php
-                $recipt=$_SESSION['SESS_MEMBER_ID'];
-                $result = mysql_query("SELECT sum(sales_totalamount) FROM sales_temp where sales_receiptid = '$recipt'; ");
-                while($row2 = mysql_fetch_array($result))
-                  { $finalTotal=$row2['sum(sales_totalamount)']; }
+            $finalTotal =0;
+             foreach($_SESSION['arrSellTemp'] as $key => $row) {
+                   $finalTotal = $finalTotal + $row[5];
+              }
+
 ?>
     <input name="tretail" type="hidden" id="tretail" size="20" style="text-align:right;" value="<?php echo $finalTotal;?>" readonly/><?php echo english2bangla($finalTotal);?> টাকা</br>
     <b>প্রদেয় টাকা&nbsp;:</b> <input name="gtotal" type="hidden" id="gtotal" size="20" onblur="checkNumeric(this);" readonly style="text-align:right;" value="<?php echo $finalTotal;?>"/><?php echo english2bangla($finalTotal);?> টাকা
-</div>
-    
+</div>    
 <fieldset style="border-width: 3px;padding-bottom:50px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
 <legend style="color: brown;">মূল্য পরিশোধ এবং ক্রেতার তথ্য</legend>
-
 <b>কাস্টমার টাইপ :</b>
-&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(2)" checked />নন-রেজিস্টার কাস্টমার
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(1)"/>রেজিস্টার কাস্টমার
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(3)"/>কর্মচারী
+&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(2)" value="2" checked />নন-রেজিস্টার কাস্টমার
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(1)" value="1"/>রেজিস্টার কাস্টমার
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(3)" value="3"/>কর্মচারী
 <!--<select name="customerType" id="customerType" onchange="showCustInfo(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
     <option value="0">-সিলেক্ট করুন-</option>
     <option value="1">রেজিস্টার কাস্টমার</option>
@@ -407,9 +402,9 @@ function checkNumeric(objName)
 </div>
 </br>
 <b>পেমেন্ট টাইপ :</b>
-&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(1)" checked />ক্যাশ
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(2)"/>অ্যাকাউন্ট
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(3)"/>ক্যাশ ও অ্যাকাউন্ট
+&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(1)" value="1" checked />ক্যাশ
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(2)" value="2" />অ্যাকাউন্ট
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(3)" value="3" />ক্যাশ ও অ্যাকাউন্ট
 <!--<select name="payType" id="payType" onchange="showPayType(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
     <option value="0">-সিলেক্ট করুন-</option>
     <option value="1">ক্যাশ</option>
@@ -419,9 +414,9 @@ function checkNumeric(objName)
 </br>
   <div id="payInfo" class="text" style="margin-top: 10px;">
       <label style='margin-left:200px;'><b>টাকা গ্রহন&nbsp;&nbsp;:</b>
-	  <input name='cash' id='cash' type='text' onkeypress='return checkIt(event)' onkeyup='minus()' /> টাকা</label>
-	<label style='margin-left: 63px;'><b>টাকা ফেরত : </b>
-	  <input name='change' id='change' type='text' readonly/> টাকা</label>
+       <input name='cash' id='cash' type='text' onkeypress='return checkIt(event)' onkeyup='minus()' /> টাকা</label>
+       <label style='margin-left: 63px;'><b>টাকা ফেরত : </b>
+        <input name='change' id='change' type='text' readonly/> টাকা</label>
   </div></br></br>
 <input class="btn" name="print" id="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:42%;font-family: SolaimanLipi !important;" />
     </fieldset>

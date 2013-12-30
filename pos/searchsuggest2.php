@@ -20,7 +20,8 @@ if (!isset($_SESSION['pro_inventory_array']))
  $_SESSION['pro_inventory_array'] = array();
     $reslt = mysql_query("SELECT * FROM inventory WHERE ins_ons_id=$storeID AND ins_ons_type='$scatagory' ORDER BY ins_productname");
     while ($suggest = mysql_fetch_assoc($reslt)){
-        $_SESSION['pro_inventory_array'][] = $suggest;
+        $inventID = $suggest['idinventory'];
+        $_SESSION['pro_inventory_array'][$inventID] = $suggest;
     }
 }
 //--------------------------- searches----------------------------------------------
