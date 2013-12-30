@@ -2,11 +2,11 @@
 error_reporting(0);
 session_start();
 include_once 'includes/ConnectDB.inc';
+include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 
 $storeName= $_SESSION['loggedInOfficeName'];
-$timestamp=time(); //current timestamp
-$da=date("m/d/Y", $timestamp);
+$sel_product_inventory = $conn->prepare("SELECT * FROM inventory WHERE idinventory =? ");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -238,7 +238,37 @@ function showEmpName(acNo)
 		 reqst.send(null);
 	}	
 }
-
+function addToCart() // to add into temporary array*******************
+{
+        var id = document.getElementById("inventoryID").value;
+        var name = document.getElementById("pname").value;
+        var code = document.getElementById("procode").value;
+        var qty = Number(document.getElementById("QTY").value);
+        var totalamount = Number(document.getElementById("TOTAL").value);
+        var sell = document.getElementById("PPRICE").value;
+        var buy = document.getElementById("buyprice").value;
+        var totalpv = Number(document.getElementById("ProPV").value);
+        if(qty != 0)
+            {
+              var reqst = getXMLHTTP();		
+	if (reqst) 
+	{
+                    reqst.onreadystatechange = function()
+		{
+		if (reqst.readyState == 4) 
+			{			
+                                                        if (reqst.status == 200)
+				{location.reload();} 
+				else 
+				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+			}				
+		 }			
+		 reqst.open("GET","addorder.php?selltype=1&id="+id+"&code="+code+"&name="+name+"&qty="+qty+"&total="+totalamount+"&selling="+sell+"&buying="+buy+"&totalpv="+totalpv, true);
+		 reqst.send(null);
+	}	
+            }
+            else { alert("দুঃখিত, পরিমান অথবা ক্রয়মূল্য ০ হতে পারবে না") ;}
+}
 </script>  
  <script language="javascript" type="text/javascript">
  
@@ -265,52 +295,48 @@ function checkNumeric(objName)
     <div style="width: 33%;height: 100%;float: left;text-align: right;font-family: SolaimanLipi !important;"><a href="" onclick="javasrcipt:window.open('product_list.php');return false;"><img src="images/productList.png" style="width: 100px;height: 70px;"/></br>প্রোডাক্ট লিস্ট</a></div>
 </div>
 </br>
-    <div class="wraper" style="width: 100%;font-family: SolaimanLipi !important;">
-        <form action="addorder.php?selltype=1" method="post" name="abc">
-     <fieldset style="border-width: 3px;margin:0 20px 0 20px;">
-         <legend style="color: brown;">পণ্যের বিবরণী</legend>
-    <div class="top" style="width: 100%;">
-        <div class="topleft" style="float: left;width: 40%;"><b>প্রোডাক্ট কোড :</b>
+<div class="wraper" style="width: 100%;font-family: SolaimanLipi !important;">
+   <form action="" method="post" name="abc">
+      <fieldset style="border-width: 3px;margin:0 20px 0 20px;">
+      <legend style="color: brown;">পণ্যের বিবরণী</legend>
+      <div class="top" style="width: 100%;">
+            <div class="topleft" style="float: left;width: 40%;"><b>প্রোডাক্ট কোড :</b>
             <input type="text" id="amots" name="amots" onKeyUp="bleble('auto.php');" autocomplete="off" style="width: 290px;"/>
-      <div style="width:280px;position:absolute;top:282px;left:232px;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="layer2" ></div></br></br>
-      <b>প্রোডাক্ট নাম&nbsp;&nbsp; :</b>
-      <input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('auto.php');" autocomplete="off" style="width: 290px;"/>
-      <div style="position:absolute;top:340px;left:232px;width:285px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult" ></div>
+            <div style="width:280px;position:absolute;top:282px;left:232px;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="layer2" ></div></br></br>
+            <b>প্রোডাক্ট নাম&nbsp;&nbsp; :</b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('auto.php');" autocomplete="off" style="width: 290px;"/>
+            <div style="position:absolute;top:340px;left:232px;width:285px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult" ></div>
     </div>
     <div class="topright" style="float:left; width: 60%;">
         <?php
 	if (isset($_GET['code']))
-     	{
-		
-                    $G_summaryID = $_GET['code'];
-                    $result = mysql_query("SELECT * FROM inventory WHERE idinventory = '$G_summaryID'");
-                        $row = mysql_fetch_assoc($result);
-                        $db_proname=$row["ins_productname"];
-                        $db_price=$row["ins_sellingprice"];
-                        $db_inventoryid=$row["idinventory"];
-                        $db_procode=$row["ins_product_code"];
-                        $db_proPV=$row["ins_pv"];
-                        $db_buyingprice = $row['ins_buying_price'];
-                    }
+     	{	
+                        $G_inventoryID = $_GET['code'];
+                        $sel_product_inventory->execute(array($G_inventoryID));
+                        $result = $sel_product_inventory->fetchAll();
+                        foreach ($result as $row) {
+                            $db_proname=$row["ins_productname"];
+                            $db_price=$row["ins_sellingprice"];
+                            $db_inventoryid=$row["idinventory"];
+                            $db_procode=$row["ins_product_code"];
+                            $db_proPV=$row["ins_pv"];
+                            $db_buyingprice = $row['ins_buying_price'];
+                        }
+        }
 ?>
-        <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
+<table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
   <tr>
-      <td width="60%" height="50"><span style="color: #03C;font-size: 25px;"> প্রোডাক্ট-এর নাম: </span><input name="PNAME" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width:250px;" readonly/>
-        <input name="inventoryID" id="inventoryID" type="hidden" value="<?php echo $db_inventoryid; ?>"/>      
-      <input name="procode" type="hidden" value="<?php echo $db_procode; ?>"/><input name="propv" id="ProPV" type="hidden" value="<?php echo $db_proPV; ?>"/>
+      <td colspan="3"><span style="color: #03C;"> প্রোডাক্টের নাম: </span><input name="PNAME" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width:310px;" readonly/>
+        <input id="inventoryID" type="hidden" value="<?php echo $db_inventoryid; ?>"/>      
+      <input id="procode" type="hidden" value="<?php echo $db_procode; ?>"/><input id="ProPV" type="hidden" value="<?php echo $db_proPV; ?>"/>
       <input name="less" type="hidden"/></td>
-      <td colspan="2"><span style="color: #03C;"> তারিখ ও সময়: </span><input name="date" style="width:75px;"type="text" value="<?php echo $da; ?>" readonly/>
-    <input name="time" type="text" id="txt" size="7" readonly/>
-    </td>
   </tr>
   <tr>
-      <td  width="60%"><span style="color: #03C;font-size: 25px;">প্রোডাক্ট-এর মূল্য: </span><input name="PPRICE" id="PPRICE" type="text" value="<?php echo $db_price ;?>" style="border:0px;font-size: 18px;width:250px;"/><input name="buyprice" id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>
-      <td><span style="color: #03C;"> পরিমাণ : </span><input name="QTY" id="QTY" type="text" onkeyup="checkQty(this.value);" onkeypress="return checkIt(event)" style="width:100px;"/><input type="hidden" id="checkresult" value=""/></td>
-      <td width="8%" rowspan="2"><input type="submit" name="addButton" style="height:100px; width: 100px;background-image: url('images/add to cart.jpg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
+      <td colspan="2"><span style="color: #03C;">প্রোডাক্টের বিক্রয়মূল্য: </span><input name="PPRICE" id="PPRICE" type="text" value="<?php echo $db_price ;?>" style="border:0px;font-size: 18px;width:100px;text-align: right;"/> টাকা<input  id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>      
+      <td rowspan="2" ><input type="button" onclick="addToCart()" name="addButton" style="height:100px; width: 100px;background-image: url('images/add to cart.jpg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
     </tr>
   <tr>
-    <td  width="60%"><span style="color: #03C;font-size: 25px;">চালান নং: </span><input name="recipt" type="text" id="recipt" value="<?php echo $_SESSION['SESS_MEMBER_ID']; ?>" style="border:0px; width:200px;font-size: 18px;" readonly="readonly"/></td>
-    <td><span style="color: #03C;"> মোট&nbsp;&nbsp;&nbsp;&nbsp;: </span><input name="TOTAL" id="TOTAL" type="text" readonly="readonly" style="width:100px;"/>
+    <td><span style="color: #03C;"> পরিমাণ : </span><input name="QTY" id="QTY" type="text" onkeyup="checkQty(this.value);" onkeypress="return checkIt(event)" style="width:100px;"/><input type="hidden" id="checkresult" value=""/></td>
+    <td><span style="color: #03C;"> মোট: </span><input name="TOTAL" id="TOTAL" type="text" readonly="readonly" style="width:100px;"/> টাকা
     <input name="subTotalpv" id="SubTotalPV"type="hidden"/></td>
     </tr>
 </table>
@@ -324,25 +350,23 @@ function checkNumeric(objName)
       <tr>
         <td width="17%"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
         <td width="27%"><div align="center"><strong><span style="width:130px;">প্রোডাক্ট-এর নাম</span></strong></div></td>
-        <td width="14%"><div align="center"><strong>পরিমাণ</strong></div></td>
         <td width="16%"><div align="center"><strong>খুচরা মূল্য</strong></div></td>
+        <td width="14%"><div align="center"><strong>পরিমাণ</strong></div></td>
         <td width="19%"><div align="center"><strong>মোট টাকা</strong></div></td>
         <td width="7%">&nbsp;</td>
       </tr>
     <?php
-$f=$_SESSION['SESS_MEMBER_ID'];
-$getresult = mysql_query("SELECT * FROM sales_temp where sales_receiptid = '$f'; ") or exit ('query failed');
-while($row = mysql_fetch_array($getresult))
-  {
-      echo '<tr>';
-      echo '<td><div align="left">'.$row['sales_product_code'].'</div></td>';
-        echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row['sales_product_name'].'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['sales_product_qty']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['sales_product_sellprice']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['sales_totalamount']).'</div></td>';
-        echo "<td><a href=delete.php?selltype=auto.php&code=".$row['sales_product_code'].">Remove</a></td>";
-        echo '</tr>';
-}
+        print_r($_SESSION['arrSellTemp']);
+        foreach($_SESSION['arrSellTemp'] as $key => $row) {
+                    echo '<tr>';
+                    echo '<td><div align="left">'.$row[0].'</div></td>';
+                      echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row[1].'</div></td>';        
+                      echo '<td><div align="center">'.english2bangla($row[3]).'</div></td>';
+                      echo '<td><div align="center">'.english2bangla($row[4]).'</div></td>';
+                      echo '<td><div align="center">'.english2bangla($row[5]).'</div></td>';
+                      echo '<td><a href=delete.php?selltype=auto.php&id='.$key.'><img src="images/del.png" style="cursor:pointer;" width="20px" height="20px" /></a></td>';
+                      echo '</tr>';
+              }
 ?>
 </table>
 </fieldset>
