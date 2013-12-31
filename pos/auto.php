@@ -6,7 +6,6 @@ include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 
 $storeName= $_SESSION['loggedInOfficeName'];
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -423,7 +422,6 @@ function addToCart() // to add into temporary array*******************
              foreach($_SESSION['arrSellTemp'] as $key => $row) {
                    $finalTotal = $finalTotal + $row[5];
               }
-
 ?>
     <input name="tretail" type="hidden" id="tretail" size="20" style="text-align:right;" value="<?php echo $finalTotal;?>" readonly/><?php echo english2bangla($finalTotal);?> টাকা</br>
     <b>প্রদেয় টাকা&nbsp;:</b> <input name="gtotal" type="hidden" id="gtotal" size="20" readonly style="text-align:right;" value="<?php echo $finalTotal;?>"/><?php echo english2bangla($finalTotal);?> টাকা

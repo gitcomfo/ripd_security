@@ -9,9 +9,9 @@ if (!isset($_SESSION['arrSellTemp']))
 //$sql = "INSERT INTO sales_temp(sales_receiptid ,sales_product_code ,sales_product_name ,sales_inventory_sumid ,sales_buying_price, sales_product_sellprice ,sales_product_qty , sales_totalamount ,sales_pv) 
 //            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 //$stmt = $conn->prepare($sql);
-$wholesql = "INSERT INTO sales_temp(sales_receiptid ,sales_product_code ,sales_product_name ,sales_inventory_sumid ,sales_buying_price, sales_product_sellprice ,sales_product_qty , sales_totalamount ,sales_pv ,sales_less_profit, sales_less_extraprofit) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-$wholestmt = $conn->prepare($wholesql);
+//$wholesql = "INSERT INTO sales_temp(sales_receiptid ,sales_product_code ,sales_product_name ,sales_inventory_sumid ,sales_buying_price, sales_product_sellprice ,sales_product_qty , sales_totalamount ,sales_pv ,sales_less_profit, sales_less_extraprofit) 
+//            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//$wholestmt = $conn->prepare($wholesql);
 
 if($_GET['selltype']==1)
 {
@@ -44,20 +44,19 @@ elseif($_GET['selltype']==3)
 
 elseif($_GET['selltype']==2)
 {
-    $P_pname=$_POST['PNAME'];
-     $P_QTY=$_POST['QTY'];
-     $P_subTotal=$_POST['TOTAL'];
-     $P_recipt=$_POST['recipt'];
-     $P_price=$_POST['PPRICE'];
-     $P_buy= $_POST['buyprice'];
-     $P_inventoryID=$_POST['inventoryID'];
-     $P_procode=$_POST['procode'];
-     $P_pv=$_POST['subTotalpv'];
-     $P_profitLess=$_POST['lessProfit'];
-     $P_xtraprofitLess=$_POST['lessxtraProfit'];
-     echo $totalAmount = $P_subTotal - ($P_profitLess + $P_xtraprofitLess);
-    
-    $wholestmt->execute(array($P_recipt, $P_procode, $P_pname, $P_inventoryID, $P_buy, $P_price, $P_QTY, $totalAmount, $P_pv, $P_profitLess, $P_xtraprofitLess));
-header("location: wholesale.php");
+    $P_pname=$_GET['name'];
+     $P_QTY=$_GET['qty'];
+     $P_subTotal=$_GET['total'];
+     $P_price=$_GET['selling'];
+     $P_buy= $_GET['buying'];
+     $P_inventoryID=$_GET['id'];
+     $P_procode=$_GET['code'];
+     $P_pv=$_GET['totalpv'];
+     $P_profitLess=$_GET['lessProfit'];
+     $P_xtraprofitLess=$_GET['lessxtraProfit'];
+     $totalAmount = $P_subTotal - ($P_profitLess + $P_xtraprofitLess);
+     $arr_temp = array($P_procode, $P_pname,$P_buy, $P_price, $P_QTY, $totalAmount, $P_pv, $P_profitLess, $P_xtraprofitLess);
+     
+     $_SESSION['arrSellTemp'][$P_inventoryID] = $arr_temp;
 }
 ?>
