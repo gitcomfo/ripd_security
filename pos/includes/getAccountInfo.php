@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 include 'connectionPDO.php';
 if($_GET['type']=='cust')
 {
@@ -40,6 +40,18 @@ elseif($_GET['type']=='off')
     $all = $selectstmt->fetchAll();
     foreach($all as $row)
     {echo $row['office_name'];}
+}
+elseif(isset ($_GET['AcNo']))
+{
+    $g_accountNo = $_GET['AcNo'];
+    $selectstmt1 = $conn ->prepare("SELECT * FROM cfs_user, acc_user_balance WHERE cfs_user_iduser= idUser AND account_number = ? ");
+    $selectstmt1->execute(array($g_accountNo));
+    $all1 = $selectstmt1->fetchAll();
+    foreach($all1 as $row)
+    {
+        $db_balance = $row['total_balanace'];
+        echo $db_balance;
+    }
 }
 
 ?>

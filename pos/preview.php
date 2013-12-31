@@ -8,14 +8,14 @@ $G_s_type = $_SESSION['loggedInOfficeType'];
 $G_s_id= $_SESSION['loggedInOfficeID'];
 $cfsID = $_SESSION['userIDUser'];
 
-$sel_sales_summery = $conn->prepare("SELECT * FROM `sales_summery` WHERE sal_invoiceno=? ");
+$sel_sales_summary = $conn->prepare("SELECT * FROM `sales_summary` WHERE sal_invoiceno=? ");
 $sel_cfs_user = $conn->prepare("SELECT * FROM cfs_user WHERE account_name= ? AND account_number = ? ");
 $sel_unreg_customer = $conn->prepare("SELECT * FROM unregistered_customer WHERE unregcust_mobile=? ");
 $ins_unreg_customer = $conn->prepare("INSERT INTO `unregistered_customer` (`unregcust_name` ,`unregcust_address` ,`unregcust_occupation` ,`unregcust_mobile` ,`unregcust_email` ,`unregcust_buyingcount` ,`unregcust_status` ,`unregcust_lastupdated_date`) 
                     VALUES (?, ?, ?, ?, '', '1', 'unregistered', NOW())");
 $up_ureg_customer = $conn->prepare("UPDATE `unregistered_customer` SET `unregcust_buyingcount` = ? WHERE unregcust_mobile= ? ");
-$ins_sales_summery = $conn->prepare("INSERT INTO sales_summery(sal_store_type, sal_storeid, sal_buyer_type,sal_buyerid, sal_salesdate ,sal_salestime ,sal_total_buying_price, sal_totalamount ,sal_totalpv ,sal_givenamount ,sal_invoiceno, cfs_userid) 
-            VALUES (?, ?, ?, ?, CURDATE(), CURTIME(), ?, ?, ?, ?, ?, ?)");
+$ins_sales_summary = $conn->prepare("INSERT INTO sales_summary(sal_store_type, sal_storeid, sal_buyer_type,sal_buyerid, sal_salesdate ,sal_salestime ,sal_total_buying_price, sal_totalamount ,sal_totalpv ,sal_givenamount ,sal_invoiceno, cfs_userid,sal_cash_paid,sal_acc_paid) 
+            VALUES (?, ?, ?, ?, CURDATE(), CURTIME(), ?, ?, ?, ?, ?, ?,?, ?)");
 $ins_sales = $conn->prepare("INSERT INTO sales(quantity ,sales_buying_price, sales_amount ,sales_pv , sales_profit, sales_extra_profit, inventory_idinventory ,sales_summery_idsalessummery) 
             VALUES (? ,?, ?, ?, ?, ?, ?, ?);");
 
@@ -49,6 +49,7 @@ if(isset($_POST['print']))
         {
             foreach ($row as $value) {
                 $buycount = $value['unregcust_buyingcount'] +1;
+                $buyerid = $value['idunregcustomer'];
                 $up_ureg_customer->execute(array($buycount,$P_custmbl));
             }
         }
@@ -66,18 +67,33 @@ if(isset($_POST['print']))
         }
     }
     // পোস্ট ডাটা ****************************************
-    $P_getTaka=$_POST['cash'];
-    $P_backTaka=$_POST['change'];
     $P_payType=$_POST['payType'];
     if($P_payType ==1)
     {
         $pay = "ক্যাশ";
+        $P_getTaka=$_POST['cash'];
+        $P_backTaka=$_POST['change'];
+        $P_paiedByCash = $_POST['gtotal'];
+        $P_paiedByAcc = 0;
     }
-    else {$pay = "অ্যাকাউন্ট";}
+    elseif($P_payType ==2) 
+        {
+            $pay = "অ্যাকাউন্ট";
+            $P_paiedByAcc = $_POST['amount'];
+            $P_paiedByCash = 0;
+            $P_getTaka = 0;
+        }
+    else {
+        $pay = "ক্যাশ এন্ড অ্যাকাউন্ট";
+        $P_paiedByAcc = $_POST['amount'];
+        $P_paiedByCash = $_POST['cashTopay'];
+        $P_getTaka=$_POST['cash2'];
+        $P_backTaka=$_POST['change2'];
+    }
 }
 $id=$_SESSION['SESS_MEMBER_ID']; // চালান নং যাচাই**********************
-$sel_sales_summery->execute(array($id));
-$result= $sel_sales_summery->fetchAll();
+$sel_sales_summary->execute(array($id));
+$result= $sel_sales_summary->fetchAll();
         if (count($result)<1)
         {
              $_SESSION['SESS_MEMBER_ID']=$_SESSION['SESS_MEMBER_ID'];
@@ -94,8 +110,8 @@ $result= $sel_sales_summery->fetchAll();
                             $str_recipt_random= str_pad($str_random_no,4, "0", STR_PAD_LEFT);
                             $str_recipt =$str_recipt."-".$str_recipt_random;
                         }
-                        $sel_sales_summery->execute(array($str_recipt));
-                        $result1= $sel_sales_summery->fetchAll();
+                        $sel_sales_summary->execute(array($str_recipt));
+                        $result1= $sel_sales_summary->fetchAll();
                         if (count($result1) < 1)
                         {
                             $forwhileloop = 0;
@@ -111,7 +127,7 @@ $result= $sel_sales_summery->fetchAll();
                    $totalbuy = $totalbuy + $row[2];
               }
     $invoiceNo = $_SESSION['SESS_MEMBER_ID'];
-    $ins_sales_summery->execute(array($G_s_type,$G_s_id,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$P_getTaka,$invoiceNo,$cfsID));
+    $ins_sales_summary->execute(array($G_s_type,$G_s_id,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$P_getTaka,$invoiceNo,$cfsID,$P_paiedByCash,$P_paiedByAcc));
     $sales_sum_id= $conn->lastInsertId();
 
     foreach($_SESSION['arrSellTemp'] as $key => $row) 
@@ -190,11 +206,11 @@ $result= $sel_sales_summery->fetchAll();
     <td width="13%" ><div align="right"  style="padding-right: 8px;"><?php echo $pay;?></div></td>
 </tr>
 <tr>
-    <td colspan="4" ><div align="right"><strong>টাকা গ্রহন:</strong>&nbsp;</div></td>
+    <td colspan="4" ><div align="right"><strong>ক্যাশ টাকা গ্রহন:</strong>&nbsp;</div></td>
     <td width="13%" ><div align="right"  style="padding-right: 8px;"><?php echo english2bangla($P_getTaka);?></div></td>
 </tr>
 <tr>
-    <td colspan="4" ><div align="right"><strong>টাকা ফেরত:</strong>&nbsp;</div></td>
+    <td colspan="4" ><div align="right"><strong>ক্যাশ টাকা ফেরত:</strong>&nbsp;</div></td>
     <td width="13%" ><div align="right" style="padding-right: 8px;"><?php echo english2bangla($P_backTaka);?></div></td>
 </tr>
 </table>

@@ -68,9 +68,7 @@ if (a!=0) {document.getElementById("addtoCart").disabled = false;}
     </script>
 <!--===========================================================================================================================-->
 <script language="javascript" type="text/javascript">
-
 function multiply(){
-
 a=Number(document.abc.QTY.value);
 b=Number(document.abc.PPRICE.value);
 c=a*b;
@@ -85,21 +83,18 @@ if (a!=0) // some logic to determine if it is ok to go
     {document.getElementById("addtoCart").disabled = true;}
 
 }
-function addCommas(nStr){
- nStr += '';
- x = nStr.split('.');
- x1 = x[0];
- x2 = x.length > 1 ? '.' + x[1] : '';
- var rgx = /(\d+)(\d{3})/;
- while (rgx.test(x1)) {
-  x1 = x1.replace(rgx, '$1' + ',' + '$2');
- }
- return x1 + x2;
+function beforeSave()
+{
+    if((document.getElementById('checkField').value != 0))
+    {
+        document.getElementById('print').readonly = false; 
+        return true; 
+    }
+    else { return false; }        
 }
 
-</script>
-<script LANGUAGE="JavaScript">
-function checkIt(evt) {
+function checkIt(evt) // float value******************** 
+{
     evt = (evt) ? evt : window.event
     var charCode = (evt.which) ? evt.which : evt.keyCode
     if (charCode ==8 || (charCode >47 && charCode <58) || charCode==46) {
@@ -109,6 +104,15 @@ function checkIt(evt) {
     status = "This field accepts numbers only."
     return false
 }
+function numbersonly(e)
+   {
+        var unicode=e.charCode? e.charCode : e.keyCode
+            if (unicode!=8)
+            { //if the key isn't the backspace key (which we should allow)
+                if (unicode<48||unicode>57) //if not a number
+                return false //disable key press
+            }
+}
 </script>
 <script language="javascript" type="text/javascript">
 function minus(){
@@ -116,6 +120,28 @@ a=Number(document.mn.cash.value);
 b=Number(document.mn.gtotal.value);
 c=a-b;
 document.mn.change.value=c;
+if(c >= 0)
+    {
+        document.getElementById('checkField').value=1;
+    }
+    else { document.getElementById('checkField').value=0; }
+}
+function minus2(){
+a=Number(document.mn.cash2.value);
+b=Number(document.mn.cashTopay.value);
+c=a-b;
+document.mn.change2.value=c;
+if(c >= 0)
+    {
+        document.getElementById('checkField').value=1;
+    }
+    else { document.getElementById('checkField').value=0; }
+}
+function calculateCash(byacc)
+{
+    var total =Number(document.mn.gtotal.value);
+    var bycash = total - Number(byacc);
+    document.getElementById('cashTopay').value= bycash;
 }
 </script>
 <script>
@@ -238,6 +264,39 @@ function showEmpName(acNo)
 		 reqst.send(null);
 	}	
 }
+function checkAccountBalance(accNo)
+{
+    var toPayAmount = document.getElementById('gtotal').value;
+    var reqst = getXMLHTTP();		
+	if (reqst) 
+	{
+                    reqst.onreadystatechange = function()
+		{
+		if (reqst.readyState == 4) 
+			{			
+                                                        if (reqst.status == 200)
+				{ 
+                                                                            var amount = reqst.responseText;
+                                                                            if(Number(amount) >= Number(toPayAmount))
+                                                                                {
+                                                                                    document.getElementById('amount').value=toPayAmount;
+                                                                                    document.getElementById('checkField').value=1;
+                                                                                }
+                                                                            else
+                                                                                {
+                                                                                    document.getElementById('amount').value=0;
+                                                                                    document.getElementById('checkField').value=0;
+                                                                                    alert("দুঃখিত, এই পরিমান টাকা আপনার অ্যাকাউন্টে নেই")
+                                                                                }
+                                                                        } 
+				else 
+				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+			}				
+		 }			
+		 reqst.open("GET","includes/getAccountInfo.php?AcNo="+accNo, true);
+		 reqst.send(null);
+	}	
+}
 function addToCart() // to add into temporary array*******************
 {
         var id = document.getElementById("inventoryID").value;
@@ -270,15 +329,6 @@ function addToCart() // to add into temporary array*******************
             else { alert("দুঃখিত, পরিমান অথবা ক্রয়মূল্য ০ হতে পারবে না") ;}
 }
 </script>  
- <script language="javascript" type="text/javascript">
- 
-function checkNumeric(objName)
-  {
-    var lstLetters = objName;
-
-    var lstReplace = lstLetters.replace(/\,/g,'');
-  }   
- </script>
  <script type="text/javascript">
  function pinGenerate()
 	{ TINY.box.show({url:'pinGenerator.php',animate:true,close:true,boxid:'error',top:100,width:400,height:100}); }
@@ -301,10 +351,10 @@ function checkNumeric(objName)
       <legend style="color: brown;">পণ্যের বিবরণী</legend>
       <div class="top" style="width: 100%;">
             <div class="topleft" style="float: left;width: 40%;"><b>প্রোডাক্ট কোড :</b>
-            <input type="text" id="amots" name="amots" onKeyUp="bleble('auto.php');" autocomplete="off" style="width: 290px;"/>
-            <div style="width:280px;position:absolute;top:282px;left:232px;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="layer2" ></div></br></br>
-            <b>প্রোডাক্ট নাম&nbsp;&nbsp; :</b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('auto.php');" autocomplete="off" style="width: 290px;"/>
-            <div style="position:absolute;top:340px;left:232px;width:285px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult" ></div>
+            <input type="text" id="amots" name="amots" onKeyUp="bleble('auto.php');" autocomplete="off" style="width: 250px;"/>
+            <div style="width:430px;position:absolute;top:41.5%;left:18%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="layer2" ></div></br></br>
+            <b>প্রোডাক্ট নাম&nbsp;&nbsp;: </b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('auto.php');" autocomplete="off" style="width: 250px;"/>
+            <div style="position:absolute;top:50%;left:18%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult" ></div>
     </div>
     <div class="topright" style="float:left; width: 60%;">
         <?php
@@ -332,7 +382,7 @@ function checkNumeric(objName)
       <td rowspan="2" ><input type="button" onclick="addToCart()" name="addButton" style="height:100px; width: 100px;background-image: url('images/add to cart.jpg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
     </tr>
   <tr>
-    <td><span style="color: #03C;"> পরিমাণ : </span><input name="QTY" id="QTY" type="text" onkeyup="checkQty(this.value);" onkeypress="return checkIt(event)" style="width:100px;"/><input type="hidden" id="checkresult" value=""/></td>
+    <td><span style="color: #03C;"> পরিমাণ : </span><input name="QTY" id="QTY" type="text" onkeyup="checkQty(this.value);" onkeypress="return numbersonly(event)" style="width:100px;"/><input type="hidden" id="checkresult" value=""/></td>
     <td><span style="color: #03C;"> মোট: </span><input name="TOTAL" id="TOTAL" type="text" readonly="readonly" style="width:100px;"/> টাকা
     <input name="subTotalpv" id="SubTotalPV"type="hidden"/></td>
     </tr>
@@ -376,7 +426,7 @@ function checkNumeric(objName)
 
 ?>
     <input name="tretail" type="hidden" id="tretail" size="20" style="text-align:right;" value="<?php echo $finalTotal;?>" readonly/><?php echo english2bangla($finalTotal);?> টাকা</br>
-    <b>প্রদেয় টাকা&nbsp;:</b> <input name="gtotal" type="hidden" id="gtotal" size="20" onblur="checkNumeric(this);" readonly style="text-align:right;" value="<?php echo $finalTotal;?>"/><?php echo english2bangla($finalTotal);?> টাকা
+    <b>প্রদেয় টাকা&nbsp;:</b> <input name="gtotal" type="hidden" id="gtotal" size="20" readonly style="text-align:right;" value="<?php echo $finalTotal;?>"/><?php echo english2bangla($finalTotal);?> টাকা
 </div>    
 <fieldset style="border-width: 3px;padding-bottom:50px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
 <legend style="color: brown;">মূল্য পরিশোধ এবং ক্রেতার তথ্য</legend>
@@ -394,7 +444,7 @@ function checkNumeric(objName)
 <div id="customerInfo" style="width: 100%; margin-top: 20px;">
     <table width='100%' cellspacing='0' cellpadding='0' style='border: #000000 inset 1px; font-size:20px;'><tr>
             <td>কাস্টমারের নামঃ <input id='custName' name='custName' /><em style='font-size: 10px;color:#03C;'>* অবশ্য পূরণীয়</em></td>
-           <td>কাস্টমারের মোবাইল নং :<input id='custMbl' name='custMbl' onkeypress='return checkIt(event)' /><em style='font-size: 10px;color:#03C;'>* অবশ্য পূরণীয়</em></td>
+           <td>কাস্টমারের মোবাইল নং :<input id='custMbl' name='custMbl' onkeypress='return numbersonly(event)' /><em style='font-size: 10px;color:#03C;'>* অবশ্য পূরণীয়</em></td>
             <td>কাস্টমারের পেশাঃ <input id='custOccupation' name='custOccupation' /></td>
            </tr><tr><td colspan ='4'>&nbsp;&nbsp;</td></tr>
             <tr><td colspan='4'>কাস্টমারের ঠিকানাঃ <input id='custAdrss' name='custAdrss' style='width:600px;'/></td></tr>
@@ -416,9 +466,9 @@ function checkNumeric(objName)
       <label style='margin-left:200px;'><b>টাকা গ্রহন&nbsp;&nbsp;:</b>
        <input name='cash' id='cash' type='text' onkeypress='return checkIt(event)' onkeyup='minus()' /> টাকা</label>
        <label style='margin-left: 63px;'><b>টাকা ফেরত : </b>
-        <input name='change' id='change' type='text' readonly/> টাকা</label>
+        <input name='change' id='change' type='text' readonly/> টাকা <input type='hidden' id='checkField' value='0' /></label>
   </div></br></br>
-<input class="btn" name="print" id="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:42%;font-family: SolaimanLipi !important;" />
+<input class="btn" name="print" id="print" onclick="return beforeSave()" readonly  type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:42%;font-family: SolaimanLipi !important;" />
     </fieldset>
   </form>
 <div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
