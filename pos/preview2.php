@@ -160,7 +160,7 @@ $result= $sel_sales_summary->fetchAll();
 সময়ঃ <?php echo english2bangla(date('g:i a' , strtotime('+4 hour')));?></div></br></br>
 <table width="100%" border="1" cellspacing="0" cellpadding="0" style="font-family: SolaimanLipi !important; font-size:14px;">
       <tr><td width="13%" height="43"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
-        <td width="34%"><div align="center"><strong>প্রোডাক্ট-এর নাম</strong></div></td>
+        <td width="34%"><div align="center"><strong>প্রোডাক্টের নাম</strong></div></td>
         <td width="9%"><div align="center"><strong>পরিমাণ</strong></div></td>
         <td width="12%"><div align="center"><strong>মূল বিক্রয়মূল্য</strong></div></td>
         <td width="10%"><div align="center"><strong>প্রফিটে ছাড়</strong></div></td>
@@ -172,9 +172,9 @@ foreach($_SESSION['arrSellTemp'] as $key => $row)
   {
       echo '<tr>';
       echo '<td><div align="left">'.$row[0].'</div></td>';
-        echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row[1].'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row[3]).'</div></td>';
+        echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row[1].'</div></td>';        
         echo '<td><div align="center">'.english2bangla($row[4]).'</div></td>';
+        echo '<td><div align="center">'.english2bangla($row[3]).'</div></td>';
         echo '<td><div align="center">'.english2bangla($row[7]).'</div></td>';
         echo '<td><div align="center">'.english2bangla($row[8]).'</div></td>';
         echo '<td><div align="center">'.english2bangla($row[5]).'</div></td>';

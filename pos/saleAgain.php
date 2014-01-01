@@ -1,5 +1,6 @@
 <?php
 error_reporting(0);
+session_start();
 if($_GET['selltype']==1)
 {
     unset($_SESSION['arrSellTemp']);

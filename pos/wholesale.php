@@ -28,9 +28,7 @@ $storeName= $_SESSION['loggedInOfficeName'];
 </style>
 <!--===========================================================================================================================-->
 <script language="javascript" type="text/javascript">
-
 function multiply(){
-
 a=Number(document.abc.QTY.value);
 b=Number(document.abc.PPRICE.value);
 c=a*b;
@@ -81,6 +79,15 @@ a=Number(document.mn.cash.value);
 w=Number(document.mn.gtotal.value);
 c=a-w;
 document.mn.change.value=c;
+}
+function beforeSave()
+{
+    if((document.getElementById('checkField').value != 0))
+    {
+        document.getElementById('print').readonly = false; 
+        return true; 
+    }
+    else { return false; }        
 }
 </script>
 <script>
@@ -208,9 +215,9 @@ function addToCart() // to add into temporary array*******************
         var code = document.getElementById("procode").value;
         var qty = Number(document.getElementById("QTY").value);
         var totalamount = Number(document.getElementById("TOTAL").value);
-        var sell = document.getElementById("PPRICE").value;
-        var buy = document.getElementById("buyprice").value; 
-        var totalpv = Number(document.getElementById("ProPV").value);
+        var sell = Number(document.getElementById("PPRICE").value);
+        var buy = Number(document.getElementById("buyprice").value) * (qty); 
+        var totalpv = Number(document.getElementById("SubTotalPV").value);
         var xtraless =Number(document.getElementById("lessxtraProfit").value);
         var profitless = Number(document.getElementById("lessProfit").value);
         if(qty != 0)

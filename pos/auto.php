@@ -303,9 +303,9 @@ function addToCart() // to add into temporary array*******************
         var code = document.getElementById("procode").value;
         var qty = Number(document.getElementById("QTY").value);
         var totalamount = Number(document.getElementById("TOTAL").value);
-        var sell = document.getElementById("PPRICE").value;
-        var buy = document.getElementById("buyprice").value;
-        var totalpv = Number(document.getElementById("ProPV").value);
+        var sell = Number(document.getElementById("PPRICE").value);
+        var buy = Number(document.getElementById("buyprice").value) * (qty);
+        var totalpv = Number(document.getElementById("SubTotalPV").value);
         if(qty != 0)
             {
               var reqst = getXMLHTTP();		
