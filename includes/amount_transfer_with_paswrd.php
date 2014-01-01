@@ -3,12 +3,6 @@ error_reporting(0);
 
 echo "<table>";
 echo " <tr>
-                 <td style='text-align: center;' colspan='2'>
-                 <input type='radio' name='charger' /> চার্জ প্রেরকের &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                 <input type='radio' name='charger' /> চার্জ প্রাপকের
-                 </td>
-                 </tr>
-                 <tr>
                     <td style='text-align: right; width: 40%;'>ট্রান্সফার এমাউন্ট</td>
                     <td style='width: 60%;' >: <input  class='box' type='text' /> টাকা</td>   
                  </tr>
