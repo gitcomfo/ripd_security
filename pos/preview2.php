@@ -138,8 +138,8 @@ $result= $sel_sales_summary->fetchAll();
         $pro_xtraProfitless = $row[8];
         $pro_buy= $row[2];
         $invenrow = $_SESSION['pro_inventory_array'][$key];
-        $pro_profit = $invenrow['ins_profit'] * $pro_qty;
-        $pro_xprofit = $invenrow['ins_extra_profit'] * $pro_qty;
+        $pro_profit = ($invenrow['ins_profit'] * $pro_qty) - $pro_profitless;
+        $pro_xprofit = ($invenrow['ins_extra_profit'] * $pro_qty) - $pro_xtraProfitless;
         $ins_sales->execute(array($pro_qty,$pro_buy,$pro_amount,$pro_profitless,$pro_xtraProfitless,$pro_pv,$pro_profit,$pro_xprofit,$key,$sales_sum_id));
     }
 ?>

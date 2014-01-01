@@ -79,6 +79,11 @@ a=Number(document.mn.cash.value);
 w=Number(document.mn.gtotal.value);
 c=a-w;
 document.mn.change.value=c;
+if(c >= 0)
+    {
+        document.getElementById('checkField').value=1;
+    }
+    else { document.getElementById('checkField').value=0; }
 }
 function beforeSave()
 {
@@ -394,9 +399,9 @@ function addToCart() // to add into temporary array*******************
       <label style='margin-left:200px;'><b>টাকা গ্রহন&nbsp;&nbsp;:</b>
 	  <input name='cash' id='cash' type='text' onkeypress='return checkIt(event)' onkeyup='minus()' /> টাকা</label>
 	<label style='margin-left: 63px;'><b>টাকা ফেরত : </b>
-	  <input name='change' id='change' type='text' readonly/> টাকা</label>
+	  <input name='change' id='change' type='text' readonly/> টাকা <input type='hidden' id='checkField' value='0' /></label>
   </div></br></br>
-<input class="btn" name="print" id="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" />
+<input class="btn" name="print" id="print" onclick="return beforeSave()" readonly  type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" />
     </fieldset>
   </form>
 <div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
