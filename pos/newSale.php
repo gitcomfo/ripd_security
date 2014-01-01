@@ -15,7 +15,7 @@ while($forwhileloop==1)
             $str_recipt_random= str_pad($str_random_no,4, "0", STR_PAD_LEFT);
             $str_recipt =$str_recipt."-".$str_recipt_random;
         }
-       $result= mysql_query("SELECT * FROM `sales_summery` where sal_invoiceno='$str_recipt';");
+       $result= mysql_query("SELECT * FROM `sales_summary` where sal_invoiceno='$str_recipt';");
         if (mysql_fetch_array($result)=="" )
         {
             $forwhileloop = 0;
@@ -34,10 +34,7 @@ elseif($G_sellingType==2)
 elseif($G_sellingType==3)
 {
      $prevRecipt = $_SESSION['recipt'];
-    $reslt=mysql_query("SELECT sum(replace_amount) FROM replace_temp WHERE reciptID='$prevRecipt'; ");
-    $row1 = mysql_fetch_assoc($reslt);
-    $db_totalamount = $row1['sum(replace_amount)'];
-   
+     $db_totalamount = $_SESSION['repMoney'];   
     mysql_query("INSERT INTO replace_product_summary(reprosum_store_type,reprosum_storeid,reprosum_replace_date , reprosum_replace_time ,reprosum_total_amount ,reprosum_invoiceno,cfs_userid) 
                         VALUES ('$scatagory',$storeID,CURDATE(), CURTIME(), '$db_totalamount', '$prevRecipt',$cfsID);") or exit ("could not insert into replaceSummary".mysql_error());
     $replace_pro_sum_id= mysql_insert_id();
