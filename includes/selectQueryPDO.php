@@ -38,4 +38,5 @@ $sql_select_product = $conn->prepare("SELECT * FROM product_chart WHERE idproduc
 $sql_select_product_from_inventory = $conn->prepare("SELECT * FROM inventory WHERE ins_productid = ? AND ins_product_type='general' ");
 $sql_select_office = $conn->prepare("SELECT * FROM office WHERE idOffice = ?");
 $sql_select_store = $conn->prepare("SELECT * FROM sales_store WHERE idSales_store = ?");
+
 ?>
