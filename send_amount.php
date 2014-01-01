@@ -142,6 +142,32 @@ function  checkCorrectPass() // match password with account
         xmlhttp.open("GET","includes/matchPassword.php?acc="+acc+"&pass="+pass,true);
         xmlhttp.send();
   }
+  
+function validateMobile(mblno)
+    {
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function()
+        {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+            {
+                document.getElementById("mblValidationMsg").innerHTML = xmlhttp.responseText;
+                var message = document.getElementById("mblValidationMsg").innerText;
+                if (message != "ঠিক আছে")
+                {
+                    document.getElementById('mobile').focus();
+                }
+            }
+        }
+        xmlhttp.open("GET", "includes/mobileNoValidation.php?mobile=" + mblno, true);
+        xmlhttp.send();
+    }
 
 </script>
  
@@ -195,7 +221,7 @@ function  checkCorrectPass() // match password with account
                 </tr>
                 <tr>
                     <td style="text-align: right; width: 50%;padding-left: 10px;">প্রাপকের মোবাইল নাম্বার</td>
-                    <td style="text-align: left; width: 50%;">: <input  class="box" type="text" name="mobileNo" id="mobileNo" maxlength="11" onkeypress=' return numbersonly(event)'  /> </td>
+                    <td style="text-align: left; width: 50%;">: <input  class="box" type="text" name="mobileNo" id="mobileNo" maxlength="11" onkeypress= "return numbersonly(event)" onblur= "validateMobile(this.value)" placeholder="01XXXXXXXXX"/><span id='mblValidationMsg'></span></td>
                 </tr>
                 <tr>
                     <td style="text-align: right;padding-left: 10px;">টাকার পরিমান</td>
