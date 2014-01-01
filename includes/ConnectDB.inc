@@ -7,8 +7,8 @@ global  $db;
 //$dbpassword = 'ibrahim4321';
 //$dbname = 'ripd_db_comfosys';
 
-$host = 'localhost';
-$dbuser = 'root';
+$host = '192.168.1.100';
+$dbuser = 'cfs_iftee';
 $dbpassword = '';
 $dbname = 'ripd_db_comfosys';
 
