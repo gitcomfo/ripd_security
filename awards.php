@@ -2,6 +2,55 @@
 include_once 'includes/header.php';
 include_once 'includes/showTables.php';
 ?>
+<style type="text/css">
+a { 
+	display:block;
+	text-decoration: none;
+/* add cursor:default; to this rule to disable the hand cursor */
+}
+
+a:hover{ /* don't move this positioning to normal state */
+ 	position:relative;
+}
+
+span img {
+        width: 720px;
+        height: 360px;
+}
+
+a span {  /* this is for the large image and the caption */
+	position: absolute;
+	display:none;
+	background-color: #000000;
+	padding: 5px 5px 5px 5px;
+}
+
+img { /* leave or IE puts a border around links */
+border-width: 0;
+}
+
+a:hover span { 
+	display:block;
+	bottom: -100px; /* means the pop-up's top is 50px away from thumb's top */
+	right: 10px; /* means the pop-up's left is 90px far from the thumb's left */
+	z-index: 1;
+	
+/* If you want the pop-up open to the left of thumb, remove the left: 90px; and add  
+right: 90px; This would mean the right side of the pop-up is 90px far from the right side of thumb */	
+
+/* If you want the pop-up open above the thumb, remove the top: 50px; and add  
+bottom: 50px; This would mean the bottom of the pop-up is 50px far from the bottom of thumb */	
+
+/* add cursor:default; to this rule to disable the hand cursor only for the large image */
+}
+
+.resize_thumb {
+	width: 70px; /* enter desired thumb width here */
+	height : 22px;
+}
+
+/* smart image enlarger ends here */
+</style>
 <script type="text/javascript" src="javascripts/external/mootools.js"></script>
 <script type="text/javascript" src="javascripts/dg-filter.js"></script>
 
@@ -16,10 +65,12 @@ include_once 'includes/showTables.php';
                 <thead>
                     <tr align="left" id="table_row_odd">
                         <th><?php echo "ক্রম"; ?></th>
-                        <th><?php echo "এওয়ার্ড টাইপ"; ?></th>
+                        <th><?php echo "এওয়ার্ড নাম"; ?></th>
+                        <th><?php echo "প্রদানকারীর নাম"; ?></th>
                         <th><?php echo "এওয়ার্ড বর্ণনা"; ?></th>
                         <th><?php echo "তারিখ"; ?></th>
-                        <th><?php echo "এওয়ার্ড হোল্ডার"; ?></th>
+                        <th><?php echo "এওয়ার্ড গ্রহণকারী"; ?></th>
+                        <th><?php echo "এওয়ার্ড ছবি"; ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,17 +84,23 @@ include_once 'includes/showTables.php';
                     while ($row_awards = mysql_fetch_array($rs_awards)) {
                         $db_slNo = $db_slNo + 1;
                         $serial = english2bangla($db_slNo);
-                        $db_awardId = $row_awards['idaward'];
-                        $db_awardType = getAwardType($row_awards['awd_type']);
-                        $db_awardDescription = $row_awards['awd_description'];
-                        $db_awardDate = english2bangla($row_awards['awd_date']);
-                        $db_awardReceiver_name = $row_awards['awd_receivername'];
+                        $db_awd_name = $row_awards['awd_name'];
+                        $db_awd_provider_name = $row_awards['awd_provider_name'];
+                        $db_awd_description = $row_awards['awd_description'];
+                        $db_awd_date = english2bangla($row_awards['awd_date']);
+                        $db_awd_image = $row_awards['awd_image'];
+                        //$db_awd_image = "images/Green-Oil.jpg";
+                        $db_awd_receivers_name = $row_awards['awd_receivers_name'];
                         echo "<tr>";
                         echo "<td>$serial</td>";
-                        echo "<td>$db_awardType</td>";
-                        echo "<td>$db_awardDescription</td>";
-                        echo "<td>$db_awardDate</td>";
-                        echo "<td>$db_awardReceiver_name</td>";
+                        echo "<td>$db_awd_name</td>";
+                        echo "<td>$db_awd_provider_name</td>";
+                        echo "<td>$db_awd_description</td>";
+                        echo "<td>$db_awd_date</td>";
+                        echo "<td>$db_awd_receivers_name</td>";
+                        echo '<td><a href=""><img src="'.$db_awd_image.'" alt="No Image" class="resize_thumb" /><span>
+                        <img src="'.$db_awd_image.'" alt="No Image"/><br />
+                        </span></a></td>';
                         echo "</tr>";
                     }
                     ?>

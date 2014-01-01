@@ -25,6 +25,16 @@ function get_catagory()
 <title>পণ্যের তালিকা</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
 <script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
+<style type="text/css">
+.prolinks:focus{
+    background-color: cadetblue;
+    color: yellow !important;
+}
+.prolinks:hover{
+    background-color: cadetblue;
+    color: yellow !important;
+}
+</style>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
  <script src="scripts/tinybox.js" type="text/javascript"></script>
   <script type="text/javascript">
@@ -278,6 +288,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
         <td width="6%"><div align="center"><strong>করনীয়</strong></div></td>
       </tr>
     <?php
+        $sl = 1;
 if (isset($_GET['code']))
      	{	
                     $G_summaryID = $_GET['code'];
@@ -291,7 +302,7 @@ if (isset($_GET['code']))
                         $inventoryID= $row['idinventory'];
                         
       echo '<tr>';
-      echo '<td><div align="center">১</div></td>';
+      echo '<td><div align="center">'.english2bangla($sl).'</div></td>';
       echo '<td><div align="left">'.$db_procode.'</div></td>';
         echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
         echo '<td><div align="center">'.$db_qty.'</div></td>';
@@ -299,6 +310,7 @@ if (isset($_GET['code']))
         echo '<td><div align="center">'.$db_proPV.'</div></td>';
         echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
         echo '</tr>';
+        $sl++;
         }
    else
      	{	
@@ -313,14 +325,15 @@ if (isset($_GET['code']))
                             $inventoryID= $row['idinventory'];
 
                             echo '<tr>';
-                            echo '<td><div align="center">১</div></td>';
+                            echo '<td><div align="center">'.english2bangla($sl).'</div></td>';
                             echo '<td><div align="left">'.$db_procode.'</div></td>';
                               echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
                               echo '<td><div align="center">'.$db_qty.'</div></td>';
                               echo '<td><div align="center">'.$db_price.'</div></td>';
                               echo '<td><div align="center">'.$db_proPV.'</div></td>';
                               echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
-                              echo '</tr>';
+                              echo '</tr>'; 
+                              $sl++;
                         }
         }
 ?>

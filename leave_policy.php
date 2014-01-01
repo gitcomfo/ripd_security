@@ -86,20 +86,20 @@ function deduction(checkvalue)
                           <tr>
                         <td colspan="2" style="text-align: center; font-size: 16px;color: green;">  <?php if($msg != "") {echo $msg;}?></td>                                               
                     </tr>
-                        <tr><td><b>ছুটির নাম : </b></td>
-                                <td><input class="box" type="text" name="leave_name" class="box" /></td>
+                    <tr><td style="text-align: right; width: 40%"><b>ছুটির নাম : </b></td>
+                                <td style="text-align: left; width: 60%"><input class="box" type="text" name="leave_name" class="box" /></td>
                         </tr>
-                        <tr><td><b>ছুটির কোড :</b></td>
-                            <td> <input class="box" type="text" readonly="" name="leave_code" class="box" value="<?php echo $leaveCode;?>" /></td>
+                        <tr><td style="text-align: right; width: 40%"><b>ছুটির কোড :</b></td>
+                            <td style="text-align: left; width: 60%"> <input class="box" type="text" readonly="" name="leave_code" class="box" value="<?php echo $leaveCode;?>" /></td>
                         </tr>
-                        <tr><td><b>বর্ণনা : </b></td>
-                            <td><textarea class="box" type="text" name="leave_des" class="box" /></textarea></td>
+                        <tr><td style="text-align: right; width: 40%"><b>বর্ণনা : </b></td>
+                            <td style="text-align: left; width: 60%"><textarea class="box" type="text" name="leave_des" class="box" /></textarea></td>
                         </tr>
-                        <tr><td><b>বেতন কর্তন : </b></td>
+                        <tr><td style="text-align: right; width: 40%"><b >বেতন কর্তন : </b></td>
                             <td><input type='radio' name='deduct' id="deduct" value='yes' onclick = 'deduction(this.value)'/> হবে
                                     <input type='radio' name='deduct' id="deduct" value='no'  onclick = 'deduction(this.value)' /> হবে না</td>
                         </tr>
-                        <tr><td><b>কর্তন পরিমান : </b></td>
+                        <tr><td style="text-align: right; width: 40%"><b>কর্তন পরিমান : </b></td>
                             <td><span  id="showReductionbox" style="visibility: hidden;" ><input class="box" type="text" name="deductvalue" onkeypress="return checkIt(event)" /> %</span></td>
                         </tr> 
                         <tr>                    

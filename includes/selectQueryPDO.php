@@ -1,5 +1,7 @@
 <?php
 include_once 'connectionPDO.php';
+$sql_select_award_all = $conn->prepare("SELECT * FROM  ripd_award");
+$sql_select_award_id = $conn->prepare("SELECT * FROM  ripd_award WHERE idaward=?");
 $sql_select_command = $conn->prepare("SELECT * FROM command ORDER BY commandno ASC");
 $sql_select_commandEdit = $conn->prepare("SELECT * FROM command WHERE idcommand = ?");
 $sql_select_account_type = $conn->prepare("SELECT idAccount_type, account_name FROM account_type LIMIT 5");

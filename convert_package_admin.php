@@ -13,6 +13,36 @@ $db_onsid = $emprow['idUser'];
 <style type="text/css"> @import "css/bush.css";</style>
 <link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
 
+<script>
+    function getAccount(keystr) //search employee by account number***************
+    {
+        var xmlhttp;
+        //alert("gdgfdg..........");
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if(keystr.length ==0)
+            {
+                document.getElementById('accountfound').style.display = "none";
+            }
+            else
+            {document.getElementById('accountfound').style.visibility = "visible";
+                document.getElementById('accountfound').setAttribute('style','position:absolute;top:41%;left:61.5%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+            }
+            document.getElementById('accountfound').innerHTML=xmlhttp.responseText;
+        }
+        xmlhttp.open("POST","includes/accountSearch.php?key="+keystr+"&location=convert_package_admin.php",true);
+        xmlhttp.send();	
+    }    
+</script>
+
 <div class="main_text_box">
     <div style="padding-left: 110px;"><a href="crm_management.php"><b>ফিরে যান</b></a></div>
     <div>
@@ -99,8 +129,8 @@ if ($msg != "") {
                     <td width="41%"></br>
                         <table>
                             <tr>
-                                <td colspan="2" style="text-align: right">একাউন্ট:  <input type="text" class="box" style="width: 200px;" id="empsearch" name="empsearch" onkeyup="getEmployee(this.value)"/>
-                                    <div id="empfound"></div></td>
+                                <td colspan="2" style="text-align: right">একাউন্ট:  <input type="text" class="box" style="width: 200px;" id="accountsearch" name="accountsearch" onkeyup="getAccount(this.value)" placeholder="টাইপ একাউন্ট নাম্বার"/>
+                                    <div id="accountfound"></div></td>
                             </tr>
                             <tr>
                                 <td  colspan="2"  style="padding-left: 0px;text-align: center;"> <img src="<?php echo $db_empphoto; ?>" width="128px" height="128px" alt=""></td> 

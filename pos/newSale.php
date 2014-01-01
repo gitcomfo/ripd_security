@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 include 'includes/ConnectDB.inc';
-$storeName= $_SESSION['loggedInOfficeName'];
 $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];

@@ -1,11 +1,10 @@
 <?php
 include 'includes/ConnectDB.inc';
-if (isset($_GET['code']))
+if (isset($_GET['id']))
 {
     $location =   $_GET['selltype'];
-    $dltItem = $_GET['code'];
-        $receiptID = $_SESSION['SESS_MEMBER_ID'];
-       mysql_query("DELETE FROM sales_temp where sales_product_code='$dltItem' AND sales_receiptid='$receiptID';") or exit("could not delete item");
+    $dltItem = $_GET['id'];
+    unset($_SESSION['arrSellTemp'][$dltItem]);
        header("location: $location");
 }
 if (isset($_GET['storeID']))

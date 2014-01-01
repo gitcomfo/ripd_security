@@ -1,20 +1,36 @@
 <?php 
 error_reporting(0);
-include 'includes/ConnectDB.inc';
+session_start();
+include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
-$G_rID= $_SESSION['SESS_MEMBER_ID'];
+
 $G_s_type = $_SESSION['loggedInOfficeType'];
 $G_s_id= $_SESSION['loggedInOfficeID'];
 $cfsID = $_SESSION['userIDUser'];
+
+$sel_sales_summary = $conn->prepare("SELECT * FROM `sales_summary` WHERE sal_invoiceno=? ");
+$sel_cfs_user = $conn->prepare("SELECT * FROM cfs_user WHERE account_name= ? AND account_number = ? ");
+$sel_unreg_customer = $conn->prepare("SELECT * FROM unregistered_customer WHERE unregcust_mobile=? ");
+$ins_unreg_customer = $conn->prepare("INSERT INTO `unregistered_customer` (`unregcust_name` ,`unregcust_address` ,`unregcust_occupation` ,`unregcust_mobile` ,`unregcust_email` ,`unregcust_buyingcount` ,`unregcust_status` ,`unregcust_lastupdated_date`) 
+                    VALUES (?, ?, ?, ?, '', '1', 'unregistered', NOW())");
+$up_ureg_customer = $conn->prepare("UPDATE `unregistered_customer` SET `unregcust_buyingcount` = ? WHERE unregcust_mobile= ? ");
+$ins_sales_summary = $conn->prepare("INSERT INTO sales_summary(sal_store_type, sal_storeid, sal_buyer_type,sal_buyerid, sal_salesdate ,sal_salestime ,sal_total_buying_price, sal_totalamount ,sal_totalpv ,sal_givenamount ,sal_invoiceno, cfs_userid,sal_cash_paid,sal_acc_paid) 
+            VALUES (?, ?, ?, ?, CURDATE(), CURTIME(), ?, ?, ?, ?, ?, ?,?, ?)");
+$ins_sales = $conn->prepare("INSERT INTO sales(quantity ,sales_buying_price, sales_amount ,sales_pv , sales_profit, sales_extra_profit, inventory_idinventory ,sales_summery_idsalessummery) 
+            VALUES (? ,?, ?, ?, ?, ?, ?, ?);");
+
 if(isset($_POST['print']))
 {
-    if($_POST['customerType']== 1)
+    if($_POST['customerType']== 1) // ******** ক্রেতা নির্ধারণ*********************************
     {
         $P_accNo = $_POST['accountNo'];
         $P_custname = $_POST['acName'];
-        $custsql = mysql_query("SELECT * FROM cfs_user WHERE account_name= '$P_custname' AND account_number = '$P_accNo' ");
-        $row = mysql_fetch_assoc($custsql);
-        $buyerid = $row['idUser']; $buyertype = 'customer';
+        $sel_cfs_user->execute(array($P_custname,$P_accNo));
+        $custsql = $sel_cfs_user->fetchAll();
+        foreach ($custsql as $row) {
+            $buyerid = $row['idUser']; 
+            $buyertype = 'customer';
+        }
       }
     elseif($_POST['customerType']== 2)
     {
@@ -22,18 +38,20 @@ if(isset($_POST['print']))
         $P_custmbl = $_POST['custMbl'];
         $P_custoccu = $_POST['custOccupation'];
         $P_custadrs = $_POST['custAdrss'];
-        $custsql = mysql_query("SELECT * FROM unregistered_customer WHERE unregcust_mobile= '$P_custmbl' ");
-        $row = mysql_fetch_assoc($custsql);
-        if($row == 0)
+        $sel_unreg_customer->execute(array($P_custmbl));
+        $row = $sel_unreg_customer->fetchAll();
+        if(count($row) < 1)
         {
-            $insertsql = mysql_query("INSERT INTO `unregistered_customer` (`unregcust_name` ,`unregcust_address` ,`unregcust_occupation` ,`unregcust_mobile` ,`unregcust_email` ,`unregcust_buyingcount` ,`unregcust_status` ,`unregcust_lastupdated_date`) 
-                    VALUES ('$P_custname', '$P_custadrs', '$P_custoccu', '$P_custmbl', '', '1', 'unregistered', NOW());") or exit ("could not insert unregister customer");
-            $buyerid= mysql_insert_id();
+            $ins_unreg_customer->execute(array($P_custname,$P_custadrs,$P_custoccu,$P_custmbl));
+            $buyerid= $conn->lastInsertId();
         }
         else
         {
-            $buycount = $row['unregcust_buyingcount'] +1;
-            $upsql = mysql_query("UPDATE `unregistered_customer` SET `unregcust_buyingcount` = '$buycount' WHERE unregcust_mobile= '$P_custmbl' ") or exit("not updated");      
+            foreach ($row as $value) {
+                $buycount = $value['unregcust_buyingcount'] +1;
+                $buyerid = $value['idunregcustomer'];
+                $up_ureg_customer->execute(array($buycount,$P_custmbl));
+            }
         }
         $buyertype='unregcustomer';
     }
@@ -41,23 +59,42 @@ if(isset($_POST['print']))
     {
         $P_accNo = $_POST['empAccNo'];
         $P_custname = $_POST['empName'];
-        $custsql = mysql_query("SELECT * FROM cfs_user WHERE account_name= '$P_custname' AND account_number = '$P_accNo'") or exit ("djhfkdsjhf");
-        $row = mysql_fetch_assoc($custsql);
-        $buyerid = $row['idUser'];
-        $buyertype ='employee';
+        $sel_cfs_user->execute(array($P_custname,$P_accNo));
+        $custsql = $sel_cfs_user->fetchAll();
+        foreach ($custsql as $row) {
+            $buyerid = $row['idUser'];
+            $buyertype ='employee';
+        }
     }
-    $P_getTaka=$_POST['cash'];
-    $P_backTaka=$_POST['change'];
+    // পোস্ট ডাটা ****************************************
     $P_payType=$_POST['payType'];
     if($P_payType ==1)
     {
         $pay = "ক্যাশ";
+        $P_getTaka=$_POST['cash'];
+        $P_backTaka=$_POST['change'];
+        $P_paiedByCash = $_POST['gtotal'];
+        $P_paiedByAcc = 0;
     }
-    else {$pay = "অ্যাকাউন্ট";}
+    elseif($P_payType ==2) 
+        {
+            $pay = "অ্যাকাউন্ট";
+            $P_paiedByAcc = $_POST['amount'];
+            $P_paiedByCash = 0;
+            $P_getTaka = 0;
+        }
+    else {
+        $pay = "ক্যাশ এন্ড অ্যাকাউন্ট";
+        $P_paiedByAcc = $_POST['amount'];
+        $P_paiedByCash = $_POST['cashTopay'];
+        $P_getTaka=$_POST['cash2'];
+        $P_backTaka=$_POST['change2'];
+    }
 }
-$id=$_SESSION['SESS_MEMBER_ID'];
-$result= mysql_query("SELECT * FROM `sales_summery` where sal_invoiceno='$id';");
-        if (mysql_fetch_array($result)=="" )
+$id=$_SESSION['SESS_MEMBER_ID']; // চালান নং যাচাই**********************
+$sel_sales_summary->execute(array($id));
+$result= $sel_sales_summary->fetchAll();
+        if (count($result)<1)
         {
              $_SESSION['SESS_MEMBER_ID']=$_SESSION['SESS_MEMBER_ID'];
         }
@@ -66,23 +103,45 @@ $result= mysql_query("SELECT * FROM `sales_summery` where sal_invoiceno='$id';")
             $forwhileloop = 1;
                 while($forwhileloop==1)
                 {
+                    $str_recipt = "RIPD";
                     for($i=0;$i<3;$i++)
                         {
                             $str_random_no=(string)mt_rand (0 ,9999 );
                             $str_recipt_random= str_pad($str_random_no,4, "0", STR_PAD_LEFT);
                             $str_recipt =$str_recipt."-".$str_recipt_random;
                         }
-                       $result1= mysql_query("SELECT * FROM `sales_summery` where sal_invoiceno='$str_recipt';");
-                        if (mysql_fetch_array($result1)=="" )
+                        $sel_sales_summary->execute(array($str_recipt));
+                        $result1= $sel_sales_summary->fetchAll();
+                        if (count($result1) < 1)
                         {
                             $forwhileloop = 0;
                             break;
                         }
                 }
-                $_SESSION['SESS_MEMBER_ID']=$str_recipt;
+              $_SESSION['SESS_MEMBER_ID']=$str_recipt;
         }
+    $totalamount =0; $totalPV = 0; $totalbuy = 0;
+             foreach($_SESSION['arrSellTemp'] as $key => $row) {
+                   $totalamount = $totalamount + $row[5];
+                   $totalPV = $totalPV + $row[6];
+                   $totalbuy = $totalbuy + $row[2];
+              }
+    $invoiceNo = $_SESSION['SESS_MEMBER_ID'];
+    $ins_sales_summary->execute(array($G_s_type,$G_s_id,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$P_getTaka,$invoiceNo,$cfsID,$P_paiedByCash,$P_paiedByAcc));
+    $sales_sum_id= $conn->lastInsertId();
+
+    foreach($_SESSION['arrSellTemp'] as $key => $row) 
+    {
+        $pro_qty = $row[4];
+        $pro_amount = $row[5];
+        $pro_pv = $row[6];
+        $pro_buy= $row[2];
+        $invenrow = $_SESSION['pro_inventory_array'][$key];
+        $pro_profit = $invenrow['ins_profit'] * $pro_qty;
+        $pro_xprofit = $invenrow['ins_extra_profit'] * $pro_qty;
+        $ins_sales->execute(array($pro_qty,$pro_buy,$pro_amount,$pro_pv,$pro_profit,$pro_xprofit,$key,$sales_sum_id));
+    }
 ?>
- 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -114,27 +173,26 @@ $result= mysql_query("SELECT * FROM `sales_summery` where sal_invoiceno='$id';")
     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="font-family: SolaimanLipi !important; font-size:14px;">
       <tr>
           <td width="17%"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
-        <td width="43%"><div align="center"><strong>প্রোডাক্ট-এর নাম</strong></div></td>
-        <td width="17%"><div align="center"><strong>পরিমাণ</strong></div></td>
+        <td width="43%"><div align="center"><strong>প্রোডাক্ট-এর নাম</strong></div></td>       
         <td width="10%"><div align="center"><strong>খুচরা মূল্য</strong></div></td>
+        <td width="17%"><div align="center"><strong>পরিমাণ</strong></div></td>
         <td width="13%"><div align="center"><strong>মোট টাকা</strong></div></td>
       </tr>
 <?php
-$f=$_SESSION['SESS_MEMBER_ID'];
-$getresult = mysql_query("SELECT * FROM sales_temp where sales_receiptid = '$f'; ") or exit ('query failed');
-while($row = mysql_fetch_array($getresult))
+ foreach($_SESSION['arrSellTemp'] as $key => $row) 
   {
       echo '<tr>';
-      echo '<td><div align="center">'.$row['sales_product_code'].'</div></td>';
-        echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row['sales_product_name'].'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['sales_product_qty']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['sales_product_sellprice']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['sales_totalamount']).'</div></td>';
+      echo '<td><div align="left">'.$row[0].'</div></td>';
+        echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row[1].'</div></td>';
+        echo '<td><div align="center">'.english2bangla($row[3]).'</div></td>';
+        echo '<td><div align="center">'.english2bangla($row[4]).'</div></td>';
+        echo '<td><div align="center">'.english2bangla($row[5]).'</div></td>';
         echo '</tr>';
 }
-$result = mysql_query("SELECT sum(sales_totalamount) FROM sales_temp where sales_receiptid = '$f';");
- while($row2 = mysql_fetch_array($result))
-         { $finalTotal=$row2['sum(sales_totalamount)']; }
+ $finalTotal =0;
+             foreach($_SESSION['arrSellTemp'] as $key => $row) {
+                   $finalTotal = $finalTotal + $row[5];
+              }
 ?>
 <td colspan="4" ><div align="right"><strong>সর্বমোট:</strong>&nbsp;</div></td>
 <td width="13%"><div align="right" style="padding-right: 8px;"><?php echo english2bangla($finalTotal);?></div></td>
@@ -148,41 +206,16 @@ $result = mysql_query("SELECT sum(sales_totalamount) FROM sales_temp where sales
     <td width="13%" ><div align="right"  style="padding-right: 8px;"><?php echo $pay;?></div></td>
 </tr>
 <tr>
-    <td colspan="4" ><div align="right"><strong>টাকা গ্রহন:</strong>&nbsp;</div></td>
+    <td colspan="4" ><div align="right"><strong>ক্যাশ টাকা গ্রহন:</strong>&nbsp;</div></td>
     <td width="13%" ><div align="right"  style="padding-right: 8px;"><?php echo english2bangla($P_getTaka);?></div></td>
 </tr>
 <tr>
-    <td colspan="4" ><div align="right"><strong>টাকা ফেরত:</strong>&nbsp;</div></td>
-    <td width="13%" ><div align="right"><?php echo english2bangla($P_backTaka);?></div></td>
+    <td colspan="4" ><div align="right"><strong>ক্যাশ টাকা ফেরত:</strong>&nbsp;</div></td>
+    <td width="13%" ><div align="right" style="padding-right: 8px;"><?php echo english2bangla($P_backTaka);?></div></td>
 </tr>
 </table>
 <?php
-    $P_buyertype = $buyertype;
-    $P_buyerid = $buyerid;
-    $reslt=mysql_query("SELECT sum(sales_totalamount), sum(sales_pv), sum(sales_buying_price) FROM sales_temp where sales_receiptid = '$G_rID'; ");
-    $row1 = mysql_fetch_assoc($reslt);
-    $db_totalamount = $row1['sum(sales_totalamount)'];
-    $db_totalPV = $row1['sum(sales_pv)'];
-    $db_totalbuy= $row1['sum(sales_buying_price)'];
-    mysql_query("INSERT INTO sales_summery(sal_store_type, sal_storeid, sal_buyer_type,sal_buyerid, sal_salesdate ,sal_salestime ,sal_total_buying_price, sal_totalamount ,sal_totalpv ,sal_givenamount ,sal_invoiceno, cfs_userid) 
-            VALUES ('$G_s_type', $G_s_id,'$P_buyertype', '$P_buyerid', CURDATE(), CURTIME(), $db_totalbuy, '$db_totalamount', '$db_totalPV', '$P_getTaka', '$G_rID', $cfsID);") or exit ("could not insert into salesSummery");
-    $sales_sum_id= mysql_insert_id();
-    $db_reslt= mysql_query("SELECT * FROM sales_temp WHERE sales_receiptid='$G_rID';");
-    while($salesreslt=mysql_fetch_assoc($db_reslt))
-    {
-        $db_proInventID= $salesreslt['sales_inventory_sumid'];
-        $db_qty = $salesreslt['sales_product_qty'];
-        $db_amount = $salesreslt['sales_totalamount'];
-        $db_pv = $salesreslt['sales_pv'];
-        $db_buy= $salesreslt['sales_buying_price'];
-        $sql_inven = mysql_query("SELECT * FROM inventory WHERE idinventory = $db_proInventID");
-        $invenrow = mysql_fetch_assoc($sql_inven);
-        $db_pro_profit = $invenrow['ins_profit'] * $db_qty;
-        $db_pro_xprofit = $invenrow['ins_extra_profit'] * $db_qty;
-                
-        mysql_query("INSERT INTO sales(quantity ,sales_buying_price, sales_amount ,sales_pv , sales_profit, sales_extra_profit, inventory_idinventory ,sales_summery_idsalessummery) 
-            VALUES ('$db_qty' ,$db_buy, '$db_amount', '$db_pv', $db_pro_profit, $db_pro_xprofit, '$db_proInventID', '$sales_sum_id');") or exit ("could not insert into sales");
-    }
+    
      ?></br>
 <div align="center" style="width: 100%;font-family: SolaimanLipi !important;">
    <span id="noprint"><a href="javascript: window.print()"style="margin: 1% 5% 5% 20%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/print-icon.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
@@ -191,7 +224,7 @@ $result = mysql_query("SELECT sum(sales_totalamount) FROM sales_temp where sales
         <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -70px;">পুনরায় বিক্রয় করুন</span></a></span>
 <?php if($buyertype == 'customer') {?>
     <span id="noprint" style="font-family: SolaimanLipi !important;">
-    <a onclick="pinGenerate('<?php echo $sales_sum_id ?>','<?php echo $db_totalPV;?>')" style="margin: 1% 5% 5% 5%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/pingenerator.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
+    <a onclick="pinGenerate('<?php echo $sales_sum_id ?>','<?php echo $totalPV;?>')" style="margin: 1% 5% 5% 5%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/pingenerator.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
 <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -70px;">পিন নং জেনারেট করুন</span></a></span>
 <?php } if($buyertype=='unregcustomer') {?>
 <span id="noprint" style="font-family: SolaimanLipi !important;">

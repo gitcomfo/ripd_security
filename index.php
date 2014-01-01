@@ -1,7 +1,15 @@
 <?php
 include_once 'includes/header.php';
 ?>  
+<script type="text/javascript" src="javascripts/jquery-1.4.3.min.js"></script>
+<script type="text/javascript" src="javascripts/marquee_index_page.js"></script>
 
+<script>
+    $(document).ready(function(){
+        startit1();
+        startit2();
+    });
+</script>
 <div id="fb-root"></div>
         <script>
           (function(d, s, id) {
@@ -124,32 +132,33 @@ include_once 'includes/columnLeftIndexHome.php';
                 <div class="column3">
                     
                     <div class="small_title">দৃষ্টিআকর্ষণ</div>
-                    
-                    <div class="offer_box">
-                        <img src="images/supershop.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
+                    <div class="offer_box" id="marquee_replacement1" onmouseout="startit1();" onmouseover="stop1();">
+<!--    this p height is same as marquee_repacement height      -->
+                            <p class="spacer1"></p>
+<!--    this p height is same as marquee_repacement height      -->
+<!--                            <p class="spacer"></p>-->
+                            <img src="images/supershop.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
                         <div class="offer_info">
                             <span>শুভ উদ্বোধন</span>
                             <p class="offer">
                              শীঘ্রই "সারাবাংলা চেইন-শপ" নামে একটি ব্যতিক্রমী শপ চালু হতে যাচ্ছে। যা আমাদের সিস্টেমের প্রথম ও দেশের সর্ব প্রথম পূর্ণ অনলাইন সফটওয়ার নির্ভর 
                             একটি অত্যাধুনিক চেইন-শপ। এই শপে থাকছে ভোগ্য পণ্য (মুদি আইটেম), পোষাক, জুতা, কসমেটিকস, কুকারিজ, প্লাস্টিক, ইলেক্ট্রিক, খেলনা, বেভারেজ, 
                             চাউল ও ঔষধসহ আরো চমৎকার চমৎকার আইটেম। খুব দ্রম্নতই আমাদের প্রথম সিস্টেমিক চেইন-শপটি মুন্সিগঞ্জ জেলার সিরাজদিখান বাজারে চালু হতে যাচ্ছে।
-                            </p>
-                            <div class="more">
-                                <a href="#">...বিস্তারিত</a>
-                            </div>
+                            <a href="#">বিস্তারিত...</a></p>
                         </div>
+                            <p class="spacer1"></p>
                     </div>
-                    
+                    <br/>
                     <div class="small_title">নতুন নতুন অফারসমূহ</div>
+                    <div class="offer_box" id="marquee_replacement2" onmouseout="startit2();" onmouseover="stop2();" style="background-color:#DDEBF9;">
+<!--    this p height is same as marquee_repacement height      -->
+                            <p class="spacer2"></p>
 
                     <div class="offer_box">
                         <img src="images/Green-Oil.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
                         <div class="offer_info">
                             <span>বিক্রয়ের জন্য</span>
-                            <p class="offer">ঘরে বসেই হাতের কাছে পেয়ে যাচ্ছেন সব পণ্য। ঘরে বসে আরাম করে সব কেনাকাটা করুন কিংবা প্রিয়জনদের উপহার দিন। অর্ডার দেওয়া মাত্র প্রিয়জনদের হাতে পৌঁছে দেওয়া হবে আপনার উপহার। </p>
-                            <div class="more">
-                                <a href="#">...বিস্তারিত</a>
-                            </div>
+                            <p class="offer">ঘরে বসেই হাতের কাছে পেয়ে যাচ্ছেন সব পণ্য। ঘরে বসে আরাম করে সব কেনাকাটা করুন কিংবা প্রিয়জনদের উপহার দিন। অর্ডার দেওয়া মাত্র প্রিয়জনদের হাতে পৌঁছে দেওয়া হবে আপনার উপহার।<a href="#"> বিস্তারিত...</a></p>                            
                         </div>
                     </div>
 
@@ -157,11 +166,8 @@ include_once 'includes/columnLeftIndexHome.php';
                         <img src="images/baby_food.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
                         <div class="offer_info">
                             <span>বিক্রয়ের জন্য</span>
-                            <p class="offer">শীত, গ্রীষ্ম বা বর্ষা এখন কোনোই ব্যাপার না। যখন দরকার তখনই হাতের নাগালে পাওয়া যাবে সবকিছু।আর এই জন্য রিপড ইউনিভার্সাল আপনাকে সবসময় সুবিধা দিতে অঙ্গিকারাবদ্ধ থাকবে। 
-                            </p>
-                            <div class="more">
-                                <a href="#">...বিস্তারিত</a>
-                            </div>
+                            <p class="offer">শীত, গ্রীষ্ম বা বর্ষা এখন কোনোই ব্যাপার না। যখন দরকার তখনই হাতের নাগালে পাওয়া যাবে সবকিছু।আর এই জন্য রিপড ইউনিভার্সাল আপনাকে সবসময় সুবিধা দিতে অঙ্গিকারাবদ্ধ থাকবে। <a href="#"> বিস্তারিত...</a></p>
+                            
                         </div>
                     </div>
                     
@@ -169,13 +175,11 @@ include_once 'includes/columnLeftIndexHome.php';
                         <img src="images/OGB-00426-0.jpg" width="130" height="98" class="img_left" alt="" title="" border="0" />
                         <div class="offer_info">
                             <span>বিক্রয়ের জন্য</span>
-                            <p class="offer">বাচ্চাদের ত্বক সবসময় সেনসিটিভ থাকে। বিশেষ করে শীতে তাদের নানা রকম সমস্যা দেখা দেয়। তাদের সমস্যা সমাধানে Hilsk Harval নিয়ে এসেছে একটি ভিন্নধর্মী পণ্য যেটা ব্যবহারে খুব সহজে</p>
-                            <div class="more">
-                                <a href="#">...বিস্তারিত</a>
-                            </div>
+                            <p class="offer">বাচ্চাদের ত্বক সবসময় সেনসিটিভ থাকে। বিশেষ করে শীতে তাদের নানা রকম সমস্যা দেখা দেয়। তাদের সমস্যা সমাধানে Hilsk Harval নিয়ে এসেছে একটি ভিন্নধর্মী পণ্য যেটা ব্যবহারে খুব সহজে <a href="#"> বিস্তারিত...</a></p>
+                            
                         </div>
                     </div>
-                    
+                    <p class="spacer2"></p> 
                 </div>
 <?php 
 include_once 'includes/footer.php';

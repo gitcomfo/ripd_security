@@ -47,7 +47,7 @@ if(isset($_POST['submit']))
     $maj_gap_des = $_POST['maj_gap_des'];
     $worktime = $_POST['worktime'];
     $xtratime = $_POST['xtratime'];
-    for($i=0;$i<$count;$i++)
+    for($i=1;$i<$count;$i++)
     {
         $month = date("n");
         $year=date('Y');

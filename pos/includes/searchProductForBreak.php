@@ -11,7 +11,7 @@ $scatagory =$_SESSION['loggedInOfficeType'];
 	while($suggest = mysql_fetch_assoc($reslt)) 
                     {
                                 $inventoryid = $suggest['idinventory'];
-                               echo "<a onclick=inventoryProductInfo('$inventoryid'); style='text-decoration:none;color:brown;cursor:pointer;'>" . $suggest['ins_product_code'] . "</a></br>";
+                               echo "<a class='prolinks' onclick=inventoryProductInfo('$inventoryid'); style='text-decoration:none;color:brown;cursor:pointer;display:block;'>" . $suggest['ins_product_code'] ." ".$suggest['ins_productname']. "</a>";
                       }
 }
     elseif (isset($_GET['searchKey2']) && $_GET['searchKey2'] != '') {
@@ -22,7 +22,7 @@ $scatagory =$_SESSION['loggedInOfficeType'];
 	while($suggest = mysql_fetch_assoc($reslt)) 
                     {
                         $chartid = $suggest['idproductchart'];
-                        echo "<a onclick=ProductInfo('$chartid'); style='text-decoration:none;color:brown;cursor:pointer;'>" . $suggest['pro_code'] . "</a></br>";
+                        echo "<a class='prolinks' onclick=ProductInfo('$chartid'); style='text-decoration:none;color:brown;cursor:pointer;display:block;'>" . $suggest['pro_code'] ." ".$suggest['pro_productname']. "</a>";
                       }
 }
     elseif (isset($_GET['id1'])) {

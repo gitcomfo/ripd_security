@@ -5,8 +5,6 @@ include 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 
 $storeName= $_SESSION['loggedInOfficeName'];
-$timestamp=time(); //current timestamp
-$da=date("m/d/Y", $timestamp);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -19,68 +17,15 @@ $da=date("m/d/Y", $timestamp);
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
  <script src="scripts/tinybox.js" type="text/javascript"></script>
 <style type="text/css">
-a:link {
-	text-decoration: none;
+.prolinks:focus{
+    background-color: cadetblue;
+    color: yellow !important;
 }
-a:visited {
-	text-decoration: none;
-}
-a:hover {
-	text-decoration: none;
-}
-a:active {
-	text-decoration: none;
+.prolinks:hover{
+    background-color: cadetblue;
+    color: yellow !important;
 }
 </style>
-<script type="text/javascript">
-function ShowTime()
-{
-      var time=new Date()
-      var h=time.getHours()
-      var m=time.getMinutes()
-      var s=time.getSeconds()
-      // add a zero in front of numbers<10
-      m=checkTime(m)
-      s=checkTime(s)
-      document.getElementById('txt').value=h+" : "+m+" : "+s
-      t=setTimeout('ShowTime()',1000)
-      if(document.getElementById('pname').value !="")
-          { document.getElementById("QTY").disabled = false;}
-     else {document.getElementById("QTY").disabled = true;}
-     
-     if(document.getElementById('tretail').value !="")
-          { document.getElementById("cash").disabled = false;}
-     else {document.getElementById("cash").disabled = true;}
-          
-      a=Number(document.abc.QTY.value);
-if (a!=0) {document.getElementById("addtoCart").disabled = false;}
-  else {document.getElementById("addtoCart").disabled = true;}
-  payable = Number(document.getElementById('gtotal').value);
-  cash = Number(document.getElementById('cash').value);
-  if(cash<payable)
-  {document.getElementById("print").disabled = true;}
-  else {document.getElementById("print").disabled =false ;}
-
-}
-    function checkTime(i)
-    {
-      if (i<10)
-      {
-        i="0" + i
-      }
-      return i
-    }
-    </script>
-	
-<!--=========================================================================================================================-->
-<script type="text/javascript">
-function displayDiv(prefix,suffix) 
-{
-        var div = document.getElementById(prefix+suffix);
-        div.style.display = 'block';
-}
-
-</script>
 <!--===========================================================================================================================-->
 <script language="javascript" type="text/javascript">
 
@@ -109,18 +54,6 @@ if (a!=0) // some logic to determine if it is ok to go
     {document.getElementById("addtoCart").disabled = true;}
 
 }
-function addCommas(nStr){
- nStr += '';
- x = nStr.split('.');
- x1 = x[0];
- x2 = x.length > 1 ? '.' + x[1] : '';
- var rgx = /(\d+)(\d{3})/;
- while (rgx.test(x1)) {
-  x1 = x1.replace(rgx, '$1' + ',' + '$2');
- }
- return x1 + x2;
-}
-
 </script>
 <script LANGUAGE="JavaScript">
 function checkIt(evt) {
@@ -133,8 +66,16 @@ function checkIt(evt) {
     status = "This field accepts numbers only."
     return false
 }
-</script>
-<script language="javascript" type="text/javascript">
+function numbersonly(e)
+   {
+        var unicode=e.charCode? e.charCode : e.keyCode
+            if (unicode!=8)
+            { //if the key isn't the backspace key (which we should allow)
+                if (unicode<48||unicode>57) //if not a number
+                return false //disable key press
+            }
+}
+
 function minus(){
 a=Number(document.mn.cash.value);
 w=Number(document.mn.gtotal.value);
@@ -260,25 +201,48 @@ function showOffName(acNo)
 		 reqst.send(null);
 	}	
 }
+function addToCart() // to add into temporary array*******************
+{
+        var id = document.getElementById("inventoryID").value;
+        var name = document.getElementById("pname").value;
+        var code = document.getElementById("procode").value;
+        var qty = Number(document.getElementById("QTY").value);
+        var totalamount = Number(document.getElementById("TOTAL").value);
+        var sell = document.getElementById("PPRICE").value;
+        var buy = document.getElementById("buyprice").value; 
+        var totalpv = Number(document.getElementById("ProPV").value);
+        var xtraless =Number(document.getElementById("lessxtraProfit").value);
+        var profitless = Number(document.getElementById("lessProfit").value);
+        if(qty != 0)
+            {
+              var reqst = getXMLHTTP();		
+	if (reqst) 
+	{
+                    reqst.onreadystatechange = function()
+		{
+		if (reqst.readyState == 4) 
+			{			
+                                                        if (reqst.status == 200)
+				{ location.reload(); } 
+				else 
+				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+			}				
+		 }			
+		 reqst.open("GET","addorder.php?selltype=2&id="+id+"&code="+code+"&name="+name+"&qty="+qty+"&total="+totalamount+"&selling="+sell+"&buying="+buy+"&totalpv="+totalpv+"&lessProfit="+profitless+"&lessxtraProfit="+xtraless, true);
+		 reqst.send(null);
+	}	
+            }
+            else { alert("দুঃখিত, পরিমান অথবা ক্রয়মূল্য ০ হতে পারবে না") ;}
+}
 </script>  
- <script language="javascript" type="text/javascript">
- 
-function checkNumeric(objName)
-  {
-    var lstLetters = objName;
-
-    var lstReplace = lstLetters.replace(/\,/g,'');
-  }   
- </script>
  <script type="text/javascript">
  function pinGenerate()
 	{ TINY.box.show({url:'pinGenerator.php',animate:true,close:true,boxid:'error',top:100,width:400,height:100}); }
  </script>   
 </head>
     
-<body onLoad="ShowTime()">
-
-    <div id="maindiv">
+<body>
+<div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
 <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
@@ -286,24 +250,23 @@ function checkNumeric(objName)
     <div style="width: 33%;height: 100%;float: left;text-align: right;font-family: SolaimanLipi !important;"><a href="" onclick="javasrcipt:window.open('product_list.php');return false;"><img src="images/productList.png" style="width: 100px;height: 70px;"/></br>প্রোডাক্ট লিস্ট</a></div>
 </div>
 </br>
-        <form action="addorder.php?selltype=2" method="post" name="abc">
+        <form action="" method="post" name="abc">
      <fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
          <legend style="color: brown;">পণ্যের বিবরণী</legend>
     <div class="top" style="width: 100%;">
         <div class="topleft" style="float: left;width: 15%;"><b>প্রোডাক্ট কোড:</b></br>
       <input type="text" id="amots" name="amots" onKeyUp="bleble('wholesale.php');" autocomplete="off"/>
-      <div id="layer2"style="width:200px;position:absolute;top:308px;left:105px;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br>
+      <div id="layer2"style="width:400px;position:absolute;top:45.5%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br>
       <b>প্রোডাক্ট নাম:</b>
       <input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('wholesale.php');" autocomplete="off"/>
-      <div  id="searchResult"style="position:absolute;top:360px;left:106px;width:250px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
+      <div  id="searchResult"style="position:absolute;top:53.5%;left:8%;width:350px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
     </div>
     <div class="topright" style="float:left; width: 85%;">
 <?php
 	if (isset($_GET['code']))
      	{
-                        $G_summaryID = $_GET['code'];
-                        $result = mysql_query("SELECT * FROM inventory WHERE idinventory = '$G_summaryID'");
-                        $row = mysql_fetch_assoc($result);
+                        $G_inventoryID = $_GET['code'];
+                        $row = $_SESSION['pro_inventory_array'][$G_inventoryID];
                         $db_proname=$row["ins_productname"];
                         $db_price=$row["ins_sellingprice"];
                         $db_inventoryid=$row["idinventory"];
@@ -316,31 +279,26 @@ function checkNumeric(objName)
 ?>
 <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
   <tr>
-      <td width="43%" height="50"><span style="color: #03C;font-size: 25px;"> প্রোডাক্ট-এর নাম: </span><input name="PNAME" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 250px;" readonly/>
-       <input name="inventoryID" id="inventoryID" type="hidden" value="<?php echo $db_inventoryid; ?>"/>      
-      <input name="procode" type="hidden" value="<?php echo $db_procode; ?>"/><input name="propv" id="ProPV" type="hidden" value="<?php echo $db_proPV; ?>"/>
-      <input name="profit" id="Profit" type="hidden" value="<?php echo $db_profit; ?>"/>
-      <input name="xtraprofit" id="XProfit" type="hidden" value="<?php echo $db_xtraProfit; ?>"/>
-      <input name="less" type="hidden"/></td>
-      <td colspan="3"><span style="color: #03C;"> তারিখ ও সময়: </span><input name="date" style="width:80px;"type="text" value="<?php echo $da; ?>" readonly/>
-    <input name="time" type="text" id="txt" size="8" readonly/>
-    </td>
+      <td colspan="2"><span style="color: #03C;"> প্রোডাক্টের নাম: </span><input name="PNAME" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width: 400px;" readonly/>
+           <input name="inventoryID" id="inventoryID" type="hidden" value="<?php echo $db_inventoryid; ?>"/>      
+           <input name="procode" id="procode" type="hidden" value="<?php echo $db_procode; ?>"/><input name="propv" id="ProPV" type="hidden" value="<?php echo $db_proPV; ?>"/>
+           <input name="profit" id="Profit" type="hidden" value="<?php echo $db_profit; ?>"/>
+           <input name="xtraprofit" id="XProfit" type="hidden" value="<?php echo $db_xtraProfit; ?>"/>
+           <input name="less" type="hidden"/>
+      </td>
+      <td colspan="2"><span style="color: #03C;">প্রোডাক্টের মূল্য: </span><input name="PPRICE" id="PPRICE" type="text" value="<?php echo $db_price ;?>" style="border:0px;font-size: 18px;width: 100px;text-align: right;"/> টাকা<input name="buyprice" id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>
   </tr>
   <tr>
-      <td  width="43%"><span style="color: #03C;font-size: 25px;">প্রোডাক্ট-এর মূল্য: </span><input name="PPRICE" id="PPRICE" type="text" value="<?php echo $db_price ;?>" style="border:0px;font-size: 18px;width: 250px;"/><input name="buyprice" id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>
-      <td width="14%"><span style="color: #03C;"> পরিমাণ</span></br>
-        <input name="QTY" id="QTY" type="text" onkeyup="checkQty(this.value);" onkeypress="return checkIt(event)" style="width:100px;"/><input type="hidden" id="checkresult" value=""/></td>
-      <td width="15%"><span style="color: #03C;">এক্সট্রা প্রফিট</span></br><input name="subxtraProfit" id="subxtraProfit" type="text"  readonly style="width:100px;"/></td>
-          <td width="14%"><span style="color: #03C;"> প্রফিট </span></br><input name="subprofit" id="subprofit" type="text"  readonly style="width:100px;"/></td>
-     
-      <td width="8%" rowspan="2"><input type="submit" name="addButton" style="height:100px; width: 100px;background-image: url('images/add to cart.jpg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
+      <td ><span style="color: #03C;"> পরিমাণ</span> <input name="QTY" id="QTY" type="text" onkeyup="checkQty(this.value);" onkeypress="return checkIt(event)" style="width:100px;"/><input type="hidden" id="checkresult" value=""/></td>
+      <td ><span style="color: #03C;">এক্সট্রা প্রফিট</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input name="subxtraProfit" id="subxtraProfit" type="text"  readonly style="width:100px;text-align: right;"/> টাকা</td>
+      <td ><span style="color: #03C;"> প্রফিট </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="subprofit" id="subprofit" type="text"  readonly style="width:100px;text-align: right;"/> টাকা</td>     
+      <td  rowspan="2"><input type="button" onclick="addToCart();" name="addButton" style="height:100px; width: 100px;background-image: url('images/add to cart.jpg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
     </tr>
   <tr>
-    <td  width="43%"><span style="color: #03C;font-size: 25px;">চালান নং: </span><input name="recipt" type="text" id="recipt" value="<?php echo $_SESSION['SESS_MEMBER_ID']; ?>" style="border:0px; width:200px;font-size: 18px;" readonly="readonly"/></td>
-    <td><span style="color: #03C;"> মোট</span>
-    </br><input name="TOTAL" id="TOTAL" type="text" readonly="readonly" style="width:100px;"/><input name="subTotalpv" id="SubTotalPV"type="hidden"/></td>
-   <td width="15%"><span style="color: #03C;"> এক্সট্রা প্রফিটে ছাড়</span><input name="lessxtraProfit" id="lessxtraProfit" type="text" onkeypress="return checkIt(event)" style="width:100px;"/></td>
-  <td width="14%"><span style="color: #03C;"> প্রফিটে ছাড়</span><input name="lessProfit" id="lessProfit" type="text" onkeypress="return checkIt(event)" style="width:100px;"/></td>
+      <td><span style="color: #03C;"> মোট</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="TOTAL" id="TOTAL" type="text" readonly="readonly" style="width:100px;text-align: right;"/> টাকা<input name="subTotalpv" id="SubTotalPV"type="hidden"/></td>
+    <td><span style="color: #03C;"> এক্সট্রা প্রফিটে ছাড়</span> <input name="lessxtraProfit" id="lessxtraProfit" type="text" onkeypress="return checkIt(event)" style="width:100px;text-align: right;"/> টাকা</td>
+    <td ><span style="color: #03C;"> প্রফিটে ছাড়</span> <input name="lessProfit" id="lessProfit" type="text" onkeypress="return checkIt(event)" style="width:100px;text-align: right;"/> টাকা</td>
+    <td></td>
   </tr>
 </table>
 </div>
@@ -361,20 +319,18 @@ function checkNumeric(objName)
         <td width="7%">&nbsp;</td>
       </tr>
     <?php
-$f=$_SESSION['SESS_MEMBER_ID'];
-$getresult = mysql_query("SELECT * FROM sales_temp where sales_receiptid = '$f'; ") or exit ('query failed');
-while($row = mysql_fetch_array($getresult))
-  {
-      echo '<tr>';
-      echo '<td><div align="left">'.$row['sales_product_code'].'</div></td>';
-        echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row['sales_product_name'].'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['sales_product_qty']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['sales_product_sellprice']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['sales_less_profit']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['sales_less_extraprofit']).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row['sales_totalamount']).'</div></td>';
-        echo "<td><a href=delete.php?selltype=wholesale.php&code=".$row['sales_product_code'].">Remove</a></td>";
-        echo '</tr>';
+        foreach($_SESSION['arrSellTemp'] as $key => $row) 
+            {
+                echo '<tr>';
+                echo '<td><div align="left">'.$row[0].'</div></td>';
+                  echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row[1].'</div></td>';
+                  echo '<td><div align="center">'.english2bangla($row[4]).'</div></td>';
+                  echo '<td><div align="center">'.english2bangla($row[3]).'</div></td>';
+                  echo '<td><div align="center">'.english2bangla($row[7]).'</div></td>';
+                  echo '<td><div align="center">'.english2bangla($row[8]).'</div></td>';
+                  echo '<td><div align="center">'.english2bangla($row[5]).'</div></td>';
+                  echo '<td style="text-align:center"><a href=delete.php?selltype=wholesale.php&id='.$key.'><img src="images/del.png" style="cursor:pointer;" width="20px" height="20px" /></a></td>';
+                  echo '</tr>';
 }
 ?>
 </table>
@@ -382,11 +338,13 @@ while($row = mysql_fetch_array($getresult))
 <form action="preview2.php" method="post" name="mn" id="suggestSearch">
 <div align="right" style="margin-top:10px;margin-right:100px;font-family: SolaimanLipi !important;">
     <?php
-                $recipt=$_SESSION['SESS_MEMBER_ID'];
-                $result = mysql_query("SELECT sum(sales_totalamount), sum(sales_less_profit), sum(sales_less_extraprofit) FROM sales_temp where sales_receiptid = '$recipt'");
-                while($row2 = mysql_fetch_assoc($result))
-                  { $finalTotal=$row2['sum(sales_totalamount)']; $finalProfitless = $row2['sum(sales_less_profit)']; $finalXtraProfitless = $row2['sum(sales_less_extraprofit)']; }
-?>
+        $finalTotal =0; $finalProfitless = 0; $finalXtraProfitless=0;
+             foreach($_SESSION['arrSellTemp'] as $key => $row) {
+                   $finalTotal = $finalTotal + $row[5];
+                   $finalProfitless= $finalProfitless+ $row[7];
+                   $finalXtraProfitless= $finalXtraProfitless+ $row[8];
+              }
+    ?>
     <b>মোট প্রফিট ছাড়&nbsp;:</b> <input name="totalprofiless" type="hidden" id="totalprofitless" size="20"  readonly style="text-align:right;" value="<?php echo $finalProfitless;?>"/><?php echo english2bangla($finalProfitless);?> টাকা</br>
     <b>মোট এক্সট্রা প্রফিট ছাড়&nbsp;:</b> <input name="totalXprofitless" type="hidden" id="totalXprofitless" size="20"  readonly style="text-align:right;" value="<?php echo $finalXtraProfitless;?>"/><?php echo english2bangla($finalXtraProfitless);?> টাকা</br>
     <b>সর্বমোট : </b><input name="tretail" type="hidden" id="tretail" size="20" style="text-align:right;" value="<?php echo $finalTotal;?>" readonly/><?php echo english2bangla($finalTotal);?> টাকা</br>
@@ -395,11 +353,10 @@ while($row = mysql_fetch_array($getresult))
     
 <fieldset style="border-width: 3px;padding-bottom:50px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
 <legend style="color: brown;">মূল্য পরিশোধ এবং ক্রেতার তথ্য</legend>
-
 <b>কাস্টমার টাইপ :</b>
-&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(1)"/>নন-রেজিস্টার কাস্টমার
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(2)"/>সেলস স্টোর
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(3)"/>অফিস
+&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(1)" checked value="1" />নন-রেজিস্টার কাস্টমার
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(2)" value="2" />সেলস স্টোর
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(3)" value="3" />অফিস
 <!--<select name="customerType" id="customerType" onchange="showCustInfo(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
     <option value="0">---সিলেক্ট করুন---</option>
     <option value="1">নন-রেজিস্টার কাস্টমার</option>
@@ -418,8 +375,8 @@ while($row = mysql_fetch_array($getresult))
 </div>
 </br>
 <b>পেমেন্ট টাইপ :</b>
-&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(1)" checked />ক্যাশ
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(2)"/>অ্যাকাউন্ট
+&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(1)" checked value="1" />ক্যাশ
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(2)" value="2" />অ্যাকাউন্ট
 <!--<select name="payType" id="payType" onchange="showPayType(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
     <option value="0">-সিলেক্ট করুন-</option>
     <option value="1">ক্যাশ</option>

@@ -560,7 +560,7 @@ way to fit your requirements.
     height:auto;
     background-color:#f3f5f6;
     padding:0px;
-    margin:10px 0px 25px 0px;
+    margin:7px 0px 7px 0px;
 }
 .offer_box_wide{
     width:310px;
@@ -965,3 +965,22 @@ a.nav_footer:active {
                                   -moz-border-radius: 3px;
                                   border-radius: 3px;
                                   border: 1px solid mediumturquoise;}
+
+/* ********************index page javascript marquee************************* */
+#marquee_replacement1{
+ width:320px;
+ height:220px;
+ overflow:hidden;
+}
+#marquee_replacement1 p.spacer1{
+ height:220px;
+}
+
+#marquee_replacement2{
+ width:320px;
+ height:530px;
+ overflow:hidden;
+}
+#marquee_replacement2 p.spacer2{
+ height:530px;
+}
