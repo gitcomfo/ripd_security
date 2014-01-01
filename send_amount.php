@@ -1,9 +1,9 @@
 <?php
 error_reporting(0);
-include_once 'includes/ConnectDB.inc';
 include_once 'includes/header.php';
 include_once 'includes/columnViewAccount.php';
-include_once 'includes/connectionPDO.php';
+include_once 'includes/selectQueryPDO.php';
+include_once 'includes/MiscFunctions.php';
 
 $flag = 'false';
 function showMessage($flag, $msg) 
@@ -151,22 +151,46 @@ function  checkCorrectPass() // match password with account
                 <tr>
                     <th colspan="3">সেন্ড এমাউন্ট</th>
                 </tr>
-                <?php showMessage($flag, $msg);?>
+                <?php
+                showMessage($flag, $msg);
+                $transfer_type = "send";
+                $sender_id = $_SESSION['userIDUser'];
+                $sql_last_userAmountTransfer->execute(array($transfer_type, $sender_id));
+                $row_last_amountTransfer = $sql_last_userAmountTransfer->fetchAll();
+                foreach($row_last_amountTransfer as $rlat) $db_last_send = date("d-m-Y", strtotime ($rlat['trans_date_time']));
+                $sql_userBalance->execute(array($sender_id));
+                $row_user_balance = $sql_userBalance->fetchAll();
+                foreach($row_user_balance as $rub) 
+                    {
+                    $db_total_balance = $rub['total_balanace'];
+                    $db_last_withdrawl = date("d-m-Y", strtotime ($rub['last_withdrawl']));
+                    }
+                ?>
                 <tr>
                     <td colspan="3">
                         <fieldset style="border: #686c70 solid 3px;width: 80%;margin-left: 10%;">
                             <legend style="color: brown;">একাউন্ট স্ট্যাটাস</legend>
                                 <table width="100%" align="center" >
                                     <tr>
-                                        <td style="text-align: right; width: 50%;">টোটাল ব্যালেন্স :</td>
-                                        <td style="width: 50%;padding-left: 0px;"><input class="box" type="text" readonly="" /> টাকা</td>
+                                        <td style="text-align: right; width: 50%;"><b>টোটাল ব্যালেন্স :</b></td>
+                                        <td style="width: 50%;padding-left: 0px;"><?php echo english2bangla($db_total_balance)." টাকা";?></td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: right;">শেষ উত্তোলনের তারিখ :</td>
-                                        <td style="padding-left: 0px;"><input class="box" type="text" readonly="" /></td>
+                                        <td style="text-align: right;"><b>সর্বশেষ সেন্ড এমাউন্টের তারিখ :</b></td>
+                                        <td style="padding-left: 0px;"><?php echo english2bangla($db_last_send);?></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;"><b>শেষ উত্তোলনের তারিখ :</b></td>
+                                        <td style="padding-left: 0px;"><?php echo english2bangla($db_last_withdrawl);?></td>
                                     </tr>
                                 </table>
                         </fieldset>
+                    </td>
+                </tr>
+                <tr>                    
+                    <td style='text-align: center;' colspan='2'>
+                        <input type='radio' name='charger' checked="checked" value="sender"/> চার্জ প্রেরকের &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type='radio' name='charger' value="receiver"/> চার্জ প্রাপকের
                     </td>
                 </tr>
                 <tr>

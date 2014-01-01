@@ -4,7 +4,7 @@ include_once 'includes/header.php';
 include_once 'includes/selectQueryPDO.php';
 error_reporting(0);
 ?>
-<title>জেনোলজি ট্রি</title>
+<title>সিস্টেম ট্রি</title>
 
 <!-- CSS Files -->
 <link type="text/css" href="css/base.css" rel="stylesheet" />
