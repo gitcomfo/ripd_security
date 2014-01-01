@@ -22,6 +22,7 @@ $storeName = $_SESSION['loggedInOfficeName'];
                 background-color: cadetblue;
                 color: yellow !important;
             }
+<<<<<<< HEAD
             .prolinks:hover{
                 background-color: cadetblue;
                 color: yellow !important;
@@ -29,6 +30,204 @@ $storeName = $_SESSION['loggedInOfficeName'];
         </style>
         <script type="text/javascript">
             function ShowTime()
+=======
+}
+</script>
+<script language="javascript" type="text/javascript">
+function minus(){
+a=Number(document.mn.cash.value);
+b=Number(document.mn.gtotal.value);
+c=a-b;
+document.mn.change.value=c;
+if(c >= 0)
+    {
+        document.getElementById('checkField').value=1;
+    }
+    else { document.getElementById('checkField').value=0; }
+}
+function minus2(){
+a=Number(document.mn.cash2.value);
+b=Number(document.mn.cashTopay.value);
+c=a-b;
+document.mn.change2.value=c;
+if(c >= 0)
+    {
+        document.getElementById('checkField').value=1;
+    }
+    else { document.getElementById('checkField').value=0; }
+}
+function calculateCash(byacc)
+{
+    var total =Number(document.mn.gtotal.value);
+    var bycash = total - Number(byacc);
+    document.getElementById('cashTopay').value= bycash;
+}
+</script>
+<script>
+function getXMLHTTP() { 
+		var xmlhttp=false;	
+		try{ xmlhttp=new XMLHttpRequest();}
+		catch(e){		
+			try{xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");}
+			catch(e){
+                                                                        try{xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");}
+				catch(e1){xmlhttp=false;}
+                                                                    }
+                                                  }
+		 return xmlhttp;
+}
+	
+function checkQty(qty)
+{
+    var inventoryid = document.getElementById('inventoryID').value;
+   var reqst = getXMLHTTP();		
+	if (reqst) 
+	{
+                    reqst.onreadystatechange = function()
+		{
+		if (reqst.readyState == 4) 
+			{			
+                                                        if (reqst.status == 200)
+				{
+                                                                            var jc= document.getElementById('checkresult').innerHTML=reqst.responseText;
+                                                                            if(jc == 1) {multiply();}
+                                                                                else {                                                                                     
+                                                                                    document.getElementById('TOTAL').value=0;
+                                                                                    document.getElementById("QTY").value = 0;
+                                                                                    alert("দুঃখিত, পর্যাপ্ত পরিমান প্রোডাক্ট নেই");
+                                                                                   
+                                                                                }
+                                                                         } 
+				else 
+				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+			}				
+		 }			
+		 reqst.open("GET","includes/checkProductQty.php?qty="+qty+"&id="+inventoryid, true);
+		 reqst.send(null);
+	}	
+}
+
+function showCustInfo(custType)
+{
+    var reqst = getXMLHTTP();		
+	if (reqst) 
+	{
+                    reqst.onreadystatechange = function()
+		{
+		if (reqst.readyState == 4) 
+			{			
+                                                        if (reqst.status == 200)
+				{ document.getElementById('customerInfo').innerHTML=reqst.responseText;} 
+				else 
+				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+			}				
+		 }			
+		 reqst.open("GET","includes/showCustomerInfo.php?type="+custType+"&selltype=1", true);
+		 reqst.send(null);
+	}		
+}
+function showPayType(payType)
+{
+var reqst = getXMLHTTP();		
+	if (reqst) 
+	{
+                    reqst.onreadystatechange = function()
+		{
+		if (reqst.readyState == 4) 
+			{			
+                                                        if (reqst.status == 200)
+				{ document.getElementById('payInfo').innerHTML=reqst.responseText;} 
+				else 
+				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+			}				
+		 }			
+		 reqst.open("GET","includes/showPayInfo.php?type="+payType+"&selltype=1", true);
+		 reqst.send(null);
+	}		
+}
+function showCustName(acNo)
+{
+    var reqst = getXMLHTTP();		
+	if (reqst) 
+	{
+                    reqst.onreadystatechange = function()
+		{
+		if (reqst.readyState == 4) 
+			{			
+                                                        if (reqst.status == 200)
+				{ document.getElementById('acName').value=reqst.responseText;} 
+				else 
+				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+			}				
+		 }			
+		 reqst.open("GET","includes/getAccountInfo.php?acno="+acNo+"&type=cust", true);
+		 reqst.send(null);
+	}		
+}
+function showEmpName(acNo)
+{
+    var reqst = getXMLHTTP();		
+	if (reqst) 
+	{
+                    reqst.onreadystatechange = function()
+		{
+		if (reqst.readyState == 4) 
+			{			
+                                                        if (reqst.status == 200)
+				{ document.getElementById('empName').value=reqst.responseText;} 
+				else 
+				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+			}				
+		 }			
+		 reqst.open("GET","includes/getAccountInfo.php?acno="+acNo+"&type=emp", true);
+		 reqst.send(null);
+	}	
+}
+function checkAccountBalance(accNo)
+{
+    var toPayAmount = document.getElementById('gtotal').value;
+    var reqst = getXMLHTTP();		
+	if (reqst) 
+	{
+                    reqst.onreadystatechange = function()
+		{
+		if (reqst.readyState == 4) 
+			{			
+                                                        if (reqst.status == 200)
+				{ 
+                                                                            var amount = reqst.responseText;
+                                                                            if(Number(amount) >= Number(toPayAmount))
+                                                                                {
+                                                                                    document.getElementById('amount').value=toPayAmount;
+                                                                                    document.getElementById('checkField').value=1;
+                                                                                }
+                                                                            else
+                                                                                {
+                                                                                    document.getElementById('amount').value=0;
+                                                                                    document.getElementById('checkField').value=0;
+                                                                                    alert("দুঃখিত, এই পরিমান টাকা আপনার অ্যাকাউন্টে নেই")
+                                                                                }
+                                                                        } 
+				else 
+				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+			}				
+		 }			
+		 reqst.open("GET","includes/getAccountInfo.php?AcNo="+accNo, true);
+		 reqst.send(null);
+	}	
+}
+function addToCart() // to add into temporary array*******************
+{
+        var id = document.getElementById("inventoryID").value;
+        var name = document.getElementById("pname").value;
+        var code = document.getElementById("procode").value;
+        var qty = Number(document.getElementById("QTY").value);
+        var totalamount = Number(document.getElementById("TOTAL").value);
+        var sell = Number(document.getElementById("PPRICE").value);
+        var buy = Number(document.getElementById("buyprice").value) * (qty);
+        var totalpv = Number(document.getElementById("SubTotalPV").value);
+        if(qty != 0)
+>>>>>>> branch 'master' of https://github.com/gitcomfo/ripd_security.git
             {
                 var time=new Date()
                 var h=time.getHours()

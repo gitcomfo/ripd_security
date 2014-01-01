@@ -41,13 +41,13 @@ elseif($_GET['selltype']=='2')
             echo "<label style='margin-left:200px;'><b>টাকা গ্রহন&nbsp;&nbsp;:</b>
                         <input name='cash' id='cash' type='text' onkeypress='return checkIt(event)' onkeyup='minus()' /> টাকা</label>
                         <label style='margin-left: 63px;'><b>টাকা ফেরত : </b>
-                        <input name='change' id='change' type='text' readonly/> টাকা</label>";
+                        <input name='change' id='change' type='text' readonly/> টাকা <input type='hidden' id='checkField' value='0' /></label>";
         break;
         case 2:
             echo "<label style='margin-left:200px;'><b>অ্যাকাউন্ট নং&nbsp;&nbsp;:</b>
                         <input name='accountNo' id='accountNo' type='text' /></label>
                         <label style='margin-left: 63px;'><b>টাকার পরিমাণ : </b>
-                        <input name='amount' id='amount' type='text' onkeypress='return checkIt(event)'  /> টাকা</label>";
+                        <input name='amount' id='amount' type='text' onkeypress='return checkIt(event)'  /> টাকা <input type='hidden' id='checkField' value='0' /></label>";
        break;
     }
 }
