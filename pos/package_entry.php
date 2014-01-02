@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 session_start();
-include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 $storeName= $_SESSION['loggedInOfficeName'];
@@ -24,6 +23,7 @@ $insstmt = $conn->prepare("INSERT INTO package_inventory(pckg_infoid ,pckg_quant
 $stmtsel = $conn ->prepare( "SELECT * FROM package_info WHERE idpckginfo= ?");
 $selectstmt2 = $conn ->prepare("SELECT * FROM package_details WHERE pckg_infoid = ?");
 $selectstmt3 = $conn ->prepare("SELECT * FROM product_chart WHERE idproductchart= ? ");
+
 if(isset($_POST['update']))
 {
     $P_updatedpckgbuy = $_POST['buyingprz'];
@@ -43,7 +43,6 @@ if(isset($_POST['update']))
                     else { $msg = "দুঃখিত প্যাকেজটি এন্ট্রি হয়নি";}
 
 }
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -64,7 +63,6 @@ if(isset($_POST['update']))
     color: yellow !important;
 }
 </style>
- <script src="scripts/tinybox.js" type="text/javascript"></script>
 <script type="text/javascript">
 function ShowTime()
 {
@@ -210,8 +208,7 @@ function getUpdate(xprofit) // after update pckg prices
 </head>
     
 <body onLoad="ShowTime()">
-
-    <div id="maindiv">
+<div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
