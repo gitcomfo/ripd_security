@@ -128,7 +128,7 @@ function searchRecipt(str_key) // for sold recipt no. search box
     <?php
 if (isset($_GET['id']))
     {
-       echo  $G_sales_sum_id = $_GET['id'];
+       $G_sales_sum_id = $_GET['id'];
         $sel_sales_summary->execute(array($G_sales_sum_id));
         $reslt = $sel_sales_summary->fetchAll();
         foreach ($reslt as $row) {

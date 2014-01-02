@@ -110,12 +110,13 @@ $result= $sel_sales_summary->fetchAll();
             $pro_qty = $row[4];
             $pro_amount = $row[5];
             $pro_pv = $row[6];
-            $pro_buy= $row[2];
+            $pro_buy= $row[2] * $pro_qty;
             $invenrow = $_SESSION['pro_inventory_array'][$key];
             $pro_profit = $invenrow['ins_profit'] * $pro_qty;
             $pro_xprofit = $invenrow['ins_extra_profit'] * $pro_qty;
             $ins_sales->execute(array($pro_qty,$pro_buy,$pro_amount,$pro_pv,$pro_profit,$pro_xprofit,$key,$sales_sum_id));
         }
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -135,9 +136,9 @@ $result= $sel_sales_summary->fetchAll();
 	{ TINY.box.show({url:'accountGenerator.php?ssumid='+ssumid,animate:true,close:true,boxid:'success',top:100,width:800,height:500}); }
  </script> 
 </head>
+    
 <body>
-
-    <div align="center" style="font-family: SolaimanLipi !important;"><strong>রিপড ইউনিভার্সাল (রিলীভ এন্ড ইমপ্রুভমেন্ট প্ল্যান অব ডেপ্রাইভড) </strong></br>
+<div align="center" style="font-family: SolaimanLipi !important;"><strong>রিপড ইউনিভার্সাল (রিলীভ এন্ড ইমপ্রুভমেন্ট প্ল্যান অব ডেপ্রাইভড) </strong></br>
 বিক্রয় চালান পত্র</br><?php echo $storeName;?></br>
 চালান নং: <?php echo $_SESSION['SESS_MEMBER_ID'];?></br>
 পরিবর্তিত চালান নং:<?php echo $_SESSION['recipt'];?>(পরিবর্তিত) </div></br>
@@ -194,9 +195,9 @@ foreach($_SESSION['arrSellTemp'] as $key => $row)
 <br />
 <div align="center" style="width: 100%;font-family: SolaimanLipi !important;">
    <span id="noprint"><a href="javascript: window.print()"style="margin: 1% 5% 5% 20%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/print-icon.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
-        <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -15px;">প্রিন্ট </span></a></span>
-<span id="noprint"><a href="saleAgain.php?selltype=1"  style="margin: 1% 5% 5% 5%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/newSell.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
-        <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -70px;">পুনরায় বিক্রয় করুন</span></a></span>
+    <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -15px;">প্রিন্ট </span></a></span>
+    <span id="noprint"><a href="saleAgain.php?selltype=1"  style="margin: 1% 5% 5% 5%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/newSell.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
+    <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -70px;">পুনরায় বিক্রয় করুন</span></a></span>
 <?php 
 if ($buyertype== 'customer')
 {

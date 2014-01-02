@@ -14,4 +14,12 @@ elseif($_GET['selltype']==2)
     unset($_SESSION['SESS_MEMBER_ID']);
     header("location: newSale.php?selltype=2");
 }
+//for sell after replace....................................................
+elseif($_GET['selltype']==2)
+{
+    unset($_SESSION['arrSellTemp']);
+    unset($_SESSION['SESS_MEMBER_ID']);
+    unset($_SESSION['recipt']);
+    header("location: newSale.php?selltype=1");
+}
 ?>
