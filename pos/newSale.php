@@ -1,9 +1,17 @@
 <?php
 error_reporting(0);
-include 'includes/ConnectDB.inc';
+session_start();
+include_once './includes/connectionPDO.php';
 $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
+
+$ins_replace_sum = $conn->prepare("INSERT INTO replace_product_summary(reprosum_store_type,reprosum_storeid,reprosum_replace_date , reprosum_replace_time ,reprosum_total_amount ,reprosum_invoiceno,cfs_userid) 
+                                                            VALUES (?,?,CURDATE(), CURTIME(), ?, ?,?)");
+$ins_replace = $conn->prepare("INSERT INTO replace_product(reppro_quantity ,reppro_amount ,inventory_idinventory ,replace_product_summary_idreproductsum) 
+                                                    VALUES (?, ?, ?, ?)");
+$sel_sales_summary = $conn->prepare("SELECT * FROM `sales_summary` WHERE sal_invoiceno=? ");
+
 $G_sellingType = $_GET['selltype'];
 $str_recipt= "RIPD";
 $forwhileloop = 1;
@@ -15,14 +23,16 @@ while($forwhileloop==1)
             $str_recipt_random= str_pad($str_random_no,4, "0", STR_PAD_LEFT);
             $str_recipt =$str_recipt."-".$str_recipt_random;
         }
-       $result= mysql_query("SELECT * FROM `sales_summary` where sal_invoiceno='$str_recipt';");
-        if (mysql_fetch_array($result)=="" )
+        $sel_sales_summary->execute(array($str_recipt));
+       $result= $sel_sales_summary->fetchAll();
+        if (count($result)<1)
         {
             $forwhileloop = 0;
             break;
         }
 }   
 $_SESSION['SESS_MEMBER_ID']=$str_recipt;
+
 if($G_sellingType==1)
 {
     header("location: auto.php");
@@ -35,20 +45,16 @@ elseif($G_sellingType==3)
 {
      $prevRecipt = $_SESSION['recipt'];
      $db_totalamount = $_SESSION['repMoney'];   
-    mysql_query("INSERT INTO replace_product_summary(reprosum_store_type,reprosum_storeid,reprosum_replace_date , reprosum_replace_time ,reprosum_total_amount ,reprosum_invoiceno,cfs_userid) 
-                        VALUES ('$scatagory',$storeID,CURDATE(), CURTIME(), '$db_totalamount', '$prevRecipt',$cfsID);") or exit ("could not insert into replaceSummary".mysql_error());
-    $replace_pro_sum_id= mysql_insert_id();
-    $rTempSelect = mysql_query("SELECT * FROM `replace_temp` WHERE reciptID='$prevRecipt';");
-    while($rTempRow = mysql_fetch_assoc($rTempSelect))
-    {
-        $db_qty=$rTempRow['replace_qty'];
-        $db_amount=$rTempRow['replace_amount'];
-        $db_inventID=$rTempRow['inventory_sum_id'];
-        mysql_query("INSERT INTO replace_product(reppro_quantity ,reppro_amount ,inventory_idinventory ,replace_product_summary_idreproductsum) 
-            VALUES ('$db_qty' , '$db_amount', '$db_inventID', '$replace_pro_sum_id');") or exit ("could not insert into replace_product".mysql_error());
+     $ins_replace_sum->execute(array($scatagory,$storeID,$db_totalamount,$prevRecipt,$cfsID));
+     $replace_pro_sum_id= $conn->lastInsertId();
+     foreach ($_SESSION['arrRepTemp'] as $replaceRow)
+        {
+            $repro_qty=$replaceRow[9];
+            $repro_amount=$replaceRow[10];
+            $repro_id = $replaceRow[4];
+            $ins_replace->execute(array($repro_qty,$repro_amount,$repro_id,$replace_pro_sum_id));
        }
-   
-    mysql_query("delete from replace_temp WHERE reciptID='$prevRecipt';") or exit ("could not delete data!!");
-    header("location: sellAfterReplace.php");
+       unset($_SESSION['arrRepTemp']);
+        header("location: sellAfterReplace.php");
 }
 ?>

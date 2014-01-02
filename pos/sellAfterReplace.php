@@ -1,6 +1,7 @@
 <?php
 error_reporting(0);
 include 'includes/ConnectDB.inc';
+include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 $G_replaceRecipt= $_SESSION['recipt'];
 $storeName= $_SESSION['loggedInOfficeName'];
