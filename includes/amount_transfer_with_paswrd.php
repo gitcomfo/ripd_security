@@ -2,18 +2,7 @@
 error_reporting(0);
 
 echo "<table>";
-echo " <tr>
-                    <td style='text-align: right; width: 40%;'>ট্রান্সফার এমাউন্ট</td>
-                    <td style='width: 60%;' >: <input  class='box' type='text' /> টাকা</td>   
-                 </tr>
-                 <tr>
-                    <td style='text-align: right; width: 30%;'>ট্রান্সফার চার্জ</td>
-                    <td>: <input  class='box' type='text' /> টাকা</td>   
-                 </tr>
-                 <tr>
-                    <td style='text-align: right; width: 30%;'>টোটাল এমাউন্ট</td>
-                    <td>: <input  class='box' type='text' /> টাকা</td>   
-                 </tr>
+echo " 
                   <tr>
                     <td style='text-align: right; width: 30%;'>পাসওয়ার্ড লিখুন</td>
                     <td>: <input  class='box' type='password' name='password1'  id='password1' onblur='checkCorrectPass();'/><span id='showError'></span></td>   

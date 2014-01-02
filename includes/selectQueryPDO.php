@@ -40,4 +40,5 @@ $sql_select_office = $conn->prepare("SELECT * FROM office WHERE idOffice = ?");
 $sql_select_store = $conn->prepare("SELECT * FROM sales_store WHERE idSales_store = ?");
 $sql_last_userAmountTransfer = $conn->prepare("SELECT trans_date_time FROM acc_user_amount_transfer WHERE trans_type=? AND trans_senderid=? ORDER BY trans_date_time DESC LIMIT 1");
 $sql_userBalance = $conn->prepare("SELECT * FROM acc_user_balance WHERE cfs_user_iduser = ?");
+$sql_select_charge = $conn->prepare("SELECT charge_amount, charge_type FROM charge WHERE charge_status = 'active' AND charge_code = ?");
 ?>
