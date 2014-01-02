@@ -74,8 +74,6 @@ $storeName = $_SESSION['loggedInOfficeName'];
                         return false //disable key press
                 }
             }
-        </script>
-        <script language="javascript" type="text/javascript">
             function minus(){
                 a=Number(document.mn.cash.value);
                 b=Number(document.mn.gtotal.value);
@@ -267,7 +265,7 @@ $storeName = $_SESSION['loggedInOfficeName'];
                 var totalamount = Number(document.getElementById("TOTAL").value);
                 var sell = document.getElementById("PPRICE").value;
                 var buy = document.getElementById("buyprice").value;
-                var totalpv = Number(document.getElementById("ProPV").value);
+                var totalpv = Number(document.getElementById("SubTotalPV").value);
                 if(qty != 0)
                 {
                     var reqst = getXMLHTTP();		
