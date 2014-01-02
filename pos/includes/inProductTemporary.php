@@ -15,7 +15,8 @@ if(isset($_GET['name']))
     $arr_temp = array($g_name,$g_code,$g_qty,$g_total,$tkPerQty);
     $_SESSION['arrProductTemp'][$g_chartID] = $arr_temp;
 }
- elseif (isset ($_GET['type'])) {
+
+elseif (isset ($_GET['type'])) {
     $g_id = $_GET['chartID'];
     unset($_SESSION['arrProductTemp'][$g_id]);
 }
