@@ -39,7 +39,7 @@ if (isset($_POST['award_submit'])) {
     }
    $arr_awd =  $sql_insert_award->execute(array($awd_name, $awd_pro, $awd_des, $awd_date, $image_path,
                                        $awd_rec_type, $awd_rec_name, $user_id));
-    if ($arr_awd == 1) {
+    if ($arr_awd > 0) {
         $msg = "আপনি সফলভাবে " . $awd_name . " নামে নতুন এওয়ার্ড তৈরি করেছেন";
         $flag = 'true';
     } else {
@@ -56,7 +56,7 @@ if (isset($_POST['award_submit'])) {
 <script type="text/javascript">
     function edit_award(id)
     {
-        TINY.box.show({iframe:'edit_award.php?editID='+id,width:800,height:550,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});
+        TINY.box.show({iframe:'edit_award.php?editID='+id,width:800,height:490,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});
     }
 </script>
 <script type="text/javascript">
@@ -83,7 +83,7 @@ if ($_GET['action'] == 'new') {
         <form name="awd" action="" enctype="multipart/form-data"  method="post">
             <table class="formstyle" style =" width:90%; margin-left: 50px">    
                 <tr>
-                    <th colspan="4">নতুন এওয়ার্ড প্রদান</th>
+                    <th colspan="2">নতুন এওয়ার্ড প্রদান</th>
                 </tr>                
                 <?php
                 showMessage($flag, $msg);
@@ -102,7 +102,7 @@ if ($_GET['action'] == 'new') {
                 </tr>
                 <tr>
                     <td >এওয়ার্ড তারিখ</td>
-                    <td>: <input class="textfield" type="text" id="date" placeholder="Date" name="awd_date" id="awd_date" value=""style="width: 250px"/></td>	  
+                    <td>: <input class="textfield" type="date" id="date" placeholder="Date" name="awd_date" id="awd_date" value=""style="width: 250px"/></td>	  
                 </tr>
                 <tr>
                     <td >এওয়ার্ড ছবি</td>
@@ -111,11 +111,11 @@ if ($_GET['action'] == 'new') {
                 <tr>
                     <td >এওয়ার্ড গ্রহণকারীর ধরণ</td>
                     <td>: <select class="box2" id="awd_rec_type" name="awd_rec_type" style="width: 250px"/>
-                <option>-সিলেক্ট করুন-</option>
-                <option value="company">-কোম্পানি-</option>
-                <option value="employee">-কর্মচারী-</option>
-                <option value="customer">-কাস্টমার-</option>
-                <option value="others">-অন্যান্য-</option>
+                                <option>----সিলেক্ট করুন----</option>
+                                <option value="company">কোম্পানি</option>
+                                <option value="employee">কর্মচারী</option>
+                                <option value="customer">কাস্টমার</option>
+                                <option value="others">অন্যান্য</option>
                 </td>
                 </tr>
                 <tr>
@@ -136,24 +136,21 @@ if ($_GET['action'] == 'new') {
         <div style="padding-left: 50px; width: 73%; float: left"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
         <div ><a href="award_entry.php?action=new"> নতুন এওয়ার্ড </a>&nbsp;&nbsp;<a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">এওয়ার্ড এর  লিস্ট</a></div>
     </div>
-    <div>
-        <form method="POST" onsubmit="">	
-            <table class="formstyle"  style=" width: 90%; margin-left: 50px ">      
+    <div>	
+            <table class="formstyle"  style="width: 90%; margin-left: 50px;">      
                 <tr>
                     <th colspan="9">প্রদানকৃত এওয়ার্ড তালিকা</th>
-                </tr>
-                <tr>
-                    <td>                
-                <tr id = "table_row_odd">
-                    <td style="background-color: #89C2FA; text-align: center" >ক্রম</td>
-                    <td style="background-color: #89C2FA; text-align: center" >এওয়ার্ড নাম</td>
-                    <td style="background-color: #89C2FA; text-align: center" >প্রদানকারীর নাম</td>
-                    <td style="background-color: #89C2FA; text-align: center">এওয়ার্ড বর্ণনা</td>
-                    <td style="background-color: #89C2FA; text-align: center">তারিখ</td>
-                    <td style="background-color: #89C2FA; text-align: center">এওয়ার্ড গ্রহণকারীর ধরণ</td>
-                    <td style="background-color: #89C2FA; text-align: center">এওয়ার্ড গ্রহণকারী</td>
-                    <td style="background-color: #89C2FA; text-align: center">এওয়ার্ড ছবি</td>
-                    <td style="background-color: #89C2FA; text-align: center; width: 15%">অপশন</td>
+                </tr>           
+                <tr id="table_row_odd">
+                    <th style="background-color: #89C2FA; text-align: center" >ক্রম</th>
+                    <th style="background-color: #89C2FA; text-align: center" >এওয়ার্ড নাম</th>
+                    <th style="background-color: #89C2FA; text-align: center" >প্রদানকারীর নাম</th>
+                    <th style="background-color: #89C2FA; text-align: center">এওয়ার্ড বর্ণনা</th>
+                    <th style="background-color: #89C2FA; text-align: center">তারিখ</th>
+                    <th style="background-color: #89C2FA; text-align: center">গ্রহণকারীর ধরণ</th>
+                    <th style="background-color: #89C2FA; text-align: center">এওয়ার্ড গ্রহণকারী</th>
+                    <th style="background-color: #89C2FA; text-align: center">এওয়ার্ড ছবি</th>
+                    <th style="background-color: #89C2FA; text-align: center;">অপশন</th>
                 </tr>
                 <?php
                 $count = 0;
@@ -169,11 +166,10 @@ if ($_GET['action'] == 'new') {
                     $db_awd_id = $row['idaward'];
                     $db_awd_date = $row['awd_date'];
                     $showDate = english2bangla($db_awd_date);
-                    $db_rec_type = $row['awd_receivers_type'];
+                    $db_rec_type = getAwardReceiverType($row['awd_receivers_type']);
                     $db_rec_name = $row['awd_receivers_name'];
                     $db_awd_pic = $row['awd_image'];
-                    $picname = end(explode("-", $db_awd_pic));
-                    echo "  <tr>
+                    echo "<tr>
                         <td style='text-align: center'>$showCount</td>
                         <td style='text-align: center'>$db_awrd_name</td>
                             <td style='text-align: center'>$db_awd_provider_name</td>
@@ -181,13 +177,12 @@ if ($_GET['action'] == 'new') {
                                         <td style='text-align: center'>$showDate</td>
                                             <td style='text-align: center'>$db_rec_type</td>
                                                 <td style='text-align: center'>$db_rec_name</td>
-                                                    <td style='text-align: center'><img src='$db_awd_pic' width='80px' height='80px'/></td>
-                        <td style='text-align: center ' ><a onclick='edit_award(" . $db_awd_id . ")' style='cursor:pointer;color:blue;'><u>এডিট এওয়ার্ড</u></a></td>
+                                                    <td><img src='$db_awd_pic' alt='No Image' class='resize_award_img'/></td>
+                        <td style='text-align: center ' ><a onclick='edit_award(" . $db_awd_id . ")' style='cursor:pointer;color:blue;'><u>এডিট</u></a></td>
                     </tr>";
                 }
                 ?>
             </table>
-        </form>
     </div>
     <?php
 }

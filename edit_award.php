@@ -12,6 +12,7 @@ if (isset($_POST['award_submit'])) {
     $awd_date = $_POST['awd_date'];
     $awd_pro = $_POST['awd_pro'];
     $awd_des = $_POST['awd_des'];
+    $old_award_img = $_POST['old_award_img'];
     $awd_rec_name = $_POST['awd_rec_name'];
     $awd_rec_type = $_POST['awd_rec_type'];
     $user_id = $_SESSION['userIDUser'];
@@ -26,11 +27,13 @@ if (isset($_POST['award_submit'])) {
         } else {
             echo "Invalid file format.";
         }
+    }else{
+        $image_path = $old_award_img;
     }
     $arr_awd =  $sql_update_award->execute(array($awd_name, $awd_pro, $awd_des, $awd_date, $image_path,
                                        $awd_rec_type, $awd_rec_name, $user_id, $awd_id));
-    if ($arr_awd == 1) {
-        $msg = "আপনি সফলভাবে " . $awd_name . " নামে এডিট করেছেন";
+    if ($arr_awd > 0) {
+        $msg = "আপনি সফলভাবে " . $awd_name . " নামে এওয়ার্ড এডিট করেছেন";
         $flag = 'true';
     } else {
         $msg = "দুঃখিত, আবার চেষ্টা করুন";
@@ -74,47 +77,53 @@ if (isset($_POST['award_submit'])) {
                         $db_rec_type = $row['awd_receivers_type'];
                         $db_rec_name = $row['awd_receivers_name'];
                         $db_awd_pic = $row['awd_image'];
-                        $picname = end(explode("-", $db_awd_pic));
                         ?>
                         <tr>
                             <td >এওয়ার্ড নাম</td>
-                            <td>: <input class="textfield" type="text" value="<?php echo $db_awrd_name; ?>" name="awd_name" id="awd_name" style="width: 250px"></input>
+                            <td>: </td>
+                            <td><input class="textfield" type="text" value="<?php echo $db_awrd_name; ?>" name="awd_name" id="awd_name" style="width: 250px"></input>
                                 <input name="awd_id" value="<?php echo $edit_awardlD; ?>" type="hidden"/></td>                                      
                         </tr>
                         <tr>
                             <td >এওয়ার্ড প্রদানকারীর নাম</td>
-                            <td>: <input class="textfield" type="text" value="<?php echo $db_awd_provider_name; ?>" name="awd_pro" id="awd_pro" style="width: 250px"></input></td>                                      
+                            <td>: </td>
+                            <td><input class="textfield" type="text" value="<?php echo $db_awd_provider_name; ?>" name="awd_pro" id="awd_pro" style="width: 250px"></input></td>                                      
                         </tr>
                         <tr>
                             <td >এওয়ার্ড বর্ণনা</td>
-                            <td>  <textarea name="awd_des" id="awd_des" style="width: 250px"><?php echo $db_awd_des; ?></textarea></td>                                      
+                            <td>: </td>
+                            <td><textarea name="awd_des" id="awd_des" style="width: 250px"><?php echo $db_awd_des; ?></textarea></td>                                      
                         </tr>
                         <tr>
                             <td >এওয়ার্ড তারিখ</td>
-                            <td>: <input class="textfield" type="text" id="date" placeholder="Date" name="awd_date" style="width: 250px" id="awd_id" value="<?php echo $db_awd_date; ?>"/></td>	  
+                            <td>: </td>
+                            <td><input class="textfield" type="date" id="date" placeholder="Date" name="awd_date" style="width: 250px" id="awd_id" value="<?php echo $db_awd_date; ?>"/></td>	  
                         </tr>
                         <tr>
                             <td >এওয়ার্ড ছবি</td>
-                            <td>: <img src='<?php echo $db_awd_pic; ?>' width='80px' height='80px'/></br>
+                            <td>: </td>
+                            <td><img src='<?php echo $db_awd_pic; ?>' width='250px' height='140px'/></br>
                                 <input class="box" type="file" id="awardscan" name="awardscan" style="font-size:10px;" style="width: 350px"/>
-                                <input type="hidden" name="award_img" id="award_img" value="<?php echo $picname; ?>" /></td>
+                                <input type="hidden" name="old_award_img" id="old_award_img" value="<?php echo $db_awd_pic; ?>" /></td>
                         </tr>
                         <tr>
-                            <td >এওয়ার্ড গ্রহণকারীর ধরণ</td>
-                            <td>: <select class="box2" id="awd_rec_type" name="awd_rec_type" style="width: 250px"/>
-                                <option>-সিলেক্ট করুন-</option>
-                                <option value="company">-কোম্পানি-</option>
-                                <option value="employee">-কর্মচারী-</option>
-                                <option value="customer">-কাস্টমার-</option>
-                                <option value="others">-অন্যান্য-</option>
+                            <td>গ্রহণকারীর ধরণ</td>
+                            <td>: </td>
+                            <td><select class="box2" id="awd_rec_type" name="awd_rec_type" style="width: 250px"/>
+                                <option>----সিলেক্ট করুন----</option>
+                                <option value="company" <?php if($db_rec_type=='company') echo 'selected="selected"';?>>কোম্পানি</option>
+                                <option value="employee" <?php if($db_rec_type=='employee') echo 'selected="selected"';?>>কর্মচারী</option>
+                                <option value="customer" <?php if($db_rec_type=='customer') echo 'selected="selected"';?>>কাস্টমার</option>
+                                <option value="others" <?php if($db_rec_type=='others') echo 'selected="selected"';?>>অন্যান্য</option>
                             </td>
                         </tr>
                         <tr>
                             <td>গ্রহণকারীর নাম</td>
-                            <td>: <input  class ="textfield" type="text" id="awd_rec_name" name="awd_rec_name" value="<?php echo $db_rec_name; ?>" style="width: 250px" /></td>
+                            <td>: </td>
+                            <td><input  class ="textfield" type="text" id="awd_rec_name" name="awd_rec_name" value="<?php echo $db_rec_name; ?>" style="width: 250px" /></td>
                         </tr>
                         <tr>                    
-                            <td colspan="4" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="award_submit" value="এডিট করুন" />
+                            <td colspan="3" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="award_submit" value="এডিট করুন" />
                                 <input class="btn" style =" font-size: 12px" type="reset" name="reset" value="রিসেট করুন" /></td>                           
                         </tr>   
                         <?php

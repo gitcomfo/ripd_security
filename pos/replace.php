@@ -1,14 +1,9 @@
 <?php
 error_reporting(0);
 session_start();
-include_once 'includes/ConnectDB.inc';
 include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
-if(isset($_GET['edit']))
-{
-    $recitid= $_GET['edit'];
-    mysql_query("DELETE FROM replace_temp WHERE reciptID = '$recitid';") or exit ("ha ha ha");
-}
+
 $storeName= $_SESSION['loggedInOfficeName'];
 $sel_sales_summary = $conn->prepare("SELECT * FROM sales_summary WHERE idsalessummary= ? ");
 $sel_sales = $conn->prepare("SELECT * FROM sales,inventory WHERE idinventory = inventory_idinventory AND sales_summery_idsalessummery=? ");
@@ -99,8 +94,7 @@ function searchRecipt(str_key) // for sold recipt no. search box
 </head>
     
 <body onLoad="ShowTime()">
-
-    <div id="maindiv">
+<div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>

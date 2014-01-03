@@ -11,11 +11,6 @@ $dbpass = "";
 //$dbuser = "root";
 //$dbpass = "";
 
-//$dbhost = 'localhost';
-//$dbuser = 'root';
-//$dbpass = '';
-//$dbname = 'ripd_db_comfosys';
-
 // database connection
 $conn = new PDO("mysql:host=$dbhost;dbname=$dbname",$dbuser,$dbpass);
 $conn->exec("set names utf8");

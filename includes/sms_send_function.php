@@ -10,8 +10,8 @@ $message_final = substr($message_url, 0, 159);
 //fixed parameter
 $host = "121.241.242.114";
 //$port = "8080";
-$username = "mfn-demo";
-$password = "demo321";
+$username = "mfn-iftee";
+$password = "comfo201";
 $sender = "RIPD";
 $msgtype = "0";
 $dlr ="1";

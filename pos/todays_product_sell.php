@@ -9,12 +9,12 @@ $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory = $_SESSION['loggedInOfficeType'];
 $date = date("Y-m-d");
 $sql_select_today_product_sell = $conn->prepare("SELECT quantity, ins_productname, ins_product_code, sales_amount
-                                                            FROM sales, inventory, sales_summary
-                                                            WHERE inventory.idinventory = sales.inventory_idinventory
-                                                            AND sales.sales_summery_idsalessummery = sales_summary.idsalessummary
-                                                            AND AND sales_amount = ?
-                                                            AND ins_ons_id = ?
-                                                            AND ins_ons_type = ?");
+                                                                                    FROM sales, inventory, sales_summary
+                                                                                    WHERE inventory.idinventory = sales.inventory_idinventory
+                                                                                    AND sales.sales_summery_idsalessummery = sales_summary.idsalessummary
+                                                                                    AND AND sales_amount = ?
+                                                                                    AND ins_ons_id = ?
+                                                                                    AND ins_ons_type = ?");
 $sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
 
 function get_catagory() {

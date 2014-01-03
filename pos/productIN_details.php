@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 session_start();
-include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 	
@@ -83,33 +82,35 @@ if(isset($_POST['entry']))
     $p_profit = $_POST['proProfit']; 
     $p_pv = $_POST['proPV']; 
     $p_qty = $_POST['porQty']; 
-    try {
-          $conn->beginTransaction();
-        $ins_purchase_sum->execute(array($chalanNo,$totalbuying,$totaltarnsport,$totalother,$comment,$cfsID,$chalancopy));
-        $purchase_sum_id = $conn->lastInsertId();
-        for($i=1;$i<=$noRows;$i++)
-        {
-            $buy=$p_buy[$i];
-            $sell=$p_sell[$i];
-            $profit=$p_profit[$i];
-            $xtraprofit=$p_xprofit[$i];
-            $pv=$p_pv[$i];
-            $qty=$p_qty[$i];
-            $chartid=$p_chartID[$i];
-            $ins_purchase->execute(array($scatagory, $storeID, $qty, $pv,  $xtraprofit, $profit, $buy, $sell, $purchase_sum_id, $chartid));
-        }
-         $conn->commit();
-         unset($_SESSION['chalanArray']);
-         unset($_SESSION['chalanNO']);
-         unset($_SESSION['arrProductTemp']);
-         unset($_SESSION['pro_chart_array']);
-         echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>";
-         header('Location:productIN.php');
-    } 
-    catch (Exception $exc) {
-        $conn->rollBack();
-        echo "<script>alert('দুঃখিত,প্রোডাক্ট এন্ট্রি হয়নি')</script>";
-    }
+
+    $conn->beginTransaction();
+            $sqlrslt1 = $ins_purchase_sum->execute(array($chalanNo,$totalbuying,$totaltarnsport,$totalother,$comment,$cfsID,$chalancopy));
+            $purchase_sum_id = $conn->lastInsertId();
+            for($i=1;$i<=$noRows;$i++)
+            {
+                $buy=$p_buy[$i];
+                $sell=$p_sell[$i];
+                $profit=$p_profit[$i];
+                $xtraprofit=$p_xprofit[$i];
+                $pv=$p_pv[$i];
+                $qty=$p_qty[$i];
+                $chartid=$p_chartID[$i];
+                $sqlrslt2 = $ins_purchase->execute(array($scatagory, $storeID, $qty, $pv,  $xtraprofit, $profit, $buy, $sell, $purchase_sum_id, $chartid));
+            }
+            if($sqlrslt1  && $sqlrslt2)
+            {
+                $conn->commit();
+                unset($_SESSION['chalanArray']);
+                unset($_SESSION['chalanNO']);
+                unset($_SESSION['arrProductTemp']);
+                unset($_SESSION['pro_chart_array']);
+                echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>";
+                header('Location:productIN.php');
+            }
+            else {
+                $conn->rollBack();
+                echo "<script>alert('দুঃখিত,প্রোডাক্ট এন্ট্রি হয়নি')</script>";
+            }
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

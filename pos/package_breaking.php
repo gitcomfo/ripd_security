@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 session_start();
-include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 $storeName= $_SESSION['loggedInOfficeName'];
@@ -9,18 +8,13 @@ $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
 $check = 0; $msg ="";
-$arr_left_qty= array();
-$arr_ri8_qty = array();
-$sql ="SELECT * FROM package_inventory WHERE pckg_infoid=? AND ons_type=? AND ons_id=? AND pckg_type=?";
-$stmt = $conn->prepare($sql);
 
-$selsql2 ="SELECT * FROM inventory WHERE ins_productid=? AND ins_ons_type=? AND ins_ons_id=?";
-$selstmt2 = $conn->prepare($selsql2);
-    
-$selsql ="SELECT * FROM package_details WHERE pckg_infoid=?";
-$selstmt = $conn->prepare($selsql);
- $sqlins = "INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_selling_price ,pckg_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?)";
- $insstmt = $conn ->prepare($sqlins);
+$stmt = $conn->prepare("SELECT * FROM package_inventory WHERE pckg_infoid=? AND ons_type=? AND ons_id=? AND pckg_type=?");
+$selstmt2 = $conn->prepare("SELECT * FROM inventory WHERE ins_productid=? AND ins_ons_type=? AND ins_ons_id=?");
+$insstmt = $conn ->prepare("INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_selling_price ,pckg_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?)");
+$selectstmt = $conn ->prepare("SELECT * FROM package_info WHERE idpckginfo= ?");
+$selectstmt2 = $conn ->prepare("SELECT * FROM package_details WHERE pckg_infoid = ?");
+$selectstmt3 = $conn ->prepare("SELECT * FROM product_chart WHERE idproductchart= ? ");
 
 if(isset($_POST['break']))
 {
@@ -71,19 +65,9 @@ if(isset($_POST['break']))
     color: yellow !important;
 }
 </style>
- <script src="scripts/tinybox.js" type="text/javascript"></script>
 <script type="text/javascript">
 function ShowTime()
 {
-      var time=new Date()
-      var h=time.getHours()
-      var m=time.getMinutes()
-      var s=time.getSeconds()
-  
-      m=checkTime(m)
-      s=checkTime(s)
-      document.getElementById('txt').value=h+" : "+m+" : "+s
-      t=setTimeout('ShowTime()',1000)
       if (document.getElementById("breakingQty").value == '')
            {
                document.getElementById("ok").disabled = false;
@@ -96,14 +80,6 @@ function ShowTime()
        else {document.getElementById("break").disabled = true;}
 
 }
-    function checkTime(i)
-    {
-      if (i<10)
-      {
-        i="0" + i
-      }
-      return i
-    }
 
 $(document).ready(function(){
   $('#ok').click(function() {
@@ -208,8 +184,7 @@ function getUpdate(xprofit)
 </head>
     
 <body onLoad="ShowTime()">
-
-    <div id="maindiv">
+<div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
@@ -223,11 +198,9 @@ function getUpdate(xprofit)
     <div class="top" style="width: 100%;height: auto;">
         <div class="topleft" style="width: 60%;float: left;"><b>প্যাকেজ কোড&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
             : <input type="text" id="searchPckg" name="searchPckg" onKeyUp="searchInventoryPckg(this.value)" autocomplete="off" style="width: 300px;"/></br>
-        <div id="searchResult"></div>
-    </div>
-        <div style="width: 40%;float: left;text-align: right;"><b> তারিখ ও সময় : </b><input name="date" style="width:75px;"type="text" value="<?php echo date("d/m/Y"); ?>" readonly/>
-    <input name="time" type="text" id="txt" size="7" readonly/></div>
+                <div id="searchResult"></div>
         </div>
+   </div>
 </fieldset>
 </div></br>
  <?php
@@ -252,8 +225,6 @@ function getUpdate(xprofit)
                                                     if(isset($_GET['id']))
                                                     {
                                                         $pckgid = $_GET['id'];
-                                                        $sql = "SELECT * FROM package_info WHERE idpckginfo= ?";
-                                                        $selectstmt = $conn ->prepare($sql);
                                                         $selectstmt->execute(array($pckgid));
                                                         $all = $selectstmt->fetchAll();
                                                         foreach($all as $row)
@@ -271,8 +242,6 @@ function getUpdate(xprofit)
                                                         {
                                                             $check =1;
                                                         }
-                                                        $sql2 = "SELECT * FROM package_details WHERE pckg_infoid = ?";
-                                                        $selectstmt2 = $conn ->prepare($sql2);
                                                         $arr_pro_chartid = array();
                                                         $arr_pro_qty = array();
                                                         $selectstmt2->execute(array($pckgid));
@@ -301,8 +270,6 @@ function getUpdate(xprofit)
                                                             {
                                                                 $prochartid = $arr_pro_chartid[$i];
                                                                 $proqty = $arr_pro_qty[$i];
-                                                                $sql3 = "SELECT * FROM product_chart WHERE idproductchart= ? ";
-                                                                $selectstmt3 = $conn ->prepare($sql3);
                                                                 $selectstmt3->execute(array($prochartid));
                                                                 $all3 = $selectstmt3->fetchAll();
                                                                 foreach($all3 as $row3)
@@ -317,8 +284,7 @@ function getUpdate(xprofit)
                                                      ?>
                                          </table>
                                     </fieldset>
-                                </td>
-                               
+                                </td>                               
                             </tr>
                         </table>
                     </td>

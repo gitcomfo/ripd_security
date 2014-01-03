@@ -1,19 +1,21 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 session_start();
-include 'includes/connectionPDO.php';
-$sql = "INSERT INTO package_temp(pckg_name ,pckg_code ,pckg_infoid, pckg_prochart_id ,pckg_pro_code, pckg_pro_name ,pckg_pro_qty) VALUES (?, ?, ?, ?, ?, ?, ?)";
-$stmt = $conn->prepare($sql);
-
-    $P_pckgname=$_POST['pckg_name'];
-     $P_pckgcode=$_POST['pckg_code'];
-    $P_pckgid=$_SESSION['pckgid'];
-     $P_prochartid=$_POST['proChartID'];
-     $P_procode=$_POST['pcode'];
-     $P_proname=$_POST['pname'];
-     $P_QTY=$_POST['QTY'];
-     
-   $stmt->execute(array($P_pckgname, $P_pckgcode,$P_pckgid,  $P_prochartid, $P_procode, $P_proname, $P_QTY));
- header("location: create_package.php");
-
+if (!isset($_SESSION['arrProductTemp']))
+{
+ $_SESSION['arrProductTemp'] = array();
+}
+if(isset($_GET['name']))
+{
+     $prochartid=$_GET['chartID'];
+     $procode=$_GET['code'];
+     $proname=$_GET['name'];
+     $QTY=$_GET['totalQty'];
+     $arr_temp = array($procode, $proname, $QTY);
+     $_SESSION['arrProductTemp'][$prochartid] = $arr_temp;
+}
+elseif (isset ($_GET['type'])) {
+    $g_id = $_GET['chartID'];
+    unset($_SESSION['arrProductTemp'][$g_id]);
+}
 ?>

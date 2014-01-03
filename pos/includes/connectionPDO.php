@@ -5,10 +5,11 @@ $dbname = "ripd_db_comfosys";
 $dbuser = "cfs_smriti";
 $dbpass = "";
 
-//$dbhost = 'localhost';
-//$dbuser = 'root';
-//$dbpass = '';
-//$dbname = 'ripd_db_comfosys';
+//$dbhost = "localhost";
+//$dbname = "ripd_db_comfosys";
+//$dbuser = "root";
+//$dbpass = "";
+
 
 
 // database connection
