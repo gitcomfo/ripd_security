@@ -45,7 +45,9 @@ if(count($sqlpckgrow) < 1)
 }
 else
 {
-    $db_str_pckgCode = $sqlpckgrow['pckg_code'];
+    foreach ($sqlpckgrow as $value) {
+        $db_str_pckgCode = $value['pckg_code'];
+    }
     $code = end(explode('-', $db_str_pckgCode));
     $y = (int)$code;
     $y=$y+1;
@@ -64,10 +66,10 @@ if(isset($_POST['entry']))
         $insstmt->execute(array($pckginfoid,$productchartid,$proQTY));
         if($insstmt == 1)
         {
-            $msg = "প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে";
+            $msg = "প্যাকেজ সফলভাবে এন্ট্রি হয়েছে";
         }
         else { 
-            $msg = "দুঃখিত প্রোডাক্ট এন্ট্রি হয়নি";
+            $msg = "দুঃখিত প্যাকেজ এন্ট্রি হয়নি";
         }
       }
             unset($_SESSION['pckgname']); 
@@ -116,6 +118,15 @@ function numbersonly(e)
                 if (unicode<48||unicode>57) //if not a number
                 return false //disable key press
             }
+}
+function beforeSave()
+{
+    var pckgName = document.getElementById('pckg_name').value;
+    if(pckgName != "")
+        {
+             return true;
+        }
+        else { return false; }
 }
 </script>
 <script>
@@ -185,7 +196,7 @@ function addToPckgList() // to add into temporary package array*****************
         var name = document.getElementById("pname").value;
         var code = document.getElementById("pcode").value;
         var totalqty = Number(document.getElementById("QTY").value);
-        if(totalqty != 0)
+        if((totalqty != 0) && (code != ""))
             {
                 var xmlhttp;  
                  if (window.XMLHttpRequest)
@@ -247,15 +258,15 @@ function deleteProduct(id) // to add into temporary array*******************
     if(!isset($_SESSION['pckgcode']))
     {
 ?>
-    <form action="create_package.php" enctype="multipart/form-data" method="post" name="abc">
+<form action="create_package.php" enctype="multipart/form-data" method="post" name="abc" onsubmit="return beforeSave();">
           <fieldset style="width:70%;border-width: 3px;margin:0 20px 0 200px;font-family: SolaimanLipi !important;">
               <legend style="color: brown;">প্যাকেজ তৈরি</legend>
               <div style="width: 100%;">
-                  <b>প্যাকেজের নাম&nbsp;&nbsp; : </b><input type="text" name="pckg_name" style="width: 200px;"/></br>
+                  <b>প্যাকেজের নাম&nbsp;&nbsp; : </b><input type="text" name="pckg_name" id="pckg_name" style="width: 200px;"/></br>
                   <b>প্যাকেজ কোড&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" name="pckg_code" readonly value="<?php echo $pckgCode;?>" style="width: 200px;"/></br>
                   <b>প্যাকেজ ছবি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : </b><input type="file" name="pckg_pic" style="width: 200px;"/>
               </div>
-              <input name="ok" id="ok" type="submit" value="ঠিক আছে" style="cursor:pointer;margin-left:45%;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br>
+              <input name="ok" id="ok" type="submit" readonly value="ঠিক আছে" style="cursor:pointer;margin-left:45%;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br>
            </fieldset>
         </br></br></br></br></br></br></br></br>
     </form>

@@ -14,7 +14,7 @@ $pvrow = $sql_runningpv->fetchAll();
 foreach ($pvrow as $value) {
     $current_pv = $value['pv_value'];
 }
- $insstmt = $conn ->prepare("INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_pv, pckg_selling_price ,pckg_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?)");
+ $insstmt = $conn ->prepare("INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_pv, pckg_selling_price ,pckg_buying_price, pckg_original_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?)");
  $selectstmt = $conn ->prepare("SELECT * FROM inventory WHERE ins_productid= ? AND ins_ons_type=? AND ins_ons_id =? AND ins_product_type = 'general'");
 
  if(isset($_POST['ok']))
@@ -34,20 +34,15 @@ if(isset($_POST['entry']))
     $P_pckgName = $_POST['pckgName'];
     $P_pckgCode = $_POST['pckgCode'];
     $P_pckgID = $_POST['pckgID'];
-    $P_pckgbuying = $_POST['pckgBuy'];
-    $P_totalsell = $_POST['totalsellprz'];
-    $P_totalprofit = $_POST['totalprofit'];
-    $P_totalxprofit = $_POST['totalxprofit'];
-    $P_profitless = $_POST['pckgprofitless'];
-    $P_xprofitless = $_POST['pckgxprofitless'];
+    $P_pckgbuying = $_POST['pckgbuying'];
+    $pckgprofit = $_POST['pckgprofitless'];
+    $pckgxprofit = $_POST['pckgxprofitless'];
     $P_pckgselling = $_POST['pckgsellprz'];
     $P_pckgpv = $_POST['pckgpv'];
-    $pckgprofit = $P_totalprofit - $P_profitless;
-    $pckgxprofit = $P_totalxprofit - $P_xprofitless;
      $timestamp=time(); //current timestamp
      $date=date("Y/m/d", $timestamp);  
      $pckgtype = "making";
-     $x = $insstmt->execute(array($P_pckgID, $P_pckgqty,$P_pckgpv, $P_pckgselling, $P_pckgbuying, $pckgprofit, $pckgxprofit, $date, $cfsID, $pckgtype, $scatagory, $storeID));
+     $x = $insstmt->execute(array($P_pckgID, $P_pckgqty,$P_pckgpv, $P_pckgselling, $P_pckgbuying,$P_pckgbuying, $pckgprofit, $pckgxprofit, $date, $cfsID, $pckgtype, $scatagory, $storeID));
      
     if($x == 1)
        {
@@ -69,17 +64,25 @@ if(isset($_POST['entry']))
 <script type="text/javascript">
 function getPrice(xprofitless)
 {
-    var sell = document.getElementById('totalsellprz').value;
-    var profitless = document.getElementById('pckgprofitless').value;
-    var totalless = profitless + xprofitless;
-    var pckgprice = sell - totalless;
-    document.getElementById('pckgsellprz').value = pckgprice;
-    var cur_pv = <?php echo $current_pv?>;
-    var prev_profit = document.getElementById('totalprofit').value;
-    var cur_profit = prev_profit -  profitless;
-    var pv = ((cur_pv)/100) * cur_profit;
-    pv = (pv).toFixed(2);
-     document.getElementById('pckgpv').value = pv;
+    var totalsell = document.getElementById('totalsellprz').value;
+    var totalxtra = document.getElementById('totalxprofit').value;
+    var buy = document.getElementById('pckgbuying').value;
+    var sell = document.getElementById('pckgsellprz').value;
+    if((sell < totalsell) || (xprofitless < totalxtra))
+        {
+            var pckgprofit = sell - (buy + xprofitless); 
+            var cur_pv = <?php echo $current_pv?>;
+            var pv = cur_pv * pckgprofit;
+            pv = (pv).toFixed(5);
+            pckgprofit = (pckgprofit).toFixed(5);
+            document.getElementById('pckgprofitless').value = pckgprofit;
+            document.getElementById('pckgpv').value = pv;
+    }
+    else
+        {
+            document.getElementById('pckgprofitless').value = 0;
+            document.getElementById('pckgpv').value = 0;
+        }
 }
 function checkIt(evt) // float value-er jonno***********************
     {
@@ -91,6 +94,15 @@ function checkIt(evt) // float value-er jonno***********************
     }
     status = "This field accepts numbers only.";
     return false;
+}
+function beforeSave()
+{
+    var pckgpv = document.getElementById('pckgpv').value;
+    if((pckgpv != 0) && (pckgpv != ""))
+        {
+            return true;
+        }
+        else { return false; }
 }
 </script>
 </head>
@@ -111,9 +123,9 @@ function checkIt(evt) // float value-er jonno***********************
     else { ?>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?>
     </div></br>
-    <form method="post" action="package_price_entry.php">
+    <form method="post" action="package_price_entry.php" onsubmit="return beforeSave();">
     <div style="width: 100%;float: none;font-family: SolaimanLipi !important;">
-        <fieldset style="border-width: 3px;width: 97%;">
+        <fieldset style="border-width: 3px;width: 96%;">
          <legend style="color: brown;">প্যাকেজের দাম নির্ধারণ</legend>
          <b>প্যাকেজের নাম&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" id="pckgName" name="pckgName" readonly value="<?php echo $P_pckgName;?>" style="width: 300px;"/></br>
          <b>প্যাকেজ কোড&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" id="pckgCode" name="pckgCode" readonly value="<?php echo $P_pckgCode;?>" style="width: 300px;"/></br>
@@ -168,23 +180,33 @@ function checkIt(evt) // float value-er jonno***********************
              ?>
              </tbody>
     </table>
-         <div align="right" style="margin-top:10px;margin-right:100px;font-family: SolaimanLipi !important;">
-             <b>মোট বিক্রয় মূল্য :</b><input name="totalsellprz" type="hidden" id="totalsellprz" size="20" style="text-align:right;" value="<?php echo $sellsum;?>" readonly/> <?php echo english2bangla($sellsum);?> টাকা</br>
-            <b>মোট প্রফিট&nbsp;:</b> <input name="totalprofit" type="hidden" id="totalprofit" size="20" readonly style="text-align:right;" value="<?php echo $profitsum;?>"/> <?php echo english2bangla($profitsum);?> টাকা</br>
-            <b>মোট এক্সট্রা প্রফিট :</b><input name="totalxprofit" type="hidden" id="totalxprofit" size="20" style="text-align:right;" value="<?php echo $xprofitsum;?>" readonly/> <?php echo english2bangla($xprofitsum);?> টাকা</br>
-            <b>মোট পিভি&nbsp;:</b> <input name="totalpv" type="hidden" id="totalpv" size="20" readonly style="text-align:right;" value="<?php echo $pvsum;?>"/> <?php echo english2bangla($pvsum);?> টাকা
-            <input type="hidden" name="pckgBuy" readonly value="<?php echo $probuy;?>"/>
-</div>
-         <hr></hr>
-         <div align="left" style="margin-top:10px;margin-right:100px;font-family: SolaimanLipi !important;">
-             <b>প্যাকেজ প্রফিট হ্রাস&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input name="pckgprofitless" type="text" id="pckgprofitless" onkeypress="return checkIt(event)" size="20" style="text-align:right;" /> টাকা</br>
-            <b>প্যাকেজ এক্সট্রা প্রফিট হ্রাস : </b><input name="pckgxprofitless" type="text" id="pckgxprofitless" onkeypress="return checkIt(event)" onblur="getPrice(this.value)" size="20" style="text-align:right;" /> টাকা</br>
-            <b>প্যাকেজ বিক্রয় মূল্য&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b><input name="pckgsellprz" type="text" id="pckgsellprz" size="20" style="text-align:right;" readonly/> টাকা</br>
-            <b>প্যাকেজ পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b> <input name="pckgpv" type="text" id="pckgpv" size="20" readonly style="text-align:right;" /> টাকা
-</div>
+         <div style="font-family: SolaimanLipi !important;width: 100%">
+             <div style="width: 48%;font-family: SolaimanLipi !important;float: left;">
+                 <fieldset style="border-width: 3px;width: 90%;">
+                 <legend style="color: brown;">প্যাকেজ পণ্যসমূহের মোট মূল্য</legend>
+                    <b>মোট ক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b><input name="totalbuyprz" type="hidden" id="totalbuyprz" size="20" style="text-align:right;" value="<?php echo $buysum;?>" readonly /> <?php echo english2bangla($buysum);?> টাকা</br>
+                    <b>মোট বিক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;:</b><input name="totalsellprz" type="hidden" id="totalsellprz" size="20" style="text-align:right;" value="<?php echo $sellsum;?>" readonly/> <?php echo english2bangla($sellsum);?> টাকা</br>
+                     <b>মোট এক্সট্রা প্রফিট :</b><input name="totalxprofit" type="hidden" id="totalxprofit" size="20" style="text-align:right;" value="<?php echo $xprofitsum;?>" readonly/> <?php echo english2bangla($xprofitsum);?> টাকা</br>
+                    <b>মোট প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b> <input name="totalprofit" type="hidden" id="totalprofit" size="20" readonly style="text-align:right;" value="<?php echo $profitsum;?>"/> <?php echo english2bangla($profitsum);?> টাকা</br>
+                    <b>মোট পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b><input name="totalpv" type="hidden" id="totalpv" size="20" readonly style="text-align:right;" value="<?php echo $pvsum;?>"/> <?php echo english2bangla($pvsum);?> টাকা
+                    <input type="hidden" name="pckgBuy" readonly value="<?php echo $probuy;?>"/>
+                </fieldset>
+             </div>
+             
+             <div style="float: left;width: 48%;">
+                 <fieldset style="border-width: 3px;width: 90%;">
+                 <legend style="color: brown;">প্যাকেজের মূল্য নির্ধারণ</legend>
+                    <b>প্যাকেজ ক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</b> <input name="pckgbuying" type="text" id="pckgbuying" readonly size="20" style="text-align:right;" value="<?php echo $buysum;?>" /> টাকা</br>
+                    <b>প্যাকেজ বিক্রয়মূল্য&nbsp;&nbsp;&nbsp; :</b> <input name="pckgsellprz" type="text" id="pckgsellprz" size="20" style="text-align:right;" onkeypress="return checkIt(event)" /> টাকা</br>
+                    <b>প্যাকেজ এক্সট্রা প্রফিট :</b> <input name="pckgxprofitless" type="text" id="pckgxprofitless" onkeypress="return checkIt(event)" onblur="getPrice(this.value)" size="20" style="text-align:right;" /> টাকা</br>
+                    <b>প্যাকেজ প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input name="pckgprofitless" type="text" id="pckgprofitless" readonly size="20" style="text-align:right;" /> টাকা</br>    
+                    <b>প্যাকেজ পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b> <input name="pckgpv" type="text" id="pckgpv" size="20" readonly style="text-align:right;" /> টাকা
+                 </fieldset>
+            </div>
+         </div> 
     </fieldset>
  </div>
-    <input name="entry" id="entry" type="submit" value="সেভ করুন"style="cursor:pointer;margin-left:45%;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br></br>
+        <input name="entry" id="entry" readonly type="submit" value="সেভ করুন"style="cursor:pointer;margin-left:45%;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br></br>
     </from> <?php }?>
 </div>
 <div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">

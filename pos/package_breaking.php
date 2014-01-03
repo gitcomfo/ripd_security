@@ -39,10 +39,8 @@ if(isset($_POST['break']))
      $date=date("Y/m/d", $timestamp);  
     
     $yes= $insstmt->execute(array($P_pckgid,$P_break,$db_pckgsell,$db_pckgbuy,$db_pckgprofit,$db_pckgxprofit,$date,$cfsID,$instype,$scatagory,$storeID));
-    if($yes ==1)
-    {
-       $msg = "প্যাকেজগুলো সফলভাবে ব্রেক হয়েছে";}
-                    else { $msg = "দুঃখিত প্যাকেজগুলো ব্রেক হয়নি";}
+    if($yes ==1){$msg = "প্যাকেজগুলো সফলভাবে ব্রেক হয়েছে";}
+       else { $msg = "দুঃখিত প্যাকেজগুলো ব্রেক হয়নি";}
     }
 
 ?>
@@ -83,12 +81,14 @@ function ShowTime()
 
 $(document).ready(function(){
   $('#ok').click(function() {
-    if($('#breakingQty').val() > $('#pckgQty').val() )
+    if(parseInt($('#breakingQty').val()) > parseInt($('#pckgQty').val()) )
         {
+            $("#show").css('color','red');
             $("#show").html("দুঃখিত, এই পরিমান প্যাকেজ ব্রেক করা যাবে না");
             $('#break').attr('disabled','disabled');
         }
         else{ 
+            $("#show").css('color','green');
             $("#show").html("প্যাকেজ ব্রেক করুন");
             $('#ok').attr('disabled','disabled');
             $('#break').removeAttr('disabled');
@@ -105,8 +105,19 @@ function numbersonly(e)
                 return false //disable key press
             }
 }
-    </script>
-	
+function beforeSubmit()
+{
+    var qty = Number(document.getElementById('pckgQty').value);
+    var brkqty = Number(document.getElementById('breakingQty').value);
+    if( brkqty > qty )
+        {
+            document.getElementById('ok').disabled = false;
+            document.getElementById('break').disabled = true;
+            return false;
+        }
+        else { return true; }
+}
+</script>	
 <!--===========================================================================================================================-->
 <script>
 function searchInventoryPckg(str_key) // for searching packages from own inventory
@@ -192,6 +203,13 @@ function getUpdate(xprofit)
     <div style="width: 33%;height: 100%;float: left;text-align: right;font-family: SolaimanLipi !important;"><a href="" style="text-decoration: none;" onclick="javasrcipt:window.open('package_list.php');return false;"><img src="images/packagelist.png" style="width: 100px;height: 70px;"/></br>প্যাকেজ লিস্ট</a></div>
 </div>
 </br>
+ <?php
+    if($msg != "")
+    {
+?>
+<div align="center" style="color: green;font-size: 26px; font-weight: bold; width: 90%;height: 20px;margin: 0 5% 0 5%;float: none;"><?php if($msg != "") echo $msg;?></div></br>
+    <?php } 
+    else { ?>
 <div class="wraper" style="width: 80%;font-family: SolaimanLipi !important;float: none;">
 <fieldset style="border-width: 3px;width: 100%;">
          <legend style="color: brown;">প্যাকেজ খুঁজুন</legend>
@@ -203,15 +221,8 @@ function getUpdate(xprofit)
    </div>
 </fieldset>
 </div></br>
- <?php
-    if($msg != "")
-    {
-?>
-<div align="center" style="color: green;font-size: 26px; font-weight: bold; width: 90%;height: 20px;margin: 0 5% 0 5%;float: none;"><?php if($msg != "") echo $msg;?></div></br>
-    <?php } 
-    else { ?>
 <div  class="wraper" style="width: 80%;font-family: SolaimanLipi !important;float: none;border: solid 1px #000;">
-    <form method="post" action="package_breaking.php">
+    <form method="post" action="package_breaking.php" onsubmit="return beforeSubmit();">
         <div style="width: 100%;height: auto;float: none;">
             <table>
                 <tr>
@@ -293,7 +304,7 @@ function getUpdate(xprofit)
                     <td align="center">
                         <?php if($check !=1) {?>
                         <b>যতটা প্যাকেজ ভাঙতে চাই : </b> <input type="text" id="breakingQty" name="breakingQty" onkeypress=' return numbersonly(event)' style="width: 200px;"/></br>
-                        <input type="hidden"  id="check"  value="0" /><span id="show" style="color: red;"></span></br>
+                        <input type="hidden"  id="check"  value="0" /><span id="show"></span></br>
                         <input  id="ok" type="button" value="ঠিক আছে" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" />
                         <input name="break" id="break" type="submit" value="ব্রেক" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br></br>
                         <?php } else { echo "<span style='color:red;'>দুঃখিত, এই প্যাকেজটি ব্রেক করার জন্য প্রয়োজনীয় পরিমান পণ্য নেই </span>";}?>
