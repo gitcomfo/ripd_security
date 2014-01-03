@@ -3,6 +3,7 @@
  */
 //------------------------1st one for dristi akorshon
 var speed1 = 1; // change scroll speed with this value
+var height1 = 220;
 /**
  * Initialize the marquee, and start the marquee by calling the marquee function.
  */
@@ -21,7 +22,7 @@ var timeout1 = '';
 function scrollFromBottom1(){
   clearTimeout(timeout1);
   var el1 = document.getElementById("marquee_replacement1");
-  if(el1.scrollTop >= el1.scrollHeight-200){
+  if(el1.scrollTop >= el1.scrollHeight-height1){
     el1.scrollTop = 0;
   };
   el1.scrollTop = el1.scrollTop + speed1;
@@ -46,6 +47,7 @@ function startit1(){
 }
 //------------------------2nd one for product
 var speed2 = 2; // change scroll speed with this value
+var height2 = 530;
 /**
  * Initialize the marquee, and start the marquee by calling the marquee function.
  */
@@ -64,7 +66,7 @@ var timeout2 = '';
 function scrollFromBottom2(){
   clearTimeout(timeout2);
   var el2 = document.getElementById("marquee_replacement2");
-  if(el2.scrollTop >= el2.scrollHeight-500){
+  if(el2.scrollTop >= el2.scrollHeight-height2){
     el2.scrollTop = 0;
   };
   el2.scrollTop = el2.scrollTop + speed2;

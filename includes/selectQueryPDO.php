@@ -1,6 +1,6 @@
 <?php
 include_once 'connectionPDO.php';
-$sql_select_award_all = $conn->prepare("SELECT * FROM  ripd_award");
+$sql_select_award_all = $conn->prepare("SELECT * FROM  ripd_award ORDER BY awd_date DESC");
 $sql_select_award_id = $conn->prepare("SELECT * FROM  ripd_award WHERE idaward=?");
 $sql_select_command = $conn->prepare("SELECT * FROM command ORDER BY commandno ASC");
 $sql_select_commandEdit = $conn->prepare("SELECT * FROM command WHERE idcommand = ?");

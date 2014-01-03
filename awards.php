@@ -1,6 +1,7 @@
 <?php
 include_once 'includes/header.php';
 include_once 'includes/showTables.php';
+include_once 'includes/selectQueryPDO.php';
 ?>
 <style type="text/css">
 a { 
@@ -47,6 +48,7 @@ bottom: 50px; This would mean the bottom of the pop-up is 50px far from the bott
 .resize_thumb {
 	width: 70px; /* enter desired thumb width here */
 	height : 22px;
+            alignment-adjust: central;
 }
 
 /* smart image enlarger ends here */
@@ -76,12 +78,10 @@ bottom: 50px; This would mean the bottom of the pop-up is 50px far from the bott
                 <tbody>
 
                     <?php
-                    $sql_awards = "SELECT * from ripd_award ORDER BY awd_date ASC";
-                    $rs_awards = mysql_query($sql_awards);
-                    //echo "Heloo".mysql_num_rows($rs_awards);
-
-
-                    while ($row_awards = mysql_fetch_array($rs_awards)) {
+                    $db_slNo = 0;
+                    $sql_select_award_all->execute();
+                    $arr_awd = $sql_select_award_all->fetchAll();
+                    foreach ($arr_awd as $row_awards) {
                         $db_slNo = $db_slNo + 1;
                         $serial = english2bangla($db_slNo);
                         $db_awd_name = $row_awards['awd_name'];
@@ -89,8 +89,8 @@ bottom: 50px; This would mean the bottom of the pop-up is 50px far from the bott
                         $db_awd_description = $row_awards['awd_description'];
                         $db_awd_date = english2bangla($row_awards['awd_date']);
                         $db_awd_image = $row_awards['awd_image'];
-                        //$db_awd_image = "images/Green-Oil.jpg";
                         $db_awd_receivers_name = $row_awards['awd_receivers_name'];
+                        
                         echo "<tr>";
                         echo "<td>$serial</td>";
                         echo "<td>$db_awd_name</td>";
