@@ -168,6 +168,11 @@ function validateMobile(mblno)
         xmlhttp.open("GET", "includes/mobileNoValidation.php?mobile=" + mblno, true);
         xmlhttp.send();
     }
+    
+function chargeGivenBy(user){
+    var amount1 = document.getElementById('amount1').value;
+    var amount2 = document.getElementById('amount2').value;
+}
 
 </script>
  
@@ -215,8 +220,8 @@ function validateMobile(mblno)
                 </tr>
                 <tr>                    
                     <td style='text-align: center;' colspan='2'>
-                        <input type='radio' name='charger' checked="checked" value="sender"/> চার্জ প্রেরকের &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type='radio' name='charger' value="receiver"/> চার্জ প্রাপকের
+                        <input type='radio' name='charger' checked="checked" value="sender" onclick="chargeGivenBy(this.value)"/> চার্জ প্রেরকের &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type='radio' name='charger' value="receiver" onclick="chargeGivenBy(this.value)"/> চার্জ প্রাপকের
                     </td>
                 </tr>
                 <tr>
