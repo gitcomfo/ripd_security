@@ -252,14 +252,13 @@ function setParent(office,offid)
         document.getElementById('parentResult').style.display = "none";
 }
 window.onload=function() {
-
-var radio = document.forms['off_form'].elements['whatoffice'];
-    radio[0].onclick = function() {
-        this.form.office_acc.value = '<?php echo $RaccNo;?>';
-}
-    radio[1].onclick = function() {
-        this.form.office_acc.value = '<?php echo $PwaccNo;?>';
-}
+    var radio = document.forms['off_form'].elements['whatoffice'];
+        radio[0].onclick = function() {
+            this.form.office_acc.value = '<?php echo $RaccNo;?>';
+    }
+        radio[1].onclick = function() {
+            this.form.office_acc.value = '<?php echo $PwaccNo;?>';
+    }
 }
 </script> 
 

@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 session_start();
-include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 	
@@ -83,33 +82,35 @@ if(isset($_POST['entry']))
     $p_profit = $_POST['proProfit']; 
     $p_pv = $_POST['proPV']; 
     $p_qty = $_POST['porQty']; 
-    try {
-          $conn->beginTransaction();
-        $ins_purchase_sum->execute(array($chalanNo,$totalbuying,$totaltarnsport,$totalother,$comment,$cfsID,$chalancopy));
-        $purchase_sum_id = $conn->lastInsertId();
-        for($i=1;$i<=$noRows;$i++)
-        {
-            $buy=$p_buy[$i];
-            $sell=$p_sell[$i];
-            $profit=$p_profit[$i];
-            $xtraprofit=$p_xprofit[$i];
-            $pv=$p_pv[$i];
-            $qty=$p_qty[$i];
-            $chartid=$p_chartID[$i];
-            $ins_purchase->execute(array($scatagory, $storeID, $qty, $pv,  $xtraprofit, $profit, $buy, $sell, $purchase_sum_id, $chartid));
-        }
-         $conn->commit();
-         unset($_SESSION['chalanArray']);
-         unset($_SESSION['chalanNO']);
-         unset($_SESSION['arrProductTemp']);
-         unset($_SESSION['pro_chart_array']);
-         echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>";
-         header('Location:productIN.php');
-    } 
-    catch (Exception $exc) {
-        $conn->rollBack();
-        echo "<script>alert('দুঃখিত,প্রোডাক্ট এন্ট্রি হয়নি')</script>";
-    }
+
+    $conn->beginTransaction();
+            $sqlrslt1 = $ins_purchase_sum->execute(array($chalanNo,$totalbuying,$totaltarnsport,$totalother,$comment,$cfsID,$chalancopy));
+            $purchase_sum_id = $conn->lastInsertId();
+            for($i=1;$i<=$noRows;$i++)
+            {
+                $buy=$p_buy[$i];
+                $sell=$p_sell[$i];
+                $profit=$p_profit[$i];
+                $xtraprofit=$p_xprofit[$i];
+                $pv=$p_pv[$i];
+                $qty=$p_qty[$i];
+                $chartid=$p_chartID[$i];
+                $sqlrslt2 = $ins_purchase->execute(array($scatagory, $storeID, $qty, $pv,  $xtraprofit, $profit, $buy, $sell, $purchase_sum_id, $chartid));
+            }
+            if($sqlrslt1  && $sqlrslt2)
+            {
+                $conn->commit();
+                unset($_SESSION['chalanArray']);
+                unset($_SESSION['chalanNO']);
+                unset($_SESSION['arrProductTemp']);
+                unset($_SESSION['pro_chart_array']);
+                echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>";
+                header('Location:productIN.php');
+            }
+            else {
+                $conn->rollBack();
+                echo "<script>alert('দুঃখিত,প্রোডাক্ট এন্ট্রি হয়নি')</script>";
+            }
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -164,22 +165,30 @@ function calculate(val,i)
         }
 }
 
-$(document).ready(function() {
-  $('#entry').click(function() {
-    $(".inbox").filter(function() {
+function validate() {
+        var notOK= 0;
+        $(".inbox").filter(function() {
          var val = $(this).val();
         if((val == "") || (val == 0))
             {
-                 $("form").submit(function(e){
-                        e.preventDefault();
-                    })
+                 notOK++;
             }
-           else {
-               $("form").get(0).allowDefault = true;
-           }
     });
-  });
-});
+    return notOK;
+ }
+function beforeSave()
+{
+var blank = validate();
+    if(blank > 0)
+        {
+            document.getElementById('entry').readonly= true;
+            return false;
+        }
+        else {
+             document.getElementById('entry').readonly= false;
+            return true;
+        }
+}
 </script>
 </head>
     
@@ -226,7 +235,7 @@ $(document).ready(function() {
 ?>
 </table>
 </fieldset>
-    <input class="btn" name="entry" id="entry" type="submit" value="এন্ট্রি করুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" /></br></br>
+    <input class="btn" readonly onclick="return beforeSave();" name="entry" id="entry" type="submit" value="এন্ট্রি করুন" style="cursor:pointer;margin-left:45%;font-family: SolaimanLipi !important;" /></br></br>
 </form>
 <div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 

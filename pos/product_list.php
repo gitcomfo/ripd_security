@@ -1,19 +1,23 @@
 <?php
 error_reporting(0);
 session_start();
-include_once 'includes/ConnectDB.inc';
+include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 $storeName= $_SESSION['loggedInOfficeName'];
 $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
-function get_catagory()
-{
-    echo  "<option value=0> -সিলেক্ট করুন- </option>";
-    $catagoryRslt= mysql_query("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory;");
-    while($catrow = mysql_fetch_assoc($catagoryRslt))
-    {
-	echo  "<option value=".$catrow['pro_cat_code'].">".$catrow['pro_catagory']."</option>";
+
+$sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
+$sel_inventory_all = $conn->prepare("SELECT * FROM inventory WHERE idinventory =? ");
+$sel_inventory = $conn->prepare("SELECT * FROM inventory WHERE ins_ons_id = ? AND ins_ons_type=? AND ins_product_type='general' ");
+
+function get_catagory($sql) {
+    echo "<option value=0> -সিলেক্ট করুন- </option>";
+    $sql->execute();
+    $arr_category = $sql->fetchAll();
+    foreach ($arr_category as $catrow) {
+        echo "<option value=" . $catrow['pro_cat_code'] . ">" . $catrow['pro_catagory'] . "</option>";
     }
 }
 
@@ -41,46 +45,6 @@ function get_catagory()
  function productUpdate(id)
 	{ TINY.box.show({iframe:'updateProduct.php?proid='+id,width:800,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
  </script>
-<script type="text/javascript">
-function ShowTime()
-{
-      var time=new Date()
-      var h=time.getHours()
-      var m=time.getMinutes()
-      var s=time.getSeconds()
-  
-      m=checkTime(m)
-      s=checkTime(s)
-      document.getElementById('txt').value=h+" : "+m+" : "+s
-      t=setTimeout('ShowTime()',1000)
-      if(document.getElementById('pname').value !="")
-          { document.getElementById("QTY").disabled = false;}
-     else {document.getElementById("QTY").disabled = true;}
-     
-     if(document.getElementById('tretail').value !="")
-          { document.getElementById("cash").disabled = false;}
-     else {document.getElementById("cash").disabled = true;}
-          
-      a=Number(document.abc.QTY.value);
-if (a!=0) {document.getElementById("addtoCart").disabled = false;}
-  else {document.getElementById("addtoCart").disabled = true;}
-  payable = Number(document.getElementById('gtotal').value);
-  cash = Number(document.getElementById('cash').value);
-  if(cash<payable)
-  {document.getElementById("print").disabled = true;}
-  else {document.getElementById("print").disabled =false ;}
-
-}
-    function checkTime(i)
-    {
-      if (i<10)
-      {
-        i="0" + i
-      }
-      return i
-    }
-    </script>
-	
 <!--===========================================================================================================================-->
 <script>
 function showTypes(catagory) // for types dropdown list
@@ -234,9 +198,8 @@ function showBrandProducts(brandcode,procatid) // show products from brand
 </script>  
 </head>
     
-<body onLoad="ShowTime()">
-
-    <div id="maindiv">
+<body>
+<div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
          <div style="width: 40%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
@@ -253,7 +216,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
     </div></br></br>
     <div style="float: left;width: 25%;"><b>পণ্যের ক্যাটাগরি</b></br>
       <select id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value);showCatProducts(this.value);" style="width: 200px;font-family: SolaimanLipi !important;">
-                <?php echo get_catagory(); ?>
+                <?php echo get_catagory($sql_select_category); ?>
             </select>
         </div>
         <div style="float: left;width: 25%;"><b>পণ্যের টাইপ</b></br>
@@ -288,32 +251,37 @@ function showBrandProducts(brandcode,procatid) // show products from brand
         <td width="6%"><div align="center"><strong>করনীয়</strong></div></td>
       </tr>
     <?php
-if (isset($_GET['code']))
-     	{	
-                    $G_summaryID = $_GET['code'];
-                    $result = mysql_query("SELECT * FROM inventory WHERE idinventory = '$G_summaryID';");
-                        $row = mysql_fetch_assoc($result);
-                        $db_proname=$row["ins_productname"];
-                        $db_price=english2bangla($row["ins_sellingprice"]);
-                        $db_qty=english2bangla($row["ins_how_many"]);
-                        $db_procode=$row["ins_product_code"];
-                        $db_proPV=english2bangla($row["ins_pv"]);
-                        $inventoryID= $row['idinventory'];
-                        
-      echo '<tr>';
-      echo '<td><div align="center">১</div></td>';
-      echo '<td><div align="left">'.$db_procode.'</div></td>';
-        echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
-        echo '<td><div align="center">'.$db_qty.'</div></td>';
-        echo '<td><div align="center">'.$db_price.'</div></td>';
-        echo '<td><div align="center">'.$db_proPV.'</div></td>';
-        echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
-        echo '</tr>';
-        }
-   else
-     	{	
-                    $result = mysql_query("SELECT * FROM inventory WHERE ins_ons_id = '$storeID' AND ins_ons_type='$scatagory' AND ins_product_type='general';");
-                        while ($row = mysql_fetch_assoc($result))
+        $sl = 1;
+        if (isset($_GET['code']))
+                {	
+                            $G_summaryID = $_GET['code'];
+                            $sel_inventory_all->execute(array($G_summaryID));
+                            $result = $sel_inventory_all->fetchAll();
+                            foreach ($result as $row) {
+                                $row = mysql_fetch_assoc($result);
+                                $db_proname=$row["ins_productname"];
+                                $db_price=english2bangla($row["ins_sellingprice"]);
+                                $db_qty=english2bangla($row["ins_how_many"]);
+                                $db_procode=$row["ins_product_code"];
+                                $db_proPV=english2bangla($row["ins_pv"]);
+                                $inventoryID= $row['idinventory'];
+                            }              
+              echo '<tr>';
+              echo '<td><div align="center">'.english2bangla($sl).'</div></td>';
+              echo '<td><div align="left">'.$db_procode.'</div></td>';
+                echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
+                echo '<td><div align="center">'.$db_qty.'</div></td>';
+                echo '<td><div align="center">'.$db_price.'</div></td>';
+                echo '<td><div align="center">'.$db_proPV.'</div></td>';
+                echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
+                echo '</tr>';
+                $sl++;
+                }
+           else
+     	{
+                    $sel_inventory->execute(array($storeID,$scatagory));
+                    $result = $sel_inventory->fetchAll();
+                    foreach ($result as $row) 
                         {
                             $db_proname=$row["ins_productname"];
                             $db_price=english2bangla($row["ins_sellingprice"]);
@@ -323,14 +291,15 @@ if (isset($_GET['code']))
                             $inventoryID= $row['idinventory'];
 
                             echo '<tr>';
-                            echo '<td><div align="center">১</div></td>';
+                            echo '<td><div align="center">'.english2bangla($sl).'</div></td>';
                             echo '<td><div align="left">'.$db_procode.'</div></td>';
                               echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$db_proname.'</div></td>';
                               echo '<td><div align="center">'.$db_qty.'</div></td>';
                               echo '<td><div align="center">'.$db_price.'</div></td>';
                               echo '<td><div align="center">'.$db_proPV.'</div></td>';
                               echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
-                              echo '</tr>';
+                              echo '</tr>'; 
+                              $sl++;
                         }
         }
 ?>
