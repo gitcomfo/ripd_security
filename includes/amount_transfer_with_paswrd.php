@@ -13,6 +13,6 @@ echo "
                             <span id='passcheck'></span></td>   
                     </tr>
                     <tr>                    
-                        <td colspan='2' style='text-align:center; ' ></br><input class='btn' style =' font-size: 12px; ' onclick='beforeSave();' type='submit' id='save' name='save' disabled value='ট্রান্সফার করুন' /></td>                           
+                        <td colspan='2' style='text-align:center; ' ></br><input class='btn' style =' font-size: 12px; ' type='submit' id='save' name='save' value='ট্রান্সফার করুন' /></td>                           
                     </tr></table>";
 ?>

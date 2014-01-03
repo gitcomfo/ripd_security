@@ -127,7 +127,7 @@ function addToTable() // to add into temporary array*******************
         var code = document.getElementById("pcode").value;
         var totalqty = Number(document.getElementById("QTY").value);
         var totalamount = Number(document.getElementById("buyPrice").value);
-        if((totalqty != 0) && (totalamount != 0))
+        if((totalqty != 0) && (totalamount != 0) && (code != ""))
             {
                 var xmlhttp;  
                  if (window.XMLHttpRequest)

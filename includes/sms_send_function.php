@@ -25,7 +25,7 @@ $dlr ="1";
       curl_setopt($ch, CURLOPT_TIMEOUT,60);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, True);
 
-      $contents = curl_exec ($ch);
+      $contents = curl_exec($ch);
 
       //var_dump(curl_getinfo($ch));
 
