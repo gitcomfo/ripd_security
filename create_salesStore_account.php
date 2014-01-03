@@ -11,6 +11,25 @@ if(isset($_POST['submit']))
     $sales_add = $_POST['sales_address'];
     $sales_no = $_POST['sales_no'];
     $sales_acc = $_POST['sales_acc'];
+    
+        $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+        $extension = end(explode(".", $_FILES["sstore_banner"]["name"]));
+        $salesstorebanner_name = $_FILES["sstore_banner"]["name"];
+        if($salesstorebanner_name != "")
+        {
+            $salesstorebanner_name = $sales_acc."-". $_FILES["sstore_banner"]["name"];
+        if (($_FILES["sstore_banner"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
+                {            
+                $salesstorebanner_path = "images/banners/".$salesstorebanner_name;
+                move_uploaded_file($_FILES["sstore_banner"]["tmp_name"], "images/banners/" . $salesstorebanner_name);                        
+                } 
+        else{
+            $salesstorebanner_path = '';
+            }
+        }else{
+            $salesstorebanner_path = '';
+        }
+                   
     $accType = current(explode("-", $sales_acc));
     $sales_acc1 = checkAccountNo2($sales_acc,$accType);
     $whatPwr = $_POST['pwrstore'];
@@ -35,8 +54,8 @@ if(isset($_POST['submit']))
    $ripdemailid = "";
    $passwrd = "123";
     mysql_query("START TRANSACTION");
-   $sql= "INSERT INTO `sales_store` (opening_date ,`salesStore_name` ,`salesStore_number` ,`account_number` ,`salesStore_details_address` ,`salesStore_email` ,email_password, `office_id`, `powerstore_officeid`,`top_pwr`, `Thana_idThana`) 
-            VALUES (NOW(), '$name','$sales_no' , '$sales_acc1', '$sales_add','$ripdemailid','$passwrd' ,'$officeID', '$powrid', '$topparent_id', '$thana')";
+   $sql= "INSERT INTO `sales_store` (opening_date ,`salesStore_name` ,`salesStore_number` ,`account_number` ,`salesStore_details_address` ,`salesStore_email` ,email_password, `sstore_banner`, `office_id`, `powerstore_officeid`,`top_pwr`, `Thana_idThana`) 
+            VALUES (NOW(), '$name','$sales_no' , '$sales_acc1', '$sales_add','$ripdemailid','$passwrd' ,'$salesstorebanner_path', '$officeID', '$powrid', '$topparent_id', '$thana')";
     $reslt=mysql_query($sql) or exit('query failed insert into sales store: '.mysql_error());
     $off = mysql_insert_id();
     
@@ -84,7 +103,7 @@ if(isset($_POST['submit']))
          $oreslt = mysql_query($osql) or exit('query failed: '.mysql_error());
      }
    
-         $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+        $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["picture"]["name"]));
         $image_name = $_FILES["picture"]["name"];
         if($image_name != "")
@@ -120,7 +139,7 @@ if(isset($_POST['submit']))
                 echo "Invalid file format.";
                 }
                 
-                $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+        $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["owner_finger_print"]["name"]));
         $finger_name = $_FILES["owner_finger_print"]["name"];
         if($finger_name != "")
@@ -138,7 +157,7 @@ if(isset($_POST['submit']))
                 echo "Invalid file format.";
                 }
                 
-                $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+        $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["scanDoc"]["name"]));
         $scan_name = $_FILES["scanDoc"]["name"];
         if($scan_name != "")
@@ -473,6 +492,10 @@ var xmlhttp;
                      <tr>
                         <td>সেলস স্টোরের  অ্যাকাউন্ট</td>
                         <td>:    <input  class ="textfield" type="text" readonly="" id="sales_acc" name="sales_acc" value="<?php echo getSalesAccount();?>"/></td>
+                    </tr>
+                    <tr>
+                        <td>সেলস স্টোর ব্যানার</td>
+                        <td >:   <input class="filefield" type="file" id="sstore_banner" name="sstore_banner" style="font-size:10px;"/><span style="color: red;">*</span>ব্যানারের প্রস্থ ৯৭০px এবং উচ্চতা ১১০px</td>
                     </tr>
                     <tr>
                         <td> প্যারেন্ট পাওয়ারস্টোর অফিস</td>

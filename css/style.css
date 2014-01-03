@@ -122,9 +122,9 @@ img.img_big_pic{
     box-shadow: 0 0 5px 5px #888;
 }
 #header{
-    width:100%;
+    width:970px;
     height:110px;
-    background-image: url(../images/banner.png);
+    background-image: url(../images/banners/ripd_banner.png);
     margin:auto;
 }
 #logo{
