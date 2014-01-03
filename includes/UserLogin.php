@@ -66,18 +66,27 @@ function userLogin($Name, $Password) {
                             $_SESSION['loggedInOfficeID'] = $office_or_sales_store_id;
                             $_SESSION['loggedInOfficeType'] = $office_type;
                             $_SESSION['loggedInOfficeAccNo'] = $db_office_acc_no;
+                            
+                            $_SESSION['page_banner'] = 'background-image: url(images/banners/ripd_banner.png)';
                             break;
 
                         case 's_store' :
                             $salesquery = mysql_query("SELECT * FROM sales_store WHERE idSales_store=$office_or_sales_store_id");
                             $salesrow = mysql_fetch_assoc($salesquery);
                             $db_sstore_offname = $salesrow['salesStore_name'];
-                            $db_sstore_acc_no = $salesrow['account_number'];                          
+                            $db_sstore_acc_no = $salesrow['account_number'];
+                            $db_sstore_banner = $salesrow['sstore_banner'];
                     
                             $_SESSION['loggedInOfficeName'] = $db_sstore_offname;
                             $_SESSION['loggedInOfficeID'] = $office_or_sales_store_id;
                             $_SESSION['loggedInOfficeType'] = $office_type;
                             $_SESSION['loggedInOfficeAccNo'] = $db_sstore_acc_no;
+                            $_SESSION['page_banner_link'] = $db_sstore_banner;
+                            if($db_sstore_banner!=''){
+                                $_SESSION['page_banner'] = 'background-image: url('.$db_sstore_banner.')';
+                            }  else {
+                                $_SESSION['page_banner'] = 'background-image: url(images/banners/ripd_banner.png)';
+                            }
                             break;
                     }
                 } elseif ($logedInUserType == 'owner') {

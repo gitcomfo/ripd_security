@@ -66,7 +66,8 @@ if (isset($_POST['submit_new_password'])) {
             $sendStatus = substr($sendResult, 0, 4);
             //echo "SendStatus = ".$sendStatus;
             if($sendStatus == '1701'){
-                $update_pass_sql = "Update cfs_user SET password = '$new_pass_str' WHERE idUser = '$receiver_acc_cfs_id'";
+                $finalPass = md5($new_pass_str);
+                $update_pass_sql = "Update cfs_user SET password = '$finalPass' WHERE idUser = '$receiver_acc_cfs_id'";
                 if(mysql_query($update_pass_sql)){
                     $update_msg = "'$receiver_acc_user_name' একাউন্ট নামের পাসওয়ার্ড সফলভাবে আপডেট হয়েছে এবং '$receiver_acc_mobile_number' এই নাম্বারে পাসওয়ার্ডটি পাঠানো হয়েছে ";
                 }else{
