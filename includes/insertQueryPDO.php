@@ -30,4 +30,7 @@ $sql_insert_unreg_customer_command = $conn->prepare("INSERT into pv_unregistered
 //command execution
 $sql_insert_curr_command = $conn->prepare("INSERT into command_execution (commandno, com_start_date) VALUES (?, NOW())");
 
+$sql_insert_acc_user_amount_transfer = $conn->prepare("INSERT into acc_user_amount_transfer (trans_type, trans_senderid, receiver_mobile_num, trans_amount, reciever_get, trans_servicecharge, trans_purpose, chrg_givenby, total_transaction, send_amt_status, send_amt_pin, trans_date_time) 
+                                                                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?, NOW())");
+
 ?>

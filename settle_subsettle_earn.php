@@ -1,41 +1,34 @@
 <?php
-//include_once 'includes/session.inc';
+include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 ?>
+<script>
+function confirmFunction(name)
+{ 
+return confirm("Do you want to -" + name + "- this earn?");
+}
+</script>
 <?php
-$flag = 'false';
-$msg = "";
 $msgedit = $_GET['editmsg'];
 $flagedit = $_GET['editflag'];
-
 //echo "MSG: ".$msgedit. " Flag : ".$flagedit;
 
 function showEditMessage($flagedit, $msgedit) {
     if (!empty($msgedit)) {
-        if ($msgedit == '2') {
-            $showEditMsg = "চার্জটি সফলভাবে পরিবর্তন হয়েছে";
-        } elseif ($msgedit == '3') {
-            $showEditMsg = "চার্জটি সফলভাবে স্থগিত হয়েছে";
-        } elseif ($msgedit == '4') {
-            $showEditMsg = "চার্জটি সফলভাবে পুনরায় চালু হয়েছে";
-        } else {
+        if($msgedit=='2'){
+            $showEditMsg = "আর্নটি সফলভাবে পরিবর্তন হয়েছে";
+        }elseif ($msgedit=='3') {
+            $showEditMsg = "আর্নটি সফলভাবে স্থগিত হয়েছে";
+        }elseif ($msgedit=='4') {
+            $showEditMsg = "আর্নটি সফলভাবে পুনরায় চালু হয়েছে";
+        }  else {
             $showEditMsg = "দুঃখিত, আবার চেষ্টা করুন";
         }
         if ($flagedit == '2') {
-            echo '<tr><td colspan="2" height="30px" style="text-align:center;"><b><span style="color:green;font-size:15px;">' . $showEditMsg . '</b></td></tr>';
+            echo '<tr><td colspan="3" height="30px" style="text-align:center;"><b><span style="color:green;font-size:15px;">' . $showEditMsg . '</b></td></tr>';
         } else {
-            echo '<tr><td colspan="2" height="30px" style="text-align:center;"><b><span style="color:red;font-size:15px;"><blink>' . $showEditMsg . '</blink></b></td></tr>';
-        }
-    }
-}
-
-function showMessage($flag, $msg) {
-    if (!empty($msg)) {
-        if ($flag == 'true') {
-            echo '<tr><td colspan="2" height="30px" style="text-align:center;"><b><span style="color:green;font-size:15px;">' . $msg . '</b></td></tr>';
-        } else {
-            echo '<tr><td colspan="2" height="30px" style="text-align:center;"><b><span style="color:red;font-size:15px;"><blink>' . $msg . '</blink></b></td></tr>';
+            echo '<tr><td colspan="3" height="30px" style="text-align:center;"><b><span style="color:red;font-size:15px;"><blink>' . $showEditMsg . '</blink></b></td></tr>';
         }
     }
 }
@@ -70,73 +63,45 @@ function showMessage($flag, $msg) {
     }
 </script>
 
-<?php
-//$rowEntry = mysql_query("SELECT * FROM charge");
-//$rowNumber = mysql_num_rows($rowEntry);
-//$selectCharge = mysql_query("Select * from charge");
-//$rows_selected_charge = mysql_num_rows($selectCharge);
-if (isset($_POST['submit']) && ($_GET['action'] == 'new')) {
+    <div style="padding-top: 10px;">    
+        <div style="padding-left: 110px; width: 100%;"><a href="command_system_management.php"><b>ফিরে যান</b></a></div>
+        <div></div>
+    </div>
+    <div>
+        <table  class='formstyle' style='font-family: SolaimanLipi !important; width: 78%;'>          
+            <tr><th colspan='3' style='text-align: center;'>সেটল সাব-সেটল আর্ন</th></tr>
+            <?php 
+            showEditMessage($flagedit, $msgedit);
+            ?>
+            <?php
+            $selectSsearn = mysql_query("Select * from settle_subsettle_earn");
+            while ($selectSsearnRow = mysql_fetch_array($selectSsearn)) {
+                $db_ssearn_id_selected = $selectSsearnRow['idsettlesubsettleearn'];
+                $db_ssearn_name_selected = $selectSsearnRow['earn_name'];
+                $db_ssearn_amount_selected = $selectSsearnRow['earn_amount'];
+                $db_ssearn_status_selected = $selectSsearnRow['earn_status'];
+                echo "<form method='POST' name='' action='includes/edit_settle_subsettle_amount.php' onsubmit=''>";
+                echo " <tr>
+                        <td style='width:30%; text-align:left;padding-left:5%;'><b>$db_ssearn_name_selected</b></td>
+                            <input type='hidden' id='ssearn_id' name='ssearn_id' value='$db_ssearn_id_selected'/>";
 
-    $new_charge_criteria_name = $_POST['charge_criteria_name'];
-    $new_charge_amount = $_POST['charge_amount'];
-    $new_charge_status = "Active";
-    $newChargeInsert = "INSERT INTO charge (charge_criteria ,charge_amount ,charge_status) values('$new_charge_criteria_name', '$new_charge_amount', '$new_charge_status')";
-
-    if (mysql_query($newChargeInsert)) {
-        $msg = "আপনি সফলভাবে " . $new_charge_criteria_name . " নামে নতুন চার্জটি তৈরি করেছেন";
-        $flag = 'true';
-    } else {
-        $msg = "দুঃখিত, আবার চেষ্টা করুন";
-        $flag = 'false';
-    }
-    header("Location:charge_making.php");
-}
-?>      
-<div style="padding-top: 10px;">    
-    <div style="padding-left: 110px; width: 65%; float: left"><a href="command_system_management.php"><b>ফিরে যান</b></a></div>
-</div>
-<div>
-    <table  class='formstyle' style='font-family: SolaimanLipi !important; width: 78%;'>          
-        <tr><th colspan='3' style='text-align: center;'>সেটল সাব-সেটল আর্ন</th></tr>
-        <tr><form method='POST' onsubmit='' name='' action='edit_charge.php'>
-            <td style="width: 25%; text-align: right">কাস্টমার সেটল আর্ন এমাউন্ট</td>
-            <td style="width: 30%">: <input class="box" type="text" id="instalment_period" name="instalment_period" /> টাকা</td>
-            <td style="width: 45%"><input class='btn' type='submit' id='edit' name='edit' value='পরিবর্তন' style='background: #0099A1 !important;height: 20px !important;width: 100px;'/>
-                <input class='btn' type='submit' id='postpond' name='postpond' value='স্থগিত' style='background: red !important;height: 20px !important;width: 100px;'/>
-                <input class='btn' type='submit' id='restart' name='restart' value='রিস্টার্ট' style='background: gray !important;height: 20px !important;width: 100px;' disabled='true'/>
-            </td>
-        </form></tr>
-
-
-        <tr><form method='POST' onsubmit='' name='' action='edit_charge.php'>
-            <td style="width: 25%; text-align: right">অফিস সেটল আর্ন এমাউন্ট</td>
-            <td style="width: 30%">: <input class="box" type="text" id="instalment_period" name="instalment_period" /> টাকা</td>
-            <td style="width: 45%"><input class='btn' type='submit' id='edit' name='edit' value='পরিবর্তন' style='background: #0099A1 !important;height: 20px !important;width: 100px;'/>
-                <input class='btn' type='submit' id='postpond' name='postpond' value='স্থগিত' style='background: red !important;height: 20px !important;width: 100px;'/>
-                <input class='btn' type='submit' id='restart' name='restart' value='রিস্টার্ট' style='background: gray !important;height: 20px !important;width: 100px;' disabled='true'/>
-            </td>
-        </form></tr>
-        
-        <tr><form method='POST' onsubmit='' name='' action='edit_charge.php'>
-            <td style="width: 25%; text-align: right">সেলস স্টোর সেটল আর্ন এমাউন্ট</td>
-            <td style="width: 30%">: <input class="box" type="text" id="instalment_period" name="instalment_period" /> টাকা</td>
-            <td style="width: 45%"><input class='btn' type='submit' id='edit' name='edit' value='পরিবর্তন' style='background: #0099A1 !important;height: 20px !important;width: 100px;'/>
-                <input class='btn' type='submit' id='postpond' name='postpond' value='স্থগিত' style='background: red !important;height: 20px !important;width: 100px;'/>
-                <input class='btn' type='submit' id='restart' name='restart' value='রিস্টার্ট' style='background: gray !important;height: 20px !important;width: 100px;' disabled='true'/>
-            </td>
-        </form></tr>
-        
-        <tr><form method='POST' onsubmit='' name='' action='edit_charge.php'>
-            <td style="width: 25%; text-align: right">কাস্টমার সাব-সেটল আর্ন এমাউন্ট</td>
-            <td style="width: 30%">: <input class="box" type="text" id="instalment_period" name="instalment_period" /> টাকা</td>
-            <td style="width: 45%"><input class='btn' type='submit' id='edit' name='edit' value='পরিবর্তন' style='background: #0099A1 !important;height: 20px !important;width: 100px;'/>
-                <input class='btn' type='submit' id='postpond' name='postpond' value='স্থগিত' style='background: red !important;height: 20px !important;width: 100px;'/>
-                <input class='btn' type='submit' id='restart' name='restart' value='রিস্টার্ট' style='background: gray !important;height: 20px !important;width: 100px;' disabled='true'/>
-            </td>
-        </form></tr>
-
-    </table>
-</div>
+                if ($db_ssearn_status_selected == 'active') {
+                    echo"<td>: <input class='box5' type='text' id='ssearn_amount' name='ssearn_amount' value='$db_ssearn_amount_selected'/> টাকা</td><td>
+                                  <input class='btn' type='submit' id='edit' name='edit' value='পরিবর্তন' style='background: #0099A1 !important;height: 20px !important;width: 100px;' onclick='return confirmFunction(\"Edit\")'/>
+                                  <input class='btn' type='submit' id='postpond' name='postpond' value='স্থগিত' style='background: red !important;height: 20px !important;width: 100px;' onclick='return confirmFunction(\"Postpond\")'/>
+                                  <input class='btn' type='submit' id='restart' name='restart' value='রিস্টার্ট' style='background: gray !important;height: 20px !important;width: 100px;' disablaed='true'/>";
+                } else {
+                    echo"<td>: <input class='box5' type='text' id='ssearn_amount' name='ssearn_amount' value='$db_ssearn_amount_selected' disabled='true' /> টাকা</td><td>
+                                    <input class='btn' type='submit' id='edit' name='edit' value='পরিবর্তন' style='background: gray !important;height: 20px !important;width: 100px;' disabled='true'/>
+                                    <input class='btn' type='submit' id='postpond' name='postpond' value='স্থগিত' style='background: gray !important;height: 20px !important;width: 100px;' disabled='true'/>
+                                    <input class='btn' type='submit' id='restart' name='restart' value='রিস্টার্ট' style='background: green !important;height: 20px !important;width: 100px;' onclick='return confirmFunction(\"Restart\")'/>";
+                }
+                echo "</td> 
+                </tr></form>";
+            }
+            ?>   
+        </table>
+    </div>
 <?php
 include_once 'includes/footer.php';
 ?>
