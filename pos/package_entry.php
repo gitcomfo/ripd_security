@@ -17,16 +17,16 @@ $pvrow = $sql_runningpv->fetchAll();
 foreach ($pvrow as $value) {
     $current_pv = $value['pv_value'];
 }
-$stmt = $conn->prepare("SELECT * FROM package_inventory WHERE pckg_infoid=? AND ons_type=? AND ons_id=?");
 $inventstmt = $conn->prepare("SELECT * FROM inventory WHERE ins_productid= ? AND ins_ons_type=? AND ins_ons_id =? AND ins_product_type = ? ");
-$insstmt = $conn->prepare("INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_pv, pckg_selling_price ,pckg_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?,?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?)");
+$insstmt = $conn->prepare("INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_pv, pckg_selling_price ,pckg_buying_price, pckg_original_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?,?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?)");
 $stmtsel = $conn ->prepare( "SELECT * FROM package_info WHERE idpckginfo= ?");
 $selectstmt2 = $conn ->prepare("SELECT * FROM package_details WHERE pckg_infoid = ?");
 $selectstmt3 = $conn ->prepare("SELECT * FROM product_chart WHERE idproductchart= ? ");
 
 if(isset($_POST['update']))
 {
-    $P_updatedpckgbuy = $_POST['buyingprz'];
+    $P_oldpckgbuy = $_POST['currentpckgbuy'];
+    $P_updatedpckgbuy = $_POST['updatebuy'];
     $P_updatedpckgsell = $_POST['updatesellprz'];
     $P_updatedpckgprofit = $_POST['updateprofit'];
     $P_updatedpckgxprofit = $_POST['updatexprofit'];
@@ -37,10 +37,10 @@ if(isset($_POST['update']))
     $timestamp=time(); //current timestamp
      $date=date("Y/m/d", $timestamp);  
     
-    $yes= $insstmt->execute(array($P_pckgid, $P_newqty,$P_pv,  $P_updatedpckgsell, $P_updatedpckgbuy, $P_updatedpckgprofit, $P_updatedpckgxprofit, $date, $cfsID, $type, $scatagory, $storeID));
+    $yes= $insstmt->execute(array($P_pckgid, $P_newqty,$P_pv,  $P_updatedpckgsell, $P_updatedpckgbuy, $P_oldpckgbuy, $P_updatedpckgprofit, $P_updatedpckgxprofit, $date, $cfsID, $type, $scatagory, $storeID));
     if($yes ==1)
     {$msg = "প্যাকেজটি সফলভাবে এন্ট্রি হয়েছে";}
-                    else { $msg = "দুঃখিত প্যাকেজটি এন্ট্রি হয়নি";}
+    else { $msg = "দুঃখিত প্যাকেজটি এন্ট্রি হয়নি";}
 
 }
 ?>
@@ -87,19 +87,20 @@ $(document).ready(function() {
             $('#update').attr('disabled','disabled');
         }
     
-      $('#okok').click(function() {
+$('#okok').click(function() {
     if($('#check').val() == 1 )
         {
-            //$('#okok').attr('','enable');
+            $('#show').css('color', 'red');
             $("#show").html("দুঃখিত, এই পরিমান প্যাকেজ এন্ট্রি করার জন্য প্রয়োজনীয় পরিমান পণ্য নেই");
             $('#update').attr('disabled','disabled');
             $('#ok').attr('disabled','disabled');
         }
         else{ 
-            $("#show").html("প্যাকেজটি এন্ট্রি করুন");
-            $('#okok').attr('disabled','disabled');
-            $('#update').removeAttr('disabled');
-            $('#ok').removeAttr('disabled');
+                $('#show').css('color', 'green');
+                $("#show").html("প্যাকেজটি এন্ট্রি করুন");
+                $('#okok').attr('disabled','disabled');
+                $('#update').removeAttr('disabled');
+                $('#ok').removeAttr('disabled');
         }
   });
  });
@@ -180,29 +181,13 @@ function checkqty(qty,left,ri8) // check qty after enter pckg qty
 function getUpdate(xprofit) // after update pckg prices
 {
    var run_pv = <?php echo $current_pv?>;
-        var profit = Number(document.getElementById('updateprofit').value);
-   var totalprft = profit + Number(xprofit);
-    var curprft = Number(document.getElementById('currentpckgprft').value);
-    var curxprft = Number(document.getElementById('currentpckgxprft').value);
-    var totalcurprft = curprft + curxprft;
-    var pv = ((run_pv)/100) * profit;
-    pv = (pv).toFixed(2);
-     document.getElementById('updatepv').value = pv;
-     
-    if(totalprft < totalcurprft)
-        {
-            var difference = totalcurprft - totalprft;
-            var currentsell = Number(document.getElementById('currentpckgprz').value);
-            var updatesell = currentsell - difference;
-            document.getElementById('updatesellprz').value = updatesell;
-        }
-        else
-            {
-                var difference = totalprft - totalcurprft;
-                var currentsell = Number(document.getElementById('currentpckgprz').value);
-                var updatesell = currentsell +difference;
-                document.getElementById('updatesellprz').value = updatesell;
-            }
+   var updatedbuy = Number(document.getElementById('updatebuy').value);
+   var updatedsell = Number(document.getElementById('updatesellprz').value);
+   var profit = updatedsell - (updatedbuy + xprofit);
+   var pv = run_pv * profit;
+   pv = (pv).toFixed(2);
+   document.getElementById('updateprofit').value = profit;
+   document.getElementById('updatepv').value = pv;
 }
 </script>  
 </head>
@@ -374,7 +359,7 @@ if($_GET['step']==1) {
                         <p>প্যাকেজ এন্ট্রি পরিমান : </b><input id="pckgQty" name="pckgQty" type="text" onkeypress=' return numbersonly(event)' onkeyup="checkqty(this.value,'<?php echo $str_left;?>','<?php echo $str_ri8;?>')"  /></br></p>
                                     <p>
                                         <?php if($check !=1) {?>
-                                        <input type="hidden"  id="check"  /><span id="show" style="color: red;"></span></br>
+                                        <input type="hidden"  id="check"  /><span id="show"></span></br>
                                         <input  id="okok" type="button" value="ঠিক আছে" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" />
                                       <input name="ok" id="ok" type="submit" value="এন্ট্রি" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" />
                                       <?php } else { echo "<span style='color:red;'>দুঃখিত, এই প্যাকেজটি এন্ট্রি করার জন্য প্রয়োজনীয় পরিমান পণ্য নেই </span>";}?>
@@ -471,8 +456,7 @@ if($_GET['step']==1) {
                                                                    array_push($arr_left_qty,$proqty);
                                                             }                                         
              ?>
-                                             </tbdoy></table></br>
-                                         
+                                             </tbdoy></table></br>         
                                     </fieldset>
                                 </td>
                                 <td width="40%">
@@ -541,16 +525,19 @@ if($_GET['step']==1) {
                                 </td>
                             </tr>
                             <tr>
-                                <td align="center" colspan="2" style="border: 1px solid black;">
-                                    <b>বর্তমান মোট ক্রয়মূল্য &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input name="buyingprz" type="text" readonly style="text-align: right;" value="<?php echo $buysum;?>" /> টাকা</br>
+                                <td align="center" colspan="2">
+                                    <fieldset style="border-width: 3px;width: 90%;">
+                                    <legend style="color: brown;">বর্তমানে পণ্যসমূহের মোট মূল্য</legend>
+                                         <b>বর্তমান মোট ক্রয়মূল্য &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input name="buyingprz" type="text" readonly style="text-align: right;" value="<?php echo $buysum;?>" /> টাকা</br>
                                          <b>বর্তমান মোট বিক্রয়মূল্য &nbsp;&nbsp;&nbsp;: </b><input type="text" readonly style="text-align: right;" value="<?php echo $sellsum;?>" /> টাকা</br>
                                          <b>বর্তমান মোট প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" readonly style="text-align: right;" value="<?php echo $profitsum;?>"/> টাকা</br>
                                          <b>বর্তমান মোট এক্সট্রা প্রফিট : </b><input type="text" readonly style="text-align: right;" value="<?php echo $xprofitsum;?>" /> টাকা</br>
                                          <b>বর্তমান মোট পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" readonly style="text-align: right;" value="<?php echo $pvsum;?>" /> টাকা
+                                    </fieldset>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black;">
+                                <td>
                                     <?php
                                                 $type='package';
                                                         $inventstmt->execute(array($pckgid,$scatagory,$storeID,$type));
@@ -562,19 +549,27 @@ if($_GET['step']==1) {
                                                             $db_pckgxprofit = $pckgrow['ins_extra_profit'];
                                                             $db_pckgprofit= $pckgrow['ins_profit'];
                                                             $db_pckgqty= $pckgrow['ins_how_many'];
+                                                            $db_pckgbuy = $pckgrow['ins_buying_price'];
                                                         }
                                     ?>
-                                        <b>বর্তমান প্যাকেজ প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgprft" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgprofit;?>" /> টাকা</br>
-                                         <b>বর্তমান প্যাকেজ এক্সট্রা প্রফিট : </b><input id="currentpckgxprft" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgxprofit;?>" /> টাকা</br>
+                                    <fieldset style="border-width: 3px;width: 90%;">
+                                    <legend style="color: brown;">বর্তমান প্যাকেজ মূল্য</legend>
+                                    <b>বর্তমান প্যাকেজ ক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgbuy" name="currentpckgbuy" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgbuy;?>" /> টাকা</br>
                                         <b>বর্তমান প্যাকেজ বিক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgprz" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgsell;?>" /> টাকা</br>
+                                        <b>বর্তমান প্যাকেজ এক্সট্রা প্রফিট : </b><input id="currentpckgxprft" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgxprofit;?>" /> টাকা</br>
+                                        <b>বর্তমান প্যাকেজ প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgprft" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgprofit;?>" /> টাকা</br>                                 
                                         <b>বর্তমান প্যাকেজ পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgpv" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgpv;?>" /></br>
-                                         
+                                    </fieldset>
                                 </td>
-                                <td style="border: 1px solid black;">
-                                         <b>আপডেট প্যাকেজ প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updateprofit" name="updateprofit" onkeypress="return checkIt(event)" type="text" style="text-align: right;width: 100px;" value="<?php echo $db_pckgprofit;?>"  /> টাকা</br>
+                                <td>
+                                    <fieldset style="border-width: 3px;width: 95%;">
+                                    <legend style="color: brown;">আপডেট প্যাকেজ মূল্য</legend>
+                                         <b>আপডেট প্যাকেজ ক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updatebuy" name="updatebuy" onkeypress="return checkIt(event)" type="text" style="text-align: right;width: 100px;" value="<?php echo $db_pckgbuy;?>"  /> টাকা</br>
+                                         <b>আপডেট প্যাকেজ বিক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updatesellprz" name="updatesellprz" type="text" onkeypress="return checkIt(event)" style="text-align: right;width: 100px;" value="<?php echo $db_pckgsell;?>"/> টাকা</br>
                                          <b>আপডেট প্যাকেজ এক্সট্রা প্রফিট : </b><input id="updatexprofit" name="updatexprofit" type="text" style="text-align: right;width: 100px;" onkeypress="return checkIt(event)" onblur="getUpdate(this.value)" value="<?php echo $db_pckgxprofit;?>"/> টাকা</br>
-                                         <b>আপডেটেট প্যাকেজ বিক্রয়মূল্য&nbsp;&nbsp;: </b><input id="updatesellprz" name="updatesellprz" type="text" readonly style="text-align: right;width: 100px;" value="<?php echo $db_pckgsell;?>"/> টাকা</br>
-                                         <b>আপডেটেট প্যাকেজ পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updatepv" name="updatepv" type="text" readonly style="text-align: right;width: 100px;" value="<?php echo $db_pckgpv;?>"/> </br>
+                                         <b>আপডেটেট প্যাকেজ প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updateprofit" name="updateprofit" readonly type="text" style="text-align: right;width: 100px;" value="<?php echo $db_pckgprofit;?>"  /> টাকা</br>
+                                         <b>আপডেটেট প্যাকেজ পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updatepv" name="updatepv" type="text" readonly style="text-align: right;width: 100px;" value="<?php echo $db_pckgpv;?>"/> </br>
+                                    </fieldset>
                                 </td>
                             </tr>
                             <tr>
