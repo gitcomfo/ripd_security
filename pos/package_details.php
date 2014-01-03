@@ -64,7 +64,7 @@ foreach($getall as $row3)
                                          <legend style="color: brown;">প্যাকেজ বিবরণ</legend>
                                          <b>প্যাকেজের নাম &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" id="pckgName" name="pckgName" readonly style="width: 200px;" value="<?php echo $pckgname;?>"/></br>
                                          <b>প্যাকেজ কোড &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b> <input type="text" id="pckgCode" name="pckgCode" readonly style="width: 200px;" value="<?php echo $pckgcode;?>"/></br>
-                                         <b>প্যাকেজের বিক্রয়মূল্য : </b> <input type="text" id="pckgPrice" name="pckgPrice" readonly style="width: 200px;text-align: right" value="<?php echo $str_price;?>"/> টাকা</br>
+                                         <b>প্যাকেজের বিক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b> <input type="text" id="pckgPrice" name="pckgPrice" readonly style="width: 200px;text-align: right" value="<?php echo $str_price;?>"/> টাকা</br>
                                          <table border="1" style="font-family: SolaimanLipi !important;">
                                              <thead style="background-color: #ffcccc">
                                                  <th width="33%">পণ্যের কোড</th>

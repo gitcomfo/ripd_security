@@ -102,9 +102,9 @@ $result= $sel_sales_summary->fetchAll();
                    $totalbuy = $totalbuy + $row[2];
               }
         $invoiceNo = $_SESSION['SESS_MEMBER_ID'];
-        $ins_sales_summary->execute(array($scatagory,$storeID,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$P_getTaka,$invoiceNo,$cfsID,$P_paiedByCash,$P_paiedByAcc));
+        $conn->beginTransaction();
+        $sqlresult1=$ins_sales_summary->execute(array($scatagory,$storeID,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$P_getTaka,$invoiceNo,$cfsID,$P_paiedByCash,$P_paiedByAcc));
         $sales_sum_id= $conn->lastInsertId();
-
         foreach($_SESSION['arrSellTemp'] as $key => $row) 
         {
             $pro_qty = $row[4];
@@ -114,8 +114,16 @@ $result= $sel_sales_summary->fetchAll();
             $invenrow = $_SESSION['pro_inventory_array'][$key];
             $pro_profit = $invenrow['ins_profit'] * $pro_qty;
             $pro_xprofit = $invenrow['ins_extra_profit'] * $pro_qty;
-            $ins_sales->execute(array($pro_qty,$pro_buy,$pro_amount,$pro_pv,$pro_profit,$pro_xprofit,$key,$sales_sum_id));
+            $sqlresult2=$ins_sales->execute(array($pro_qty,$pro_buy,$pro_amount,$pro_pv,$pro_profit,$pro_xprofit,$key,$sales_sum_id));
         }
+    if($sqlresult1 && $sqlresult2)
+    {
+        $conn->commit();
+    }
+ else {
+        $conn->rollBack();
+        echo "<script>alert('দুঃখিত,প্রোডাক্ট বিক্রয় হয়নি')</script>";
+}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

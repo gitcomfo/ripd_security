@@ -14,10 +14,10 @@ $pvrow = $sql_runningpv->fetchAll();
 foreach ($pvrow as $value) {
     $current_pv = $value['pv_value'];
 }
- $selstmt = $conn->prepare("SELECT * FROM package_details WHERE pckg_infoid=?");
  $insstmt = $conn ->prepare("INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_pv, pckg_selling_price ,pckg_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?)");
  $selectstmt = $conn ->prepare("SELECT * FROM inventory WHERE ins_productid= ? AND ins_ons_type=? AND ins_ons_id =? AND ins_product_type = 'general'");
-if(isset($_POST['ok']))
+
+ if(isset($_POST['ok']))
 {
     $P_pckgqty = $_POST['pckgQty'];
     $P_pckgName = $_POST['pckgName'];
@@ -27,7 +27,6 @@ if(isset($_POST['ok']))
     $str_qty = $_POST['pckgqty'];
     $arr_chart = explode(',', $str_chart);
     $arr_qty = explode(',', $str_qty);
-  
 }
 if(isset($_POST['entry']))
 {
@@ -53,8 +52,8 @@ if(isset($_POST['entry']))
     if($x == 1)
        {
            $msg = "প্যাকেজটি সফলভাবে এন্ট্রি হয়েছে";
-                    }
-                    else { $msg = "দুঃখিত প্যাকেজটি এন্ট্রি হয়নি";}
+        }
+    else { $msg = "দুঃখিত প্যাকেজটি এন্ট্রি হয়নি";}
          
 }
 ?>
@@ -70,7 +69,6 @@ if(isset($_POST['entry']))
 <script type="text/javascript">
 function getPrice(xprofitless)
 {
-   
     var sell = document.getElementById('totalsellprz').value;
     var profitless = document.getElementById('pckgprofitless').value;
     var totalless = profitless + xprofitless;
@@ -83,14 +81,6 @@ function getPrice(xprofitless)
     pv = (pv).toFixed(2);
      document.getElementById('pckgpv').value = pv;
 }
-    function checkTime(i)
-    {
-      if (i<10)
-      {
-        i="0" + i
-      }
-      return i
-    }
 function checkIt(evt) // float value-er jonno***********************
     {
     evt = (evt) ? evt : window.event;
@@ -102,7 +92,7 @@ function checkIt(evt) // float value-er jonno***********************
     status = "This field accepts numbers only.";
     return false;
 }
-    </script>
+</script>
 </head>
     
 <body>

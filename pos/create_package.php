@@ -70,7 +70,7 @@ if(isset($_POST['entry']))
             $msg = "দুঃখিত প্রোডাক্ট এন্ট্রি হয়নি";
         }
       }
-                  unset($_SESSION['pckgname']); 
+            unset($_SESSION['pckgname']); 
             unset($_SESSION['pckgcode']); 
             unset($_SESSION['pckgid']);
             unset($_SESSION['arrProductTemp']);

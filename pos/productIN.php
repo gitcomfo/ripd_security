@@ -6,9 +6,6 @@ include_once 'includes/MiscFunctions.php';
 
 if (!isset($_SESSION['chalanNO'])) { $_SESSION['chalanNO'] = get_time_random_no(10); }
 $storeName= $_SESSION['loggedInOfficeName'];
-$cfsID = $_SESSION['userIDUser'];
-$storeID = $_SESSION['loggedInOfficeID'];
-$scatagory =$_SESSION['loggedInOfficeType'];
 
 $sel_product_chart = $conn->prepare("SELECT * FROM product_chart WHERE idproductchart = ? ");
 ?>
@@ -187,7 +184,7 @@ function deleteProduct(id) // to add into temporary array*******************
         <a href="" onclick="javasrcipt:window.open('all_ripd_product_list.php');return false;" style="float: right"><img src="images/allproductlist.png" style="width: 100px;height: 70px;"/></br>অল প্রোডাক্ট লিস্ট</a></div>
 </div>
 </br>
-     <fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
+<fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
          <legend style="color: brown;">পণ্য প্রবেশ</legend>
     <div class="top" style="width: 100%;">
         <div class="topleft" style="float: left;width: 30%;">
