@@ -164,7 +164,7 @@ if ($_GET['action'] == 'edit') {
     </div>
     <div>
         <form method="POST">
-            <table class="formstyle" style =" width:90%; margin-left: 5%;">        
+            <table class="formstyle" style =" width:78%;">        
                 <tr>
                     <th colspan="6">কমান্ড লিস্ট ও পি,ভি এর মান</th>
                 </tr>

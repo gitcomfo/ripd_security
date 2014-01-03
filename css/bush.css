@@ -301,3 +301,9 @@ em2{
 #container_others4 { }
 #container_others32 { }
 #container_others33 { }
+
+.resize_award_img {
+	width: 70px; /* enter desired award image width here */
+	height : 22px;
+             alignment-adjust: central;
+}

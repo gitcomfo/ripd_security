@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 session_start();
-include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 $storeName= $_SESSION['loggedInOfficeName'];
@@ -12,22 +11,22 @@ $check = 0; $msg ="";
 $arr_left_qty= array();
 $arr_ri8_qty = array();
 
-$sql_runningpv = mysql_query("SELECT * FROM running_command ;"); 
-$pvrow = mysql_fetch_assoc($sql_runningpv);
-$current_pv = $pvrow['pv_value'];
-
-$sql ="SELECT * FROM package_inventory WHERE pckg_infoid=? AND ons_type=? AND ons_id=?";
-$stmt = $conn->prepare($sql);
-
-$inventsql = "SELECT * FROM inventory WHERE ins_productid= ? AND ins_ons_type=? AND ins_ons_id =? AND ins_product_type = ? ";
-$inventstmt = $conn ->prepare($inventsql);
-
-$sqlins = "INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_pv, pckg_selling_price ,pckg_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?,?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?)";
- $insstmt = $conn ->prepare($sqlins);
+$sql_runningpv = $conn->prepare("SELECT * FROM running_command ;");
+$sql_runningpv->execute();
+$pvrow = $sql_runningpv->fetchAll();
+foreach ($pvrow as $value) {
+    $current_pv = $value['pv_value'];
+}
+$inventstmt = $conn->prepare("SELECT * FROM inventory WHERE ins_productid= ? AND ins_ons_type=? AND ins_ons_id =? AND ins_product_type = ? ");
+$insstmt = $conn->prepare("INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_pv, pckg_selling_price ,pckg_buying_price, pckg_original_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?,?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?)");
+$stmtsel = $conn ->prepare( "SELECT * FROM package_info WHERE idpckginfo= ?");
+$selectstmt2 = $conn ->prepare("SELECT * FROM package_details WHERE pckg_infoid = ?");
+$selectstmt3 = $conn ->prepare("SELECT * FROM product_chart WHERE idproductchart= ? ");
 
 if(isset($_POST['update']))
 {
-    $P_updatedpckgbuy = $_POST['buyingprz'];
+    $P_oldpckgbuy = $_POST['currentpckgbuy'];
+    $P_updatedpckgbuy = $_POST['updatebuy'];
     $P_updatedpckgsell = $_POST['updatesellprz'];
     $P_updatedpckgprofit = $_POST['updateprofit'];
     $P_updatedpckgxprofit = $_POST['updatexprofit'];
@@ -38,13 +37,12 @@ if(isset($_POST['update']))
     $timestamp=time(); //current timestamp
      $date=date("Y/m/d", $timestamp);  
     
-    $yes= $insstmt->execute(array($P_pckgid, $P_newqty,$P_pv,  $P_updatedpckgsell, $P_updatedpckgbuy, $P_updatedpckgprofit, $P_updatedpckgxprofit, $date, $cfsID, $type, $scatagory, $storeID));
+    $yes= $insstmt->execute(array($P_pckgid, $P_newqty,$P_pv,  $P_updatedpckgsell, $P_updatedpckgbuy, $P_oldpckgbuy, $P_updatedpckgprofit, $P_updatedpckgxprofit, $date, $cfsID, $type, $scatagory, $storeID));
     if($yes ==1)
     {$msg = "প্যাকেজটি সফলভাবে এন্ট্রি হয়েছে";}
-                    else { $msg = "দুঃখিত প্যাকেজটি এন্ট্রি হয়নি";}
+    else { $msg = "দুঃখিত প্যাকেজটি এন্ট্রি হয়নি";}
 
 }
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -65,19 +63,9 @@ if(isset($_POST['update']))
     color: yellow !important;
 }
 </style>
- <script src="scripts/tinybox.js" type="text/javascript"></script>
 <script type="text/javascript">
 function ShowTime()
 {
-      var time=new Date()
-      var h=time.getHours()
-      var m=time.getMinutes()
-      var s=time.getSeconds()
-  
-      m=checkTime(m)
-      s=checkTime(s)
-      document.getElementById('txt').value=h+" : "+m+" : "+s
-      t=setTimeout('ShowTime()',1000)
       if (document.getElementById("check").value == '1')
            {
                document.getElementById("okok").disabled = false;
@@ -93,20 +81,29 @@ function ShowTime()
        }
 
 }
-    function checkTime(i)
-    {
-      if (i<10)
-      {
-        i="0" + i
-      }
-      return i
-    }
-    
-    $(document).ready(function() {
+
+$(document).ready(function() {
     if ($('#okok').is(':disabled') == false) {
             $('#update').attr('disabled','disabled');
         }
-    });
+    
+$('#okok').click(function() {
+    if($('#check').val() == 1 )
+        {
+            $('#show').css('color', 'red');
+            $("#show").html("দুঃখিত, এই পরিমান প্যাকেজ এন্ট্রি করার জন্য প্রয়োজনীয় পরিমান পণ্য নেই");
+            $('#update').attr('disabled','disabled');
+            $('#ok').attr('disabled','disabled');
+        }
+        else{ 
+                $('#show').css('color', 'green');
+                $("#show").html("প্যাকেজটি এন্ট্রি করুন");
+                $('#okok').attr('disabled','disabled');
+                $('#update').removeAttr('disabled');
+                $('#ok').removeAttr('disabled');
+        }
+  });
+ });
   function numbersonly(e)
    {
         var unicode=e.charCode? e.charCode : e.keyCode
@@ -128,23 +125,6 @@ function checkIt(evt) // float value-er jonno***********************
     return false;
 }
 
-$(document).ready(function(){
-  $('#okok').click(function() {
-    if($('#check').val() == 1 )
-        {
-            //$('#okok').attr('','enable');
-            $("#show").html("দুঃখিত, এই পরিমান প্যাকেজ এন্ট্রি করার জন্য প্রয়োজনীয় পরিমান পণ্য নেই");
-            $('#update').attr('disabled','disabled');
-            $('#ok').attr('disabled','disabled');
-        }
-        else{ 
-            $("#show").html("প্যাকেজটি এন্ট্রি করুন");
-            $('#okok').attr('disabled','disabled');
-            $('#update').removeAttr('disabled');
-            $('#ok').removeAttr('disabled');
-        }
-  });
-});
     </script>
 	
 <!--===========================================================================================================================-->
@@ -201,36 +181,19 @@ function checkqty(qty,left,ri8) // check qty after enter pckg qty
 function getUpdate(xprofit) // after update pckg prices
 {
    var run_pv = <?php echo $current_pv?>;
-        var profit = Number(document.getElementById('updateprofit').value);
-   var totalprft = profit + Number(xprofit);
-    var curprft = Number(document.getElementById('currentpckgprft').value);
-    var curxprft = Number(document.getElementById('currentpckgxprft').value);
-    var totalcurprft = curprft + curxprft;
-    var pv = ((run_pv)/100) * profit;
-    pv = (pv).toFixed(2);
-     document.getElementById('updatepv').value = pv;
-     
-    if(totalprft < totalcurprft)
-        {
-            var difference = totalcurprft - totalprft;
-            var currentsell = Number(document.getElementById('currentpckgprz').value);
-            var updatesell = currentsell - difference;
-            document.getElementById('updatesellprz').value = updatesell;
-        }
-        else
-            {
-                var difference = totalprft - totalcurprft;
-                var currentsell = Number(document.getElementById('currentpckgprz').value);
-                var updatesell = currentsell +difference;
-                document.getElementById('updatesellprz').value = updatesell;
-            }
+   var updatedbuy = Number(document.getElementById('updatebuy').value);
+   var updatedsell = Number(document.getElementById('updatesellprz').value);
+   var profit = updatedsell - (updatedbuy + xprofit);
+   var pv = run_pv * profit;
+   pv = (pv).toFixed(2);
+   document.getElementById('updateprofit').value = profit;
+   document.getElementById('updatepv').value = pv;
 }
 </script>  
 </head>
     
 <body onLoad="ShowTime()">
-
-    <div id="maindiv">
+<div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
@@ -247,11 +210,9 @@ function getUpdate(xprofit) // after update pckg prices
     <div class="top" style="width: 100%;height: auto;">
         <div class="topleft" style="width: 60%;float: left;"><b>প্যাকেজ কোড&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
             : <input type="text" id="searchPckg" name="searchPckg" onKeyUp="searchPckg(this.value);" autocomplete="off" style="width: 300px;"/></br>
-        <div id="searchResult"></div>
-    </div>
-        <div style="width: 40%;float: left;text-align: right;"><b> তারিখ ও সময় : </b><input name="date" style="width:75px;"type="text" value="<?php echo date("d/m/Y"); ?>" readonly/>
-    <input name="time" type="text" id="txt" size="7" readonly/></div>
+                <div id="searchResult"></div>
         </div>
+    </div>
 </fieldset>
 </div></br>
 <?php
@@ -272,8 +233,6 @@ if($_GET['step']==1) {
                                                     if(isset($_GET['id']))
                                                     {
                                                         $pckgid = $_GET['id'];
-                                                        $sqlsel = "SELECT * FROM package_info WHERE idpckginfo= ?";
-                                                        $stmtsel = $conn ->prepare($sqlsel);
                                                         $stmtsel->execute(array($pckgid));
                                                         $all = $stmtsel->fetchAll();
                                                         foreach($all as $row)
@@ -281,8 +240,6 @@ if($_GET['step']==1) {
                                                             $db_pckgname= $row['pckg_name'];
                                                             $db_pckgcode = $row['pckg_code'];
                                                         }
-                                                        $sql2 = "SELECT * FROM package_details WHERE pckg_infoid = ?";
-                                                        $selectstmt2 = $conn ->prepare($sql2);
                                                         $arr_pro_chartid = array();
                                                         $arr_pro_qty = array();
                                                         $selectstmt2->execute(array($pckgid));
@@ -296,24 +253,23 @@ if($_GET['step']==1) {
                                                         $str_pro_qty = implode(',', $arr_pro_qty);
                                                     }
                                          ?>
-                                         <b>প্যাকেজের নাম : </b><input type="text" id="pckgName" name="pckgName" readonly value="<?php echo $db_pckgname;?>" style="width: 300px;"/><input type="hidden" name="pckgID"  value="<?php echo $pckgid;?>"/></br>
-                                         <b>প্যাকেজ কোড &nbsp;: </b> <input type="text" id="pckgCode" name="pckgCode" readonly value="<?php echo $db_pckgcode;?>" style="width: 300px;"/></br>
+                                         <b>প্যাকেজের নাম : </b><input type="text" id="pckgName" name="pckgName" readonly value="<?php echo $db_pckgname;?>" style="width: 250px;"/><input type="hidden" name="pckgID"  value="<?php echo $pckgid;?>"/></br>
+                                         <b>প্যাকেজ কোড &nbsp;: </b> <input type="text" id="pckgCode" name="pckgCode" readonly value="<?php echo $db_pckgcode;?>" style="width: 250px;"/></br>
                                          <input type='hidden' name='pckgproid' value='<?php echo $str_pro_chartid; ?>' />
-                                         <input type='hidden' name='pckgqty' value='<?php echo $str_pro_qty; ?>' />
-                                         <table border="">
+                                         <input type='hidden' name='pckgqty' value='<?php echo $str_pro_qty; ?>' /></br>
+                                         <table border="1" cellpadding="0" cellspacing="0">
                                              <thead style="background-color: #ffcccc">
                                                  <th width="33%">পণ্যের কোড</th>
                                                  <th width="53%">পণ্যের নাম</th>
                                                  <th width="14%">পরিমাণ</th>
-                                             </thead>                                       
+                                             </thead>
+                                             <tbody style="font-size: 16px;">
                                                  <?php
                                                             $rowNumber = count($arr_pro_chartid);
                                                             for($i = 0 ; $i< $rowNumber; $i++)
                                                             {
                                                                 $prochartid = $arr_pro_chartid[$i];
                                                                 $proqty = $arr_pro_qty[$i];
-                                                                $sql3 = "SELECT * FROM product_chart WHERE idproductchart= ? ";
-                                                                $selectstmt3 = $conn ->prepare($sql3);
                                                                 $selectstmt3->execute(array($prochartid));
                                                                 $all3 = $selectstmt3->fetchAll();
                                                                 foreach($all3 as $row3)
@@ -321,19 +277,20 @@ if($_GET['step']==1) {
                                                                     $procode = $row3['pro_code'];
                                                                     $proname = $row3['pro_productname'];
                                                                 }
-                                                                echo "<tbody><td>$procode </td>
+                                                                echo "<tr><td>$procode </td>
                                                                          <td>$proname</td>
-                                                                         <td align='center'>$proqty</td></tbody>";
+                                                                         <td align='center'>$proqty</td></tr>";
                                                                 array_push($arr_left_qty,$proqty);
                                                             }
                                                      ?>
+                                             </tbody>
                                          </table>
                                     </fieldset>
                                 </td>
                                 <td>
                                     <fieldset style="border-width: 3px;width: 98%;height: auto;">
-                                         <legend style="color: brown;">ব্যাবহারযোগ্য পণ্যের পরিমাণ</legend>
-                                         <table border="1">
+                                         <legend style="color: brown;">ব্যবহারযোগ্য পণ্যের পরিমাণ</legend>
+                                         <table border="1" cellpadding="0" cellspacing="0">
                                              <thead style="background-color: #ffcccc">
                                                  <th width="31%">পণ্যের কোড</th>
                                                  <th width="42%">পণ্যের নাম</th>
@@ -402,7 +359,7 @@ if($_GET['step']==1) {
                         <p>প্যাকেজ এন্ট্রি পরিমান : </b><input id="pckgQty" name="pckgQty" type="text" onkeypress=' return numbersonly(event)' onkeyup="checkqty(this.value,'<?php echo $str_left;?>','<?php echo $str_ri8;?>')"  /></br></p>
                                     <p>
                                         <?php if($check !=1) {?>
-                                        <input type="hidden"  id="check"  /><span id="show" style="color: red;"></span></br>
+                                        <input type="hidden"  id="check"  /><span id="show"></span></br>
                                         <input  id="okok" type="button" value="ঠিক আছে" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" />
                                       <input name="ok" id="ok" type="submit" value="এন্ট্রি" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" />
                                       <?php } else { echo "<span style='color:red;'>দুঃখিত, এই প্যাকেজটি এন্ট্রি করার জন্য প্রয়োজনীয় পরিমান পণ্য নেই </span>";}?>
@@ -423,17 +380,15 @@ if($_GET['step']==1) {
             <table>
                 <tr>
                     <td>
-                        <table>
+                        <table style="padding: 0px !important;">
                             <tr>
-                                <td width="58%">
+                                <td width="60%">
                                     <fieldset style="border-width: 3px;width: 95%;">
                                          <legend style="color: brown;">প্যাকেজ বিবরণ</legend>
                                          <?php
                                                     if(isset($_GET['id']))
                                                     {
                                                         $pckgid = $_GET['id'];
-                                                        $sqlsel = "SELECT * FROM package_info WHERE idpckginfo= ?";
-                                                        $stmtsel = $conn ->prepare($sqlsel);
                                                         $stmtsel->execute(array($pckgid));
                                                         $all = $stmtsel->fetchAll();
                                                         foreach($all as $row)
@@ -441,8 +396,6 @@ if($_GET['step']==1) {
                                                             $db_pckgname= $row['pckg_name'];
                                                             $db_pckgcode = $row['pckg_code'];
                                                         }
-                                                        $sql2 = "SELECT * FROM package_details WHERE pckg_infoid = ?";
-                                                        $selectstmt2 = $conn ->prepare($sql2);
                                                         $arr_pro_chartid = array();
                                                         $arr_pro_qty = array();
                                                         $selectstmt2->execute(array($pckgid));
@@ -456,9 +409,8 @@ if($_GET['step']==1) {
                                          ?>
                                          <b>প্যাকেজের নাম : </b><input type="text" id="pckgName" name="pckgName" readonly value="<?php echo $db_pckgname;?>"  style="width: 300px;"/><input type="hidden" name="pckgID"  value="<?php echo $pckgid;?>"/></br>
                                          <b>প্যাকেজ কোড &nbsp;: </b> <input type="text" id="pckgCode" name="pckgCode" readonly value="<?php echo $db_pckgcode;?>" style="width: 300px;"/></br></br>
-                                         <table border="1">
+                                         <table border="1" cellpadding="0" cellspacing="0" style="padding: 0px !important;font-size: 16px;">
                                              <thead style="background-color: #ffcccc">
-                                                 <th width="12%">পণ্যের কোড</th>
                                                  <th width="21%">পণ্যের নাম</th>
                                                  <th width="9%">পরিমাণ</th>
                                                   <th width="12%">বর্তমান ক্রয়মূল্য</th>
@@ -467,6 +419,7 @@ if($_GET['step']==1) {
                                                   <th width="10%">বর্তমান এক্সট্রা প্রফিট</th>
                                                  <th width="12%">বর্তমান পিভি</th>
                                              </thead>
+                                             <tbody style="font-size: 16px;">
                                              <?php
                                                      $rowcount = count($arr_pro_chartid);
                                                             for($i = 0 ; $i< $rowcount; $i++)
@@ -491,32 +444,31 @@ if($_GET['step']==1) {
                                                                         $xprofitsum = $xprofitsum+$proxprofit;
                                                                         $pvsum = $pvsum+$propv;
                                                                       }
-                                                                   echo "<tbody>
-                                                                      <td>$procode </td>
+                                                                   echo "<tr>
                                                                       <td>$proname</td>
                                                                       <td align='center'>$proqty</td>
                                                                       <td>$probuy </td>
                                                                       <td>$prosell</td>
-                                                                      <td align='center'>$proprofit</td>
+                                                                      <td>$proprofit</td>
                                                                       <td align='center'>$proxprofit </td>
-                                                                      <td align='center'>$propv</td>
-                                                                      </tbody>";
+                                                                      <td >$propv</td>
+                                                                      </tr>";
                                                                    array_push($arr_left_qty,$proqty);
                                                             }                                         
              ?>
-                                         </table></br>
-                                         
+                                             </tbdoy></table></br>         
                                     </fieldset>
                                 </td>
-                                <td width="42%">
-                                    <fieldset style="border-width: 3px;width: 98%;height: auto;">
-                                         <legend style="color: brown;">ব্যাবহারযোগ্য পণ্যের পরিমাণ</legend>
-                                          <table width="100%" border="1">
+                                <td width="40%">
+                                    <fieldset style="border-width: 3px;width: 96%;height: auto;">
+                                         <legend style="color: brown;">ব্যবহারযোগ্য পণ্যের পরিমাণ</legend>
+                                         <table width="100%" border="1" cellpadding="0" cellspacing="0" style="padding: 0px !important;font-size: 16px;">
                                              <thead style="background-color: #ffcccc">
                                                  <th width="28%">পণ্যের কোড</th>
-                                                 <th width="36%">পণ্যের নাম</th>
-                                                 <th width="36%">ব্যবহারযোগ্য পরিমাণ</th>
+                                                 <th width="44%">পণ্যের নাম</th>
+                                                 <th width="28%">ব্যবহারযোগ্য পরিমাণ</th>
                                              </thead>
+                                             <tbody style="font-size: 16px;">
                                              <?php
                                                         $rowNumber = count($arr_pro_chartid);
                                                             for($i = 0 ; $i< $rowNumber; $i++)
@@ -534,9 +486,9 @@ if($_GET['step']==1) {
                                                                         $proname = $row4['ins_productname'];
                                                                         $qty = $row4['ins_how_many'];
                                                                     }
-                                                                   echo "<tbody><td>$procode </td>
+                                                                   echo "<tr><td>$procode </td>
                                                                              <td>$proname</td>
-                                                                             <td align='center'>$qty</td></tbody>";
+                                                                             <td align='center'>$qty</td></tr>";
                                                                    
                                                                    array_push($arr_ri8_qty,$qty);
                                                                     }
@@ -549,9 +501,9 @@ if($_GET['step']==1) {
                                                                         $procode = $row3['pro_code'];
                                                                         $proname = $row3['pro_productname'];
                                                                     }
-                                                                    echo "<tbody><td>$procode </td>
+                                                                    echo "<tr><td>$procode </td>
                                                                              <td>$proname</td>
-                                                                             <td align='center'>পণ্যটি নেই</td></tbody>";
+                                                                             <td align='center'>পণ্যটি নেই</td></tr>";
                                                                     $check = 1;
                                                                     array_push($arr_ri8_qty,0);
                                                                     }
@@ -567,21 +519,25 @@ if($_GET['step']==1) {
                                                              $str_left = implode("/", $arr_left_qty);
                                                              $str_ri8 = implode("/", $arr_ri8_qty);                                     
                                                   ?>
+                                             </tbody>
                                          </table>
                                      </fieldset>
                                 </td>
                             </tr>
                             <tr>
-                                <td align="center" colspan="2" style="border: 1px solid black;">
-                                    <b>বর্তমান মোট ক্রয়মূল্য &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input name="buyingprz" type="text" readonly style="text-align: right;" value="<?php echo $buysum;?>" /> টাকা</br>
+                                <td align="center" colspan="2">
+                                    <fieldset style="border-width: 3px;width: 90%;">
+                                    <legend style="color: brown;">বর্তমানে পণ্যসমূহের মোট মূল্য</legend>
+                                         <b>বর্তমান মোট ক্রয়মূল্য &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input name="buyingprz" type="text" readonly style="text-align: right;" value="<?php echo $buysum;?>" /> টাকা</br>
                                          <b>বর্তমান মোট বিক্রয়মূল্য &nbsp;&nbsp;&nbsp;: </b><input type="text" readonly style="text-align: right;" value="<?php echo $sellsum;?>" /> টাকা</br>
                                          <b>বর্তমান মোট প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" readonly style="text-align: right;" value="<?php echo $profitsum;?>"/> টাকা</br>
                                          <b>বর্তমান মোট এক্সট্রা প্রফিট : </b><input type="text" readonly style="text-align: right;" value="<?php echo $xprofitsum;?>" /> টাকা</br>
                                          <b>বর্তমান মোট পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" readonly style="text-align: right;" value="<?php echo $pvsum;?>" /> টাকা
+                                    </fieldset>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black;">
+                                <td>
                                     <?php
                                                 $type='package';
                                                         $inventstmt->execute(array($pckgid,$scatagory,$storeID,$type));
@@ -593,19 +549,27 @@ if($_GET['step']==1) {
                                                             $db_pckgxprofit = $pckgrow['ins_extra_profit'];
                                                             $db_pckgprofit= $pckgrow['ins_profit'];
                                                             $db_pckgqty= $pckgrow['ins_how_many'];
+                                                            $db_pckgbuy = $pckgrow['ins_buying_price'];
                                                         }
                                     ?>
-                                        <b>বর্তমান প্যাকেজ প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgprft" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgprofit;?>" /> টাকা</br>
-                                         <b>বর্তমান প্যাকেজ এক্সট্রা প্রফিট : </b><input id="currentpckgxprft" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgxprofit;?>" /> টাকা</br>
+                                    <fieldset style="border-width: 3px;width: 90%;">
+                                    <legend style="color: brown;">বর্তমান প্যাকেজ মূল্য</legend>
+                                    <b>বর্তমান প্যাকেজ ক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgbuy" name="currentpckgbuy" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgbuy;?>" /> টাকা</br>
                                         <b>বর্তমান প্যাকেজ বিক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgprz" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgsell;?>" /> টাকা</br>
+                                        <b>বর্তমান প্যাকেজ এক্সট্রা প্রফিট : </b><input id="currentpckgxprft" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgxprofit;?>" /> টাকা</br>
+                                        <b>বর্তমান প্যাকেজ প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgprft" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgprofit;?>" /> টাকা</br>                                 
                                         <b>বর্তমান প্যাকেজ পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgpv" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgpv;?>" /></br>
-                                         
+                                    </fieldset>
                                 </td>
-                                <td style="border: 1px solid black;">
-                                         <b>আপডেট প্যাকেজ প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updateprofit" name="updateprofit" onkeypress="return checkIt(event)" type="text" style="text-align: right;" value="<?php echo $db_pckgprofit;?>"  /> টাকা</br>
-                                         <b>আপডেট প্যাকেজ এক্সট্রা প্রফিট : </b><input id="updatexprofit" name="updatexprofit" type="text" style="text-align: right;" onkeypress="return checkIt(event)" onblur="getUpdate(this.value)" value="<?php echo $db_pckgxprofit;?>"/> টাকা</br>
-                                         <b>আপডেটেট প্যাকেজ বিক্রয়মূল্য&nbsp;&nbsp;: </b><input id="updatesellprz" name="updatesellprz" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgsell;?>"/> টাকা</br>
-                                         <b>আপডেটেট প্যাকেজ পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updatepv" name="updatepv" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgpv;?>"/> </br>
+                                <td>
+                                    <fieldset style="border-width: 3px;width: 95%;">
+                                    <legend style="color: brown;">আপডেট প্যাকেজ মূল্য</legend>
+                                         <b>আপডেট প্যাকেজ ক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updatebuy" name="updatebuy" onkeypress="return checkIt(event)" type="text" style="text-align: right;width: 100px;" value="<?php echo $db_pckgbuy;?>"  /> টাকা</br>
+                                         <b>আপডেট প্যাকেজ বিক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updatesellprz" name="updatesellprz" type="text" onkeypress="return checkIt(event)" style="text-align: right;width: 100px;" value="<?php echo $db_pckgsell;?>"/> টাকা</br>
+                                         <b>আপডেট প্যাকেজ এক্সট্রা প্রফিট : </b><input id="updatexprofit" name="updatexprofit" type="text" style="text-align: right;width: 100px;" onkeypress="return checkIt(event)" onblur="getUpdate(this.value)" value="<?php echo $db_pckgxprofit;?>"/> টাকা</br>
+                                         <b>আপডেটেট প্যাকেজ প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updateprofit" name="updateprofit" readonly type="text" style="text-align: right;width: 100px;" value="<?php echo $db_pckgprofit;?>"  /> টাকা</br>
+                                         <b>আপডেটেট প্যাকেজ পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updatepv" name="updatepv" type="text" readonly style="text-align: right;width: 100px;" value="<?php echo $db_pckgpv;?>"/> </br>
+                                    </fieldset>
                                 </td>
                             </tr>
                             <tr>

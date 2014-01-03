@@ -1,14 +1,16 @@
 <?php
 error_reporting(0);
 session_start();
-include_once 'includes/ConnectDB.inc';
+include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
-if(isset($_GET['edit']))
-{
-    $recitid= $_GET['edit'];
-    mysql_query("DELETE FROM replace_temp WHERE reciptID = '$recitid';") or exit ("ha ha ha");
-}
+
 $storeName= $_SESSION['loggedInOfficeName'];
+$sel_sales_summary = $conn->prepare("SELECT * FROM sales_summary WHERE idsalessummary= ? ");
+$sel_sales = $conn->prepare("SELECT * FROM sales,inventory WHERE idinventory = inventory_idinventory AND sales_summery_idsalessummery=? ");
+$sel_sales_store = $conn->prepare("SELECT * FROM sales_store WHERE idSales_store= ?");
+$sel_office = $conn->prepare("SELECT * FROM office WHERE idOffice= ?");
+$sel_unreg = $conn->prepare("SELECT * FROM unregistered_customer WHERE idunregcustomer= ? ");
+$sel_cfsuser = $conn->prepare("SELECT * FROM cfs_user WHERE idUser= ? ");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -92,8 +94,7 @@ function searchRecipt(str_key) // for sold recipt no. search box
 </head>
     
 <body onLoad="ShowTime()">
-
-    <div id="maindiv">
+<div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
     <div style="width: 33%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
@@ -121,9 +122,10 @@ function searchRecipt(str_key) // for sold recipt no. search box
     <?php
 if (isset($_GET['id']))
     {
-        $G_sales_sum_id = $_GET['id'];
-                    $result = mysql_query("SELECT * FROM sales_summery WHERE idsalessummery= '$G_sales_sum_id';");
-                        $row = mysql_fetch_assoc($result);
+       $G_sales_sum_id = $_GET['id'];
+        $sel_sales_summary->execute(array($G_sales_sum_id));
+        $reslt = $sel_sales_summary->fetchAll();
+        foreach ($reslt as $row) {
                         $db_storeType=$row["sal_store_type"];
                         $db_storeID=$row["sal_storeid"];
                         $db_sellDate=strtotime($row["sal_salesdate"]);
@@ -135,51 +137,62 @@ if (isset($_GET['id']))
                         $db_invoiceno=$row['sal_invoiceno'];
                         $db_buyerid= $row['sal_buyerid'];
                         $db_buyertype= $row['sal_buyer_type'];
+        }
                         if($db_storeType=='s_store')
                         {
-                            $storereslt = mysql_query("SELECT * FROM sales_store WHERE idSales_store= '$db_storeID';");
-                            $storerow = mysql_fetch_assoc($storereslt);
-                            $db_storename = $storerow['salesStore_name'];
-                            $db_storeacc = $storerow['account_number'];
+                            $sel_sales_store->execute(array($db_storeID));
+                            $storereslt = $sel_sales_store->fetchAll();
+                            foreach ($storereslt as $storerow) {
+                                $db_storename = $storerow['salesStore_name'];
+                                $db_storeacc = $storerow['account_number'];
+                            }
                         }
                         elseif($db_storeType=='office')
                         {
-                            $storereslt = mysql_query("SELECT * FROM office WHERE idOffice= '$db_storeID';");
-                            $storerow = mysql_fetch_assoc($storereslt);
-                            $db_storename = $storerow['office_name'];
-                            $db_storeacc = $storerow['account_number'];
+                            $sel_office->execute(array($db_storeID));
+                            $storereslt = $sel_office->fetchAll();
+                            foreach ($storereslt as $storerow) {
+                                $db_storename = $storerow['office_name'];
+                                $db_storeacc = $storerow['account_number'];
+                            }
                         }
                         
                         if($db_buyertype == 'employee' || $db_buyertype == 'customer')
                         {
-                            $selcetresult = mysql_query("SELECT * FROM cfs_user WHERE idUser= '$db_buyerid';");
-                            $selectrow = mysql_fetch_assoc($selcetresult);
-                            $db_custname = $selectrow['account_name'];
-                            $db_custacc = $selectrow['account_number'];
-                        
+                            $sel_cfsuser->execute(array($db_buyerid));
+                            $selcetresult = $sel_cfsuser->fetchAll();
+                            foreach ($selcetresult as $selectrow) {
+                                $db_custname = $selectrow['account_name'];
+                                $db_custacc = $selectrow['account_number'];
+                            }
                         }
                         elseif($db_buyertype == 'unregcustomer' )
                         {
-                            $selcetresult = mysql_query("SELECT * FROM unregistered_customer WHERE idunregcustomer= '$db_buyerid';");
-                            $selectrow = mysql_fetch_assoc($selcetresult);
-                            $db_custname = $selectrow['unregcust_name'];
-                            $db_custacc = $selectrow['unregcust_mobile'];
-                        
+                            $sel_unreg->execute(array($db_buyerid));
+                            $selcetresult = $sel_unreg->fetchAll();
+                            foreach ($selcetresult as $selectrow) {
+                                $db_custname = $selectrow['unregcust_name'];
+                                $db_custacc = $selectrow['unregcust_mobile'];
+                            }
                         }
                         elseif($db_buyertype == 'office' )
                         {
-                            $storereslt = mysql_query("SELECT * FROM office WHERE idOffice= '$db_buyerid';");
-                            $storerow = mysql_fetch_assoc($storereslt);
-                            $db_custname = $storerow['office_name'];
-                            $db_custacc = $storerow['account_number'];
+                            $sel_office->execute(array($db_buyerid));
+                            $storereslt = $sel_office->fetchAll();
+                            foreach ($storereslt as $storerow) {
+                                $db_custname = $storerow['office_name'];
+                                $db_custacc = $storerow['account_number'];
+                            }
                         }
                         
                         elseif($db_buyertype == 's_store' )
                         {
-                            $storereslt = mysql_query("SELECT * FROM sales_store WHERE idSales_store= '$db_buyerid';");
-                            $storerow = mysql_fetch_assoc($storereslt);
-                            $db_custname = $storerow['salesStore_name'];
-                            $db_custacc = $storerow['account_number'];
+                           $sel_sales_store->execute(array($db_buyerid));
+                            $storereslt = $sel_sales_store->fetchAll();
+                            foreach ($storereslt as $storerow) {
+                                $db_custname = $storerow['salesStore_name'];
+                                $db_custacc = $storerow['account_number'];
+                            }
                         }
                         
                         $timestamp=time(); //current timestamp
@@ -199,34 +212,32 @@ if (isset($_GET['id']))
                         
                          echo "<div id='resultTable' style='background-color: antiquewhite;padding: 2px;'>
                                 <form name='replaceForm' action='showReplace.php?ssumid=$G_sales_sum_id' method='post'>";
-                        echo "<div style='width: 65%;float: left;'><b>চালান নং:</b><input type='hidden' name='reciptID' value= '$db_invoiceno' /> $db_invoiceno</br>
-                        <b>ক্রেতার নাম: <input type='hidden' name='buyname' value='$db_custname' /><input type='hidden' name='buytype' value='$db_buyertype' />$db_custname</b> </br><b>ক্রেতার অ্যাকাউন্ট নং : <input type='hidden' name='buyacc' value='$db_custacc' /><input type='hidden' name='buyid' value='$db_buyerid' />$db_custacc</b></div>
-                        <div style='width: 35%;float: left;'><b>তারিখঃ</b> $showDate  &nbsp;&nbsp;&nbsp;<b>সময়ঃ</b> $showTime</br>
-                        <b>সেলস স্টোরের নাম: $db_storename</b> </br><b>সেলস স্টোরের অ্যাকাউন্ট নং : $db_storeacc</b></div></br>";
+                        echo "<div style='width: 60%;float: left;'><b>চালান নং:</b><input type='hidden' name='reciptID' value= '$db_invoiceno' /> $db_invoiceno</br>
+                            <b>ক্রেতার নাম: <input type='hidden' name='buyname' value='$db_custname' /><input type='hidden' name='buytype' value='$db_buyertype' />$db_custname</b> 
+                            </br><b>ক্রেতার অ্যাকাউন্ট নং / মোবাইল নং : <input type='hidden' name='buyacc' value='$db_custacc' /><input type='hidden' name='buyid' value='$db_buyerid' />$db_custacc</b></div>
+                            <div style='width: 40%;float: left;'><b>তারিখঃ</b> $showDate  &nbsp;&nbsp;&nbsp;<b>সময়ঃ</b> $showTime</br>
+                            <b>সেলস স্টোরের নাম: $db_storename</b> </br><b>সেলস স্টোরের অ্যাকাউন্ট নং : $db_storeacc</b></div></br>";
     
                             echo "<table width='100%' border='1' cellspacing='0' cellpadding='0' style='border-color:#000000; border-width:thin; font-size:18px;'>
                           <tr>
-                            <td width='23%'><div align='center'><strong>প্রোডাক্ট কোড</strong></div></td>
+                            <td width='20%'><div align='center'><strong>প্রোডাক্ট কোড</strong></div></td>
                             <td width='30%'><div align='center'><strong>প্রোডাক্ট-এর নাম</strong></div></td>
                             <td width='11%'><div align='center'><strong>ক্রয়কৃত পরিমাণ</strong></div></td>
-                            <td width='12%'><div align='center'><strong>মোট</strong></div></td>
-                            <td width='6%'><div align='center'><strong>পি.ভি.</strong></div></td>
-                            <td width='20%'><div align='center'><strong>ফেরত দিন</strong></div></td>
+                            <td width='12%'><div align='center'><strong>মোট (টাকা)</strong></div></td>
+                            <td width='9%'><div align='center'><strong>পি.ভি.</strong></div></td>
+                            <td width='20%'><div align='center'><strong>ফেরত দিন (পরিমান)</strong></div></td>
                           </tr>";
-                                           
-                        $productReslt = mysql_query("SELECT * FROM sales WHERE sales_summery_idsalessummery='$G_sales_sum_id';");
-                        while($rowSales = mysql_fetch_assoc($productReslt))
+                        $sel_sales->execute(array($G_sales_sum_id));                   
+                        $productReslt = $sel_sales->fetchAll();
+                        foreach ($productReslt as $rowSales) 
                         {
                             $db_itemqty=$rowSales["quantity"];
                             $db_itemprice=$rowSales["sales_amount"];
                             $db_itemTotalPV=$rowSales["sales_pv"];
                             $db_inventID=$rowSales["inventory_idinventory"];
                             $db_itembuy= $rowSales['sales_buying_price'];
-                                                        
-                            $itemReslt = mysql_query("SELECT * FROM inventory WHERE idinventory='$db_inventID';");
-                            $rowInventory = mysql_fetch_assoc($itemReslt);
-                            $db_proCode=$rowInventory["ins_product_code"];
-                            $db_proName=$rowInventory["ins_productname"];
+                            $db_proCode=$rowSales["ins_product_code"];
+                            $db_proName=$rowSales["ins_productname"];                            
                                  echo '<tr>';
                                 echo "<td><div align='left'><input type='hidden' name='proCode[]' value=$db_proCode />$db_proCode</div></td>";
                                 echo "<td><div align='left'><input type='hidden' name='proname[]' value= '$db_proName' />&nbsp;&nbsp;&nbsp;$db_proName</div></td>";
@@ -237,15 +248,15 @@ if (isset($_GET['id']))
                                 echo '</tr>';
                         }
                         echo "<td colspan='5' ><div align='right'><strong>সর্বমোট:</strong>&nbsp;</div></td>
-                        <td colspan='2' width='13%'><div align='right'>".english2bangla($db_sellTotalAmount)."</div></td>
+                        <td colspan='2' width='13%'><div align='right' style='padding-right:3px;'>".english2bangla($db_sellTotalAmount)."</div></td>
                         </tr>
                         <tr>
                             <td colspan='5' ><div align='right'><strong>মোট পি.ভি.</strong>&nbsp;</div></td>
-                            <td colspan='2' width='13%'><div align='right'>".english2bangla($db_sellTotalPV)."</div></td>
+                            <td colspan='2' width='13%'><div align='right' style='padding-right:3px;'>".english2bangla($db_sellTotalPV)."</div></td>
                         </tr>
                         <tr>
                             <td colspan='5' ><div align='right'><strong>টাকা গ্রহন:</strong>&nbsp;</div></td>
-                            <td colspan='2' width='13%'><div align='right'>".english2bangla($db_givenTaka)."</div></td>
+                            <td colspan='2' width='13%'><div align='right' style='padding-right:3px;'>".english2bangla($db_givenTaka)."</div></td>
                         </tr></table>";   
                         echo "</br><div align='center' style='width: 100%;float: left;'><input type='submit' name='replace' value='রিপ্লেস করুন' style='font-family: SolaimanLipi !important;' /></div>";
                         echo "</form></div>";

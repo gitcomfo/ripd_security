@@ -1,15 +1,11 @@
 <?php
 error_reporting(0);
 session_start();
-include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 
 if (!isset($_SESSION['chalanNO'])) { $_SESSION['chalanNO'] = get_time_random_no(10); }
 $storeName= $_SESSION['loggedInOfficeName'];
-$cfsID = $_SESSION['userIDUser'];
-$storeID = $_SESSION['loggedInOfficeID'];
-$scatagory =$_SESSION['loggedInOfficeType'];
 
 $sel_product_chart = $conn->prepare("SELECT * FROM product_chart WHERE idproductchart = ? ");
 ?>
@@ -131,7 +127,7 @@ function addToTable() // to add into temporary array*******************
         var code = document.getElementById("pcode").value;
         var totalqty = Number(document.getElementById("QTY").value);
         var totalamount = Number(document.getElementById("buyPrice").value);
-        if((totalqty != 0) && (totalamount != 0))
+        if((totalqty != 0) && (totalamount != 0) && (code != ""))
             {
                 var xmlhttp;  
                  if (window.XMLHttpRequest)
@@ -188,7 +184,7 @@ function deleteProduct(id) // to add into temporary array*******************
         <a href="" onclick="javasrcipt:window.open('all_ripd_product_list.php');return false;" style="float: right"><img src="images/allproductlist.png" style="width: 100px;height: 70px;"/></br>অল প্রোডাক্ট লিস্ট</a></div>
 </div>
 </br>
-     <fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
+<fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
          <legend style="color: brown;">পণ্য প্রবেশ</legend>
     <div class="top" style="width: 100%;">
         <div class="topleft" style="float: left;width: 30%;">

@@ -2,9 +2,8 @@
 session_start();
 global  $db;
 
-
 $host = '192.168.1.100';
-$dbuser = 'cfs_iftee';
+$dbuser = 'cfs_smriti';
 $dbpassword = '';
 $dbname = 'ripd_db_comfosys';
 

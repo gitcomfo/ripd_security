@@ -208,22 +208,22 @@ function getProgramerType($type)
    $arr_who_type = array('presentation'=>'presenter','program'=>'programmer','training'=>'trainer','travel'=>'traveler');
    return $arr_who_type[$type];
 }
-function getAwardType($aType){
+function getAwardReceiverType($aType){
     $arr_award_type = array('company'=>'কোম্পানী', 'employee'=>'কর্মচারী', 'customer'=>'কাস্টমার', 'others'=>'অন্যান্য');
     return $arr_award_type[$aType];
 }
 function getRandomPassword()
 {
         $new_pass_str = "";
+        $arr_rand_generator =array("num","small","star");
     for ($i = 0; $i < 10; $i++) {
-        $arr_rand_generator = array("num", "cap");
-        $rand_controller = array_rand($arr_rand_generator);
-        if ($rand_controller == "num")
+        $random_keys = rand(0, 2);
+        if (($arr_rand_generator["$random_keys"]) == "num")
             $new_pass_str .= chr(rand(48, 57));
-        else if ($rand_controller == "cap")
-            $new_pass_str .= chr(rand(65, 90));
+        elseif (($arr_rand_generator["$random_keys"]) == "small")
+            $new_pass_str .= chr(rand(97, 122));
         else
-            $new_pass_str .= chr(rand(97, 122)); // this numbers refer to numbers of the ascii table (small-caps)
+            $new_pass_str .= chr(42); // this numbers refer to *
     }
     return $new_pass_str;
 }
