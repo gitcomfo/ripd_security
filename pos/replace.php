@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 session_start();
 include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
@@ -19,6 +19,7 @@ $sel_cfsuser = $conn->prepare("SELECT * FROM cfs_user WHERE idUser= ? ");
 <title>ক্রয়কৃত পণ্য পরিবর্তন</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
 <script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/jquery-1.4.3.min.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
  <script src="scripts/tinybox.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -51,7 +52,7 @@ if (a!=0) {document.getElementById("addtoCart").disabled = false;}
   else {document.getElementById("print").disabled =false ;}
 
 }
-    function checkTime(i)
+function checkTime(i)
     {
       if (i<10)
       {
@@ -59,7 +60,39 @@ if (a!=0) {document.getElementById("addtoCart").disabled = false;}
       }
       return i
     }
-    </script>
+function validate() {
+    alert("jfhdskj");
+        var OK= 0;
+        $(this).find('input[type=text]').each(function(){
+            alert("dhfkjs");
+            if($(this).val() != "") 
+                {
+                     OK++;
+                }
+        });
+//        $(".inbox").filter(function() {
+//         var val = $(this).val();
+//        if((val == "") || (val == 0))
+//            {
+//                 notOK++;
+//            }
+//    });
+    return OK;
+ }
+function beforeSave()
+{
+    var blank = validate();
+    if(blank > 0)
+        {
+            document.getElementById('replace').readonly= true;
+            return true;
+        }
+        else {
+             document.getElementById('replace').readonly= false;
+            return false;
+        }
+}
+</script>
 	
 <!--===========================================================================================================================-->
 <script>
@@ -227,6 +260,7 @@ if (isset($_GET['id']))
                             <td width='9%'><div align='center'><strong>পি.ভি.</strong></div></td>
                             <td width='20%'><div align='center'><strong>ফেরত দিন (পরিমান)</strong></div></td>
                           </tr>";
+                            $sl = 1;
                         $sel_sales->execute(array($G_sales_sum_id));                   
                         $productReslt = $sel_sales->fetchAll();
                         foreach ($productReslt as $rowSales) 
@@ -244,8 +278,9 @@ if (isset($_GET['id']))
                                 echo '<td><div align="center"><input type="hidden" name="soldqty[]" value='.$db_itemqty.'/>'.english2bangla($db_itemqty).'</div></td>';
                                 echo '<td><div align="center"><input type="hidden" name="soldprice[]" value='.$db_itemprice.'/>'.english2bangla($db_itemprice).'<input type="hidden" name="inventSumID[]" value='.$db_inventID.'/></div></td>';
                                 echo '<td><div align="center">'.english2bangla($db_itemTotalPV).'</div></td>';
-                                 echo '<td><input type="text" id="replaceUnit" name="replaceUnit[]" style="width: 94%;text-align:right"/></td>';
+                                 echo "<td><input type='text' class='inbox' id='replaceUnit[$sl]' name='replaceUnit[]' style='width: 94%;text-align:right'/></td>";
                                 echo '</tr>';
+                                $sl ++;
                         }
                         echo "<td colspan='5' ><div align='right'><strong>সর্বমোট:</strong>&nbsp;</div></td>
                         <td colspan='2' width='13%'><div align='right' style='padding-right:3px;'>".english2bangla($db_sellTotalAmount)."</div></td>
@@ -258,7 +293,7 @@ if (isset($_GET['id']))
                             <td colspan='5' ><div align='right'><strong>টাকা গ্রহন:</strong>&nbsp;</div></td>
                             <td colspan='2' width='13%'><div align='right' style='padding-right:3px;'>".english2bangla($db_givenTaka)."</div></td>
                         </tr></table>";   
-                        echo "</br><div align='center' style='width: 100%;float: left;'><input type='submit' name='replace' value='রিপ্লেস করুন' style='font-family: SolaimanLipi !important;' /></div>";
+                        echo "</br><div align='center' style='width: 100%;float: left;'><input type='submit' readonly onclick='return beforeSave();' name='replace' id='replace' value='রিপ্লেস করুন' style='font-family: SolaimanLipi !important;' /></div>";
                         echo "</form></div>";
               }
     }

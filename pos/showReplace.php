@@ -28,9 +28,9 @@ if(isset($_POST['replace']))
         {
             $replaceAmount = $P_arr_replaceQty[$i] * ($P_arr_soldprice[$i] / $P_arr_soldQty[$i] );
             $arr_temp =  array($P_buyername,$P_buyeracc, $P_buyertype, $P_buyerid, $P_arr_inventSumID[$i], $P_arr_procode[$i], $P_arr_proname[$i], $P_arr_soldQty[$i],$P_arr_soldprice[$i], $P_arr_replaceQty[$i], $replaceAmount);
-            $_SESSION['arrRepTemp'][$P_invoiceno] = $arr_temp;
+            $_SESSION['arrRepTemp'][] = $arr_temp;
         }
-        else continue;
+        else {continue;}
     }
 }
 ?>
@@ -59,6 +59,7 @@ if(isset($_POST['replace']))
       </tr>
 <?php
 $replacedGrndTotal = 0;
+print_r($_SESSION['arrRepTemp']);
 foreach ($_SESSION['arrRepTemp'] as $replaceRow)
   {
     $db_qty = $replaceRow[7];
