@@ -38,6 +38,7 @@ function showMessage($flag, $msg)
                 }
         }
 if (isset($_POST['save'])) {
+    $receiver_id =$_POST['receiver_user_id'];
     $trans_amount = $_POST['amount1'];
     $trans_purpose = $_POST['trans_des'];
     $trans_servicecharge = $db_charge_amount;
@@ -75,8 +76,7 @@ if (isset($_POST['save'])) {
     }
     else{
         $receiver_mobile_num = null;
-        $reciever_id = 0;
-        $sql_insert_acc_user_amount_transfer->execute(array($trans_type, $trans_senderid, $reciever_id, $receiver_mobile_num,
+        $sql_insert_acc_user_amount_transfer->execute(array($trans_type, $trans_senderid, $receiver_id, $receiver_mobile_num,
                                                                     $trans_amount, $reciever_get, $trans_servicecharge, $trans_purpose,
                                                                     $chrg_givenby, $total_transaction, $sts, $random));
         $sms_body = "Dear User, You have received: $trans_amount Taka.\nTransaction Charge: $trans_servicecharge Taka,\nYou will get $reciever_get Taka in Cash\nYour code $random.";
@@ -169,7 +169,7 @@ function getEmployee(accountNo) //search employee by account number*************
                 <tr>
                     <td style="text-align: right; width: 25%;padding-left: 10px;">প্রাপকের অ্যাকাউন্ট নং</td>
                     <td style="text-align: left; width: 45%;">: <input  class="box" type="text" name="accountNo"  id="accountNo" maxlength="15" onblur="getEmployee(this.value)" /> <em>(ইংরেজিতে লিখুন)</em></td>
-                    <td rowspan="4" style="text-align: right; width: 30%; padding-left: 0px;" id='recieverInfo' ></td>
+                    <td rowspan="7" style="text-align: right; width: 35%; padding-left: 0px;" id='recieverInfo' ></td>
                 </tr>
                 <tr>
                     <td style="text-align: right;">টাকার পরিমান</td>
@@ -199,7 +199,7 @@ function getEmployee(accountNo) //search employee by account number*************
                 <tr>
                     <td colspan="3" style="text-align: center"></br><input type="button" class="btn"  name="submit" id="submit" onclick="getPassword();" disabled value="ঠিক আছে"></td>
                 </tr>
-                    <tr>
+                <tr>
                     <td colspan="3" id="passwordbox"></td>
                 </tr>
             </table>

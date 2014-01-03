@@ -80,7 +80,7 @@ if (isset($_POST['save'])) {
         $sendResult = SendSMSFuntion("88".$receiver_mobile_num, $sms_body);
         $sendStatus = substr($sendResult, 0, 4);
         if($sendStatus == '1701'){
-            $msg = "টাকা সফল ভাবে ট্রান্সফার হয়েছে, আপনার কোডটি ".$random;
+            $msg = "টাকা সফল ভাবে সেন্ড হয়েছে, আপনার কোডটি ".$random;
         }else{
             $msg = "দুঃখিত, ম্যাসেজটি পাঠানো যায়নি, আপনার কোডটি ".$random;
         }
