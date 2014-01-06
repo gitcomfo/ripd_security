@@ -11,9 +11,8 @@ $sqlpv = $conn->prepare("SELECT * FROM running_command;");
 $rslt =$sqlpv->execute(array());
 $pvrow = $sqlpv->fetchAll();
 foreach ($pvrow as $row) {
-    $pvinvalue= $row['pv_value'];
+    $unitpv= $row['pv_value'];
 }
- $unitpv = $pvinvalue / 100;
 
 $result_inven = $sql_inven_sel->execute(array($g_proid));
 $getresult = $sql_inven_sel->fetchAll();
@@ -42,56 +41,113 @@ if(isset($_POST['update']))
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
-<link rel="icon" type="image/png" href="images/favicon.png" />
-<title>পণ্যের তালিকা</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
 <script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
- <script src="scripts/tinybox.js" type="text/javascript"></script>
-  <script type="text/javascript">
- function productUpdate(id)
-	{ TINY.box.show({iframe:'updateProduct.php?proid='+id,width:500,height:280,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
- </script>
 </head>
     
 <body>
+<div id="maindiv">
+<div class="wraper" style="width: 99%;font-family: SolaimanLipi !important;">
 
-    <div id="maindiv">
-    <div style="width: 100%;height: 50px;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div></br>
-<div class="wraper" style="width: 80%;font-family: SolaimanLipi !important;">
-<fieldset style="border-width: 3px;width: 100%;">
-    <legend style="color: brown;">প্রোডাক্টের মূল্য আপডেট</legend>
-    <div class="top" style="width: 100%;height: auto;">
-        <?php
+   <?php
         if($msg !="")
-            {echo "<b><font color='green;'>$msg</font></b>";}
-        else{
-        ?>
+            { echo " <div class='top' style='width: 100%;height: auto;'>
+                <b><font color='green;'>$msg</font></b></div>"; } 
+    else { ?>
+    <div style="width: 100%;font-family: SolaimanLipi !important;">
+        
         <form method="post" action="">
-            <table border="2" cellpadding="0" cellspacing="0" style="font-family: SolaimanLipi !important;">
+            <table border="1" cellpadding="0" cellspacing="0">
                 <tr>
-                    <td width="50%"><b>প্রোডাক্টের নাম</b></td>
-                    <td width="50%" style="text-align: left;"><input type="hidden" name="proid" value="<?php echo $g_proid?>"/><?php echo $db_productname;?></td>
-                </tr>
-                <tr>
-                    <td><b>প্রোডাক্টের বর্তমান ক্রয়মূল্য</b></td>
-                    <td style="text-align: center;"><input type="text" readonly name="buyingprice" style="width: 96%;text-align: right;padding-right: 5px;font-size: 16px;" value="<?php echo $db_buying; ?>" /></td>
-                </tr>
-                <tr>
-                    <td><b>প্রোডাক্টের বর্তমান বিক্রয়মূল্য</b></td>
-                    <td style="text-align: center;"><input type="text" name="sellingprice" value="<?php echo  $db_selling;?>" style="width: 96%;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
-                </tr>
-                <tr>
-                    <td><b>প্রোডাক্টের বর্তমান এক্সট্রা প্রফিট</b></td>
-                    <td style="text-align: center;"><input type="text" name="xprofit" value="<?php echo $db_xtraprofit;?>" style="width: 96%;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="text-align: center;"></br><input type="submit" name="update" value="আপডেট"></input></td>
+                    <td>প্রোডাক্টের নাম : <input type="hidden" name="proid" value="<?php echo $g_proid?>"/><?php echo $db_productname;?></td>
+                    <td>বর্তমানে পর্যাপ্ত পরিমান : <input type="hidden" name="proid" value="<?php echo $g_proid?>"/><?php echo $db_productname;?></td>
                 </tr>
             </table>
-        </form><?php }?>
-    </div>
-</fieldset></br>
+            <fieldset style="border-width: 3px;width: 95%;">
+                <legend style="color: brown;">প্রোডাক্টের সর্বশেষ ক্রয়ের মূল্য</legend>
+                <table border="1" cellpadding="0" cellspacing="0" style="font-family: SolaimanLipi !important;">
+                    <tr>
+                        <td width="50%"><b>ক্রয়কৃত পরিমান :</b></td>
+                        <td width="50%" style="text-align: left;"><b>ক্রয়ের তারিখ :</b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><b>ক্রয়মূল্য</b><input type="text" readonly name="buyingprice" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" value="<?php echo $db_buying; ?>" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><b>বিক্রয়মূল্য</b><input type="text" name="sellingprice" value="<?php echo  $db_selling;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><b>এক্সট্রা প্রফিট</b><input type="text" name="xprofit" value="<?php echo $db_xtraprofit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><b>প্রফিট</b><input type="text" name="xprofit" value="<?php echo $db_xtraprofit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><b>এক্সট্রা প্রফিট</b><input type="text" name="xprofit" value="<?php echo $db_xtraprofit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
+                    </tr>
+                </table>
+            </fieldset>
+                <table cellpadding="0" cellspacing="0" style="font-family: SolaimanLipi !important;">
+                    <tr>
+                        <td>
+                            <fieldset style="border-width: 3px;width: 95%;">
+                                <legend style="color: brown;">প্রোডাক্টের বর্তমান মূল্য</legend>
+                                <table border="1" cellpadding="0" cellspacing="0" style="font-family: SolaimanLipi !important;">
+                                    <tr>
+                                        <td width="50%"><b>ক্রয়কৃত পরিমান :</b></td>
+                                        <td width="50%" style="text-align: left;"><b>ক্রয়ের তারিখ :</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><b>ক্রয়মূল্য</b><input type="text" readonly name="buyingprice" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" value="<?php echo $db_buying; ?>" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><b>বিক্রয়মূল্য</b><input type="text" name="sellingprice" value="<?php echo  $db_selling;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><b>এক্সট্রা প্রফিট</b><input type="text" name="xprofit" value="<?php echo $db_xtraprofit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><b>প্রফিট</b><input type="text" name="xprofit" value="<?php echo $db_xtraprofit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><b>এক্সট্রা প্রফিট</b><input type="text" name="xprofit" value="<?php echo $db_xtraprofit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </td>
+                        <td>
+                            <fieldset style="border-width: 3px;width: 95%;">
+                                <legend style="color: brown;">আপডেট প্রোডাক্টের মূল্য</legend>
+                                <table border="1" cellpadding="0" cellspacing="0" style="font-family: SolaimanLipi !important;">
+                                    <tr>
+                                        <td width="50%"><b>ক্রয়কৃত পরিমান :</b></td>
+                                        <td width="50%" style="text-align: left;"><b>ক্রয়ের তারিখ :</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><b>ক্রয়মূল্য</b><input type="text" readonly name="buyingprice" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" value="<?php echo $db_buying; ?>" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><b>বিক্রয়মূল্য</b><input type="text" name="sellingprice" value="<?php echo  $db_selling;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><b>এক্সট্রা প্রফিট</b><input type="text" name="xprofit" value="<?php echo $db_xtraprofit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><b>প্রফিট</b><input type="text" name="xprofit" value="<?php echo $db_xtraprofit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><b>এক্সট্রা প্রফিট</b><input type="text" name="xprofit" value="<?php echo $db_xtraprofit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </td>
+                    </tr>
+                </table>
+            <input type="submit" name="update" value="আপডেট" />
+        </form>
+            </div><?php }?>
+</div></br>
 </div>
   </div>
 </body>

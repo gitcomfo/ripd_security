@@ -43,7 +43,7 @@ function get_catagory($sql) {
  <script src="scripts/tinybox.js" type="text/javascript"></script>
   <script type="text/javascript">
  function productUpdate(id)
-	{ TINY.box.show({iframe:'updateProduct.php?proid='+id,width:800,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+	{ TINY.box.show({iframe:'updateProduct.php?proid='+id,width:950,height:650,opacity:30,topsplit:4,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
  </script>
 <!--===========================================================================================================================-->
 <script>
