@@ -97,6 +97,15 @@ function beforeSave()
             return false;
         }
 }
+function checkQty(qty,i)
+{
+    var soldqty = Number(document.getElementById("soldqty["+i+"]").value);
+    if(qty > soldqty)
+        {
+            document.getElementById("replaceUnit["+i+"]").value = "";
+            alert("দুঃখিত,এই পরিমান পণ্য রিপ্লেস করতে পারবেন না");
+        }
+}
 </script>
 <!--===========================================================================================================================-->
 <script>
@@ -277,10 +286,10 @@ if (isset($_GET['id']))
                                  echo '<tr>';
                                 echo "<td><div align='left'><input type='hidden' name='proCode[]' value=$db_proCode />$db_proCode</div></td>";
                                 echo "<td><div align='left'><input type='hidden' name='proname[]' value= '$db_proName' />&nbsp;&nbsp;&nbsp;$db_proName</div></td>";
-                                echo '<td><div align="center"><input type="hidden" name="soldqty[]" value='.$db_itemqty.'/>'.english2bangla($db_itemqty).'</div></td>';
+                                echo "<td><div align='center'><input type='hidden' name='soldqty[]' id='soldqty[$sl]' value='$db_itemqty'/>".english2bangla($db_itemqty)."</div></td>";
                                 echo '<td><div align="center"><input type="hidden" name="soldprice[]" value='.$db_itemprice.'/>'.english2bangla($db_itemprice).'<input type="hidden" name="inventSumID[]" value='.$db_inventID.'/></div></td>';
                                 echo '<td><div align="center">'.english2bangla($db_itemTotalPV).'</div></td>';
-                                 echo "<td><input type='text' class='inbox' id='replaceUnit[$sl]' name='replaceUnit[]' style='width: 94%;text-align:right'/></td>";
+                                 echo "<td><input type='text' class='inbox' id='replaceUnit[$sl]' name='replaceUnit[]' style='width: 94%;text-align:right' onkeyup='checkQty(this.value,$sl);' /></td>";
                                 echo '</tr>';
                                 $sl ++;
                         }

@@ -11,6 +11,7 @@ $ins_replace_sum = $conn->prepare("INSERT INTO replace_product_summary(reprosum_
 $ins_replace = $conn->prepare("INSERT INTO replace_product(reppro_quantity ,reppro_amount ,inventory_idinventory ,replace_product_summary_idreproductsum) 
                                                     VALUES (?, ?, ?, ?)");
 $sel_sales_summary = $conn->prepare("SELECT * FROM `sales_summary` WHERE sal_invoiceno=? ");
+$up_sales_summary = $conn->prepare("UPDATE sales_summary SET status = 'replaced' WHERE sal_invoiceno = ? ");
 
 $G_sellingType = $_GET['selltype'];
 $str_recipt= "RIPD";
@@ -55,7 +56,8 @@ elseif($G_sellingType==3)
             $repro_id = $replaceRow[4];
             $sqlresult2 = $ins_replace->execute(array($repro_qty,$repro_amount,$repro_id,$replace_pro_sum_id));
        }
-     if($sqlresult1 && $sqlresult2)
+       $sqlresult3 = $up_sales_summary->execute(array($prevRecipt));
+     if($sqlresult1 && $sqlresult2 && $sqlresult3)
         {
             $conn->commit();
             unset($_SESSION['arrRepTemp']);
