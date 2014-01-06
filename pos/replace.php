@@ -1,8 +1,12 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 session_start();
 include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
+if($_GET['edit'] == 1)
+{
+    unset($_SESSION['arrRepTemp']);
+}
 
 $storeName= $_SESSION['loggedInOfficeName'];
 $sel_sales_summary = $conn->prepare("SELECT * FROM sales_summary WHERE idsalessummary= ? ");
@@ -21,7 +25,16 @@ $sel_cfsuser = $conn->prepare("SELECT * FROM cfs_user WHERE idUser= ? ");
 <script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/jquery-1.4.3.min.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
- <script src="scripts/tinybox.js" type="text/javascript"></script>
+<style type="text/css">
+            .prolinks:focus{
+                background-color: cadetblue;
+                color: yellow !important;
+            }
+            .prolinks:hover{
+                background-color: cadetblue;
+                color: yellow !important;
+            }
+</style>
 <script type="text/javascript">
 function ShowTime()
 {
@@ -61,22 +74,14 @@ function checkTime(i)
       return i
     }
 function validate() {
-    alert("jfhdskj");
-        var OK= 0;
-        $(this).find('input[type=text]').each(function(){
-            alert("dhfkjs");
-            if($(this).val() != "") 
-                {
-                     OK++;
-                }
-        });
-//        $(".inbox").filter(function() {
-//         var val = $(this).val();
-//        if((val == "") || (val == 0))
-//            {
-//                 notOK++;
-//            }
-//    });
+var OK= 0;
+        $(".inbox").filter(function() {
+         var val = $(this).val();
+        if((val != "") || (val != 0))
+            {
+                 OK++;
+            }
+    });
     return OK;
  }
 function beforeSave()
@@ -84,16 +89,15 @@ function beforeSave()
     var blank = validate();
     if(blank > 0)
         {
-            document.getElementById('replace').readonly= true;
+            document.getElementById('replace').readonly= false;
             return true;
         }
         else {
-             document.getElementById('replace').readonly= false;
+             document.getElementById('replace').readonly= true;
             return false;
         }
 }
 </script>
-	
 <!--===========================================================================================================================-->
 <script>
 function searchRecipt(str_key) // for sold recipt no. search box
@@ -122,7 +126,6 @@ function searchRecipt(str_key) // for sold recipt no. search box
         xmlhttp.open("GET","includes/searchProcessForReplace.php?searchKey="+str_key,true);
         xmlhttp.send();	
 }
-
 </script>  
 </head>
     
@@ -141,11 +144,10 @@ function searchRecipt(str_key) // for sold recipt no. search box
     <div class="top" style="width: 100%;height: auto;">
         <div class="topleft" style="width: 60%;float: left;"><b>চালান নং&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
             : <input type="text" id="searchRecipt" name="searchRecipt" onKeyUp="searchRecipt(this.value);" autocomplete="off" style="width: 300px;"/></br>
-        <div id="searchResult"></div>
+                <div id="searchResult"></div>
     </div>
         <div style="width: 40%;float: left;text-align: right;"><b> তারিখ ও সময় : </b><input name="date" style="width:75px;"type="text" value="<?php echo date("d/m/Y"); ?>" readonly/>
     <input name="time" type="text" id="txt" size="7" readonly/></div>
-    
     </div>
 </fieldset></div>
 
@@ -297,8 +299,7 @@ if (isset($_GET['id']))
                         echo "</form></div>";
               }
     }
-?>
-   
+?>  
 </fieldset>
 
 <div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">

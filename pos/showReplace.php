@@ -59,7 +59,6 @@ if(isset($_POST['replace']))
       </tr>
 <?php
 $replacedGrndTotal = 0;
-print_r($_SESSION['arrRepTemp']);
 foreach ($_SESSION['arrRepTemp'] as $replaceRow)
   {
     $db_qty = $replaceRow[7];
@@ -83,7 +82,7 @@ $_SESSION['recipt'] = $P_invoiceno; $_SESSION['repMoney']=$replacedGrndTotal;
 </fieldset>
 
 <div align="center" style="width: 100%;font-family: SolaimanLipi !important;">
-    <span id="noprint"><a  href="replace.php?edit=<?php echo $P_invoiceno;?>&id=<?php echo $id;?>" style="margin: 1% 5% 5% 35%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/addToCart.jpeg');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
+    <span id="noprint"><a  href="replace.php?edit=1&id=<?php echo $id;?>" style="margin: 1% 5% 5% 35%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/addToCart.jpeg');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
             <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -50px;">এডিট করুন </span></a></span>
 <span id="noprint"><a href="newSale.php?selltype=3"  style="margin: 1% 5% 5% 5%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/newSell.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
 <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -50px;">বিক্রয় করুন</span></a></span>

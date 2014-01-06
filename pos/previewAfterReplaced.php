@@ -97,9 +97,10 @@ $result= $sel_sales_summary->fetchAll();
         }
         $totalamount =0; $totalPV = 0; $totalbuy = 0;
              foreach($_SESSION['arrSellTemp'] as $key => $row) {
+                    $pro_qty = $row[4];
                    $totalamount = $totalamount + $row[5];
                    $totalPV = $totalPV + $row[6];
-                   $totalbuy = $totalbuy + $row[2];
+                   $totalbuy = $totalbuy + ($row[2] * $pro_qty);
               }
         $invoiceNo = $_SESSION['SESS_MEMBER_ID'];
         $conn->beginTransaction();
