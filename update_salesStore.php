@@ -15,6 +15,7 @@ while ($sale_row = mysql_fetch_assoc($allsql)) {
     $sales_no = $sale_row['salesStore_number'];
     $sales_mail = $sale_row['salesStore_email'];
     $sales_acc = $sale_row['account_number'];
+    $salesstore_banner_old =  $sale_row['sstore_banner'];
     $sale_thana = $sale_row['Thana_idThana'];
 }
 $onsq = "SELECT * FROM " . $dbname . ".`ons_relation` WHERE add_ons_id=$salesid AND catagory= 's_store' ";
@@ -93,7 +94,27 @@ $otherID = $othercost_row['idons_cost_others'];
 if (isset($_POST['submit03'])) {
     $off_name = $_POST['sales_name'];
     $off_add = $_POST['sales_address'];
-    $offup = "UPDATE `sales_store` SET `salesStore_name` = '$off_name', `salesStore_details_address` = '$off_add' WHERE `sales_store`.`idSales_store` =$salesid AND `sales_store`.`Thana_idThana` =$sale_thana;";
+    $sstore_old_banner = $_POST['salsestore_old_banner'];
+    
+    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+        $extension = end(explode(".", $_FILES["sstore_banner_upload"]["name"]));
+        $salesstorebanner_name = $_FILES["sstore_banner_upload"]["name"];
+        if($salesstorebanner_name != "")
+        {
+            $salesstorebanner_name = $sales_acc."-". $_FILES["sstore_banner_upload"]["name"];
+        if (($_FILES["sstore_banner_upload"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
+                {            
+                $salesstorebanner_path = "images/banners/".$salesstorebanner_name;
+                move_uploaded_file($_FILES["sstore_banner_upload"]["tmp_name"], "images/banners/" . $salesstorebanner_name);                        
+                } 
+        else{
+            $salesstorebanner_path = $sstore_old_banner;
+            }
+        }else{
+            $salesstorebanner_path = $sstore_old_banner;
+        }
+    
+    $offup = "UPDATE `sales_store` SET `salesStore_name` = '$off_name', `salesStore_details_address` = '$off_add', `sstore_banner` = '$salesstorebanner_path' WHERE `sales_store`.`idSales_store` =$salesid AND `sales_store`.`Thana_idThana` =$sale_thana;";
     $offupsql = mysql_query($offup) or exit('query failed: ' . mysql_error());
     echo "<script type='text/javascript'>window.location.href = window.location; </script>";
 }
@@ -513,6 +534,11 @@ echo $new;
                                     <tr>
                                         <td>সেলস স্টোরের  ইমেইল</td>
                                         <td>:    <input  class ="textfield" type="text" readonly="" id="sales_mail" name="sales_mail" value="<?php echo $sales_mail; ?>" /><em> (ইংরেজিতে লিখুন)</em><div id="error_msg" style="margin-left: 5px"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td >সেলস স্টোর ব্যানার</td>
+                                        <td >: <img src="<?php echo $salesstore_banner_old; ?>" width="500px" height="110px"/>&nbsp;<input type="file" name="sstore_banner_upload" style="font-size:10px;" /> 
+                                        <input type="hidden" name="salsestore_old_banner" id="salsestore_old_banner" value="<?php echo $salesstore_banner_old; ?>" /></td></td>
                                     </tr>
                                     <tr>                    
                                         <td colspan="4" style="padding-left: 250px; " >

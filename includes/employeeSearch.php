@@ -77,14 +77,12 @@ elseif (isset($_GET['account'])) {
                                           $aab_picture = $aab['emplo_scanDoc_picture'];
                                         }
                             }
-                        echo "<table><tr><td colspan='2'><img src='$aab_picture' width='128px' height='128px' alt=''></td></tr>
+                        echo "<table><tr><td style='text-align:center;'><img src='$aab_picture' width='128px' height='128px' alt=''></td></tr>
                             <tr>
-                                <td>নাম :</td>
-                                <td>$name</td>
+                                <td><b>নাম :</b> $name<input type='hidden' name='receiver_user_id' value='$cfs_user_id'></td>
                             </tr>
                             <tr>
-                                <td>মোবাইল :</td>
-                                <td>$mobile</td>
+                                <td><b>মোবাইল :</b> $mobile</td>
                             </tr>
                             </table>";
                     }
