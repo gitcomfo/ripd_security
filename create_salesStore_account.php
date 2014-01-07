@@ -405,13 +405,33 @@ var xmlhttp;
         xmlhttp.open("GET","includes/getParentOffices.php?key="+key+"&off=1",true);
         xmlhttp.send();	
 }
+function beforeSubmit()
+{
+    var radio = document.forms['sales_form'].elements['pwrstore'];
+    if ((document.getElementById('sales_name').value != "")
+                && (document.getElementById('mobile_number').innerHTML != "")
+                && (document.getElementById('owner_Name').innerHTML == "")
+                && (document.getElementById('advanced_payment1').value !="")
+                && (document.getElementById('floor_number').value !="")
+                && (document.getElementById('office_rent1').value !="")
+                &&(document.getElementById('sales_address_').value != "")
+                &&(document.getElementById('parentOff_id').value != "")
+                &&(document.getElementById('parent').value != "")
+                && ((radio[0].checked) || (radio[1].checked))
+                && (document.getElementById('thana_id').value !=""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 
 <div class="columnSld" >
        <div class="main_text_box" style="width: 100%;">
         <div style="padding-left: 110px;"><a href="office_sstore_management.php"><b>ফিরে যান</b></a><a href="" onclick="javasrcipt:window.open('update_salesStore_account.php');return false;" style="padding-left: 510px;"><b>সেলস স্টোর লিস্ট</b></a></div>
         <div>           
-            <form style="padding-right: 10px;" method="POST" enctype="multipart/form-data" action="" id="sales_form" name="sales_form">	
+            <form style="padding-right: 10px;" method="POST" enctype="multipart/form-data" action="" id="sales_form" name="sales_form" onsubmit="return beforeSubmit()">	
                 <table class="formstyle"  style=" width: 70%; "> 
                     <tr><th style="text-align: center" colspan="2"><h1>সেলস স্টোর একাউন্ট তৈরির ফর্ম</h1></th></tr>
                     <tr><td colspan="2" style="text-align: center;color: green;font-size: 16px;"><?php if($msg != "") echo $msg;?></td></tr>
