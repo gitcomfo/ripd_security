@@ -17,6 +17,11 @@ $ins_sales_summary = $conn->prepare("INSERT INTO sales_summary(sal_store_type, s
             VALUES (?, ?, ?, ?, CURDATE(), CURTIME(), ?, ?, ?, ?, ?, ?,?, ?,'not_replaced')");
 $ins_sales = $conn->prepare("INSERT INTO sales(quantity ,sales_buying_price, sales_amount ,sales_pv , sales_profit, sales_extra_profit, inventory_idinventory ,sales_summery_idsalessummery) 
             VALUES (? ,?, ?, ?, ?, ?, ?, ?);");
+$ins_replace_sum = $conn->prepare("INSERT INTO replace_product_summary(reprosum_store_type,reprosum_storeid,reprosum_replace_date , reprosum_replace_time ,reprosum_total_amount ,reprosum_invoiceno,cfs_userid) 
+                                                            VALUES (?,?,CURDATE(), CURTIME(), ?, ?,?)");
+$ins_replace = $conn->prepare("INSERT INTO replace_product(reppro_quantity ,reppro_amount ,inventory_idinventory ,replace_product_summary_idreproductsum) 
+                                                    VALUES (?, ?, ?, ?)");
+$up_sales_summary = $conn->prepare("UPDATE sales_summary SET status = 'replaced' WHERE sal_invoiceno = ? ");
 
 if(isset($_POST['print']))
 {
@@ -108,7 +113,21 @@ $result= $sel_sales_summary->fetchAll();
               }
         $invoiceNo = $_SESSION['SESS_MEMBER_ID'];
         $conn->beginTransaction();
-        $sqlresult1=$ins_sales_summary->execute(array($scatagory,$storeID,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$P_getTaka,$invoiceNo,$cfsID,$P_paiedByCash,$P_paiedByAcc));
+        // ******************* replace table-e insert & sales summary table-e update ****************
+        $prevRecipt = $_SESSION['recipt'];
+        $db_totalamount = $_SESSION['repMoney'];  
+        $sqlresult1=$ins_replace_sum->execute(array($scatagory,$storeID,$db_totalamount,$prevRecipt,$cfsID));
+        $replace_pro_sum_id= $conn->lastInsertId();
+        foreach ($_SESSION['arrRepTemp'] as $replaceRow)
+           {
+               $repro_qty=$replaceRow[9];
+               $repro_amount=$replaceRow[10];
+               $repro_id = $replaceRow[4];
+               $sqlresult2 = $ins_replace->execute(array($repro_qty,$repro_amount,$repro_id,$replace_pro_sum_id));
+          }
+          $sqlresult3 = $up_sales_summary->execute(array($prevRecipt));
+          // ******************* sales table-e insert ***************************************
+        $sqlresult4=$ins_sales_summary->execute(array($scatagory,$storeID,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$P_getTaka,$invoiceNo,$cfsID,$P_paiedByCash,$P_paiedByAcc));
         $sales_sum_id= $conn->lastInsertId();
         foreach($_SESSION['arrSellTemp'] as $key => $row) 
         {
@@ -119,15 +138,16 @@ $result= $sel_sales_summary->fetchAll();
             $invenrow = $_SESSION['pro_inventory_array'][$key];
             $pro_profit = $invenrow['ins_profit'] * $pro_qty;
             $pro_xprofit = $invenrow['ins_extra_profit'] * $pro_qty;
-            $sqlresult2=$ins_sales->execute(array($pro_qty,$pro_buy,$pro_amount,$pro_pv,$pro_profit,$pro_xprofit,$key,$sales_sum_id));
+            $sqlresult5=$ins_sales->execute(array($pro_qty,$pro_buy,$pro_amount,$pro_pv,$pro_profit,$pro_xprofit,$key,$sales_sum_id));
         }
-    if($sqlresult1 && $sqlresult2)
+    if($sqlresult4 && $sqlresult5 && $sqlresult1 && $sqlresult2 && $sqlresult3)
     {
+        unset($_SESSION['arrRepTemp']);
         $conn->commit();
     }
  else {
         $conn->rollBack();
-        echo "<script>alert('দুঃখিত,প্রোডাক্ট বিক্রয় হয়নি')</script>";
+       echo "<script>alert('দুঃখিত,প্রোডাক্ট রিপ্লেস হয়নি')</script>";
 }
 
 ?>
@@ -196,6 +216,9 @@ foreach($_SESSION['arrSellTemp'] as $key => $row)
     <td colspan="4" ><div align="right"><strong>রিপ্লেস বাবদ ফেরত:</strong>&nbsp;</div></td>
     <td width="13%" ><div align="right"  style="padding-right: 8px;"><?php echo english2bangla($P_backAfterReplace);?></div></td>
 </tr>
+<?php
+if($P_getTaka != 0) {
+?>
 <tr>
     <td colspan="4" ><div align="right"><strong>পেমেন্ট টাইপ:</strong>&nbsp;</div></td>
     <td width="13%" ><div align="right"  style="padding-right: 8px;"><?php echo $pay;?></div></td>
@@ -208,12 +231,13 @@ foreach($_SESSION['arrSellTemp'] as $key => $row)
     <td colspan="4" ><div align="right"><strong>টাকা ফেরত:</strong>&nbsp;</div></td>
     <td width="13%" ><div align="right"><?php echo english2bangla($P_backTaka);?></div></td>
 </tr>
+<?php } ?>
 </table>
 <br />
 <div align="center" style="width: 100%;font-family: SolaimanLipi !important;">
    <span id="noprint"><a href="javascript: window.print()"style="margin: 1% 5% 5% 20%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/print-icon.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
     <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -15px;">প্রিন্ট </span></a></span>
-    <span id="noprint"><a href="saleAgain.php?selltype=1"  style="margin: 1% 5% 5% 5%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/newSell.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
+    <span id="noprint"><a href="saleAgain.php?selltype=3"  style="margin: 1% 5% 5% 5%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/newSell.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
     <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -70px;">পুনরায় বিক্রয় করুন</span></a></span>
 <?php 
 if ($buyertype== 'customer')

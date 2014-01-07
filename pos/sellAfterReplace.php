@@ -1,16 +1,9 @@
 <?php
 error_reporting(0);
-include 'includes/ConnectDB.inc';
 include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 $G_replaceRecipt= $_SESSION['recipt'];
 $storeName= $_SESSION['loggedInOfficeName'];
-$cfsID = $_SESSION['userIDUser'];
-$storeID = $_SESSION['loggedInOfficeID'];
-$scatagory =$_SESSION['loggedInOfficeType'];
-
-print_r($_SESSION['arrRepTemp']);
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -107,14 +100,7 @@ print_r($_SESSION['arrRepTemp']);
                 var bycash = total - Number(byacc);
                 document.getElementById('cashTopay').value= bycash;
             }
-$(document).ready(function(){
-  $("button").click(function(){
-    $("p").hide("slow",function(){
-      alert("The paragraph is now hidden");
-    });
-  });
-});
-        </script>
+</script>
 <!--===========================================================================================================================-->
 <script>
 function getXMLHTTP() { 
@@ -371,11 +357,12 @@ function checkAccountBalance(accNo)
     <input name="print" id="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:42%;font-family: SolaimanLipi !important;" />
     </fieldset>
     <?php }
-    else{ ?>
-    <input type="hidden" name="payType" value="1" />
-    <input name='cash'  type='hidden' value="<?php echo $finalTotal ?>"  />
-    <input name='change' type='hidden' readonly value="0" />
-    <input name="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:42%;font-family: SolaimanLipi !important;" />
+    else{  ?>
+            <input name="gtotal" type="hidden" value="<?php echo $finalTotal?>"/>
+            <input type="hidden" name="payType" value="1" />
+            <input name='cash'  type='hidden' value="0"  />
+            <input name='change' type='hidden' readonly value="0" />
+            <input name="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:42%;font-family: SolaimanLipi !important;" />
     <?php }?>
   </form>
 <div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
