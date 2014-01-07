@@ -8,7 +8,7 @@ $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory = $_SESSION['loggedInOfficeType'];
 
-$sql_select_sell_date_range = $conn->prepare("SELECT sal_totalamount, sal_invoiceno
+$sql_select_sell_date_range = $conn->prepare("SELECT sal_totalamount, sal_invoiceno, idsalessummary
                                                             FROM sales_summary
                                                             WHERE sal_salesdate >= ? AND sal_salesdate <= ?");
 $sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
@@ -29,6 +29,11 @@ function get_catagory() {
         <title>পণ্যের তালিকা</title>
         <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
         <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
+        <script src="scripts/tinybox.js" type="text/javascript"></script>
+        <script type="text/javascript">
+       function details_show(id){
+                  TINY.box.show({url:'product_details.php?sum_id='+id,width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+       </script>
         <style type="text/css">
             .prolinks:focus{
                 background-color: cadetblue;
@@ -235,6 +240,7 @@ function get_catagory() {
     <body onLoad="ShowTime()">
 
         <div id="maindiv">
+            <form method="post">
             <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
             <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
                 <div style="width: 40%;height: 100%; float: left;"><a href="../pos_management.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
@@ -243,8 +249,7 @@ function get_catagory() {
 
             <div class="wraper" style="width: 80%;font-family: SolaimanLipi !important;">
                 <fieldset style="border-width: 3px;width: 100%;">
-                    <legend style="color: brown;">বিক্রয় তালিকা ফিল্টার</legend>
-                    <form method="post">
+                    <legend style="color: brown;">বিক্রয় তালিকা ফিল্টার</legend>                    
                         <div class="top" style="width: 100%;height: auto;">
                             <div style="float: left;width: 25%;"><b>শুরুর তারিখ</b></br>
                                 <input type="date" name="start"></input>
@@ -256,7 +261,7 @@ function get_catagory() {
                                 <input style="width: 100px; height: 30px" type="submit" value="দেখুন" name="show"></input>
                             </div>
                         </div>
-                    </form>
+                    
                 </fieldset></div>
 
             <fieldset   style="border-width: 3px;margin:0 20px 50px 20px;font-family: SolaimanLipi !important;">
@@ -264,9 +269,10 @@ function get_catagory() {
                 <div id="resultTable">
                     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
                         <tr>
-                            <td width="8%"><div align="center"><strong>ক্রম</strong></div></td>
-                            <td width="23%"><div align="center"><strong>চালান নং</strong></div></td>
-                            <td width="6%"><div align="center"><strong>মোট (টাকা)</strong></div></td>
+                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রম</strong></div></td>
+                            <td width="40%" style="color: blue; font-size: 25px"><div align="center"><strong>চালান নং</strong></div></td>
+                            <td width="40%" style="color: blue; font-size: 25px"><div align="center"><strong>মোট (টাকা)</strong></div></td>
+                            <td width="10%"></td>
                         </tr>
                         <?php
                         $count = 0;
@@ -282,14 +288,18 @@ function get_catagory() {
                                 $db_chalan_no = english2bangla($row["sal_invoiceno"]);
                                 $amount += $row['sal_totalamount'];
                                 $db_amount = english2bangla($row["sal_totalamount"]);
+                                $db_idsalessummary = $row['idsalessummary'];
                                 echo '<tr>';
                                 echo '<td><div align="center">' . $countShow . '</div></td>';
                                 echo '<td><div align="center">' . $db_chalan_no . '</div></td>';
                                 echo '<td><div align="center">' . $db_amount . '</div></td>';
+                                ?>
+                        <td><div align='center'><input type="button" name="details" value="বিস্তারিত" onclick="details_show('<?php echo $db_idsalessummary?>')"></input></div></td>
+                        <?php
                             }
                             echo '<tr>';
                             echo '<td colspan="2"><div align="right">সর্বমোট : </div></td>';
-                            echo '<td><div align="center">' . english2bangla($amount) . '</div></td>';
+                            echo '<td colspan="2"><div align="center">' . english2bangla($amount) . '</div></td>';
                         }
                         ?>
                     </table>
@@ -300,6 +310,7 @@ function get_catagory() {
                 <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
                 RIPD Universal &copy; All Rights Reserved 2013 - Designed and Developed By <a href="http://www.comfosys.com" target="_blank" style="color:#772c17;">comfosys Limited<img src="images/comfosys_logo.png" style="width: 50px;height: 40px;"/></a>
             </div>
+        </form>
         </div>
     </body>
 </html>

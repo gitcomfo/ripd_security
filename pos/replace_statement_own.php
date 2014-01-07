@@ -240,11 +240,11 @@ $sql_select_replace = $conn->prepare("SELECT *
                 <form method="post">
                 <table width='100%' border='1' cellspacing='0' cellpadding='0' style='border-color:#000000; border-width:thin; font-size:18px;'>
                     <tr>
-                        <td ><div align='center'><strong>তারিখ</strong></div></td>
-                        <td ><div align='center'><strong>চালান নং</strong></div></td>
-                        <td ><div align='center'><strong>রিপ্লেসের পরিমাণ(টাকা)</strong></div></td>
-                        <td ><div align='center'><strong>রিপ্লেসকারী</strong></div></td>
-                        <td ><div align='center'><strong></strong></div></td>
+                        <td style='color: blue; font-size: 20px'><div align='center'><strong>তারিখ</strong></div></td>
+                        <td style='color: blue; font-size: 20px'><div align='center'><strong>চালান নং</strong></div></td>
+                        <td style='color: blue; font-size: 20px'><div align='center'><strong>রিপ্লেসের পরিমাণ(টাকা)</strong></div></td>
+                        <td style='color: blue; font-size: 20px'><div align='center'><strong>রিপ্লেসকারী</strong></div></td>
+                        <td style='color: blue; font-size: 20px'><div align='center'><strong></strong></div></td>
                     </tr>
                     <?php 
                     $sql_select_replace->execute(array($office_type, $office_id));

@@ -8,7 +8,7 @@ $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory = $_SESSION['loggedInOfficeType'];
 $date = date("Y-m-d");
-$sql_select_today_sell = $conn->prepare("SELECT sal_totalamount, sal_invoiceno
+$sql_select_today_sell = $conn->prepare("SELECT sal_totalamount, sal_invoiceno, idsalessummary
                                                             FROM sales_summary
                                                             WHERE sal_salesdate = ?");
 $sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
@@ -29,6 +29,11 @@ function get_catagory() {
         <title>পণ্যের তালিকা</title>
         <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
          <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
+         <script src="scripts/tinybox.js" type="text/javascript"></script>
+        <script type="text/javascript">
+       function details_show(id){
+                  TINY.box.show({url:'product_details.php?sum_id='+id,width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+       </script>
          <style type="text/css">
             .prolinks:focus{
                 background-color: cadetblue;
@@ -246,9 +251,10 @@ function get_catagory() {
                 <div id="resultTable">
                     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
                         <tr>
-                            <td width="8%"><div align="center"><strong>ক্রম</strong></div></td>
-                            <td width="23%"><div align="center"><strong>চালান নং</strong></div></td>
-                            <td width="6%"><div align="center"><strong>মোট (টাকা)</strong></div></td>
+                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রম</strong></div></td>
+                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>চালান নং</strong></div></td>
+                            <td width="40%" style="color: blue; font-size: 25px"><div align="center"><strong>মোট (টাকা)</strong></div></td>
+                            <td width="10%"></td>
                         </tr>
                         <?php
                         $amount = 0;
@@ -261,14 +267,19 @@ function get_catagory() {
                             $db_chalan_no = english2bangla($row["sal_invoiceno"]);
                             $amount += $row['sal_totalamount'];
                             $db_amount = english2bangla($row["sal_totalamount"]);
+                            $db_idsalessummary = $row['idsalessummary'];
                             echo '<tr>';
                             echo '<td><div align="center">' . $countShow . '</div></td>';
                             echo '<td><div align="center">' . $db_chalan_no . '</div></td>';
                             echo '<td><div align="center">' . $db_amount . '</div></td>';
-                        }
+                       ?>
+                        <td><div align='center'><input type="button" name="details" value="বিস্তারিত" onclick="details_show('<?php echo $db_idsalessummary?>')"></input></div></td>
+                        <?php
+                            }
                         echo '<tr>';
                         echo '<td colspan="2"><div align="right">সর্বমোট : </div></td>';
                         echo '<td><div align="center">' . english2bangla($amount) . '</div></td>';
+                        echo '<td></td>';
                         ?>
                     </table>
                 </div>
