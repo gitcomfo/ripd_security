@@ -203,7 +203,7 @@ function getUpdate(xprofit) // after update pckg prices
 </br>
 <div class="wraper" style="width: 80%;font-family: SolaimanLipi !important;float: none;">
      <?php if($msg != "") { ?>
-<div align="center" style="color: green;font-size: 26px; font-weight: bold; width: 90%;height: 20px;margin: 0 5% 0 5%;float: none;"><?php echo $msg;?></div></br>
+<div align="center" style="color: green;font-size: 26px; font-weight: bold; width: 90%;height: 20px;margin: 0 5% 0 5%;float: none;"><?php echo $msg;?></div></br></br></br></br>
     <?php } ?>
 <fieldset style="border-width: 3px;width: 100%;">
          <legend style="color: brown;">প্যাকেজ খুঁজুন</legend>
