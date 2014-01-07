@@ -40,15 +40,14 @@ if(isset($_POST['submit0']))
       }
       elseif (($selected_type == 'pwr') && $topparent_id != 0) { $topparent_id = $topparent_id;}
     $thana = $_POST['thana_id'];
-//    $emailusername = str_replace("-", "", $off_acc1);
-//    $ripdemailid = $emailusername . "@ripduniversal.com";
-//    $passwrd = $emailusername;
-//    //************************* create official email *************************************************
-//             $email_create_status = CreateEmailAccount($emailusername, $passwrd);
-//            if ($email_create_status != '777') {
+    $emailusername = str_replace("-", "", $off_acc1);
+    $ripdemailid = $emailusername . "@ripduniversal.com";
+    $passwrd = $emailusername;
+    //************************* create official email *************************************************
+             $email_create_status = CreateEmailAccount($emailusername, $passwrd);
+            if ($email_create_status != '777') {
                 $ripdemailid = "";
-                $passwrd = "123";
-//            }
+            }
     mysql_query("START TRANSACTION");
    
     $sql= "INSERT INTO `office` (opening_date,`office_type` ,`office_selection`, `parent_id`, `top_parent`, `office_name` ,`office_number` ,`account_number` ,`branch_name` ,`office_email` ,email_password, `Thana_idThana`,`office_details_address` ) 

@@ -207,7 +207,7 @@ function getUpdate(xprofit)
     if($msg != "")
     {
 ?>
-<div align="center" style="color: green;font-size: 26px; font-weight: bold; width: 90%;height: 20px;margin: 0 5% 0 5%;float: none;"><?php if($msg != "") echo $msg;?></div></br>
+<div align="center" style="color: green;font-size: 26px; font-weight: bold; width: 90%;height: 20px;margin: 0 5% 0 5%;float: none;"><?php if($msg != "") echo $msg;?></div></br></br></br></br></br></br></br></br></br>
     <?php } 
     else { ?>
 <div class="wraper" style="width: 80%;font-family: SolaimanLipi !important;float: none;">

@@ -346,7 +346,7 @@ function getValues(procode)
 <div class="wraper" style="width: 80%;font-family: SolaimanLipi !important;float: none;">
      <?php
         if($msg !="")
-            { echo " <div class='top' style='width: 100%;height: auto;text-align:center;font-size:18px;color='green;''><b>$msg</b></div></br>"; } 
+            { echo "<div class='top' style='width: 100%;height: auto;text-align:center;font-size:26px; color:#009933;'><b>$msg</b></div></br>"; } 
        else
        { if(($_GET['step'] == 2)) {?>
     <form method="POST"  action="" onsubmit="return beforeSave();">

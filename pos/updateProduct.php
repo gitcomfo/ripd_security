@@ -99,6 +99,10 @@ function beforeSave()
        }
        else { return false;}
 }
+function out()
+    {
+        setTimeout(function(){parent.location.href=parent.location.href;},1000);
+    }
 </script>
 </head>
     
@@ -108,7 +112,9 @@ function beforeSave()
    <?php
         if($msg !="")
             { echo " <div class='top' style='width: 100%;height: auto;text-align:center;font-size:18px;'>
-                <b><font color='green;'>$msg</font></b></div>"; } 
+                <b><font color='green;'>$msg</font></b></div>"; 
+                echo "<script>out();</script>";
+            } 
     else { ?>
     <div style="width: 100%;font-family: SolaimanLipi !important;">
         <form method="post" action="" onsubmit="return beforeSave();">

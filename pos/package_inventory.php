@@ -169,7 +169,7 @@ function searchPckgPro(keystr) // show products from brand
                             echo '<td><div align="center">'.english2bangla($pckgXprofit).'</div></td>';
                             echo '<td><div align="center">'.english2bangla($pckgProfit).'</div></td>';
                             echo '<td><div align="center">'.english2bangla($pckgPV).'</div></td>';
-                            echo '<td><div align="center"><a onclick="packageUpdate('.$pckgid.')" style="cursor:pointer;" ><input  type="button" value="আপডেট" style="font-family: SolaimanLipi !important;"/></a></div></td>';
+                            echo '<td><div align="center"><a onclick="packageUpdate('.$pckgid.')" style="cursor:pointer;" ><input  type="button" value="মূল্য আপডেট" style="font-family: SolaimanLipi !important;"/></a></div></td>';
                             echo '</tr>';
                             $sl++;
                       }
