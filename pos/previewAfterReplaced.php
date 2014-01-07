@@ -102,6 +102,10 @@ $result= $sel_sales_summary->fetchAll();
                    $totalPV = $totalPV + $row[6];
                    $totalbuy = $totalbuy + ($row[2] * $pro_qty);
               }
+              if($totalamount > $_SESSION['repMoney'])
+              {
+                  $P_paiedByCash = $P_paiedByCash + $_SESSION['repMoney'] ;
+              }
         $invoiceNo = $_SESSION['SESS_MEMBER_ID'];
         $conn->beginTransaction();
         $sqlresult1=$ins_sales_summary->execute(array($scatagory,$storeID,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$P_getTaka,$invoiceNo,$cfsID,$P_paiedByCash,$P_paiedByAcc));
@@ -176,6 +180,10 @@ foreach($_SESSION['arrSellTemp'] as $key => $row)
                    $finalTotal = $finalTotal + $row[5];
               }
   $P_paidAmount = $finalTotal - $_SESSION['repMoney'];
+  if($P_paidAmount < 0)
+  {
+      $P_paidAmount = 0;
+  }
 ?>
 <td colspan="4" ><div align="right"><strong>সর্বমোট:</strong>&nbsp;</div></td>
 <td width="13%"><div align="right" style="padding-right: 8px;"><?php echo english2bangla($finalTotal);?></div></td>

@@ -34,38 +34,38 @@ while($forwhileloop==1)
 }   
 $_SESSION['SESS_MEMBER_ID']=$str_recipt;
 
-if($G_sellingType==1)
+if($G_sellingType==1) // for general selling ****************************
 {
     header("location: auto.php");
 }
-elseif($G_sellingType==2)
+elseif($G_sellingType==2) // for wholeselling ***********************************
 {
     header("location: wholesale.php");
 }
-elseif($G_sellingType==3)
+elseif($G_sellingType==3) // sell after replace ******************************************
 {
-     $prevRecipt = $_SESSION['recipt'];
-     $db_totalamount = $_SESSION['repMoney'];   
-     $conn->beginTransaction();
-     $sqlresult1=$ins_replace_sum->execute(array($scatagory,$storeID,$db_totalamount,$prevRecipt,$cfsID));
-     $replace_pro_sum_id= $conn->lastInsertId();
-     foreach ($_SESSION['arrRepTemp'] as $replaceRow)
-        {
-            $repro_qty=$replaceRow[9];
-            $repro_amount=$replaceRow[10];
-            $repro_id = $replaceRow[4];
-            $sqlresult2 = $ins_replace->execute(array($repro_qty,$repro_amount,$repro_id,$replace_pro_sum_id));
-       }
-       $sqlresult3 = $up_sales_summary->execute(array($prevRecipt));
-     if($sqlresult1 && $sqlresult2 && $sqlresult3)
-        {
-            $conn->commit();
-            unset($_SESSION['arrRepTemp']);
+//     $prevRecipt = $_SESSION['recipt'];
+//     $db_totalamount = $_SESSION['repMoney'];   
+//     $conn->beginTransaction();
+//     $sqlresult1=$ins_replace_sum->execute(array($scatagory,$storeID,$db_totalamount,$prevRecipt,$cfsID));
+//     $replace_pro_sum_id= $conn->lastInsertId();
+//     foreach ($_SESSION['arrRepTemp'] as $replaceRow)
+//        {
+//            $repro_qty=$replaceRow[9];
+//            $repro_amount=$replaceRow[10];
+//            $repro_id = $replaceRow[4];
+//            $sqlresult2 = $ins_replace->execute(array($repro_qty,$repro_amount,$repro_id,$replace_pro_sum_id));
+//       }
+//       $sqlresult3 = $up_sales_summary->execute(array($prevRecipt));
+//     if($sqlresult1 && $sqlresult2 && $sqlresult3)
+//        {
+//            $conn->commit();
+//            unset($_SESSION['arrRepTemp']);
             header("location: sellAfterReplace.php");
-        }
-     else {
-                $conn->rollBack();
-                echo "<script>alert('দুঃখিত,প্রোডাক্ট রিপ্লেস হয়নি')</script>";
-            }
+//        }
+//     else {
+//                $conn->rollBack();
+//                echo "<script>alert('দুঃখিত,প্রোডাক্ট রিপ্লেস হয়নি')</script>";
+//            }
 }
 ?>

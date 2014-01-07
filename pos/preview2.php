@@ -119,9 +119,10 @@ $result= $sel_sales_summary->fetchAll();
 
         $totalamount =0; $totalPV = 0; $totalbuy = 0;$totalLessProfit=0;$totalLessXtra=0;
              foreach($_SESSION['arrSellTemp'] as $key => $row) {
+                 $pro_qty = $row[4];
                    $totalamount = $totalamount + $row[5];
                    $totalPV = $totalPV + $row[6];
-                   $totalbuy = $totalbuy + $row[2];
+                   $totalbuy = $totalbuy + ($row[2] * $pro_qty);
                    $totalLessProfit = $totalLessProfit + $row[7];
                    $totalLessXtra = $totalLessXtra + $row[8];
               }
@@ -137,7 +138,7 @@ $result= $sel_sales_summary->fetchAll();
         $pro_pv = $row[6];
         $pro_profitless = $row[7];
         $pro_xtraProfitless = $row[8];
-        $pro_buy= $row[2];
+        $pro_buy= $row[2] * $pro_qty;
         $invenrow = $_SESSION['pro_inventory_array'][$key];
         $pro_profit = ($invenrow['ins_profit'] * $pro_qty) - $pro_profitless;
         $pro_xprofit = ($invenrow['ins_extra_profit'] * $pro_qty) - $pro_xtraProfitless;

@@ -8,6 +8,9 @@ $storeName= $_SESSION['loggedInOfficeName'];
 $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
+
+print_r($_SESSION['arrRepTemp']);
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -104,6 +107,13 @@ $scatagory =$_SESSION['loggedInOfficeType'];
                 var bycash = total - Number(byacc);
                 document.getElementById('cashTopay').value= bycash;
             }
+$(document).ready(function(){
+  $("button").click(function(){
+    $("p").hide("slow",function(){
+      alert("The paragraph is now hidden");
+    });
+  });
+});
         </script>
 <!--===========================================================================================================================-->
 <script>
@@ -339,10 +349,12 @@ function checkAccountBalance(accNo)
                   }
 ?>
     <b>সর্বমোট :</b><input name="tretail" type="hidden" id="tretail" size="20" style="text-align:right;" value="<?php echo $finalTotal;?>" readonly/><?php echo english2bangla($finalTotal);?> টাকা</br>
-    <b>প্রদেয় টাকা&nbsp;:</b> <input name="gtotal" type="hidden" id="gtotal" size="20" onblur="checkNumeric(this);" readonly style="text-align:right;" value="<?php echo $togive?>"/><?php echo english2bangla($togive);?> টাকা</br>
+    <b>প্রদেয় টাকা&nbsp;:</b> <input name="gtotal" type="hidden" id="gtotal" size="20" readonly style="text-align:right;" value="<?php echo $togive?>"/><?php echo english2bangla($togive);?> টাকা</br>
     <b>রিপ্লেস বাবদ ফেরত:</b> <input name="getFromReplace" type="hidden" id="getFromReplace" size="20" readonly style="text-align:right;" value="<?php echo $replaceBack;?>"/><?php echo english2bangla($replaceBack);?> টাকা
 </div>
-    
+    <?php 
+    if($togive > 0 ) {
+        ?>
 <fieldset style="border-width: 3px;padding-bottom:50px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
 <legend style="color: brown;">মূল্য পরিশোধ</legend>
 <b>পেমেন্ট টাইপ :</b>
@@ -358,6 +370,13 @@ function checkAccountBalance(accNo)
   <div id="payInfo" class="text" style="margin-top: 10px;"></div></br>
     <input name="print" id="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:42%;font-family: SolaimanLipi !important;" />
     </fieldset>
+    <?php }
+    else{ ?>
+    <input type="hidden" name="payType" value="1" />
+    <input name='cash'  type='hidden' value="<?php echo $finalTotal ?>"  />
+    <input name='change' type='hidden' readonly value="0" />
+    <input name="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:42%;font-family: SolaimanLipi !important;" />
+    <?php }?>
   </form>
 <div style="background-color:#f2efef;border-top:#009 dashed 2px;padding:3px 50px;">
      <a href="http://www.comfosys.com" target="_blank"><img src="images/footer_logo.png"/></a> 
