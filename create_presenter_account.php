@@ -1,6 +1,6 @@
 <?php
-error_reporting(0);
-include_once 'includes/session.inc';
+//error_reporting(0);
+//include_once 'includes/session.inc';
 include_once 'includes/MiscFunctions.php';
 include_once 'includes/makeAccountNumbers.php';
 include_once 'includes/checkAccountNo.php';
@@ -25,11 +25,7 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
         $account_number1 = checkAccountNo($account_number);
         $emailusername = str_replace("-", "", $account_number1);
         $ripdemailid = $emailusername . "@ripduniversal.com";
-        $p_employee_grade = $_POST['employee_grade'];
-        $p_employee_salary = $_POST['salary'];
-        $p_onsid = $_POST['ospID'];
-        $p_postonsID = $_POST['post'];
-        $p_posting_type = $_POST['posttype'];
+        $p_employee_type = $_POST['employee_type']; 
         $p_joiningdate = $_POST['date'];
         $roleid = $_POST['role'];
          // ****************** password create & send ******************************************
@@ -49,26 +45,17 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
                 $ripdemailid = "";
             }
             $ins_cfsuser=mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email, cfs_account_status, security_roles_idsecurityrole,user_type)
-                                                                        VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email', '$ripdemailid','active', $roleid, 'employee')") or exit(mysql_error()." sorry");
+                                                                        VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email', '$ripdemailid','active', $roleid, '$p_employee_type')") or exit(mysql_error()." sorry");
              $cfs_user_id = mysql_insert_id();
                     
                     $ins_employee = mysql_query("INSERT INTO employee (status, employee_type, joining_date, posting_type, emp_ons_id, pay_grade_id, cfs_user_idUser)
-                                           VALUES ('posting', 'employee', '$p_joiningdate' ,'$p_posting_type', '$p_onsid', '$p_employee_grade', '$cfs_user_id')") or exit(mysql_error()."step2");
-                    $employee_id = mysql_insert_id();
-                    // employee_posting table-e insert***********************
-                    $ins_empposting = mysql_query("INSERT INTO employee_posting (posting_type, posting_date, Employee_idEmployee, ons_relation_idons_relation, post_in_ons_idpostinons)
-                                            VALUES ('$p_posting_type',NOW(), $employee_id, $p_onsid, $p_postonsID)")or exit(mysql_error()."step3");
-                    // update post_in_ons table***********************
-                    $ins_postinons=mysql_query("UPDATE `post_in_ons` SET `free_post` = free_post-1,`used_post` = used_post+1 WHERE `idpostinons` =$p_postonsID")or exit(mysql_error()."step4");
-                   //employee_salary table-e insert***************
-                    $ins_empsalary= mysql_query("INSERT INTO employee_salary (total_salary, insert_date, user_id, pay_grade_idpaygrade)
-                                            VALUES ('$p_employee_salary',NOW(), $employee_id, $p_employee_grade)")or exit(mysql_error()."step5");
-                    
+                                           VALUES ('non-posting', '$p_employee_type', '$p_joiningdate' ,'acting', 0, 0, '$cfs_user_id')") or exit(mysql_error()."step2");
+                    $employee_id = mysql_insert_id();                  
                     $empinfo_ins = mysql_query("INSERT INTO employee_information (Employee_idEmployee) VALUES ($employee_id)") or exit(mysql_error()."step6");
                     $employee_info_id = mysql_insert_id();
                     $encodedID = base64_encode($employee_info_id);
                     
-                     if ($ins_cfsuser && $ins_employee && $ins_empposting && $ins_postinons && $ins_postinons && $ins_empsalary && $empinfo_ins) {
+                     if ($ins_cfsuser && $ins_employee && $empinfo_ins) {
                         mysql_query("COMMIT");
                         header( 'Location: create_employee_account_inner.php?empInfoID='.$encodedID);
                     } else {
@@ -92,13 +79,9 @@ if (isset($_POST['submitwithpass']))
         $account_number1 = checkAccountNo($account_number);
         $emailusername = str_replace("-", "", $account_number1);
         $ripdemailid = $emailusername . "@ripduniversal.com";
-        $p_employee_grade = $_POST['employee_grade'];
-        $p_employee_salary = $_POST['salary'];
-        $p_onsid = $_POST['ospID'];
-        $p_postonsID = $_POST['post'];
-        $p_posting_type = $_POST['posttype'];
-        $p_joiningdate = $_POST['date'];
+        $p_employee_type = $_POST['employee_type']; 
         $roleid = $_POST['role'];
+        $p_joiningdate = $_POST['date'];
         $pass = $_POST['reap_password'];
         $passwrd = md5($pass);
 
@@ -110,27 +93,19 @@ if (isset($_POST['submitwithpass']))
             } else {
                 $ripdemailid = "";
             }
-
+             
              $ins_cfsuser=mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email, cfs_account_status, security_roles_idsecurityrole,user_type)
-                                                                        VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email', '$ripdemailid','active', $roleid, 'employee')") or exit(mysql_error()." sorry");
+                                                                        VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email', '$ripdemailid','active', $roleid, '$p_employee_type')") or exit(mysql_error()." sorry");
              $cfs_user_id = mysql_insert_id();
                     
                     $ins_employee = mysql_query("INSERT INTO employee (status, employee_type, joining_date, posting_type, emp_ons_id, pay_grade_id, cfs_user_idUser)
-                                                                                VALUES ('posting', 'employee','$p_joiningdate' ,'$p_posting_type', '$p_onsid', '$p_employee_grade', '$cfs_user_id')") or exit(mysql_error());
+                                                                                VALUES ('non-posting', '$p_employee_type','$p_joiningdate' ,'acting', 0, 0, '$cfs_user_id')") or exit(mysql_error());
                     $employee_id = mysql_insert_id();
-                    // employee_posting table-e insert***********************
-                    $ins_empposting = mysql_query("INSERT INTO employee_posting ( posting_date, Employee_idEmployee, ons_relation_idons_relation, post_in_ons_idpostinons)
-                                                                            VALUES (NOW(), $employee_id, $p_onsid, $p_postonsID)")or exit(mysql_error());
-                    // update post_in_ons table***********************
-                    $ins_postinons=mysql_query("UPDATE post_in_ons SET free_post = free_post-1,used_post = used_post+1 WHERE idpostinons =$p_postonsID")or exit(mysql_error());
-                   //employee_salary table-e insert***************
-                    $ins_empsalary= mysql_query("INSERT INTO employee_salary (total_salary, insert_date, user_id, pay_grade_idpaygrade)
-                                                                        VALUES ('$p_employee_salary',NOW(), $employee_id, $p_employee_grade)")or exit(mysql_error());
-                    
+                         
                     $empinfo_ins = mysql_query("INSERT INTO employee_information (Employee_idEmployee) VALUES ($employee_id)")or exit(mysql_error());
                     $employee_info_id = mysql_insert_id();
                     $encodedID = base64_encode($employee_info_id);
-                     if ($ins_cfsuser && $ins_employee && $ins_empposting && $ins_postinons && $ins_postinons && $ins_empsalary && $empinfo_ins) {
+                     if ($ins_cfsuser && $ins_employee && $empinfo_ins) {
                         mysql_query("COMMIT");
                         header( 'Location: create_employee_account_inner.php?empInfoID='.$encodedID);
                     } else {
@@ -194,40 +169,9 @@ if (isset($_POST['submitwithpass']))
         }
     }
 
-    function checkSalaryRange(sal)
-    {
-        var range = document.getElementById('SalaryRange').innerText;
-        var myarr = range.split("-");
-        var min = myarr[0];
-        var max = myarr[1];
-        var sal = Number(sal);
-        if ((sal <= max) && (sal >= min))
-        {
-            document.getElementById('showerror').innerHTML = "";
-        }
-        else {
-            document.getElementById('showerror').innerHTML = "দুঃখিত, সেলারি রেঞ্জ অতিক্রম করেছে";
-        }
-    }
-    function setParent(office, offid)
-    {
-        document.getElementById('officesearch').value = office;
-        document.getElementById('ospID').value = offid;
-        document.getElementById('offResult').style.display = "none";
-    }
-    function showTypeBox()
-    {
-        document.getElementById('postingbox').style.visibility = 'visible';
-    }
     function beforeSave()
     {
-        var radio = document.forms['employee_form'].elements['posttype'];
-        if ((document.getElementById('usernamecheck').innerHTML == "")
-                && (document.getElementById('salary').value != "")
-                && (document.getElementById('SalaryRange').innerHTML != "")
-                && (document.getElementById('showerror').innerHTML == "")
-                && (document.getElementById('role').value != 0)
-                && ((radio[0].checked) || (radio[1].checked)))
+        if ((document.getElementById('usernamecheck').innerHTML == "") && (document.getElementById('role').value != 0))
         {
             document.getElementById('save').readonly = false;
             return true;
@@ -239,13 +183,8 @@ if (isset($_POST['submitwithpass']))
     }
     function beforeSave2()
     {
-        var radio = document.forms['employee_form'].elements['posttype'];
         if ((document.getElementById('usernamecheck').innerHTML == "")
-                && (document.getElementById('salary').value != "")
-                && (document.getElementById('SalaryRange').innerHTML != "")
-                && (document.getElementById('showerror').innerHTML == "")
                 && (document.getElementById('role').value != 0)
-                && ((radio[0].checked) || (radio[1].checked))
                 && (document.getElementById('passcheck').innerHTML == "OK"))
         {
             document.getElementById('save2').readonly = false;
@@ -258,13 +197,8 @@ if (isset($_POST['submitwithpass']))
     }
     function beforeSaveRetry()
     {
-        var radio = document.forms['employee_form'].elements['posttype'];
         if ((document.getElementById('usernamecheck').innerHTML == "")
-                && (document.getElementById('salary').value != "")
-                && (document.getElementById('SalaryRange').innerHTML != "")
-                && (document.getElementById('showerror').innerHTML == "")
                 && (document.getElementById('role').value != 0)
-                && ((radio[0].checked) || (radio[1].checked))
                 && (document.getElementById('passcheck').innerHTML == ""))
         {
             document.getElementById('retry').readonly = false;
@@ -327,77 +261,6 @@ function passminlength(pass)
         xmlhttp.send();
     }
 
-function showSalaryRange(paygrdid) // for selecting salary range according to grade
-    {
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function()
-        {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-            {
-                document.getElementById("SalaryRange").innerHTML = xmlhttp.responseText;
-            }
-        }
-        xmlhttp.open("GET", "includes/getGradeForEmployeeType.php?paygrdid=" + paygrdid + "&step=2", true);
-        xmlhttp.send();
-    }
-
-function searchOSP(keystr)
-    {
-        var xmlhttp;
-        var type = document.querySelector('input[name = "whatoffice"]:checked').value;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function()
-        {
-            if (keystr.length == 0)
-            {
-                document.getElementById('offResult').style.display = "none";
-            }
-            else
-            {
-                document.getElementById('offResult').style.visibility = "visible";
-                document.getElementById('offResult').setAttribute('style', 'position:absolute;top:83%;left:56%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
-            }
-            document.getElementById('offResult').innerHTML = xmlhttp.responseText;
-        }
-        xmlhttp.open("GET", "includes/getGradeForEmployeeType.php?searchkey=" + keystr + "&step=3&type=" + type, true);
-        xmlhttp.send();
-    }
-
-    function showPost()
-    {
-        var onsid = document.getElementById('ospID').value;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function()
-        {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-            {
-                document.getElementById("getPost").innerHTML = xmlhttp.responseText;
-            }
-        }
-        xmlhttp.open("GET", "includes/getGradeForEmployeeType.php?onsid=" + onsid + "&step=4", true);
-        xmlhttp.send();
-    }
     function checkUserName(uname)
     {
         if (window.XMLHttpRequest)
@@ -452,16 +315,13 @@ function searchOSP(keystr)
             <form method="POST" id="employee_form" name="employee_form" action="">
                 <?php
                  if ((isset($_POST['submit']) || isset($_POST['retry'])) && $error == 1) {
-                    $input= 'employee';
-                    $arrayAccountType = array('employee' => 'কর্মচারীর', 'customer' => 'কাস্টমারের', 'proprietor' => 'প্রোপ্রাইটারের');
-                    $showAccountType  = $arrayAccountType[$input];
                     
-                    echo "<tr><td><input type='hidden' value='$input' name='account_type'/></td></tr>
+                    echo "
                     <table  class='formstyle'>          
-                    <tr><th colspan='4' style='text-align: center;'>$showAccountType মূল তথ্য</th></tr>  
+                    <tr><th colspan='4' style='text-align: center;'> মূল তথ্য</th></tr>  
                          <tr><td colspan ='2' style='text-align: center;'><font color='read'>$smserror</font></td></tr>
                     <tr>
-                        <td >$showAccountType নাম</td>
+                        <td >নাম</td>
                         <td>:   <input class='box' type='text' id='name' name='name' value='$account_name'/><em2> *</em2></td>			
                     </tr>
                     <tr>
@@ -484,54 +344,23 @@ function searchOSP(keystr)
                     </tr>   
                     <tr>
                         <td colspan='2' ><hr /></td>
-                    </tr> 
-                    <tr>
-                        <td>গ্রেড নির্বাচন</td>
-                        <td>: <select class='box' onchange='showSalaryRange(this.value)' name='employee_grade'><em2> *</em2>
-                                    <option value=0> -সিলেক্ট করুন- </option>";
-                                  $sql_paygrade= mysql_query("SELECT * FROM pay_grade WHERE employee_type = 'employee' ");
-                                  while($paygraderow = mysql_fetch_assoc($sql_paygrade))
-                                  {
-                                      echo  "<option value=".$paygraderow['idpaygrade'].">".$paygraderow['grade_name']."</option>";
-                                  }
-                                  echo "</select>
-                       </td>
                     </tr>
                     <tr>
-                        <td>সেলারি</td>
-                       <td>:   <input class='box' type='text' id='salary' name='salary' onkeypress='return checkIt(event)' onkeyup='checkSalaryRange(this.value);'/><em2> *</em2> টাকা (সেলারি রেঞ্জঃ <span id='SalaryRange' style='color:red;'></span>)</td>
-                    </tr>
-                    <tr>
-                        <td colspan='2' id='showerror' style='text-align:center;color:red;'></td>
-                   </tr>
-                   <tr>
-                        <td>অফিস সিলেক্ট করুন</td> 
-                        <td>: <input type='radio'  id='whatoffice' name='whatoffice' value ='office'/> অফিস &nbsp;&nbsp;&nbsp;
-                            <input  type='radio' id='whatoffice' name='whatoffice' value ='s_store'/> সেলসস্টোর</td>
-                    </tr>
-                     <tr>
-                        <td>অফিস / সেলস স্টোর / পাওয়ার স্টোর</td>
-                        <td>: <input class='box' type='text' id='officesearch' name='officesearch' onkeyup='searchOSP(this.value)'/><em2> *</em2>
-                        <div id='offResult'></div><input type='hidden' name='ospID' id='ospID'/></br>
-                        </td>            
-                    </tr>
-                    <tr>
-                        <td>দায়িত্ব / পোস্ট</td>  
-                        <td id='getPost'>
-                        </td>            
-                    </tr>
-                    <tr id='postingbox'  style='visibility: hidden;'>
-                        <td>পোস্টের ধরন</td>
-                        <td>: <input type='radio' name='posttype' id='posttype' value ='Acting'/> অ্যাক্টিং &nbsp;&nbsp;&nbsp;
-                            <input  type='radio' name='posttype' id='posttype' value ='Permanent'/> পার্মানেন্ট</td>
-                    </tr>
+                        <td>কাজের ধরন</td>
+                      <td>:   <select  class='box'  name='employee_type' style =' font-size: 14px'>
+                                <option >-একটি নির্বাচন করুন-</option>
+                                <option value='programmer'>প্রোগ্রামার</option>
+                                <option value='presenter'>প্রেজেন্টার</option>
+                                <option value='trainer'>ট্রেইনার</option>
+                            </select><em2> *</em2></td>
+                    </tr>   
                     <tr>
                         <td>যোগদানের তারিখ</td>
                         <td>: <input class='box' type='text' id='date' placeholder='Date' name='date' value='$p_joiningdate'/>
                         </td>            
                     </tr>
                     <tr>
-                     <td>কর্মচারীর রোল</td>
+                     <td>রোল</td>
                       <td>:   <select  class='box'  name='role' id='role' style =' font-size: 14px'>";
                       showRoles();
                         echo "</select><em2> *</em2></td>
@@ -551,17 +380,12 @@ function searchOSP(keystr)
                     </td>                           
                     </tr>             
                 </table>";
-                 } else {
-                      $input= 'employee';
-                    $arrayAccountType = array('employee' => 'কর্মচারীর', 'customer' => 'কাস্টমারের', 'proprietor' => 'প্রোপ্রাইটারের');
-                    $showAccountType  = $arrayAccountType[$input];
-                    
-                    echo "<tr><td><input type='hidden' value='$input' name='account_type'/></td></tr>";
-
+                 } 
+                 else {                  
                     echo "<table  class='formstyle'>          
-                    <tr><th colspan='4' style='text-align: center;'>$showAccountType মূল তথ্য</th></tr>  
+                    <tr><th colspan='4' style='text-align: center;'> মূল তথ্য</th></tr>  
                     <tr>
-                        <td >$showAccountType নাম</td>
+                        <td > নাম</td>
                         <td>:   <input class='box' type='text' id='name' name='name'/><em2> *</em2></td>			
                     </tr>
                     <tr>
@@ -586,52 +410,21 @@ function searchOSP(keystr)
                         <td colspan='2' ><hr /></td>
                     </tr>
                     <tr>
-                        <td>গ্রেড নির্বাচন</td>
-                        <td>: <select class='box' onchange='showSalaryRange(this.value)' name='employee_grade'><em2> *</em2>
-                                    <option value=0> -সিলেক্ট করুন- </option>";
-                                  $sql_paygrade= mysql_query("SELECT * FROM pay_grade WHERE employee_type = 'employee' ");
-                                  while($paygraderow = mysql_fetch_assoc($sql_paygrade))
-                                  {
-                                      echo  "<option value=".$paygraderow['idpaygrade'].">".$paygraderow['grade_name']."</option>";
-                                  }
-                                  echo "</select>
-                         </td>
-                    </tr>
-                    <tr>
-                        <td>সেলারি</td>
-                       <td>:   <input class='box' type='text' id='salary' name='salary' onkeypress='return checkIt(event)' onkeyup='checkSalaryRange(this.value);'/><em2> *</em2> টাকা (সেলারি রেঞ্জঃ <span id='SalaryRange' style='color:red;'></span>)</td>
-                    </tr>
-                    <tr>
-                        <td colspan='2' id='showerror' style='text-align:center;color:red;'></td>
-                   </tr>
-                   <tr>
-                        <td>অফিস সিলেক্ট করুন</td> 
-                        <td>: <input type='radio'  id='whatoffice' name='whatoffice' value ='office'/> অফিস &nbsp;&nbsp;&nbsp;
-                            <input  type='radio' id='whatoffice' name='whatoffice' value ='s_store'/> সেলসস্টোর</td>
-                    </tr>
-                     <tr>
-                        <td>অফিস / সেলস স্টোর / পাওয়ার স্টোর</td>
-                        <td>: <input class='box' type='text' id='officesearch' name='officesearch' onkeyup='searchOSP(this.value)'/><em2> *</em2>
-                        <div id='offResult'></div><input type='hidden' name='ospID' id='ospID'/></br>
-                        </td>            
-                    </tr>
-                    <tr>
-                        <td>দায়িত্ব / পোস্ট</td>  
-                        <td id='getPost'>
-                        </td>            
-                    </tr>
-                    <tr id='postingbox'  style='visibility: hidden;'>
-                        <td>পোস্টের ধরন</td>
-                        <td>: <input type='radio' name='posttype' value ='Acting'/> অ্যাক্টিং &nbsp;&nbsp;&nbsp;
-                            <input  type='radio' name='posttype' value ='Permanent'/> পার্মানেন্ট</td>
-                    </tr>
+                        <td>কাজের ধরন</td>
+                      <td>:   <select  class='box'  name='employee_type' style =' font-size: 14px'>
+                                <option >-একটি নির্বাচন করুন-</option>
+                                <option value='programmer'>প্রোগ্রামার</option>
+                                <option value='presenter'>প্রেজেন্টার</option>
+                                <option value='trainer'>ট্রেইনার</option>
+                            </select><em2> *</em2></td>
+                    </tr>   
                     <tr>
                         <td>যোগদানের তারিখ</td>
                         <td>: <input class='box' type='text' id='date' placeholder='Date' name='date' value=''/>
                         </td>            
                     </tr>
                     <tr>
-                     <td>কর্মচারীর রোল</td>
+                     <td> রোল</td>
                       <td>:   <select  class='box'  name='role' id='role' style =' font-size: 14px'>";
                       showRoles();
                         echo "</select><em2> *</em2></td>
