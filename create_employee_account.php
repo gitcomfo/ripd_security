@@ -295,10 +295,10 @@ function userminlength(username)
 }
 function passminlength(pass)
 {
-    if(pass.length < 8)
+    if(pass.length < 10)
         {
             document.getElementById('user_password').focus();
-            document.getElementById('minlengtherror').innerHTML= "কমপক্ষে ৮ অক্ষর হতে হবে";
+            document.getElementById('minlengtherror').innerHTML= "কমপক্ষে ১০ অক্ষর হতে হবে";
         }
         else{
             document.getElementById('minlengtherror').innerHTML= "";
