@@ -43,4 +43,9 @@ $sql_userBalance = $conn->prepare("SELECT * FROM acc_user_balance WHERE cfs_user
 $sql_select_charge = $conn->prepare("SELECT charge_amount, charge_type FROM charge WHERE charge_status = 'active' AND charge_code = ?");
 $sql_select_balace_check = $conn->prepare("SELECT total_balanace FROM acc_user_balance WHERE cfs_user_iduser = ?");
 $sql_select_random = $conn->prepare("SELECT * FROM acc_user_amount_transfer WHERE send_amt_pin = ?");
+//for get id_ons_relation form office_type and office_id
+$sql_select_id_ons_relation = $conn->prepare("SELECT idons_relation
+                                                        FROM  ons_relation
+                                                        WHERE catagory =  ?
+                                                        AND add_ons_id = ?");
 ?>
