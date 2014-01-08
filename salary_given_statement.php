@@ -29,6 +29,43 @@ if (isset($_GET['id'])) {
     $sql_empsal = mysql_query("SELECT * FROM employee_salary WHERE user_id=$db_empid AND pay_grade_idpaygrade= $db_paygrdid;");
     $empsalrow = mysql_fetch_assoc($sql_empsal);
     $db_empsalary = $empsalrow['total_salary'];
+    
+    
+$loginUSERname = $_SESSION['acc_holder_name'] ;
+$loginUSERid = $_SESSION['userIDUser'] ;   
+$currentMonth = date('n');
+$currentYear = date('Y');
+if($currentMonth == 1){
+    $currentYear = $currentYear - 1;
+    $preMonth = 12;
+} else {
+    $preMonth = $currentMonth -1;
+}
+$select_attendance = mysql_query("SELECT COUNT(idempattend) FROM employee,employee_attendance 
+    WHERE   year_no ='$currentYear' AND month_no='$preMonth' AND  cfs_user_idUser = $loginUSERid AND idEmployee = emp_user_id ");
+$row = mysql_fetch_assoc($select_attendance);
+$workingDays = $row['COUNT(idempattend)'];
+
+$sql_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? AND  year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
+$status1 = "present";
+$sql_attend->execute(array($status1,$currentYear,$preMonth,$loginUSERid));
+$row1 = $sql_attend->fetchAll();
+foreach ($row1 as $value) {
+    $presentDays = $value['COUNT(idempattend)'];
+}
+$status2 ="absent";
+$sql_attend->execute(array($status2,$currentYear,$preMonth,$loginUSERid));
+$row2 = $sql_attend->fetchAll();
+foreach ($row2 as $value) {
+    $absentDays = $value['COUNT(idempattend)'];
+}
+$status3 = "leave";
+$sql_attend->execute(array($status3,$currentYear,$preMonth,$loginUSERid));
+$row3 = $sql_attend->fetchAll();
+foreach ($row3 as $value) {
+    $leaveDays = $value['COUNT(idempattend)'];
+}
+$attendPercent = ($presentDays / $workingDays) * 100;
     ?>
     <title>বেতন প্রদানের স্টেটমেন্ট</title>
     <style type="text/css"> @import "css/bush.css";</style>
@@ -116,21 +153,22 @@ if (isset($_GET['id'])) {
                                 <legend style="color: brown;">হাজিরা সারসংক্ষেপ</legend>
                                 <table style=" width: 90%; padding-left: 15%" cellspacing="0">
                                     <tr>
+                                        <td  ><b>মোট কার্যদিবস :</b></td>
+                                        <td ><?php echo english2bangla($workingDays) ?></td>
+                                    </tr>
+                                    <tr>
                                         <td  ><b>উপস্থিত :</b></td>
-                                        <td ></td>
+                                        <td ><?php echo english2bangla($presentDays) ?></td>
                                     </tr>
                                     <tr>
                                         <td  ><b>অনুপস্থিত :</b></td>
-                                        <td ></td>
+                                        <td ><?php echo english2bangla($absentDays) ?></td>
                                     </tr>
                                     <tr>
                                         <td  ><b>ছুটি :</b></td>
-                                        <td ></td>
+                                        <td ><?php echo english2bangla($leaveDays) ?></td>
                                     </tr>
-                                    <tr>
-                                        <td  ><b>তারিখ :</b></td>
-                                        <td ></td>
-                                    </tr>
+                                    
                                 </table>
                             </fieldset>
 
