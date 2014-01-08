@@ -1,5 +1,6 @@
 <?php
 error_reporting(0);
+session_start();
 include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 $G_replaceRecipt= $_SESSION['recipt'];

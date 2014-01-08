@@ -53,7 +53,12 @@ function beforeSave()
 {
       a=document.getElementById('transportCost').value;
       b=document.getElementById('otherCost').value;
-    if ((a != "") && (b != "")) 
+      var radiocheck = 0;
+      var radios = document.getElementsByName("purchaseType");
+      for(var i=0; i<radios.length; i++){
+	if(radios[i].checked) { radiocheck = 1; }
+	}
+    if ((a != "") && (b != "") && (radiocheck == 1)) 
     {
         document.getElementById("next").readonly = false; return true;}
     else {
@@ -285,6 +290,10 @@ function deleteProduct(id) // to add into temporary array*******************
         <tr>
             <td>চালান কপি</td>
             <td>: <input type="file" name="chalanCopy" /></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="purchaseType" value="invest" />ইনভেস্ট</td>
+            <td><input type="radio" name="purchaseType" value="reuse" />রিইউজ</td>
         </tr>
     </table>
 </fieldset>

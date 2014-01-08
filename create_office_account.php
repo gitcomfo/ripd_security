@@ -211,10 +211,8 @@ if(isset($_POST['submit0']))
 <link rel="stylesheet" type="text/css" media="all" href="javascripts/jsDatePick_ltr.min.css" />
 <script type="text/javascript" src="javascripts/jsDatePick.min.1.3.js"></script>
 <script type="text/javascript" src="javascripts/jquery-1.4.3.min.js"></script>
-
 <script type="text/javascript">    
-    
-        $('.del').live('click',function(){
+$('.del').live('click',function(){
 	$(this).parent().parent().remove();
         });
         $('.add').live('click',function()
@@ -225,7 +223,7 @@ if(isset($_POST['submit0']))
             $("#container_others:last").after(appendTxt);
         })
 
-    window.onclick = function()
+window.onclick = function()
     {
         new JsDatePick({
             useMode: 2,
@@ -243,7 +241,6 @@ function numbersonly(e)
                 return false //disable key press
             }
 }
-
 function setParent(office,offid)
 {
         document.getElementById('parent').value = office;
