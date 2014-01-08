@@ -5,12 +5,10 @@ $sql_select_award_id = $conn->prepare("SELECT * FROM  ripd_award WHERE idaward=?
 $sql_select_command = $conn->prepare("SELECT * FROM command ORDER BY commandno ASC");
 $sql_select_commandEdit = $conn->prepare("SELECT * FROM command WHERE idcommand = ?");
 $sql_select_account_type = $conn->prepare("SELECT idAccount_type, account_name FROM account_type LIMIT 5");
-$sql_pv_view = $conn->prepare("SELECT
-                                                                    cust_type, sales_type, store_type, less_amount, selling_earn, patent_nh,
+$sql_pv_view = $conn->prepare("SELECT cust_type, sales_type, store_type, less_amount, selling_earn, patent_nh,
                                                                     pv_ripd_income, direct_sales_cust, account_name, Rone, Rtwo, Rthree, Rfour, Rfive,
                                                                     office, staff, shariah, charity, presentation, training, program, travel, patent, leadership, transport, research, server, bag, brochure, form, money_receipt, pad, box, extra
-                                                                        FROM view_pv_view WHERE idcommand=?
-                                                                                ORDER BY cust_type ASC");
+                                                                    FROM view_pv_view WHERE idcommand=? ORDER BY cust_type ASC");
 $sql_current_command = $conn->prepare("SELECT * FROM running_command LIMIT 1");
 $sql_select_login = $conn->prepare("SELECT * FROM cfs_user WHERE user_name=? AND password=?");
 $sql_select_cfs_user_all = $conn->prepare("SELECT * FROM cfs_user WHERE idUser = ?");
@@ -24,6 +22,10 @@ $sql_genology_tree = $conn->prepare("SELECT account_name, cfs_user_idUser FROM c
 $sql_select_accountType = $conn->prepare("SELECT account_name FROM account_type");
 $sql_select_office = $conn->prepare("SELECT * FROM office WHERE idOffice = ?");
 $sql_select_sales_store = $conn->prepare("SELECT * FROM sales_store WHERE idSales_store = ?");
+$sql_select_emp_post = $conn->prepare("SELECT post_name FROM employee, employee_posting, post_in_ons, post
+                                                                    WHERE idPost = Post_idPost AND idpostinons = post_in_ons_idpostinons AND Employee_idEmployee = idEmployee
+                                                                    AND  cfs_user_idUser =? ");
+$sql_select_pay_grade = $conn->prepare("SELECT * FROM pay_grade WHERE idpaygrade = ?");
 // ******************* for master chart ***********************************************************
 $sql_select_all_catagory = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
 $sql_select_all_brand = $conn->prepare("SELECT DISTINCT pro_brand_or_grp, pro_brnd_or_grp_code FROM product_chart ORDER BY pro_brand_or_grp");
@@ -31,19 +33,18 @@ $sql_select_type = $conn->prepare("SELECT * FROM product_catagory WHERE pro_cat_
 $sql_select_cat_by_brand = $conn->prepare ("SELECT DISTINCT pro_catagory, pro_cat_code  FROM product_catagory,product_chart WHERE idproduct_catagory = product_catagory_idproduct_catagory AND pro_brnd_or_grp_code=? ");
 $sql_select_type_by_brand = $conn->prepare("SELECT DISTINCT pro_type,idproduct_catagory FROM product_catagory,product_chart WHERE  idproduct_catagory = product_catagory_idproduct_catagory AND pro_brnd_or_grp_code=? AND pro_cat_code= ?");
 $sql_select_all_type_by_cat = $conn ->prepare("SELECT * FROM product_catagory WHERE pro_cat_code = 
-    ANY(SELECT pro_cat_code FROM product_catagory WHERE idproduct_catagory = ?)");
+                                                                                ANY(SELECT pro_cat_code FROM product_catagory WHERE idproduct_catagory = ?)");
 $sql_select_product_by_type = $conn->prepare("SELECT * FROM product_chart WHERE product_catagory_idproduct_catagory = ?");
 $sql_select_product_by_brand = $conn->prepare("SELECT * FROM product_chart WHERE pro_brnd_or_grp_code = ?");
 $sql_select_product = $conn->prepare("SELECT * FROM product_chart WHERE idproductchart = ? ");
 $sql_select_product_from_inventory = $conn->prepare("SELECT * FROM inventory WHERE ins_productid = ? AND ins_product_type='general' ");
-$sql_select_office = $conn->prepare("SELECT * FROM office WHERE idOffice = ?");
-$sql_select_store = $conn->prepare("SELECT * FROM sales_store WHERE idSales_store = ?");
+// *********************************** for Accounting *************************************************************
 $sql_last_userAmountTransfer = $conn->prepare("SELECT trans_date_time FROM acc_user_amount_transfer WHERE trans_type=? AND trans_senderid=? ORDER BY trans_date_time DESC LIMIT 1");
 $sql_userBalance = $conn->prepare("SELECT * FROM acc_user_balance WHERE cfs_user_iduser = ?");
 $sql_select_charge = $conn->prepare("SELECT charge_amount, charge_type FROM charge WHERE charge_status = 'active' AND charge_code = ?");
 $sql_select_balace_check = $conn->prepare("SELECT total_balanace FROM acc_user_balance WHERE cfs_user_iduser = ?");
 $sql_select_random = $conn->prepare("SELECT * FROM acc_user_amount_transfer WHERE send_amt_pin = ?");
-//for get id_ons_relation form office_type and office_id
+// ********************************** for get id_ons_relation form office_type and office_id ************************
 $sql_select_id_ons_relation = $conn->prepare("SELECT idons_relation
                                                         FROM  ons_relation
                                                         WHERE catagory =  ?

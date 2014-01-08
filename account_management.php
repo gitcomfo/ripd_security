@@ -42,7 +42,40 @@ if ($aab_user_type == 'customer') {
     $arr_employee_basic = $sql_select_employee_basic->fetchAll();
     foreach ($arr_employee_basic as $aab) {
         $aab_picture = $aab['emplo_scanDoc_picture'];
+         $db_paygrdid = $aab['pay_grade_id'];
+         $db_joiningDate = $aab['joining_date'];
     }
+    if( $_SESSION['loggedInOfficeType'] == 'office')
+    {
+        $offid =  $_SESSION['loggedInOfficeID'];
+        $sql_select_office->execute(array($offid));
+        $offresult = $sql_select_office->fetchAll();
+        foreach ($offresult as $value) {
+            $offnumber = $value['office_number'];
+            $offaddress= $value['office_details_address'];
+        }
+    }
+    else {
+        $storeid =  $_SESSION['loggedInOfficeID'];
+        $sql_select_sales_store->execute(array($storeid));
+        $offresult = $sql_select_sales_store->fetchAll();
+        foreach ($offresult as $value) {
+            $offnumber = $value['salesStore_number'];
+            $offaddress= $value['salesStore_details_address'];
+        }
+    }
+    $sql_select_emp_post->execute(array($cfs_user_id));
+    $sql_postrow = $sql_select_emp_post->fetchAll();
+    foreach ($sql_postrow as $value) {
+        $db_empposition = $value['post_name'];
+    }
+   $sql_select_pay_grade->execute(array($db_paygrdid));
+    $emgrade = $sql_select_pay_grade->fetchAll();
+    foreach ($emgrade as $value) {
+        $db_paygrd_name = $value['grade_name'];
+    }
+    
+    
 }
 if (!file_exists($aab_picture))
     $aab_picture = "pic/default_profile.jpg";
@@ -99,27 +132,27 @@ if (!file_exists($aab_picture))
                     </tr>                            
                     <tr>
                         <td><b>কর্মরত অফিস নামঃ </b></td>
-                        <td></td>
+                        <td><?php echo $_SESSION['loggedInOfficeName'];?></td>
                     </tr>
                     <tr>
                         <td><b>অফিস নাম্বারঃ </b></td>
-                        <td></td>
+                        <td><?php echo $offnumber;?></td>
                     </tr>
                     <tr>
                         <td><b>অফিস ঠিকানাঃ </b></td>
-                        <td></td>
+                        <td><?php echo $offaddress;?></td>
                     </tr>
                     <tr>
                         <td><b> যোগদানের তারিখঃ </b></td>
-                        <td></td>
+                        <td><?php echo english2bangla(date("d/m/Y",  strtotime($db_joiningDate)));?></td>
                     </tr>
                     <tr>
                         <td><b>বর্তমান গ্রেডঃ </b></td>
-                        <td></td>
+                        <td><?php echo $db_paygrd_name;?></td>
                     </tr>
                     <tr>
                         <td><b>দায়িত্বঃ </b></td>
-                        <td></td>
+                        <td><?php echo $db_empposition;?></td>
                     </tr>
                 </table>
             </td>
