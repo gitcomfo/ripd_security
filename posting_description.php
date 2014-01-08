@@ -14,9 +14,6 @@ include_once 'includes/MiscFunctions.php';
     <div>
         <table  class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          
             <tr><th colspan="2" style="text-align: center;">পোস্টিং ডেসক্রিপশন</th></tr>
-            <tr>
-                <td colspan="2" ><hr /></td>
-            </tr>
             <tr >
                 <td style="text-align: right; width: 50%"><b>কারেন্ট পোস্টিং অফিসঃ</b></td>
                 <td></td>
