@@ -51,7 +51,6 @@ if(isset($_POST['update']))
 <title>প্যাকেজ তৈরি বিস্তারিত</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
 <script src="scripts/jquery-1.10.2.min.js"></script>
-<script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 <style type="text/css">
 .prolinks:focus{

@@ -22,7 +22,6 @@ $sel_cfsuser = $conn->prepare("SELECT * FROM cfs_user WHERE idUser= ? ");
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>ক্রয়কৃত পণ্য পরিবর্তন</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/jquery-1.4.3.min.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 <style type="text/css">

@@ -133,8 +133,6 @@ if(isset($_POST['entry']))
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>প্রোডাক্ট এন্ট্রি</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<script language="JavaScript" type="text/javascript" src="suggest.js"></script>
-<script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/jquery-1.10.2.min.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 <!--===========================================================================================================================-->

@@ -18,7 +18,6 @@ $selstmt3 = $conn->prepare("SELECT * FROM inventory WHERE ins_ons_type=? AND ins
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>প্যাকেজের ইনভেন্টরি</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
  <script src="scripts/tinybox.js" type="text/javascript"></script>
 <style type="text/css">

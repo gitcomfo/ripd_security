@@ -15,8 +15,6 @@ $sel_product_chart = $conn->prepare("SELECT * FROM product_chart WHERE idproduct
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>প্রোডাক্ট এন্ট্রি</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<script language="JavaScript" type="text/javascript" src="suggest.js"></script>
-<script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 <style type="text/css">
 .prolinks:focus{

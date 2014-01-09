@@ -24,7 +24,6 @@ $selstmt3 = $conn->prepare($selsql3);
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>প্যাকেজের তালিকা</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
  <script src="scripts/tinybox.js" type="text/javascript"></script>
   <script type="text/javascript">

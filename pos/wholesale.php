@@ -12,8 +12,8 @@ $storeName= $_SESSION['loggedInOfficeName'];
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>হোলসেল কার্যক্রম</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<script language="JavaScript" type="text/javascript" src="suggest.js"></script>
-<script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/suggest.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/productsearch.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
  <script src="scripts/tinybox.js" type="text/javascript"></script>
 <style type="text/css">

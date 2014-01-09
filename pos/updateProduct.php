@@ -60,7 +60,6 @@ if(isset($_POST['update'])) //************************ update query ************
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 <script type="text/javascript">
 function checkIt(evt) {
