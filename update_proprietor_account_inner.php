@@ -31,7 +31,7 @@ if (isset($_POST['submit1'])) {
         else
         {
             //$image_name ="pwr" . "-" .$proprietorID."-".$_FILES["image"]["name"];
-            $image_name = "pwr" . "-" .$proprietorID."-image.jpg";
+            $image_name = "pwr" . "-" .$proprietorID."-image.".$extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -44,7 +44,6 @@ if (isset($_POST['submit1'])) {
                     }
         }
 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_signature"]["name"]));
     $sign_name = $_FILES["scanDoc_signature"]["name"];
     if($sign_name=="")
@@ -54,7 +53,8 @@ if (isset($_POST['submit1'])) {
         }
         else
         {
-            $sign_name = "pwr" . "-" .$proprietorID."-".$_FILES["scanDoc_signature"]["name"];
+            //$sign_name = "pwr" . "-" .$proprietorID."-".$_FILES["scanDoc_signature"]["name"];
+            $sign_name = "pwr" . "-" .$proprietorID."-sign.".$extension;
             $sing_path = "sign/" . $sign_name;
             if (($_FILES["scanDoc_signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -66,7 +66,6 @@ if (isset($_POST['submit1'])) {
                     }
         }
  
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_finger_print"]["name"]));
     $finger_name = $_FILES["scanDoc_finger_print"]["name"];
     if($finger_name=="")
@@ -76,7 +75,8 @@ if (isset($_POST['submit1'])) {
         }
         else
         {
-            $finger_name = "pwr" . "-" .$proprietorID."-".$_FILES["scanDoc_finger_print"]["name"];
+            //$finger_name = "pwr" . "-" .$proprietorID."-".$_FILES["scanDoc_finger_print"]["name"];
+            $finger_name = "pwr" . "-" .$proprietorID."-finger.".$extension;
             $finger_path = "fingerprints/" . $finger_name;
             if (($_FILES["scanDoc_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -159,11 +159,12 @@ elseif (isset($_POST['submit2'])) {
         }
         else
         {
-            $image_name = "nom" . "-" . $_FILES["nominee_picture"]["name"];
+            //$image_name = "nom" . "-" . $_FILES["nominee_picture"]["name"];
+            $image_name = "nom"."-".$proprietorID."-image.".$extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
-                        move_uploaded_file($_FILES["nominee_picture"]["tmp_name"], "pic/" . $image_name);
+                        move_uploaded_file($_FILES["nominee_picture"]["tmp_name"], "pic/".$image_name);
                     } 
             else 
                     {

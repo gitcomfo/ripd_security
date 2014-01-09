@@ -50,39 +50,39 @@ if (isset($_POST['submit1'])) {
     $dob_month = $_POST['month'];
     $dob_year = $_POST['year'];
     $dob = $dob_year . "-" . $dob_month . "-" . $dob_day;
-    // picture, sign, finger print
+    // picture, sign, finger print ****************************************************************
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["image"]["name"]));
     //$image_name = "pwr" . "-" .$proprietorTableID."-". $_FILES["image"]["name"];
-    $image_name = "pwr" . "-" .$proprietorTableID."-image.jpg";
+    $image_name = "pwr" . "-" .$proprietorTableID."-image.".$extension;
     $image_path = "pic/" . $image_name;
     if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
     } else {
-        echo "Invalid file format.";
+        //echo "Invalid file format.";
     }
 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_signature"]["name"]));
-    $sign_name = "pwr" . "-" .$proprietorTableID."-". $_FILES["scanDoc_signature"]["name"];
+    //$sign_name = "pwr" . "-" .$proprietorTableID."-". $_FILES["scanDoc_signature"]["name"];
+    $sign_name = "pwr" . "-" .$proprietorTableID."-sign.".$extension;
     $sing_path = "sign/" . $sign_name;
     if (($_FILES["scanDoc_signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_signature"]["tmp_name"], "sign/" . $sign_name);
     } else {
-        echo "Invalid file format.";
+        //echo "Invalid file format.";
     }
 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_finger_print"]["name"]));
-    $finger_name = "pwr" . "-" .$proprietorTableID."-". $_FILES["scanDoc_finger_print"]["name"];
+    //$finger_name = "pwr" . "-" .$proprietorTableID."-". $_FILES["scanDoc_finger_print"]["name"];
+    $finger_name = "pwr" . "-" .$proprietorTableID."-finger.".$extension;
     $finger_path = "fingerprints/" . $finger_name;
     if (($_FILES["scanDoc_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
     } else {
-        echo "Invalid file format.";
+        //echo "Invalid file format.";
     }
     mysql_query("START TRANSACTION");
-    $sql_update_proprietor = mysql_query("UPDATE $dbname.proprietor_account SET prop_father_name='$prop_father_name', prop_motherName='$prop_motherName', prop_spouseName='$prop_spouseName', 
+    $sql_update_proprietor = mysql_query("UPDATE proprietor_account SET prop_father_name='$prop_father_name', prop_motherName='$prop_motherName', prop_spouseName='$prop_spouseName', 
                                                         prop_occupation='$prop_occupation', prop_religion='$prop_religion', prop_natonality='$prop_natonality', prop_nationalID_no='$prop_nationalID_no', 
                                                         prop_passportID_no='$prop_passportID_no', prop_date_of_birth='$dob', prop_birth_certificate_no='$prop_birth_certificate_no',  
                                                         prop_scanDoc_picture='$image_path', prop_scanDoc_signature='$sing_path',  prop_scanDoc_finger_print='$finger_path'
@@ -133,12 +133,12 @@ elseif (isset($_POST['submit2'])) {
     //Insert Into Nominee table
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["nominee_picture"]["name"]));
-    $image_name = "nominee" . "-" . $_FILES["nominee_picture"]["name"];
+    $image_name = "nom"."-".$proprietorID."-image.".$extension;
     $image_path = "pic/" . $image_name;
     if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["nominee_picture"]["tmp_name"], "pic/" . $image_name);
     } else {
-        echo "Invalid file format.";
+        //echo "Invalid file format.";
     }
 mysql_query("START TRANSACTION");
     $sql_nominee = mysql_query("INSERT INTO $dbname.nominee(nominee_name, nominee_relation, nominee_mobile,
