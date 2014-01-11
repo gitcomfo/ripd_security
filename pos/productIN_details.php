@@ -28,12 +28,12 @@ if(isset($_POST['next']))
     $p_purchaseType = $_POST['purchaseType'];
     if($p_purchaseType == 'invest')
     {
-        $invest_amount = $p_totalBuyingPrice + $p_totalTransportCost + $p_totalotherCost;
+        $invest_amount = $p_totalBuyingPrice + $p_totalTransportCost;
         $reuse_amount = 0;
     }
     else {
         $invest_amount = 0;
-        $reuse_amount = $p_totalBuyingPrice + $p_totalTransportCost + $p_totalotherCost;
+        $reuse_amount = $p_totalBuyingPrice + $p_totalTransportCost;
     }
     
       $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
@@ -229,8 +229,7 @@ var blank = validate();
     <?php
             $sl = 1;
             foreach($_SESSION['arrProductTemp'] as $key => $proinfo) {
-                $poribohon = $p_totalTransportCost + $p_totalotherCost;
-                $buyingprice =  $proinfo['4'] + (($proinfo['3'] * $poribohon) / ($p_totalBuyingPrice * $proinfo['2']));
+                $buyingprice =  $proinfo['4'] + (($proinfo['3'] * $p_totalTransportCost) / ($p_totalBuyingPrice * $proinfo['2']));
                 echo "<tr>
                         <td style='text-align: center;'>".english2bangla($sl)."</td>
                         <td style='text-align: left;padding-left:2px;'>$proinfo[1]</td>
