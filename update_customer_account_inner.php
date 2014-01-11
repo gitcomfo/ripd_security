@@ -348,12 +348,12 @@ elseif (isset($_POST['submit2'])) {
     $image_name = $_FILES["nominee_picture"]["name"];
     if($image_name=="")
         {
-            $image_name= "nom-".$custAcid."-".$_POST['nomimagename'];
+            $image_name= "nom-cust-".$custAcid."-".$_POST['nomimagename'];
              $image_path = "pic/" . $image_name;
         }
         else
         {
-            $image_name = "nom-".$custAcid."-image.".$extension;
+            $image_name = "nom-cust-".$custAcid."-image.". $extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {

@@ -52,7 +52,7 @@ if (isset($_POST['submit1'])) {
     // picture, sign, fingerprint ****************************************************
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["image"]["name"]));
-    $image_name = "emp"."-" .$emp."-image.".$extension;
+    $image_name = "emp-" .$emp."-image.".$extension;
     $image_path = "pic/" . $image_name;
     if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
@@ -61,7 +61,7 @@ if (isset($_POST['submit1'])) {
     }
 
     $extension = end(explode(".", $_FILES["scanDoc_signature"]["name"]));
-    $sign_name = "emp"."-" .$emp."-sign.".$extension;
+    $sign_name = "emp-" .$emp."-sign.".$extension;
     $sing_path = "sign/" . $sign_name;
     if (($_FILES["scanDoc_signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_signature"]["tmp_name"], "sign/" . $sign_name);
@@ -70,7 +70,7 @@ if (isset($_POST['submit1'])) {
     }
 
     $extension = end(explode(".", $_FILES["scanDoc_finger_print"]["name"]));
-    $finger_name = "emp"."-" .$emp."-finger.".$extension;
+    $finger_name = "emp-" .$emp."-finger.".$extension;
     $finger_path = "fingerprints/" . $finger_name;
     if (($_FILES["scanDoc_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
@@ -135,7 +135,7 @@ if (isset($_POST['submit1'])) {
     //Insert Into Nominee table
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["nominee_picture"]["name"]));
-    $image_name = "nom-emp"."-" .$emp1."-image.".$extension;
+    $image_name = "nom-emp-" .$emp1."-image.".$extension;
     $image_path = "pic/" . $image_name;
     if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["nominee_picture"]["tmp_name"], "pic/" . $image_name);

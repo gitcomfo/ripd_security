@@ -32,12 +32,12 @@ if (isset($_POST['submit1'])) {
     $image_name = $_FILES["image"]["name"];
     if($image_name=="")
         {
-            $image_name= "emp"."-" .$employeeID."-" . $_POST['imagename'];
+            $image_name= "emp-" .$employeeID."-" . $_POST['imagename'];
              $image_path = "pic/" . $image_name;
         }
         else
         {
-            $image_name = "emp"."-" .$employeeID."-image.".$extension;
+            $image_name = "emp-" .$employeeID."-image.".$extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -111,12 +111,12 @@ elseif (isset($_POST['submit2'])) {
     $image = $_FILES["nominee_picture"]["name"];
     if($image=="")
         {
-            $image_name= "nom-emp"."-" .$employeeID. "-" . $_POST['nomimage'];
+            $image_name= "nom-emp-" .$employeeID. "-" . $_POST['nomimage'];
              $image_path = "pic/" . $image_name;
         }
         else
         {
-            $image_name = "nom-emp"."-" .$employeeID."-image.".$extension;
+            $image_name = "nom-emp-" .$employeeID."-image.".$extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {

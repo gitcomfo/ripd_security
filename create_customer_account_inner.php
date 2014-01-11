@@ -220,7 +220,7 @@ elseif (isset($_POST['submit2'])) {
     //Insert Into Nominee table **************************************************
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["nominee_picture"]["name"]));
-    $image_name = "nom-".$custAcid."-image.". $extension;
+    $image_name = "nom-cust-".$custAcid."-image.". $extension;
     $image_path = "pic/" . $image_name;
     if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["nominee_picture"]["tmp_name"], "pic/" . $image_name);
