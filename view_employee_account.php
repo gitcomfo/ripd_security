@@ -26,23 +26,22 @@ if (isset($_POST['submit1'])) {
     $employee_passport = $_POST['employee_passport'];
     $employee_birth_certificate_No = $_POST['employee_birth_certificate_No'];
     $dob = $_POST['dob'];
-    // picture, sign, finger print
+    // picture, sign, finger print *****************************************************
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["image"]["name"]));
     $image_name = $_FILES["image"]["name"];
     if($image_name=="")
         {
-            $image_name= "picture" . "-" . $_POST['imagename'];
+            $image_name= "emp"."-" .$employeeID."-" . $_POST['imagename'];
              $image_path = "pic/" . $image_name;
         }
         else
         {
-            $image_name = "picture" . "-" . $_FILES["image"]["name"];
+            $image_name = "emp"."-" .$employeeID."-image.".$extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
                         move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
-
                     } 
             else 
                     {
@@ -112,12 +111,12 @@ elseif (isset($_POST['submit2'])) {
     $image = $_FILES["nominee_picture"]["name"];
     if($image=="")
         {
-            $image_name= "nom" . "-" . $_POST['nomimage'];
+            $image_name= "nom-emp"."-" .$employeeID. "-" . $_POST['nomimage'];
              $image_path = "pic/" . $image_name;
         }
         else
         {
-            $image_name = "nom" . "-" . $_FILES["nominee_picture"]["name"];
+            $image_name = "nom-emp"."-" .$employeeID."-image.".$extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {

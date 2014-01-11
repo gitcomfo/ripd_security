@@ -36,6 +36,9 @@ $g_id= base64_decode($_GET['empInfoID']);
 </script>
 <?php
 if (isset($_POST['submit1'])) {
+    $result = mysql_query("SELECT  * FROM employee_information WHERE idEmployee_information='$g_id'");
+    $employee_id = mysql_fetch_array($result);
+    $emp = $employee_id['Employee_idEmployee'];
     $employee_fatherName = $_POST['employee_fatherName'];
     $employee_motherName = $_POST['employee_motherName'];
     $employee_spouseName = $_POST['employee_spouseName'];
@@ -46,10 +49,10 @@ if (isset($_POST['submit1'])) {
     $employee_national_ID = $_POST['employee_national_ID'];
     $employee_passport = $_POST['employee_passport'];
     $employee_birth_certificate_No = $_POST['employee_birth_certificate_No'];
-    // picture, sign, sign
+    // picture, sign, fingerprint ****************************************************
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["image"]["name"]));
-    $image_name = "picture" . "-" . $_FILES["image"]["name"];
+    $image_name = "emp"."-" .$emp."-image.".$extension;
     $image_path = "pic/" . $image_name;
     if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
@@ -57,9 +60,8 @@ if (isset($_POST['submit1'])) {
         echo "Invalid file format.";
     }
 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_signature"]["name"]));
-    $sign_name = "signature" . "-" . $_FILES["scanDoc_signature"]["name"];
+    $sign_name = "emp"."-" .$emp."-sign.".$extension;
     $sing_path = "sign/" . $sign_name;
     if (($_FILES["scanDoc_signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_signature"]["tmp_name"], "sign/" . $sign_name);
@@ -67,9 +69,8 @@ if (isset($_POST['submit1'])) {
         echo "Invalid file format.";
     }
 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_finger_print"]["name"]));
-    $finger_name = "fingerprint" . "-" . $_FILES["scanDoc_finger_print"]["name"];
+    $finger_name = "emp"."-" .$emp."-finger.".$extension;
     $finger_path = "fingerprints/" . $finger_name;
     if (($_FILES["scanDoc_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
@@ -83,10 +84,6 @@ if (isset($_POST['submit1'])) {
                                      employee_national_ID='$employee_national_ID', employee_passport='$employee_passport', employee_date_of_birth='$dob',
                                      employee_birth_certificate_No='$employee_birth_certificate_No' ,emplo_scanDoc_signature='$sing_path', emplo_scanDoc_picture='$image_path',  scanDoc_finger_print='$finger_path'
                                      WHERE idEmployee_information=$g_id");
-
-    $result = mysql_query("SELECT  * FROM employee_information WHERE idEmployee_information='$g_id'");
-    $employee_id = mysql_fetch_array($result);
-    $emp = $employee_id['Employee_idEmployee'];
     //Current Address Infromation
     $e_Village_idVillage = $_POST['village_id1'];
     $e_Post_idPost = $_POST['post_id1'];
@@ -138,7 +135,7 @@ if (isset($_POST['submit1'])) {
     //Insert Into Nominee table
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["nominee_picture"]["name"]));
-    $image_name = "picture" . "-" . $_FILES["nominee_picture"]["name"];
+    $image_name = "nom-emp"."-" .$emp1."-image.".$extension;
     $image_path = "pic/" . $image_name;
     if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["nominee_picture"]["tmp_name"], "pic/" . $image_name);
