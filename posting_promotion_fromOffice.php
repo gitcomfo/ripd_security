@@ -110,7 +110,7 @@ include 'includes/header.php';
         <div style="padding-left: 110px;"><a href="posting_promotion_fromOffice.php"><b>ফিরে যান</b></a></div>
         <div>
             <?php
-            $get_office_id = $_GET['i010d10'];
+           $get_office_id = $_GET['i010d10'];
             $sql = mysql_query("SELECT * FROM office WHERE idOffice=$get_office_id");
             $row = mysql_fetch_array($sql);
             $office_name = $row['office_name'];

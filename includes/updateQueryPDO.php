@@ -5,7 +5,11 @@ $sql_update_account_block = $conn->prepare("UPDATE cfs_user SET blocked='1' WHER
 $sql_update_password = $conn->prepare("UPDATE cfs_user SET password=? WHERE idUser=?");
 $sql_update_command = $conn->prepare("UPDATE command SET commandno=?, command_desc=?, pv_value=? WHERE idcommand=?");
 $sql_update_award = $conn->prepare("UPDATE ripd_award SET awd_name=?, awd_provider_name=?, awd_description=?, 
-                                       awd_date=?, awd_image=?, awd_receivers_type=?, 
-                                           awd_receivers_name=?, cfs_user_id=? 
-                                      WHERE idaward=?");
+                                                                awd_date=?, awd_image=?, awd_receivers_type=?, awd_receivers_name=?, cfs_user_id=? 
+                                                               WHERE idaward=?");
+// ************************** posting & promotion *************************************************
+$sql_update_post_in_ons_up = $conn->prepare("UPDATE post_in_ons SET free_post = (free_post+1), used_post=(used_post-1)
+                                                                                WHERE  idpostinons=?");
+$sql_update_post_in_ons_down = $conn->prepare("UPDATE post_in_ons SET free_post = (free_post-1), used_post=(used_post+1)
+                                                                                    WHERE  idpostinons=?");
 ?>

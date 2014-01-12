@@ -1,14 +1,44 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 include_once 'includes/MiscFunctions.php';
 include 'includes/header.php';
+include_once './includes/insertQueryPDO.php';
+include_once './includes/updateQueryPDO.php';
+include_once './includes/selectQueryPDO.php';
+
+if(isset($_POST['submit']))
+{
+     $p_oldOnSID = $_POST['oldonsID'];
+     $p_oldPostingID = $_POST['oldpost'];
+     $p_empID = $_POST['empID'];
+     $p_newOnSID = $_POST['newonsid'];
+     $p_newPostinID = $_POST['newpostID'];
+     $p_newPostingDate = $_POST['postingDate'];
+     $conn->beginTransaction();
+     $empposting =$sql_insert_employee_posting->execute(array($p_newPostingDate, $p_empID, $p_newOnSID,$p_newPostinID));
+     if($p_oldPostingID != "")
+     {
+         $update1=$sql_update_post_in_ons_up->execute(array($p_oldPostingID));
+     }
+     $update2=$sql_update_post_in_ons_down->execute(array($p_newPostinID));
+     if(($empposting && $update2) || $update1)
+     {
+         $conn->commit();
+         echo "<script>alert('পোস্টিং হয়েছে')</script>";
+     }
+     else {
+                $conn->rollBack();
+                echo "<script>alert('দুঃখিত,পোস্টিং হয়নি')</script>";
+            }
+    
+}
 ?>
 <style type="text/css">@import "css/bush.css";</style>
 <link rel="stylesheet" href="css/tinybox.css" type="text/css">
 <script src="javascripts/tinybox.js" type="text/javascript"></script>
 <script type="text/javascript">
-    function selectOffice(url)
-    { TINY.box.show({iframe:'select_office.php?url='+url,width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+function selectOffice(url)
+{ TINY.box.show({iframe:'select_office.php?url='+url,width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
 </script>
 <script language=javascript>
 window.name = "parentWindow";
@@ -21,13 +51,14 @@ window.name = "parentWindow";
         echo "<div style='padding-left: 110px;'><a href='$back_parent_change'><b>ফিরে যান</b></a></div>";
         ?>
         <div>
-            <form onsubmit="" method="post" style="width: 90%;">
+            <form method="post" style="width: 90%;" action="">
                 <?php
                 $url= urlencode($_SERVER['REQUEST_URI']);
-                //$g_officeID = $_GET['ll1i1s0t01%%i010d10'];
+                $g_officeID = $_GET['ll1i1s0t01%%i010d10'];
                 $employee_id = $_GET['0to1o1ff01i0c1e0'];
                 $sql_sel_cfsuser = mysql_query("SELECT * FROM cfs_user,employee,employee_information WHERE idUser = cfs_user_idUser AND idEmployee = $employee_id");
                 $cfs_row = mysql_fetch_assoc($sql_sel_cfsuser);
+                $db_old_onsid = $cfs_row['emp_ons_id'];
                 $sql_sel_address = mysql_query("SELECT * FROM address,thana,district,division WHERE 	address_whom = 'emp'
                                                                         AND address_type='Present' AND adrs_cepng_id = $employee_id
                                                                         AND Thana_idThana = idThana AND District_idDistrict=idDistrict AND Division_idDivision= idDivision ");
@@ -38,6 +69,7 @@ window.name = "parentWindow";
                     $sql_employee_posting = mysql_query("SELECT * FROM view_emp_post WHERE Employee_idEmployee=$employee_id ORDER BY posting_date DESC LIMIT 1");
                     $arr_row = mysql_fetch_assoc($sql_employee_posting);
                     $db_post = $arr_row['post_name'];
+                    $db_idposting = $arr_row['idempposting'];
                     $db_postingDate = $arr_row['posting_date'];                
                 echo "<table  class='formstyle'>";
                 echo "<tr >
@@ -59,14 +91,14 @@ window.name = "parentWindow";
                             <tr>
                                 <td style="width: 25%; text-align:right">গ্রেড</td>
                                 <td style="width: 25%; text-align:left">: '.$arr_grade['grade_name'].'</td>
-                                <td style="width: 25%; text-align:right">পোস্ট</td>
+                                <td style="width: 25%; text-align:right">পোস্ট<input type="hidden" name="oldpost" value="'.$db_idposting.'" /></td>
                                 <td style="width: 25%; text-align:left">: '.$db_post.'</td>
                             </tr>
                             <tr>
                                <td style="width: 25%; text-align:right">অফিস</td>
-                                <td style="width: 25%; text-align:left">: </td>
+                                <td style="width: 25%; text-align:left">: <input type="hidden" name="oldonsID" value="'.$db_old_onsid.'" /></td>
                                 <td style="width: 25%; text-align:right">কর্মচারীর ধরন</td>
-                                <td style="width: 25%; text-align:left">: কর্মচারী</td>
+                                <td style="width: 25%; text-align:left">: কর্মচারী<input type="hidden" name="empID" value="'.$employee_id.'" /></td>
                             </tr>
                             <tr>
                                <td style="width: 25%; text-align:right">যোগদানের তারিখ</td>
@@ -129,6 +161,9 @@ window.name = "parentWindow";
                         $offrow = mysql_fetch_assoc($sel_office);
                         $offname = $offrow['salesStore_name'];
                     }
+                    $sel_ons_relation = mysql_query("SELECT idons_relation FROM ons_relation WHERE catagory='$db_officetype' AND add_ons_id=$db_offid ");
+                    $onsrow = mysql_fetch_assoc($sel_ons_relation);
+                    $db_onsID = $onsrow['idons_relation'];
                 }
                 echo '<tr>
                      <td colspan="4">
@@ -137,21 +172,21 @@ window.name = "parentWindow";
                             <table>
                             <tr>
                                 <td style="width: 30%; text-align:right">পোস্টিং অফিস</td>
-                                <td style="width: 40%"><input type="text" class="box" name="promotion" readonly  value=" '.$offname.' "/></td>';
+                                <td style="width: 40%"><input type="text" class="box" readonly  value=" '.$offname.' "/><input type="hidden" name="newonsid" value="'.$db_onsID.'" /></td>';
                        echo "<td colspan='2'><div align='center'><a onclick=selectOffice('$url') style='cursor:pointer;color:blue;'>সিলেক্ট অফিস</a></div></td> "; 
                        echo  '</tr>
                             <tr>
                                 <td style="width: 30%; text-align:right">পোস্ট</td>
-                                <td colspan="3" style="width: 40%"><input type="text" class="box" name="promotion" readonly  value='.$db_postname.' /></td>
+                                <td colspan="3" style="width: 40%"><input type="text" class="box" readonly value="'.$db_postname.'" /><input type="hidden" name="newpostID" value="'.$p_postingID.'" /></td>
                              </tr>
                             <tr>
                                 <td style="width: 30%; text-align:right">পোস্টিং তারিখ</td>
-                                <td colspan="3" style="width: 40%"><input type="date" class="box" name="promotion"/></td>
+                                <td colspan="3" style="width: 40%"><input type="date" class="box" name="postingDate"/></td>
                              </tr>
                             </table>
                             </filedset></td>
                     </tr>';
-                echo "<tr><td colspan='4' style='text-align: center' ><input class='btn' style ='font-size: 12px' type='reset' name='reset' value='পোস্টিং' /></td></tr>";
+                echo "<tr><td colspan='4' style='text-align: center' ><input class='btn' style ='font-size: 12px' type='submit' name='submit' value='পোস্টিং' /></td></tr>";
                 echo "</table>";
                 ?>
             </form>
