@@ -56,6 +56,11 @@ window.name = "parentWindow";
                 $url= urlencode($_SERVER['REQUEST_URI']);
                 $g_officeID = end(explode("=", $back_parent_change));
                 $employee_id = $_GET['0to1o1ff01i0c1e0'];
+                $sql_select_office->execute(array($g_officeID));
+                        $row9 = $sql_select_office->fetchAll();
+                        foreach ($row9 as $offrow) {
+                            $offname1 = $offrow['office_name'];
+                        } 
                 $sql_select_emplyee_cfs->execute(array($employee_id));
                 $row1 = $sql_select_emplyee_cfs->fetchAll();
                 foreach ($row1 as $cfs_row) {
@@ -108,21 +113,21 @@ window.name = "parentWindow";
                             <table>
                             <tr>
                                 <td style="width: 25%; text-align:right">গ্রেড</td>
-                                <td style="width: 25%; text-align:left">: '.$db_gradename.'</td>
-                                <td style="width: 25%; text-align:right">পোস্ট<input type="hidden" name="oldpost" value="'.$db_idposting.'" /></td>
+                                <td style="width: 35%; text-align:left">: '.$db_gradename.'</td>
+                                <td style="width: 15%; text-align:right">পোস্ট<input type="hidden" name="oldpost" value="'.$db_idposting.'" /></td>
                                 <td style="width: 25%; text-align:left">: '.$db_post.'</td>
                             </tr>
                             <tr>
-                               <td style="width: 25%; text-align:right">অফিস</td>
-                                <td style="width: 25%; text-align:left">: <input type="hidden" name="oldonsID" value="'.$db_old_onsid.'" /></td>
-                                <td style="width: 25%; text-align:right">কর্মচারীর ধরন</td>
-                                <td style="width: 25%; text-align:left">: কর্মচারী<input type="hidden" name="empID" value="'.$employee_id.'" /></td>
+                               <td style="text-align:right">অফিস</td>
+                                <td style=" text-align:left">: '.$offname1.'<input type="hidden" name="oldonsID" value="'.$db_old_onsid.'" /></td>
+                                <td style=" text-align:right">কর্মচারীর ধরন</td>
+                                <td style=" text-align:left">: কর্মচারী<input type="hidden" name="empID" value="'.$employee_id.'" /></td>
                             </tr>
                             <tr>
-                               <td style="width: 25%; text-align:right">যোগদানের তারিখ</td>
-                                <td style="width: 25%; text-align:left">: '.english2bangla(date("d/m/Y",  strtotime($db_postingDate))).'</td>
-                                <td style="width: 25%; text-align:right">বেতন</td>
-                                <td style="width: 25%; text-align:left">: '.english2bangla($db_salary).' টাকা</td>
+                               <td style="text-align:right">যোগদানের তারিখ</td>
+                                <td style="text-align:left">: '.english2bangla(date("d/m/Y",  strtotime($db_postingDate))).'</td>
+                                <td style="text-align:right">বেতন</td>
+                                <td style="text-align:left">: '.english2bangla($db_salary).' টাকা</td>
                             </tr>
                             </table>
                             </filedset></td>
@@ -140,14 +145,14 @@ window.name = "parentWindow";
                                 <td style="width: 25%; text-align:left">: </td>
                             </tr>
                             <tr>
-                               <td style="width: 25%; text-align:right">প্রেজেন্ড ডে</td>
-                                <td style="width: 25%; text-align:left">: </td>
-                                <td style="width: 25%; text-align:right">অ্যাবসেন্ট</td>
-                                <td style="width: 25%; text-align:left">: </td>
+                               <td style="width: 25%; text-align:right">উপস্থিত</td>
+                                <td style="width: 25%; text-align:left">: দিন</td>
+                                <td style="width: 25%; text-align:right">অনুপস্থিত</td>
+                                <td style="width: 25%; text-align:left">: দিন</td>
                             </tr>
                             <tr>
                                 <td colspan="2" style="width: 50%; text-align:right">ছুটি</td>
-                                <td colspan="2" style="width: 50%; text-align:left">: </td>     
+                                <td colspan="2" style="width: 50%; text-align:left">: দিন</td>     
                             </tr>
                             <tr>
                             <td colspan="4"><div align="center"><a onclick="detailsWithPrice()" style="cursor:pointer;color:blue;">উপস্থিতির বিস্তারিত তথ্য</a></div></td>
@@ -195,7 +200,7 @@ window.name = "parentWindow";
                             <tr>
                                 <td style="width: 30%; text-align:right">পোস্টিং অফিস</td>
                                 <td style="width: 40%"><input type="text" class="box" readonly  value=" '.$offname.' "/><input type="hidden" name="newonsid" value="'.$db_onsID.'" /></td>';
-                       echo "<td colspan='2'><div align='center'><a onclick=selectOffice('$url') style='cursor:pointer;color:blue;'>সিলেক্ট অফিস</a></div></td> "; 
+                       echo "<td colspan='2'><div align='left'><a onclick=selectOffice('$url') style='cursor:pointer;color:blue;'>সিলেক্ট অফিস</a></div></td> "; 
                        echo  '</tr>
                             <tr>
                                 <td style="width: 30%; text-align:right">পোস্ট</td>

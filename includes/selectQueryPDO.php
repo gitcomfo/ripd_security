@@ -50,7 +50,7 @@ $sql_select_ons_relation = $conn->prepare("SELECT * FROM ons_relation WHERE idon
 $sel_office_employee = $conn->prepare("SELECT * FROM cfs_user,employee,ons_relation WHERE catagory='office' 
                                                                   AND add_ons_id=? AND idons_relation=emp_ons_id 
                                                                   AND employee.employee_type='employee' AND cfs_user_idUser = idUser");
-$sql_select_employee_grade = $conn->prepare("SELECT grade_name,employee_salary.insert_date  FROM employee_salary,employee,pay_grade
+$sql_select_employee_grade = $conn->prepare("SELECT grade_name,employee_salary.insert_date,total_salary FROM employee_salary,employee,pay_grade
                                                                                 WHERE pay_grade_id = idpaygrade AND user_id = ? 
                                                                                AND pay_grade_idpaygrade = idpaygrade ORDER BY employee_salary.insert_date DESC LIMIT 1");
 $sql_select_view_emp_post = $conn->prepare("SELECT * FROM view_emp_post 
