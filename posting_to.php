@@ -109,20 +109,40 @@ window.name = "parentWindow";
                             </table>
                             </filedset></td>
                     </tr>';
-
+                if(isset($_POST['submitPost']))
+                {
+                    $p_postingID = $_POST['OnSCheck'];
+                    $sel_post = mysql_query("SELECT * FROM post_in_ons,post WHERE idpostinons = $p_postingID AND Post_idPost =idPost ");
+                    $postrow = mysql_fetch_assoc($sel_post);
+                    $db_postname = $postrow['post_name'];
+                    $db_officetype = $postrow['post_onstype'];
+                    $db_offid = $postrow['post_onsid'];
+                    if($db_officetype == 'office')
+                    {
+                        $sel_office = mysql_query("SELECT * FROM office WHERE idOffice = $db_offid");
+                        $offrow = mysql_fetch_assoc($sel_office);
+                        $offname = $offrow['office_name'];
+                    }
+                    else
+                    {
+                        $sel_office = mysql_query("SELECT * FROM sales_store WHERE idSales_store = $db_offid");
+                        $offrow = mysql_fetch_assoc($sel_office);
+                        $offname = $offrow['salesStore_name'];
+                    }
+                }
                 echo '<tr>
                      <td colspan="4">
                      <fieldset style="border:3px solid #686c70;width: 99%;">
-                            <legend style="color: brown;font-size: 14px;">পোস্টিং এ</legend>
+                            <legend style="color: brown;font-size: 14px;">পোস্টিং</legend>
                             <table>
                             <tr>
                                 <td style="width: 30%; text-align:right">পোস্টিং অফিস</td>
-                                <td style="width: 40%"><input type="text" class="box" name="promotion"/></td>';
-                                echo "<td colspan='2'><div align='center'><a onclick=selectOffice('$url') style='cursor:pointer;color:blue;'>সিলেক্ট অফিস</a></div></td> "; 
-                           echo  '</tr>
+                                <td style="width: 40%"><input type="text" class="box" name="promotion" readonly  value=" '.$offname.' "/></td>';
+                       echo "<td colspan='2'><div align='center'><a onclick=selectOffice('$url') style='cursor:pointer;color:blue;'>সিলেক্ট অফিস</a></div></td> "; 
+                       echo  '</tr>
                             <tr>
-                                <td style="width: 30%; text-align:right">পোস্টিং</td>
-                                <td colspan="3" style="width: 40%"><input type="text" class="box" name="promotion"/></td>
+                                <td style="width: 30%; text-align:right">পোস্ট</td>
+                                <td colspan="3" style="width: 40%"><input type="text" class="box" name="promotion" readonly  value='.$db_postname.' /></td>
                              </tr>
                             <tr>
                                 <td style="width: 30%; text-align:right">পোস্টিং তারিখ</td>

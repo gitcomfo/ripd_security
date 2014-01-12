@@ -3,9 +3,40 @@
 include_once 'includes/header.php';
 function getPages()
 { 
-    echo  "<option value=0> -সিলেক্ট করুন- </option>";
+    $myarray = array();
+    $sel_usedpages = mysql_query("SELECT page_name FROM security_pages ORDER BY page_name");
+    while($arr_pages = mysql_fetch_assoc($sel_usedpages))
+    {
+        $pagename = $arr_pages['page_name'];
+        array_push($myarray, $pagename);
+    }
+   echo  "<option value=0> -সিলেক্ট করুন- </option>";
      foreach (glob("*.php") as $filename) {
-    echo  "<option value=".$filename.">".$filename."</option>";
+         if(in_array($filename, $myarray))
+         {
+         }
+        else {
+            echo  "<option value=".$filename.">".$filename."</option>";
+        }
+    }
+}
+function getPOSPages()
+{ 
+    $myarray = array();
+    $sel_usedpages = mysql_query("SELECT page_name FROM security_pages ORDER BY page_name");
+    while($arr_pages = mysql_fetch_assoc($sel_usedpages))
+    {
+        $pagename = $arr_pages['page_name'];
+        array_push($myarray, $pagename);
+    }
+    echo  "<option value=0> -সিলেক্ট করুন- </option>";
+     foreach (glob("pos/*.php") as $filename) {
+        if(in_array($filename, $myarray))
+             {
+             }
+            else {
+                echo  "<option value=".$filename.">".end(explode("/",$filename))."</option>";
+            }
     }
 }
 function getSubmodules()
@@ -57,6 +88,18 @@ if (isset($_POST['submit'])) {
  function editPage(id)
 	{ TINY.box.show({iframe:'security_page_edit.php?pageid='+id,width:500,height:310,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
  </script>
+<script>
+    function showRIPD()
+    {
+        var showcase = ": <select  class='box'  name='page' style='width: 250px; height: 25px;'><?php getPages();?></select>";
+        document.getElementById('selectbox').innerHTML = showcase;
+    }
+    function showPOS()
+    {
+        var showcase = ": <select  class='box'  name='page' style='width: 250px; height: 25px;'><?php getPOSPages();?></select>";
+        document.getElementById('selectbox').innerHTML = showcase;
+    }
+</script>
     <?php
 if ($_GET['action'] == 'list') {
     ?>
@@ -125,11 +168,17 @@ if ($_GET['action'] == 'list') {
                 <?php
                 showMessage($flag, $msg);
                 ?>
+                <tr>
+                    <td style="text-align: center; width: 50%;"><input type="radio" name="dirselect" onclick="showRIPD()" />RIPD</td>
+                    <td><input type="radio" name="dirselect" onclick="showPOS()"  />POS</td>   
+                </tr>
                  <tr>
                     <td style="text-align: center; width: 50%;">পেজের নাম</td>
-                    <td>: <select  class="box"  name="page" style="width: 250px; height: 25px;">
-                            <?php getPages();?>
-                        </select></td>   
+                    <td id="selectbox">: 
+<!--                        <select  class="box"  name="page" style="width: 250px; height: 25px;">
+                            <?php getPOSPages();?>
+                        </select>-->
+                    </td>   
                 </tr>
                 <tr>
                     <td style="text-align: center; width: 50%;">পেজের ভিউ নাম</td>

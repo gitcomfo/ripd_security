@@ -15,11 +15,12 @@ $result = mysql_query("SELECT * FROM post, post_in_ons
         $db_postname=$row["post_name"];
         $db_postno=$row["number_of_post"];
         $db_freepost = $row['free_post'];
+        $db_postingID = $row['idpostinons'];
         echo '<tr>';
         echo '<td  style="border: solid black 1px;"><div align="left">'.$db_postname.'</div></td>';
         echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;'.english2bangla($db_postno).'</div></td>';
         echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($db_freepost).'</div></td>';
-        echo '<td style="border: solid black 1px;"><input type="checkbox"/></td>';
+        echo '<td style="border: solid black 1px;"><input type="checkbox" name="OnSCheck" value='.$db_postingID.' /></td>';
         echo '</tr>';
     }
 ?>
