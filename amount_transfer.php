@@ -6,6 +6,7 @@ include_once 'includes/columnViewAccount.php';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/selectQueryPDO.php';
 include_once 'includes/insertQueryPDO.php';
+include_once 'includes/sms_send_function.php';
 
 
 $charge_code = "tra";
@@ -29,11 +30,11 @@ function showMessage($flag, $msg)
                 {
                 if ($flag == 'true') 
                     {
-                    echo '<tr><td colspan="2" height="30px" style="text-align:center;"><b><span style="color:green;font-size:20px;">' . $msg . '</b></td></tr>';
+                    echo '<tr><td colspan="3" height="30px" style="text-align:center;"><b><span style="color:green;font-size:20px;">' . $msg . '</b></td></tr>';
                     }
                 else 
                     {
-                    echo '<tr><td colspan="2" height="30px" style="text-align:center;"><b><span style="color:red;font-size:20px;"><blink>' . $msg . '</blink></b></td></tr>';
+                    echo '<tr><td colspan="3" height="30px" style="text-align:center;"><b><span style="color:red;font-size:20px;"><blink>' . $msg . '</blink></b></td></tr>';
                     }
                 }
         }
@@ -75,12 +76,12 @@ if (isset($_POST['save'])) {
         goto random;
     }
     else{
-        $receiver_mobile_num = null;
+        $receiver_mobile_num = $_POST['user_mobile'];
         $sql_insert_acc_user_amount_transfer->execute(array($trans_type, $trans_senderid, $receiver_id, $receiver_mobile_num,
                                                                     $trans_amount, $reciever_get, $trans_servicecharge, $trans_purpose,
                                                                     $chrg_givenby, $total_transaction, $sts, $random));
         $sms_body = "Dear User, You have received: $trans_amount Taka.\nTransaction Charge: $trans_servicecharge Taka,\nYou will get $reciever_get Taka in Cash\nYour code $random.";
-        $sendResult = SendSMSFuntion("88".$receiver_mobile_num, $sms_body);
+        $sendResult = SendSMSFuntion($receiver_mobile_num, $sms_body);
         $sendStatus = substr($sendResult, 0, 4);
         if($sendStatus == '1701'){
             $msg = "টাকা সফল ভাবে ট্রান্সফার হয়েছে, আপনার কোডটি ".$random;
