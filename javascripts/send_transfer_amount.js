@@ -115,6 +115,7 @@ function checkAmountTrans(checkvalue, charge_amount, charge_type, balance) // ch
         var trans_amount = 0;
         var charge = 0;
         var total = 0;
+        var message = document.getElementById("recieverInfo").innerText;
         var amount = document.getElementById('amount1').value;
         var amount1 = document.getElementById('amount1');
         var amount2 = document.getElementById('amount2');
@@ -168,8 +169,11 @@ function checkAmountTrans(checkvalue, charge_amount, charge_type, balance) // ch
             document.getElementById('trans_amount').innerHTML = trans_amount;
             document.getElementById('trans_charge').innerHTML = charge;
             document.getElementById('total_amount').innerHTML = total;
-            document.getElementById('errormsg').innerHTML="";  
-            document.getElementById('submit').disabled= false;  
+            document.getElementById('errormsg').innerHTML="";             
+            
+            if (message != "দুঃখিত, একাউন্ট নাম্বারটি সঠিক নয়"){
+              document.getElementById('submit').disabled= false;  
+            }  
             
         }
     }

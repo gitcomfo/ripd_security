@@ -3,6 +3,10 @@ error_reporting(0);
 session_start();
 include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
+if($_GET['edit'] == 1)
+{
+    unset($_SESSION['arrRepTemp']);
+}
 
 $storeName= $_SESSION['loggedInOfficeName'];
 $sel_sales_summary = $conn->prepare("SELECT * FROM sales_summary WHERE idsalessummary= ? ");
@@ -19,8 +23,18 @@ $sel_cfsuser = $conn->prepare("SELECT * FROM cfs_user WHERE idUser= ? ");
 <title>ক্রয়কৃত পণ্য পরিবর্তন</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
 <script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/jquery-1.4.3.min.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
- <script src="scripts/tinybox.js" type="text/javascript"></script>
+<style type="text/css">
+            .prolinks:focus{
+                background-color: cadetblue;
+                color: yellow !important;
+            }
+            .prolinks:hover{
+                background-color: cadetblue;
+                color: yellow !important;
+            }
+</style>
 <script type="text/javascript">
 function ShowTime()
 {
@@ -51,7 +65,7 @@ if (a!=0) {document.getElementById("addtoCart").disabled = false;}
   else {document.getElementById("print").disabled =false ;}
 
 }
-    function checkTime(i)
+function checkTime(i)
     {
       if (i<10)
       {
@@ -59,8 +73,40 @@ if (a!=0) {document.getElementById("addtoCart").disabled = false;}
       }
       return i
     }
-    </script>
-	
+function validate() {
+var OK= 0;
+        $(".inbox").filter(function() {
+         var val = $(this).val();
+        if((val != "") || (val != 0))
+            {
+                 OK++;
+            }
+    });
+    return OK;
+ }
+function beforeSave()
+{
+    var blank = validate();
+    if(blank > 0)
+        {
+            document.getElementById('replace').readonly= false;
+            return true;
+        }
+        else {
+             document.getElementById('replace').readonly= true;
+            return false;
+        }
+}
+function checkQty(qty,i)
+{
+    var soldqty = Number(document.getElementById("soldqty["+i+"]").value);
+    if(qty > soldqty)
+        {
+            document.getElementById("replaceUnit["+i+"]").value = "";
+            alert("দুঃখিত,এই পরিমান পণ্য রিপ্লেস করতে পারবেন না");
+        }
+}
+</script>
 <!--===========================================================================================================================-->
 <script>
 function searchRecipt(str_key) // for sold recipt no. search box
@@ -89,7 +135,6 @@ function searchRecipt(str_key) // for sold recipt no. search box
         xmlhttp.open("GET","includes/searchProcessForReplace.php?searchKey="+str_key,true);
         xmlhttp.send();	
 }
-
 </script>  
 </head>
     
@@ -108,11 +153,10 @@ function searchRecipt(str_key) // for sold recipt no. search box
     <div class="top" style="width: 100%;height: auto;">
         <div class="topleft" style="width: 60%;float: left;"><b>চালান নং&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
             : <input type="text" id="searchRecipt" name="searchRecipt" onKeyUp="searchRecipt(this.value);" autocomplete="off" style="width: 300px;"/></br>
-        <div id="searchResult"></div>
+                <div id="searchResult"></div>
     </div>
         <div style="width: 40%;float: left;text-align: right;"><b> তারিখ ও সময় : </b><input name="date" style="width:75px;"type="text" value="<?php echo date("d/m/Y"); ?>" readonly/>
     <input name="time" type="text" id="txt" size="7" readonly/></div>
-    
     </div>
 </fieldset></div>
 
@@ -227,6 +271,7 @@ if (isset($_GET['id']))
                             <td width='9%'><div align='center'><strong>পি.ভি.</strong></div></td>
                             <td width='20%'><div align='center'><strong>ফেরত দিন (পরিমান)</strong></div></td>
                           </tr>";
+                            $sl = 1;
                         $sel_sales->execute(array($G_sales_sum_id));                   
                         $productReslt = $sel_sales->fetchAll();
                         foreach ($productReslt as $rowSales) 
@@ -241,11 +286,12 @@ if (isset($_GET['id']))
                                  echo '<tr>';
                                 echo "<td><div align='left'><input type='hidden' name='proCode[]' value=$db_proCode />$db_proCode</div></td>";
                                 echo "<td><div align='left'><input type='hidden' name='proname[]' value= '$db_proName' />&nbsp;&nbsp;&nbsp;$db_proName</div></td>";
-                                echo '<td><div align="center"><input type="hidden" name="soldqty[]" value='.$db_itemqty.'/>'.english2bangla($db_itemqty).'</div></td>';
+                                echo "<td><div align='center'><input type='hidden' name='soldqty[]' id='soldqty[$sl]' value='$db_itemqty'/>".english2bangla($db_itemqty)."</div></td>";
                                 echo '<td><div align="center"><input type="hidden" name="soldprice[]" value='.$db_itemprice.'/>'.english2bangla($db_itemprice).'<input type="hidden" name="inventSumID[]" value='.$db_inventID.'/></div></td>';
                                 echo '<td><div align="center">'.english2bangla($db_itemTotalPV).'</div></td>';
-                                 echo '<td><input type="text" id="replaceUnit" name="replaceUnit[]" style="width: 94%;text-align:right"/></td>';
+                                 echo "<td><input type='text' class='inbox' id='replaceUnit[$sl]' name='replaceUnit[]' style='width: 94%;text-align:right' onkeyup='checkQty(this.value,$sl);' /></td>";
                                 echo '</tr>';
+                                $sl ++;
                         }
                         echo "<td colspan='5' ><div align='right'><strong>সর্বমোট:</strong>&nbsp;</div></td>
                         <td colspan='2' width='13%'><div align='right' style='padding-right:3px;'>".english2bangla($db_sellTotalAmount)."</div></td>
@@ -258,12 +304,11 @@ if (isset($_GET['id']))
                             <td colspan='5' ><div align='right'><strong>টাকা গ্রহন:</strong>&nbsp;</div></td>
                             <td colspan='2' width='13%'><div align='right' style='padding-right:3px;'>".english2bangla($db_givenTaka)."</div></td>
                         </tr></table>";   
-                        echo "</br><div align='center' style='width: 100%;float: left;'><input type='submit' name='replace' value='রিপ্লেস করুন' style='font-family: SolaimanLipi !important;' /></div>";
+                        echo "</br><div align='center' style='width: 100%;float: left;'><input type='submit' readonly onclick='return beforeSave();' name='replace' id='replace' value='রিপ্লেস করুন' style='font-family: SolaimanLipi !important;' /></div>";
                         echo "</form></div>";
               }
     }
-?>
-   
+?>  
 </fieldset>
 
 <div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">

@@ -43,7 +43,7 @@ function get_catagory($sql) {
  <script src="scripts/tinybox.js" type="text/javascript"></script>
   <script type="text/javascript">
  function productUpdate(id)
-	{ TINY.box.show({iframe:'updateProduct.php?proid='+id,width:800,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+	{ TINY.box.show({iframe:'updateProduct.php?proid='+id,width:950,height:650,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
  </script>
 <!--===========================================================================================================================-->
 <script>
@@ -243,12 +243,12 @@ function showBrandProducts(brandcode,procatid) // show products from brand
     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
       <tr>
           <td width="8%"><div align="center"><strong>ক্রমিক নং</strong></div></td>
-        <td width="23%"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
+        <td width="18%"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
         <td width="30%"><div align="center"><strong>প্রোডাক্ট-এর নাম</strong></div></td>
         <td width="11%"><div align="center"><strong>পর্যাপ্ত পরিমাণ</strong></div></td>
         <td width="12%"><div align="center"><strong>খুচরা মূল্য</strong></div></td>
         <td width="10%"><div align="center"><strong>পি.ভি.</strong></div></td>
-        <td width="6%"><div align="center"><strong>করনীয়</strong></div></td>
+        <td width="11%"><div align="center"><strong>করনীয়</strong></div></td>
       </tr>
     <?php
         $sl = 1;

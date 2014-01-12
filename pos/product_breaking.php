@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 session_start();
-include_once 'includes/ConnectDB.inc';
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 $storeName= $_SESSION['loggedInOfficeName'];
@@ -13,6 +12,14 @@ $msg ="";
 $sel_inventory = $conn->prepare("SELECT * FROM inventory,product_chart WHERE idproductchart= ins_productid AND ins_product_type = 'general' AND idinventory = ?");
 $sel_prochart = $conn->prepare("SELECT * FROM product_chart WHERE idproductchart=?");
 $sel_inventory2 = $conn->prepare("SELECT * FROM inventory WHERE ins_ons_id= ? AND ins_ons_type=? AND ins_product_type='general' AND ins_productid=?");
+$ins_product_breaking = $conn->prepare("INSERT INTO product_breaking (ons_id, ons_type, breaking_date, breaking_pro_id, breaking_qty, converted_pro_id, converted_qty, original_buying_price, buying_price, selling_price, xtra_profit, profit, pv, cfs_user_id)
+                                                                    VALUES (?,?,NOW(),?,?,?,?,?,?,?,?,?,?,?)");
+$sqlpv = $conn->prepare("SELECT * FROM running_command;");
+$sqlpv->execute();
+$pvrow = $sqlpv->fetchAll();
+foreach ($pvrow as $row) {
+    $unitpv= $row['pv_value'];
+}
 
 if(isset($_POST['break']))
 {
@@ -23,6 +30,7 @@ if(isset($_POST['break']))
     $all1 = $sel_inventory->fetchAll();
     foreach ($all1 as $row1) {
         $db_breakingProUnit = $row1['pro_unit'];
+        $db_breakingChartID = $row1['idproductchart'];
     }
     
     $sel_prochart->execute(array($p_chartID));
@@ -49,28 +57,25 @@ if(isset($_POST['break']))
         $db_profit = 0;
         $db_pv = 0;
     }
-//    $type = 'making';
-//    $instype = 'breaking';
-//    
-//    $stmt->execute(array($P_pckgid,$scatagory,$storeID,$type));
-//    $getpckg = $stmt->fetchAll();
-//              foreach($getpckg as $pckg)
-//                  {
-//                     $db_pckgqty = $pckg['pckg_quantity'];
-//                     $db_pckgpv = $pckg['pckg_pv'];
-//                     $db_pckgsell = $pckg['pckg_selling_price'];
-//                     $db_pckgbuy = $pckg['pckg_buying_price'];
-//                     $db_pckgprofit = $pckg['pckg_profit'];
-//                     $db_pckgxprofit = $pckg['pckg_extraprofit'];
-//                   }
-//     $timestamp=time(); //current timestamp
-//     $date=date("Y/m/d", $timestamp);  
-//    
-//    $yes= $insstmt->execute(array($P_pckgid,$P_break,$db_pckgsell,$db_pckgbuy,$db_pckgprofit,$db_pckgxprofit,$date,$cfsID,$instype,$scatagory,$storeID));
-//    if($yes ==1)
-//    {
-//       $msg = "প্যাকেজগুলো সফলভাবে ব্রেক হয়েছে";}
-//                    else { $msg = "দুঃখিত প্যাকেজগুলো ব্রেক হয়নি";}
+}
+
+if(isset($_POST['entry'])) // ********************* final entry ********************************
+{
+    $p_breakingid = $_POST['breakingID'];
+    $p_breakingQty = $_POST['breakingqty'];
+    $p_makingID = $_POST['makingChartID'];
+    $p_makingQty = $_POST['totalqty'];
+    $p_originalBuying = $_POST['actualBuying'];
+    $p_buying = $_POST['newBuyingPrice'];
+    $p_selling = $_POST['newSellingPrice'];
+    $p_xtraprofit = $_POST['newXtraprofit'];
+    $p_profit = $_POST['newProfit'];
+    $p_pv = $_POST['newPV'];
+    $yes= $ins_product_breaking->execute(array($storeID,$scatagory,$p_breakingid,$p_breakingQty,$p_makingID,$p_makingQty,$p_originalBuying,$p_buying,$p_selling,$p_xtraprofit,$p_profit,$p_pv,$cfsID));
+    if($yes ==1)
+    {
+       $msg = "প্রোডাক্টটি সফলভাবে ব্রেক হয়েছে";}
+                    else { $msg = "দুঃখিত প্রোডাক্টটি ব্রেক হয়নি";}
     }
 
 ?>
@@ -81,6 +86,16 @@ if(isset($_POST['break']))
 <title>প্রোডাক্ট ব্রেক</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
+<style type="text/css">
+.prolinks:focus{
+    background-color: cadetblue;
+    color: yellow !important;
+}
+.prolinks:hover{
+    background-color: cadetblue;
+    color: yellow !important;
+}
+</style>
 <script type="text/javascript">
 function numbersonly(e)
    {
@@ -90,6 +105,14 @@ function numbersonly(e)
                 if (unicode<48||unicode>57) //if not a number
                 return false //disable key press
             }
+}
+function checkIt(evt) {
+    evt = (evt) ? evt : window.event
+    var charCode = (evt.which) ? evt.which : evt.keyCode
+    if (charCode ==8 || (charCode >47 && charCode <58) || charCode==46) {
+        return true;
+    }
+    return false;
 }
 function setBreakingProduct(getstring1)
 { 
@@ -134,24 +157,42 @@ function calculate1(convertedQty, breakingqty)
 function setNewValues(getstring3)
 {
     var array3 = getstring3.split(',');
+    document.getElementById('actualBuying').value = array3[0];
     document.getElementById('newBuyingPrice').value = array3[0];
     document.getElementById('newSellingPrice').value = array3[1];
     document.getElementById('newProfit').value = array3[2];
     document.getElementById('newXtraprofit').value = array3[3];
     document.getElementById('newPV').value = array3[4];
 }
+function calculate(val)
+{ 
+    var xprofit = Number(val);
+    var buying = Number(document.getElementById("newBuyingPrice").value);
+    var selling = Number(document.getElementById("newSellingPrice").value);
+    var currentpv = <?php echo $unitpv?> ;
+    var profit = selling - (buying + xprofit);
+    var pv = profit * currentpv;
+    if((selling < buying) || (pv <= 0))
+        {
+            alert("দুঃখিত, বিক্রয়মূল্য < ক্রয়মূল্য হতে পারবে না\n এবং\n পিভি ০ হতে পারবে না");
+            document.getElementById("newProfit").value = 0;
+            document.getElementById("newPV").value = 0;
+        }
+        else {
+                document.getElementById("newProfit").value = profit;
+                 document.getElementById("newPV").value = pv;
+        }
+}
+function beforeSave()
+{
+   var pv = document.getElementById("newPV").value;
+   if(pv !="" && pv!= 0)
+       {
+           return true;
+       }
+       else { return false;}
+}
 </script>
-<style type="text/css">
-.prolinks:focus{
-    background-color: cadetblue;
-    color: yellow !important;
-}
-.prolinks:hover{
-    background-color: cadetblue;
-    color: yellow !important;
-}
-</style>
-	
 <!--===========================================================================================================================-->
 <script>
 function searchInventoryProduct(str_key) // for searching product from own inventory
@@ -173,7 +214,7 @@ function searchInventoryProduct(str_key) // for searching product from own inven
                }
                 else
                     {   document.getElementById('searchResult1').style.visibility = "visible";
-                         document.getElementById('searchResult1').setAttribute('style','position:absolute;top:49%;left:18%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                         document.getElementById('searchResult1').setAttribute('style','position:absolute;top:49%;left:17.5%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:110px; background-color:#F5F5FF;');
                     }
                 document.getElementById('searchResult1').innerHTML=xmlhttp.responseText;
         }
@@ -219,7 +260,7 @@ function searchProduct1(str_key) // for searching products from product chart
                }
                 else
                     {   document.getElementById('searchResult2').style.visibility = "visible";
-                         document.getElementById('searchResult2').setAttribute('style','position:absolute;top:49%;left:53%;width:290px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                         document.getElementById('searchResult2').setAttribute('style','position:absolute;top:49%;left:52.5%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:110px; background-color:#F5F5FF;');
                     }
                 document.getElementById('searchResult2').innerHTML=xmlhttp.responseText;
         }
@@ -291,9 +332,9 @@ function getValues(procode)
         xmlhttp.send();	
 }
 </script>  
-    </head>    
-<body>
+</head>    
 
+<body>
 <div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
     <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
@@ -303,8 +344,12 @@ function getValues(procode)
 </div>
 </br>
 <div class="wraper" style="width: 80%;font-family: SolaimanLipi !important;float: none;">
-    <?php if(($_GET['step'] == 2)) {?>
-    <form method="POST"  action="">
+     <?php
+        if($msg !="")
+            { echo " <div class='top' style='width: 100%;height: auto;text-align:center;font-size:18px;color='green;''><b>$msg</b></div></br>"; } 
+       else
+       { if(($_GET['step'] == 2)) {?>
+    <form method="POST"  action="" onsubmit="return beforeSave();">
         <table border="1">
             <tr>
                 <td width="100%" colspan="2">
@@ -324,7 +369,7 @@ function getValues(procode)
                         <tr>
                             <td  style="border: 1px black solid;text-align:right;">রূপান্তরযোগ্য প্রোডাক্টের  <?php echo $p_breakingqty." টি " ; echo $db_breakingProUnit;?></td>
                              <td  style="border: 1px black solid;text-align: center;"> = </td>
-                             <td style="border: 1px black solid;"><input readonly id="totalqty" /> টি রূপান্তরিত প্রোডাক্ট</td>
+                             <td style="border: 1px black solid;"><input readonly id="totalqty" name="totalqty" /> টি রূপান্তরিত প্রোডাক্ট</td>
                         </tr>
                     </table>
                     </fieldset>
@@ -336,7 +381,7 @@ function getValues(procode)
                         <legend style="color: brown;">রূপান্তরিত প্রোডাক্টের চলমান মূল্যতালিকা</legend>
                             <table width="100%" align="center" >
                             <tr>
-                                <td width="50%" style="border: 1px black solid;text-align:right;">ক্রয়মূল্য </td>
+                                <td width="50%" style="border: 1px black solid;text-align:right;">ক্রয়মূল্য <input type="hidden"  name="makingChartID" value="<?php echo $p_chartID?>" /></td>
                                 <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" readonly value="<?php echo $db_buyingprice?>" /></td>
                             </tr>
                             <tr>
@@ -363,32 +408,32 @@ function getValues(procode)
                         <legend style="color: brown;">রূপান্তরিত প্রোডাক্টের হিসাবকৃত মূল্যতালিকা</legend>
                             <table width="100%" align="center" >
                                 <tr>
-                                    <td width="50%" style="border: 1px black solid;text-align:right;">একক ক্রয়মূল্য </td>
-                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newBuyingPrice" id="newBuyingPrice"  /></td>
+                                    <td width="50%" style="border: 1px black solid;text-align:right;">একক ক্রয়মূল্য <input type="hidden" id="actualBuying" name="actualBuying" /></td>
+                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newBuyingPrice" id="newBuyingPrice" onkeypress='return checkIt(event)' /></td>
                                 </tr>
                                 <tr>
-                                    <td width="50%" style="border: 1px black solid;text-align:right;">একক বিক্রয়মূল্য </td>
-                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newSellingPrice" id="newSellingPrice" /></td>
+                                    <td width="50%" style="border: 1px black solid;text-align:right;">একক বিক্রয়মূল্য <input type="hidden"  name="breakingqty" value="<?php echo $p_breakingqty?>" /></td>
+                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newSellingPrice" id="newSellingPrice" onkeypress='return checkIt(event)' /></td>
                                 </tr>
                                 <tr>
-                                    <td width="50%" style="border: 1px black solid;text-align:right;">একক এক্সট্রা প্রফিট </td>
-                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newXtraprofit" id="newXtraprofit" /></td>
+                                    <td width="50%" style="border: 1px black solid;text-align:right;">একক এক্সট্রা প্রফিট <input type="hidden"  name="breakingID" value="<?php echo $db_breakingChartID?>" /></td>
+                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newXtraprofit" id="newXtraprofit" onkeypress='return checkIt(event)' onblur="calculate(this.value)" /></td>
                                 </tr>
                                 <tr>
                                     <td width="50%" style="border: 1px black solid;text-align:right;">একক প্রফিট </td>
-                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newProfit" id="newProfit" /></td>
+                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly style="text-align: right;" name="newProfit" id="newProfit"  /></td>
                                 </tr>
                                 <tr>
                                     <td width="50%" style="border: 1px black solid;text-align:right;">একক পিভি</td>
-                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" style="text-align: right;" name="newPV" id="newPV" /></td>
+                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly style="text-align: right;" name="newPV" id="newPV" /></td>
                                 </tr>
                             </table>
                     </fieldset>
                 </td>
             </tr>
             <tr>
-                <td align="center" colspan="2"></br>
-                    <input name="break" id="break" disabled type="submit" value="এন্ট্রি" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br>
+                <td align="center" colspan="2">
+                    <input class="btn" name="entry" id="entry" readonly type="submit" value="এন্ট্রি করুন" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br></br>
                 </td>
             </tr>
         </table>
@@ -397,23 +442,19 @@ function getValues(procode)
   <form method="POST"  action="product_breaking.php?step=2">
     <table border="1">
         <tr>
-             <?php
-                if($msg != "")
-                {
-            ?>
-            <td colspan="2" align="center" style="color: green;font-size: 26px; font-weight: bold;"><?php echo $msg;?></td>
-                <?php } ?>
             <td style="width: 50%">
                 <fieldset style="border-width: 3px;width: 90%;">
                     <legend style="color: brown;">যে প্রোডাক্ট কে ব্রেক করতে চাই</legend>
-                    <table width="100%">
-                        <thead><td colspan="2">
+                    <table width="100%" cellspacing="0">
+                        <thead>
+                            <td colspan="2">
                                 প্রোডাক্ট কোড : <input type="text" id="searchInProduct" name="searchInProduct" onKeyUp="searchInventoryProduct(this.value)" autocomplete="off" style="width: 300px;"/></br>
                                 <div id="searchResult1"></div>
-                            </td></thead>
+                            </td>
+                        </thead>
                         <tbody>
                             <tr>
-                                <td style="border: 1px black solid;width:40%;">প্রোডাক্ট কোড<input type="hidden" id="breakingCode" name="breakingCode" value=""/></td>
+                                <td style="border: 1px black solid;width:30%;">প্রোডাক্ট কোড<input type="hidden" id="breakingCode" name="breakingCode" value=""/></td>
                                 <td id="code1" style="border: 1px black solid;width: 60%;"></td>
                             </tr>
                             <tr>
@@ -435,14 +476,14 @@ function getValues(procode)
             <td>
                 <fieldset style="border-width: 3px;width: 90%;">
                     <legend style="color: brown;">যেই প্রোডাক্ট-এ পরিবর্তন করতে চাই</legend>
-                    <table>
+                    <table width="100%" cellspacing="0">
                         <thead><td colspan="2">
                                 প্রোডাক্ট কোড : <input type="text" id="searchProduct" name="searchProduct" onKeyUp="searchProduct1(this.value);" autocomplete="off" style="width: 300px;"/></br>
                                 <div id="searchResult2"></div>
                             </td></thead>
                         <tbody>
                             <tr>
-                                <td style="border: 1px black solid;width: 40%;">প্রোডাক্ট কোড<input type="hidden" id="proCode" name="proCode" value=""/></td>
+                                <td style="border: 1px black solid;width: 30%;">প্রোডাক্ট কোড<input type="hidden" id="proCode" name="proCode" value=""/></td>
                                 <td id="code2" style="border: 1px black solid;width: 60%;"></td>
                             </tr>
                             <tr>
@@ -464,13 +505,13 @@ function getValues(procode)
         </tr>
         <tr>
             <td align="center" colspan="2">
-                <b>যতটা প্রোডাক্ট ভাঙতে চাই : </b> <input type="text" id="breakingQty" name="breakingQty" onkeypress=' return numbersonly(event);' onkeyup="checkQty(this.value);" style="width: 200px;"/></br>
+                <b>যতটা প্রোডাক্ট ভাঙতে চাই : </b> <input type="text" id="breakingQty" name="breakingQty" onkeypress=' return numbersonly(event);' onkeyup="checkQty(this.value);" style="width: 200px;"/></br></br>
                 <input name="break" id="break" disabled type="submit" value="ব্রেক" style="cursor:pointer;width:80px;height: 25px;font-family: SolaimanLipi !important;" /></br></br>
             </td>
         </tr>
     </table>
   </form>
-    <?php }?>
+       <?php } }?>
 </div>
     
 <div style="background-color:#f2efef;border-top:1px #eeabbd dashed;padding:3px 50px;">
