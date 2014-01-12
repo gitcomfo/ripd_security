@@ -33,4 +33,8 @@ $sql_insert_curr_command = $conn->prepare("INSERT into command_execution (comman
 $sql_insert_acc_user_amount_transfer = $conn->prepare("INSERT into acc_user_amount_transfer (trans_type, trans_senderid, trans_receiverid, receiver_mobile_num, trans_amount, reciever_get, trans_servicecharge, trans_purpose, chrg_givenby, total_transaction, send_amt_status, send_amt_pin, trans_date_time) 
                                                                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?, NOW())");
 
+//**************** posting & promotion ***********************************************************
+$sql_insert_employee_posting = $conn->prepare("INSERT INTO employee_posting (posting_date, Employee_idEmployee, ons_relation_idons_relation, post_in_ons_idpostinons)
+                                                                                VALUES(?, ?, ?, ?) ");
+
 ?>
