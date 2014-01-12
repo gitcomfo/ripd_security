@@ -4,23 +4,14 @@ include_once 'includes/MiscFunctions.php';
 include 'includes/header.php';
 ?>
 <style type="text/css">@import "css/bush.css";</style>
-<link rel="stylesheet" type="text/css" media="all" href="javascripts/jsDatePick_ltr.min.css" />
-<script type="text/javascript" src="javascripts/jsDatePick.min.1.3.js"></script>
-<script type="text/javascript">
-    window.onclick = function()
-    {
-        new JsDatePick({
-            useMode:2,
-            target:"posting_date",
-            dateFormat:"%Y-%m-%d"
-        });
-    };
-</script>
 <link rel="stylesheet" href="css/tinybox.css" type="text/css">
 <script src="javascripts/tinybox.js" type="text/javascript"></script>
 <script type="text/javascript">
-    function selectOffice()
-    { TINY.box.show({iframe:'includes/select_office.php',width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+    function selectOffice(url)
+    { TINY.box.show({iframe:'select_office.php?url='+url,width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+</script>
+<script language=javascript>
+window.name = "parentWindow";
 </script>
 
 <div class="main_text_box">
@@ -32,7 +23,8 @@ include 'includes/header.php';
         <div>
             <form onsubmit="" method="post" style="width: 90%;">
                 <?php
-                echo $g_officeID = $_GET['ll1i1s0t01%%i010d10'];
+                $url= urlencode($_SERVER['REQUEST_URI']);
+                //$g_officeID = $_GET['ll1i1s0t01%%i010d10'];
                 $employee_id = $_GET['0to1o1ff01i0c1e0'];
                 $sql_sel_cfsuser = mysql_query("SELECT * FROM cfs_user,employee,employee_information WHERE idUser = cfs_user_idUser AND idEmployee = $employee_id");
                 $cfs_row = mysql_fetch_assoc($sql_sel_cfsuser);
@@ -125,28 +117,21 @@ include 'includes/header.php';
                             <table>
                             <tr>
                                 <td style="width: 30%; text-align:right">পোস্টিং অফিস</td>
-                                <td style="width: 40%"><input type="text" class="box" name="promotion"/></td>
-                                <td colspan="2"><div align="center"><a onclick="selectOffice()" style="cursor:pointer;color:blue;">সিলেক্ট অফিস</a></div></td>  
-                            </tr>
+                                <td style="width: 40%"><input type="text" class="box" name="promotion"/></td>';
+                                echo "<td colspan='2'><div align='center'><a onclick=selectOffice('$url') style='cursor:pointer;color:blue;'>সিলেক্ট অফিস</a></div></td> "; 
+                           echo  '</tr>
                             <tr>
                                 <td style="width: 30%; text-align:right">পোস্টিং</td>
                                 <td colspan="3" style="width: 40%"><input type="text" class="box" name="promotion"/></td>
                              </tr>
-                             
                             <tr>
                                 <td style="width: 30%; text-align:right">পোস্টিং তারিখ</td>
                                 <td colspan="3" style="width: 40%"><input type="date" class="box" name="promotion"/></td>
                              </tr>
-                             <tr>
-                                <td style="width: 30%; text-align:right">পোস্টিং ধরণ</td>
-                                <td colspan="3" style="width: 40%"><input type="text" class="box" name="promotion"/></td>
-                             </tr>
                             </table>
                             </filedset></td>
                     </tr>';
-                echo "<tr>                    
-                                    <td colspan='4' style='text-align: center' ><input class='btn' style ='font-size: 12px' type='reset' name='reset' value='পোস্টিং' /></td>                           
-                            </tr>";
+                echo "<tr><td colspan='4' style='text-align: center' ><input class='btn' style ='font-size: 12px' type='reset' name='reset' value='পোস্টিং' /></td></tr>";
                 echo "</table>";
                 ?>
             </form>

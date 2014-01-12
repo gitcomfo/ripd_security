@@ -1,10 +1,10 @@
 <?php
 error_reporting(0);
-include_once 'ConnectDB.inc';
-include_once './connectionPDO.php';
-include_once 'MiscFunctions.php';
-include_once 'areaSearchForProduct.php';
-
+include_once 'includes/ConnectDB.inc';
+include_once 'includes/connectionPDO.php';
+include_once 'includes/MiscFunctions.php';
+include_once 'includes/areaSearchForProduct.php';
+$url = end(explode("/",urldecode($_GET['url'])));
 
 $receiver_office_sstore_email = $_GET['office_sstore_mail'];
 
@@ -37,8 +37,8 @@ if (isset($_POST['submit_email'])) {
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<style type="text/css"> @import "../css/bush.css";</style>
-<script type="text/javascript" src="../javascripts/area3.js"></script>
+<style type="text/css"> @import "css/bush.css";</style>
+<script type="text/javascript" src="javascripts/area3.js"></script>
 <script>
 function validateForm()
 {
@@ -82,11 +82,32 @@ function validateForm()
         }
     }
 }
+function getOnSpost(typeNid)
+{
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            document.getElementById('postTable').innerHTML=xmlhttp.responseText;
+        }
+    }
+    xmlhttp.open("GET","includes/postListByOnS.php?typeNid="+typeNid,true);
+    xmlhttp.send();
+}
 </script>
 </head>
 <body>
 
-<form method="POST" onsubmit="" name="" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">	
+    <form action="<?php echo $url?>" method="post" name="uploadnew" target="parentWindow" onsubmit="setTimeout('self.close()',1000)">
     <table  class="formstyle" style="margin: 5px 10px 15px 10px; width: 100%; font-family: SolaimanLipi !important;">          
         <tr><th colspan="3" style="text-align: center;">সিলেক্ট অফিস এন্ড পোস্ট</th></tr>
         <tr>
@@ -96,7 +117,7 @@ function validateForm()
                     <table>
                               <tr>
                                <td><?php getAreaOffice(); ?></td>
-                               <td><select class="box" id="offNsales" name="offNsales" style="width: 200px;font-family: SolaimanLipi !important;" >
+                               <td><select class="box" id="offNsales" name="offNsales" style="width: 200px;font-family: SolaimanLipi !important;" onchange="getOnSpost(this.value)" >
                                         <option value="0">-- অফিস / সেলসস্টোর --</option>
                                         </select>
                                </td>
@@ -118,14 +139,9 @@ function validateForm()
                                         <td style="border: solid black 1px;"><div align="center"><strong></strong></div></td>
                                     </tr>
                                 </thead>
-                                <tbody style="background-color: #FCFEFE">
-                                    <td style="border: solid black 1px;">111111</td>
-                                    <td style="border: solid black 1px;">22222222</td>
-                                    <td style="border: solid black 1px;">3333</td>
-                                    <td><input type="checkbox"/></td>
-                                </tbody>
+                                <tbody style="background-color: #FCFEFE" id="postTable"></tbody>
                             </table>
-                            <input class="btn" style =" font-size: 12px; margin-left: 400px" type="reset" name="reset" value="সাবমিট" />
+                            <input class="btn" style =" font-size: 12px; margin-left: 400px" type="submit" name="submitPost" value="সাবমিট" />
                         </fieldset>
                     </td> 
                 </tr>
