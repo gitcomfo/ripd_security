@@ -6,10 +6,8 @@ $arr_str = explode(",", $g_str);
 $type = $arr_str[0];
 $id = $arr_str[1];
 
-$result = mysql_query("SELECT * FROM post, post_in_ons 
-                                    WHERE post_onsid = $id AND post_onstype='$type'
+$result = mysql_query("SELECT * FROM post, post_in_ons WHERE post_onsid = $id AND post_onstype='$type'
                                      AND Post_idPost=idPost ORDER BY post_name ");
-
     while ($row = mysql_fetch_assoc($result))
     {
         $db_postname=$row["post_name"];

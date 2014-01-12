@@ -1,8 +1,8 @@
 <?php
 include_once 'includes/MiscFunctions.php';
 include 'includes/header.php';
+include_once './includes/selectQueryPDO.php';
 ?>
-
 <style type="text/css">@import "css/bush.css";</style>
 <script type="text/javascript" src="javascripts/area.js"></script>
 <script type="text/javascript" src="javascripts/external/mootools.js"></script>
@@ -26,14 +26,12 @@ include 'includes/header.php';
         xmlhttp.send();
     }
 </script>
-
-<div class="column6">
-    
+ 
     <?php if($_GET['iffimore'] != 'll1i1s0t01'){?>
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
         <div>
-            <table  class='formstyle'>       
+            <table  class='formstyle' style="width: 80%;">       
                 <tr><th style='text-align: center;'>সকল অফিসের তালিকা</th></tr>
                 <tr><td>
                     <div style="padding-bottom: 10px;">
@@ -63,7 +61,7 @@ include 'includes/header.php';
                                 <tbody>
                                     <?php
                                     //officeTableHead();
-                                    $sql_setteleOfficeTable = "SELECT * from $dbname.office ORDER BY office_name ASC";
+                                    $sql_setteleOfficeTable = "SELECT * from office ORDER BY office_name ASC";
                                     $db_slNo = 0;
                                     $rs = mysql_query($sql_setteleOfficeTable);
                                     //echo mysql_num_rows($rs);
@@ -111,10 +109,12 @@ include 'includes/header.php';
         <div>
             <?php
            $get_office_id = $_GET['i010d10'];
-            $sql = mysql_query("SELECT * FROM office WHERE idOffice=$get_office_id");
-            $row = mysql_fetch_array($sql);
-            $office_name = $row['office_name'];
-            echo "<table  class='formstyle'>";          
+           $sql_select_office->execute(array($get_office_id));
+           $arr_off = $sql_select_office->fetchAll();
+           foreach ($arr_off as $row) {
+               $office_name = $row['office_name'];
+           }
+            echo "<table  class='formstyle' style='width: 80%;'>";          
                 echo "<tr><th colspan='10' style='text-align: center;font-size:18px;'>$office_name - এ কর্মচারীদের তালিকা</th></tr>";
                 echo "<tr align='left' id='table_row_odd'>
                     <td><b>ক্রম</b></td>
@@ -126,18 +126,19 @@ include 'includes/header.php';
                     <td><b>অফিসে সময়কাল</b></td>
                     <td colspan='3'></td>
                 </tr>";
-                $sel_office_employee = mysql_query("SELECT * FROM cfs_user,employee,ons_relation 
-                    WHERE catagory='office' AND add_ons_id=$get_office_id AND idons_relation=emp_ons_id AND employee.employee_type='employee' 
-                    AND cfs_user_idUser = idUser");
+                $sel_office_employee->execute(array($get_office_id));
+                $row1 = $sel_office_employee->fetchAll();
                 $sl = 1;
-                while($emprow = mysql_fetch_assoc($sel_office_employee))
+                foreach ($row1 as $emprow)
                 {
                     $empID = $emprow['idEmployee'];
                     $timestamp=time(); //current timestamp
-                    $sql_employee_grade = mysql_query("SELECT grade_name,employee_salary.insert_date  FROM employee_salary,employee,pay_grade
-                                                                    WHERE pay_grade_id = 	idpaygrade AND user_id = $empID AND pay_grade_idpaygrade = idpaygrade ORDER BY employee_salary.insert_date DESC LIMIT 1");
-                    $arr_grade = mysql_fetch_assoc($sql_employee_grade);
-                    $db_gradeInsertDate = $arr_grade['insert_date'];
+                    $sql_select_employee_grade->execute(array($empID));
+                    $graderow = $sql_select_employee_grade->fetchAll();
+                    foreach ($graderow as $arr_grade) {
+                        $db_gradeInsertDate = $arr_grade['insert_date'];
+                        $db_gradename = $arr_grade['grade_name'];      
+                    }
                     $start= abs(strtotime(date("Y/m/d",  strtotime($db_gradeInsertDate))));
                      $end =abs(strtotime(date("Y/m/d", $timestamp)));
                      $grddifference = $end - $start;
@@ -145,12 +146,13 @@ include 'includes/header.php';
                      $grdmonths2 = english2bangla(floor(($grddifference - ($grdyears * 365 * 60 * 60 * 24)) / ((365 * 60 * 60 * 24) / 12)));
                      $grddays = english2bangla(floor(($grddifference - ($grdyears * 365 * 60 * 60 * 24) -( $grdmonths2 * 30 * 60 * 60 * 24))/ (60 * 60 * 24)));
                     
-                    $sql_employee_posting = mysql_query("SELECT * FROM view_emp_post 
-                        WHERE Employee_idEmployee=$empID AND add_ons_id= $get_office_id ORDER BY posting_date DESC LIMIT 1");
-                    $arr_row = mysql_fetch_assoc($sql_employee_posting);
-                    $db_post = $arr_row['post_name'];
-                    $db_postingDate = $arr_row['posting_date'];
-                     $timestamp_start= abs(strtotime(date("Y/m/d",  strtotime($db_postingDate))));
+                    $sql_select_view_emp_post->execute(array($empID,$get_office_id));
+                    $result = $sql_select_view_emp_post->fetchAll();
+                    foreach ($result as $arr_row) {
+                        $db_post = $arr_row['post_name'];
+                        $db_postingDate = $arr_row['posting_date'];
+                    }
+                    $timestamp_start= abs(strtotime(date("Y/m/d",  strtotime($db_postingDate))));
                      $timestamp_end =abs(strtotime(date("Y/m/d", $timestamp)));
                      $difference = $timestamp_end - $timestamp_start;
                         $years = english2bangla(floor($difference / (365 * 60 * 60 * 24)));
@@ -160,7 +162,7 @@ include 'includes/header.php';
                         <td>".english2bangla($sl)."</td>
                         <td>".$emprow['account_name']."</td>
                         <td>".$emprow['account_number']."</td>
-                        <td>".$arr_grade['grade_name']."</td>
+                        <td>".$db_gradename."</td>
                         <td>$grdyears বছর, $grdmonths2 মাস, $grddays দিন</td>
                         <td>$db_post</td>
                         <td>$years বছর, $months2 মাস, $days দিন</td>

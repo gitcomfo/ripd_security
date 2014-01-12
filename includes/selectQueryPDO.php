@@ -13,9 +13,8 @@ $sql_current_command = $conn->prepare("SELECT * FROM running_command LIMIT 1");
 $sql_select_login = $conn->prepare("SELECT * FROM cfs_user WHERE user_name=? AND password=?");
 $sql_select_cfs_user_all = $conn->prepare("SELECT * FROM cfs_user WHERE idUser = ?");
 $sql_select_cust_basic = $conn->prepare("SELECT designation_name, designation_star, scanDoc_finger_print, scanDoc_picture, referer_id
-                                                                                FROM customer_account, designation
-                                                                                    WHERE idDesignation=Designation_idDesignation 
-                                                                                        AND cfs_user_idUser = ?");
+                                                                    FROM customer_account, designation
+                                                                    WHERE idDesignation=Designation_idDesignation AND cfs_user_idUser = ?");
 $sql_select_employee_basic = $conn->prepare("SELECT * FROM employee,employee_information WHERE Employee_idEmployee= idEmployee AND cfs_user_idUser = ?");
 $sql_select_propritor_basic = $conn->prepare("SELECT * FROM proprietor_account WHERE cfs_user_idUser = ?");
 $sql_genology_tree = $conn->prepare("SELECT account_name, cfs_user_idUser FROM cfs_user, customer_account WHERE idUser=cfs_user_idUser AND referer_id = ?");
@@ -48,4 +47,18 @@ $sql_select_random = $conn->prepare("SELECT * FROM acc_user_amount_transfer WHER
 $sql_select_id_ons_relation = $conn->prepare("SELECT idons_relation FROM  ons_relation WHERE catagory =  ? AND add_ons_id = ?");
 // ********************************************* posting & promotion ******************************************************
 $sql_select_ons_relation = $conn->prepare("SELECT * FROM ons_relation WHERE idons_relation=? ");
+$sel_office_employee = $conn->prepare("SELECT * FROM cfs_user,employee,ons_relation WHERE catagory='office' 
+                                                                  AND add_ons_id=? AND idons_relation=emp_ons_id 
+                                                                  AND employee.employee_type='employee' AND cfs_user_idUser = idUser");
+$sql_select_employee_grade = $conn->prepare("SELECT grade_name,employee_salary.insert_date  FROM employee_salary,employee,pay_grade
+                                                                                WHERE pay_grade_id = idpaygrade AND user_id = ? 
+                                                                               AND pay_grade_idpaygrade = idpaygrade ORDER BY employee_salary.insert_date DESC LIMIT 1");
+$sql_select_view_emp_post = $conn->prepare("SELECT * FROM view_emp_post 
+                                                                            WHERE Employee_idEmployee=? AND add_ons_id= ? ORDER BY posting_date DESC LIMIT 1");
+$sql_select_emplyee_cfs = $conn->prepare("SELECT * FROM cfs_user,employee,employee_information WHERE idUser = cfs_user_idUser AND idEmployee = ?");
+$sql_select_emp_address = $conn->prepare("SELECT * FROM address,thana,district,division WHERE address_whom = 'emp'
+                                                                        AND address_type='Present' AND adrs_cepng_id = ?
+                                                                        AND Thana_idThana = idThana AND District_idDistrict=idDistrict AND Division_idDivision= idDivision ");
+$sql_select_post = $conn->prepare("SELECT * FROM post_in_ons,post WHERE idpostinons = ? AND Post_idPost =idPost ");
+
 ?>

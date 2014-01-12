@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 include_once 'includes/MiscFunctions.php';
 include 'includes/header.php';
 include_once './includes/insertQueryPDO.php';
@@ -54,33 +54,51 @@ window.name = "parentWindow";
             <form method="post" style="width: 90%;" action="">
                 <?php
                 $url= urlencode($_SERVER['REQUEST_URI']);
-                $g_officeID = $_GET['ll1i1s0t01%%i010d10'];
+                $g_officeID = end(explode("=", $back_parent_change));
                 $employee_id = $_GET['0to1o1ff01i0c1e0'];
-                $sql_sel_cfsuser = mysql_query("SELECT * FROM cfs_user,employee,employee_information WHERE idUser = cfs_user_idUser AND idEmployee = $employee_id");
-                $cfs_row = mysql_fetch_assoc($sql_sel_cfsuser);
-                $db_old_onsid = $cfs_row['emp_ons_id'];
-                $sql_sel_address = mysql_query("SELECT * FROM address,thana,district,division WHERE 	address_whom = 'emp'
-                                                                        AND address_type='Present' AND adrs_cepng_id = $employee_id
-                                                                        AND Thana_idThana = idThana AND District_idDistrict=idDistrict AND Division_idDivision= idDivision ");
-                $addressrow = mysql_fetch_assoc($sql_sel_address); 
-                $sql_employee_grade = mysql_query("SELECT grade_name,employee_salary.insert_date,total_salary  FROM employee_salary,employee,pay_grade WHERE pay_grade_id = idpaygrade AND user_id = $employee_id AND pay_grade_idpaygrade = idpaygrade ORDER BY employee_salary.insert_date DESC LIMIT 1");
-                    $arr_grade = mysql_fetch_assoc($sql_employee_grade);
-                    $db_salary = $arr_grade['total_salary'];                                       
-                    $sql_employee_posting = mysql_query("SELECT * FROM view_emp_post WHERE Employee_idEmployee=$employee_id ORDER BY posting_date DESC LIMIT 1");
-                    $arr_row = mysql_fetch_assoc($sql_employee_posting);
-                    $db_post = $arr_row['post_name'];
-                    $db_idposting = $arr_row['idempposting'];
-                    $db_postingDate = $arr_row['posting_date'];                
+                $sql_select_emplyee_cfs->execute(array($employee_id));
+                $row1 = $sql_select_emplyee_cfs->fetchAll();
+                foreach ($row1 as $cfs_row) {
+                    $db_old_onsid = $cfs_row['emp_ons_id'];
+                    $db_cfs_name = $cfs_row['account_name'];
+                    $db_cfs_account = $cfs_row['account_number'];
+                    $db_mobile = $cfs_row['mobile'];
+                    $db_picture = $cfs_row['emplo_scanDoc_picture'];
+                }
+                $sql_select_emp_address->execute(array($employee_id));
+                $row2 = $sql_select_emp_address->fetchAll();
+                foreach ($row2 as $addressrow) {
+                    $db_house = $addressrow['house'];
+                    $db_houseno = $addressrow['house_no'];
+                    $db_road = $addressrow['house'];
+                    $db_thana = $addressrow['thana_name'];
+                    $db_district = $addressrow['district_name'];
+                    $db_division = $addressrow['division_name'];
+                }
+                    $sql_select_employee_grade->execute(array($employee_id));
+                    $row3 = $sql_select_employee_grade->fetchAll();
+                    foreach ($row3 as $arr_grade) {
+                        $db_salary = $arr_grade['total_salary'];
+                        $db_gradename = $arr_grade['grade_name'];
+                    }
+                                                           
+                    $sql_select_view_emp_post->execute(array($employee_id,$g_officeID));
+                    $row4 = $sql_select_view_emp_post->fetchAll();
+                    foreach ($row4 as $arr_row) {
+                        $db_post = $arr_row['post_name'];
+                        $db_idposting = $arr_row['idempposting'];
+                        $db_postingDate = $arr_row['posting_date'];
+                    }                                  
                 echo "<table  class='formstyle'>";
                 echo "<tr >
                                 <th colspan='4' style='text-align: center'>
                                 <div style='width: 80%; float: left; padding-top: 18px;'>
-                                    <h1>".$cfs_row['account_name']."</h1>
-                                    <h2>".$cfs_row['account_number']."</h2>
-                                    <h3>মোবাইলঃ ".$cfs_row['mobile']."</h3>
-                                    <h3>বাসা-".$addressrow['house'].",".$addressrow['house_no'].", রোড-".$addressrow['house'].", থানাঃ ".$addressrow['thana_name'].", জেলাঃ".$addressrow['district_name'].", বিভাগঃ".$addressrow['division_name']."</h3>
+                                    <h1>".$db_cfs_name."</h1>
+                                    <h2>".$db_cfs_account."</h2>
+                                    <h3>মোবাইলঃ ".$db_mobile."</h3>
+                                    <h3>বাসা-".$db_house.",".$db_houseno.", রোড-".$db_road.", থানাঃ ".$db_thana.", জেলাঃ".$db_district.", বিভাগঃ".$db_division."</h3>
                                 </div>
-                                <div style='float: right'><img src='".$cfs_row['emplo_scanDoc_picture']."' style='width:150px;height:150px;' /></div></th>
+                                <div style='float: right'><img src='".$db_picture."' style='width:150px;height:150px;' /></div></th>
                             </tr>";
                 echo "<tr><td colspan='4'><hr></td></tr>";
                 echo '<tr>
@@ -90,7 +108,7 @@ window.name = "parentWindow";
                             <table>
                             <tr>
                                 <td style="width: 25%; text-align:right">গ্রেড</td>
-                                <td style="width: 25%; text-align:left">: '.$arr_grade['grade_name'].'</td>
+                                <td style="width: 25%; text-align:left">: '.$db_gradename.'</td>
                                 <td style="width: 25%; text-align:right">পোস্ট<input type="hidden" name="oldpost" value="'.$db_idposting.'" /></td>
                                 <td style="width: 25%; text-align:left">: '.$db_post.'</td>
                             </tr>
@@ -116,10 +134,6 @@ window.name = "parentWindow";
                             <legend style="color: brown;font-size: 14px;">সামগ্রিক কর্মজীবন</legend>
                             <table>
                             <tr>
-                                <td colspan="2" style="width: 50%; text-align:right">কর্মজীবন</td>
-                                <td colspan="2" style="width: 50%; text-align:left">: </td>     
-                            </tr>
-                            <tr>
                                <td style="width: 25%; text-align:right">উপস্থিতির হার</td>
                                 <td style="width: 25%; text-align:left">: </td>
                                 <td style="width: 25%; text-align:right">মোট কর্মদিবস</td>
@@ -144,26 +158,34 @@ window.name = "parentWindow";
                 if(isset($_POST['submitPost']))
                 {
                     $p_postingID = $_POST['OnSCheck'];
-                    $sel_post = mysql_query("SELECT * FROM post_in_ons,post WHERE idpostinons = $p_postingID AND Post_idPost =idPost ");
-                    $postrow = mysql_fetch_assoc($sel_post);
-                    $db_postname = $postrow['post_name'];
-                    $db_officetype = $postrow['post_onstype'];
-                    $db_offid = $postrow['post_onsid'];
+                    $sql_select_post->execute(array($p_postingID));
+                    $row5 = $sql_select_post->fetchAll();
+                    foreach ($row5 as $postrow) {
+                        $db_postname = $postrow['post_name'];
+                        $db_officetype = $postrow['post_onstype'];
+                        $db_offid = $postrow['post_onsid'];
+                    }
                     if($db_officetype == 'office')
                     {
-                        $sel_office = mysql_query("SELECT * FROM office WHERE idOffice = $db_offid");
-                        $offrow = mysql_fetch_assoc($sel_office);
-                        $offname = $offrow['office_name'];
+                        $sql_select_office->execute(array($db_offid));
+                        $row6 = $sql_select_office->fetchAll();
+                        foreach ($row6 as $offrow) {
+                            $offname = $offrow['office_name'];
+                        } 
                     }
                     else
                     {
-                        $sel_office = mysql_query("SELECT * FROM sales_store WHERE idSales_store = $db_offid");
-                        $offrow = mysql_fetch_assoc($sel_office);
-                        $offname = $offrow['salesStore_name'];
+                        $sql_select_sales_store->execute(array($db_offid));
+                        $row6 = $sql_select_office->fetchAll();
+                        foreach ($row6 as $offrow) {
+                            $offname = $offrow['salesStore_name'];
+                        } 
                     }
-                    $sel_ons_relation = mysql_query("SELECT idons_relation FROM ons_relation WHERE catagory='$db_officetype' AND add_ons_id=$db_offid ");
-                    $onsrow = mysql_fetch_assoc($sel_ons_relation);
-                    $db_onsID = $onsrow['idons_relation'];
+                    $sql_select_id_ons_relation->execute(array($db_officetype,$offname));
+                    $row7 = $sql_select_id_ons_relation->fetchAll();
+                    foreach ($row7 as $onsrow) {
+                        $db_onsID = $onsrow['idons_relation'];
+                    }
                 }
                 echo '<tr>
                      <td colspan="4">
