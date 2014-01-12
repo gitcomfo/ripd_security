@@ -28,8 +28,8 @@ function get_catagory() {
         <link rel="icon" type="image/png" href="images/favicon.png" />
         <title>পণ্যের তালিকা</title>
         <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-        <script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
-        <style type="text/css">
+         <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
+         <style type="text/css">
             .prolinks:focus{
                 background-color: cadetblue;
                 color: yellow !important;
@@ -39,7 +39,6 @@ function get_catagory() {
                 color: yellow !important;
             }
         </style>
-        <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
         <script type="text/javascript">
             function ShowTime()
             {

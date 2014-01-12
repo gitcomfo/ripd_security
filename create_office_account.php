@@ -40,15 +40,14 @@ if(isset($_POST['submit0']))
       }
       elseif (($selected_type == 'pwr') && $topparent_id != 0) { $topparent_id = $topparent_id;}
     $thana = $_POST['thana_id'];
-//    $emailusername = str_replace("-", "", $off_acc1);
-//    $ripdemailid = $emailusername . "@ripduniversal.com";
-//    $passwrd = $emailusername;
-//    //************************* create official email *************************************************
-//             $email_create_status = CreateEmailAccount($emailusername, $passwrd);
-//            if ($email_create_status != '777') {
+    $emailusername = str_replace("-", "", $off_acc1);
+    $ripdemailid = $emailusername . "@ripduniversal.com";
+    $passwrd = $emailusername;
+    //************************* create official email *************************************************
+             $email_create_status = CreateEmailAccount($emailusername, $passwrd);
+            if ($email_create_status != '777') {
                 $ripdemailid = "";
-                $passwrd = "123";
-//            }
+            }
     mysql_query("START TRANSACTION");
    
     $sql= "INSERT INTO `office` (opening_date,`office_type` ,`office_selection`, `parent_id`, `top_parent`, `office_name` ,`office_number` ,`account_number` ,`branch_name` ,`office_email` ,email_password, `Thana_idThana`,`office_details_address` ) 
@@ -212,10 +211,8 @@ if(isset($_POST['submit0']))
 <link rel="stylesheet" type="text/css" media="all" href="javascripts/jsDatePick_ltr.min.css" />
 <script type="text/javascript" src="javascripts/jsDatePick.min.1.3.js"></script>
 <script type="text/javascript" src="javascripts/jquery-1.4.3.min.js"></script>
-
 <script type="text/javascript">    
-    
-        $('.del').live('click',function(){
+$('.del').live('click',function(){
 	$(this).parent().parent().remove();
         });
         $('.add').live('click',function()
@@ -226,7 +223,7 @@ if(isset($_POST['submit0']))
             $("#container_others:last").after(appendTxt);
         })
 
-    window.onclick = function()
+window.onclick = function()
     {
         new JsDatePick({
             useMode: 2,
@@ -244,7 +241,6 @@ function numbersonly(e)
                 return false //disable key press
             }
 }
-
 function setParent(office,offid)
 {
         document.getElementById('parent').value = office;

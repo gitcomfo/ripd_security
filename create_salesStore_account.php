@@ -43,16 +43,14 @@ if(isset($_POST['submit']))
     else {$powrid = 0; $topparent_id = 0;}
     $officeID = $_POST['parentOff_id'];
    $thana = $_POST['thana_id'];
-//   $emailusername = str_replace("-", "", $sales_acc1);
-//    $ripdemailid = $emailusername . "@ripduniversal.com";
-//    $passwrd = $emailusername;
-//    //************************* create official email *************************************************
-//             $email_create_status = CreateEmailAccount($emailusername, $passwrd);
-//            if ($email_create_status != '777') {
-//                $ripdemailid = "";
-//            }
-   $ripdemailid = "";
-   $passwrd = "123";
+   $emailusername = str_replace("-", "", $sales_acc1);
+    $ripdemailid = $emailusername . "@ripduniversal.com";
+    $passwrd = $emailusername;
+    //************************* create official email *************************************************
+             $email_create_status = CreateEmailAccount($emailusername, $passwrd);
+            if ($email_create_status != '777') {
+                $ripdemailid = "";
+            }
     mysql_query("START TRANSACTION");
    $sql= "INSERT INTO `sales_store` (opening_date ,`salesStore_name` ,`salesStore_number` ,`account_number` ,`salesStore_details_address` ,`salesStore_email` ,email_password, `sstore_banner`, `office_id`, `powerstore_officeid`,`top_pwr`, `Thana_idThana`) 
             VALUES (NOW(), '$name','$sales_no' , '$sales_acc1', '$sales_add','$ripdemailid','$passwrd' ,'$salesstorebanner_path', '$officeID', '$powrid', '$topparent_id', '$thana')";

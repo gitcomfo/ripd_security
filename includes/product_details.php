@@ -96,8 +96,8 @@ foreach ($arr_product as $proRow) {
                                                     }
                                                     else
                                                     {
-                                                        $sql_select_store->execute(array($db_onsID));
-                                                        $arr_office = $sql_select_store->fetchAll();
+                                                        $sql_select_sales_store->execute(array($db_onsID));
+                                                        $arr_office = $sql_select_sales_store->fetchAll();
                                                         foreach ($arr_office as $offrow) {
                                                             $db_offname = $offrow['salesStore_name'];
                                                             $db_offaddress = $offrow['salesStore_details_address'];

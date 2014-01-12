@@ -15,7 +15,7 @@ $arr_rslt = $sel_command->fetchAll();
 foreach ($arr_rslt as $value) {
     $db_pv = $value['pv_value'];
 }
-$ins_purchase_sum = $conn->prepare("INSERT INTO product_purchase_summary(chalan_no, total_chalan_cost, transport_cost ,others_cost ,chalan_comment , chalan_date , cfs_user_idUser ,chalan_scan_copy) VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)");
+$ins_purchase_sum = $conn->prepare("INSERT INTO product_purchase_summary(chalan_no, chln_invest_amount, chln_reuse_amount, total_chalan_cost, transport_cost ,others_cost ,chalan_comment , chalan_date , cfs_user_idUser ,chalan_scan_copy) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)");
 $ins_purchase = $conn->prepare("INSERT INTO product_purchase(in_ons_type, in_onsid, in_input_date ,input_type ,in_howmany , in_pv , in_extra_profit ,in_profit, in_buying_price, in_sellingprice, pps_id, Product_chart_idproductchart) VALUES (?, ?, NOW(), 'in', ?, ?, ?, ?, ?, ?, ?, ?)");
 $sel_purchase_sum = $conn->prepare("SELECT * FROM product_purchase_summary WHERE chalan_no= ? ");
 
@@ -25,6 +25,16 @@ if(isset($_POST['next']))
     $p_totalTransportCost = $_POST['transportCost'];
     $p_comment = $_POST['transportComment'];
     $p_totalotherCost = $_POST['otherCost'];
+    $p_purchaseType = $_POST['purchaseType'];
+    if($p_purchaseType == 'invest')
+    {
+        $invest_amount = $p_totalBuyingPrice + $p_totalTransportCost;
+        $reuse_amount = 0;
+    }
+    else {
+        $invest_amount = 0;
+        $reuse_amount = $p_totalBuyingPrice + $p_totalTransportCost;
+    }
     
       $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
       $extension = end(explode(".", $_FILES["chalanCopy"]["name"]));
@@ -53,6 +63,8 @@ if(isset($_POST['next']))
         $_SESSION['chalanArray'][2] = $p_comment;
         $_SESSION['chalanArray'][3] = $p_totalotherCost;
         $_SESSION['chalanArray'][4] = $chalancopy_path;
+        $_SESSION['chalanArray'][5] = $invest_amount;
+        $_SESSION['chalanArray'][6] = $reuse_amount;
     }
 }
 
@@ -73,6 +85,8 @@ if(isset($_POST['entry']))
    $comment = $_SESSION['chalanArray'][2];
    $totalother = $_SESSION['chalanArray'][3];
    $chalancopy = $_SESSION['chalanArray'][4];
+   $invest = $_SESSION['chalanArray'][5];
+   $reuse = $_SESSION['chalanArray'][6];
 
    $noRows = count($_SESSION['arrProductTemp']); // how many products
     $p_chartID = $_POST['chartID']; 
@@ -84,7 +98,7 @@ if(isset($_POST['entry']))
     $p_qty = $_POST['porQty']; 
 
     $conn->beginTransaction();
-            $sqlrslt1 = $ins_purchase_sum->execute(array($chalanNo,$totalbuying,$totaltarnsport,$totalother,$comment,$cfsID,$chalancopy));
+            $sqlrslt1 = $ins_purchase_sum->execute(array($chalanNo,$invest,$reuse,$totalbuying,$totaltarnsport,$totalother,$comment,$cfsID,$chalancopy));
             $purchase_sum_id = $conn->lastInsertId();
             for($i=1;$i<=$noRows;$i++)
             {
@@ -119,8 +133,6 @@ if(isset($_POST['entry']))
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>প্রোডাক্ট এন্ট্রি</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<script language="JavaScript" type="text/javascript" src="suggest.js"></script>
-<script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/jquery-1.10.2.min.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 <!--===========================================================================================================================-->
@@ -217,8 +229,7 @@ var blank = validate();
     <?php
             $sl = 1;
             foreach($_SESSION['arrProductTemp'] as $key => $proinfo) {
-                $poribohon = $p_totalTransportCost + $p_totalotherCost;
-                $buyingprice =  $proinfo['4'] + (($proinfo['3'] * $poribohon) / ($p_totalBuyingPrice * $proinfo['2']));
+                $buyingprice =  $proinfo['4'] + (($proinfo['3'] * $p_totalTransportCost) / ($p_totalBuyingPrice * $proinfo['2']));
                 echo "<tr>
                         <td style='text-align: center;'>".english2bangla($sl)."</td>
                         <td style='text-align: left;padding-left:2px;'>$proinfo[1]</td>

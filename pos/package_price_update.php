@@ -19,9 +19,7 @@ foreach ($pvrow as $value) {
 $inventstmt = $conn->prepare("SELECT * FROM inventory WHERE ins_productid= ? AND ins_ons_type=? AND ins_ons_id =? AND ins_product_type = ? ");
 $up_invetory = $conn->prepare("UPDATE inventory SET ins_extra_profit= ?,ins_sellingprice=?, ins_buying_price=? ,ins_profit=? ,ins_pv=? , ins_lastupdate= NOW()
                                                     WHERE ins_product_type='package' AND ins_productid=? AND ins_ons_type=? AND ins_ons_id = ? ");
-$stmtsel = $conn ->prepare( "SELECT * FROM package_info WHERE idpckginfo= ?");
 $selectstmt2 = $conn ->prepare("SELECT * FROM package_details WHERE pckg_infoid = ?");
-$selectstmt3 = $conn ->prepare("SELECT * FROM product_chart WHERE idproductchart= ? ");
 
 if(isset($_POST['update']))
 {
@@ -76,21 +74,26 @@ function beforeUpdate()
 function getUpdate(xprofit) // after update pckg prices
 {
    var run_pv = <?php echo $current_pv?>;
+   xprofit = Number(xprofit);
    var updatedbuy = Number(document.getElementById('updatebuy').value);
    var updatedsell = Number(document.getElementById('updatesellprz').value);
    var profit = updatedsell - (updatedbuy + xprofit);
-   var pv = run_pv * profit;
+   var pv = (run_pv * profit);
    pv = (pv).toFixed(2);
    document.getElementById('updateprofit').value = profit;
    document.getElementById('updatepv').value = pv;
 }
+function out()
+    {
+        setTimeout(function(){parent.location.href=parent.location.href;},1000);
+    }
 </script>
 </head>
     
 <body>
  <div id="maindiv">
      <?php if($msg != "") { ?>
-        <div align="center" style="color: green;font-size: 26px; font-weight: bold; width: 90%;height: 100px;margin: 0 5% 0 5%;float: none;"><?php echo $msg;?></div></br>
+        <div align="center" style="color: green;font-size: 26px; font-weight: bold; width: 90%;height: 100px;margin: 0 5% 0 5%;float: none;"><?php echo $msg; echo "<script>out();</script>";?></div></br>
     <?php } else {?>
   <div id="bush" style="width: 99.9%;font-family: SolaimanLipi !important;float: none;border: solid 1px #000;font-size: 14px;">
       <form method="post" action="" onsubmit="return beforeUpdate();">
@@ -100,19 +103,21 @@ function getUpdate(xprofit) // after update pckg prices
                     <td>
                         <table style="padding: 0px !important;">
                             <tr>
-                                <td width="60%">
+                                <td colspan="2">
                                     <fieldset style="border-width: 2px;width: 95%;">
                                          <legend style="color: brown;">প্যাকেজ বিবরণ</legend>
                                          <?php
                                                     if(isset($_GET['pckgid']))
                                                     {
                                                         $pckgid = $_GET['pckgid'];
-                                                        $stmtsel->execute(array($pckgid));
-                                                        $all = $stmtsel->fetchAll();
+                                                        $type='package';
+                                                        $inventstmt->execute(array($pckgid,$scatagory,$storeID,$type));
+                                                        $all = $inventstmt->fetchAll();
                                                         foreach($all as $row)
                                                         {
-                                                            $db_pckgname= $row['pckg_name'];
-                                                            $db_pckgcode = $row['pckg_code'];
+                                                            $db_pckgname= $row['ins_product_code'];
+                                                            $db_pckgcode = $row['ins_productname'];
+                                                            $db_pckgqty = $row['ins_how_many'];
                                                         }
                                                         $arr_pro_chartid = array();
                                                         $arr_pro_qty = array();
@@ -125,10 +130,12 @@ function getUpdate(xprofit) // after update pckg prices
                                                         }
                                                     }
                                          ?>
-                                         <b>প্যাকেজের নাম : </b><input type="text" id="pckgName" name="pckgName" readonly value="<?php echo $db_pckgname;?>"  style="width: 300px;"/><input type="hidden" name="pckgID"  value="<?php echo $pckgid;?>"/></br>
-                                         <b>প্যাকেজ কোড &nbsp;: </b> <input type="text" id="pckgCode" name="pckgCode" readonly value="<?php echo $db_pckgcode;?>" style="width: 300px;"/></br></br>
+                                         <b>প্যাকেজের নাম &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" id="pckgName" name="pckgName" readonly value="<?php echo $db_pckgname;?>"  style="width: 300px;"/><input type="hidden" name="pckgID"  value="<?php echo $pckgid;?>"/></br>
+                                         <b>প্যাকেজ কোড &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b> <input type="text" id="pckgCode" name="pckgCode" readonly value="<?php echo $db_pckgcode;?>" style="width: 300px;"/></br>
+                                         <b>প্যাকেজের পর্যাপ্ত পরিমান : </b> <input type="text" id="pckgCode" name="pckgCode" readonly value="<?php echo $db_pckgqty;?>" style="width: 300px;"/></br></br>
                                          <table border="1" cellpadding="0" cellspacing="0" style="padding: 0px !important;font-size: 16px;">
                                              <thead style="background-color: #ffcccc">
+                                                 <th width="15%">পণ্যের কোড</th>
                                                  <th width="21%">পণ্যের নাম</th>
                                                  <th width="9%">পরিমাণ</th>
                                                   <th width="12%">বর্তমান ক্রয়মূল্য</th>
@@ -163,6 +170,7 @@ function getUpdate(xprofit) // after update pckg prices
                                                                         $pvsum = $pvsum+$propv;
                                                                       }
                                                                    echo "<tr>
+                                                                       <td>$procode</td>
                                                                       <td>$proname</td>
                                                                       <td align='center'>$proqty</td>
                                                                       <td>$probuy </td>
@@ -176,70 +184,6 @@ function getUpdate(xprofit) // after update pckg prices
              ?>
                                              </tbdoy></table></br>         
                                     </fieldset>
-                                </td>
-                                <td width="40%">
-                                    <fieldset style="border-width: 3px;width: 96%;height: auto;">
-                                         <legend style="color: brown;">ব্যবহারযোগ্য পণ্যের পরিমাণ</legend>
-                                         <table width="100%" border="1" cellpadding="0" cellspacing="0" style="padding: 0px !important;font-size: 16px;">
-                                             <thead style="background-color: #ffcccc">
-                                                 <th width="28%">পণ্যের কোড</th>
-                                                 <th width="44%">পণ্যের নাম</th>
-                                                 <th width="28%">ব্যবহারযোগ্য পরিমাণ</th>
-                                             </thead>
-                                             <tbody style="font-size: 16px;">
-                                             <?php
-                                                        $rowNumber = count($arr_pro_chartid);
-                                                            for($i = 0 ; $i< $rowNumber; $i++)
-                                                            {
-                                                                $prochartid = $arr_pro_chartid[$i];
-                                                                $proqty = $arr_pro_qty[$i];
-                                                                $type='general';
-                                                                $inventstmt->execute(array($prochartid,$scatagory,$storeID,$type));
-                                                                $all4 = $inventstmt->fetchAll();
-                                                                    if(count($all4) !=0)
-                                                                    {
-                                                                    foreach($all4 as $row4)
-                                                                    {
-                                                                        $procode = $row4['ins_product_code'];
-                                                                        $proname = $row4['ins_productname'];
-                                                                        $qty = $row4['ins_how_many'];
-                                                                    }
-                                                                   echo "<tr><td>$procode </td>
-                                                                             <td>$proname</td>
-                                                                             <td align='center'>$qty</td></tr>";
-                                                                   
-                                                                   array_push($arr_ri8_qty,$qty);
-                                                                    }
-                                                                else
-                                                               {
-                                                                    $selectstmt3->execute(array($prochartid));
-                                                                    $all3 = $selectstmt3->fetchAll();
-                                                                    foreach($all3 as $row3)
-                                                                    {
-                                                                        $procode = $row3['pro_code'];
-                                                                        $proname = $row3['pro_productname'];
-                                                                    }
-                                                                    echo "<tr><td>$procode </td>
-                                                                             <td>$proname</td>
-                                                                             <td align='center'>পণ্যটি নেই</td></tr>";
-                                                                    $check = 1;
-                                                                    array_push($arr_ri8_qty,0);
-                                                                    }
-                                                               }
-                                                               $count = count($arr_left_qty);
-                                                                for($j=0; $j<$count; $j++)
-                                                                {
-                                                                   if( $arr_ri8_qty[$j] < $arr_left_qty[$j])
-                                                                   {
-                                                                       $check =1;
-                                                                   }
-                                                                }
-                                                             $str_left = implode("/", $arr_left_qty);
-                                                             $str_ri8 = implode("/", $arr_ri8_qty);                                     
-                                                  ?>
-                                             </tbody>
-                                         </table>
-                                     </fieldset>
                                 </td>
                             </tr>
                             <tr>

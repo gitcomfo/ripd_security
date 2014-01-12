@@ -32,7 +32,6 @@ for ($i = 0; $i <= 18; $i++) {
 ?></select> </td><td style= 'padding-left: 57px;'><input type='button' class='del' /></td><td>&nbsp;<input type='button' class='add' /></td>"+count1
             "</tr>";
             $("#container_others30:last").after(appendTxt);
-            
         }  
         count1 = count1 + 1;     
     })
@@ -117,73 +116,67 @@ if (isset($_POST['submit1'])) {
     // picture, sign, fingerprint**********************************************************************************************
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["image"]["name"]));
-    $image_name = "cust-".$custAcid."-". $_FILES["image"]["name"];
+    $image_name = "cust-".$custAcid."-image.".$extension;
     $image_path = "pic/" . $image_name;
     if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
     } else {
-        echo "Invalid file format.";
+        //echo "Invalid file format.";
     }
 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_signature"]["name"]));
-    $sign_name = "cust-".$custAcid."-".$_FILES["scanDoc_signature"]["name"];
+    $sign_name = "cust-".$custAcid."-sign.".$extension;
     $sing_path = "sign/" . $sign_name;
     if (($_FILES["scanDoc_signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_signature"]["tmp_name"], "sign/" . $sign_name);
     } else {
-        echo "Invalid file format.";
+       // echo "Invalid file format.";
     }
 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_finger_print"]["name"]));
-    $finger_name = "cust-".$custAcid."-".$_FILES["scanDoc_finger_print"]["name"];
+    $finger_name = "cust-".$custAcid."-finger.".$extension;
     $finger_path = "fingerprints/" . $finger_name;
     if (($_FILES["scanDoc_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
     } else {
-        echo "Invalid file format.";
+       // echo "Invalid file format.";
     }
 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["cust_gurd_scanpic"]["name"]));
-    $gimage_name = "gurd-".$custAcid."-".$_FILES["cust_gurd_scanpic"]["name"];
+    $gimage_name = "gurd-".$custAcid."-guardpic".$extension;
     $gimage_path = "pic/" . $gimage_name;
     if (($_FILES["cust_gurd_scanpic"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["cust_gurd_scanpic"]["tmp_name"], "pic/" . $gimage_name);
     } else {
-        echo "Invalid file format.";
+       // echo "Invalid file format.";
     }
     //************ scandocs **********************************************************************************************************
     
-     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_birth_certificate"]["name"]));
-    $dob_name = "DOB-".$custAcid."-".$_FILES["scanDoc_birth_certificate"]["name"];
+    $dob_name = "DOB-".$custAcid."-scandoc.".$extension;
     $dob_path = "scaned/" . $dob_name;
     if (($_FILES["scanDoc_birth_certificate"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_birth_certificate"]["tmp_name"], "scaned/" . $dob_name);
     } else {
-        echo "Invalid file format.";
+        //echo "Invalid file format.";
     }
      
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_national_id"]["name"]));
-    $nid_name = "NID-".$custAcid."-".$_FILES["scanDoc_national_id"]["name"];
+    $nid_name = "NID-".$custAcid."-scandoc.".$extension;
     $nid_path = "scaned/" . $nid_name;
     if (($_FILES["scanDoc_national_id"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_national_id"]["tmp_name"], "scaned/" . $nid_name);
     } else {
-        echo "Invalid file format.";
+       // echo "Invalid file format.";
     }
      
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_chairman_certificate"]["name"]));
-    $cc_name = "CC-".$custAcid."-".$_FILES["scanDoc_chairman_certificate"]["name"];
+    $cc_name = "CC-".$custAcid."-scanDoc".$extension;
     $cc_path = "scaned/" . $cc_name;
     if (($_FILES["scanDoc_chairman_certificate"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_chairman_certificate"]["tmp_name"], "scaned/" . $cc_name);
     } else {
-        echo "Invalid file format.";
+      //  echo "Invalid file format.";
     }
     mysql_query("START TRANSACTION");
     $sql_update_customer = mysql_query("UPDATE customer_account SET cust_father_name='$cust_father_name', cust_mother_name='$cust_mother_name', cust_spouse_name='$cust_spouse_name', cust_family_member='$cust_family_member', cust_son_no='$cust_son_no', cust_daughter_no='$cust_daughter_no', 
@@ -227,7 +220,7 @@ elseif (isset($_POST['submit2'])) {
     //Insert Into Nominee table **************************************************
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["nominee_picture"]["name"]));
-    $image_name = "nom-".$custAcid."-". $_FILES["nominee_picture"]["name"];
+    $image_name = "nom-cust-".$custAcid."-image.". $extension;
     $image_path = "pic/" . $image_name;
     if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["nominee_picture"]["tmp_name"], "pic/" . $image_name);

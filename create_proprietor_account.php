@@ -127,12 +127,11 @@ include_once 'includes/header.php';
 <title>ক্রিয়েট প্রোপ্রাইটার অ্যাকাউন্ট</title>
 <style type="text/css">@import "css/bush.css";</style>
 <script>
-
-    function goBack()
+function goBack()
     {
         window.history.go(-1);
     }
-    function numbersonly(e)
+function numbersonly(e)
     {
         var unicode = e.charCode ? e.charCode : e.keyCode
         if (unicode != 8)
@@ -141,7 +140,7 @@ include_once 'includes/header.php';
                 return false //disable key press
         }
     }
-    function checkIt(evt) // float value-er jonno***********************
+function checkIt(evt) // float value-er jonno***********************
     {
         evt = (evt) ? evt : window.event;
         var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -152,7 +151,7 @@ include_once 'includes/header.php';
         status = "This field accepts numbers only.";
         return false;
     }
-    function checkPass(passvalue) // check password in repeat
+function checkPass(passvalue) // check password in repeat
     {
         var user_password = document.getElementById('user_password').value;
         if (user_password != passvalue)
@@ -166,12 +165,12 @@ include_once 'includes/header.php';
             document.getElementById('passcheck').innerHTML = "OK";
         }
     }
-    function showAccountNo(account)
+function showAccountNo(account)
     {
         document.getElementById('powerStore_accountNumber').value = account;
     }
 
-    function beforeSave()
+function beforeSave()
     {
         if ((document.getElementById('usernamecheck').innerHTML == "") && (document.getElementById('powerStore_accountNumber').value != ""))
         {
@@ -183,7 +182,7 @@ include_once 'includes/header.php';
             return false;
         }
     }
-    function beforeSave2()
+function beforeSave2()
     {
         if ((document.getElementById('usernamecheck').innerHTML == "") && (document.getElementById('powerStore_accountNumber').value != "") && (document.getElementById('passcheck').innerHTML == "OK"))
         {
@@ -195,7 +194,7 @@ include_once 'includes/header.php';
             return false;
         }
     }
-    function beforeSaveRetry()
+function beforeSaveRetry()
     {
         if ((document.getElementById('usernamecheck').innerHTML == "") && (document.getElementById('powerStore_accountNumber').value != "") && (document.getElementById('passcheck').innerHTML == ""))
         {
@@ -220,10 +219,10 @@ function userminlength(username)
 }
 function passminlength(pass)
 {
-    if(pass.length < 8)
+    if(pass.length < 10)
         {
             document.getElementById('user_password').focus();
-            document.getElementById('minlengtherror').innerHTML= "কমপক্ষে ৮ অক্ষর হতে হবে";
+            document.getElementById('minlengtherror').innerHTML= "কমপক্ষে ১০ অক্ষর হতে হবে";
         }
          else{
             document.getElementById('minlengtherror').innerHTML= "";

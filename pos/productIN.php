@@ -15,8 +15,6 @@ $sel_product_chart = $conn->prepare("SELECT * FROM product_chart WHERE idproduct
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>প্রোডাক্ট এন্ট্রি</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<script language="JavaScript" type="text/javascript" src="suggest.js"></script>
-<script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 <style type="text/css">
 .prolinks:focus{
@@ -53,7 +51,12 @@ function beforeSave()
 {
       a=document.getElementById('transportCost').value;
       b=document.getElementById('otherCost').value;
-    if ((a != "") && (b != "")) 
+      var radiocheck = 0;
+      var radios = document.getElementsByName("purchaseType");
+      for(var i=0; i<radios.length; i++){
+	if(radios[i].checked) { radiocheck = 1; }
+	}
+    if ((a != "") && (b != "") && (radiocheck == 1)) 
     {
         document.getElementById("next").readonly = false; return true;}
     else {
@@ -87,7 +90,7 @@ function searchCode(where) // productlist-er code search box
                 document.getElementById('layer2').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","searchsuggest2.php?searchcode="+str_key+"&where="+where,true);
+        xmlhttp.open("GET","searchsuggest.php?searchcode="+str_key+"&where="+where,true);
         xmlhttp.send();
     
 }
@@ -117,7 +120,7 @@ function searchName(where) // productlist-er name search box
                 document.getElementById('searchResult').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","searchsuggest2.php?searchname="+str_key+"&where="+where,true);
+        xmlhttp.open("GET","searchsuggest.php?searchname="+str_key+"&where="+where,true);
         xmlhttp.send();    
 }
 function addToTable() // to add into temporary array*******************
@@ -285,6 +288,10 @@ function deleteProduct(id) // to add into temporary array*******************
         <tr>
             <td>চালান কপি</td>
             <td>: <input type="file" name="chalanCopy" /></td>
+        </tr>
+        <tr>
+            <td><input type="radio" name="purchaseType" value="invest" />ইনভেস্ট</td>
+            <td><input type="radio" name="purchaseType" value="reuse" />রিইউজ</td>
         </tr>
     </table>
 </fieldset>

@@ -1,9 +1,8 @@
 <?php
+error_reporting(0);
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 include_once 'includes/areaSearch2.php';
-
-error_reporting(0);
 $x= $_GET['id'];
 $custAcid = base64_decode($x);
 ?>
@@ -125,7 +124,7 @@ if (isset($_POST['submit1'])) {
         }
         else
         {
-            $image_name = "cust-".$custAcid."-".$_FILES["image"]["name"];
+            $image_name = "cust-".$custAcid."-image.".$extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -136,7 +135,6 @@ if (isset($_POST['submit1'])) {
                     echo "Invalid file format.";
                     }
         }
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_signature"]["name"]));
     $sign_name = $_FILES["scanDoc_signature"]["name"];
     if($sign_name=="")
@@ -146,7 +144,7 @@ if (isset($_POST['submit1'])) {
         }
         else
         {
-            $sign_name = "cust-".$custAcid."-".$_FILES["scanDoc_signature"]["name"];
+            $sign_name = "cust-".$custAcid."-sign.".$extension;
             $sing_path = "sign/" . $sign_name;
             if (($_FILES["scanDoc_signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -156,7 +154,6 @@ if (isset($_POST['submit1'])) {
                     {echo "Invalid file format.";}
         }
 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_finger_print"]["name"]));
     $finger_name = $_FILES["scanDoc_finger_print"]["name"];
     if($finger_name=="")
@@ -166,7 +163,7 @@ if (isset($_POST['submit1'])) {
         }
         else
         {
-            $finger_name = "cust-".$custAcid."-".$_FILES["scanDoc_finger_print"]["name"];
+            $finger_name = "cust-".$custAcid."-finger.".$extension;
             $finger_path = "fingerprints/" . $finger_name;
             if (($_FILES["scanDoc_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -178,7 +175,6 @@ if (isset($_POST['submit1'])) {
                     }
         }
 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["cust_gurd_scanpic"]["name"]));
     $gurdimage_name = $_FILES["cust_gurd_scanpic"]["name"];
     if($gurdimage_name=="")
@@ -188,7 +184,7 @@ if (isset($_POST['submit1'])) {
         }
         else
         {
-            $gurdimage_name = "gurd-".$custAcid."-".$_FILES["cust_gurd_scanpic"]["name"];
+            $gurdimage_name = "gurd-".$custAcid."-guardpic.".$extension;
             $gimage_path = "pic/" . $gurdimage_name;
             if (($_FILES["cust_gurd_scanpic"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -200,8 +196,7 @@ if (isset($_POST['submit1'])) {
                     }
         }
     //************ scandocs **********************************************************************************************************
-    
-     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+
     $extension = end(explode(".", $_FILES["scanDoc_birth_certificate"]["name"]));
    $dob_name = $_FILES["scanDoc_birth_certificate"]["name"];
     if($dob_name=="")
@@ -211,7 +206,7 @@ if (isset($_POST['submit1'])) {
         }
         else
         {
-            $dob_name = "DOB-".$custAcid."-".$_FILES["scanDoc_birth_certificate"]["name"];
+            $dob_name = "DOB-".$custAcid."-scandoc.".$extension;
             $dob_path = "scaned/" . $dob_name;
             if (($_FILES["scanDoc_birth_certificate"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -222,8 +217,7 @@ if (isset($_POST['submit1'])) {
                     echo "Invalid file format.";
                     }
         }
-     
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+
     $extension = end(explode(".", $_FILES["scanDoc_national_id"]["name"]));
     $nid_name = $_FILES["scanDoc_national_id"]["name"];
     if($nid_name=="")
@@ -233,7 +227,7 @@ if (isset($_POST['submit1'])) {
         }
         else
         {
-            $nid_name = "NID-".$custAcid."-".$_FILES["scanDoc_national_id"]["name"];
+            $nid_name = "NID-".$custAcid."-scandoc.".$extension;
             $nid_path = "scaned/" . $nid_name;
             if (($_FILES["scanDoc_national_id"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -244,8 +238,7 @@ if (isset($_POST['submit1'])) {
                     echo "Invalid file format.";
                     }
         }
-     
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+
     $extension = end(explode(".", $_FILES["scanDoc_chairman_certificate"]["name"]));
     $cc_name = $_FILES["scanDoc_chairman_certificate"]["name"];
     if($cc_name=="")
@@ -255,7 +248,7 @@ if (isset($_POST['submit1'])) {
         }
         else
         {
-            $cc_name = "CC-".$custAcid."-".$_FILES["scanDoc_chairman_certificate"]["name"];
+            $cc_name = "CC-".$custAcid."-scandoc.".$extension;
             $cc_path = "scaned/" . $cc_name;
             if (($_FILES["scanDoc_chairman_certificate"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -355,12 +348,12 @@ elseif (isset($_POST['submit2'])) {
     $image_name = $_FILES["nominee_picture"]["name"];
     if($image_name=="")
         {
-            $image_name= "nom-".$custAcid."-".$_POST['nomimagename'];
+            $image_name= "nom-cust-".$custAcid."-".$_POST['nomimagename'];
              $image_path = "pic/" . $image_name;
         }
         else
         {
-            $image_name = "nom-".$custAcid."-".$_FILES["nominee_picture"]["name"];
+            $image_name = "nom-cust-".$custAcid."-image.". $extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -446,7 +439,7 @@ elseif (isset($_POST['submit3'])) {
     mysql_query("START TRANSACTION");
    $del_c_edu = mysql_query("DELETE FROM education WHERE education_type='cust' AND cepn_id=$custAcid");
     for ($i = 0; $i < $a; $i++) {
-        $sql_insert_cus_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) 
+        $sql_insert_cus_edu = "INSERT INTO education ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) 
                                             VALUES ('$c_ex_name[$i]', '$c_pass_year[$i]','$c_institute[$i]','$c_board[$i]','$c_gpa[$i]','cust','$custAcid');";
         $cus_edu = mysql_query($sql_insert_cus_edu);
     }
@@ -462,7 +455,7 @@ elseif (isset($_POST['submit3'])) {
     $b = count($n_ex_name);
     $del_n_edu = mysql_query("DELETE FROM education WHERE education_type='nmn' AND cepn_id=$db_nomID");
     for ($i = 0; $i < $b; $i++) {
-        $sql_insert_nom_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) 
+        $sql_insert_nom_edu = "INSERT INTO education ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) 
                                                 VALUES ('$n_ex_name[$i]', '$n_pass_year[$i]','$n_institute[$i]','$n_board[$i]','$n_gpa[$i]','nmn','$db_nomID');";
         $nom_edu = mysql_query($sql_insert_nom_edu);
     }

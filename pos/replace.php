@@ -22,18 +22,17 @@ $sel_cfsuser = $conn->prepare("SELECT * FROM cfs_user WHERE idUser= ? ");
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>ক্রয়কৃত পণ্য পরিবর্তন</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/jquery-1.4.3.min.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 <style type="text/css">
-            .prolinks:focus{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
-            .prolinks:hover{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
+ .prolinks:focus{
+      background-color: cadetblue;
+        color: yellow !important;
+  }
+ .prolinks:hover{
+       background-color: cadetblue;
+       color: yellow !important;
+ }
 </style>
 <script type="text/javascript">
 function ShowTime()
@@ -73,7 +72,8 @@ function checkTime(i)
       }
       return i
     }
-function validate() {
+function validate() 
+{
 var OK= 0;
         $(".inbox").filter(function() {
          var val = $(this).val();
@@ -287,7 +287,7 @@ if (isset($_GET['id']))
                                 echo "<td><div align='left'><input type='hidden' name='proCode[]' value=$db_proCode />$db_proCode</div></td>";
                                 echo "<td><div align='left'><input type='hidden' name='proname[]' value= '$db_proName' />&nbsp;&nbsp;&nbsp;$db_proName</div></td>";
                                 echo "<td><div align='center'><input type='hidden' name='soldqty[]' id='soldqty[$sl]' value='$db_itemqty'/>".english2bangla($db_itemqty)."</div></td>";
-                                echo '<td><div align="center"><input type="hidden" name="soldprice[]" value='.$db_itemprice.'/>'.english2bangla($db_itemprice).'<input type="hidden" name="inventSumID[]" value='.$db_inventID.'/></div></td>';
+                                echo '<td><div align="center"><input type="hidden" name="soldprice[]" value='.$db_itemprice.' />'.english2bangla($db_itemprice).'<input type="hidden" name="inventSumID[]" value='.$db_inventID.' /></div></td>';
                                 echo '<td><div align="center">'.english2bangla($db_itemTotalPV).'</div></td>';
                                  echo "<td><input type='text' class='inbox' id='replaceUnit[$sl]' name='replaceUnit[]' style='width: 94%;text-align:right' onkeyup='checkQty(this.value,$sl);' /></td>";
                                 echo '</tr>';

@@ -28,7 +28,6 @@ function get_catagory($sql) {
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>পণ্যের তালিকা</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
 <style type="text/css">
 .prolinks:focus{
     background-color: cadetblue;

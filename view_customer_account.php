@@ -126,7 +126,7 @@ if (isset($_POST['submit1'])) {
     $cust_gurdian_passportID_no = $_POST['cust_gurdian_passportID_no'];
     $dob = $_POST['dob'];
 
-    // picture, sign, fingerprint**********************************************************************************************
+    // picture**********************************************************************************************
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["image"]["name"]));
     $image_name = $_FILES["image"]["name"];
@@ -137,7 +137,7 @@ if (isset($_POST['submit1'])) {
         }
         else
         {
-            $image_name = "cust-".$p_custAcid."-".$_FILES["image"]["name"];
+            $image_name = "cust-".$p_custAcid."-image.".$extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -149,8 +149,6 @@ if (isset($_POST['submit1'])) {
                     }
         }
 
-
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["cust_gurd_scanpic"]["name"]));
     $gurdimage_name = $_FILES["cust_gurd_scanpic"]["name"];
     if($gurdimage_name=="")
@@ -160,7 +158,7 @@ if (isset($_POST['submit1'])) {
         }
         else
         {
-            $gurdimage_name = "gurd-".$p_custAcid."-".$_FILES["cust_gurd_scanpic"]["name"];
+            $gurdimage_name = "gurd-".$p_custAcid."-guardpic.".$extension;
             $gimage_path = "pic/" . $gurdimage_name;
             if (($_FILES["cust_gurd_scanpic"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -261,12 +259,12 @@ elseif (isset($_POST['submit2'])) {
     $image_name = $_FILES["nominee_picture"]["name"];
     if($image_name=="")
         {
-            $image_name= "nom-".$p_custAcid."-".$_POST['nomimagename'];
+            $image_name= "nom-cust-".$custAcid."-".$_POST['nomimagename'];
              $image_path = "pic/" . $image_name;
         }
         else
         {
-            $image_name = "nom-".$p_custAcid."-".$_FILES["nominee_picture"]["name"];
+            $image_name = "nom-cust-".$custAcid."-image.".$extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {

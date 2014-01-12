@@ -24,12 +24,12 @@ if (isset($_POST['submit1'])) {
     $image_name = $_FILES["image"]["name"];
     if($image_name=="")
         {
-            $image_name= "picture" . "-" . $_POST['imagename'];
+            $image_name= "pwr-" .$proprietorID."-".$_POST['imagename'];
              $image_path = "pic/" . $image_name;
         }
         else
         {
-            $image_name = "picture" . "-" . $_FILES["image"]["name"];
+            $image_name = "pwr-" .$proprietorID."-image.".$extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -42,17 +42,16 @@ if (isset($_POST['submit1'])) {
                     }
         }
 
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_signature"]["name"]));
     $sign_name = $_FILES["scanDoc_signature"]["name"];
     if($sign_name=="")
         {
-            $sign_name= "signature" . "-" . $_POST['signname'];
+            $sign_name= "pwr-" .$proprietorID."-".$_POST['signname'];
              $sing_path = "sign/" . $sign_name;
         }
         else
         {
-            $sign_name = "signature" . "-" . $_FILES["scanDoc_signature"]["name"];
+            $sign_name = "pwr-" .$proprietorID."-sign.".$extension;
             $sing_path = "sign/" . $sign_name;
             if (($_FILES["scanDoc_signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -64,17 +63,16 @@ if (isset($_POST['submit1'])) {
                     }
         }
  
-    $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
     $extension = end(explode(".", $_FILES["scanDoc_finger_print"]["name"]));
     $finger_name = $_FILES["scanDoc_finger_print"]["name"];
     if($finger_name=="")
         {
-            $finger_name= "fingerprint" . "-" . $_POST['fingername'];
+            $finger_name="pwr-" .$proprietorID."-".$_POST['fingername'];
              $finger_path = "fingerprints/" . $finger_name;
         }
         else
         {
-            $finger_name = "fingerprint" . "-" . $_FILES["scanDoc_finger_print"]["name"];
+             $finger_name ="pwr-" .$proprietorID."-finger.".$extension;
             $finger_path = "fingerprints/" . $finger_name;
             if (($_FILES["scanDoc_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -153,12 +151,13 @@ elseif (isset($_POST['submit2'])) {
     $image = $_FILES["nominee_picture"]["name"];
     if($image=="")
         {
-            $image_name= "nom" . "-" . $_POST['nomimage'];
+            $image_name="nom-pwr-".$proprietorID. "-" . $_POST['nomimage'];
              $image_path = "pic/" . $image_name;
         }
         else
         {
-            $image_name = "nom" . "-" . $_FILES["nominee_picture"]["name"];
+
+            $image_name = "nom-pwr-".$proprietorID."-image.".$extension;
             $image_path = "pic/" . $image_name;
             if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
@@ -525,12 +524,12 @@ if(strlen($p_mobile) == 11)
                     </tr>
                    <tr>
                         <td>প্রোপ্রাইটারের নাম</td>
-                        <td>:   <input class='box' type='text' id='name' name='name' value="<?php echo $db_proprietorName;?>"/>
+                        <td>:   <input class='box' style="width:220px;" type='text' id='name' name='name' value="<?php echo $db_proprietorName;?>"/>
                             <input type='hidden' name='cfsid' value="<?php echo $userID;?>"/></td>			
                     </tr>
                     <tr>
                         <td >একাউন্ট নাম্বার</td>
-                        <td>:   <input class='box' type='text' id='acc_num' name='acc_num' readonly value="<?php echo $db_proprietorAcc;?>"/></td>			
+                        <td>:   <input class='box' style="width:220px;" type='text' id='acc_num' name='acc_num' readonly value="<?php echo $db_proprietorAcc;?>"/></td>			
                     </tr>
                     <tr>
                         <td>অফিশিয়াল ই মেইল</td>
@@ -538,11 +537,11 @@ if(strlen($p_mobile) == 11)
                     </tr>
                     <tr>
                         <td >ব্যক্তিগত ই মেইল</td>
-                       <td>:   <input class='box' type='text' id='email' name='email' onblur='check(this.value)' value="<?php echo $db_proprietorMail;?>" /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
+                       <td>:   <input class='box' style="width:220px;" type='text' id='email' name='email' onblur='check(this.value)' value="<?php echo $db_proprietorMail;?>" /> <em>ইংরেজিতে লিখুন</em> <span id='error_msg' style='margin-left: 5px'></span></td>			
                     </tr>
                     <tr>
                         <td >মোবাইল</td>
-                        <td>:   <input class='box' type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' value="<?php echo $db_proprietorMob;?>" /></td>		
+                        <td>:   <input class='box' style="width:220px;" type='text' id='mobile' name='mobile' onkeypress=' return numbersonly(event)' value="<?php echo $db_proprietorMob;?>" /></td>		
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-top: 10px; padding-left: 250px;padding-bottom: 5px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit5" value="সেভ করুন" />

@@ -13,8 +13,8 @@ $storeName = $_SESSION['loggedInOfficeName'];
         <link rel="icon" type="image/png" href="images/favicon.png" />
         <title>বিক্রয় কার্যক্রম</title>
         <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-        <script language="JavaScript" type="text/javascript" src="suggest.js"></script>
-        <script language="JavaScript" type="text/javascript" src="productsearch.js"></script>
+        <script language="JavaScript" type="text/javascript" src="scripts/suggest.js"></script>
+        <script language="JavaScript" type="text/javascript" src="scripts/productsearch.js"></script>
         <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
         <script src="scripts/tinybox.js" type="text/javascript"></script>
         <style type="text/css">
@@ -263,8 +263,8 @@ $storeName = $_SESSION['loggedInOfficeName'];
                 var code = document.getElementById("procode").value;
                 var qty = Number(document.getElementById("QTY").value);
                 var totalamount = Number(document.getElementById("TOTAL").value);
-                var sell = document.getElementById("PPRICE").value;
-                var buy = document.getElementById("buyprice").value;
+                var sell = Number(document.getElementById("PPRICE").value);
+                var buy = Number(document.getElementById("buyprice").value);
                 var totalpv = Number(document.getElementById("SubTotalPV").value);
                 if(qty != 0)
                 {
@@ -291,7 +291,6 @@ $storeName = $_SESSION['loggedInOfficeName'];
     </head>
 
     <body>
-
         <div id="maindiv">
             <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
             <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">

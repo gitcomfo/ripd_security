@@ -109,7 +109,7 @@ include_once 'includes/MiscFunctions.php';
 
 <div class="columnSld" style=" padding-left: 50px;">
     <div class="main_text_box">
-        <div style="padding-left: 110px;"><a href="accounting_sys_management.php"><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 9px;"><a href="accounting_sys_management.php"><b>ফিরে যান</b></a></div>
         <div>           
             <form method="POST" onsubmit="" name="frm" action="cheque_make.php">	
                 <table  class="formstyle" style="width: 90%; margin: 1px 1px 1px 1px;">          

@@ -202,7 +202,7 @@ function get_catagory() {
                 <tr>
                     <td>
                         <fieldset style="border: 3px solid #686c70 ; width: 99%;font-family: SolaimanLipi !important;">
-                            <legend style="color: brown;font-size: 14px;">personal perchase statement</legend>
+                            <legend style="color: brown;font-size: 14px;">পার্সোনাল পারচেজ স্টেটমেন্ট</legend>
                             <div id="resultTable">
                                 <table style="width: 98%;margin: 0 auto;" cellspacing="0" cellpadding="0">
                                     <thead>
@@ -218,24 +218,26 @@ function get_catagory() {
                                     </thead>
                                     <tbody style="background-color: #FCFEFE">
                                         <?php
-//if (isset($_GET['code']))
-//     	{	
-//                    $G_summaryID = $_GET['code'];
                                         $slNo = 1;
-                                        $result = mysql_query("SELECT * FROM product_chart ORDER BY pro_code ");
+                                        $userID = $_SESSION['userIDUser'];
+                                        $result = mysql_query("SELECT *
+                                                                    FROM `sales_summary` 
+                                                                    WHERE sal_buyerid = $userID
+                                                                    ORDER BY sal_salesdate");
                                         while ($row = mysql_fetch_assoc($result)) {
-                                            $db_proname = $row["pro_productname"];
-                                            $db_unit = $row["pro_unit"];
-                                            $db_article = $row["pro_article"];
-                                            $db_procode = $row["pro_code"];
+                                            $db_sal_salesdate = $row["sal_salesdate"];
+                                            $db_sal_salestime = $row["sal_salestime"];
+                                            $db_sal_totalamount = $row["sal_totalamount"];
+                                            $db_sal_invoiceno = $row["sal_invoiceno"];
+                                            $db_sal_totalpv = $row['sal_totalpv'];
                                             echo '<tr>';
-                                            echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla($slNo) . '</div></td>';
-                                            echo '<td  style="border: solid black 1px;"><div align="left">' . $db_procode . '</div></td>';
-                                            echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;' . $db_proname . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_sal_salesdate . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="left">' . $db_sal_salestime . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="left">&nbsp;&nbsp;&nbsp;' . $db_sal_invoiceno . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_sal_totalamount . '</div></td>';
                                             echo '<td  style="border: solid black 1px;"><div align="center">' . $db_unit . '</div></td>';
-                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_unit . '</div></td>';
-                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_unit . '</div></td>';
-                                            echo '<td style="border: solid black 1px;"><div align="center"><a onclick="detailsWithPrice()" style="cursor:pointer;color:blue;">বিস্তারিত</a></div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_sal_totalpv . '</div></td>';
+                                            echo '<td  style="border: solid black 1px;"><div align="center">' . $db_sal_totalpv . '</div></td>';
                                             echo '</tr>';
                                             $slNo++;
                                         }
