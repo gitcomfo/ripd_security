@@ -82,7 +82,7 @@ elseif (isset($_GET['account'])) {
                                 <td><b>নাম :</b> $name<input type='hidden' name='receiver_user_id' value='$cfs_user_id'></td>
                             </tr>
                             <tr>
-                                <td><b>মোবাইল :</b> $mobile</td>
+                                <td><b>মোবাইল :</b> $mobile<input type='hidden' name='user_mobile' value='$mobile'></td>
                             </tr>
                             </table>";
                     }

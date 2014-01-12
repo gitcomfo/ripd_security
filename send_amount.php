@@ -63,6 +63,10 @@ if (isset($_POST['save'])) {
                 $reciever_get = $total_transaction - $trans_servicecharge;
         }
     }
+    /*$reciever_get = $trans_amount;
+    $trans_servicecharge = chargeAmount($reciever_get, $charge_code);
+    if($chrg_givenby == "sender") $total_transaction = $reciever_get + $trans_servicecharge;
+    else $reciever_get = $total_transaction - $trans_servicecharge;*/
     $sts = "unpaid";
     random:
     $random = mt_rand(10000000, 99999999);

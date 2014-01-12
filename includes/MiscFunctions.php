@@ -303,4 +303,21 @@ function getChequeNo()
     }
    return $str_checque_no;
 }
+
+function chargeAmount($amount, $code)
+{
+    include_once 'selectQueryPDO.php';
+    $sql_select_charge->execute(array($code));
+    $row_charge = $sql_select_charge->fetchAll();
+    foreach ($row_charge as $row)
+        {
+        $db_charge_amount = $row['charge_amount'];
+        $db_charge_type = $row['charge_type'];
+        }
+    if($db_charge_type == "fixed") $charge = $db_charge_amount;
+    elseif($db_charge_type == "percent") $charge = $amount*$db_charge_amount/100;
+    else $charge = 0;
+    return $charge;
+}
+
 ?>
