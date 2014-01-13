@@ -179,7 +179,7 @@ mysql_query("START TRANSACTION");
     $n_road = $_POST['n_road'];
     $n_post_code = $_POST['n_post_code'];
     //Permanent Address information
-    if($_POST['addressConfirm1'] == 'asabove')
+    if($_POST['addressConfirm2'] == 'asabove')
     {
         $np_Village_idVillage = $_POST['village_id5'];
         $np_Post_idPost = $_POST['post_id5'];

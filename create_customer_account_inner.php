@@ -86,6 +86,22 @@ for ($i = 0; $i <= 18; $i++) {
     })
         
 </script>
+<script type="text/javascript">
+    function showBox(classname)
+    {
+        elements = $(classname);
+        elements.each(function() { 
+            $(this).css("visibility","visible"); 
+        });
+    }
+    function hideBox(classname)
+    {
+        elements = $(classname);
+        elements.each(function() { 
+            $(this).css("visibility","hidden"); 
+        });
+    }
+</script>
 <?php
 if (isset($_POST['submit1'])) {
     $cust_father_name = $_POST['cust_father_name'];
@@ -287,14 +303,26 @@ elseif (isset($_POST['submit4'])) {
     $c_road = $_POST['c_road'];
     $c_post_code = $_POST['c_post_code'];
     //Permanent Address information
-    $cp_Village_idVillage = $_POST['village_id2'];
-    $cp_Post_idPost = $_POST['post_id2'];
-    $cp_Thana_idThana = $_POST['thana_id2'];
-    $cp_house = $_POST['cp_house'];
-    $cp_house_no = $_POST['cp_house_no'];
-    $cp_road = $_POST['cp_road'];
-    $cp_post_code = $_POST['cp_post_code'];
-    //Current Address Infromation
+    if($_POST['addressConfirm1'] == 'asabove')
+    {
+        $cp_Village_idVillage = $_POST['village_id1'];
+        $cp_Post_idPost = $_POST['post_id1'];
+        $cp_Thana_idThana = $_POST['thana_id1'];
+        $cp_house = $_POST['c_house'];
+        $cp_house_no = $_POST['c_house_no'];
+        $cp_road = $_POST['c_road'];
+        $cp_post_code = $_POST['c_post_code']; 
+    }
+ else {
+            $cp_Village_idVillage = $_POST['village_id2'];
+            $cp_Post_idPost = $_POST['post_id2'];
+            $cp_Thana_idThana = $_POST['thana_id2'];
+            $cp_house = $_POST['cp_house'];
+            $cp_house_no = $_POST['cp_house_no'];
+            $cp_road = $_POST['cp_road'];
+            $cp_post_code = $_POST['cp_post_code'];    
+    }
+    //Current Address Infromation guardian
     $g_Village_idVillage = $_POST['village_id3'];
     $g_Post_idPost = $_POST['post_id3'];
     $g_Thana_idThana = $_POST['thana_id3'];
@@ -302,7 +330,7 @@ elseif (isset($_POST['submit4'])) {
     $g_house_no = $_POST['g_house_no'];
     $g_road = $_POST['g_road'];
     $g_post_code = $_POST['g_post_code'];
-    //Permanent Address information
+    //Permanent Address information guardian
     $gp_Village_idVillage = $_POST['village_id4'];
     $gp_Post_idPost = $_POST['post_id4'];
     $gp_Thana_idThana = $_POST['thana_id4'];
@@ -310,7 +338,7 @@ elseif (isset($_POST['submit4'])) {
     $gp_house_no = $_POST['gp_house_no'];
     $gp_road = $_POST['gp_road'];
     $gp_post_code = $_POST['gp_post_code'];
-    //Current Address Infromation
+    //Current Address Infromation nominee
     $n_Village_idVillage = $_POST['village_id5'];
     $n_Post_idPost = $_POST['post_id5'];
     $n_Thana_idThana = $_POST['thana_id5'];
@@ -318,14 +346,26 @@ elseif (isset($_POST['submit4'])) {
     $n_house_no = $_POST['n_house_no'];
     $n_road = $_POST['n_road'];
     $n_post_code = $_POST['n_post_code'];
-    //Permanent Address information
-    $np_Village_idVillage = $_POST['village_id6'];
-    $np_Post_idPost = $_POST['post_id6'];
-    $np_Thana_idThana = $_POST['thana_id6'];
-    $np_house = $_POST['np_house'];
-    $np_house_no = $_POST['np_house_no'];
-    $np_road = $_POST['np_road'];
-    $np_post_code = $_POST['np_post_code'];
+    //Permanent Address information nominee
+   if($_POST['addressConfirm2'] == 'asabove')
+    {
+        $np_Village_idVillage = $_POST['village_id5'];
+        $np_Post_idPost = $_POST['post_id5'];
+        $np_Thana_idThana = $_POST['thana_id5'];
+        $np_house = $_POST['n_house'];
+        $np_house_no = $_POST['n_house_no'];
+        $np_road = $_POST['n_road'];
+        $np_post_code = $_POST['n_post_code'];   
+    }
+ else {
+            $np_Village_idVillage = $_POST['village_id6'];
+            $np_Post_idPost = $_POST['post_id6'];
+            $np_Thana_idThana = $_POST['thana_id6'];
+            $np_house = $_POST['np_house'];
+            $np_house_no = $_POST['np_house_no'];
+            $np_road = $_POST['np_road'];
+            $np_post_code = $_POST['np_post_code'];       
+    }
     mysql_query("START TRANSACTION");
     //customer address_type=Present
     $sql_c_insert_current_address = mysql_query("INSERT INTO $dbname.address 
@@ -798,83 +838,116 @@ $sql_cust_sel = mysql_query("SELECT * FROM customer_account, cfs_user WHERE idUs
                     <tr>
                         <td colspan="4" ><hr /></td>
                     </tr>
-                    <tr>	
-                        <td  colspan="2" style =" font-size: 14px"><b>বর্তমান ঠিকানা </b></td>                            
-                        <td colspan="2" style =" font-size: 14px"><b> স্থায়ী ঠিকানা   </b></td>
-                    </tr>
                     <tr>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        <td >:   <input class="box" type="text" id="c_house" name="c_house" /></td>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        <td >:   <input class="box" type="text" id="cp_house" name="cp_house" /></td>
-                    </tr>
-                    <tr>
-                        <td  >বাড়ি নং</td>
-                        <td >:   <input class="box" type="text" id="c_house_no" name="c_house_no" /></td>
-                        <td >বাড়ি নং</td>
-                        <td>:   <input class="box" type="text" id="cp_house_no" name="cp_house_no" /></td>
-                    </tr>
-                    <tr>
-                        <td >রোড নং</td>
-                        <td>:   <input class="box" type="text" id="c_road" name="c_road" /> </td>
-                        <td >রোড নং</td>
-                        <td>:   <input class="box" type="text" id="cp_road" name="cp_road" /></td>
-                    </tr>
-                    <tr>
-                        <td >পোষ্ট কোড</td>
-                        <td>:   <input class="box" type="text" id="c_post_code" name="c_post_code" /></td>
-                        <td >পোষ্ট কোড</td>
-                        <td>:   <input class="box" type="text" id="cp_post_code" name="cp_post_code" /></td>
-                    </tr> 
-                    <tr>
-                        <td >বিভাগ</td>
-                        <td>:  <select class="box2" type="text" id="division_id_1" name="c_division_name" onChange="getDistrict1()" />
-                            <option value=1>-বিভাগ-</option>
-                            <?php
-                            $division_sql = mysql_query("SELECT * FROM " . $dbname . ".division ORDER BY division_name ASC");
-                            while ($division_rows = mysql_fetch_array($division_sql)) {
-                                $db_division_id = $division_rows['idDivision'];
-                                $db_division_name = $division_rows['division_name'];
-                                echo'<option style="width: 96%" value=' . $db_division_id . '>' . $db_division_name . '</option>';
-                            }
-                            ?>
-                            </select></td>                                
-                        <td >বিভাগ</td>
-                        <td>:  <select class="box2" type="text" id="division_id_2" name="p_division_name" onChange="getDistrict2()" />
-                            <option value=1>-বিভাগ-</option>
-                            <?php
-                            $division_sql = mysql_query("SELECT * FROM " . $dbname . ".division ORDER BY division_name ASC");
-                            while ($division_rows = mysql_fetch_array($division_sql)) {
-                                $db_division_id = $division_rows['idDivision'];
-                                $db_division_name = $division_rows['division_name'];
-                                echo'<option style="width: 96%" value=' . $db_division_id . '>' . $db_division_name . '</option>';
-                            }
-                            ?>
-                            </select></td>
-                    </tr>
-                    <tr>
-                        <td >জেলা</td>
-                        <td>: <span id="did"></span></td>
-                        <td >জেলা</td>
-                        <td>: <span id="did2"></span></td>
-                    </tr>                        
-                    <tr>
-                        <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd"></span></td>      
-                        <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd2"></span></td>
-                    </tr>
-                    <tr>
-                        <td >পোষ্ট অফিস</td>
-                        <td>: <span id="pidd"></span></td> 
-                        <td >পোষ্ট অফিস</td>
-                        <td>: <span id="pidd2"></span></td> 
-                    </tr>
-                    <tr>
-                        <td  >গ্রাম / পাড়া / প্রোজেক্ট</td>
-                        <td>: <span id="vidd"></span></td> 
-                        <td >গ্রাম / পাড়া / প্রোজেক্ট</td>
-                        <td>: <span id="vidd2"></span></td> 
+                        <td colspan="2">
+                            <table>
+                                <tr>	
+                                    <td  colspan="2" style =" font-size: 14px"><b>বর্তমান ঠিকানা </b></td> 
+                                </tr>
+                                <tr>
+                                    <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                                    <td >:   <input class="box" type="text" id="c_house" name="c_house" /></td>
+                                </tr>
+                                <tr>
+                                    <td  >বাড়ি নং</td>
+                                    <td >:   <input class="box" type="text" id="c_house_no" name="c_house_no" /></td>
+                                </tr>
+                                <tr>
+                                    <td >রোড নং</td>
+                                    <td>:   <input class="box" type="text" id="c_road" name="c_road" /> </td>
+                                </tr>
+                                <tr>
+                                    <td >পোষ্ট কোড</td>
+                                    <td>:   <input class="box" type="text" id="c_post_code" name="c_post_code" /></td>
+                                </tr> 
+                                <tr>
+                                    <td >বিভাগ</td>
+                                    <td>:  <select class="box2" type="text" id="division_id_1" name="c_division_name" onChange="getDistrict1()" />
+                                        <option value=1>-বিভাগ-</option>
+                                        <?php
+                                        $division_sql = mysql_query("SELECT * FROM " . $dbname . ".division ORDER BY division_name ASC");
+                                        while ($division_rows = mysql_fetch_array($division_sql)) {
+                                            $db_division_id = $division_rows['idDivision'];
+                                            $db_division_name = $division_rows['division_name'];
+                                            echo'<option style="width: 96%" value=' . $db_division_id . '>' . $db_division_name . '</option>';
+                                        }
+                                        ?>
+                                        </select></td>
+                                </tr>
+                                <tr>
+                                    <td >জেলা</td>
+                                    <td>: <span id="did"></span></td>
+                                </tr>                        
+                                <tr>
+                                    <td>উপজেলা / থানা</td>
+                                    <td>: <span id="tidd"></span></td>    
+                                </tr>
+                                <tr>
+                                    <td >পোষ্ট অফিস</td>
+                                    <td>: <span id="pidd"></span></td> 
+                                </tr>
+                                <tr>
+                                    <td  >গ্রাম / পাড়া / প্রোজেক্ট</td>
+                                    <td>: <span id="vidd"></span></td> 
+                                </tr>
+                            </table>
+                        </td>
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <td colspan="2" style =" font-size: 14px"><b> স্থায়ী ঠিকানা   </b></br>
+                                    <input type="radio" name="addressConfirm1" value="asabove" onclick="hideBox('.permanentBox1')" /> বর্তমান ঠিকানাই
+                                    <input type="radio" name="addressConfirm1" value="new" onclick="showBox('.permanentBox1')" /> নতুন ঠিকানা
+                                    </td>
+                                </tr>
+                                <tr class="permanentBox1" style="visibility: hidden;">
+                                    <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                                    <td >:   <input class="box" type="text" id="cp_house" name="cp_house" /></td>
+                                </tr>
+                                <tr class="permanentBox1" style="visibility: hidden;">
+                                    <td >বাড়ি নং</td>
+                                    <td>:   <input class="box" type="text" id="cp_house_no" name="cp_house_no" /></td>
+                                </tr>
+                                <tr class="permanentBox1" style="visibility: hidden;">
+                                    <td >রোড নং</td>
+                                    <td>:   <input class="box" type="text" id="cp_road" name="cp_road" /></td>
+                                </tr>
+                                <tr class="permanentBox1" style="visibility: hidden;">
+                                    <td >পোষ্ট কোড</td>
+                                    <td>:   <input class="box" type="text" id="cp_post_code" name="cp_post_code" /></td>
+                                </tr> 
+                                <tr class="permanentBox1" style="visibility: hidden;">                            
+                                    <td >বিভাগ</td>
+                                    <td>:  <select class="box2" type="text" id="division_id_2" name="p_division_name" onChange="getDistrict2()" />
+                                        <option value=1>-বিভাগ-</option>
+                                        <?php
+                                        $division_sql = mysql_query("SELECT * FROM " . $dbname . ".division ORDER BY division_name ASC");
+                                        while ($division_rows = mysql_fetch_array($division_sql)) {
+                                            $db_division_id = $division_rows['idDivision'];
+                                            $db_division_name = $division_rows['division_name'];
+                                            echo'<option style="width: 96%" value=' . $db_division_id . '>' . $db_division_name . '</option>';
+                                        }
+                                        ?>
+                                        </select></td>
+                                </tr>
+                                <tr class="permanentBox1" style="visibility: hidden;">
+                                    <td >জেলা</td>
+                                    <td>: <span id="did2"></span></td>
+                                </tr>                        
+                                <tr class="permanentBox1" style="visibility: hidden;">   
+                                    <td>উপজেলা / থানা</td>
+                                    <td>: <span id="tidd2"></span></td>
+                                </tr>
+                                <tr class="permanentBox1" style="visibility: hidden;">
+                                    <td >পোষ্ট অফিস</td>
+                                    <td>: <span id="pidd2"></span></td> 
+                                </tr>
+                                <tr class="permanentBox1" style="visibility: hidden;">
+                                    <td >গ্রাম / পাড়া / প্রোজেক্ট</td>
+                                    <td>: <span id="vidd2"></span></td> 
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                     <tr>	
                         <td  colspan="2" style =" padding-left: 300px; font-size: 15px"><b>অভিভাবকের </b></td>                            
@@ -966,84 +1039,116 @@ $sql_cust_sel = mysql_query("SELECT * FROM customer_account, cfs_user WHERE idUs
                     <tr>
                         <td colspan="4" ><hr /></td>
                     </tr> 
-                    <tr>	
-                        <td  colspan="2" style =" font-size: 14px"><b>বর্তমান ঠিকানা </b></td>                            
-                        <td colspan="2" style =" font-size: 14px"><b> স্থায়ী ঠিকানা   </b></td>
-                    </tr>
                     <tr>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        <td >:   <input class="box" type="text" id="n_house" name="n_house" /></td>
-                        <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        <td >:   <input class="box" type="text" id="np_house" name="np_house" /></td>
-                    </tr>
-                    <tr>
-                        <td  >বাড়ি নং</td>
-                        <td >:   <input class="box" type="text" id="n_house_no" name="n_house_no" /></td>
-                        <td >বাড়ি নং</td>
-                        <td>:   <input class="box" type="text" id="np_house_no" name="np_house_no" /></td>
-                    </tr>
-                    <tr>
-                        <td >রোড নং</td>
-                        <td>:   <input class="box" type="text" id="n_road" name="n_road" /> </td>
-                        <td >রোড নং</td>
-                        <td>:   <input class="box" type="text" id="np_road" name="np_road" /></td>
-                    </tr>
-                    <tr>
-                        <td >পোষ্ট কোড</td>
-                        <td>:   <input class="box" type="text" id="n_post_code" name="n_post_code" /></td>
-                        <td >পোষ্ট কোড</td>
-                        <td>:   <input class="box" type="text" id="np_post_code" name="np_post_code" /></td>
-                    </tr>
-                    <tr>
-                        <td >বিভাগ</td>
-                        <td>:  <select class="box2" type="text" id="division_id_5" name="n_division_name" onChange="getDistrict5()" />
-                            <option value=1>-বিভাগ-</option>
-                            <?php
-                            $division_sql = mysql_query("SELECT * FROM " . $dbname . ".division ORDER BY division_name ASC");
-                            while ($division_rows = mysql_fetch_array($division_sql)) {
-                                $db_division_id = $division_rows['idDivision'];
-                                $db_division_name = $division_rows['division_name'];
-                                echo'<option style="width: 96%" value=' . $db_division_id . '>' . $db_division_name . '</option>';
-                            }
-                            ?>
-                            </select></td>                                
-                        <td >বিভাগ</td>
-                        <td>:  <select class="box2" type="text" id="division_id_6" name="np_division_name" onChange="getDistrict6()" />
-                            <option value=1>-বিভাগ-</option>
-                            <?php
-                            $division_sql = mysql_query("SELECT * FROM " . $dbname . ".division ORDER BY division_name ASC");
-                            while ($division_rows = mysql_fetch_array($division_sql)) {
-                                $db_division_id = $division_rows['idDivision'];
-                                $db_division_name = $division_rows['division_name'];
-                                echo'<option style="width: 96%" value=' . $db_division_id . '>' . $db_division_name . '</option>';
-                            }
-                            ?>
-                            </select></td>
-                    </tr>
-                    <tr>
-                        <td >জেলা</td>
-                        <td>: <span id="did5"></span></td>
-                        <td >জেলা</td>
-                        <td>: <span id="did6"></span></td>
-                    </tr>                        
-                    <tr>
-                        <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd5"></span></td>      
-                        <td>উপজেলা / থানা</td>
-                        <td>: <span id="tidd6"></span></td>
-                    </tr>
-                    <tr>
-                        <td >পোষ্ট অফিস</td>
-                        <td>: <span id="pidd5"></span></td> 
-                        <td >পোষ্ট অফিস</td>
-                        <td>: <span id="pidd6"></span></td> 
-                    </tr>
-                    <tr>
-                        <td  >গ্রাম / পাড়া / প্রোজেক্ট</td>
-                        <td>: <span id="vidd5"></span></td> 
-                        <td >গ্রাম / পাড়া / প্রোজেক্ট</td>
-                        <td>: <span id="vidd6"></span></td> 
-                    </tr>
+                        <td colspan="2">
+                            <table>
+                                <tr>	
+                                    <td  colspan="2" style =" font-size: 14px"><b>বর্তমান ঠিকানা </b></td>
+                                </tr>
+                                <tr>
+                                    <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                                    <td >:   <input class="box" type="text" id="n_house" name="n_house" /></td>
+                                </tr>
+                                <tr>
+                                    <td  >বাড়ি নং</td>
+                                    <td >:   <input class="box" type="text" id="n_house_no" name="n_house_no" /></td>
+                                </tr>
+                                <tr>
+                                    <td >রোড নং</td>
+                                    <td>:   <input class="box" type="text" id="n_road" name="n_road" /> </td>
+                                </tr>
+                                <tr>
+                                    <td >পোষ্ট কোড</td>
+                                    <td>:   <input class="box" type="text" id="n_post_code" name="n_post_code" /></td>
+                                </tr>
+                                <tr>
+                                    <td >বিভাগ</td>
+                                    <td>:  <select class="box2" type="text" id="division_id_5" name="n_division_name" onChange="getDistrict5()" />
+                                <option value=1>-বিভাগ-</option>
+                                <?php
+                                $division_sql = mysql_query("SELECT * FROM " . $dbname . ".division ORDER BY division_name ASC");
+                                while ($division_rows = mysql_fetch_array($division_sql)) {
+                                    $db_division_id = $division_rows['idDivision'];
+                                    $db_division_name = $division_rows['division_name'];
+                                    echo'<option style="width: 96%" value=' . $db_division_id . '>' . $db_division_name . '</option>';
+                                }
+                                ?>
+                                </select></td>
+                                </tr>
+                                <tr>
+                                    <td >জেলা</td>
+                                    <td>: <span id="did5"></span></td>
+                                </tr>                        
+                                <tr>
+                                    <td>উপজেলা / থানা</td>
+                                    <td>: <span id="tidd5"></span></td>  
+                                </tr>
+                                <tr>
+                                    <td >পোষ্ট অফিস</td>
+                                    <td>: <span id="pidd5"></span></td> 
+                                </tr>
+                                <tr>
+                                    <td>গ্রাম / পাড়া / প্রোজেক্ট</td>
+                                    <td>: <span id="vidd5"></span></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                <td colspan="2" style =" font-size: 14px"><b> স্থায়ী ঠিকানা   </b></br>
+                                    <input type="radio" name="addressConfirm2" value="asabove" onclick="hideBox('.permanentBox2')" /> বর্তমান ঠিকানাই
+                                    <input type="radio" name="addressConfirm2" value="new" onclick="showBox('.permanentBox2')" /> নতুন ঠিকানা
+                                 </td>
+                                </tr>
+                                <tr class="permanentBox2" style="visibility: hidden;">
+                                    <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
+                                    <td >:   <input class="box" type="text" id="np_house" name="np_house" /></td>
+                                </tr>
+                                <tr class="permanentBox2" style="visibility: hidden;">
+                                    <td >বাড়ি নং</td>
+                                    <td>:   <input class="box" type="text" id="np_house_no" name="np_house_no" /></td>
+                                </tr>
+                                <tr class="permanentBox2" style="visibility: hidden;">
+                                    <td >রোড নং</td>
+                                    <td>:   <input class="box" type="text" id="np_road" name="np_road" /></td>
+                                </tr>
+                                <tr class="permanentBox2" style="visibility: hidden;">
+                                    <td >পোষ্ট কোড</td>
+                                    <td>:   <input class="box" type="text" id="np_post_code" name="np_post_code" /></td>
+                                </tr>
+                                <tr class="permanentBox2" style="visibility: hidden;">
+                                    <td >বিভাগ</td>
+                                <td>:  <select class="box2" type="text" id="division_id_6" name="np_division_name" onChange="getDistrict6()" />
+                                <option value=1>-বিভাগ-</option>
+                                <?php
+                                $division_sql = mysql_query("SELECT * FROM " . $dbname . ".division ORDER BY division_name ASC");
+                                while ($division_rows = mysql_fetch_array($division_sql)) {
+                                    $db_division_id = $division_rows['idDivision'];
+                                    $db_division_name = $division_rows['division_name'];
+                                    echo'<option style="width: 96%" value=' . $db_division_id . '>' . $db_division_name . '</option>';
+                                }
+                                ?>
+                                </select></td>
+                                </tr>
+                                <tr class="permanentBox2" style="visibility: hidden;">
+                                    <td >জেলা</td>
+                                    <td>: <span id="did6"></span></td>
+                                </tr>                        
+                                <tr class="permanentBox2" style="visibility: hidden;">
+                                    <td>উপজেলা / থানা</td>
+                                    <td>: <span id="tidd6"></span></td>
+                                </tr>
+                                <tr class="permanentBox2" style="visibility: hidden;">
+                                    <td >পোষ্ট অফিস</td>
+                                    <td>: <span id="pidd6"></span></td> 
+                                </tr>
+                                <tr class="permanentBox2" style="visibility: hidden;">
+                                    <td>গ্রাম / পাড়া / প্রোজেক্ট</td>
+                                    <td>: <span id="vidd6"></span></td> 
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit4" value="সেভ করুন" />
