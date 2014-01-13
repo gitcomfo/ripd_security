@@ -36,5 +36,7 @@ $sql_insert_acc_user_amount_transfer = $conn->prepare("INSERT into acc_user_amou
 //**************** posting & promotion ***********************************************************
 $sql_insert_employee_posting = $conn->prepare("INSERT INTO employee_posting (posting_date, Employee_idEmployee, ons_relation_idons_relation, post_in_ons_idpostinons)
                                                                                 VALUES(?, ?, ?, ?) ");
+$sql_insert_employee_salary = $conn->prepare("INSERT INTO employee_salary (total_salary, insert_date, user_id, pay_grade_idpaygrade)
+                                                                               VALUES(?, NOW(), ?, ?) ");
 
 ?>
