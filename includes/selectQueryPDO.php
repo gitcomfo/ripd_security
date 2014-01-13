@@ -60,5 +60,9 @@ $sql_select_emp_address = $conn->prepare("SELECT * FROM address,thana,district,d
                                                                         AND address_type='Present' AND adrs_cepng_id = ?
                                                                         AND Thana_idThana = idThana AND District_idDistrict=idDistrict AND Division_idDivision= idDivision ");
 $sql_select_post = $conn->prepare("SELECT * FROM post_in_ons,post WHERE idpostinons = ? AND Post_idPost =idPost ");
-
+$sql_select_last_cheque_making = $conn->prepare("SELECT cheque_mak_datetime
+                                                            FROM  `acc_user_cheque` 
+                                                            WHERE cheque_makerid =117
+                                                            ORDER BY cheque_mak_datetime
+                                                            LIMIT 1");
 ?>

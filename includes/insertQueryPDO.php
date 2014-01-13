@@ -37,4 +37,8 @@ $sql_insert_acc_user_amount_transfer = $conn->prepare("INSERT into acc_user_amou
 $sql_insert_employee_posting = $conn->prepare("INSERT INTO employee_posting (posting_date, Employee_idEmployee, ons_relation_idons_relation, post_in_ons_idpostinons)
                                                                                 VALUES(?, ?, ?, ?) ");
 
+//**************** cheque making ***********************************************************
+$sql_insert_cheque_making = $conn->prepare("INSERT INTO acc_user_cheque (cheque_num, cheque_type, cheque_description, cheque_mak_datetime, cheque_amount, cheque_makerid, cheque_status)
+                                                                                VALUES(?, ?, ?, NOW(), ?, ?, ?) ");
+
 ?>
