@@ -65,4 +65,10 @@ $sql_select_last_cheque_making = $conn->prepare("SELECT cheque_mak_datetime
                                                             WHERE cheque_makerid =117
                                                             ORDER BY cheque_mak_datetime
                                                             LIMIT 1");
+
+$sql_select_cheque = $conn->prepare("SELECT * 
+                                                FROM acc_user_cheque, cfs_user
+                                                WHERE cheque_num =  ?
+                                                AND idUser = cheque_makerid
+                                                AND cheque_status = 'made' ");
 ?>
