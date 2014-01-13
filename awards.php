@@ -78,6 +78,7 @@ bottom: 50px; This would mean the bottom of the pop-up is 50px far from the bott
                 <tbody>
 
                     <?php
+                    //use pdo
                     $db_slNo = 0;
                     $sql_select_award_all->execute();
                     $arr_awd = $sql_select_award_all->fetchAll();
