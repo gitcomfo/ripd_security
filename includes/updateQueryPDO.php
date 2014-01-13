@@ -12,4 +12,6 @@ $sql_update_post_in_ons_up = $conn->prepare("UPDATE post_in_ons SET free_post = 
                                                                                 WHERE  idpostinons=?");
 $sql_update_post_in_ons_down = $conn->prepare("UPDATE post_in_ons SET free_post = (free_post-1), used_post=(used_post+1)
                                                                                     WHERE  idpostinons=?");
+$sql_update_cheque = $conn->prepare("UPDATE acc_user_cheque SET postpond_reason = ?, cheque_status = ?, cheque_update_datetime = NOW(), cheque_updated_userid = ?, chqupd_officeid = ?
+                                                                                    WHERE  cheque_num = ?");
 ?>
