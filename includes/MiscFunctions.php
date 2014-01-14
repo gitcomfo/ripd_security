@@ -203,6 +203,11 @@ function getProgramer($type)
    $arr_who = array('presentation'=>'প্রেজেন্টার','program'=>'প্রোগ্রামার','training'=>'ট্রেইনার','travel'=>'ট্র্যাভেলার');
    return $arr_who[$type];
 }
+function getProgramer2($type)
+{
+   $arr_who = array('presenter'=>'প্রেজেন্টার','programmer'=>'প্রোগ্রামার','trainer'=>'ট্রেইনার');
+   return $arr_who[$type];
+}
 function getProgramerType($type)
 {
    $arr_who_type = array('presentation'=>'presenter','program'=>'programmer','training'=>'trainer','travel'=>'traveler');
