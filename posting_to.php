@@ -60,7 +60,7 @@ function beforeSubmit()
         echo "<div style='padding-left: 110px;'><a href='$back_parent_change'><b>ফিরে যান</b></a></div>";
         ?>
         <div>
-            <form method="post" style="width: 90%;" action="">
+            <form method="post" style="width: 90%;" action="" onsubmit="return beforeSubmit()">
                 <?php
                 $url= urlencode($_SERVER['REQUEST_URI']);
                 $g_officeID = end(explode("=", $back_parent_change));

@@ -129,13 +129,13 @@ if (isset($_POST['submit1'])) {
     }
     
     //employee address_type=Present
-    $sql_e_insert_current_address = mysql_query("INSERT INTO $dbname.address 
+    $sql_e_insert_current_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana, post_idpost, village_idvillage ,adrs_cepng_id)
-                                     VALUES ('Present', '$e_house', '$e_house_no', '$e_road', 'emp', '$e_post_code','$e_Thana_idThana','$e_Post_idPost', '$e_Village_idVillage', '$emp')");
+                                     VALUES ('Present', '$e_house', '$e_house_no', '$e_road', 'emp', '$e_post_code','$e_Thana_idThana','$e_Post_idPost', '$e_Village_idVillage', '$emp')") or exit(mysql_error());
     //employee address_type=Permanent
-    $sql_ep_insert_permanent_address = mysql_query("INSERT INTO $dbname.address 
+    $sql_ep_insert_permanent_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
-                                     VALUES ('Permanent', '$ep_house', '$ep_house_no', '$ep_road', 'emp', '$ep_post_code','$ep_Thana_idThana', '$ep_Post_idPost', '$ep_Village_idVillage', '$emp')");
+                                     VALUES ('Permanent', '$ep_house', '$ep_house_no', '$ep_road', 'emp', '$ep_post_code','$ep_Thana_idThana', '$ep_Post_idPost', '$ep_Village_idVillage', '$emp')") or exit(mysql_error());;
 
     if ($sql_update_employee || $sql_e_insert_current_address || $sql_ep_insert_permanent_address) {
         mysql_query("COMMIT");
@@ -167,10 +167,11 @@ if (isset($_POST['submit1'])) {
         echo "Invalid file format.";
     }
 mysql_query("START TRANSACTION");
-    $sql_nominee = mysql_query("INSERT INTO $dbname.nominee(nominee_name, nominee_relation, nominee_mobile,
+    $sql_nominee = mysql_query("INSERT INTO nominee(nominee_name, nominee_relation, nominee_mobile,
                                        nominee_email, nominee_national_ID, nominee_age, nominee_passport_ID, nominee_picture,cep_type, cep_nominee_id) 
                                        VALUES('$nominee_name','$nominee_relation','$nominee_mobile','$nominee_email','$nominee_national_ID',
                                        '$nominee_age','$nominee_passport_ID','$image_path','emp','$emp1')");
+    $nominee_id = mysql_insert_id();
     //Current Address Infromation
     $n_Village_idVillage = $_POST['village_id5'];
     $n_Post_idPost = $_POST['post_id5'];
@@ -202,11 +203,11 @@ mysql_query("START TRANSACTION");
     //nominee address_type=Present
     $sql_n_insert_current_address = mysql_query("INSERT INTO $dbname.address 
                                     (address_type, house, house_no,road, address_whom, post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
-                                     VALUES ('Present', '$n_house', '$n_house_no', '$n_road', 'nmn', '$n_post_code', '$n_Thana_idThana', '$n_Post_idPost', '$n_Village_idVillage','$emp1')");
+                                     VALUES ('Present', '$n_house', '$n_house_no', '$n_road', 'nmn', '$n_post_code', '$n_Thana_idThana', '$n_Post_idPost', '$n_Village_idVillage','$nominee_id')");
     //nominee address_type=Permanent
     $sql_np_insert_permanent_address = mysql_query("INSERT INTO $dbname.address 
                                     (address_type, house, house_no, road, address_whom,post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
-                                     VALUES ('Permanent', '$np_house', '$np_house_no','$np_road', 'nmn',  '$np_post_code','$np_Thana_idThana','$np_Post_idPost', '$np_Village_idVillage','$emp1')");
+                                     VALUES ('Permanent', '$np_house', '$np_house_no','$np_road', 'nmn',  '$np_post_code','$np_Thana_idThana','$np_Post_idPost', '$np_Village_idVillage','$nominee_id')");
 
     if ($sql_nominee || $sql_n_insert_current_address || $sql_np_insert_permanent_address) {
         mysql_query("COMMIT");
@@ -220,7 +221,7 @@ mysql_query("START TRANSACTION");
     $result = mysql_query("SELECT  * FROM $dbname.employee_information WHERE idEmployee_information='$g_id'");
     $employee_id = mysql_fetch_array($result);
     $emp2 = $employee_id['Employee_idEmployee'];
-    //customer education
+    //employee education
     $e_ex_name = $_POST['e_ex_name'];
     $e_pass_year = $_POST['e_pass_year'];
     $e_institute = $_POST['e_institute'];

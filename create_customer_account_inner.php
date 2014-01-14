@@ -248,7 +248,6 @@ elseif (isset($_POST['submit2'])) {
                                        nominee_email, nominee_national_ID, nominee_age, nominee_passport_ID, nominee_picture,cep_type, cep_nominee_id) 
                                        VALUES('$nominee_name','$nominee_relation','$nominee_mobile','$nominee_email','$nominee_national_ID',
                                        '$nominee_age','$nominee_passport_ID','$image_path','cust','$custAcid')");
-    // $nominee_id = mysql_insert_id(); //Contains the last inserted id (nominee_id)
 
     if ($sql_nominee) {
         $msg = "তথ্য সংরক্ষিত হয়েছে";
@@ -395,14 +394,17 @@ elseif (isset($_POST['submit4'])) {
     $sql_gp_insert_present_address = mysql_query("INSERT INTO $dbname.address 
                                     (address_type, house, house_no,road, address_whom,post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
                                      VALUES ('Permanent', '$gp_house', '$gp_house_no','$gp_road', 'cust_prnt','$gp_post_code', '$gp_Thana_idThana','$gp_Post_idPost', '$gp_Village_idVillage','$custAcid')");
+   $sel_nominee = mysql_query("SELECT idNominee FROM nominee WHERE cep_type='cust' AND cep_nominee_id=$custAcid ");
+   $nomineerow = mysql_fetch_assoc($sel_nominee);
+   $db_nomineeID = $nomineerow['idNominee'];
     //nominee address_type=Present
     $sql_n_insert_current_address = mysql_query("INSERT INTO $dbname.address 
                                     (address_type, house, house_no,road, address_whom, post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
-                                     VALUES ('Present', '$n_house', '$n_house_no', '$n_road', 'nmn', '$n_post_code', '$n_Thana_idThana', '$n_Post_idPost', '$n_Village_idVillage','$custAcid')");
+                                     VALUES ('Present', '$n_house', '$n_house_no', '$n_road', 'nmn', '$n_post_code', '$n_Thana_idThana', '$n_Post_idPost', '$n_Village_idVillage','$db_nomineeID')");
     //nominee address_type=Permanent
     $sql_np_insert_present_address = mysql_query("INSERT INTO $dbname.address 
                                     (address_type, house, house_no, road, address_whom,post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
-                                     VALUES ('Permanent', '$np_house', '$np_house_no','$np_road', 'nmn',  '$np_post_code','$np_Thana_idThana','$np_Post_idPost', '$np_Village_idVillage','$custAcid')");
+                                     VALUES ('Permanent', '$np_house', '$np_house_no','$np_road', 'nmn',  '$np_post_code','$np_Thana_idThana','$np_Post_idPost', '$np_Village_idVillage','$db_nomineeID')");
 
     if ($sql_c_insert_current_address || $sql_cp_insert_permanent_address || $sql_g_insert_current_address || $sql_gp_insert_present_address || $sql_n_insert_current_address || $sql_np_insert_present_address) {
         mysql_query("COMMIT");
