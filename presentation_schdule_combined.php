@@ -234,13 +234,13 @@ if ($_GET['action'] == 'first') {
     </div>
     <div>
         <form method="POST" onsubmit="">	
-            <table  class="formstyle" style =" width:78%"id="make_presentation_fillter">      
+            <table  class="formstyle" style =" width:78%" id="make_presentation_fillter">      
                 <thead>
                     <tr>
                         <th colspan="8" ><?php echo $typeinbangla;?> সিডিউল</th>                        
                     </tr>          
                     <tr>
-                        <td colspan="8" style="text-align: right">খুঁজুন:  <input type="text" class="box"id="search_filter" name="search" /></td>
+                        <td colspan="8" style="text-align: right">খুঁজুন:  <input type="text" class="box" id="search_filter" /></td>
                     </tr>
                     <tr id = "table_row_odd">
                         <td ><?php echo $typeinbangla;?> নাম্বার</td>
@@ -257,10 +257,9 @@ if ($_GET['action'] == 'first') {
 
                     <!--######################SELECT QUERY########################## -->
                     <?php
-                    $sql = "SELECT * FROM program WHERE program_type = '$type'";
                     $str_presenter_list = "";
                     $str_presenter_email_list = "";
-                    $db_result_presenter_name = mysql_query($sql);
+                    $db_result_presenter_name = mysql_query("SELECT * FROM program WHERE program_type = '$type' AND program_date >= NOW() ORDER BY program_no ");
                     while ($row_prstn = mysql_fetch_array($db_result_presenter_name)) {
                         $db_programID = $row_prstn['idprogram'];
                         $db_rl_prstn_number = $row_prstn['program_no'];
@@ -268,7 +267,7 @@ if ($_GET['action'] == 'first') {
                         $db_rl_prstn_date = $row_prstn['program_date'];
                         $db_rl_prstn_time = $row_prstn['program_time'];
                         $sql_prsntr_list = mysql_query("SELECT * FROM presenter_list, employee, cfs_user 
-                            WHERE idUser=cfs_user_idUser AND idEmployee= fk_Employee_idEmployee AND fk_idprogram=$db_programID ");
+                                                                             WHERE idUser=cfs_user_idUser AND idEmployee= fk_Employee_idEmployee AND fk_idprogram=$db_programID ");
                          while ($row_prsnter = mysql_fetch_array($sql_prsntr_list)) {
                              $str_presenter_list = $row_prsnter['account_name'].",\n".$str_presenter_list;
                              $str_presenter_email_list = $row_prsnter['email'].",\n".$str_presenter_email_list;
@@ -309,6 +308,13 @@ if ($_GET['action'] == 'first') {
             </table>
         </form>
     </div>
+    <script type="text/javascript">
+        var filter = new DG.Filter({
+            filterField : $('search_filter'),
+            filterEl : $('make_presentation_fillter'),
+            colIndexes : [1,2]
+        }); 
+    </script>
     <!--******************Make Presentation************** -->
     <?php
 } else if ($_GET['action'] == 'new') {
@@ -462,10 +468,8 @@ if ($_GET['action'] == 'first') {
                 <tr id = "table_row_odd">
                     <td><?php echo $whoinbangla?>-এর নাম </td>
                     <td >একাউন্ট নাম্বার</td>
-                    <td >গ্রেড</td>
                     <td >সেল নাম্বার</td>
                     <td >ইমেইল</td>
-                    <td >অফিসের নাম</td>
                     <td> থানা</td>
                     <td>জেলা</td>
                     <td>বিভাগ</td>
@@ -475,45 +479,35 @@ if ($_GET['action'] == 'first') {
             <tbody id="plist">
                 <!--Presenter List Query -->
                 <?php
-                $sql_list = "SELECT * FROM cfs_user, employee, pay_grade, ons_relation,office, thana, district, division  
-                             WHERE idUser=employee.cfs_user_idUser AND pay_grade_id=idpaygrade 
-                             AND employee.employee_type='$whoType' AND emp_ons_id = idons_relation AND idOffice= add_ons_id 
-                             AND Thana_idThana=idThana AND idDistrict= District_idDistrict AND idDivision=Division_idDivision";
+                $sql_list = "SELECT * FROM cfs_user, employee, address, thana, district, division WHERE idUser=employee.cfs_user_idUser 
+                             AND employee.employee_type='$whoType' AND adrs_cepng_id= idEmployee 
+                            AND address_type='Present' AND address_whom='emp' 
+                            AND Thana_idThana=idThana AND District_idDistrict = idDistrict AND Division_idDivision=idDivision ";
                 $db_result_presenter_info = mysql_query($sql_list); //Saves the query of Presenter Infromation
                 while ($row_prstn = mysql_fetch_array($db_result_presenter_info)) {
                     $db_rl_presenter_name = $row_prstn['account_name'];
                     $db_rl_presenter_acc = $row_prstn['account_number'];
                     $db_rl_presenter_mobile = $row_prstn['mobile'];
                     $db_rl_presenter_email = $row_prstn['email'];
-                    $db_rl_presenter_grade = $row_prstn['grade_name'];
                     $db_rl_presenter_id = $row_prstn['idEmployee'];
-                    $db_rl_presenter_office = $row_prstn['office_name'];
-                    $db_rl_presenter_division = $row_prstn['division_name'];
-                    $db_rl_presenter_district = $row_prstn['district_name'];
-                    $db_rl_presennter_thana = $row_prstn['thana_name'];
+                    $db_thana = $row_prstn['thana_name'];
+                    $db_district = $row_prstn['district_name'];
+                    $db_division = $row_prstn['division_name'];
                     ?>
                     <tr>
                         <td ><?php echo $db_rl_presenter_name; ?></td>
                         <td><?php echo $db_rl_presenter_acc; ?></td>
-                        <td><?php echo $db_rl_presenter_grade; ?></td>
                         <td><?php echo $db_rl_presenter_mobile; ?></td>
                         <td><?php echo $db_rl_presenter_email; ?></td>
-                        <td><?php echo $db_rl_presenter_office; ?></td>
-                        <td><?php echo $db_rl_presennter_thana; ?></td>
-                        <td><?php echo $db_rl_presenter_district; ?></td>
-                        <td><?php echo $db_rl_presenter_division; ?></td>
+                        <td><?php echo $db_thana; ?></td>
+                        <td><?php echo $db_district; ?></td>
+                        <td><?php echo $db_division; ?></td>
                         <td style="text-align: center " > <a href="presentation_schdule_combined.php?action=sedule&id=<?php echo $db_rl_presenter_id; ?>&type=<?php echo $type;?>">সিডিউল </a></td>  
                     </tr>
                 <?php } ?>
             </tbody>
         </table>
     </form>
-    <script type="text/javascript">
-    var filter = new DG.Filter({
-        filterField: $('search_box_filter'),
-        filterEl: $('presentation_fillter')
-    });
-    </script>
 <!--   ****************************** Presenter's schedule ****************************-->
     <?php
 } elseif ($_GET['action'] == 'sedule') {
@@ -523,45 +517,41 @@ if ($_GET['action'] == 'first') {
         <div><a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
     </div>
     <form method="POST" onsubmit="">	
-        <table  class="formstyle" style =" width:78%"id="presentation_fillter">          
+        <table  class="formstyle" style =" width:78%" id="presentation_fillter">          
             <tr>
                 <th colspan="100" >সিডিউল  </th>                        
-            </tr>             
+            </tr>
+            <thead>
             <tr id = "table_row_odd">
                 <td><?php echo $typeinbangla?>-এর নাম </td>
                 <td >তারিখ</td>
                 <td >সময়</td>
                 <td >ভেন্যু</td>                
             </tr>
+            </thead>
 
             <!--Sql query for showing the data of a presenter-->
             <?php
-            $G_presenter_id = $_GET['id'];
-            $sql_sedule = "SELECT *
-                              FROM  program, presenter_list
-                              WHERE  idprogram = fk_idprogram AND fk_Employee_idEmployee = $G_presenter_id";
-            $db_result_sql_sedule = mysql_query($sql_sedule);
-            while ($row_sedule = mysql_fetch_array($db_result_sql_sedule)) {
-                $db_sedule_presentation_name = $row_sedule['program_name'];
-                $db_sedule_presentaiton_date = $row_sedule['program_date'];
-                $db_sedule_presentation_time = $row_sedule['program_time'];
-                $db_sedule_presentation_venue = $row_sedule['program_location'];
-                ?>            
-                <tr>
+                    $G_presenter_id = $_GET['id'];
+                    $sql_sedule = "SELECT * FROM  program, presenter_list WHERE  idprogram = fk_idprogram AND fk_Employee_idEmployee = $G_presenter_id";
+                    $db_result_sql_sedule = mysql_query($sql_sedule);
+                    while ($row_sedule = mysql_fetch_array($db_result_sql_sedule)) {
+                        $db_sedule_presentation_name = $row_sedule['program_name'];
+                        $db_sedule_presentaiton_date = $row_sedule['program_date'];
+                        $db_sedule_presentation_time = $row_sedule['program_time'];
+                        $db_sedule_presentation_venue = $row_sedule['program_location'];
+                ?>
+            <tbody>
+                 <tr>
                     <td ><?php echo $db_sedule_presentation_name; ?></td>
                     <td><?php echo $db_sedule_presentaiton_date; ?></td>                    
                     <td><?php echo $db_sedule_presentation_time; ?></td>
                     <td><?php echo $db_sedule_presentation_venue; ?></td>                    
                 </tr>
+            </tbody>
             <?php } ?>
         </table>
     </form>
-    <script type="text/javascript">
-                var filter = new DG.Filter({
-                    filterField : $('search_box_filter'),
-                    filterEl : $('storeTable'),
-                    colIndexes : [1,2]
-                }); </script>
     <?php
 }
 include_once 'includes/footer.php';

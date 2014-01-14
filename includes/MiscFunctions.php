@@ -213,6 +213,11 @@ function getProgramerType($type)
    $arr_who_type = array('presentation'=>'presenter','program'=>'programmer','training'=>'trainer','travel'=>'traveler');
    return $arr_who_type[$type];
 }
+function getTypeFromWho($type)
+{
+   $arr_who_type = array('presenter'=>'presentation','programmer'=>'program','trainer'=>'training','traveler'=>'travel');
+   return $arr_who_type[$type];
+}
 function getAwardReceiverType($aType){
     $arr_award_type = array('company'=>'কোম্পানী', 'employee'=>'কর্মচারী', 'customer'=>'কাস্টমার', 'others'=>'অন্যান্য');
     return $arr_award_type[$aType];
