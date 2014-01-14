@@ -3,7 +3,8 @@ include 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 include_once 'includes/selectQueryPDO.php';
 include_once 'includes/updateQueryPDO.php';
-
+$msg = "";
+$error_msg = "";
 if(isset($_POST['postpone'])){
     $p_reason = "";
     $office_userid = $_SESSION['userIDUser'];
@@ -12,25 +13,9 @@ if(isset($_POST['postpone'])){
     $p_chequeNo = $_POST['cheque_number'];
     //echo "$p_reason, postpond, $office_userid, $logged_in_officeID, $p_chequeNo";
     $sql_update_cheque->execute(array($p_reason, "postpond", $office_userid, $logged_in_officeID, $p_chequeNo));
+    $msg = "চেক নং $p_chequeNo স্থগিত হয়েছে";
 }
-?>
-
-<style type="text/css"> @import "css/bush.css";</style>
-
-    <div class="main_text_box">
-        <div id="noprint" style="padding-left: 110px;"><a href="accounting_sys_management.php"><b>ফিরে যান</b></a></div>
-        <div>           
-            <form method="POST" onsubmit="" name="cheque" action="">	
-                <table  class="formstyle" style="width: 80%;font-family: SolaimanLipi !important; font-size: 14px;">          
-                    <tr ><th colspan="2" style="text-align: center;font-size: 16px;">চেক-এর বৈধতা যাচাই এবং স্থগিত করন </th></tr>
-                    <tr>
-                        <td style="text-align: right;width: 50%;">চেক নাম্বার :</td>
-                        <td style="text-align: left;width: 50%;"><input class="box" type="text" name='chequeNo' /> </td>
-                    </tr>
-                    <tr>
-                        <td  colspan="2" style="text-align: center;" ></br><input class="btn" style =" font-size: 12px; " name='check' type="submit" value="যাচাই করুন" /></td>
-                    </tr>
-                    <?php if(isset($_POST['check'])) {
+if(isset($_POST['check'])) {
                         $p_chequeNo = $_POST['chequeNo'];
                         $sql_select_cheque->execute(array($p_chequeNo));
                         $db_cheque = $sql_select_cheque->fetchAll();
@@ -44,6 +29,34 @@ if(isset($_POST['postpone'])){
                             $db_cheque_status = $row['cheque_status'];
                             $count++;
                         }
+                        if($count == 0){
+                            $error_msg = "দুঃখিত, আপনার চেক নং টি ভুল অথবা স্থগিত করা আছে";
+                        }
+}
+?>
+
+<style type="text/css"> @import "css/bush.css";</style>
+
+    <div class="main_text_box">
+        <div id="noprint" style="padding-left: 110px;"><a href="accounting_sys_management.php"><b>ফিরে যান</b></a></div>
+        <div>           
+            <form method="POST" onsubmit="" name="cheque" action="">	
+                <table  class="formstyle" style="width: 80%;font-family: SolaimanLipi !important; font-size: 14px;">          
+                    <tr ><th colspan="2" style="text-align: center;font-size: 16px;">চেক-এর বৈধতা যাচাই এবং স্থগিত করন </th></tr>
+                    <?php if($msg != "") {?>
+                    <tr ><td colspan="2" style="color: green; font: 18px; text-align: center"><b><?php echo $msg;?></b></td></tr>
+                    <?php }?>
+                    <tr>
+                        <td style="text-align: right;width: 50%;">চেক নাম্বার :</td>
+                        <td style="text-align: left;width: 50%;"><input class="box" type="text" name='chequeNo' /> </td>
+                    </tr>
+                    <?php if($error_msg != "") {?>
+                    <tr ><td colspan="2" style="color: red; font: 18px; text-align: center"><b><?php echo $error_msg;?></b></td></tr>
+                    <?php }?>
+                    <tr>
+                        <td  colspan="2" style="text-align: center;" ></br><input class="btn" style =" font-size: 12px; " name='check' type="submit" value="যাচাই করুন" /></td>
+                    </tr>
+                    <?php 
                         if($count != 0){
                         ?>
                     <tr>
@@ -71,7 +84,7 @@ if(isset($_POST['postpone'])){
                     <tr>                    
                         <td id="noprint" colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; width: 150px;" type="submit" name="postpone" value="স্থগিত" /></td>                           
                     </tr>
-                    <?php }}?>
+                    <?php }?>
                 </table>
                 </fieldset>
             </form>

@@ -79,5 +79,9 @@ $sql_select_cheque = $conn->prepare("SELECT *
                                                 FROM acc_user_cheque, cfs_user
                                                 WHERE cheque_num =  ?
                                                 AND idUser = cheque_makerid
-						AND cheque_status = 'made'");
+			         AND cheque_status = 'made'");
+$sql_select_cheque_all = $conn->prepare("SELECT * 
+                                                FROM acc_user_cheque, cfs_user
+                                                WHERE cheque_num =  ?
+                                                AND idUser = cheque_makerid");
 ?>
