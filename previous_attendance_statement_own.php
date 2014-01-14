@@ -2,16 +2,16 @@
 //include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
+include_once './includes/selectQueryPDO.php';
 
 $loginUSERname = $_SESSION['acc_holder_name'] ;
  $loginUSERid = $_SESSION['userIDUser'] ;
  
-$select_total_attendance = mysql_query("SELECT COUNT(idempattend) FROM employee,employee_attendance 
-    WHERE  cfs_user_idUser = $loginUSERid AND idEmployee = emp_user_id ");
-    $totalrow = mysql_fetch_assoc($select_total_attendance);
+$sql_select_working_days->execute(array($loginUSERid));
+$row8 = $sql_select_working_days->fetchAll();
+foreach ($row8 as $totalrow) {
     $totalworkingDays = $totalrow['COUNT(idempattend)'];
-
-    $sql_total_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
+}
     $status1 = "present";
     $sql_total_attend->execute(array($status1,$loginUSERid));
     $trow1 = $sql_total_attend->fetchAll();

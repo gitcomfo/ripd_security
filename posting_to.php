@@ -42,6 +42,15 @@ function selectOffice(url)
 </script>
 <script language=javascript>
 window.name = "parentWindow";
+function beforeSubmit()
+{
+    if ((document.getElementById('postingDate').value !="") && (document.getElementById('newpostID').value !=""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 
 <div class="main_text_box">
@@ -69,6 +78,7 @@ window.name = "parentWindow";
                     $db_cfs_account = $cfs_row['account_number'];
                     $db_mobile = $cfs_row['mobile'];
                     $db_picture = $cfs_row['emplo_scanDoc_picture'];
+                    $db_cfsuserid = $cfs_row['idUser'];
                 }
                 $sql_select_emp_address->execute(array($employee_id));
                 $row2 = $sql_select_emp_address->fetchAll();
@@ -95,7 +105,7 @@ window.name = "parentWindow";
                         $db_postingDate = $arr_row['posting_date'];
                     }                                  
                 echo "<table  class='formstyle'>";
-                echo "<tr >
+                echo "<tr>
                                 <th colspan='4' style='text-align: center'>
                                 <div style='width: 80%; float: left; padding-top: 18px;'>
                                     <h1>".$db_cfs_name."</h1>
@@ -132,7 +142,30 @@ window.name = "parentWindow";
                             </table>
                             </filedset></td>
                     </tr>';
-
+                        $sql_select_working_days->execute(array($db_cfsuserid));
+                        $row8 = $sql_select_working_days->fetchAll();
+                        foreach ($row8 as $totalrow) {
+                            $totalworkingDays = $totalrow['COUNT(idempattend)'];
+                        }
+                        $status1 = "present";
+                        $sql_total_attend->execute(array($status1,$loginUSERid));
+                        $trow1 = $sql_total_attend->fetchAll();
+                        foreach ($trow1 as $value) {
+                            $total_presentDays = $value['COUNT(idempattend)'];
+                        }
+                        $status2 ="absent";
+                        $sql_total_attend->execute(array($status2,$loginUSERid));
+                        $trow2 = $sql_total_attend->fetchAll();
+                        foreach ($trow2 as $value) {
+                            $total_absentDays = $value['COUNT(idempattend)'];
+                        }
+                        $status3 = "leave";
+                        $sql_total_attend->execute(array($status3,$loginUSERid));
+                        $trow3 = $sql_total_attend->fetchAll();
+                        foreach ($trow3 as $value) {
+                            $total_leaveDays = $value['COUNT(idempattend)'];
+                        }
+                        $totalattendPercent = ($total_presentDays / $totalworkingDays) * 100;
                 echo '<tr>
                      <td colspan="4">
                      <fieldset style="border:3px solid #686c70;width: 99%;">
@@ -140,19 +173,19 @@ window.name = "parentWindow";
                             <table>
                             <tr>
                                <td style="width: 25%; text-align:right">উপস্থিতির হার</td>
-                                <td style="width: 25%; text-align:left">: </td>
+                                <td style="width: 25%; text-align:left">: '.english2bangla($totalattendPercent).'</td>
                                 <td style="width: 25%; text-align:right">মোট কর্মদিবস</td>
-                                <td style="width: 25%; text-align:left">: </td>
+                                <td style="width: 25%; text-align:left">: '.english2bangla($totalworkingDays).'</td>
                             </tr>
                             <tr>
                                <td style="width: 25%; text-align:right">উপস্থিত</td>
-                                <td style="width: 25%; text-align:left">: দিন</td>
+                                <td style="width: 25%; text-align:left">: '.english2bangla($total_presentDays).'দিন</td>
                                 <td style="width: 25%; text-align:right">অনুপস্থিত</td>
-                                <td style="width: 25%; text-align:left">: দিন</td>
+                                <td style="width: 25%; text-align:left">: '.english2bangla($total_absentDays).'দিন</td>
                             </tr>
                             <tr>
                                 <td colspan="2" style="width: 50%; text-align:right">ছুটি</td>
-                                <td colspan="2" style="width: 50%; text-align:left">: দিন</td>     
+                                <td colspan="2" style="width: 50%; text-align:left">: '.english2bangla($total_leaveDays).'দিন</td>     
                             </tr>
                             <tr>
                             <td colspan="4"><div align="center"><a onclick="detailsWithPrice()" style="cursor:pointer;color:blue;">উপস্থিতির বিস্তারিত তথ্য</a></div></td>
@@ -208,7 +241,7 @@ window.name = "parentWindow";
                              </tr>
                             <tr>
                                 <td style="width: 30%; text-align:right">পোস্টিং তারিখ</td>
-                                <td colspan="3" style="width: 40%"><input type="date" class="box" name="postingDate"/></td>
+                                <td colspan="3" style="width: 40%"><input type="date" class="box" name="postingDate"/><em2>*</em2></td>
                              </tr>
                             </table>
                             </filedset></td>
