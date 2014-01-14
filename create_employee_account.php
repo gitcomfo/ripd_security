@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 include_once 'includes/session.inc';
 include_once 'includes/MiscFunctions.php';
 include_once 'includes/makeAccountNumbers.php';
@@ -77,7 +77,7 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
                         header( 'Location: create_employee_account_inner.php?empInfoID='.$encodedID);
                     } else {
                         mysql_query("ROLLBACK");
-                        $msg = "দুঃখিত, কর্মচারী তৈরি হয়নি";
+                        echo "<script>alert('দুঃখিত,কর্মচারী তৈরি হয়নি')</script>";
                     }
       } else {
         $smserror = "দুঃখিত,একাউন্টধারীর মোবাইল নাম্বারে মেসেজ পাঠানো যাচ্ছে না, পুনরায় চেষ্টা করুন অথবা মেন্যুয়াল পাসওয়ার্ড দিয়ে সেভ করুন";
@@ -118,23 +118,23 @@ if (isset($_POST['submitwithpass']))
 //            $sel_securityroles = mysql_query("SELECT * FROM security_roles WHERE role_name= '$p_employee_type'");
 //            $securityrolesrow = mysql_fetch_assoc($sel_securityroles);
 //            $roleid =$securityrolesrow['idsecurityrole'];
-            $ins_cfsuser=mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email, cfs_account_status, security_roles_idsecurityrole,user_type)
+             $ins_cfsuser=mysql_query("INSERT INTO cfs_user (user_name, password, blocked, account_name, account_number, account_open_date, mobile, email, ripd_email, cfs_account_status, security_roles_idsecurityrole,user_type)
                                                                         VALUES ('$user_username', '$passwrd', '0', '$account_name', '$account_number1', NOW(), '$account_mobile1', '$account_email', '$ripdemailid','active', $roleid, '$p_employee_type')") or exit(mysql_error()." sorry");
              $cfs_user_id = mysql_insert_id();
                     
                     $ins_employee = mysql_query("INSERT INTO employee (status, employee_type, joining_date, posting_type, emp_ons_id, pay_grade_id, cfs_user_idUser)
-                                           VALUES ('posting', '$p_employee_type','$p_joiningdate' ,'$p_posting_type', '$p_onsid', '$p_employee_grade', '$cfs_user_id')") or exit(mysql_error());
+                                                                                VALUES ('posting', '$p_employee_type','$p_joiningdate' ,'$p_posting_type', '$p_onsid', '$p_employee_grade', '$cfs_user_id')") or exit(mysql_error());
                     $employee_id = mysql_insert_id();
                     // employee_posting table-e insert***********************
-                    $ins_empposting = mysql_query("INSERT INTO employee_posting (posting_type, posting_date, Employee_idEmployee, ons_relation_idons_relation, post_in_ons_idpostinons)
-                                            VALUES ('$p_posting_type',NOW(), $employee_id, $p_onsid, $p_postonsID)");
+                    $ins_empposting = mysql_query("INSERT INTO employee_posting ( posting_date, Employee_idEmployee, ons_relation_idons_relation, post_in_ons_idpostinons)
+                                                                            VALUES (NOW(), $employee_id, $p_onsid, $p_postonsID)")or exit(mysql_error());
                     // update post_in_ons table***********************
-                    $ins_postinons=mysql_query("UPDATE `post_in_ons` SET `free_post` = free_post-1,`used_post` = used_post+1 WHERE `idpostinons` =$p_postonsID");
+                    $ins_postinons=mysql_query("UPDATE post_in_ons SET free_post = free_post-1,used_post = used_post+1 WHERE idpostinons =$p_postonsID")or exit(mysql_error());
                    //employee_salary table-e insert***************
                     $ins_empsalary= mysql_query("INSERT INTO employee_salary (total_salary, insert_date, user_id, pay_grade_idpaygrade)
-                                            VALUES ('$p_employee_salary',NOW(), $employee_id, $p_employee_grade)");
+                                                                        VALUES ('$p_employee_salary',NOW(), $employee_id, $p_employee_grade)")or exit(mysql_error());
                     
-                    $empinfo_ins = mysql_query("INSERT INTO employee_information (Employee_idEmployee) VALUES ($employee_id)");
+                    $empinfo_ins = mysql_query("INSERT INTO employee_information (Employee_idEmployee) VALUES ($employee_id)")or exit(mysql_error());
                     $employee_info_id = mysql_insert_id();
                     $encodedID = base64_encode($employee_info_id);
                      if ($ins_cfsuser && $ins_employee && $ins_empposting && $ins_postinons && $ins_postinons && $ins_empsalary && $empinfo_ins) {
@@ -142,7 +142,7 @@ if (isset($_POST['submitwithpass']))
                         header( 'Location: create_employee_account_inner.php?empInfoID='.$encodedID);
                     } else {
                         mysql_query("ROLLBACK");
-                        $msg = "দুঃখিত, কর্মচারী তৈরি হয়নি";
+                       echo "<script>alert('দুঃখিত,কর্মচারী তৈরি হয়নি')</script>";
                     }
 }
 
@@ -463,7 +463,7 @@ function passminlength(pass)
             {
                 document.getElementById("mblValidationMsg").innerHTML = xmlhttp.responseText;
                 var message = document.getElementById("mblValidationMsg").innerText;
-                if (message != "OK")
+                if (message != "ঠিক আছে")
                 {
                     document.getElementById('mobile').focus();
                 }
@@ -682,8 +682,4 @@ function passminlength(pass)
 </div> 
 <?php
 include_once 'includes/footer.php';
-?>
-<?php
-include_once 'includes/session.inc';
-header( 'Location: main_account.php?id=employee');
 ?>

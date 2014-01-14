@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
@@ -289,7 +289,7 @@ elseif (isset($_POST['submit4'])) {
 }
 //  ########################## select main info from cfs_user ########################################
 $sql_emp_sel = mysql_query("SELECT * FROM employee_information, employee, cfs_user 
-                                                            WHERE idUser=cfs_user_idUser AND  Employee_idEmployee = idEmployee AND idEmployee = $g_id ") ;
+                                                            WHERE idUser=cfs_user_idUser AND  Employee_idEmployee = idEmployee AND idEmployee_information = $g_id ") ;
      $employeerow = mysql_fetch_assoc($sql_emp_sel);
      $db_empName = $employeerow['account_name'];
      $db_empAcc = $employeerow['account_number'];
@@ -354,7 +354,7 @@ $sql_emp_sel = mysql_query("SELECT * FROM employee_information, employee, cfs_us
                     <tr>
                         <td >বাবার নাম </td>
                         <td>:  <input class="box" type="text" id="employee_fatherName" name="employee_fatherName" /></td>
-                        <td   font-weight="bold" >পাসপোর্ট ছবি </td>
+                        <td   font-weight="bold" > ছবি </td>
                         <td >:   <input class="box" type="file" id="image" name="image" style="font-size:10px;"/></td>    
                     </tr>
                     <tr>
@@ -528,7 +528,7 @@ $sql_emp_sel = mysql_query("SELECT * FROM employee_information, employee, cfs_us
                     <tr>
                         <td >নমিনির নাম</td>
                         <td>:  <input class="box" type="text" id="nominee_name" name="nominee_name" /></td>	
-                        <td  font-weight="bold" >পাসপোর্ট ছবি </td>
+                        <td  font-weight="bold" >ছবি </td>
                         <td >:  <input class="box" type="file" id="nominee_picture" name="nominee_picture" style="font-size:10px;"/></td>
                     </tr>     
                     <tr>
