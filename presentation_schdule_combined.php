@@ -93,8 +93,6 @@ elseif (isset($_POST['submit1'])) {
 <script type="text/javascript" src="javascripts/jquery.js"></script>
 <script type="text/javascript" src="javascripts/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="javascripts/area.js"></script>
-<script type="text/javascript" src="javascripts/external/mootools.js"></script>
-<script type="text/javascript" src="javascripts/dg-filter.js"></script>
 <link rel="stylesheet" type="text/css" href="css/jquery.autocomplete.css"/>
 <style type="text/css">@import "css/bush.css";</style>
 <?php
@@ -114,7 +112,6 @@ elseif (isset($_POST['submit1'])) {
 ?>
 <!--######################Style Script for calender *********************-->
 <script type="text/javascript">
-
 window.onclick = function()
     {
         new JsDatePick({
@@ -559,7 +556,6 @@ if ($_GET['action'] == 'first') {
             <?php } ?>
         </table>
     </form>
-    
     <script type="text/javascript">
                 var filter = new DG.Filter({
                     filterField : $('search_box_filter'),
