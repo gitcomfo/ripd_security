@@ -140,7 +140,6 @@ if(isset($_POST['openaccount']))
 
     function beforeSave()
     {
-        alert(document.getElementById('mblValidationMsg').innerHTML );
         if ((document.getElementById('usernamecheck').innerHTML == "")
                 && (document.getElementById('user_username').value != "")
                 && (document.getElementById('cust_name').value != "")
@@ -294,7 +293,7 @@ function showReferer(acNo)
             <?php }
                 else {?>
             <form action="" onsubmit="return beforeSave();" method="post">
-        <table style="width: 90%;height: 450px;font-family: SolaimanLipi !important; padding: 10px;color: #000;">
+        <table style="width: 97%;height: 450px;font-family: SolaimanLipi !important; padding: 10px;color: #000;">
             <tr>
                 <td style="text-align: right;">প্যাকেজের নাম</td>
                 <td colspan="3">: <select class="box" name="account_type" style="width: 150px;font-family: SolaimanLipi !important;" onchange="getPackageValue(this.value)" ><?php getPackages();?></select><em> * </em>
