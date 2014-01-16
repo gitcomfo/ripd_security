@@ -401,4 +401,20 @@ function get_time_random_no($len) // random unique number*************
     $random = substr(number_format(time() * rand(), 0, '', ''), 0, $len);
     return $random;
 }
+function getRandomPassword()
+{
+        $new_pass_str = "";
+        $arr_rand_generator =array("num","small","star");
+    for ($i = 0; $i < 10; $i++) {
+        $random_keys = rand(0, 2);
+        if (($arr_rand_generator["$random_keys"]) == "num")
+            $new_pass_str .= chr(rand(48, 57));
+        elseif (($arr_rand_generator["$random_keys"]) == "small")
+            $new_pass_str .= chr(rand(97, 122));
+        else
+            $new_pass_str .= chr(42); // this numbers refer to *
+    }
+    return $new_pass_str;
+}
+
 ?>

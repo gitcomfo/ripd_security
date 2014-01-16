@@ -166,8 +166,8 @@ $result= $sel_sales_summary->fetchAll();
 	{ TINY.box.show({url:'pinGenerator.php?ssumid='+ssumid+'&pv='+totalpv,animate:true,close:true,boxid:'success',top:100,width:400,height:100}); }
  </script> 
 <script type="text/javascript">
- function accGenerate(ssumid)
-	{ TINY.box.show({url:'accountGenerator.php?ssumid='+ssumid,animate:true,close:true,boxid:'success',top:100,width:800,height:500}); }
+ function accGenerate()
+	{ TINY.box.show({iframe:'accountGenerator.php',width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
  </script> 
 </head>
 <body>
@@ -238,7 +238,7 @@ $result= $sel_sales_summary->fetchAll();
 <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -70px;">পিন নং জেনারেট করুন</span></a></span>
 <?php } if($buyertype=='unregcustomer') {?>
 <span id="noprint" style="font-family: SolaimanLipi !important;">
-    <a onclick="accGenerate(<?php echo $sales_sum_id?>)" style="margin: 1% 5% 5% 5%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/creatacc.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
+    <a onclick="accGenerate()" style="margin: 1% 5% 5% 5%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/creatacc.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
 <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -70px;">অ্যাকাউন্ট ওপেন করুন</span></a></span>
 <?php }?>
 </div></br>
