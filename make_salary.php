@@ -4,33 +4,32 @@ include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 include_once './includes/selectQueryPDO.php';
 
-$loginUSERname = $_SESSION['acc_holder_name'] ;
  $loginUSERid = $_SESSION['userIDUser'] ;
  
-$sql_select_working_days->execute(array($loginUSERid));
-$row8 = $sql_select_working_days->fetchAll();
-foreach ($row8 as $totalrow) {
-    $totalworkingDays = $totalrow['COUNT(idempattend)'];
-}
-    $status1 = "present";
-    $sql_total_attend->execute(array($status1,$loginUSERid));
-    $trow1 = $sql_total_attend->fetchAll();
-    foreach ($trow1 as $value) {
-        $total_presentDays = $value['COUNT(idempattend)'];
-    }
-    $status2 ="absent";
-    $sql_total_attend->execute(array($status2,$loginUSERid));
-    $trow2 = $sql_total_attend->fetchAll();
-    foreach ($trow2 as $value) {
-        $total_absentDays = $value['COUNT(idempattend)'];
-    }
-    $status3 = "leave";
-    $sql_total_attend->execute(array($status3,$loginUSERid));
-    $trow3 = $sql_total_attend->fetchAll();
-    foreach ($trow3 as $value) {
-        $total_leaveDays = $value['COUNT(idempattend)'];
-    }
-    $totalattendPercent = ($total_presentDays / $totalworkingDays) * 100;
+//$sql_select_working_days->execute(array($loginUSERid));
+//$row8 = $sql_select_working_days->fetchAll();
+//foreach ($row8 as $totalrow) {
+//    $totalworkingDays = $totalrow['COUNT(idempattend)'];
+//}
+//    $status1 = "present";
+//    $sql_total_attend->execute(array($status1,$loginUSERid));
+//    $trow1 = $sql_total_attend->fetchAll();
+//    foreach ($trow1 as $value) {
+//        $total_presentDays = $value['COUNT(idempattend)'];
+//    }
+//    $status2 ="absent";
+//    $sql_total_attend->execute(array($status2,$loginUSERid));
+//    $trow2 = $sql_total_attend->fetchAll();
+//    foreach ($trow2 as $value) {
+//        $total_absentDays = $value['COUNT(idempattend)'];
+//    }
+//    $status3 = "leave";
+//    $sql_total_attend->execute(array($status3,$loginUSERid));
+//    $trow3 = $sql_total_attend->fetchAll();
+//    foreach ($trow3 as $value) {
+//        $total_leaveDays = $value['COUNT(idempattend)'];
+//    }
+//    $totalattendPercent = ($total_presentDays / $totalworkingDays) * 100;
 
 if(isset($_POST['submit']))
 {
@@ -42,27 +41,6 @@ if(isset($_POST['submit']))
     WHERE   year_no ='$p_year' AND month_no='$p_month' AND  cfs_user_idUser = $loginUSERid AND idEmployee = emp_user_id ");
     $row = mysql_fetch_assoc($select_attendance);
     $workingDays = $row['COUNT(idempattend)'];
-
-    $sql_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? AND  year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
-    $status1 = "present";
-    $sql_attend->execute(array($status1,$p_year,$p_month,$loginUSERid));
-    $row1 = $sql_attend->fetchAll();
-    foreach ($row1 as $value) {
-        $presentDays = $value['COUNT(idempattend)'];
-    }
-    $status2 ="absent";
-    $sql_attend->execute(array($status2,$p_year,$p_month,$loginUSERid));
-    $row2 = $sql_attend->fetchAll();
-    foreach ($row2 as $value) {
-        $absentDays = $value['COUNT(idempattend)'];
-    }
-    $status3 = "leave";
-    $sql_attend->execute(array($status3,$p_year,$p_month,$loginUSERid));
-    $row3 = $sql_attend->fetchAll();
-    foreach ($row3 as $value) {
-        $leaveDays = $value['COUNT(idempattend)'];
-    }
-    $attendPercent = ($presentDays / $workingDays) * 100;
 }
 ?>
 <title>নিয়মিত কর্মচারী হাজিরা</title>
@@ -75,9 +53,29 @@ if(isset($_POST['submit']))
         background-color: #0077D5;border: 2px inset #009933;color: wheat;
     }
 </style>
+<script type="text/javascript">
+    function checkIt(evt) // float value-er jonno***********************
+    {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode ==8 || (charCode >47 && charCode <58) || charCode==46) {
+        status = "";
+        return true;
+    }
+    status = "This field accepts numbers only.";
+    return false;
+}
+function calculateSalary(deduct)
+{
+    var monthlypay = Number(document.getElementById('monthlySalary').value);
+    var xtrapay = Number(document.getElementById('xtrapay').value);
+    var salary = (monthlypay+ xtrapay) - Number(deduct);
+    document.getElementById('totalSalary').value = salary;
+}
+</script>
 
     <div class="main_text_box" style="width: 100% !important;">
-        <div style="padding-left: 50px;"><a href="personal_official_profile_employee.php"><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 50px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
           <div>
                <table  class="formstyle" style="width: 90% !important; font-family: SolaimanLipi !important;margin:0 auto !important;">          
                     <tr><th colspan="6" style="text-align: center;">কর্মচারীদের বেতন তৈরি</th></tr>
@@ -126,47 +124,105 @@ if(isset($_POST['submit']))
                         </td>
                     </tr>
                     <tr>
-                    <td colspan="2">
+                    <td colspan="2"></br>
                         <table cellspacing="0" cellpadding="0">
-                            
+                            <?php 
+                            ?>
                             <tr>
-                                <td colspan="5" style="width: 25%; text-align: right"><b>মোট কার্যদিবস</b></td>
-                                <td style="width: 25%; text-align: left"> : দিন</td>
-                                <td style="width: 25%; text-align: right"><b>মোট কর্মসময়</b></td>
-                                <td style="width: 25%; text-align: left"> : ঘণ্টা</td>
+                                <td colspan="10" style="width: 25%; text-align: center"><b>মোট কার্যদিবস</b> : <?php echo $workingDays?>দিন </br></br></td>
                             </tr>
                             <tr id="table_row_odd">
-                                        <td style='border: 1px solid #000099; text-align: center' ><strong>ক্রম</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center' ><strong>কর্মচারীর নাম</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center'><strong>উপস্থিতির হিসেব</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center'><strong>কর্মসময়ের হিসেব</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center'><strong>উপস্থিতির বিস্তারিত তথ্য</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center'><strong>মূল বেতন</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center'><strong>মাসে পাবে</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center'><strong>অতিরিক্ত প্রদান</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center'><strong>বেতন কর্তন</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center'><strong>মোট বেতন</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 1%;' ><strong>ক্রম</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;' ><strong>কর্মচারীর নাম</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 5%;' ><strong>গ্রেড</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;' ><strong>পোস্ট</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 15%;'><strong>উপস্থিতির হিসেব</strong></td>
+                                         <td style='border: 1px solid #000099;text-align: center;width: 3%;'><strong>উপস্থিতির বিস্তারিত তথ্য</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মূল বেতন (পেনসন কর্তিত)</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মাসে পাবে (টাকা)</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>অতিরিক্ত প্রদান (টাকা)</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>বেতন কর্তন (টাকা)</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মোট বেতন (টাকা)</strong></td>
                             </tr>
                                 <tbody style="font-size: 12px !important">
                                  <?php
                                  if(isset($_POST['submit']))
                                  {
-                                    $sel_attendace = mysql_query("SELECT * FROM employee,employee_attendance 
-                                    WHERE   year_no ='$p_year' AND month_no='$p_month' AND  cfs_user_idUser = $loginUSERid AND idEmployee = emp_user_id
-                                      ORDER BY date_of_atnd ");
-                                    while($attendRow = mysql_fetch_assoc($sel_attendace))
-                                    {
-                                        $db_date = $attendRow['date_of_atnd'];
-                                        $date = date("d-m-Y",  strtotime($db_date));
-                                        $db_status = $attendRow['emp_atnd_type'];
-                                        $db_inTime = $attendRow['emp_intime'];
-                                        $db_OutTime = $attendRow['emp_outtime'];
-                                        $db_overTime = $attendRow['emp_extratime'];
-                                        echo "<tr><td style='border: 1px solid black; text-align: center'>$date</td>
-                                            <td style='border: 1px solid black; text-align: center'>$db_status</td>
-                                            <td style='border: 1px solid black; text-align: center'>$db_inTime</td>
-                                            <td style='border: 1px solid black; text-align: center'>$db_OutTime</td>
-                                            <td style='border: 1px solid black; text-align: center'>$db_overTime</td></tr>";
+                                     $sl = 1;
+                                     $sql_select_emponsid->execute(array($loginUSERid));
+                                     $row4 = $sql_select_emponsid->fetchAll();
+                                     foreach ($row4 as $emprow) {
+                                         $db_onsid = $emprow['emp_ons_id'];
+                                         $db_empID = $emprow['idEmployee'];
+                                     }
+                                     $sql_select_all_employee->execute(array($db_onsid));
+                                     $row5 = $sql_select_all_employee->fetchAll();
+                                     foreach ($row5 as $allemprow) 
+                                        {
+                                            $db_name = $allemprow['account_name'];
+                                            $db_userid = $allemprow['idUser'];
+                                           $sql_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? AND  year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
+                                           $status1 = "present";
+                                           $sql_attend->execute(array($status1,$p_year,$p_month,$db_userid));
+                                           $row1 = $sql_attend->fetchAll();
+                                           foreach ($row1 as $value) {
+                                               $presentDays = $value['COUNT(idempattend)'];
+                                           }
+                                           $status2 ="absent";
+                                           $sql_attend->execute(array($status2,$p_year,$p_month,$db_userid));
+                                           $row2 = $sql_attend->fetchAll();
+                                           foreach ($row2 as $value) {
+                                               $absentDays = $value['COUNT(idempattend)'];
+                                           }
+                                           $status3 = "leave";
+                                           $sql_attend->execute(array($status3,$p_year,$p_month,$db_userid));
+                                           $row3 = $sql_attend->fetchAll();
+                                           foreach ($row3 as $value) {
+                                               $leaveDays = $value['COUNT(idempattend)'];                                             
+                                           }
+                                           $sql_total_overtime->execute(array($p_year,$p_month,$db_userid));
+                                           $row7 = $sql_total_overtime->fetchAll();
+                                           foreach ($row7 as $value) {
+                                               $db_overtime = $value['SUM(emp_extratime)'];
+                                           }
+                                           $sel_emp_salary = $conn->prepare("SELECT * FROM employee_salary WHERE user_id= ?");
+                                           $sel_emp_salary->execute(array($db_empID));
+                                           $row6 = $sel_emp_salary->fetchAll();
+                                           foreach ($row6 as $salaryrow) {
+                                               $db_main_salary = $salaryrow['total_salary'];
+                                               $db_pension = $salaryrow['pension'];
+                                               $totalsalary = $db_main_salary - $db_pension;
+                                           }
+                                           $sql_select_employee_grade->execute(array($db_empID));
+                                           $row8 = $sql_select_employee_grade->fetchAll();
+                                           foreach ($row8 as $gradrow) {
+                                               $db_empgrade = $gradrow['grade_name'];
+                                           }
+                                           $sql_select_view_emp_post = $conn->prepare("SELECT post_name FROM employee_posting,post_in_ons,post 
+                                               WHERE Employee_idEmployee = ? AND ons_relation_idons_relation=? AND post_in_ons_idpostinons= idpostinons 
+                                               AND Post_idPost= idPost ORDER BY posting_date DESC LIMIT 1");
+                                           $sql_select_view_emp_post->execute(array($db_empID,$db_onsid));
+                                           $row9 = $sql_select_view_emp_post->fetchAll();
+                                           foreach ($row9 as $postrow) {
+                                               $db_post = $postrow['post_name'];
+                                           }
+                                           echo "<tr><td style='border: 1px solid black; text-align: center'>".  english2bangla($sl)."</td>
+                                               <td style='border: 1px solid black; text-align: left'>$db_name</td>
+                                                <td style='border: 1px solid black; text-align: center'>$db_empgrade</td>
+                                                <td style='border: 1px solid black; text-align: center'>$db_post</td>
+                                               <td style='border: 1px solid black; text-align: left'>
+                                                <b>উপস্থিতঃ</b> $presentDays দিন</br>
+                                                <b>অনুপস্থিতঃ</b> $absentDays দিন</br>
+                                                <b>ছুটিঃ</b> $leaveDays দিন</br>
+                                                <b>ওভারটাইমঃ</b> $db_overtime ঘণ্টা    
+                                               </td>
+                                               <td style='border: 1px solid black; text-align: center'><input type='button' value='বিস্তারিত' style='cursor:pointer;border:2px solid blue;' /></td>
+                                               <td style='border: 1px solid black; text-align: center'>".english2bangla($totalsalary)."</td>
+                                               <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary' id='monthlySalary' value='$totalsalary' />".english2bangla($totalsalary)."</td>
+                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay' name='xtrapay' onkeypress='return checkIt(event)'  /></td>
+                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' onkeypress='return checkIt(event)' onkeyup='calculateSalary(this.value)' /></td>
+                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary' name='totalSalary' /></td></tr>";
+                                           $sl++;
                                     }
                                  }
                                 ?>
