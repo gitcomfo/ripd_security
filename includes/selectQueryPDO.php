@@ -84,4 +84,12 @@ $sql_select_cheque_all = $conn->prepare("SELECT *
                                                 FROM acc_user_cheque, cfs_user
                                                 WHERE cheque_num =  ?
                                                 AND idUser = cheque_makerid");
+$sql_select_program = $conn->prepare("SELECT * 
+                                                FROM program
+                                                WHERE program_no =  ? ");
+$sql_select_presenter_list = $conn->prepare("SELECT * 
+                                                    FROM presenter_list, employee, cfs_user
+                                                    WHERE fk_idprogram = ?
+                                                    AND fk_Employee_idEmployee = idEmployee
+                                                    AND cfs_user_idUser = idUser");
 ?>
