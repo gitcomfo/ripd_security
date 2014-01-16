@@ -145,6 +145,7 @@ if(isset($_POST['openaccount']))
                 && (document.getElementById('user_username').value != "")
                 && (document.getElementById('cust_name').value != "")
                 && (document.getElementById('pckgvalue').value != "")
+                && (document.getElementById('mblValidationMsg').innerHTML == "")
                 && (document.getElementById('showReferer').innerHTML != "দুঃখিত, ভুল অ্যাকাউন্ট নাম্বার"))
         {
             document.getElementById('openaccount').readonly = false;
