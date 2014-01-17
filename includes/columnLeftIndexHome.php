@@ -7,13 +7,13 @@
             <div class="box_title"><span> যোগাযোগের </span>ঠিকানা</div>
             <div class="form">
                 <div class="form_row">
-                    <img src="images/contact_envelope.gif" width="50" height="47" border="0" class="img_right" alt="" title="" />
+                    <img src="images/contact_envelope.gif" width="45" height="42" border="0" class="img_right" alt="" title="" />
                     <div class="contact_information">
-                        ইমেইলঃ info@ripduniversal.com<br />
-                        টেলিফোনঃ ৯৯৯ ৮৮৮ ২৩<br />
-                        মোবাইলঃ +৮৮ ০১৯১৩ ৪৪০ ১৮৫<br />
-                        ফ্যাক্সঃ ২৩ ২৩ ২৩<br /><br />
-                        <span>www.ripduniversal.com</span>
+                        <b>ইমেইলঃ</b> info@ripduniversal.com<br />
+                        <b>টেলিফোনঃ</b> ৯৯৯ ৮৮৮ ২৩<br />
+                        <b>মোবাইলঃ</b> +৮৮ ০১৯১৩ ৪৪০ ১৮৫<br />
+                        <b>ফ্যাক্সঃ</b> ২৩ ২৩ ২৩<br /><br />
+                        <span style="font-size: 15px;">www.ripduniversal.com</span>
                     </div>
                 </div>                    
             </div>

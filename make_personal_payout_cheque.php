@@ -6,16 +6,26 @@ include_once 'includes/insertQueryPDO.php';
 ?>
 <style type="text/css"> @import "css/bush.css";</style>
 <link href="css/print.css" rel="stylesheet" type="text/css" media="print"/>
-<?php
+<script src="javascripts/cfs_accounting.js" type="text/javascript"></script>
 
+
+<div class="main_text_box">
+    <div id="noprint" style="padding-left: 110px;"><a href="personal_accounting_balance.php"><b>ফিরে যান</b></a></div>
+    
+<?php
 if (isset($_POST['save_cheque'])) {
     $p_amount = $_POST['amount'];
     $p_desc = $_POST['amount_desc'];
     $accountnumber = $_SESSION['personalAccNo'];
     $accountname = $_SESSION['acc_holder_name'];
-    $cheque_no = getChequeNo();
+    $cheque_no = $_POST['cheque'];
     $takaInWords = convert_number($p_amount);
-
+    
+    $sql_select_cheque->execute(array($cheque_no));
+    $row_chequeNumber = $sql_select_cheque->fetchColumn();
+    if($row_chequeNumber == 0) $cheque_no = $cheque_no;
+    else $cheque_no = getChequeNo($sql_select_cheque);
+    
     echo "</br><div id='cheque' style='width: 574px; height: 320px; font-size:12px; border: blue solid 1px; margin: 0 auto; background-image: url(images/cheque.gif);background-repeat: no-repeat;background-size:100% 320px;'>
                  <div style='width: 558px;height: 70px;float: left;padding-left: 15px; background-image: url(images/background.gif);background-repeat: no-repeat;background-size:100% 70px;'></div>
                  <div id='cheque_body' style='width: 570px;float: left;padding-left: 2px;'>
@@ -30,76 +40,11 @@ if (isset($_POST['save_cheque'])) {
                           <div style='float: right;height: 20px;padding-top: 10px;text-align: right;'><input type='text' readonly style='width:230px;' /><hr style='width:230px; height: 2px; background-color: black;'/> এখানে স্বাক্ষর করুন&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                   </div>
              </div></br>";
-       $sql_insert_cheque_making->execute(array($cheque_no, "out", $p_desc, $p_amount, $_SESSION['userIDUser'], "made"));                             
+$sql_insert_cheque_making->execute(array($cheque_no, "out", $p_desc, $p_amount, $_SESSION['userIDUser'], "made"));                             
 echo '<script> window.print(); </script>';
-} else {
-    
+} else {    
 ?>
 
-
-<script type="text/javascript">
-    function checkIt(evt) // float value-er jonno***********************
-    {
-        evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if (charCode ==8 || (charCode >47 && charCode <58) || charCode==46) 
-        {
-            status = "";
-            return true;
-        }
-        status = "This field accepts numbers only.";
-        return false;
-    }
-        function numbersonly(e)
-   {
-        var unicode=e.charCode? e.charCode : e.keyCode
-            if (unicode!=8)
-            { //if the key isn't the backspace key (which we should allow)
-                if (unicode<48||unicode>57) //if not a number
-                return false //disable key press
-            }
-}
-    function checkAmount(checkvalue) // check amount value in repeat
-    {
-        var amount = document.getElementById('amount').value;
-        var amount1 = document.getElementById('amount');
-        var amount2 = document.getElementById('amount_rep');
-        if(amount1.value.length == 0 || amount2.value.length == 0){
-            document.getElementById('errormsg').style.color='red';
-            document.getElementById('errormsg').innerHTML = "পরিমানের ঘরটি খালি";
-        } else if(amount != checkvalue) 
-        {
-            document.getElementById('errormsg').style.color='red';
-            document.getElementById('errormsg').innerHTML = "পরিমান সঠিক হয় নি";
-        } else {
-            document.getElementById('errormsg').style.color='green';
-            document.getElementById('errormsg').innerHTML="OK";
-            document.getElementById('view').disabled= false;  
-        }
-    }
-    function viewCheque()
-    {
-        var xmlhttp;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function()
-        {
-            document.getElementById('viewCheque').innerHTML=xmlhttp.responseText;
-        }
-        var amount = document.getElementById('amount_rep').value;
-        xmlhttp.open("GET","includes/cheque.php?amount="+amount,true);
-        xmlhttp.send();	
-    }
-</script>
-
-<div class="main_text_box">
-    <div id="noprint" style="padding-left: 110px;"><a href="personal_accounting_balance.php"><b>ফিরে যান</b></a></div>
     <div>           
         <form method="POST" onsubmit="" name="cheque" action="">	
             <table  class="formstyle" style="width: 80%;font-family: SolaimanLipi !important; font-size: 14px;">          
@@ -119,9 +64,10 @@ echo '<script> window.print(); </script>';
                             $db_total_balance = $rub['total_balanace'];
                             $db_last_withdrawl = date("d-m-Y", strtotime($rub['last_withdrawl']));
                         }
+                        $new_chequeNumber = getChequeNo($sql_select_cheque);
                         ?>
                         <fieldset style="border: #686c70 solid 3px;width: 80%;margin-left: 10%;">
-                            <legend style="color: brown;">একাউন্ট স্ট্যাটাস</legend>
+                            <legend style="color: brown;">একাউন্ট স্ট্যাটাস</legend><input type="hidden" id="cheque" name="cheque" value="<?php echo $new_chequeNumber;?>">
                             <table width="100%" align="center" >
                                 <tr>
                                     <td style="text-align: right; width: 50%;"><b>টোটাল ব্যালেন্স :</b></td>
@@ -141,11 +87,11 @@ echo '<script> window.print(); </script>';
                 </tr>
                 <tr id="noprint">
                     <td style="text-align: right;">টাকা উত্তোলনের পরিমান</td>
-                    <td style="text-align: left;">: <input class="box" id='amount' type="text" onkeypress="return numbersonly(event);" /> টাকা</td>
+                    <td style="text-align: left;">: <input class="box" id='amount' type="text" onkeypress="return numbersonly(event);" onblur="chequeAmount(this.value, '<?php echo $db_total_balance;?>');" /> টাকা <span id="errorbalance"></span></td>
                 </tr>
                 <tr id="noprint">
                     <td style="text-align: right;">টাকা উত্তোলনের পরিমান (পুনরায়)</td>
-                    <td style="text-align: left;">: <input class="box" id="amount_rep" name="amount" type="text" onkeypress="return numbersonly(event);" onblur="checkAmount(this.value);"  /> টাকা <span id="errormsg"></span></td>
+                    <td style="text-align: left;">: <input class="box" id="amount_rep" name="amount" type="text" onkeypress="return numbersonly(event);" onblur="repeatAmount(this.value);"  /> টাকা <span id="errormsg"></span></td>
                 </tr>
                 <tr id="noprint">
                     <td style="text-align: right;">বর্ণনা</td>
@@ -158,7 +104,7 @@ echo '<script> window.print(); </script>';
                     <td colspan="2" style="text-align: center;" id="viewCheque"></td>
                 </tr>
                 <tr>                    
-                    <td id="noprint" colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; width: 150px;" type="submit" name="save_cheque" value="মেইক চেক এন্ড প্রিন্ট " />                           
+                    <td id="noprint" colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; width: 150px;" id="save_cheque" disabled="" type="submit" name="save_cheque" value="মেইক চেক এন্ড প্রিন্ট " />                           
                 </tr>    
             </table>
             </fieldset>

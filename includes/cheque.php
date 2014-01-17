@@ -1,11 +1,11 @@
 <?php
 error_reporting(0);
-include_once './connectionPDO.php';
+session_start();
 include_once './MiscFunctions.php';
 $accountnumber = $_SESSION['personalAccNo'];
 $accountname = $_SESSION['acc_holder_name'];
 $g_amount = $_GET['amount'];
-$cheque_no = getChequeNo();
+$cheque_no = $_GET['cheque'];
 $takaInWords = convert_number($g_amount);
 
 echo "</br><div id='cheque' style='width: 574px; height: 320px; font-size:12px; border: blue solid 1px; margin: 0 auto; background-image: url(images/cheque.gif);background-repeat: no-repeat;background-size:100% 320px;'>

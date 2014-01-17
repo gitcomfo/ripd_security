@@ -3,6 +3,7 @@ error_reporting(0);
 session_start();
 include_once 'ConnectDB.inc';
 include_once 'connectionPDO.php';
+include_once 'MiscFunctions.php';
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -65,6 +66,10 @@ include_once 'connectionPDO.php';
                         <?php
                         if(isset($_SESSION['UserID']) && isset($_SESSION['acc_holder_name']))
                             {
+                            $notification = 5; // it comes from the query of notification
+                            $showNotificationNum = english2bangla($notification);
+                            if($notification == 0) echo '<li><a href="notification.php">নোটিফিকেশন (0)</a></li>';
+                            else echo "<li><a href='notification.php' style='color: yellow;'>নোটিফিকেশন ($showNotificationNum)</a></li>";
                             $user_name = $_SESSION['acc_holder_name'];
                             $logged_in_office_name = $_SESSION['loggedInOfficeName'];
                             if($logged_in_office_name!='customerOffice'){

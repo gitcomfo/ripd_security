@@ -7,10 +7,11 @@ include_once 'includes/selectQueryPDO.php';
 include_once 'includes/MiscFunctions.php';
 
 $session_user_id = $_SESSION['userIDUser'];
+$session_account_name = $_SESSION['acc_holder_name'];
 $sql_select_cfs_user_all->execute(array($session_user_id));
 $arr_cfs_user = $sql_select_cfs_user_all->fetchAll();
 foreach ($arr_cfs_user as $acu) {
-    $aab_account_name = $acu['account_name'];
+    //$aab_account_name = $acu['account_name'];
     $aab_account_number = $acu['account_number'];
     $aab_open_date = english2bangla($acu['account_open_date']);
     $aab_mobile = english2bangla($acu['mobile']);
@@ -163,7 +164,7 @@ if (!file_exists($aab_picture))
             <td style="width: 35%; text-align: center;">
                 <table >
                     <tr>
-                        <td style="font-size: 16px; text-align: center;"><b><?php echo $aab_account_name; ?></b></td>
+                        <td style="font-size: 16px; text-align: center;"><b><?php echo $session_account_name; ?></b></td>
                     </tr>
                     <tr>
                         <td style="text-align: center;"><img src="<?php echo $aab_picture; ?>" width='120px' height='120px'/></td>
