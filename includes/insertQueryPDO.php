@@ -42,5 +42,10 @@ $sql_insert_employee_salary = $conn->prepare("INSERT INTO employee_salary (total
 //**************** cheque making ***********************************************************
 $sql_insert_cheque_making = $conn->prepare("INSERT INTO acc_user_cheque (cheque_num, cheque_type, cheque_description, cheque_mak_datetime, cheque_amount, cheque_makerid, cheque_status)
                                                                                 VALUES(?, ?, ?, NOW(), ?, ?, ?) ");
+// ************************************* employee salary give ***************************************************************************
+$insert_sal_approval = $conn->prepare("INSERT INTO salary_approval (month_no,year_no,salary_makerid,salary_making_date)
+        VALUES (?, ?, ?, NOW())");
+$insert_sal_chart = $conn->prepare("INSERT INTO salary_chart (month_no,year_no,given_amount,deducted_amount,bonus_amount,total_given_amount,user_id,salary_status,fk_sal_aprv_salappid)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'made', ?)");
 
 ?>

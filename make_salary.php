@@ -3,44 +3,49 @@
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 include_once './includes/selectQueryPDO.php';
-
+include_once './includes/insertQueryPDO.php';
  $loginUSERid = $_SESSION['userIDUser'] ;
  
-//$sql_select_working_days->execute(array($loginUSERid));
-//$row8 = $sql_select_working_days->fetchAll();
-//foreach ($row8 as $totalrow) {
-//    $totalworkingDays = $totalrow['COUNT(idempattend)'];
-//}
-//    $status1 = "present";
-//    $sql_total_attend->execute(array($status1,$loginUSERid));
-//    $trow1 = $sql_total_attend->fetchAll();
-//    foreach ($trow1 as $value) {
-//        $total_presentDays = $value['COUNT(idempattend)'];
-//    }
-//    $status2 ="absent";
-//    $sql_total_attend->execute(array($status2,$loginUSERid));
-//    $trow2 = $sql_total_attend->fetchAll();
-//    foreach ($trow2 as $value) {
-//        $total_absentDays = $value['COUNT(idempattend)'];
-//    }
-//    $status3 = "leave";
-//    $sql_total_attend->execute(array($status3,$loginUSERid));
-//    $trow3 = $sql_total_attend->fetchAll();
-//    foreach ($trow3 as $value) {
-//        $total_leaveDays = $value['COUNT(idempattend)'];
-//    }
-//    $totalattendPercent = ($total_presentDays / $totalworkingDays) * 100;
-
 if(isset($_POST['submit']))
 {
     $p_month = $_POST['month'];;
     $p_year = $_POST['year'];
     $monthName = date("F", mktime(0, 0, 0, $p_month, 10));
     
-    $select_attendance = mysql_query("SELECT COUNT(idempattend) FROM employee,employee_attendance 
-    WHERE   year_no ='$p_year' AND month_no='$p_month' AND  cfs_user_idUser = $loginUSERid AND idEmployee = emp_user_id ");
-    $row = mysql_fetch_assoc($select_attendance);
-    $workingDays = $row['COUNT(idempattend)'];
+    $select_attendance->execute(array($p_year,$p_month,$loginUSERid));
+    $attendrow = $select_attendance->fetchAll();
+    foreach ($attendrow as $row) {
+        $workingDays = $row['COUNT(idempattend)'];
+    }  
+}
+if(isset($_POST['makesalary']))
+{
+    $p_empCfsID = $_POST['empCFSid'];
+    $p_monthlyPay = $_POST['monthlySalary'];
+    $p_xtrapay = $_POST['xtrapay'];
+    $p_deduct = $_POST['deductpay'];
+    $p_totalpay = $_POST['totalSalary'];
+    $p_monthNo = $_POST['monthNo'];
+    $p_yearNo = $_POST['yearNo'];
+    $numberOfRows = count($p_empCfsID);
+    
+    $conn->beginTransaction(); 
+    $sqlrslt1= $insert_sal_approval->execute(array($p_monthNo,$p_yearNo,$loginUSERid));
+    $sal_approval_id = $conn->lastInsertId();
+    for($i=1;$i<=$numberOfRows;$i++)
+    {
+         $sqlrslt2= $insert_sal_chart->execute(array($p_monthNo, $p_yearNo, $p_monthlyPay[$i], $p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i], $p_empCfsID[$i], $sal_approval_id));
+    }
+   
+     if($sqlrslt1  && $sqlrslt2)
+        {
+            $conn->commit();
+            echo "<script>alert('বেতন সফলভাবে এন্ট্রি হয়েছে')</script>";
+        }
+        else {
+            $conn->rollBack();
+            echo "<script>alert('দুঃখিত,বেতন এন্ট্রি হয়নি')</script>";
+        }
 }
 ?>
 <title>নিয়মিত কর্মচারী হাজিরা</title>
@@ -65,12 +70,12 @@ if(isset($_POST['submit']))
     status = "This field accepts numbers only.";
     return false;
 }
-function calculateSalary(deduct)
+function calculateSalary(deduct,i)
 {
-    var monthlypay = Number(document.getElementById('monthlySalary').value);
-    var xtrapay = Number(document.getElementById('xtrapay').value);
+    var monthlypay = Number(document.getElementById("monthlySalary["+i+"]").value);
+    var xtrapay = Number(document.getElementById("xtrapay["+i+"]").value);
     var salary = (monthlypay+ xtrapay) - Number(deduct);
-    document.getElementById('totalSalary').value = salary;
+    document.getElementById("totalSalary["+i+"]").value = salary;
 }
 </script>
 
@@ -125,11 +130,13 @@ function calculateSalary(deduct)
                     </tr>
                     <tr>
                     <td colspan="2"></br>
+                        <form method="post" action="" >
                         <table cellspacing="0" cellpadding="0">
                             <?php 
                             ?>
                             <tr>
-                                <td colspan="10" style="width: 25%; text-align: center"><b>মোট কার্যদিবস</b> : <?php echo $workingDays?>দিন </br></br></td>
+                                <td colspan="10" style="width: 25%; text-align: center"><b><?php echo $monthName.", ".$p_year;?>-এ মোট কার্যদিবস</b> : <?php echo $workingDays?>দিন 
+                                    <input type="hidden" name="yearNo" value="<?php echo $p_year;?>" /><input type="hidden" name="monthNo" value="<?php echo $p_month;?>" /></br></br></td>
                             </tr>
                             <tr id="table_row_odd">
                                         <td style='border: 1px solid #000099;text-align: center;width: 1%;' ><strong>ক্রম</strong></td>
@@ -138,8 +145,8 @@ function calculateSalary(deduct)
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;' ><strong>পোস্ট</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 15%;'><strong>উপস্থিতির হিসেব</strong></td>
                                          <td style='border: 1px solid #000099;text-align: center;width: 3%;'><strong>উপস্থিতির বিস্তারিত তথ্য</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মূল বেতন (পেনসন কর্তিত)</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মাসে পাবে (টাকা)</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মূল বেতন (টাকা)</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মাসে পাবে (পেনসন কর্তিত)</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>অতিরিক্ত প্রদান (টাকা)</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>বেতন কর্তন (টাকা)</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মোট বেতন (টাকা)</strong></td>
@@ -207,7 +214,7 @@ function calculateSalary(deduct)
                                                $db_post = $postrow['post_name'];
                                            }
                                            echo "<tr><td style='border: 1px solid black; text-align: center'>".  english2bangla($sl)."</td>
-                                               <td style='border: 1px solid black; text-align: left'>$db_name</td>
+                                               <td style='border: 1px solid black; text-align: left'>$db_name<input type='hidden' name='empCFSid[$sl]' value='$db_userid' /></td>
                                                 <td style='border: 1px solid black; text-align: center'>$db_empgrade</td>
                                                 <td style='border: 1px solid black; text-align: center'>$db_post</td>
                                                <td style='border: 1px solid black; text-align: left'>
@@ -216,18 +223,20 @@ function calculateSalary(deduct)
                                                 <b>ছুটিঃ</b> $leaveDays দিন</br>
                                                 <b>ওভারটাইমঃ</b> $db_overtime ঘণ্টা    
                                                </td>
-                                               <td style='border: 1px solid black; text-align: center'><input type='button' value='বিস্তারিত' style='cursor:pointer;border:2px solid blue;' /></td>
-                                               <td style='border: 1px solid black; text-align: center'>".english2bangla($totalsalary)."</td>
-                                               <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary' id='monthlySalary' value='$totalsalary' />".english2bangla($totalsalary)."</td>
-                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay' name='xtrapay' onkeypress='return checkIt(event)'  /></td>
-                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' onkeypress='return checkIt(event)' onkeyup='calculateSalary(this.value)' /></td>
-                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary' name='totalSalary' /></td></tr>";
+                                               <td style='border: 1px solid black; text-align: center'><a style='cursor:pointer;color:blue;' id='details[$sl]' ><u>বিস্তারিত</u></a></td>
+                                               <td style='border: 1px solid black; text-align: center'>".english2bangla($db_main_salary)."</td>
+                                               <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary[$sl]' id='monthlySalary[$sl]' value='$totalsalary' />".english2bangla($totalsalary)."</td>
+                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay[$sl]' name='xtrapay[$sl]' onkeypress='return checkIt(event)'  /></td>
+                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' id='deductpay[$sl]' name='deductpay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalary(this.value,$sl)' /></td>
+                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary[$sl]' name='totalSalary[$sl]' /></td></tr>";
                                            $sl++;
                                     }
                                  }
                                 ?>
+                                    <tr><td colspan="11" style="text-align: center;"></br><input class="btn" type="submit" name="makesalary" value="বেতন প্রদান করুন" style="width: 150px;" /></td></tr>
                                 </tbody>
                             </table>
+                            </form>
                            </td>
                     </tr>
                 </table>

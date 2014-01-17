@@ -66,6 +66,8 @@ $sql_select_post_own_office = $conn->prepare("SELECT * FROM post, post_in_ons WH
 // ******************************************** employee attendance ******************************************************
 $sql_select_working_days = $conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance 
                                                                             WHERE  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
+$select_attendance = $conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance 
+                                                                WHERE year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
 $sql_total_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? 
                                                             AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
 $sql_total_overtime =$conn->prepare("SELECT SUM(emp_extratime) FROM employee,employee_attendance WHERE emp_atnd_type='present' 
