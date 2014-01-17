@@ -291,33 +291,26 @@ function convert_number($number)
         }
         return $res;
 }
-function getChequeNo()
-{
-      $str_random_no=(string)mt_rand (0 ,9999 );
-      $str_checque_no= str_pad($str_random_no,4, "0", STR_PAD_LEFT);
-    for($i=0;$i<3;$i++)
+function getChequeNo($sql)
     {
-        $str_random_no=(string)mt_rand (0 ,9999 );
-        $str_cheque= str_pad($str_random_no,4, "0", STR_PAD_LEFT);
-        $str_checque_no = $str_checque_no."-".$str_cheque;
-    }
-   return $str_checque_no;
-}
-
-function chargeAmount($amount, $code)
-{
-    include_once 'selectQueryPDO.php';
-    $sql_select_charge->execute(array($code));
-    $row_charge = $sql_select_charge->fetchAll();
-    foreach ($row_charge as $row)
+    chequeLoop:
+    $str_random_no=(string)mt_rand (0 ,9999);
+    $str_checque_no= str_pad($str_random_no, 4, "0", STR_PAD_LEFT);
+    for($i=0; $i<3; $i++)
         {
-        $db_charge_amount = $row['charge_amount'];
-        $db_charge_type = $row['charge_type'];
+        $str_random_no=(string)mt_rand (0 ,9999);
+        $str_cheque= str_pad($str_random_no, 4, "0", STR_PAD_LEFT);
+        $str_checque_no = $str_checque_no."-".$str_cheque;
         }
-    if($db_charge_type == "fixed") $charge = $db_charge_amount;
-    elseif($db_charge_type == "percent") $charge = $amount*$db_charge_amount/100;
-    else $charge = 0;
-    return $charge;
-}
+    //return $str_checque_no;
+    $sql->execute(array($str_checque_no));
+    $row_chequeNumber = $sql->fetchColumn();
+    if($row_chequeNumber > 0) 
+        {
+        $str_checque_no = "";
+        goto chequeLoop;
+        }
+    else {return $str_checque_no;}
+    }
 
 ?>

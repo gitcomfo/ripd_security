@@ -36,37 +36,12 @@ function showMessage($flag, $msg) {
 
 if (isset($_POST['save'])) {
     $receiver_mobile_num = $_POST['mobileNo'];
-    $trans_amount = $_POST['amount1'];
+    //$trans_amount = $_POST['amount1'];
     $trans_purpose = $_POST['trans_des'];
     $trans_servicecharge = $db_charge_amount;
     $trans_type = "send";
     $trans_senderid = $_SESSION['userIDUser'];
     $chrg_givenby = $_POST['charger'];
-    if($db_charge_type == "fixed"){
-        if($chrg_givenby == "sender"){
-                $reciever_get = $trans_amount;
-                $trans_servicecharge = $db_charge_amount;
-                $total_transaction = $reciever_get + $trans_servicecharge;
-        }elseif ($chrg_givenby == "receiver") {
-                $total_transaction = $trans_amount;
-                $trans_servicecharge = $db_charge_amount;
-                $reciever_get = $total_transaction - $trans_servicecharge;
-        }
-    }elseif ($db_charge_type == "percent") {
-        if($chrg_givenby == "sender"){
-                $reciever_get = $trans_amount;
-                $trans_servicecharge = $db_charge_amount * $reciever_get / 100;
-                $total_transaction = $reciever_get + $trans_servicecharge;
-        }elseif ($chrg_givenby == "receiver") {
-                $total_transaction = $trans_amount;
-                $trans_servicecharge = $db_charge_amount * $reciever_get / 100;
-                $reciever_get = $total_transaction - $trans_servicecharge;
-        }
-    }
-    /*$reciever_get = $trans_amount;
-    $trans_servicecharge = chargeAmount($reciever_get, $charge_code);
-    if($chrg_givenby == "sender") $total_transaction = $reciever_get + $trans_servicecharge;
-    else $reciever_get = $total_transaction - $trans_servicecharge;*/
     $sts = "unpaid";
     random:
     $random = mt_rand(10000000, 99999999);
@@ -81,7 +56,7 @@ if (isset($_POST['save'])) {
                                                                     $trans_amount, $reciever_get, $trans_servicecharge, $trans_purpose,
                                                                     $chrg_givenby, $total_transaction, $sts, $random));
         $sms_body = "Dear User, You have received: $trans_amount Taka.\nTransaction Charge: $trans_servicecharge Taka,\nYou will get $reciever_get Taka in Cash\nYour code $random.";
-        $sendResult = SendSMSFuntion("88".$receiver_mobile_num, $sms_body);
+        //$sendResult = SendSMSFuntion("88".$receiver_mobile_num, $sms_body);
         $sendStatus = substr($sendResult, 0, 4);
         if($sendStatus == '1701'){
             $msg = "টাকা সফল ভাবে সেন্ড হয়েছে, আপনার কোডটি ".$random;
@@ -93,7 +68,7 @@ if (isset($_POST['save'])) {
 ?>
 
 <title>ব্যাক্তিগত অ্যামাউন্ট ট্রান্সফার</title>
-<script src="javascripts/send_transfer_amount.js" type="text/javascript"></script>
+<script src="javascripts/cfs_accounting.js" type="text/javascript"></script>
 <style type="text/css">@import "css/bush.css";</style>
 
 <div class="columnSubmodule" style="font-size: 14px;">
@@ -153,12 +128,11 @@ if (isset($_POST['save'])) {
                         </tr>
                         <tr>
                             <td style="text-align: right;">টাকার পরিমান</td>
-                            <td>: <input  class="box" type="text" style="width: 100px" name="amount1"  id="amount1"  onkeypress="return checkIt(event)" value="0"/> টাকা </td>   
+                            <td>: <input  class="box" type="text" style="width: 100px" name="amount"  id="amount"  onkeypress="return checkIt(event);" onblur="sendAmount(this.value, '<?php echo $db_charge_amount; ?>', '<?php echo $db_charge_type; ?>', '<?php echo $db_balance; ?>', 'mblValidationMsg'); " value="0"/> টাকা <br/><span id="errorbalance"></span></td>   
                         </tr>
                         <tr>
                             <td style="text-align: right; ">টাকার পরিমান (পুনরায়)</td>
-                            <td>: <input  class="box" type="text" name="amount2" style="width: 100px"  id="amount2"  onkeypress="return checkIt(event)" onblur="checkAmount(this.value, '<?php echo $db_charge_amount; ?>', '<?php echo $db_charge_type; ?>', '<?php echo $db_balance; ?>'); " value="0"/> টাকা 
-                                </br><span id="errormsg"></span></td>   
+                            <td>: <input  class="box" type="text" name="amount_rep" style="width: 100px"  id="amount_rep"  onkeypress="return checkIt(event);" onblur="repeatAmount(this.value);" value="0"/> টাকা <br/><span id="errormsg"></span></td>   
                         </tr>
                         <tr>
                             <td style="text-align: right;">সেন্ডের কারন</td>
@@ -184,7 +158,7 @@ if (isset($_POST['save'])) {
             </td>
             </tr>
             <tr>
-                <td colspan="2" style="text-align: center"></br><input type="button" class="btn"  name="submit" id="submit" disabled value="ঠিক আছে" onclick="getPassword();" ></td>
+                <td colspan="2" style="text-align: center"></br><input type="button" class="btn"  name="view" id="view" disabled value="ঠিক আছে" onclick="getPassword();" ></td>
             </tr>
             <tr>
                 <td colspan="2" id="passwordbox"></td>

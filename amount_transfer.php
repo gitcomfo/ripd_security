@@ -46,27 +46,6 @@ if (isset($_POST['save'])) {
     $trans_type = "transfer";
     $trans_senderid = $_SESSION['userIDUser'];
     $chrg_givenby = $_POST['charger'];
-    if($db_charge_type == "fixed"){
-        if($chrg_givenby == "sender"){
-                $reciever_get = $trans_amount;
-                $trans_servicecharge = $db_charge_amount;
-                $total_transaction = $reciever_get + $trans_servicecharge;
-        }elseif ($chrg_givenby == "receiver") {
-                $total_transaction = $trans_amount;
-                $trans_servicecharge = $db_charge_amount;
-                $reciever_get = $total_transaction - $trans_servicecharge;
-        }
-    }elseif ($db_charge_type == "percent") {
-        if($chrg_givenby == "sender"){
-                $reciever_get = $trans_amount;
-                $trans_servicecharge = $db_charge_amount * $reciever_get / 100;
-                $total_transaction = $reciever_get + $trans_servicecharge;
-        }elseif ($chrg_givenby == "receiver") {
-                $total_transaction = $trans_amount;
-                $trans_servicecharge = $db_charge_amount * $reciever_get / 100;
-                $reciever_get = $total_transaction - $trans_servicecharge;
-        }
-    }
     $sts = "transfer";
     random:
     $random = mt_rand(10000000, 99999999);
