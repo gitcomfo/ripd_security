@@ -7,7 +7,9 @@ if (isset($_GET['key']) && $_GET['key'] != '') {
 	$suggest_query = "SELECT * FROM  cfs_user WHERE account_number like('$str_key%') ORDER BY  account_number";
 	$reslt= mysql_query($suggest_query);
         if(mysql_num_rows($reslt)<1){echo "দুঃখিত, এই নাম্বারের কোনো একাউন্ট নেই";}
-	while($suggest = mysql_fetch_assoc($reslt)) {
+        else 
+        {
+            while($suggest = mysql_fetch_assoc($reslt)) {
             $cfsid = $suggest['idUser'];
             $accType = $suggest['user_type'];
             if($accType == 'owner')
@@ -31,6 +33,7 @@ if (isset($_GET['key']) && $_GET['key'] != '') {
             $acc = $suggest['account_number'];
             $name =  urlencode($suggest['account_name']);
             $mbl = $suggest['mobile'];
-	            echo "<a onclick=setBuyer('$acc','$name','$mbl','$imagesrc'); style='text-decoration:none;color:brown;cursor:pointer;'>" . $suggest['account_number'] . " (".$suggest['account_name'].")</a></br>";
-        	}            
+	            echo "<a onclick=setBuyer('$acc','$name','$mbl','$imagesrc','$cfsid'); style='text-decoration:none;color:brown;cursor:pointer;'>" . $suggest['account_number'] . " (".$suggest['account_name'].")</a></br>";
+        	}
+        }
 }

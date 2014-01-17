@@ -331,7 +331,7 @@ function beforeProceed()
             return false;
         }
 }
-function setBuyer(acc,name,mbl,image)
+function setBuyer(acc,name,mbl,image,cfsid)
 {
        var n = decodeURIComponent(name);
        var name2 = n.replace(/\+/g," ");
@@ -339,6 +339,7 @@ function setBuyer(acc,name,mbl,image)
         document.getElementById('buyername').innerHTML = name2;
         document.getElementById('buyermobile').innerHTML = mbl;
         document.getElementById('buyerACC').innerHTML= acc;
+        document.getElementById('buyerID').value= cfsid;
         document.getElementById('owner_name').value = name2;
         document.getElementById('owner_name').readOnly=true;
         document.getElementById('owner_mbl').value=mbl;
@@ -383,6 +384,7 @@ if(isset($_POST['submit_ticket']))
     $valueID=$_POST['progID'];
    $ownerName=$_POST['owner_name'];
    $ownerMbl=$_POST['owner_mbl'];
+   $buyerid = $_POST['buyerID'];
    //$takaPerTicket=$_POST['ticket'];
   // $makePerTicket = $_POST['Maketicket'];
    $arr_checkbox1 = $_POST['checkbox_Seat'];
@@ -401,7 +403,7 @@ if(isset($_POST['submit_ticket']))
    if(($no_of_seats<=10 && $no_of_seats>0) || ($no_of_xtra<=$freeXtra && $no_of_xtra >0))
    {
        $str_seatstring="";
-        $sql="SELECT seat_no FROM " . $dbname . ".ticket WHERE Program_idprogram = $valueID;";
+        $sql="SELECT seat_no FROM ticket WHERE Program_idprogram = $valueID;";
         $rslt=mysql_query($sql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৫';
         while($db_seats=  mysql_fetch_assoc($rslt))
             {
@@ -427,8 +429,8 @@ if(isset($_POST['submit_ticket']))
                $arr_matchXtra= array_intersect($arr_checkbox2, $arr_Xtra);
                if (count($arr_matchSeat) == 0  && count($arr_matchXtra) == 0 )
                {
-                   $tsql="INSERT INTO `ripd_db_comfosys`.`ticket` (`ticket_owner_name` ,`ticket_owner_mobile` ,`no_ofTicket_purchase` ,`seat_no` ,`xtra_seat` ,`total_ticket_prize` ,`total_amount`,`ticket_seller_id`, `Program_idprogram`) 
-                            VALUES ('$ownerName', '$ownerMbl', $total_no_of_seat , '$str_SelectedSeat' , '$str_SelectedXSeat', $totalTicketPrize,  $totalamount, $db_onsid, $valueID );";
+                   $tsql="INSERT INTO ticket (`ticket_owner_name` ,`ticket_owner_mobile` ,ticket_buyer_id, `no_ofTicket_purchase` ,`seat_no` ,`xtra_seat` ,`total_ticket_prize` ,`total_amount`,`ticket_seller_id`, `Program_idprogram`) 
+                            VALUES ('$ownerName', '$ownerMbl',$buyerid, $total_no_of_seat , '$str_SelectedSeat' , '$str_SelectedXSeat', $totalTicketPrize,  $totalamount, $db_onsid, $valueID );";
                     $treslt=mysql_query($tsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৭';
                     $TicketID = mysql_insert_id();
                }
@@ -771,7 +773,7 @@ if ($_GET['opt']=='submit_ticket') {
                                 <table>
                                     <tr>
                                         <td style=" color: darkblue;padding-left: 0px !important;">ক্রেতার নাম</td>
-                                        <td>:   <input class="box" type="text" id="owner_name" name="owner_name" /></td>
+                                        <td>:   <input class="box" type="text" id="owner_name" name="owner_name" /><input type="hidden" id="buyerID" name="buyerID" value="0" /></td>
                                         <td style=" color: darkblue;">খুজুন : <input class="box" type="text" name="searchBuyer" id="searchBuyer" onkeyup="getBuyer(this.value);"/>
                                         <div id="accountfound"></div></td>
                                     </tr>
