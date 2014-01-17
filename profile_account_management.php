@@ -2,9 +2,13 @@
 include_once 'includes/header.php';
 include_once 'includes/columnViewAccount.php';
 ?>
-<style type="text/css">
-    @import "css/bush.css";
-</style>
+<style type="text/css">@import "css/bush.css";</style>
+<link type="text/css" rel="stylesheet" href="css/tinybox.css">
+<script src="javascripts/tinybox.js" type="text/javascript"></script>
+<script type="text/javascript">
+ function accGenerate()
+	{ TINY.box.show({iframe:'pos/accountGenerator.php',width:1100,height:600,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+ </script> 
 <div class="columnSubmodule" style="font-size: 14px;">
     <table class="formstyle" style ="width: 100%; margin-left: 0px; font-family: SolaimanLipi !important;"> 
         <tr>
@@ -18,7 +22,7 @@ include_once 'includes/columnViewAccount.php';
         </tr>
         <tr>
             <td><a href="#">নতুন কাস্টমার একাউন্ট তৈরি</a></td>
-            <td><a href="#">নতুন এগ্রিমেন্ট একাউন্ট তৈরি</a></td>
+            <td><a onclick="accGenerate();" style="cursor: pointer;color: #03C;"><u>নতুন এগ্রিমেন্ট একাউন্ট তৈরি</u></a></td>
         </tr>
     </table>
 </div>

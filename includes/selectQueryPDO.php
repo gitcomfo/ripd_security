@@ -66,14 +66,28 @@ $sql_select_post_own_office = $conn->prepare("SELECT * FROM post, post_in_ons WH
 // ******************************************** employee attendance ******************************************************
 $sql_select_working_days = $conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance 
                                                                             WHERE  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
+$select_attendance = $conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance 
+                                                                WHERE year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
 $sql_total_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? 
                                                             AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
+$sql_total_overtime =$conn->prepare("SELECT SUM(emp_extratime) FROM employee,employee_attendance WHERE emp_atnd_type='present' 
+                                                            AND  year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
+$sql_select_emponsid = $conn->prepare("SELECT * FROM employee, cfs_user WHERE cfs_user_idUser = idUser AND idUser =? ");
+$sql_select_all_employee = $conn->prepare("SELECT * FROM cfs_user WHERE  cfs_account_status = 'active' AND idUser = ANY(SELECT cfs_user_idUser FROM employee  WHERE emp_ons_id = ?)");
 //********************************** for cheque *******************************************
 $sql_select_last_cheque_making = $conn->prepare("SELECT cheque_mak_datetime
                                                             FROM  `acc_user_cheque` 
                                                             WHERE cheque_makerid =117
                                                             ORDER BY cheque_mak_datetime
                                                             LIMIT 1");
-
 $sql_select_cheque = $conn->prepare("SELECT * FROM acc_user_cheque, cfs_user WHERE cheque_num =  ? AND idUser = cheque_makerid");
+
+$sql_select_program = $conn->prepare("SELECT * 
+                                                FROM program
+                                                WHERE program_no =  ? ");
+$sql_select_presenter_list = $conn->prepare("SELECT * 
+                                                    FROM presenter_list, employee, cfs_user
+                                                    WHERE fk_idprogram = ?
+                                                    AND fk_Employee_idEmployee = idEmployee
+                                                    AND cfs_user_idUser = idUser");
 ?>

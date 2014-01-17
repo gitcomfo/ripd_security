@@ -250,13 +250,13 @@ function get_catagory() {
                 <div id="resultTable">
                     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
                         <tr>
-                            <td width="8%"><div align="center"><strong>তারিখ</strong></div></td>
-                            <td width="23%"><div align="center"><strong>চালান নং</strong></div></td>
-                            <td width="30%"><div align="center"><strong>প্রোডাক্টের কোড</strong></div></td>
-                            <td width="11%"><div align="center"><strong>প্রোডাক্টের নাম</strong></div></td>
-                            <td width="12%"><div align="center"><strong>পরিমাণ</strong></div></td>
-                            <td width="10%"><div align="center"><strong>ক্রয়মূল্য (টাকা)</strong></div></td>
-                            <td width="6%"><div align="center"><strong>এন্ট্রিকারী</strong></div></td>
+                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>তারিখ</strong></div></td>
+                            <td width="12%"style="color: blue; font-size: 25px"><div align="center"><strong>চালান নং</strong></div></td>
+                            <td width="20%" style="color: blue; font-size: 25px"><div align="center"><strong>প্রোডাক্টের কোড</strong></div></td>
+                            <td width="25%" style="color: blue; font-size: 25px"><div align="center"><strong>প্রোডাক্টের নাম</strong></div></td>
+                            <td width="8%" style="color: blue; font-size: 25px"><div align="center"><strong>পরিমাণ</strong></div></td>
+                            <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রয়মূল্য (টাকা)</strong></div></td>
+                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>এন্ট্রিকারী</strong></div></td>
                         </tr>
                         <?php
                            $sql_select_purchase_list->execute();

@@ -109,10 +109,6 @@ if(isset($_POST['submit0']))
                     {
                         move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
                     } 
-            else 
-                    {
-                    echo "Invalid file format.";
-                    }
         }
                 
                   $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
@@ -128,8 +124,6 @@ if(isset($_POST['submit0']))
                     {
                             move_uploaded_file($_FILES["signature"]["tmp_name"], "sign/" . $sign_name);
                      } 
-            else 
-                    {echo "Invalid file format.";}
         }
                 
                 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
@@ -145,10 +139,6 @@ if(isset($_POST['submit0']))
                     {
                             move_uploaded_file($_FILES["owner_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
                     } 
-            else 
-                    {
-                    echo "Invalid file format.";
-                    }
         }
                 
                 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG","pdf");
@@ -162,10 +152,7 @@ if(isset($_POST['submit0']))
           if( $_FILES["scanDoc"]["name"] != ""){
             if (($_FILES["scanDoc"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     { move_uploaded_file($_FILES["scanDoc"]["tmp_name"], "scaned/" . $scan_name); }
-            else 
-                    {
-                    echo "Invalid file format.";
-                    }
+
           }
      
      $own_name = $_POST['owner_Name'];          
@@ -394,17 +381,35 @@ function getParentOfiice(str_key) // for searching parent offices
         xmlhttp.open("GET","includes/getParentOffices.php?searchkey="+str_key+"&officetype="+type,true);
         xmlhttp.send();	
 }
+function beforeSubmit()
+{
+    if ((document.getElementById('office_name').value != "")
+                && (document.getElementById('mobile_number').innerHTML != "")
+                && (document.getElementById('owner_Name').innerHTML == "")
+                && (document.getElementById('advanced_payment1').value !="")
+                && (document.getElementById('floor_number').value !="")
+                && (document.getElementById('office_rent1').value !="")
+                && (document.getElementById('parent').value !="")
+                && (document.getElementById('office_address').value !="")
+                && (document.getElementById('off_type').value !="")
+                &&(document.getElementById('office_acc').value != "")
+                &&(document.getElementById('parent_id').value != "")
+                && (document.getElementById('thana_id').value !=""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 
 <div class="columnSld" style=" padding-left: 10px;">
      <div class="main_text_box" style="width: 100%;">
         <div style="padding-left: 110px;"><a href="office_sstore_management.php"><b>ফিরে যান</b></a><a href="" onclick="javasrcipt:window.open('update_office_account.php?pwr=0');return false;" style="padding-left: 510px;"><b>রিপড অফিস লিস্ট</b></a></div>
         <div>           
-            <form style="padding-right: 20px;font-family: SolaimanLipi !important;" method="POST" enctype="multipart/form-data" action="" id="off_form" name="off_form">
-                
+            <form style="padding-right: 20px;font-family: SolaimanLipi !important;" method="POST" enctype="multipart/form-data" action="" id="off_form" name="off_form" onsubmit="return beforeSubmit()">    
                 <table class="formstyle"  style=" width: 80%;font-family: SolaimanLipi !important; ">          
                     <tr><th style="text-align: center" colspan="2"><h1>অফিস একাউন্ট তৈরির ফর্ম</h1></th></tr>
-
                     <tr><td colspan="2" style="text-align: center;color: green;font-size: 16px;"><?php if($msg != "") echo $msg;?></td></tr>
                      <tr>
                         <td>অফিসের নাম</td>
@@ -487,7 +492,7 @@ function getParentOfiice(str_key) // for searching parent offices
                     </tr>-->
                     <tr>
                         <td colspan="2">অফিস সিলেক্ট করুন <input  class ="textfield" type="radio"  id="whatoffice" name="whatoffice" value ="ripd" />রিপড অফিস 
-                            <input  class ="textfield" type="radio" id="whatoffice" name="whatoffice" value ="pwr"  /> পাওয়ারস্টোর অফিস</td>
+                            <input  class ="textfield" type="radio" id="whatoffice" name="whatoffice" value ="pwr"  /> পাওয়ারস্টোর অফিস <em2> *</em2></td>
                     </tr>
                     <tr>
                         <td>অফিসের অ্যাকাউন্ট</td>

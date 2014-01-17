@@ -44,14 +44,14 @@ if(isset($_POST['check'])) {
                 <table  class="formstyle" style="width: 80%;font-family: SolaimanLipi !important; font-size: 14px;">          
                     <tr ><th colspan="2" style="text-align: center;font-size: 16px;">চেক-এর বৈধতা যাচাই এবং স্থগিত করন </th></tr>
                     <?php if($msg != "") {?>
-                    <tr ><td colspan="2" style="color: green; font: 18px; text-align: center"><b><?php echo $msg;?></b></td></tr>
+                    <tr ><td colspan="2" style="color: green; font-size: 25px; text-align: center"><b><?php echo $msg;?></b></td></tr>
                     <?php }?>
                     <tr>
                         <td style="text-align: right;width: 50%;">চেক নাম্বার :</td>
                         <td style="text-align: left;width: 50%;"><input class="box" type="text" name='chequeNo' /> </td>
                     </tr>
                     <?php if($error_msg != "") {?>
-                    <tr ><td colspan="2" style="color: red; font: 18px; text-align: center"><b><?php echo $error_msg;?></b></td></tr>
+                    <tr ><td colspan="2" style="color: red; font-size: 25px; text-align: center"><b><?php echo $error_msg;?></b></td></tr>
                     <?php }?>
                     <tr>
                         <td  colspan="2" style="text-align: center;" ></br><input class="btn" style =" font-size: 12px; " name='check' type="submit" value="যাচাই করুন" /></td>

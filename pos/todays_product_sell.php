@@ -250,11 +250,11 @@ function get_catagory() {
                 <div id="resultTable">
                     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
                         <tr>
-                            <td width="8%"><div align="center"><strong>ক্রম</strong></div></td>
-                            <td width="23%"><div align="center"><strong>কোড</strong></div></td>
-                            <td width="23%"><div align="center"><strong>নাম</strong></div></td>
-                            <td width="23%"><div align="center"><strong>পরিমাণ</strong></div></td>
-                            <td width="6%"><div align="center"><strong>মোট (টাকা)</strong></div></td>
+                            <td width="8%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রম</strong></div></td>
+                            <td width="20%" style="color: blue; font-size: 25px"><div align="center"><strong>কোড</strong></div></td>
+                            <td width="20%" style="color: blue; font-size: 25px"><div align="center"><strong>নাম</strong></div></td>
+                            <td width="20%" style="color: blue; font-size: 25px"><div align="center"><strong>পরিমাণ</strong></div></td>
+                            <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>মোট (টাকা)</strong></div></td>
                         </tr>
                         <?php
                         $amount = 0;

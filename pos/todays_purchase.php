@@ -8,7 +8,7 @@ $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory = $_SESSION['loggedInOfficeType'];
 $date = date("Y-m-d");
-$sql_select_today_purchase_list = $conn->prepare("SELECT in_input_date, chalan_no, pro_code, pro_productname, in_howmany, in_buying_price, account_name
+$sql_select_today_purchase_list = $conn->prepare("SELECT *
                                                     FROM cfs_user, product_purchase, product_chart, product_purchase_summary
                                                     WHERE product_purchase.Product_chart_idproductchart = product_chart.idproductchart
                                                     AND product_purchase.pps_id = product_purchase_summary.ppsid
@@ -31,6 +31,11 @@ function get_catagory() {
         <title>পণ্যের তালিকা</title>
         <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
         <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
+        <script src="scripts/tinybox.js" type="text/javascript"></script>
+        <script type="text/javascript">
+       function details_show(id){
+                  TINY.box.show({url:'purchase_details.php?pur_id='+id,width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+       </script>
         <style type="text/css">
             .prolinks:focus{
                 background-color: cadetblue;
@@ -244,42 +249,54 @@ function get_catagory() {
             </div>
 
             <fieldset   style="border-width: 3px;margin:0 20px 50px 20px;font-family: SolaimanLipi !important;">
-                <legend style="color: brown;">পণ্যের তালিকা</legend>
+                <legend style="color: brown;">আজকের ক্রয় তালিকা</legend>
                 <div id="resultTable">
                     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
                         <tr>
-                            <td width="8%"><div align="center"><strong>ক্রম</strong></div></td>
-                            <td width="23%"><div align="center"><strong>চালান নং</strong></div></td>
-                            <td width="30%"><div align="center"><strong>প্রোডাক্টের কোড</strong></div></td>
-                            <td width="11%"><div align="center"><strong>প্রোডাক্টের নাম</strong></div></td>
-                            <td width="12%"><div align="center"><strong>পরিমাণ</strong></div></td>
-                            <td width="10%"><div align="center"><strong>ক্রয়মূল্য (টাকা)</strong></div></td>
-                            <td width="6%"><div align="center"><strong>এন্ট্রিকারী</strong></div></td>
+                            <td width="8%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রম</strong></div></td>
+                            <td width="20%" style="color: blue; font-size: 25px"><div align="center"><strong>চালান নং</strong></div></td>
+                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>চালান মূল্য</strong></div></td>
+                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>পরিবহন খরচ</strong></div></td>
+                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>অন্যান্য খরচ</strong></div></td>
+                            <td width="12%" style="color: blue; font-size: 25px"><div align="center"><strong>ইনভেস্টমেন্ট (টাকা)</strong></div></td>
+                            <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>এন্ট্রিকারী</strong></div></td>
+                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>রিইউজ</strong></div></td>
+                            <td width="5%"></td>
                         </tr>
                         <?php
                            $sql_select_today_purchase_list->execute(array($date));
+                           $count = 1;
                            $arr_purchase = $sql_select_today_purchase_list->fetchAll();
                            foreach ($arr_purchase as $row) {
-                            $db_date = english2bangla($row["in_input_date"]);
+                            $show_count = english2bangla($count);
                             $db_chalan_no = english2bangla($row["chalan_no"]);
+                            $db_total_chalan_cost = english2bangla($row["total_chalan_cost"]);
+                            $db_transport_cost = english2bangla($row["transport_cost"]);
+                            $db_others_cost = english2bangla($row["others_cost"]);
+                            $db_chln_invest_amount = english2bangla($row["chln_invest_amount"]);
+                            $db_chln_reuse_amount = english2bangla($row["chln_reuse_amount"]);
                             $db_procode = $row["pro_code"];
                             $db_pro_name = $row["pro_productname"];
                             $db_how_many =  english2bangla($row['in_howmany']);
                             $db_buying_price = english2bangla($row['in_buying_price']);
                             $db_username = $row['account_name'];
-
+                            $count++;
                             echo '<tr>';
-                            echo '<td><div align="center">' . $db_date . '</div></td>';
+                            echo '<td><div align="center">' . $show_count . '</div></td>';
                             echo '<td><div align="center">' . $db_chalan_no . '</div></td>';
-                            echo '<td><div align="center">' . $db_procode . '</div></td>';
-                            echo '<td><div align="center">' . $db_pro_name . '</div></td>';
-                            echo '<td><div align="center">' . $db_how_many . '</div></td>';
-                            echo '<td><div align="center">' . $db_buying_price . '</div></td>';
+                            echo '<td><div align="center">' . $db_total_chalan_cost . '</div></td>';
+                            echo '<td><div align="center">' . $db_transport_cost . '</div></td>';
+                            echo '<td><div align="center">' . $db_others_cost . '</div></td>';
+                            echo '<td><div align="center">' . $db_chln_invest_amount . '</div></td>';
                             echo '<td><div align="center">' . $db_username . '</div></td>';
-                            echo '</tr>';
-                            $sl++;
-                        }
-                        ?>
+                            echo '<td><div align="center">' . $db_chln_reuse_amount . '</div></td>';
+                            
+                           ?>
+                        <td><div align='center'><input type="button" name="details" value="বিস্তারিত" onclick="details_show('<?php echo $row['ppsid']?>')"></input></div></td>
+                        <?php
+                           echo '</tr>' ;
+                            } ?>
+                        
                     </table>
                 </div>
             </fieldset>

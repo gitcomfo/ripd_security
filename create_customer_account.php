@@ -180,6 +180,7 @@ if (isset($_POST['submitwithpass']))
     {
         if ((document.getElementById('usernamecheck').innerHTML == "")
                 && (document.getElementById('user_username').value != "")
+                && (document.getElementById('mblValidationMsg').innerHTML == "")
                 && (document.getElementById('pin_num').value != "")
                 && (document.getElementById('pinerror').innerHTML == ""))
         {
@@ -196,6 +197,7 @@ if (isset($_POST['submitwithpass']))
         if ((document.getElementById('usernamecheck').innerHTML == "") 
                 && (document.getElementById('pin_num').value != "")
                 && (document.getElementById('pinerror').innerHTML == "")
+                && (document.getElementById('mblValidationMsg').innerHTML == "")
                 && (document.getElementById('passcheck').innerHTML == "OK"))
         {
             document.getElementById('save2').readonly = false;
@@ -211,6 +213,7 @@ if (isset($_POST['submitwithpass']))
         if ((document.getElementById('usernamecheck').innerHTML == "")
                 && (document.getElementById('pin_num').value != "")
                 && (document.getElementById('pinerror').innerHTML == "")
+                && (document.getElementById('mblValidationMsg').innerHTML == "")
                 && (document.getElementById('passcheck').innerHTML == ""))
         {
             document.getElementById('retry').readonly = false;

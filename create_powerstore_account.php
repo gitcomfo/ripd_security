@@ -78,10 +78,6 @@ if(isset($_POST['submit0']))
                 {
                     move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
                 } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
                 
                   $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
                     $extension = end(explode(".", $_FILES["signature"]["name"]));
@@ -90,12 +86,7 @@ if(isset($_POST['submit0']))
        if (($_FILES["signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                     {
                             move_uploaded_file($_FILES["signature"]["tmp_name"], "sign/" . $sign_name);
-                     } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
-                
+                     }                 
                 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["owner_finger_print"]["name"]));
         $finger_name = $off_acc."_".$_FILES["owner_finger_print"]["name"];
@@ -104,10 +95,6 @@ if(isset($_POST['submit0']))
                 {
                         move_uploaded_file($_FILES["owner_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
                 } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
                 
                 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG","pdf");
         $extension = end(explode(".", $_FILES["scanDoc"]["name"]));
@@ -116,10 +103,6 @@ if(isset($_POST['submit0']))
         if (($_FILES["scanDoc"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
                 {
                         move_uploaded_file($_FILES["scanDoc"]["tmp_name"], "scaned/" . $scan_name);
-                }
-        else 
-                {
-                echo "Invalid file format.";
                 }
       
      $own_name = $_POST['owner_Name'];          
@@ -308,13 +291,29 @@ xmlhttp.onreadystatechange=function()
 xmlhttp.open("GET","includes/check.php?x="+str,true);
 xmlhttp.send();
 }
+function beforeSubmit()
+{
+    if ((document.getElementById('office_name').value != "")
+                && (document.getElementById('mobile_number').innerHTML != "")
+                && (document.getElementById('owner_Name').innerHTML == "")
+                && (document.getElementById('advanced_payment1').value !="")
+                && (document.getElementById('floor_number').value !="")
+                && (document.getElementById('office_rent1').value !="")
+                && (document.getElementById('office_address').value !="")
+                && (document.getElementById('thana_id').value !=""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 
 <div class="columnSld" style=" padding-left: 50px;">
     <div class="main_text_box" style="width: 100%;">
         <div style="padding-left: 110px;"><a href="office_sstore_management.php"><b>ফিরে যান</b></a><a href="" onclick="javasrcipt:window.open('update_office_account_office_pstore.php?pwr=1');return false;" style="padding-left: 510px;"><b>মেইন পাওয়ারস্টোর লিস্ট</b></a></div>
         <div>           
-            <form method="POST" enctype="multipart/form-data" action="" id="off_form" name="off_form">       
+            <form method="POST" enctype="multipart/form-data" action="" id="off_form" name="off_form" onsubmit="return beforeSubmit()">       
                 <table class="formstyle"  style=" width: 70%; ">          
                     <tr><th style="text-align: center" colspan="2"><h1>মেইন পাওয়ারস্টোর একাউন্ট তৈরির ফর্ম</h1></th></tr>
 

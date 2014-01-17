@@ -8,11 +8,11 @@ $office_type = $_SESSION['loggedInOfficeType'];
 if ($_GET['type'] == 'package_breaking') {
     echo " <table width='100%' border='1' cellspacing='0' cellpadding='0' style='border-color:#000000; border-width:thin; font-size:18px;'>
       <tr>
-          <td width='8%'><div align='center'><strong>তারিখ</strong></div></td>
-        <td width='23%'><div align='center'><strong>প্যাকেজ কোড</strong></div></td>
-        <td width='30%'><div align='center'><strong>প্যাকেজের নাম</strong></div></td>
-        <td width='11%'><div align='center'><strong>পরিমাণ</strong></div></td>
-        <td width='6%'><div align='center'><strong>ব্রেকার</strong></div></td>
+          <td width='8%' style='color: blue; font-size: 20px'><div align='center'><strong>তারিখ</strong></div></td>
+        <td width='23%' style='color: blue; font-size: 20px'><div align='center'><strong>প্যাকেজ কোড</strong></div></td>
+        <td width='30%' style='color: blue; font-size: 20px'><div align='center'><strong>প্যাকেজের নাম</strong></div></td>
+        <td width='11%' style='color: blue; font-size: 20px'><div align='center'><strong>পরিমাণ</strong></div></td>
+        <td width='6%' style='color: blue; font-size: 20px'><div align='center'><strong>ব্রেকার</strong></div></td>
       </tr>";
     $result = mysql_query("SELECT pckg_quantity, pckg_name, pckg_code, account_name, making_date
                                         FROM package_info, package_inventory, cfs_user
@@ -46,20 +46,20 @@ if ($_GET['type'] == 'package_breaking') {
 elseif ($_GET['type'] == 'pro_breaking') {
     echo " <table width='100%' border='1' cellspacing='0' cellpadding='0' style='border-color:#000000; border-width:thin; font-size:18px;'>
        <tr>
-          <td width='10%'><div align='center'><strong></strong></div></td>
-        <td width='40%' colspan='3'><div align='center'><strong>ব্রেকিং প্রোডাক্ট</strong></div></td>
-        <td width='40%' colspan='3'><div align='center'><strong>রুপান্তরিত প্রোডাক্ট</strong></div></td>
-        <td width='10%'><div align='center'><strong></strong></div></td>
+          <td width='10%' style='color: blue; font-size: 20px'><div align='center'><strong></strong></div></td>
+        <td width='40%' colspan='3' style='color: blue; font-size: 20px'><div align='center'><strong>ব্রেকিং প্রোডাক্ট</strong></div></td>
+        <td width='40%' colspan='3' style='color: blue; font-size: 20px'><div align='center'><strong>রুপান্তরিত প্রোডাক্ট</strong></div></td>
+        <td width='10%' style='color: blue; font-size: 20px'><div align='center'><strong></strong></div></td>
       </tr>
       <tr>
-          <td width='10%'><div align='center'><strong>তারিখ</strong></div></td>
-        <td ><div align='center'><strong>কোড</strong></div></td>
-        <td ><div align='center'><strong>নাম</strong></div></td>
-        <td ><div align='center'><strong>পরিমাণ</strong></div></td>
-        <td ><div align='center'><strong>কোড</strong></div></td>
-        <td ><div align='center'><strong>নাম</strong></div></td>
-        <td ><div align='center'><strong>পরিমান</strong></div></td>
-        <td width='10%'><div align='center'><strong>ব্রেকার</strong></div></td>
+          <td width='10%' style='color: blue; font-size: 20px'><div align='center'><strong>তারিখ</strong></div></td>
+        <td style='color: blue; font-size: 20px'><div align='center'><strong>কোড</strong></div></td>
+        <td style='color: blue; font-size: 20px'><div align='center'><strong>নাম</strong></div></td>
+        <td style='color: blue; font-size: 20px'><div align='center'><strong>পরিমাণ</strong></div></td>
+        <td style='color: blue; font-size: 20px'><div align='center'><strong>কোড</strong></div></td>
+        <td style='color: blue; font-size: 20px'><div align='center'><strong>নাম</strong></div></td>
+        <td style='color: blue; font-size: 20px'><div align='center'><strong>পরিমান</strong></div></td>
+        <td width='10%' style='color: blue; font-size: 20px'><div align='center'><strong>ব্রেকার</strong></div></td>
       </tr>";
     $result = mysql_query("SELECT breaking_date, breaking_pro_id, breaking_qty, converted_pro_id, converted_qty, account_name
                                 FROM product_breaking, cfs_user
