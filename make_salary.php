@@ -20,6 +20,7 @@ if(isset($_POST['submit']))
 }
 if(isset($_POST['makesalary']))
 {
+    $p_onsid = $_POST['onsID'];
     $p_empCfsID = $_POST['empCFSid'];
     $p_monthlyPay = $_POST['monthlySalary'];
     $p_xtrapay = $_POST['xtrapay'];
@@ -30,7 +31,7 @@ if(isset($_POST['makesalary']))
     $numberOfRows = count($p_empCfsID);
     
     $conn->beginTransaction(); 
-    $sqlrslt1= $insert_sal_approval->execute(array($p_monthNo,$p_yearNo,$loginUSERid));
+    $sqlrslt1= $insert_sal_approval->execute(array($p_monthNo,$p_yearNo,$p_onsid,$loginUSERid));
     $sal_approval_id = $conn->lastInsertId();
     for($i=1;$i<=$numberOfRows;$i++)
     {
@@ -213,9 +214,9 @@ function calculateSalary(deduct,i)
                                            foreach ($row9 as $postrow) {
                                                $db_post = $postrow['post_name'];
                                            }
-                                           echo "<tr><td style='border: 1px solid black; text-align: center'>".  english2bangla($sl)."</td>
+                                           echo "<tr><td style='border: 1px solid black; text-align: center'>".english2bangla($sl)."</td>
                                                <td style='border: 1px solid black; text-align: left'>$db_name<input type='hidden' name='empCFSid[$sl]' value='$db_userid' /></td>
-                                                <td style='border: 1px solid black; text-align: center'>$db_empgrade</td>
+                                                <td style='border: 1px solid black; text-align: center'>$db_empgrade<input type='hidden' name='onsID' value='$db_onsid' /></td>
                                                 <td style='border: 1px solid black; text-align: center'>$db_post</td>
                                                <td style='border: 1px solid black; text-align: left'>
                                                 <b>উপস্থিতঃ</b> $presentDays দিন</br>
