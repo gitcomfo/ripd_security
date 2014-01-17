@@ -91,7 +91,7 @@ echo '<script> window.print(); </script>';
                 </tr>
                 <tr id="noprint">
                     <td style="text-align: right;">টাকা উত্তোলনের পরিমান (পুনরায়)</td>
-                    <td style="text-align: left;">: <input class="box" id="amount_rep" name="amount" type="text" onkeypress="return numbersonly(event);" onblur="repeatAmount(this.value);"  /> টাকা <span id="errormsg"></span></td>
+                    <td style="text-align: left;">: <input class="box" id="amount_rep" name="amount" type="text" onkeypress="return numbersonly(event);" onblur="repeatAmount(this.value, 'blank', 'blank');"  /> টাকা <span id="errormsg"></span></td>
                 </tr>
                 <tr id="noprint">
                     <td style="text-align: right;">বর্ণনা</td>

@@ -229,7 +229,7 @@ function chargeAmount(charge, chargeType, amount)
     return chargeResult;
     }           
     
-function repeatAmount(checkvalue) // check amount value in repeat 
+function repeatAmount(checkvalue, error_place, input_place) // check amount value in repeat 
     {
     var amount = document.getElementById('amount').value;
     var amount_rep = document.getElementById('amount_rep').value;
@@ -248,7 +248,17 @@ function repeatAmount(checkvalue) // check amount value in repeat
     else 
         {
         document.getElementById('errormsg').innerHTML="";
-        document.getElementById('view').disabled= false;  
+        if(error_place != "blank" && input_place != "blank")
+            {
+            var message = document.getElementById(error_place).innerHTML;
+            var inputBox = document.getElementById(input_place).value;
+            if(error_place == "mblValidationMsg" && inputBox != "" && message == "")
+                    document.getElementById('view').disabled= false; 
+            else if(error_place == "recieverInfo" && inputBox != "" && message != "দুঃখিত, একাউন্ট নাম্বারটি সঠিক নয়")
+                    document.getElementById('view').disabled= false;  
+            else document.getElementById('view').disabled= true;  
+            }
+        else document.getElementById('view').disabled= false;  
         }
     }
     
@@ -284,14 +294,13 @@ function chequeAmount(checkvalue, balance) // PERSONAL CHEQUE MAKING
         }
     }
     
-function sendAmount(checkvalue, charge_amount, charge_type, balance, error_place) // SEND AMOUNT
+function sendTransAmount(checkvalue, charge_amount, charge_type, balance) // SEND & TRANSFER AMOUNT
     {
     var trans_amount = 0;
     var charge = 0;
     var total = 0;
     var amount = document.getElementById('amount').value;
     var amount_rep = document.getElementById('amount_rep').value;
-    var message = document.getElementById(error_place).value;
     checkvalue = parseFloat(checkvalue);
     charge_amount = parseFloat(charge_amount);
     balance = parseFloat(balance);       
@@ -314,7 +323,7 @@ function sendAmount(checkvalue, charge_amount, charge_type, balance, error_place
         document.getElementById('amount').focus();
         document.getElementById('view').disabled= true;  
         }
-    else if(checkvalue > balance)
+    else if(total > balance)
         {
         document.getElementById('errorbalance').style.color='red';
         document.getElementById('errorbalance').innerHTML = "একাউন্টে পর্যাপ্ত টাকা নেই";
@@ -340,5 +349,8 @@ function sendAmount(checkvalue, charge_amount, charge_type, balance, error_place
         document.getElementById('trans_amount').innerHTML = trans_amount;
         document.getElementById('trans_charge').innerHTML = charge;
         document.getElementById('total_amount').innerHTML = total;
+        document.getElementById('trans_amount_val').value = trans_amount;
+        document.getElementById('trans_charge_val').value = charge;
+        document.getElementById('total_amount_val').value = total;
         }
     }
