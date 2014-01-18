@@ -340,31 +340,31 @@ if ($_GET['action'] == 'first') {
                 ?>
                 <tr>
                     <td ><?php echo $typeinbangla;?> নাম</td>               
-                    <td>: <input  class="box" type="text" name="presentation_name" value="" /></td>   
+                    <td>: <input  class="box" type="text" name="presentation_name" value="" /><em2> *</em2></td>   
                 </tr>
                 <tr>
                     <td ><?php echo $whoinbangla?>-এর একাউন্ট নাম্বার</td>               
-                    <td>: <input class="box" id="presenters" name="presenters" />
+                    <td>: <input class="box" id="presenters" name="presenters" /><em2> *</em2>
                     </td>
                 </tr>          
                 <tr>
                     <td>অফিস</td>               
-                    <td>: <input class="box" id="off_name" name="offname" onkeyup="getOffice(this.value);" /><em> (অ্যাকাউন্ট নাম্বার)</em>
+                    <td>: <input class="box" id="off_name" name="offname" onkeyup="getOffice(this.value);" /><em2> *</em2><em> (অ্যাকাউন্ট নাম্বার)</em>
                        <div id="parentResult"></div><input type="hidden" name="parent_id" id="parent_id"/>
                     </td>
                 </tr>
                 <tr>
                         <td>স্থান</td>
-                        <td>:    <input  class="box" type="text" id="place" name="place" value=""/></td>            
+                        <td>:    <input  class="box" type="text" id="place" name="place" value=""/><em2> *</em2></td>            
                     </tr>
                 <tr>
                     <td >তারিখ </td>
-                    <td>: <input class="box"type="text" id="presentation_date" placeholder="Date"  style="" name="presentation_date" value=""/></td>   
+                    <td>: <input class="box"type="text" id="presentation_date" placeholder="Date"  style="" name="presentation_date" value=""/><em2> *</em2></td>   
                     </td>   
                 </tr>
                 <tr>
                     <td > সময় </td>
-                    <td>: <input  class="box" type="time" name="presentation_time" value=""/></td>  
+                    <td>: <input  class="box" type="time" name="presentation_time" value=""/><em2> *</em2></td>  
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: center"><input type="submit" class="btn" name="new_submit" value="সেভ" >

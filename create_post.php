@@ -188,12 +188,12 @@ function numbersonly(e)
                         echo'<option style="width: 96%" value=' . $db_post_id . '>' . $db_post_name . '</option>';
                     }
                     ?>
-                    </select></td>                                  
+                    </select><em2> *</em2></td>                                  
                     </tr>           
                     <tr><td colspan="2"><table id="post_and_responsibility" style="font-family: SolaimanLipi !important;width: 100%; margin-top: 0px;margin-bottom: 0px;margin-left: 0px;margin-right: 0px;border:0px solid grey; color: black;"></table></td></tr>
                     <tr>
                         <td>নাম্বার অফ পোস্ট</td>
-                        <td>:   <input class="box" type="text" id="post_number" name="post_number" onkeypress=' return numbersonly(event)' /> জন</td>                                  
+                        <td>:   <input class="box" type="text" id="post_number" name="post_number" onkeypress=' return numbersonly(event)' /> জন <em2> *</em2></td>                                  
                     </tr>
                     <tr>                    
                         <td colspan="2" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit_post" value="সেভ করুন" />

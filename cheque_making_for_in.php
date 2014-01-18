@@ -134,7 +134,7 @@ include_once 'includes/MiscFunctions.php';
                     </tr>
                     <tr>
                         <td >টোটাল ইন এ্যামাউন্ট</td>
-                        <td>:   <input class="box" type="text" id="t_in_amount" name="t_in_amount" onkeypress=' return numbersonly(event)' /></td>          
+                        <td>:   <input class="box" type="text" id="t_in_amount" name="t_in_amount" onkeypress=' return numbersonly(event)' /><em2> *</em2></td>          
                     </tr> 
                     <tr> 
                         <td >সিলেক্ট এরিয়া</td>

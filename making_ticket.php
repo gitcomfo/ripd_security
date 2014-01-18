@@ -226,7 +226,7 @@ $whoinbangla =  getProgramer($P_type);
                     </tr>
                     <tr>
                         <td>প্রেজেন্টেশন / প্রোগ্রাম / ট্রেইনিং / ট্রাভেল এর নম্বর</td>
-                        <td>:  <input class="box" type="text" id="prgrm_number" name="prgrm_number" onkeyup="getProgram(this.value);"/>
+                        <td>:  <input class="box" type="text" id="prgrm_number" name="prgrm_number" onkeyup="getProgram(this.value);"/><em2> *</em2>
                             <div id="progResult"></div><input type="hidden" name="prgrm_id" id="prgrm_id"/>
                         </td>
                     </tr>
@@ -256,15 +256,15 @@ $whoinbangla =  getProgramer($P_type);
                     </tr>
                     <tr>
                         <td>টিকেট প্রাইজ</td>
-                        <td>:    <input  class="box" type="text" id="ticket_prize" name="ticket_prize" onkeypress="return checkIt(event)" /> TK/ Ticket<em> (ইংরেজিতে লিখুন)</em></td>            
+                        <td>:    <input  class="box" type="text" id="ticket_prize" name="ticket_prize" onkeypress="return checkIt(event)" /><em2> *</em2> টাকা/টিকেট<em> (ইংরেজিতে লিখুন)</em></td>            
                     </tr>
                     <tr>
                         <td>আসন সংখ্যা </td>
-                        <td>:    <input  class="box" type="text" id="number_of_seat" name="number_of_seat"  onkeypress=' return numbersonly(event)'  /><em> (ইংরেজিতে লিখুন)</em></td>           
+                        <td>:    <input  class="box" type="text" id="number_of_seat" name="number_of_seat"  onkeypress=' return numbersonly(event)'  /><em2> *</em2><em> (ইংরেজিতে লিখুন)</em></td>           
                     </tr>
                     <tr>
                         <td>অতিরিক্ত আসন সংখ্যা </td>
-                        <td>:    <input  class="box" type="text" id="extra_seat" name="extra_seat" onkeypress=' return numbersonly(event)'  /><em> (ইংরেজিতে লিখুন)</em></td>
+                        <td>:    <input  class="box" type="text" id="extra_seat" name="extra_seat" onkeypress=' return numbersonly(event)'  /><em2> *</em2><em> (ইংরেজিতে লিখুন)</em></td>
                     </tr>                       
                     <tr>                    
                         <td colspan="2" style="padding-left: 300px; padding-top: 10px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="সেভ করুন" /></td>

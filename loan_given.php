@@ -137,27 +137,27 @@ function calculateInstalment(month) // for calculation instalment amount********
                             <table style="margin-left: 0px !important;">
                                  <tr>
                                      <td width="35%" style="padding-left: 0px;" >লোনের পরিমাণ</td>
-                                    <td width="65%">:  <input class="box" type="text" name="loanamount" id="loanamount" onkeypress="return checkIt(event)" /> টাকা</td>	 
+                                    <td width="65%">:  <input class="box" type="text" name="loanamount" id="loanamount" onkeypress="return checkIt(event)" /> টাকা <em2> *</em2></td>	 
                                 </tr>  
                                 <tr>
                                     <td style="padding-left: 0px;">ফান্ডের নাম</td>
-                                   <td>:   <select class="box2" name="fund" style="width: 167px;">
+                                   <td>: <select class="box2" name="fund" style="width: 167px;">
                                         <option value="">-সিলেক্ট করুন-</option>
                                         <option value="pension">পেনশন</option>
                                         <option value="ripd_income">রিপড ইনকাম</option>
                                         <option value="extra">এক্সট্রা</option>
-                                    </select></br></br></td>	  
+                                    </select><em2> *</em2></br></br></td>	  
                                 </tr>  
                                 <tr>
                                     <td colspan="2" style="text-align: center;font-size: 16px;padding-left: 0px;">------------------লোন পরিশোধ সিস্টেম--------------------</td>                                    
                                 </tr> 
                                 <tr>
                                     <td style="padding-left: 0px;">লোন পরিশোধের সময়সীমা</td>
-                                    <td>:   <input class="box" type="text" id="instalment_period" name="instalment_period" onkeypress=' return numbersonly(event)' onblur ="calculateInstalment(this.value)" /> মাস</td>
+                                    <td>:   <input class="box" type="text" id="instalment_period" name="instalment_period" onkeypress=' return numbersonly(event)' onblur ="calculateInstalment(this.value)" /> মাস<em2> *</em2></td>
                                 </tr>
                                 <tr>
                                     <td style="padding-left: 0px;">মাসিক কিস্তির পরিমান</td>
-                                    <td>:   <input class="box" readonly="" type="text" id="instalment_amount" name="instalment_amount" /> টাকা</td>
+                                    <td>:   <input class="box" readonly="" type="text" id="instalment_amount" name="instalment_amount" /> টাকা<em2> *</em2></td>
                                 </tr>
                             </table>     
                         </td>

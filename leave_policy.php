@@ -87,7 +87,7 @@ function deduction(checkvalue)
                         <td colspan="2" style="text-align: center; font-size: 16px;color: green;">  <?php if($msg != "") {echo $msg;}?></td>                                               
                     </tr>
                     <tr><td style="text-align: right; width: 40%"><b>ছুটির নাম : </b></td>
-                                <td style="text-align: left; width: 60%"><input class="box" type="text" name="leave_name" class="box" /></td>
+                                <td style="text-align: left; width: 60%"><input class="box" type="text" name="leave_name" class="box" /><em2> *</em2></td>
                         </tr>
                         <tr><td style="text-align: right; width: 40%"><b>ছুটির কোড :</b></td>
                             <td style="text-align: left; width: 60%"> <input class="box" type="text" readonly="" name="leave_code" class="box" value="<?php echo $leaveCode;?>" /></td>
@@ -97,7 +97,7 @@ function deduction(checkvalue)
                         </tr>
                         <tr><td style="text-align: right; width: 40%"><b >বেতন কর্তন : </b></td>
                             <td><input type='radio' name='deduct' id="deduct" value='yes' onclick = 'deduction(this.value)'/> হবে
-                                    <input type='radio' name='deduct' id="deduct" value='no'  onclick = 'deduction(this.value)' /> হবে না</td>
+                                    <input type='radio' name='deduct' id="deduct" value='no'  onclick = 'deduction(this.value)' /> হবে না <em2> *</em2></td>
                         </tr>
                         <tr><td style="text-align: right; width: 40%"><b>কর্তন পরিমান : </b></td>
                             <td><span  id="showReductionbox" style="visibility: hidden;" ><input class="box" type="text" name="deductvalue" onkeypress="return checkIt(event)" /> %</span></td>

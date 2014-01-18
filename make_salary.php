@@ -95,6 +95,14 @@ function calculateSalaryPlus(xtra,i)
     }
     document.getElementById('totalOfficeSalary').value = finalsalary;
 }
+function beforeSubmit()
+{
+    if ((document.getElementById('workingdays').value != 0) && (document.getElementById('totalOfficeSalary').value !=""))
+        { return true; }
+    else {
+        return false; 
+    }
+}
 </script>
 
     <div class="main_text_box" style="width: 100% !important;">
@@ -148,12 +156,12 @@ function calculateSalaryPlus(xtra,i)
                     </tr>
                     <tr>
                     <td colspan="2"></br>
-                        <form method="post" action="" >
+                        <form method="post" action="" onsubmit="return beforeSubmit();">
                         <table cellspacing="0" cellpadding="0">
                             <?php 
                             ?>
                             <tr>
-                                <td colspan="10" style="width: 25%; text-align: center"><b><?php echo $monthName.", ".$p_year;?>-এ মোট কার্যদিবস</b> : <?php echo $workingDays?>দিন 
+                                <td colspan="10" style="width: 25%; text-align: center"><b><?php echo $monthName.", ".$p_year;?>-এ মোট কার্যদিবস</b> : <?php echo $workingDays?><input type="hidden" id="workingdays" value="<?php echo $workingDays?>" />দিন 
                                     <input type="hidden" name="yearNo" value="<?php echo $p_year;?>" /><input type="hidden" name="monthNo" value="<?php echo $p_month;?>" /></br></br></td>
                             </tr>
                             <tr id="table_row_odd">
@@ -257,7 +265,7 @@ function calculateSalaryPlus(xtra,i)
                                         <td colspan="10" style='border: 1px solid black; text-align: right'><b>মোট</b></td>
                                         <td style='border: 1px solid black; text-align: right;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly name='totalOfficeSalary' id="totalOfficeSalary" value="<?php echo $offTotalSalary;?>" /></td>
                                     </tr>
-                                    <tr><td colspan="11" style="text-align: center;"></br><input class="btn" type="submit" name="makesalary" value="বেতন প্রদান করুন" style="width: 150px;" /></td></tr>
+                                    <tr><td colspan="11" style="text-align: center;"></br><input class="btn" readonly="" type="submit" name="makesalary" value="বেতন প্রদান করুন" style="width: 150px;" /></td></tr>
                                 </tbody>
                             </table>
                             </form>

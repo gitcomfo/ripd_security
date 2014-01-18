@@ -89,14 +89,14 @@ if (isset($_POST['pro_submit'])) {
                                         echo "<option style='width: 96%'  value='$db_product_cat_code'>$db_product_cat_name</option>";
                                     }
                                     ?>
-                        </select></td> 
+                        </select><em2> *</em2></td> 
                         </tr>
                         <tr><td colspan="2"><table id="new_product_category" style="font-family: SolaimanLipi !important;margin-top: 0px;margin-bottom: 0px;margin-left: 0px;margin-right: 0px;border:0px solid grey; color: black;"></table></td></tr>
                         <tr>
-                            <td >প্রোডাক্ট টাইপ</td><td> : <input class="box" type="text" id="pro_type" name="pro_type" /></td>
+                            <td >প্রোডাক্ট টাইপ</td><td> : <input class="box" type="text" id="pro_type" name="pro_type" /><em2> *</em2></td>
                             </tr>
                             <tr>
-                            <td>প্রোডাক্ট টাইপ কোড</td><td> : <input class="box" type="text" id="pro_type_code" name="pro_type_code" /></td>          
+                            <td>প্রোডাক্ট টাইপ কোড</td><td> : <input class="box" type="text" id="pro_type_code" name="pro_type_code" /><em2> *</em2></td>          
                         </tr>   
                     <tr>                    
                         <td colspan="2" style="padding-top: 5px; padding-bottom: 5px;text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="pro_submit" value="সেভ করুন" />

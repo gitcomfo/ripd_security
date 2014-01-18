@@ -99,7 +99,7 @@ if ($_GET['action'] == 'list') {
                 ?>
                 <tr>
                     <td style="text-align: center; width: 50%;">রোলের নাম</td>
-                    <td>: <input  class="box" type="text" name="new_role"  value=""/></td>   
+                    <td>: <input  class="box" type="text" name="new_role"  value=""/><em2> *</em2></td>   
                 </tr>
                 <tr>
                     <td style="text-align: center; width: 50%;">রোলের বর্ণনা</td>

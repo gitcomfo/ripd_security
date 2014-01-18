@@ -155,19 +155,19 @@ function makeProductName(unit)
                         echo "<option style='width: 96%' value='$db_product_cat_code'>$db_product_cat_name</option>";
                     }
                     ?>
-                    </select></td> 
+                    </select><em2> *</em2></td> 
                     </tr>                  
                     <tr>
                         <td>প্রোডাক্ট টাইপ</td>
-                        <td>: <span id="pcid"></span></td>
+                        <td>: <span id="pcid"></span><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td>ব্র্যান্ড/গ্রুপ</td>
-                        <td id="pttid"></td>
+                        <td id="pttid"><em2> *</em2></td>
                     </tr>
                     <tr>
                         <td>প্রকার</td>
-                        <td id="pttid2"></td>
+                        <td id="pttid2"><em2> *</em2></td>
                     </tr>
 
                     <tr>
@@ -183,7 +183,7 @@ function makeProductName(unit)
                             }
                             echo '</select>
                             অথবা <input class="box" type="text" id="new_unit" name="new_unit" onblur="makeProductName(this.value)" />';
-                            ?>      
+                            ?> <em2> *</em2>     
                         </td>
                     </tr>           
                     <tr>

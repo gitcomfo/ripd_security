@@ -90,11 +90,11 @@ if ($_GET['action'] == 'new') {
                 ?>
                 <tr>
                     <td >এওয়ার্ড নাম</td>
-                    <td>: <input class="textfield" type="text" name="awd_name" id="awd_name" style="width: 250px"></td>                                      
+                    <td>: <input class="textfield" type="text" name="awd_name" id="awd_name" style="width: 250px"><em2> *</em2></td>                                      
                 </tr>
                 <tr>
                     <td >এওয়ার্ড প্রদানকারীর নাম</td>
-                    <td>: <input class="textfield" type="text" name="awd_pro" id="awd_pro" style="width: 250px"></td>                                      
+                    <td>: <input class="textfield" type="text" name="awd_pro" id="awd_pro" style="width: 250px"><em2> *</em2></td>                                      
                 </tr>
                 <tr>
                     <td >এওয়ার্ড বর্ণনা</td>
@@ -102,7 +102,7 @@ if ($_GET['action'] == 'new') {
                 </tr>
                 <tr>
                     <td >এওয়ার্ড তারিখ</td>
-                    <td>: <input class="textfield" type="date" id="date" placeholder="Date" name="awd_date" id="awd_date" value=""style="width: 250px"/></td>	  
+                    <td>: <input class="textfield" type="date" id="date" placeholder="Date" name="awd_date" id="awd_date" value=""style="width: 250px"/><em2> *</em2></td>	  
                 </tr>
                 <tr>
                     <td >এওয়ার্ড ছবি</td>
@@ -115,12 +115,12 @@ if ($_GET['action'] == 'new') {
                                 <option value="company">কোম্পানি</option>
                                 <option value="employee">কর্মচারী</option>
                                 <option value="customer">কাস্টমার</option>
-                                <option value="others">অন্যান্য</option>
+                                <option value="others">অন্যান্য</option></select><em2> *</em2>
                 </td>
                 </tr>
                 <tr>
                     <td>গ্রহণকারীর নাম</td>
-                    <td>: <input  class ="textfield" type="text" id="awd_rec_name" name="awd_rec_name" style="width: 250px" /></td>
+                    <td>: <input  class ="textfield" type="text" id="awd_rec_name" name="awd_rec_name" style="width: 250px" /><em2> *</em2></td>
                 </tr>
                 <tr>                    
                     <td colspan="4" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="award_submit" value="সেভ করুন" />
