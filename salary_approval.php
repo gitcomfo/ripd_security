@@ -52,35 +52,31 @@ foreach ($row3 as $value) {
 
 if(isset($_POST['givsalary']))
 {
+    $p_approvalID = $_POST['salaApprovalID'];
+    $p_officeTotalSalary = $_POST['totalOfficeSalary'];
     $p_empCfsID = $_POST['empCFSid'];
-    $p_monthlyPay = $_POST['monthlySalary'];
     $p_xtrapay = $_POST['xtrapay'];
     $p_deduct = $_POST['deductpay'];
     $p_totalpay = $_POST['totalSalary'];
-    $p_monthNo = $_POST['monthNo'];
-    $p_yearNo = $_POST['yearNo'];
     $numberOfRows = count($p_empCfsID);
     
     $conn->beginTransaction(); 
-    $sqlrslt1= $insert_sal_approval->execute(array($p_monthNo,$p_yearNo,$loginUSERid));
-    $sal_approval_id = $conn->lastInsertId();
+    $sqlrslt1= $sql_update_sal_approval->execute(array($p_officeTotalSalary,$loginUSERid,$p_approvalID));
     for($i=1;$i<=$numberOfRows;$i++)
     {
-         $sqlrslt2= $insert_sal_chart->execute(array($p_monthNo, $p_yearNo, $p_monthlyPay[$i], $p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i], $p_empCfsID[$i], $sal_approval_id));
+         $sqlrslt2= $sql_update_salary_chart->execute(array($p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i], $p_approvalID,$p_empCfsID[$i]));
     }
-   
      if($sqlrslt1  && $sqlrslt2)
         {
             $conn->commit();
-            echo "<script>alert('বেতন সফলভাবে এন্ট্রি হয়েছে')</script>";
+            echo "<script>alert('বেতন সফলভাবে মঞ্জুর হয়েছে')</script>";
         }
         else {
             $conn->rollBack();
-            echo "<script>alert('দুঃখিত,বেতন এন্ট্রি হয়নি')</script>";
+            echo "<script>alert('দুঃখিত,বেতন মঞ্জুর হয়নি')</script>";
         }
 }
 ?>
-<title>নিয়মিত কর্মচারী হাজিরা</title>
 <style type="text/css"> @import "css/bush.css";</style>
 <style type="text/css">
     #search {
@@ -227,7 +223,7 @@ function calculateSalaryPlus(xtra,i)
                                                }
                                                echo "<tr><td style='border: 1px solid black; text-align: center'>".  english2bangla($sl)."</td>
                                                    <td style='border: 1px solid black; text-align: left'>$db_name<input type='hidden' name='empCFSid[$sl]' value='$db_userid' /></td>
-                                                    <td style='border: 1px solid black; text-align: center'>$db_empgrade</td>
+                                                    <td style='border: 1px solid black; text-align: center'>$db_empgrade<input type='hidden' name='salaApprovalID' value='$g_approvalID' /></td>
                                                     <td style='border: 1px solid black; text-align: center'>$db_post</td>
                                                    <td style='border: 1px solid black; text-align: left'>
                                                     <b>উপস্থিতঃ</b> $presentDays দিন</br>

@@ -28,10 +28,11 @@ if(isset($_POST['makesalary']))
     $p_totalpay = $_POST['totalSalary'];
     $p_monthNo = $_POST['monthNo'];
     $p_yearNo = $_POST['yearNo'];
+    $p_officeTotalSalary = $_POST['totalOfficeSalary'];
     $numberOfRows = count($p_empCfsID);
     
     $conn->beginTransaction(); 
-    $sqlrslt1= $insert_sal_approval->execute(array($p_monthNo,$p_yearNo,$p_onsid,$loginUSERid));
+    $sqlrslt1= $insert_sal_approval->execute(array($p_officeTotalSalary,$p_monthNo,$p_yearNo,$p_onsid,$loginUSERid));
     $sal_approval_id = $conn->lastInsertId();
     for($i=1;$i<=$numberOfRows;$i++)
     {
@@ -49,7 +50,6 @@ if(isset($_POST['makesalary']))
         }
 }
 ?>
-<title>নিয়মিত কর্মচারী হাজিরা</title>
 <style type="text/css"> @import "css/bush.css";</style>
 <style type="text/css">
     #search {
@@ -71,12 +71,29 @@ if(isset($_POST['makesalary']))
     status = "This field accepts numbers only.";
     return false;
 }
-function calculateSalary(deduct,i)
+function calculateSalaryMinus(deduct,i)
 {
     var monthlypay = Number(document.getElementById("monthlySalary["+i+"]").value);
     var xtrapay = Number(document.getElementById("xtrapay["+i+"]").value);
     var salary = (monthlypay+ xtrapay) - Number(deduct);
     document.getElementById("totalSalary["+i+"]").value = salary;
+    var finalsalary = 0;
+    for (var j=1;j<=document.getElementsByName('totalSalary').length;j++){
+        finalsalary = finalsalary + Number(document.getElementById('totalSalary['+j+']').value);
+    }
+    document.getElementById('totalOfficeSalary').value = finalsalary;
+}
+function calculateSalaryPlus(xtra,i)
+{
+    var monthlypay = Number(document.getElementById("monthlySalary["+i+"]").value);
+    var deductpay = Number(document.getElementById("deductpay["+i+"]").value);
+    var salary = (monthlypay - deductpay) + Number(xtra);
+    document.getElementById("totalSalary["+i+"]").value = salary;
+    var finalsalary = 0;
+    for (var j=1;j<=document.getElementsByName('totalSalary').length;j++){
+        finalsalary = finalsalary + Number(document.getElementById('totalSalary['+j+']').value);
+    }
+    document.getElementById('totalOfficeSalary').value = finalsalary;
 }
 </script>
 
@@ -157,6 +174,7 @@ function calculateSalary(deduct,i)
                                  if(isset($_POST['submit']))
                                  {
                                      $sl = 1;
+                                     $offTotalSalary = 0;
                                      $sql_select_emponsid->execute(array($loginUSERid));
                                      $row4 = $sql_select_emponsid->fetchAll();
                                      foreach ($row4 as $emprow) {
@@ -200,6 +218,7 @@ function calculateSalary(deduct,i)
                                                $db_main_salary = $salaryrow['total_salary'];
                                                $db_pension = $salaryrow['pension'];
                                                $totalsalary = $db_main_salary - $db_pension;
+                                               $offTotalSalary = $offTotalSalary+$totalsalary;
                                            }
                                            $sql_select_employee_grade->execute(array($db_empID));
                                            $row8 = $sql_select_employee_grade->fetchAll();
@@ -225,15 +244,19 @@ function calculateSalary(deduct,i)
                                                 <b>ওভারটাইমঃ</b> $db_overtime ঘণ্টা    
                                                </td>
                                                <td style='border: 1px solid black; text-align: center'><a style='cursor:pointer;color:blue;' id='details[$sl]' ><u>বিস্তারিত</u></a></td>
-                                               <td style='border: 1px solid black; text-align: center'>".english2bangla($db_main_salary)."</td>
-                                               <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary[$sl]' id='monthlySalary[$sl]' value='$totalsalary' />".english2bangla($totalsalary)."</td>
-                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay[$sl]' name='xtrapay[$sl]' onkeypress='return checkIt(event)'  /></td>
-                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' id='deductpay[$sl]' name='deductpay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalary(this.value,$sl)' /></td>
-                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary[$sl]' name='totalSalary[$sl]' /></td></tr>";
+                                               <td style='border: 1px solid black; text-align: center'>".$db_main_salary."</td>
+                                               <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary[$sl]' id='monthlySalary[$sl]' value='$totalsalary' />".$totalsalary."</td>
+                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay[$sl]' name='xtrapay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryPlus(this.value,$sl)'  /></td>
+                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' id='deductpay[$sl]' name='deductpay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryMinus(this.value,$sl)' /></td>
+                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary[$sl]' name='totalSalary' value='$totalsalary' /></td></tr>";
                                            $sl++;
                                     }
                                  }
                                 ?>
+                                    <tr>
+                                        <td colspan="10" style='border: 1px solid black; text-align: right'><b>মোট</b></td>
+                                        <td style='border: 1px solid black; text-align: right;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly name='totalOfficeSalary' id="totalOfficeSalary" value="<?php echo $offTotalSalary;?>" /></td>
+                                    </tr>
                                     <tr><td colspan="11" style="text-align: center;"></br><input class="btn" type="submit" name="makesalary" value="বেতন প্রদান করুন" style="width: 150px;" /></td></tr>
                                 </tbody>
                             </table>

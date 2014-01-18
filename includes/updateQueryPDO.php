@@ -14,4 +14,9 @@ $sql_update_post_in_ons_down = $conn->prepare("UPDATE post_in_ons SET free_post 
                                                                                     WHERE  idpostinons=?");
 $sql_update_cheque = $conn->prepare("UPDATE acc_user_cheque SET postpond_reason = ?, cheque_status = ?, cheque_update_datetime = NOW(), cheque_updated_userid = ?, chqupd_officeid = ?
                                                                                     WHERE  cheque_num = ?");
+// *********************************** salary ****************************************************************
+$sql_update_sal_approval = $conn->prepare("UPDATE salary_approval SET total_month_salary=?, salary_approver_id=?,
+                                                                        salary_approved_date=NOW() WHERE salappid=?");
+$sql_update_salary_chart = $conn->prepare("UPDATE salary_chart SET deducted_amount=?, bonus_amount=?, total_given_amount=?,
+                                                                        salary_status='paid' WHERE fk_sal_aprv_salappid=? AND user_id=? ");
 ?>
