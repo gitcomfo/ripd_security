@@ -17,7 +17,6 @@ foreach ($row_charge as $row){
     $db_charge_amount = $row['charge_amount'];
     $db_charge_type = $row['charge_type'];
 }
-
 $sql_select_balace_check->execute(array($_SESSION['userIDUser']));
 $row_balace_check = $sql_select_balace_check->fetchAll();
 foreach ($row_balace_check as $row){
@@ -36,9 +35,12 @@ function showMessage($flag, $msg) {
 
 if (isset($_POST['save'])) {
     $receiver_mobile_num = $_POST['mobileNo'];
-    //$trans_amount = $_POST['amount1'];
+    $receiver_mobile_num = "88$receiver_mobile_num";
+    $p_trans_amount = $_POST['amount'];
     $trans_purpose = $_POST['trans_des'];
-    $trans_servicecharge = $db_charge_amount;
+    $p_receiver_get= $_POST['trans_amount_val'];
+    $p_trans_charge= $_POST['trans_charge_val'];
+    $p_total_amount = $_POST['total_amount_val'];
     $trans_type = "send";
     $trans_senderid = $_SESSION['userIDUser'];
     $chrg_givenby = $_POST['charger'];
@@ -53,10 +55,10 @@ if (isset($_POST['save'])) {
     else{
         $reciever_id = 0;
         $sql_insert_acc_user_amount_transfer->execute(array($trans_type, $trans_senderid, $reciever_id, $receiver_mobile_num,
-                                                                    $trans_amount, $reciever_get, $trans_servicecharge, $trans_purpose,
-                                                                    $chrg_givenby, $total_transaction, $sts, $random));
-        $sms_body = "Dear User, You have received: $trans_amount Taka.\nTransaction Charge: $trans_servicecharge Taka,\nYou will get $reciever_get Taka in Cash\nYour code $random.";
-        //$sendResult = SendSMSFuntion("88".$receiver_mobile_num, $sms_body);
+                                                                    $p_trans_amount, $p_receiver_get, $p_trans_charge, $trans_purpose,
+                                                                    $chrg_givenby, $p_total_amount, $sts, $random));
+        $sms_body = "Dear User,\nYou have received: $p_trans_amount Taka.\nTransaction Charge: $p_trans_charge Taka,\nYou will get $p_receiver_get Taka in Cash.\nYour code $random";
+        $sendResult = SendSMSFuntion($receiver_mobile_num, $sms_body);
         $sendStatus = substr($sendResult, 0, 4);
         if($sendStatus == '1701'){
             $msg = "টাকা সফল ভাবে সেন্ড হয়েছে, আপনার কোডটি ".$random;
@@ -67,7 +69,7 @@ if (isset($_POST['save'])) {
 }
 ?>
 
-<title>ব্যাক্তিগত অ্যামাউন্ট ট্রান্সফার</title>
+<title>সেন্ড এমাউন্ট</title>
 <script src="javascripts/cfs_accounting.js" type="text/javascript"></script>
 <style type="text/css">@import "css/bush.css";</style>
 
@@ -128,11 +130,11 @@ if (isset($_POST['save'])) {
                         </tr>
                         <tr>
                             <td style="text-align: right;">টাকার পরিমান</td>
-                            <td>: <input  class="box" type="text" style="width: 100px" name="amount"  id="amount"  onkeypress="return checkIt(event);" onblur="sendAmount(this.value, '<?php echo $db_charge_amount; ?>', '<?php echo $db_charge_type; ?>', '<?php echo $db_balance; ?>', 'mblValidationMsg'); " value="0"/> টাকা <br/><span id="errorbalance"></span></td>   
+                            <td>: <input  class="box" type="text" style="width: 100px" name="amount"  id="amount"  onkeypress="return checkIt(event);" onblur="sendTransAmount(this.value, '<?php echo $db_charge_amount; ?>', '<?php echo $db_charge_type; ?>', '<?php echo $db_balance; ?>'); " value="0"/> টাকা <br/><span id="errorbalance"></span></td>   
                         </tr>
                         <tr>
                             <td style="text-align: right; ">টাকার পরিমান (পুনরায়)</td>
-                            <td>: <input  class="box" type="text" name="amount_rep" style="width: 100px"  id="amount_rep"  onkeypress="return checkIt(event);" onblur="repeatAmount(this.value);" value="0"/> টাকা <br/><span id="errormsg"></span></td>   
+                            <td>: <input  class="box" type="text" name="amount_rep" style="width: 100px"  id="amount_rep"  onkeypress="return checkIt(event);" onblur="repeatAmount(this.value, 'mblValidationMsg', 'mobileNo');" value="0"/> টাকা <br/><span id="errormsg"></span></td>   
                         </tr>
                         <tr>
                             <td style="text-align: right;">সেন্ডের কারন</td>
@@ -144,15 +146,15 @@ if (isset($_POST['save'])) {
                 <table>
                         <tr>
                             <td style='text-align: right;'>ট্রান্সফার এমাউন্ট</td>
-                            <td style='' >: <span id="trans_amount" name="trans_amount">0</span> টাকা</td>   
+                            <td style='' >: <span id="trans_amount" name="trans_amount">0</span> টাকা<input type="hidden" id="trans_amount_val" name="trans_amount_val" value="0" /></td>   
                         </tr>
                         <tr>
                             <td style='text-align: right;'>ট্রান্সফার চার্জ</td>
-                            <td>: <span id="trans_charge" name="trans_charge">0</span> টাকা</td>   
+                            <td>: <span id="trans_charge" name="trans_charge">0</span> টাকা<input type="hidden" id="trans_charge_val" name="trans_charge_val" value="0" /></td>   
                         </tr>
                         <tr>
                             <td style='text-align: right; '>টোটাল এমাউন্ট</td>
-                            <td>: <span id="total_amount" name="total_amount">0</span> টাকা</td>   
+                            <td>: <span id="total_amount" name="total_amount">0</span> টাকা<input type="hidden" id="total_amount_val" name="total_amount_val" value="0" /></td>   
                         </tr>
                     </table>               
             </td>

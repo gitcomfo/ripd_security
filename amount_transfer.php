@@ -40,9 +40,11 @@ function showMessage($flag, $msg)
         }
 if (isset($_POST['save'])) {
     $receiver_id =$_POST['receiver_user_id'];
-    $trans_amount = $_POST['amount1'];
+    $p_trans_amount = $_POST['amount'];
     $trans_purpose = $_POST['trans_des'];
-    $trans_servicecharge = $db_charge_amount;
+    $p_receiver_get= $_POST['trans_amount_val'];
+    $p_trans_charge= $_POST['trans_charge_val'];
+    $p_total_amount = $_POST['total_amount_val'];
     $trans_type = "transfer";
     $trans_senderid = $_SESSION['userIDUser'];
     $chrg_givenby = $_POST['charger'];
@@ -56,11 +58,11 @@ if (isset($_POST['save'])) {
     }
     else{
         $receiver_mobile_num = $_POST['user_mobile'];
-        $sql_insert_acc_user_amount_transfer->execute(array($trans_type, $trans_senderid, $receiver_id, $receiver_mobile_num,
-                                                                    $trans_amount, $reciever_get, $trans_servicecharge, $trans_purpose,
-                                                                    $chrg_givenby, $total_transaction, $sts, $random));
-        $sms_body = "Dear User, You have received: $trans_amount Taka.\nTransaction Charge: $trans_servicecharge Taka,\nYou will get $reciever_get Taka in Cash\nYour code $random.";
-        $sendResult = SendSMSFuntion($receiver_mobile_num, $sms_body);
+        $sql_insert_acc_user_amount_transfer->execute(array($trans_type, $trans_senderid, $reciever_id, $receiver_mobile_num,
+                                                                    $p_trans_amount, $p_receiver_get, $p_trans_charge, $trans_purpose,
+                                                                    $chrg_givenby, $p_total_amount, $sts, $random));
+        $sms_body = "Dear User,\nYou have received: $p_trans_amount Taka.\nTransaction Charge: $p_trans_charge Taka,\nYou will get $p_receiver_get Taka in Cash.\nYour code $random";
+        //$sendResult = SendSMSFuntion($receiver_mobile_num, $sms_body);
         $sendStatus = substr($sendResult, 0, 4);
         if($sendStatus == '1701'){
             $msg = "টাকা সফল ভাবে ট্রান্সফার হয়েছে, আপনার কোডটি ".$random;
@@ -68,14 +70,12 @@ if (isset($_POST['save'])) {
             $msg = "দুঃখিত, ম্যাসেজটি পাঠানো যায়নি, আপনার কোডটি ".$random;
         }
     }
-}
-        
-        
+}        
         
 ?>
 
 <title>ব্যাক্তিগত অ্যামাউন্ট ট্রান্সফার</title>
-<script src="javascripts/send_transfer_amount.js" type="text/javascript"></script>
+<script src="javascripts/cfs_accounting.js" type="text/javascript"></script>
 <style type="text/css">@import "css/bush.css";</style>
 <script type="text/javascript">
 function getEmployee(accountNo) //search employee by account number***************
@@ -153,12 +153,11 @@ function getEmployee(accountNo) //search employee by account number*************
                 </tr>
                 <tr>
                     <td style="text-align: right;">টাকার পরিমান</td>
-                    <td>: <input  class="box" type="text" style="width: 100px" name="amount1"  id="amount1"  onkeypress="return checkIt(event)" value="0"/> টাকা </td>   
+                    <td>: <input  class="box" type="text" style="width: 100px" name="amount"  id="amount"  onkeypress="return checkIt(event);" onblur="sendTransAmount(this.value, '<?php echo $db_charge_amount; ?>', '<?php echo $db_charge_type; ?>', '<?php echo $db_balance; ?>'); " value="0"/> টাকা <br/><span id="errorbalance"></span></td>   
                 </tr>
                 <tr>
                     <td style="text-align: right; ">টাকার পরিমান (পুনরায়)</td>
-                    <td>: <input  class="box" type="text" name="amount2" style="width: 100px"  id="amount2"  onkeypress="return checkIt(event)" onblur="checkAmountTrans(this.value, '<?php echo $db_charge_amount; ?>', '<?php echo $db_charge_type; ?>', '<?php echo $db_balance; ?>'); " value="0"/> টাকা 
-                        </br><span id="errormsg"></span></td>   
+                    <td>: <input  class="box" type="text" name="amount_rep" style="width: 100px"  id="amount_rep"  onkeypress="return checkIt(event);" onblur="repeatAmount(this.value, 'recieverInfo', 'accountNo');" value="0"/> টাকা <br/><span id="errormsg"></span></td>   
                 </tr>
                 <tr>
                     <td style="text-align: right; padding-left: 10px;">ট্রান্সফারের কারন</td>
@@ -166,18 +165,18 @@ function getEmployee(accountNo) //search employee by account number*************
                 </tr>
                 <tr>
                     <td style='text-align: right;'>ট্রান্সফার এমাউন্ট</td>
-                    <td style='' >: <span id="trans_amount" name="trans_amount">0</span> টাকা</td>   
+                    <td style='' >: <span id="trans_amount" name="trans_amount">0</span> টাকা<input type="hidden" id="trans_amount_val" name="trans_amount_val" value="0" /></td>   
                 </tr>
                 <tr>
                     <td style='text-align: right;'>ট্রান্সফার চার্জ</td>
-                    <td>: <span id="trans_charge" name="trans_charge">0</span> টাকা</td>   
+                    <td>: <span id="trans_charge" name="trans_charge">0</span> টাকা<input type="hidden" id="trans_charge_val" name="trans_charge_val" value="0" /></td>   
                 </tr>
                 <tr>
                     <td style='text-align: right; '>টোটাল এমাউন্ট</td>
-                    <td>: <span id="total_amount" name="total_amount">0</span> টাকা</td>   
+                    <td>: <span id="total_amount" name="total_amount">0</span> টাকা<input type="hidden" id="total_amount_val" name="total_amount_val" value="0" /></td>   
                 </tr>
                 <tr>
-                    <td colspan="3" style="text-align: center"></br><input type="button" class="btn"  name="submit" id="submit" onclick="getPassword();" disabled value="ঠিক আছে"></td>
+                    <td colspan="3" style="text-align: center"></br><input type="button" class="btn"  name="view" id="view" onclick="getPassword();" disabled value="ঠিক আছে"></td>
                 </tr>
                 <tr>
                     <td colspan="3" id="passwordbox"></td>

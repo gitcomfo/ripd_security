@@ -75,19 +75,11 @@ $sql_total_overtime =$conn->prepare("SELECT SUM(emp_extratime) FROM employee,emp
 $sql_select_emponsid = $conn->prepare("SELECT * FROM employee, cfs_user WHERE cfs_user_idUser = idUser AND idUser =? ");
 $sql_select_all_employee = $conn->prepare("SELECT * FROM cfs_user WHERE  cfs_account_status = 'active' AND idUser = ANY(SELECT cfs_user_idUser FROM employee  WHERE emp_ons_id = ?)");
 //********************************** for cheque *******************************************
-$sql_select_last_cheque_making = $conn->prepare("SELECT cheque_mak_datetime
-                                                            FROM  `acc_user_cheque` 
-                                                            WHERE cheque_makerid =117
-                                                            ORDER BY cheque_mak_datetime
-                                                            LIMIT 1");
+$sql_select_last_cheque_making = $conn->prepare("SELECT cheque_mak_datetime FROM  acc_user_cheque WHERE cheque_type = ? AND cheque_makerid = ?
+                                                                                                        ORDER BY cheque_mak_datetime DESC LIMIT 1");
 $sql_select_cheque = $conn->prepare("SELECT * FROM acc_user_cheque, cfs_user WHERE cheque_num =  ? AND idUser = cheque_makerid");
-
-$sql_select_program = $conn->prepare("SELECT * 
-                                                FROM program
-                                                WHERE program_no =  ? ");
-$sql_select_presenter_list = $conn->prepare("SELECT * 
-                                                    FROM presenter_list, employee, cfs_user
-                                                    WHERE fk_idprogram = ?
-                                                    AND fk_Employee_idEmployee = idEmployee
-                                                    AND cfs_user_idUser = idUser");
+//********************************** for presenter & programer attendance & payment *******************************************
+$sql_select_program = $conn->prepare("SELECT * FROM program WHERE program_no =  ? ");
+$sql_select_presenter_list = $conn->prepare("SELECT * FROM presenter_list, employee, cfs_user 
+                                                                                    WHERE fk_idprogram = ? AND fk_Employee_idEmployee = idEmployee AND cfs_user_idUser = idUser");
 ?>
