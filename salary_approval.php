@@ -64,7 +64,7 @@ if(isset($_POST['givsalary']))
     $sqlrslt1= $sql_update_sal_approval->execute(array($p_officeTotalSalary,$loginUSERid,$p_approvalID));
     for($i=1;$i<=$numberOfRows;$i++)
     {
-         $sqlrslt2= $sql_update_salary_chart->execute(array($p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i], $p_approvalID,$p_empCfsID[$i]));
+         $sqlrslt2= $sql_update_salary_chart->execute(array($p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i-1], $p_approvalID,$p_empCfsID[$i]));
     }
      if($sqlrslt1  && $sqlrslt2)
         {
@@ -105,7 +105,7 @@ function calculateSalaryMinus(deduct,i)
     var salary = (monthlypay+ xtrapay) - Number(deduct);
     document.getElementById("totalSalary["+i+"]").value = salary;
     var finalsalary = 0;
-    for (var j=1;j<=document.getElementsByName('totalSalary').length;j++){
+    for (var j=1;j<=document.getElementsByName('totalSalary[]').length;j++){
         finalsalary = finalsalary + Number(document.getElementById('totalSalary['+j+']').value);
     }
     document.getElementById('totalOfficeSalary').value = finalsalary;
@@ -117,7 +117,7 @@ function calculateSalaryPlus(xtra,i)
     var salary = (monthlypay - deductpay) + Number(xtra);
     document.getElementById("totalSalary["+i+"]").value = salary;
     var finalsalary = 0;
-    for (var j=1;j<=document.getElementsByName('totalSalary').length;j++){
+    for (var j=1;j<=document.getElementsByName('totalSalary[]').length;j++){
         finalsalary = finalsalary + Number(document.getElementById('totalSalary['+j+']').value);
     }
     document.getElementById('totalOfficeSalary').value = finalsalary;
@@ -205,8 +205,6 @@ function calculateSalaryPlus(xtra,i)
                                                $row6 = $sel_emp_salary->fetchAll();
                                                foreach ($row6 as $salaryrow) {
                                                    $db_main_salary = $salaryrow['total_salary'];
-                                                   $db_pension = $salaryrow['pension'];
-                                                   $totalsalary = $db_main_salary - $db_pension;
                                                }
                                                $sql_select_employee_grade->execute(array($db_empID));
                                                $row8 = $sql_select_employee_grade->fetchAll();
@@ -236,7 +234,7 @@ function calculateSalaryPlus(xtra,i)
                                                    <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary[$sl]' id='monthlySalary[$sl]' value='$db_monthlypay' />".$db_monthlypay."</td>
                                                    <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay[$sl]' name='xtrapay[$sl]' onkeypress='return checkIt(event)' value='$db_xtrapay' onkeyup='calculateSalaryPlus(this.value,$sl)' /></td>
                                                    <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' id='deductpay[$sl]' name='deductpay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryMinus(this.value,$sl)' value='$db_deductpay' /></td>
-                                                   <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary[$sl]' name='totalSalary' value='$db_totalpay' /></td></tr>";
+                                                   <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary[$sl]' name='totalSalary[]' value='$db_totalpay' /></td></tr>";
                                                $sl++;
                                         }
                                 ?>

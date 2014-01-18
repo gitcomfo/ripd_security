@@ -36,7 +36,7 @@ if(isset($_POST['makesalary']))
     $sal_approval_id = $conn->lastInsertId();
     for($i=1;$i<=$numberOfRows;$i++)
     {
-         $sqlrslt2= $insert_sal_chart->execute(array($p_monthNo, $p_yearNo, $p_monthlyPay[$i], $p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i], $p_empCfsID[$i], $sal_approval_id));
+         $sqlrslt2= $insert_sal_chart->execute(array($p_monthNo, $p_yearNo, $p_monthlyPay[$i], $p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i-1], $p_empCfsID[$i], $sal_approval_id));
     }
    
      if($sqlrslt1  && $sqlrslt2)
@@ -78,7 +78,7 @@ function calculateSalaryMinus(deduct,i)
     var salary = (monthlypay+ xtrapay) - Number(deduct);
     document.getElementById("totalSalary["+i+"]").value = salary;
     var finalsalary = 0;
-    for (var j=1;j<=document.getElementsByName('totalSalary').length;j++){
+    for (var j=1;j<=document.getElementsByName('totalSalary[]').length;j++){
         finalsalary = finalsalary + Number(document.getElementById('totalSalary['+j+']').value);
     }
     document.getElementById('totalOfficeSalary').value = finalsalary;
@@ -90,7 +90,7 @@ function calculateSalaryPlus(xtra,i)
     var salary = (monthlypay - deductpay) + Number(xtra);
     document.getElementById("totalSalary["+i+"]").value = salary;
     var finalsalary = 0;
-    for (var j=1;j<=document.getElementsByName('totalSalary').length;j++){
+    for (var j=1;j<=document.getElementsByName('totalSalary[]').length;j++){
         finalsalary = finalsalary + Number(document.getElementById('totalSalary['+j+']').value);
     }
     document.getElementById('totalOfficeSalary').value = finalsalary;
@@ -248,7 +248,7 @@ function calculateSalaryPlus(xtra,i)
                                                <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary[$sl]' id='monthlySalary[$sl]' value='$totalsalary' />".$totalsalary."</td>
                                                <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay[$sl]' name='xtrapay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryPlus(this.value,$sl)'  /></td>
                                                <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' id='deductpay[$sl]' name='deductpay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryMinus(this.value,$sl)' /></td>
-                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary[$sl]' name='totalSalary' value='$totalsalary' /></td></tr>";
+                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary[$sl]' name='totalSalary[]' value='$totalsalary' /></td></tr>";
                                            $sl++;
                                     }
                                  }
