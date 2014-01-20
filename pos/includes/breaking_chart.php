@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 include 'ConnectDB.inc';
 include_once 'MiscFunctions.php';
 $office_id = $_SESSION['loggedInOfficeID'];
