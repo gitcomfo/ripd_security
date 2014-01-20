@@ -4,8 +4,9 @@ include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 include_once './includes/selectQueryPDO.php';
 include_once './includes/insertQueryPDO.php';
+$logedinOfficeId = $_SESSION['loggedInOfficeID'];
+$logedinOfficeType = $_SESSION['loggedInOfficeType'];
  $loginUSERid = $_SESSION['userIDUser'] ;
- 
 if(isset($_POST['submit']))
 {
     $p_month = $_POST['month'];;
@@ -20,6 +21,47 @@ if(isset($_POST['submit']))
 }
 if(isset($_POST['makesalary']))
 {
+    // parent ons id find --------------------------------
+   if($logedinOfficeType == 'office') 
+ {
+     $sql_select_office->execute(array($logedinOfficeId));
+     $offrow = $sql_select_office->fetchAll();
+     foreach ($offrow as $value) {
+         $db_parent_id = $value['parent_id'];
+         $sql_select_id_ons_relation->execute(array($logedinOfficeType,$db_parent_id));
+         $onsrow = $sql_select_id_ons_relation->fetchAll();
+         foreach ($onsrow as $value) {
+             $db_onsID = $value['idons_relation'];
+         }
+     }    
+ }
+ else
+ {
+     $sql_select_sales_store->execute(array($logedinOfficeId));
+     $offrow = $sql_select_sales_store->fetchAll();
+     foreach ($offrow as $value) {
+         $db_parent_id = $value['powerstore_officeid'];
+         if($db_parent_id == 0)
+         {
+              $sql_select_id_ons_relation->execute(array($logedinOfficeType,$logedinOfficeId));
+                $onsrow = $sql_select_id_ons_relation->fetchAll();
+                foreach ($onsrow as $value) {
+                    $db_onsID = $value['idons_relation'];
+                }
+         }
+         else
+         {
+             $catagory = 'office';
+             $sql_select_id_ons_relation->execute(array($catagory,$db_parent_id));
+                $onsrow = $sql_select_id_ons_relation->fetchAll();
+                foreach ($onsrow as $value) {
+                    $db_onsID = $value['idons_relation'];
+                }
+         }
+     }    
+ }
+  //-----------------------------------------------------------------------
+    $msg = "salary make";
     $p_onsid = $_POST['onsID'];
     $p_empCfsID = $_POST['empCFSid'];
     $p_monthlyPay = $_POST['monthlySalary'];
@@ -38,8 +80,13 @@ if(isset($_POST['makesalary']))
     {
          $sqlrslt2= $insert_sal_chart->execute(array($p_monthNo, $p_yearNo, $p_monthlyPay[$i], $p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i-1], $p_empCfsID[$i], $sal_approval_id));
     }
+    $url = "salary_approval.php?id=".$sal_approval_id;
+    $status = "unread";
+    $type="action";
+    $nfc_catagory="official";
+    $sqlrslt3 = $insert_notification->execute(array($loginUSERid,$db_onsID,$msg,$url,$status,$type,$nfc_catagory));
    
-     if($sqlrslt1  && $sqlrslt2)
+     if($sqlrslt1  && $sqlrslt2 && $sqlrslt3)
         {
             $conn->commit();
             echo "<script>alert('বেতন সফলভাবে এন্ট্রি হয়েছে')</script>";
@@ -158,8 +205,6 @@ function beforeSubmit()
                     <td colspan="2"></br>
                         <form method="post" action="" onsubmit="return beforeSubmit();">
                         <table cellspacing="0" cellpadding="0">
-                            <?php 
-                            ?>
                             <tr>
                                 <td colspan="10" style="width: 25%; text-align: center"><b><?php echo $monthName.", ".$p_year;?>-এ মোট কার্যদিবস</b> : <?php echo $workingDays?><input type="hidden" id="workingdays" value="<?php echo $workingDays?>" />দিন 
                                     <input type="hidden" name="yearNo" value="<?php echo $p_year;?>" /><input type="hidden" name="monthNo" value="<?php echo $p_month;?>" /></br></br></td>
