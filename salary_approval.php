@@ -125,7 +125,7 @@ function calculateSalaryPlus(xtra,i)
 </script>
 
     <div class="main_text_box" style="width: 100% !important;">
-        <div style="padding-left: 50px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 50px;"><a href="notification.php"><b>ফিরে যান</b></a></div>
           <div>
                <table  class="formstyle" style="width: 90% !important; font-family: SolaimanLipi !important;margin:0 auto !important;">          
                     <tr><th colspan="6" style="text-align: center;">বেতন মঞ্জুর</th></tr>
