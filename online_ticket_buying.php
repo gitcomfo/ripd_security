@@ -483,7 +483,7 @@ if ($_GET['opt']=='submit_ticket') {
                         $countXseats = countXtra($P_value);
                         if($countXseats ==0 && $countSeats==0){?>
                         <table  class="formstyle" style="color: #3333CC; font-weight:600; font-family: SolaimanLipi !important;">          
-                        <tr><th colspan="4" style="text-align: center;">টিকেট ক্রয়</th></tr>
+                        <tr><th colspan="4" style="text-align: center;font-size: 22px;">টিকেট ক্রয়</th></tr>
                         <tr><td colspan="2" style="padding-left: 0;"></br>
                                 <span style="color: red;font-size: 15px; text-decoration: blink;padding-left: 200px;"><?php echo "দুঃখিত, এই প্রোগ্রামের সকল টিকেট বিক্রি হয়ে গিয়েছে "; ?></span>
                             </td></tr>
@@ -498,7 +498,7 @@ if ($_GET['opt']=='submit_ticket') {
             <div> 
                 <form method="POST" onsubmit="" action="online_ticket_buying.php?opt=accept_price">	
                     <table  class="formstyle" style="color: #3333CC; font-weight:600;font-family: SolaimanLipi !important;">          
-                        <tr><th colspan="4" style="text-align: center;">টিকেট ক্রয়</th></tr>                                
+                        <tr><th colspan="4" style="text-align: center;font-size: 22px;">টিকেট ক্রয়</th></tr>                                
                         <tr>
                             <td style="width: 40%;text-align: center" colspan="2">টিকেট প্রাইসঃ <span style="color: black;"><?php echo $ticket_prize;?> TK/Ticket</span><input type='hidden' name='ticket' value=<?php echo $ticket_prize;?> /></br></br></td>
                         </tr>
@@ -605,7 +605,7 @@ if ($_GET['opt']=='submit_ticket') {
         <div class="main_text_box">
             <?php  if ($bookedmsg != "") {?>
              <table  class="formstyle" style="color: #3333CC; font-weight:600;font-family: SolaimanLipi !important;">          
-                        <tr><th colspan="4" style="text-align: center;">টিকেট ক্রয়</th></tr>
+                        <tr><th colspan="4" style="text-align: center;font-size: 22px;">টিকেট ক্রয়</th></tr>
                         <tr><td colspan="2" style="padding-left: 0;"></br>
                                 <div style="color: red;font-size: 15px; text-decoration: none;padding: 10px 50px 10px 55px;">
                                     <?php 
@@ -641,7 +641,7 @@ if ($_GET['opt']=='submit_ticket') {
             <div>
                 <form method="POST" onsubmit="" action="selling_ticket.php?opt=submit_account">	
                     <table  class="formstyle" style="color: #3333CC; font-weight:600;page-break-inside: auto;">          
-                        <tr><th colspan="4" style="text-align: center;">টিকেট ক্রয়</th></tr>
+                        <tr><th colspan="4" style="text-align: center;font-size: 22px;">টিকেট ক্রয়</th></tr>
                                 <?php showTicket($TicketID);?>
                                   <tr>                    
                             <td colspan="2" style="text-align: center" ></td>
@@ -664,7 +664,7 @@ else {
             <div>
                 <form method="POST" onsubmit="" action="online_ticket_buying.php?opt=submit_ticket">	
                     <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
-                        <tr><th colspan="4" style="text-align: center;">টিকেট ক্রয়</th></tr>
+                        <tr><th colspan="4" style="text-align: center;font-size: 22px;">টিকেট ক্রয়</th></tr>
                         <tr>
                             <td style="width: 40%">প্রেজেন্টেশন / প্রোগ্রাম / ট্রেইনিং / ট্রাভেল</td>
                             <td>: <select class="selectOption" name="type" id="type" onchange="getList(this.value)" style="width: 170px !important;">
