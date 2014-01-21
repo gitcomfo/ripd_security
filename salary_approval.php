@@ -7,6 +7,7 @@ include_once './includes/insertQueryPDO.php';
 include_once './includes/updateQueryPDO.php';
  $loginUSERid = $_SESSION['userIDUser'] ;
 $g_approvalID = $_GET['id'];
+$g_nfcid = $_GET['nfcid'];
 $sel_select_sal_approval = $conn->prepare("SELECT * FROM salary_approval WHERE salappid= ?");
 $sel_select_sal_approval->execute(array($g_approvalID));
 $row = $sel_select_sal_approval->fetchAll();
@@ -66,7 +67,9 @@ if(isset($_POST['givsalary']))
     {
          $sqlrslt2= $sql_update_salary_chart->execute(array($p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i-1], $p_approvalID,$p_empCfsID[$i]));
     }
-     if($sqlrslt1  && $sqlrslt2)
+    $status = 'complete';
+    $sqlrslt3 = $sql_update_notification->execute(array($status,$g_nfcid));
+     if($sqlrslt1  && $sqlrslt2 && $sqlrslt3)
         {
             $conn->commit();
             echo "<script>alert('বেতন সফলভাবে মঞ্জুর হয়েছে')</script>";

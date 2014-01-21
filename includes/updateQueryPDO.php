@@ -19,4 +19,6 @@ $sql_update_sal_approval = $conn->prepare("UPDATE salary_approval SET total_mont
                                                                         salary_approved_date=NOW() WHERE salappid=?");
 $sql_update_salary_chart = $conn->prepare("UPDATE salary_chart SET deducted_amount=?, bonus_amount=?, total_given_amount=?,
                                                                         salary_status='paid' WHERE fk_sal_aprv_salappid=? AND user_id=? ");
+// *********************************** notification *******************************************************
+$sql_update_notification = $conn->prepare("UPDATE notification SET nfc_status=? WHERE idnotification=? ");
 ?>
