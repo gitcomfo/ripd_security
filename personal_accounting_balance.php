@@ -11,8 +11,8 @@ include_once 'includes/columnViewAccount.php';
             <th colspan="2">টাকা পাঠানোর সিস্টেম</th>
         </tr>
         <tr>
-            <td><a href="send_amount.php">সেন্ড এমাউন্ট</a></td>
-            <td><a href="amount_transfer.php">ট্রান্সফার এমাউন্ট</a></td>
+            <td><a href="send_amount.php">টাকা পাঠানো</a></td>
+            <td><a href="amount_transfer.php">টাকা ট্রান্সফার করা</a></td>
         </tr>
         <tr>
             <th colspan="2">টাকা উঠানোর সিস্টেম</th>

@@ -4,16 +4,14 @@ include_once 'includes/columnViewAccount.php';
 
 $logedInUserType = $_SESSION['userType'];
 ?>
-<style type="text/css">
-    @import "css/bush.css";
-</style>
+<style type="text/css">@import "css/bush.css";</style>
 <div class="columnSubmodule" style="font-size: 14px;">
     <table class="formstyle" style ="width: 100%; margin-left: 0px; font-family: SolaimanLipi !important;"> 
         <tr>
             <th colspan="2">সকল ধরনের রিপোর্ট</th>
         </tr>
         <tr>
-            <td><a href="personal_purchase_statement.php">পার্সনাল পারচেইজিং স্টেটমেন্ট</a></td>
+            <td><a href="personal_purchase_statement.php">ব্যক্তিগত ক্রয় স্টেটমেন্ট</a></td>
             <td><a href="payment_statement_chart.php">পেমেন্ট স্টেটমেন্ট চার্ট</a></td>
         </tr>
         <tr>

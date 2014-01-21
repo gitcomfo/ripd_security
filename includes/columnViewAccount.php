@@ -23,7 +23,7 @@ else $view_link = "view_employee_account.php";
                         echo '<li><a href="personal_accounting_balance.php">একাউন্টিং (ব্যালেন্স)</a></li>';
                         echo '<li><a href="personal_official_profile_employee.php">অফিস সংক্রান্ত</a></li>';
                     }?>
-                    <li><a href="online_ticket_buying.php">অনলাইন টিকেট পারচেইজিং</a></li>
+                    <li><a href="online_ticket_buying.php">অনলাইনে টিকেট কেনা</a></li>
                     <li><a href="<?php echo $view_link;?>">ভিউ একাউন্ট</a></li>
                     <li><a href="password_change.php">পাসওয়ার্ড পরিবর্তন</a></li>
                     <li><a href="https://webmail.ripduniversal.com" target="_blank">ই-মেইল</a></li>

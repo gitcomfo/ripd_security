@@ -26,15 +26,13 @@ if (isset($_POST['submit'])) {
     }
         $quan[$i] = $quan1[$i] . "." . $quan2[$i];
         //$osql = "INSERT INTO $dbname.`ons_operational_exp`(`exp_date` ,`exp_sector` ,`exp_amount`,`exp_desc`,`exp_scandoc`,`exp_ons_type`,`exp_ons_id`,`exp_maker_id`) VALUES ('$indate','$sub[$i]', '$quan[$i]', '$desc[$i]', '$image_path', 1, 1);";
-        $osql = "INSERT INTO $dbname.`ons_operational_exp`(`exp_date` ,`exp_sector` ,`exp_amount`,`exp_desc`,`exp_scandoc`,`exp_ons_type`,`exp_ons_id`,`exp_maker_id`) 
+        $osql = "INSERT INTO ons_operational_exp(`exp_date` ,`exp_sector` ,`exp_amount`,`exp_desc`,`exp_scandoc`,`exp_ons_type`,`exp_ons_id`,`exp_maker_id`) 
             VALUES ('$indate','$sub[$i]', '$quan[$i]', '$desc[$i]', '$image_path', '$exp_ons_type', '$exp_ons_id', '$exp_maker_id');";
         $oreslt = mysql_query($osql) or exit(mysql_error());
     }
 }
 ?>
-<style type="text/css">
-    @import "css/bush.css";
-</style>
+<style type="text/css">@import "css/bush.css";</style>
 <link rel="stylesheet" type="text/css" media="all" href="javascripts/jsDatePick_ltr.min.css" />
 <script type="text/javascript" src="javascripts/jsDatePick.min.1.3.js"></script>
 <script type="text/javascript" src="javascripts/jquery-1.4.3.min.js"></script>
@@ -54,7 +52,7 @@ echo $new;
         $("#container_others:last").after(appendTxt);
     })
 
-    window.onclick = function()
+window.onclick = function()
     {
         new JsDatePick({
             useMode: 2,
@@ -63,7 +61,7 @@ echo $new;
         });
     }
     
-    function numbersonly(e)
+function numbersonly(e)
     {   
         var unicode=e.charCode? e.charCode : e.keyCode
         if (unicode!=8)
