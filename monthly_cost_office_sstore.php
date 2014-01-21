@@ -1,171 +1,217 @@
 <?php
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
+include_once 'includes/selectQueryPDO.php';
+$ins_ons_fixed_exp = $conn->prepare("INSERT INTO ons_fixed_expenditure (month, year, ons_rent, ons_current_bill, ons_water_bill, ons_others_total, ons_monthly_total, fk_onsid) 
+                                                                VALUES(?,?,?,?,?,?,?,? )");
+$ins_others_fixed_exp = $conn->prepare("INSERT INTO ons_fixed_exp_others(ons_cost_type ,ons_cost_amount ,ons_fixed_expenditure_idfixexp) VALUES (?,?,?)");
 
-$sql_officeTable = "SELECT * from " . $dbname . ".office ORDER BY office_name ASC";
-$rs = mysql_query($sql_officeTable);
-$row_officeNcontact = mysql_fetch_assoc($rs);
-$db_offID = $row_officeNcontact['idOffice'];
+$exp_ons_type = $_SESSION['loggedInOfficeType'];
+$exp_ons_id = $_SESSION['loggedInOfficeID'];
+$exp_maker_id = $_SESSION['userIDUser'];
 
-$onsq = "SELECT * FROM " . $dbname . ".`ons_relation` WHERE add_ons_id=$db_offID AND catagory= 'office' ";
-$onssql = mysql_query($onsq);
-while ($ons_row = mysql_fetch_assoc($onssql)) {
-    $idons = $ons_row['idons_relation'];
+$sql_select_id_ons_relation->execute(array($exp_ons_type,$exp_ons_id));
+$row = $sql_select_id_ons_relation->fetchAll();
+foreach ($row as $onsrow) {
+    $db_onsID = $onsrow['idons_relation'];
 }
-
-$cost = "SELECT * FROM " . $dbname . ".`ons_cost` WHERE ons_relation_idons_relation=$idons";
+$cost = "SELECT * FROM ons_cost WHERE ons_relation_idons_relation=$db_onsID";
 $costsql = mysql_query($cost);
 while ($cost_row = mysql_fetch_assoc($costsql)) {
     $costid = $cost_row['idons_cost'];
     $rent = $cost_row['rent'];
-    $rentINT = (int) $rent;
-    list($before_dot, $after_dot) = explode('.', $rent);
-    $rentDeci = substr($after_dot, 0, 2);
     $current = $cost_row['current_bill'];
-    $currentINT = (int) $current;
-    list($before_dot, $after_dot) = explode('.', $current);
-    $currentDeci = substr($after_dot, 0, 2);
     $water = $cost_row['water_bill'];
-    $waterINT = (int) $water;
-    list($before_dot, $after_dot) = explode('.', $water);
-    $waterDeci = substr($after_dot, 0, 2);
-    $idcost = $cost_row['idons_cost'];
 }
+$totalcost = $rent + $current + $water;
 $count = 0;
-$othercost = "SELECT * FROM " . $dbname . ".`ons_cost_others` WHERE ons_cost_idons_cost=$costid";
+$othercost = "SELECT * FROM ons_cost_others WHERE ons_cost_idons_cost=$costid";
 $othercostsql = mysql_query($othercost);
 
 while ($othercost_row = mysql_fetch_assoc($othercostsql)) {
     $sub[$count] = $othercost_row['cost_type'];
     $quan[$count] = $othercost_row['cost_amount'];
-    $quanINT[$count] = (int) $quan[$count];
-    list($before_dot, $after_dot) = explode('.', $quan[$count]);
-    $quanDeci = substr($after_dot, 0, 2);
+    $totalcost = $totalcost + $quan[$count];
     $count++;
 }
-$otherID = $othercost_row['idons_cost_others'];
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit'])) // ************************ insert query ******************************
+{
+    $onsID = $_POST['onsID'];
+    $monthly_total = $_POST['totalamount'];
     $month = $_POST['month'];
     $year = $_POST['year'];
     $rent1 = $_POST['office_rent1'];
-    $rent2 = $_POST['office_rent2'];
-    $ons_rent = $rent1 . "." . $rent2;
     $e_bill1 = $_POST['electicity_bill1'];
-    $e_bill2 = $_POST['electicity_bill2'];
-    $ons_current_bill = $e_bill1 . "." . $e_bill2;
     $w_bill1 = $_POST['water_bill1'];
-    $w_bill2 = $_POST['water_bill2'];
-    $ons_water_bill = $w_bill1 . "." . $w_bill2;
-    $costup = "INSERT INTO $dbname.`ons_fixed_expenditure` ( `month`,`year`,`ons_rent`,`ons_current_bill`,`ons_water_bill`) VALUES( '$month','$year','$ons_rent','$ons_current_bill','$ons_water_bill');";
-    $costsql = mysql_query($costup);
     $sub = $_POST['sub'];
     $quan1 = $_POST['quantity1'];
-    $quan2 = $_POST['quantity2'];
     $n = count($sub);
     for ($i = 0; $i < $n; $i++) {
-        $quan[$i] = $quan1[$i] . "." . $quan2[$i];
-        $osql = "INSERT INTO $dbname.`ons_fixed_exp_others`(`ons_cost_type` ,`ons_cost_amount` ,`idexp_fixed_cost`) VALUES ( '$sub[$i]',  '$quan[$i]', '$costid');";
-        $oreslt = mysql_query($osql);
+        $othertotal = $othertotal + $quan1[$i];
+     }
+     $conn->beginTransaction();
+     $sqlresult1 = $ins_ons_fixed_exp->execute(array($month,$year,$rent1,$e_bill1,$w_bill1,$othertotal,$monthly_total,$onsID));
+     $ons_fexp_id = $conn->lastInsertId();
+    for ($i = 0; $i < $n; $i++) {
+       $sqlresult2 = $ins_others_fixed_exp->execute(array($sub[$i],$quan1[$i],$ons_fexp_id));
     }
+     if($sqlresult1  && $sqlresult2)
+        {
+            $conn->commit();
+            echo "<script>alert('মাসিক অফিস খরচ দেয়া হল')</script>";
+        }
+        else {
+            $conn->rollBack();
+            echo "<script>alert('দুঃখিত, মাসিক অফিস খরচ দেয়া হয়নি')</script>";
+        }
 }
 ?>
-<style type="text/css">
-    @import "css/bush.css";
-</style>
+<style type="text/css">@import "css/bush.css";</style>
 <link rel="stylesheet" type="text/css" media="all" href="javascripts/jsDatePick_ltr.min.css" />
 <script type="text/javascript" src="javascripts/jsDatePick.min.1.3.js"></script>
 <script type="text/javascript" src="javascripts/jquery-1.4.3.min.js"></script>
 <script type="text/javascript">
-    $('.del').live('click',function(){
+$(document).ready(function(){
+  $('.inbox').blur(function() {
+        var total= 0;
+        $(".inbox").filter(function() {
+         var val = parseFloat($(this).val());
+         total = parseFloat(total) + val;
+    });
+    $('#totalamount').val(total);
+  });
+});
+function calculate()
+{
+    var total= 0;
+        $(".inbox").filter(function() {
+         var val = parseFloat($(this).val());
+         total = parseFloat(total) + val;
+    });
+    $('#totalamount').val(total);
+}
+
+$('.del').live('click',function(){
         $(this).parent().parent().remove();
        
     });
     $('.add').live('click',function()
     {
-        var appendTxt= "<tr><td colspan='2'><input class='textfield'  id='sub' name='sub[]' type='text' /></td><td colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input class='textfield' style='text-align: right' id='quantity1' name='quantity1[]' type='text' onkeypress='return numbersonly(event)' />\n\
-                                        . <input class='boxTK' id='quantity2' name=quantity2[]' type='text' onkeypress='return numbersonly(event)'/> TK <em> (ইংরেজিতে লিখুন)</em></td></td></tr>";
+        var appendTxt= "<tr><td><input class='textfield'  id='sub' name='sub[]' type='text' /></td><td><input class='inbox' onblur='calculate()' style='text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;' id='quantity1' name='quantity1[]' type='text' onkeypress='return checkIt(event)'  /><em2> *</em2>\n\
+                                         TK </td><td><input type='button' class='del' /></td><td>&nbsp;<input type='button' class='add' /></td></tr>";
         $("#container_others:last").after(appendTxt);
     })
     
-    function numbersonly(e)
+function checkIt(evt) // float value-er jonno***********************
     {
-        var unicode=e.charCode? e.charCode : e.keyCode
-        if (unicode!=8)
-        { //if the key isn't the backspace key (which we should allow)
-
-            if (unicode<48||unicode>57) //if not a number
-                return false //disable key press
-        }
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode ==8 || (charCode >47 && charCode <58) || charCode==46) {
+        status = "";
+        return true;
     }
+    status = "This field accepts numbers only.";
+    return false;
+}
 
+function validate() {
+        var notOK= 0;
+        $(".inbox").filter(function() {
+         var val = $(this).val();
+        if((val == "") || (val == 0))
+            {
+                 notOK++;
+            }
+    });
+    return notOK;
+ }
+function beforeSubmit()
+{
+    var blank = validate();
+    if ((document.getElementById('month').value != 0) && blank == 0)
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 <div class="column6">
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="office_sstore_management.php"><b>ফিরে যান</b></a></div>
         <div>
-            <form method="POST" action="" id="off_form" name="off_form">
+            <form method="POST" action="" id="off_form" name="off_form" onsubmit="return beforeSubmit()">
                 <table class="formstyle"  > 
                     <tr><th colspan="4" style="text-align: center" colspan="2"><h1>অফিস খরচ (মাসিক)</h1></th></tr>                      
                     <tr>                    
                         <td>
                             <b>মাসঃ </b>
-                            <select class='box2' name='month'>
+                            <select class='box2' name='month' style="width: 100px;" id="month">
                                 <?php
                                 $inc = 1;
-                                $month_array = array('সিলেক্ট করুন'=>'সিলেক্ট করুন','জানুয়ারি'=>'জানুয়ারি', 'ফেব্রুয়ারি'=>'ফেব্রুয়ারি', 'মার্চ' =>'মার্চ', 'এপ্রিল'=>'এপ্রিল', 'মে'=>'মে', 'জুন'=> 'জুন', 'জুলাই'=> 'জুলাই', 'আগষ্ট'=>'আগষ্ট', 'সেপ্টেম্বর'=> 'সেপ্টেম্বর','অক্টোবর'=> 'অক্টোবর','নভেম্বর'=> 'নভেম্বর','ডিসেম্বর'=> 'ডিসেম্বর');
+                                $month_array = array(0=>'সিলেক্ট করুন',1=>'জানুয়ারি', 2=>'ফেব্রুয়ারি', 3 =>'মার্চ', 4=>'এপ্রিল', 5=>'মে', 6=> 'জুন', 7=> 'জুলাই', 8=>'আগষ্ট', 9=> 'সেপ্টেম্বর',10=> 'অক্টোবর',11=> 'নভেম্বর',12=> 'ডিসেম্বর');
                                 while (list ($inc, $val) = each($month_array))
                                     echo "<option value=$inc>$val</option>";
                                 ?>
-                            </select>
+                            </select><em2> *</em2>
                         </td>                                    
                         <td>
                             <b>বছরঃ </b>
                             <select class='box2' name='year'>
-                                <?php
-                                for ($inc_year = 2013; $inc_year <= 2099; $inc_year = $inc_year + 1)
-                                    echo "<option value='$inc_year'>$inc_year</option>";
-                                ?>
-                            </select>
+                                                <?php
+                                                    $thisYear = date('Y');
+                                                    $startYear = '2000';
+                                                    foreach (range($thisYear, $startYear) as $year) {
+                                                    echo '<option value='.$year.'>'. $year .'</option>'; }
+                                                ?>
+                            </select><em2> *</em2>
                         </td>  
                     </tr>     
                     <tr>
                         <td>ভাড়া</td>
-                        <td >: <input readonly="" class="textfield" style="text-align: right" type="text" id="office_rent1" name="office_rent1" onkeypress="return numbersonly(event)" value="<?php echo $rentINT; ?>" />
-                            . <input readonly="" class="boxTK" type="text" maxlength="2"  id="office_rent2" name="office_rent2"  onkeypress=" return numbersonly(event)" value="<?php echo $rentDeci; ?>"/>TK
+                        <td >: <input readonly="" class="inbox" style="text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;" type="text" id="office_rent1" name="office_rent1" onkeypress="return checkIt(event)" value="<?php echo $rent; ?>" /> TK
                         </td>
                     </tr>
                     <tr>
                         <td  >কারেন্ট বিল</td>
-                        <td >:   <input class="textfield" style="text-align: right" type="text" id="electicity_bill1" name="electicity_bill1" onkeypress="return numbersonly(event)" value="<?php echo $currentINT; ?>"/>
-                            . <input class="boxTK" type="text" maxlength="2"  id="electicity_bill2" name="electicity_bill2" onkeypress="return numbersonly(event)" value="<?php echo $currentDeci; ?>"/>TK<em> (ইংরেজিতে লিখুন)</em></td>
+                        <td >:   <input class="inbox" style="text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;" type="text" id="electicity_bill1" name="electicity_bill1" onkeypress="return checkIt(event)" value="<?php echo $current; ?>" onblur="calculateTotal(this.value);" /><em2> *</em2> TK<em> (ইংরেজিতে লিখুন)</em></td>
                     </tr>
                     <tr>
                         <td >পানি বিল</td>
-                        <td>:   <input class="textfield" style="text-align: right" type="text" id="water_bill1" name="water_bill1" onkeypress="return numbersonly(event)" value="<?php echo $waterINT; ?>"/>
-                            . <input class="boxTK" type="text" maxlength="2" id="water_bill2" name="water_bill2" onkeypress="return numbersonly(event)" value="<?php echo $waterDeci; ?>"/>TK<em> (ইংরেজিতে লিখুন)</em> </td>
+                        <td>:   <input class="inbox" style="text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;" type="text" id="water_bill1" name="water_bill1" onkeypress="return checkIt(event)" value="<?php echo $water; ?>" onblur="calculateTotal(this.value);" /><em2> *</em2> TK<em> (ইংরেজিতে লিখুন)</em> </td>
                     </tr>                     
                     <tr>
                         <td colspan="2" ><hr /></td>
                     </tr>
                     <tr>
-                        <td style="padding-top: 14px;vertical-align: top; width: 25%;"><b>অন্যান্য</b></td>
+                        <td style="padding-top: 5px;vertical-align: top; width: 25%;"><b>অন্যান্য</b><input type="hidden" name="onsID" value="<?php echo $db_onsID?>" /></td>
                     </tr>
                     <tr>
-                        <td id="container_others" colspan="2">
+                        <td colspan="2">
+                            <table id="container_others">
+                                <tr>
+                                     <td>বিষয়  :</td>
+                                      <td>পরিমান : <em> (ইংরেজিতে লিখুন)</em></td>
+                                 </tr>
                                 <?php
                                 for ($i = 0; $i < $count; $i++) {
                                     echo "<tr>";
-                                    echo "<td><input type='hidden'  id='sub' name='sub[]' value='$sub[$i]' />$sub[$i]</td>";
-                                    echo"<td>: <input class='textfield' style='text-align: right' id='quantity1' name='quantity1[]' type='text' onkeypress='return numbersonly(event)' value='$quanINT[$i]' />
-                                                            . <input class='boxTK' maxlength='2' id='quantity2' name='quantity2[]' type='text' onkeypress='return numbersonly(event)' value='$quanDeci[$i]' /> TK<em> (ইংরেজিতে লিখুন)</em></td>";
-                                    echo "</tr>";
+                                    echo "<td style='width:20%;'><input class='textfield' type='text'  id='sub' name='sub[]' value='$sub[$i]' /></td>";
+                                    echo"<td style='width:27%;'><input class='inbox' style='text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;' id='quantity1' name='quantity1[]' type='text' onkeypress='return checkIt(event)' value='$quan[$i]' /><em2> *</em2> TK</td>";
+                                    echo "<td><input type='button' class='add' /></td></tr>";
                                 }
                                 ?>
+                            </table>
                         </td>
-                    </tr>                 
-                    </td>
-                    </tr>  
+                    </tr>
+                    <tr>
+                        <td colspan="2" ><hr /></td>
+                    </tr>
+                    <tr>
+                        <td>মোট</td>
+                        <td>: <input class="textfield" id="totalamount" name="totalamount"  type="text" readonly="" style="text-align: right;" value="<?php echo $totalcost;?>" /> TK</td>
+                    </tr>
                     <tr>                    
                         <td colspan="4" style="padding-left: 250px; " >
                             </br><input class="btn" style =" font-size: 12px " type="submit" name="submit" id="submit" value="সেভ করুন" />
