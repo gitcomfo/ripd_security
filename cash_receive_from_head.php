@@ -33,7 +33,7 @@ function beforeSubmit()
         <div>           
             <form method="POST" onsubmit="return beforeSubmit();" action="cash_in.php">	
                 <table  class="formstyle" style="width: 90%; margin: 1px 1px 1px 1px;">          
-                    <tr><th colspan="2" style="text-align: center;">রিপড হেড অফিস ইনভেস্ট</th></tr>
+                    <tr><th colspan="2" style="text-align: center;font-size: 22px;">রিপড হেড অফিস ইনভেস্ট</th></tr>
                     <tr>
                         <td >টোটাল ইন এ্যামাউন্ট</td>
                         <td>: <input class="box" type="text" id="t_in_amount" name="t_in_amount" onkeypress=' return numbersonly(event)' /><em2> *</em2> TK</td>          
