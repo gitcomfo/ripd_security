@@ -2,7 +2,6 @@
 include 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
-
 ?>
 <style type="text/css"> @import "css/bush.css";</style>
 <script>
@@ -17,8 +16,7 @@ function numbersonly(e)
     }
 function beforeSubmit()
 {
-    if ((document.getElementById('acNo').value != "") 
-            && (document.getElementById('acName').value != "")
+    if ((document.getElementById('fund').value != "0") 
             && (document.getElementById('t_in_amount').value != "")
             && (document.getElementById('t_in_amount').value != "0"))
         { return true; }
@@ -28,29 +26,6 @@ function beforeSubmit()
     }
 }
 </script>
-<script>
-    function getAccountInfo(acNo)
-    {
-        var xmlhttp;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function()
-        {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-                document.getElementById('info').innerHTML=xmlhttp.responseText;
-            }
-        }
-        xmlhttp.open("GET","includes/getAccountInfoForCashIn.php?acNo="+acNo,true);
-        xmlhttp.send();
-    }
-</script>
 
 <div class="columnSld" style=" padding-left: 50px;">
     <div class="main_text_box">
@@ -58,24 +33,23 @@ function beforeSubmit()
         <div>           
             <form method="POST" onsubmit="return beforeSubmit();" action="cash_in.php">	
                 <table  class="formstyle" style="width: 90%; margin: 1px 1px 1px 1px;">          
-                    <tr><th colspan="2" style="text-align: center;">ক্যাশ ইন</th></tr>
-                    <tr>
-                        <td>একাউন্ট নাম্বার</td>
-                        <td>: <input class="box" type="text" id="acNo" name="acNo" maxlength="15" onblur="getAccountInfo(this.value)" /><em2> *</em2></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" id="info" style="padding-left: 0px !important;"></td>
-                    </tr>
+                    <tr><th colspan="2" style="text-align: center;">রিপড হেড অফিস ইনভেস্ট</th></tr>
                     <tr>
                         <td >টোটাল ইন এ্যামাউন্ট</td>
                         <td>: <input class="box" type="text" id="t_in_amount" name="t_in_amount" onkeypress=' return numbersonly(event)' /><em2> *</em2> TK</td>          
+                    </tr>
+                    <tr>
+                        <td >ফান্ড</td>
+                        <td>: <select class="box" name="fund" id="fund">
+                                <option value="0">-সিলেক্ট করুন-</option>
+                            </select><em2> *</em2></td>          
                     </tr> 
                     <tr> 
                         <td>কারন</td>
                         <td> <textarea name="inDescription" ></textarea></td>           
                     </tr>
                     <tr>                    
-                        <td colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="cash_in" value="ক্যাশ ইন করুন" /></td>                           
+                        <td colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="ইনভেস্ট করুন" /></td>                           
                     </tr>    
                 </table>
                 </fieldset>
