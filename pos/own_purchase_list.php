@@ -13,6 +13,8 @@ $sql_select_purchase_list = $conn->prepare("SELECT in_input_date, chalan_no, pro
                                                     WHERE product_purchase.Product_chart_idproductchart = product_chart.idproductchart
                                                     AND product_purchase.pps_id = product_purchase_summary.ppsid
                                                     AND product_purchase_summary.cfs_user_idUser = cfs_user.idUser
+                                                    AND ins_ons_id = ?
+                                                    AND ins_ons_type = ?
                                                     ORDER BY in_input_date");
 
 $sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
@@ -259,10 +261,10 @@ function get_catagory() {
                             <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>এন্ট্রিকারী</strong></div></td>
                         </tr>
                         <?php
-                           $sql_select_purchase_list->execute();
+                           $sql_select_purchase_list->execute(array($storeID, $scatagory));
                            $arr_purchase = $sql_select_purchase_list->fetchAll();
                            foreach ($arr_purchase as $row) {
-                            $db_date = english2bangla($row["in_input_date"]);
+                            $db_date = english2bangla(date('d-m-Y', strtotime($row["in_input_date"])));
                             $db_chalan_no = english2bangla($row["chalan_no"]);
                             $db_procode = $row["pro_code"];
                             $db_pro_name = $row["pro_productname"];

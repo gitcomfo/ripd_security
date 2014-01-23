@@ -250,7 +250,7 @@ $sql_select_replace = $conn->prepare("SELECT *
                     $sql_select_replace->execute(array($office_type, $office_id));
                     $replace = $sql_select_replace->fetchAll();
                     foreach($replace as $row){
-                        $db_reprosum_replace_date = $row['reprosum_replace_date'];
+                        $db_reprosum_replace_date = english2bangla(date('d-m-Y', strtotime($row["reprosum_replace_date"])));
                         $db_account_name = $row['account_name'];
                         $db_reprosum_invoiceno = $row['reprosum_invoiceno'];
                         $db_reprosum_total_amount = $row['reprosum_total_amount'];
