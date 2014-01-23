@@ -68,6 +68,19 @@ if (isset($_POST['award_submit'])) {
             dateFormat: "%Y-%m-%d"
         });
     }
+    function beforeSubmit()
+    {
+    if ((document.getElementById('awd_name').value !="") 
+        && (document.getElementById('awd_pro').value != "")
+        && (document.getElementById('awd_date').value != "")
+        && (document.getElementById('awd_rec_type').value != "")
+        && (document.getElementById('awd_rec_name').value != ""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 <style type="text/css">
     @import "css/bush.css";
@@ -80,7 +93,7 @@ if ($_GET['action'] == 'new') {
         <div ><a href="award_entry.php?action=new"> নতুন এওয়ার্ড</a>&nbsp;&nbsp;<a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">এওয়ার্ড এর লিস্ট</a></div>
     </div>
     <div>
-        <form name="awd" action="" enctype="multipart/form-data"  method="post">
+        <form name="awd" action="" enctype="multipart/form-data"  method="post" onsubmit="return beforeSubmit()">
             <table class="formstyle" style =" width:90%; margin-left: 50px">    
                 <tr>
                     <th colspan="2">নতুন এওয়ার্ড প্রদান</th>
@@ -102,7 +115,7 @@ if ($_GET['action'] == 'new') {
                 </tr>
                 <tr>
                     <td >এওয়ার্ড তারিখ</td>
-                    <td>: <input class="textfield" type="date" id="date" placeholder="Date" name="awd_date" id="awd_date" value=""style="width: 250px"/><em2> *</em2></td>	  
+                    <td>: <input class="textfield" type="date" name="awd_date" id="awd_date" value=""style="width: 250px"/><em2> *</em2></td>	  
                 </tr>
                 <tr>
                     <td >এওয়ার্ড ছবি</td>
@@ -110,8 +123,8 @@ if ($_GET['action'] == 'new') {
                 </tr>
                 <tr>
                     <td >এওয়ার্ড গ্রহণকারীর ধরণ</td>
-                    <td>: <select class="box2" id="awd_rec_type" name="awd_rec_type" style="width: 250px"/>
-                                <option>----সিলেক্ট করুন----</option>
+                    <td>: <select class="box2" name="awd_rec_type" id="awd_rec_type" style="width: 250px"/>
+                    <option value="">----সিলেক্ট করুন----</option>
                                 <option value="company">কোম্পানি</option>
                                 <option value="employee">কর্মচারী</option>
                                 <option value="customer">কাস্টমার</option>

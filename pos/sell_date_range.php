@@ -10,7 +10,9 @@ $scatagory = $_SESSION['loggedInOfficeType'];
 
 $sql_select_sell_date_range = $conn->prepare("SELECT sal_totalamount, sal_invoiceno, idsalessummary
                                                             FROM sales_summary
-                                                            WHERE sal_salesdate >= ? AND sal_salesdate <= ?");
+                                                            WHERE sal_salesdate >= ? AND sal_salesdate <= ?
+                                                             AND sal_storeid = ?
+                                                            AND sal_store_type = ?");
 $sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
 
 function get_catagory() {
@@ -280,7 +282,7 @@ function get_catagory() {
                         if (isset($_POST['show'])) {
                             $start = $_POST['start'];
                             $end = $_POST['end'];
-                            $sql_select_sell_date_range->execute(array($start, $end));
+                            $sql_select_sell_date_range->execute(array($start, $end, $storeID, $scatagory));
                             $arr_purchase = $sql_select_sell_date_range->fetchAll();
                             foreach ($arr_purchase as $row) {
                                 $count++;

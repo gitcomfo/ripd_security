@@ -66,6 +66,21 @@ function deduction(checkvalue)
              document.getElementById('showReductionbox').style.visibility= 'hidden';  
            }
 }
+function beforeSubmit()
+{
+     var radiocheck = 0;
+      var radios = document.getElementsByName("deduct");
+      for(var i=0; i<radios.length; i++){
+	if(radios[i].checked) { radiocheck = 1; }
+	}
+    if ((document.getElementById('leave_name').value !="") 
+        && (radiocheck == 1))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 
 <div class="column6">
@@ -80,14 +95,14 @@ function deduction(checkvalue)
                 
                 <div>
                 <h2><a name="01" id="01"></a></h2><br/>
-                <form method="POST" action="leave_policy.php" style=" padding-left: 60px;">
+                <form method="POST" action="leave_policy.php" style=" padding-left: 60px;" onsubmit="return beforeSubmit()">
                     <table  class="formstyle" style="font-family: SolaimanLipi !important;" > 
                          <tr><th colspan="2" style="text-align: center;">নতুন ছুটি তৈরি</th></tr>
                           <tr>
                         <td colspan="2" style="text-align: center; font-size: 16px;color: green;">  <?php if($msg != "") {echo $msg;}?></td>                                               
                     </tr>
                     <tr><td style="text-align: right; width: 40%"><b>ছুটির নাম : </b></td>
-                                <td style="text-align: left; width: 60%"><input class="box" type="text" name="leave_name" class="box" /><em2> *</em2></td>
+                        <td style="text-align: left; width: 60%"><input class="box" type="text" name="leave_name" id="leave_name"class="box" /><em2> *</em2></td>
                         </tr>
                         <tr><td style="text-align: right; width: 40%"><b>ছুটির কোড :</b></td>
                             <td style="text-align: left; width: 60%"> <input class="box" type="text" readonly="" name="leave_code" class="box" value="<?php echo $leaveCode;?>" /></td>
