@@ -47,7 +47,7 @@ function beforeSubmit()
                 document.getElementById('info').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","includes/getAccountInfoForCashIn.php?acNo="+acNo,true);
+        xmlhttp.open("GET","includes/getAccountInfoForCashIn.php?acNo="+acNo+"&type=personal",true);
         xmlhttp.send();
     }
 </script>

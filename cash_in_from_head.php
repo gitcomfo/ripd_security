@@ -26,6 +26,30 @@ function beforeSubmit()
     }
 }
 </script>
+<script>
+    function getAccountInfo(acNo)
+    {
+        var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                document.getElementById('info').innerHTML=xmlhttp.responseText;
+            }
+        }
+        var what = document.querySelector('input[name = "officetype"]:checked').value;
+        xmlhttp.open("GET","includes/getAccountInfoForCashIn.php?acNo="+acNo+"&type=office&what="+what,true);
+        xmlhttp.send();
+    }
+</script>
 
 <div class="columnSld" style=" padding-left: 50px;">
     <div class="main_text_box">
@@ -35,8 +59,17 @@ function beforeSubmit()
                 <table  class="formstyle" style="width: 90%; margin: 1px 1px 1px 1px;">          
                     <tr><th colspan="2" style="text-align: center;font-size: 22px;">অফিস / সেলসস্টোরে টাকা প্রদান</th></tr>
                     <tr>
+                        <td>যেখানে টাকা দেয়া হবে</td>
+                        <td>: <input type="radio" name="officetype" value="office" /> অফিস &nbsp;&nbsp;&nbsp;&nbsp;
+                                 <input type="radio" name="officetype" value="s_store" /> সেলসস্টোর<em2> *</em2></td>          
+                    </tr>
+                    <tr>
                         <td >অফিস/ সেলসস্টোরের একাউন্ট নাম্বার</td>
-                        <td>: <input class="box" type="text" id="acNo" name="acNo" maxlength="15" /><em2> *</em2></td>          
+                        <td>: <input class="box" type="text" id="acNo" name="acNo" maxlength="15" onblur="getAccountInfo(this.value)" /><em2> *</em2></td>          
+                    </tr>
+                    <tr>
+                        <td>অফিস/ সেলসস্টোরের নাম</td>
+                        <td id="info"></td>
                     </tr>
                     <tr>
                         <td >মোট পরিমান</td>

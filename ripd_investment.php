@@ -3,22 +3,16 @@
 include 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
-
+$sql = $conn->prepare("SELECT * FROM main_fund ORDER BY fund_name");
 $ins_ripd_invest = $conn->prepare("INSERT INTO ripd_investment (invest_amount, invest_desc, indest_scandoc, invest_date,fk_fund_idfund) 
                                                             VALUES (?,?,?,NOW(),?)");
-function getFunds()
+function getFunds($sql)
 {
     echo "<option value= 0> -সিলেক্ট করুন- </option>";
-//    $sql = $conn->prepare("SELECT * FROM main_fund ORDER BY fund_name");
-//    $sql->execute(array());
-//    $arr_fund = $sql->fetchAll();
-//    foreach ($arr_fund as $fundrow) {
-//        echo "<option value=".$fundrow['idmainfund'].">". $fundrow['fund_name'] ."</option>";
-//    }
-    $reslt = mysql_query("SELECT * FROM main_fund ORDER BY fund_name");
-    while ($row = mysql_fetch_assoc($reslt))
-    {
-        echo "<option value=".$row['idmainfund'].">". $row['fund_name'] ."</option>";
+    $sql->execute(array());
+    $arr_fund = $sql->fetchAll();
+    foreach ($arr_fund as $fundrow) {
+        echo "<option value=".$fundrow['idmainfund'].">". $fundrow['fund_name'] ."</option>";
     }
 }
 if(isset($_POST['submit']))
@@ -85,7 +79,7 @@ function beforeSubmit()
                     <tr>
                         <td >ফান্ড</td>
                         <td>: <select class="box" name="fund" id="fund">
-                                <?php getFunds();?>
+                                <?php getFunds($sql);?>
                             </select><em2> *</em2></td>          
                     </tr> 
                     <tr> 
