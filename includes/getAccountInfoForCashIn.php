@@ -1,7 +1,7 @@
 <?php
 include_once './connectionPDO.php';
 $g_accountNo = $_GET['acNo'];
-$sel_cfs_user = $conn->prepare("SELECT * FROM cfs_user WHERE account_number= ? ");
+$sel_cfs_user = $conn->prepare("SELECT * FROM cfs_user WHERE account_number= ? AND cfs_account_status='active' ");
 $sel_cfs_user->execute(array($g_accountNo));
 $row = $sel_cfs_user->fetchAll();
 $countrow = count($row);
