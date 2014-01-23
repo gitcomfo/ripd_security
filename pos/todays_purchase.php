@@ -14,8 +14,8 @@ $sql_select_today_purchase_list = $conn->prepare("SELECT *
                                                     AND product_purchase.pps_id = product_purchase_summary.ppsid
                                                     AND product_purchase_summary.cfs_user_idUser = cfs_user.idUser
                                                     AND in_input_date = ?
-                                                    AND ins_ons_id = ?
-                                                    AND ins_ons_type = ?");
+                                                    AND in_onsid = ?
+                                                    AND in_ons_type = ?");
 $sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
 function get_catagory() {
     echo "<option value=0> -সিলেক্ট করুন- </option>";

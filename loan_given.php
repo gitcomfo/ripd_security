@@ -64,6 +64,18 @@ function calculateInstalment(month) // for calculation instalment amount********
     instalment = (instalment).toFixed(2);
     document.getElementById('instalment_amount').value = instalment;
 }
+function beforeSubmit()
+{
+    if ((document.getElementById('loanamount').value !="") 
+        && (document.getElementById('fund').value != "")
+        && (document.getElementById('instalment_period').value != "")
+        && (document.getElementById('instalment_amount').value != ""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 <script>
     function getEmployee(keystr) //search employee by account number***************
@@ -98,7 +110,7 @@ function calculateInstalment(month) // for calculation instalment amount********
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
         <div>
-            <form method="POST" onsubmit="" name="" enctype="multipart/form-data" action="">	
+            <form method="POST" onsubmit="return beforeSubmit()" enctype="multipart/form-data" action="">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          
                     <tr><th colspan="2" style="text-align: center;">লোন প্রদান</th></tr>
                     <?php
@@ -141,7 +153,7 @@ function calculateInstalment(month) // for calculation instalment amount********
                                 </tr>  
                                 <tr>
                                     <td style="padding-left: 0px;">ফান্ডের নাম</td>
-                                   <td>: <select class="box2" name="fund" style="width: 167px;">
+                                    <td>: <select class="box2" name="fund" id="fund"style="width: 167px;">
                                         <option value="">-সিলেক্ট করুন-</option>
                                         <option value="pension">পেনশন</option>
                                         <option value="ripd_income">রিপড ইনকাম</option>

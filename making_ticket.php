@@ -57,6 +57,17 @@ function setProgram(progNo,progid)
         document.getElementById('progResult').style.display = "none";
         getall(progid);
 }
+     function beforeSubmit(){
+    if ((document.getElementById('prgrm_number').value !="")
+    && (document.getElementById('ticket_prize').value !="")
+    && (document.getElementById('number_of_seat').value !="")
+    && (document.getElementById('extra_seat').value !=""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 <script  type="text/javascript">
     function getname(type)
@@ -218,7 +229,7 @@ $whoinbangla =  getProgramer($P_type);
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="program_management.php"><b>ফিরে যান</b></a></div> 
         <div>
-            <form method="POST" onsubmit="" action="making_ticket.php?step=02">	
+            <form method="POST" onsubmit="return beforeSubmit()" action="making_ticket.php?step=02">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
                     <tr><th colspan="4" style="text-align: center;">টিকেট মেইকিং</th></tr>
                     <tr>

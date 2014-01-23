@@ -222,6 +222,20 @@ function setLocation(offid)
         xmlhttp.open("GET","includes/updatePresentersFromThana.php?dsd="+district_id+"&dvd="+division_id+"&ttid="+thana_id+"&type="+type,true);
         xmlhttp.send();
     }
+    
+     function beforeSubmit(){
+    if ((document.getElementById('presentation_name').value !="")
+    && (document.getElementById('presenters').value !="")
+    && (document.getElementById('off_name').value !="")
+    && (document.getElementById('place').value !="")
+    && (document.getElementById('presentation_date').value !="")
+    && (document.getElementById('presentation_time').value !=""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 
 <!--*********************Presentation List****************** -->
@@ -325,7 +339,7 @@ if ($_GET['action'] == 'first') {
     </div>
 
     <div>
-        <form method="POST" autocomplete="off" aciton="presentation_schdule_combined.php?action=first">
+        <form method="POST" autocomplete="off" aciton="presentation_schdule_combined.php?action=first" onsubmit="return beforeSubmit()">
             <table class="formstyle" style =" width:78%">
 
                 <tr>
@@ -340,7 +354,7 @@ if ($_GET['action'] == 'first') {
                 ?>
                 <tr>
                     <td ><?php echo $typeinbangla;?> নাম</td>               
-                    <td>: <input  class="box" type="text" name="presentation_name" value="" /><em2> *</em2></td>   
+                    <td>: <input  class="box" type="text" name="presentation_name" id="presentation_name" value="" /><em2> *</em2></td>   
                 </tr>
                 <tr>
                     <td ><?php echo $whoinbangla?>-এর একাউন্ট নাম্বার</td>               
@@ -364,7 +378,7 @@ if ($_GET['action'] == 'first') {
                 </tr>
                 <tr>
                     <td > সময় </td>
-                    <td>: <input  class="box" type="time" name="presentation_time" value=""/><em2> *</em2></td>  
+                    <td>: <input  class="box" type="time" id="presentation_time" name="presentation_time" value=""/><em2> *</em2></td>  
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: center"><input type="submit" class="btn" name="new_submit" value="সেভ" >
