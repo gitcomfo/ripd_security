@@ -31,7 +31,7 @@ function beforeSubmit()
     <div class="main_text_box">
         <div style="padding-left: 9px;"><a href="accounting_sys_management.php"><b>ফিরে যান</b></a></div>
         <div>           
-            <form method="POST" onsubmit="return beforeSubmit();" action="cash_in.php">	
+            <form method="POST" onsubmit="return beforeSubmit();" action="">	
                 <table  class="formstyle" style="width: 90%; margin: 1px 1px 1px 1px;">          
                     <tr><th colspan="2" style="text-align: center;font-size: 22px;">অন্য অফিস/ সেলসস্টোরে টাকা ট্রান্সফার</th></tr>
                     <tr>
