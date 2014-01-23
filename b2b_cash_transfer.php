@@ -33,23 +33,26 @@ function beforeSubmit()
         <div>           
             <form method="POST" onsubmit="return beforeSubmit();" action="cash_in.php">	
                 <table  class="formstyle" style="width: 90%; margin: 1px 1px 1px 1px;">          
-                    <tr><th colspan="2" style="text-align: center;font-size: 22px;">রিপড হেড অফিস ইনভেস্ট</th></tr>
+                    <tr><th colspan="2" style="text-align: center;font-size: 22px;">অন্য অফিস/ সেলসস্টোরে টাকা ট্রান্সফার</th></tr>
+                    <tr>
+                        <td >অফিস/ সেলসস্টোরের একাউন্ট নাম্বার</td>
+                        <td>: <input class="box" type="text" id="acNo" name="acNo" maxlength="15" /><em2> *</em2></td>          
+                    </tr>
                     <tr>
                         <td >টোটাল ইন এ্যামাউন্ট</td>
                         <td>: <input class="box" type="text" id="t_in_amount" name="t_in_amount" onkeypress=' return numbersonly(event)' /><em2> *</em2> TK</td>          
                     </tr>
                     <tr>
-                        <td >ফান্ড</td>
-                        <td>: <select class="box" name="fund" id="fund">
-                                <option value="0">-সিলেক্ট করুন-</option>
-                            </select><em2> *</em2></td>          
+                        <td >পদ্ধতি</td>
+                        <td>: <input type="radio" name="cashInType" value="cash" /> ক্যাশ &nbsp;&nbsp;&nbsp;&nbsp;
+                                 <input type="radio" name="cashInType" value="cheque" /> চেক<em2> *</em2></td>          
                     </tr> 
                     <tr> 
                         <td>কারন</td>
                         <td> <textarea name="inDescription" ></textarea></td>           
                     </tr>
                     <tr>                    
-                        <td colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="ইনভেস্ট করুন" /></td>                           
+                        <td colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="ঠিক আছে" /></td>                           
                     </tr>    
                 </table>
                 </fieldset>

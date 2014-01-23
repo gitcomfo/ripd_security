@@ -52,7 +52,7 @@ function beforeSubmit()
                         <td> <textarea name="inDescription" ></textarea></td>           
                     </tr>
                     <tr>                    
-                        <td colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="ইনভেস্ট করুন" /></td>                           
+                        <td colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="টাকা প্রদান করুন" /></td>                           
                     </tr>    
                 </table>
                 </fieldset>

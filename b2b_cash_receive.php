@@ -1,5 +1,5 @@
 <?php
-include 'includes/session.inc';
+//include 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 ?>
@@ -33,23 +33,33 @@ function beforeSubmit()
         <div>           
             <form method="POST" onsubmit="return beforeSubmit();" action="cash_in.php">	
                 <table  class="formstyle" style="width: 90%; margin: 1px 1px 1px 1px;">          
-                    <tr><th colspan="2" style="text-align: center;font-size: 22px;">রিপড হেড অফিস ইনভেস্ট</th></tr>
+                    <tr><th colspan="2" style="text-align: center;font-size: 22px;">অন্য অফিস হতে টাকা গ্রহন</th></tr>
                     <tr>
-                        <td >টোটাল ইন এ্যামাউন্ট</td>
-                        <td>: <input class="box" type="text" id="t_in_amount" name="t_in_amount" onkeypress=' return numbersonly(event)' /><em2> *</em2> TK</td>          
+                        <td >প্রেরনকৃত অফিস/ সেলসস্টোরের একাউন্ট নাম্বার</td>
+                        <td>: <input class="box" type="text" id="acNo" name="acNo" maxlength="15" /></td>          
                     </tr>
                     <tr>
-                        <td >ফান্ড</td>
-                        <td>: <select class="box" name="fund" id="fund">
-                                <option value="0">-সিলেক্ট করুন-</option>
-                            </select><em2> *</em2></td>          
+                        <td >প্রেরনকৃত অফিস/ সেলসস্টোরের নাম</td>
+                        <td>: <input class="box" type="text" id="acNo" name="acNo" maxlength="15" /></td>          
+                    </tr>
+                    <tr>
+                        <td >গ্রহনকৃত মোট টাকা</td>
+                        <td>: <input class="box" type="text" id="t_in_amount" name="t_in_amount" onkeypress=' return numbersonly(event)' /> টাকা</td>          
+                    </tr>
+                    <tr>
+                        <td >পদ্ধতি</td>
+                        <td>: <input class="box" type="text" id="acNo" name="acNo" maxlength="15" /></td> 
+                    </tr>
+                    <tr>
+                        <td >টাকা প্রেরনের তারিখ</td>
+                        <td>: <input class="box" type="text" id="acNo" name="acNo" maxlength="15" /></td> 
                     </tr> 
                     <tr> 
                         <td>কারন</td>
                         <td> <textarea name="inDescription" ></textarea></td>           
                     </tr>
                     <tr>                    
-                        <td colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="ইনভেস্ট করুন" /></td>                           
+                        <td colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="গ্রহন করা হল" /></td>                           
                     </tr>    
                 </table>
                 </fieldset>
