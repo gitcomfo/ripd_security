@@ -74,7 +74,7 @@ $sql_total_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,emplo
 $sql_total_overtime =$conn->prepare("SELECT SUM(emp_extratime) FROM employee,employee_attendance WHERE emp_atnd_type='present' 
                                                             AND  year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
 $sql_select_emponsid = $conn->prepare("SELECT * FROM employee, cfs_user WHERE cfs_user_idUser = idUser AND idUser =? ");
-$sql_select_all_employee = $conn->prepare("SELECT * FROM cfs_user WHERE  cfs_account_status = 'active' AND idUser = ANY(SELECT cfs_user_idUser FROM employee  WHERE emp_ons_id = ?)");
+$sql_select_all_employee = $conn->prepare("SELECT * FROM cfs_user,employee WHERE  cfs_account_status = 'active' AND cfs_user_idUser= idUser AND emp_ons_id = ?");
 //********************************** for cheque *******************************************
 $sql_select_last_cheque_making = $conn->prepare("SELECT cheque_mak_datetime FROM  acc_user_cheque WHERE cheque_type = ? AND cheque_makerid = ?
                                                                                                         ORDER BY cheque_mak_datetime DESC LIMIT 1");

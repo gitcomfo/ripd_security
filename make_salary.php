@@ -1,5 +1,5 @@
 <?php
-//include_once 'includes/session.inc';
+include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 include_once './includes/selectQueryPDO.php';
@@ -17,7 +17,20 @@ if(isset($_POST['submit']))
     $attendrow = $select_attendance->fetchAll();
     foreach ($attendrow as $row) {
         $workingDays = $row['COUNT(idempattend)'];
-    }  
+    }
+    $sql_select_emponsid->execute(array($loginUSERid));
+    $row4 = $sql_select_emponsid->fetchAll();
+    foreach ($row4 as $emprow) {
+        $db_onsid = $emprow['emp_ons_id'];
+    }
+    $sel_salary_approval = $conn->prepare("SELECT * FROM salary_approval WHERE month_no= ? AND year_no=? AND salapp_onsid=? ");
+    $sel_salary_approval->execute(array($p_month,$p_year,$db_onsid));
+    $countrow = count($sel_salary_approval->fetchAll());
+    if($countrow > 0)
+    {
+        $msg = "দুঃখিত, এই মাসের বেতন তৈরি করা হয়ে গেছে";
+    }
+ else { $msg = "";}
 }
 if(isset($_POST['makesalary']))
 {
@@ -226,91 +239,94 @@ function beforeSubmit()
                                  <?php
                                  if(isset($_POST['submit']))
                                  {
-                                     $sl = 1;
-                                     $offTotalSalary = 0;
-                                     $sql_select_emponsid->execute(array($loginUSERid));
-                                     $row4 = $sql_select_emponsid->fetchAll();
-                                     foreach ($row4 as $emprow) {
-                                         $db_onsid = $emprow['emp_ons_id'];
-                                         $db_empID = $emprow['idEmployee'];
+                                     if($msg != "")
+                                     {
+                                         echo "<tr><td colspan='11' style='text-align:center;color:red;'>$msg</td></tr>";
                                      }
-                                     $sql_select_all_employee->execute(array($db_onsid));
-                                     $row5 = $sql_select_all_employee->fetchAll();
-                                     foreach ($row5 as $allemprow) 
-                                        {
-                                            $db_name = $allemprow['account_name'];
-                                            $db_userid = $allemprow['idUser'];
-                                           $sql_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? AND  year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
-                                           $status1 = "present";
-                                           $sql_attend->execute(array($status1,$p_year,$p_month,$db_userid));
-                                           $row1 = $sql_attend->fetchAll();
-                                           foreach ($row1 as $value) {
-                                               $presentDays = $value['COUNT(idempattend)'];
-                                           }
-                                           $status2 ="absent";
-                                           $sql_attend->execute(array($status2,$p_year,$p_month,$db_userid));
-                                           $row2 = $sql_attend->fetchAll();
-                                           foreach ($row2 as $value) {
-                                               $absentDays = $value['COUNT(idempattend)'];
-                                           }
-                                           $status3 = "leave";
-                                           $sql_attend->execute(array($status3,$p_year,$p_month,$db_userid));
-                                           $row3 = $sql_attend->fetchAll();
-                                           foreach ($row3 as $value) {
-                                               $leaveDays = $value['COUNT(idempattend)'];                                             
-                                           }
-                                           $sql_total_overtime->execute(array($p_year,$p_month,$db_userid));
-                                           $row7 = $sql_total_overtime->fetchAll();
-                                           foreach ($row7 as $value) {
-                                               $db_overtime = $value['SUM(emp_extratime)'];
-                                           }
-                                           $sel_emp_salary = $conn->prepare("SELECT * FROM employee_salary WHERE user_id= ?");
-                                           $sel_emp_salary->execute(array($db_empID));
-                                           $row6 = $sel_emp_salary->fetchAll();
-                                           foreach ($row6 as $salaryrow) {
-                                               $db_main_salary = $salaryrow['total_salary'];
-                                               $db_pension = $salaryrow['pension'];
-                                               $totalsalary = $db_main_salary - $db_pension;
-                                               $offTotalSalary = $offTotalSalary+$totalsalary;
-                                           }
-                                           $sql_select_employee_grade->execute(array($db_empID));
-                                           $row8 = $sql_select_employee_grade->fetchAll();
-                                           foreach ($row8 as $gradrow) {
-                                               $db_empgrade = $gradrow['grade_name'];
-                                           }
-                                           $sql_select_view_emp_post = $conn->prepare("SELECT post_name FROM employee_posting,post_in_ons,post 
-                                               WHERE Employee_idEmployee = ? AND ons_relation_idons_relation=? AND post_in_ons_idpostinons= idpostinons 
-                                               AND Post_idPost= idPost ORDER BY posting_date DESC LIMIT 1");
-                                           $sql_select_view_emp_post->execute(array($db_empID,$db_onsid));
-                                           $row9 = $sql_select_view_emp_post->fetchAll();
-                                           foreach ($row9 as $postrow) {
-                                               $db_post = $postrow['post_name'];
-                                           }
-                                           echo "<tr><td style='border: 1px solid black; text-align: center'>".english2bangla($sl)."</td>
-                                               <td style='border: 1px solid black; text-align: left'>$db_name<input type='hidden' name='empCFSid[$sl]' value='$db_userid' /></td>
-                                                <td style='border: 1px solid black; text-align: center'>$db_empgrade<input type='hidden' name='onsID' value='$db_onsid' /></td>
-                                                <td style='border: 1px solid black; text-align: center'>$db_post</td>
-                                               <td style='border: 1px solid black; text-align: left'>
-                                                <b>উপস্থিতঃ</b> $presentDays দিন</br>
-                                                <b>অনুপস্থিতঃ</b> $absentDays দিন</br>
-                                                <b>ছুটিঃ</b> $leaveDays দিন</br>
-                                                <b>ওভারটাইমঃ</b> $db_overtime ঘণ্টা    
-                                               </td>
-                                               <td style='border: 1px solid black; text-align: center'><a style='cursor:pointer;color:blue;' id='details[$sl]' ><u>বিস্তারিত</u></a></td>
-                                               <td style='border: 1px solid black; text-align: center'>".$db_main_salary."</td>
-                                               <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary[$sl]' id='monthlySalary[$sl]' value='$totalsalary' />".$totalsalary."</td>
-                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay[$sl]' name='xtrapay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryPlus(this.value,$sl)'  /></td>
-                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' id='deductpay[$sl]' name='deductpay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryMinus(this.value,$sl)' /></td>
-                                               <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary[$sl]' name='totalSalary[]' value='$totalsalary' /></td></tr>";
-                                           $sl++;
+                                else 
+                                    {
+                                        $sl = 1;
+                                        $offTotalSalary = 0;
+                                        $sql_select_all_employee->execute(array($db_onsid));
+                                        $row5 = $sql_select_all_employee->fetchAll();
+                                        foreach ($row5 as $allemprow) 
+                                           {
+                                               $db_name = $allemprow['account_name'];
+                                               $db_userid = $allemprow['idUser'];
+                                               $db_empID = $allemprow['idEmployee'];
+                                               $sql_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? AND  year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
+                                               $status1 = "present";
+                                               $sql_attend->execute(array($status1,$p_year,$p_month,$db_userid));
+                                               $row1 = $sql_attend->fetchAll();
+                                               foreach ($row1 as $value) {
+                                                   $presentDays = $value['COUNT(idempattend)'];
+                                               }
+                                               $status2 ="absent";
+                                               $sql_attend->execute(array($status2,$p_year,$p_month,$db_userid));
+                                               $row2 = $sql_attend->fetchAll();
+                                               foreach ($row2 as $value) {
+                                                   $absentDays = $value['COUNT(idempattend)'];
+                                               }
+                                               $status3 = "leave";
+                                               $sql_attend->execute(array($status3,$p_year,$p_month,$db_userid));
+                                               $row3 = $sql_attend->fetchAll();
+                                               foreach ($row3 as $value) {
+                                                   $leaveDays = $value['COUNT(idempattend)'];                                             
+                                               }
+                                               $sql_total_overtime->execute(array($p_year,$p_month,$db_userid));
+                                               $row7 = $sql_total_overtime->fetchAll();
+                                               foreach ($row7 as $value) {
+                                                   $db_overtime = $value['SUM(emp_extratime)'];
+                                               }
+                                               $sel_emp_salary = $conn->prepare("SELECT * FROM employee_salary WHERE user_id= ?");
+                                               $sel_emp_salary->execute(array($db_empID));
+                                               $row6 = $sel_emp_salary->fetchAll();
+                                               foreach ($row6 as $salaryrow) {
+                                                   $db_main_salary = $salaryrow['total_salary'];
+                                                   $db_pension = $salaryrow['pension'];
+                                                   $totalsalary = $db_main_salary - $db_pension;
+                                                   $offTotalSalary = $offTotalSalary+$totalsalary;
+                                               }
+                                               $sql_select_employee_grade->execute(array($db_empID));
+                                               $row8 = $sql_select_employee_grade->fetchAll();
+                                               foreach ($row8 as $gradrow) {
+                                                   $db_empgrade = $gradrow['grade_name'];
+                                               }
+                                               $sql_select_view_emp_post = $conn->prepare("SELECT post_name FROM employee_posting,post_in_ons,post 
+                                                   WHERE Employee_idEmployee = ? AND ons_relation_idons_relation=? AND post_in_ons_idpostinons= idpostinons 
+                                                   AND Post_idPost= idPost ORDER BY posting_date DESC LIMIT 1");
+                                               $sql_select_view_emp_post->execute(array($db_empID,$db_onsid));
+                                               $row9 = $sql_select_view_emp_post->fetchAll();
+                                               foreach ($row9 as $postrow) {
+                                                   $db_post = $postrow['post_name'];
+                                               }
+                                               echo "<tr><td style='border: 1px solid black; text-align: center'>".english2bangla($sl)."</td>
+                                                   <td style='border: 1px solid black; text-align: left'>$db_name<input type='hidden' name='empCFSid[$sl]' value='$db_userid' /></td>
+                                                    <td style='border: 1px solid black; text-align: center'>$db_empgrade<input type='hidden' name='onsID' value='$db_onsid' /></td>
+                                                    <td style='border: 1px solid black; text-align: center'>$db_post</td>
+                                                   <td style='border: 1px solid black; text-align: left'>
+                                                    <b>উপস্থিতঃ</b> $presentDays দিন</br>
+                                                    <b>অনুপস্থিতঃ</b> $absentDays দিন</br>
+                                                    <b>ছুটিঃ</b> $leaveDays দিন</br>
+                                                    <b>ওভারটাইমঃ</b> $db_overtime ঘণ্টা    
+                                                   </td>
+                                                   <td style='border: 1px solid black; text-align: center'><a style='cursor:pointer;color:blue;' id='details[$sl]' ><u>বিস্তারিত</u></a></td>
+                                                   <td style='border: 1px solid black; text-align: center'>".$db_main_salary."</td>
+                                                   <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary[$sl]' id='monthlySalary[$sl]' value='$totalsalary' />".$totalsalary."</td>
+                                                   <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay[$sl]' name='xtrapay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryPlus(this.value,$sl)'  /></td>
+                                                   <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' id='deductpay[$sl]' name='deductpay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryMinus(this.value,$sl)' /></td>
+                                                   <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary[$sl]' name='totalSalary[]' value='$totalsalary' /></td></tr>";
+                                               $sl++;
+                                       }
+                                       echo '<tr>
+                                                <td colspan="10" style="border: 1px solid black; text-align: right"><b>মোট</b></td>
+                                                <td style="border: 1px solid black; text-align: right;padding-left:0px;"><input class="box" type="text" style="width:92%;text-align:right;" readonly name="totalOfficeSalary" id="totalOfficeSalary" value="'.$offTotalSalary.'" /></td>
+                                            </tr>
+                                            <tr><td colspan="11" style="text-align: center;"></br><input class="btn" readonly="" type="submit" name="makesalary" value="বেতন প্রদান করুন" style="width: 150px;" /></td></tr>';
                                     }
                                  }
                                 ?>
-                                    <tr>
-                                        <td colspan="10" style='border: 1px solid black; text-align: right'><b>মোট</b></td>
-                                        <td style='border: 1px solid black; text-align: right;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly name='totalOfficeSalary' id="totalOfficeSalary" value="<?php echo $offTotalSalary;?>" /></td>
-                                    </tr>
-                                    <tr><td colspan="11" style="text-align: center;"></br><input class="btn" readonly="" type="submit" name="makesalary" value="বেতন প্রদান করুন" style="width: 150px;" /></td></tr>
+                                    
                                 </tbody>
                             </table>
                             </form>
