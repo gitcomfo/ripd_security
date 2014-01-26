@@ -384,8 +384,8 @@ function getParentOfiice(str_key) // for searching parent offices
 function beforeSubmit()
 {
     if ((document.getElementById('office_name').value != "")
-                && (document.getElementById('mobile_number').innerHTML != "")
-                && (document.getElementById('owner_Name').innerHTML == "")
+                && (document.getElementById('mobile_number').value != "")
+                && (document.getElementById('owner_Name').value != "")
                 && (document.getElementById('advanced_payment1').value !="")
                 && (document.getElementById('floor_number').value !="")
                 && (document.getElementById('office_rent1').value !="")

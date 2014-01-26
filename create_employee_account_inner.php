@@ -71,26 +71,20 @@ if (isset($_POST['submit1'])) {
     $image_path = "pic/" . $image_name;
     if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
-    } else {
-        echo "Invalid file format.";
-    }
-
+    } 
+    
     $extension = end(explode(".", $_FILES["scanDoc_signature"]["name"]));
     $sign_name = "emp-" .$emp."-sign.".$extension;
     $sing_path = "sign/" . $sign_name;
     if (($_FILES["scanDoc_signature"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_signature"]["tmp_name"], "sign/" . $sign_name);
-    } else {
-        echo "Invalid file format.";
-    }
+    } 
 
     $extension = end(explode(".", $_FILES["scanDoc_finger_print"]["name"]));
     $finger_name = "emp-" .$emp."-finger.".$extension;
     $finger_path = "fingerprints/" . $finger_name;
     if (($_FILES["scanDoc_finger_print"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["scanDoc_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
-    } else {
-        echo "Invalid file format.";
     }
     mysql_query("START TRANSACTION");
     $sql_update_employee = mysql_query("UPDATE employee_information SET employee_fatherName='$employee_fatherName', 
@@ -131,12 +125,11 @@ if (isset($_POST['submit1'])) {
     //employee address_type=Present
     $sql_e_insert_current_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana, post_idpost, village_idvillage ,adrs_cepng_id)
-                                     VALUES ('Present', '$e_house', '$e_house_no', '$e_road', 'emp', '$e_post_code','$e_Thana_idThana','$e_Post_idPost', '$e_Village_idVillage', '$emp')") or exit(mysql_error());
+                                     VALUES ('Present', '$e_house', '$e_house_no', '$e_road', 'emp', '$e_post_code','$e_Thana_idThana','$e_Post_idPost', '$e_Village_idVillage', '$emp')");
     //employee address_type=Permanent
     $sql_ep_insert_permanent_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana,  post_idpost, village_idvillage ,adrs_cepng_id)
-                                     VALUES ('Permanent', '$ep_house', '$ep_house_no', '$ep_road', 'emp', '$ep_post_code','$ep_Thana_idThana', '$ep_Post_idPost', '$ep_Village_idVillage', '$emp')") or exit(mysql_error());;
-
+                                     VALUES ('Permanent', '$ep_house', '$ep_house_no', '$ep_road', 'emp', '$ep_post_code','$ep_Thana_idThana', '$ep_Post_idPost', '$ep_Village_idVillage', '$emp')");
     if ($sql_update_employee || $sql_e_insert_current_address || $sql_ep_insert_permanent_address) {
         mysql_query("COMMIT");
         $msg = "তথ্য সংরক্ষিত হয়েছে";
@@ -163,9 +156,7 @@ if (isset($_POST['submit1'])) {
     $image_path = "pic/" . $image_name;
     if (($_FILES["nominee_picture"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["nominee_picture"]["tmp_name"], "pic/" . $image_name);
-    } else {
-        echo "Invalid file format.";
-    }
+    } 
 mysql_query("START TRANSACTION");
     $sql_nominee = mysql_query("INSERT INTO nominee(nominee_name, nominee_relation, nominee_mobile,
                                        nominee_email, nominee_national_ID, nominee_age, nominee_passport_ID, nominee_picture,cep_type, cep_nominee_id) 
@@ -230,8 +221,8 @@ mysql_query("START TRANSACTION");
     $a = count($e_ex_name);
     mysql_query("START TRANSACTION");
     for ($i = 0; $i < $a; $i++) {
-        $sql_insert_emp_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) VALUES ('$e_ex_name[$i]', '$e_pass_year[$i]','$e_institute[$i]','$e_board[$i]','$e_gpa[$i]','emp','$emp2');";
-        $emp_edu = mysql_query($sql_insert_emp_edu) or exit('query failed: ' . mysql_error());
+        $sql_insert_emp_edu = "INSERT INTO `education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) VALUES ('$e_ex_name[$i]', '$e_pass_year[$i]','$e_institute[$i]','$e_board[$i]','$e_gpa[$i]','emp','$emp2');";
+        $emp_edu = mysql_query($sql_insert_emp_edu);
     }
     //nominee education
      $sel_nominee = mysql_query("SELECT * FROM nominee WHERE cep_nominee_id= $emp2 AND cep_type='emp'");
@@ -244,8 +235,8 @@ mysql_query("START TRANSACTION");
     $n_gpa = $_POST['n_gpa'];
     $b = count($n_ex_name);
     for ($i = 0; $i < $b; $i++) {
-        $sql_insert_nom_edu = "INSERT INTO " . $dbname . ".`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) VALUES ('$n_ex_name[$i]', '$n_pass_year[$i]','$n_institute[$i]','$n_board[$i]','$n_gpa[$i]','nmn','$db_nomID');";
-        $nom_edu = mysql_query($sql_insert_nom_edu) or exit('query failed: ' . mysql_error());
+        $sql_insert_nom_edu = "INSERT INTO`education` ( `exam_name` ,`passing_year` ,`institute_name`,`board`,`gpa`,`education_type`,`cepn_id`) VALUES ('$n_ex_name[$i]', '$n_pass_year[$i]','$n_institute[$i]','$n_board[$i]','$n_gpa[$i]','nmn','$db_nomID');";
+        $nom_edu = mysql_query($sql_insert_nom_edu);
     }
     if ($emp_edu || $nom_edu) {
         mysql_query("COMMIT");
@@ -256,7 +247,7 @@ mysql_query("START TRANSACTION");
     }
 }
 elseif (isset($_POST['submit4'])) {
-    $result = mysql_query("SELECT  * FROM $dbname.employee_information WHERE idEmployee_information='$g_id'");
+    $result = mysql_query("SELECT  * FROM employee_information WHERE idEmployee_information='$g_id'");
     $employee_id = mysql_fetch_array($result);
     $emp3 = $employee_id['Employee_idEmployee'];
     $pathArray = array();

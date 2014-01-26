@@ -90,7 +90,7 @@ if (!file_exists($aab_picture))
                             </tr>
                             <tr>
                                 <td><b>শুরুর তারিখ</b></td>
-                                <td>: <?php echo $date; ?></td>
+                                <td>: <?php echo english2bangla($date); ?></td>
                             </tr>
                         </table>
                  </fieldset>
