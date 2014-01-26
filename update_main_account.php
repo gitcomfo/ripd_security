@@ -5,6 +5,15 @@ include_once 'includes/header.php';
 $input= $_GET['id'];
 $arrayAccountType = array('employee' => 'কর্মচারীর', 'customer' => 'কাস্টমারের', 'proprietor' => 'প্রোপ্রাইটারের');
 $showAccountType  = $arrayAccountType[$input];
+$loggedInOfficeType = $_SESSION['loggedInOfficeType'];
+$loggedInOfficeId = $_SESSION['loggedInOfficeID'];
+$sql_select_id_ons_relation = $conn->prepare("SELECT idons_relation FROM  ons_relation WHERE catagory =  ? AND add_ons_id = ?");
+$sql_select_id_ons_relation->execute(array($loggedInOfficeType,$loggedInOfficeId));
+$row = $sql_select_id_ons_relation->fetchAll();
+foreach ($row as $value) {
+    $loggedInOnSid = $value['idons_relation'];
+}
+
 ?>
 <title>আপডেট অ্যাকাউন্ট</title>
 <style type="text/css">@import "css/style.css";</style>
@@ -119,7 +128,7 @@ function infoFromThana2()
                             }
                     }
                     elseif($input == 'employee'){
-                        $sql_officeTable = "SELECT * from cfs_user,employee,ons_relation WHERE idons_relation=emp_ons_id AND user_type='employee'
+                        $sql_officeTable = "SELECT * from cfs_user,employee WHERE emp_ons_id = $loggedInOnSid AND (user_type='employee' OR user_type='presenter' OR user_type='programmer' OR user_type='trainer')
                                                         AND cfs_user_idUser= idUser ORDER BY account_name ASC";
                         $rs = mysql_query($sql_officeTable);
                             while ($row_officeNcontact = mysql_fetch_array($rs)) {
@@ -128,26 +137,12 @@ function infoFromThana2()
                             $db_email = $row_officeNcontact['email'];
                             $db_mobile = $row_officeNcontact['mobile'];
                             $db_empID = $row_officeNcontact['idEmployee'];
-                            $db_onsType = $row_officeNcontact['catagory'];
-                            $db_onsID = $row_officeNcontact['add_ons_id'];
-                            if($db_onsType == 'office')
-                            {
-                                    $off_sel = mysql_query("SELECT * FROM office WHERE idOffice = $db_onsID");
-                                    $offrow = mysql_fetch_assoc($off_sel);
-                                    $onsName = $offrow['office_name'];
-                            }
-                            else 
-                                {
-                                    $off_sel = mysql_query("SELECT * FROM sales_store WHERE idSales_store = $db_onsID");
-                                    $offrow = mysql_fetch_assoc($off_sel);
-                                    $onsName = $offrow['salesStore_name'];
-                                }
                             echo "<tr>";
                             echo "<td>$db_Name</td>";
                             echo "<td>$db_accNumber</td>";
                             echo "<td>$db_email</td>";
                             echo "<td>$db_mobile</td>";
-                            echo "<td>$onsName</td>";
+                            echo "<td>".$_SESSION['loggedInOfficeName']."</td>";
                             $v = base64_encode($db_empID);
                             echo "<td><a href='update_employee_account_inner.php?id=$v'>আপডেট</a></td>";
                             echo "</tr>";
