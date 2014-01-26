@@ -1,8 +1,8 @@
 <?php
 include_once 'getSelectedThana.php';
 include_once './MiscFunctions.php';
+$arrayEmpStatus = array('posting' => 'কর্মচারী', 'contract' => 'চুক্তিবদ্ধ');
                 $joinArray = implode(',', $arr_thanaID);
-           //   print_r($joinArray);
                 $type = $_GET['type'];
                 $programType = getTypeFromWho($type);
                 $sql_list = "SELECT * FROM cfs_user, employee, address, thana, district, division WHERE idUser=employee.cfs_user_idUser 
@@ -16,6 +16,7 @@ include_once './MiscFunctions.php';
                     $db_rl_presenter_mobile = $row_prstn['mobile'];
                     $db_rl_presenter_email = $row_prstn['email'];
                     $db_rl_presenter_id = $row_prstn['idEmployee'];
+                    $db_rl_presenter_status = $row_prstn['status'];
                     $db_thana = $row_prstn['thana_name'];
                     $db_district = $row_prstn['district_name'];
                     $db_division = $row_prstn['division_name'];
@@ -24,6 +25,7 @@ include_once './MiscFunctions.php';
                         <td>$db_rl_presenter_acc</td>
                         <td>$db_rl_presenter_mobile</td>
                         <td>$db_rl_presenter_email</td>
+                        <td> $arrayEmpStatus[$db_rl_presenter_status]</td>    
                         <td>$db_thana</td>
                         <td>$db_district</td>
                         <td>$db_division</td>
