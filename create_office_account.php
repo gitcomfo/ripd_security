@@ -374,7 +374,7 @@ function getParentOfiice(str_key) // for searching parent offices
                }
                 else
                     {document.getElementById('parentResult').style.visibility = "visible";
-                document.getElementById('parentResult').setAttribute('style','position:absolute;top:82%;left:47.5%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('parentResult').setAttribute('style','position:absolute;top:78%;left:49.5%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('parentResult').innerHTML=xmlhttp.responseText;
         }

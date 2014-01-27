@@ -17,7 +17,7 @@ if($offType == 'office')
         $officeAddress = $offrow['office_details_address']; 
         $officeEmail = $offrow['office_email']; 
         $officeOpeningDate = $offrow['opening_date']; 
-        $date = date("d-m-Y",  strtotime($officeOpeningDate));
+        $date = date("d/m/Y",strtotime($officeOpeningDate));
         $officebranchName = $offrow['branch_name'];
         $parent_id = $offrow['parent_id'];
         $sql_select_office -> execute(array($parent_id));
@@ -78,7 +78,7 @@ if (!file_exists($aab_picture))
 <div class="columnSubmodule">
     <table class="formstyle">    
         <tr>
-            <th colspan="2" style="font-size: 15px;">স্বাগতম <?php echo $officename;?> -এর এডমিন</th>
+            <th colspan="2" style="font-size: 15px;">স্বাগতম <?php echo $officename;?></th>
         </tr>
         <tr>
             <td>
