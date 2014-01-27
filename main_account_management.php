@@ -17,7 +17,7 @@ if($offType == 'office')
         $officeAddress = $offrow['office_details_address']; 
         $officeEmail = $offrow['office_email']; 
         $officeOpeningDate = $offrow['opening_date']; 
-        $date = date("d-m-Y",  strtotime($officeOpeningDate));
+        $date = date("d/m/Y",strtotime($officeOpeningDate));
         $officebranchName = $offrow['branch_name'];
         $parent_id = $offrow['parent_id'];
         $sql_select_office -> execute(array($parent_id));
