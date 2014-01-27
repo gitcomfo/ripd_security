@@ -26,6 +26,16 @@ include_once 'includes/MiscFunctions.php';
         xmlhttp.open("GET","includes/updateOfficeFromThanaForCheque.php?dsd="+district_id+"&dvd="+division_id+"&ttid="+thana_id,true);
         xmlhttp.send();
     }
+    
+    function beforeSubmit()
+{
+    if ((document.getElementById('t_in_amount').value !=""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 <script>
     var fieldName='chkName[]';
@@ -111,7 +121,7 @@ include_once 'includes/MiscFunctions.php';
     <div class="main_text_box">
         <div style="padding-left: 9px;"><a href="accounting_sys_management.php"><b>ফিরে যান</b></a></div>
         <div>           
-            <form method="POST" onsubmit="" name="frm" action="cheque_make.php">	
+            <form method="POST" onsubmit="return beforeSubmit()" name="frm" action="cheque_make.php">	
                 <table  class="formstyle" style="width: 90%; margin: 1px 1px 1px 1px;">          
                     <tr><th colspan="2" style="text-align: center;">চেক মেইকিং ফর ইন</th></tr>
                     <tr>
@@ -134,7 +144,7 @@ include_once 'includes/MiscFunctions.php';
                     </tr>
                     <tr>
                         <td >টোটাল ইন এ্যামাউন্ট</td>
-                        <td>:   <input class="box" type="text" id="t_in_amount" name="t_in_amount" onkeypress=' return numbersonly(event)' /></td>          
+                        <td>:   <input class="box" type="text" id="t_in_amount" name="t_in_amount" onkeypress=' return numbersonly(event)' /><em2> *</em2></td>          
                     </tr> 
                     <tr> 
                         <td >সিলেক্ট এরিয়া</td>

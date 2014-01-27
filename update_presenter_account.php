@@ -68,7 +68,7 @@ function infoFromThana2()
                 <tbody>                    
                     <?php
                         $sql_officeTable = "SELECT * from cfs_user,employee WHERE (user_type='programmer' OR user_type='presenter' OR user_type='trainer')
-                                                        AND cfs_user_idUser= idUser ORDER BY user_type,account_name ASC";
+                                                        AND status='contract' AND cfs_user_idUser= idUser ORDER BY user_type,account_name ASC";
                         $rs = mysql_query($sql_officeTable);
                             while ($row_officeNcontact = mysql_fetch_array($rs)) {
                             $db_Name = $row_officeNcontact['account_name'];

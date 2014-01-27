@@ -7,6 +7,7 @@ include_once './includes/insertQueryPDO.php';
 include_once './includes/updateQueryPDO.php';
  $loginUSERid = $_SESSION['userIDUser'] ;
 $g_approvalID = $_GET['id'];
+$g_nfcid = $_GET['nfcid'];
 $sel_select_sal_approval = $conn->prepare("SELECT * FROM salary_approval WHERE salappid= ?");
 $sel_select_sal_approval->execute(array($g_approvalID));
 $row = $sel_select_sal_approval->fetchAll();
@@ -52,35 +53,33 @@ foreach ($row3 as $value) {
 
 if(isset($_POST['givsalary']))
 {
+    $p_approvalID = $_POST['salaApprovalID'];
+    $p_officeTotalSalary = $_POST['totalOfficeSalary'];
     $p_empCfsID = $_POST['empCFSid'];
-    $p_monthlyPay = $_POST['monthlySalary'];
     $p_xtrapay = $_POST['xtrapay'];
     $p_deduct = $_POST['deductpay'];
     $p_totalpay = $_POST['totalSalary'];
-    $p_monthNo = $_POST['monthNo'];
-    $p_yearNo = $_POST['yearNo'];
     $numberOfRows = count($p_empCfsID);
     
     $conn->beginTransaction(); 
-    $sqlrslt1= $insert_sal_approval->execute(array($p_monthNo,$p_yearNo,$loginUSERid));
-    $sal_approval_id = $conn->lastInsertId();
+    $sqlrslt1= $sql_update_sal_approval->execute(array($p_officeTotalSalary,$loginUSERid,$p_approvalID));
     for($i=1;$i<=$numberOfRows;$i++)
     {
-         $sqlrslt2= $insert_sal_chart->execute(array($p_monthNo, $p_yearNo, $p_monthlyPay[$i], $p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i], $p_empCfsID[$i], $sal_approval_id));
+         $sqlrslt2= $sql_update_salary_chart->execute(array($p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i-1], $p_approvalID,$p_empCfsID[$i]));
     }
-   
-     if($sqlrslt1  && $sqlrslt2)
+    $status = 'complete';
+    $sqlrslt3 = $sql_update_notification->execute(array($status,$g_nfcid));
+     if($sqlrslt1  && $sqlrslt2 && $sqlrslt3)
         {
             $conn->commit();
-            echo "<script>alert('বেতন সফলভাবে এন্ট্রি হয়েছে')</script>";
+            echo "<script>alert('বেতন সফলভাবে মঞ্জুর হয়েছে')</script>";
         }
         else {
             $conn->rollBack();
-            echo "<script>alert('দুঃখিত,বেতন এন্ট্রি হয়নি')</script>";
+            echo "<script>alert('দুঃখিত,বেতন মঞ্জুর হয়নি')</script>";
         }
 }
 ?>
-<title>নিয়মিত কর্মচারী হাজিরা</title>
 <style type="text/css"> @import "css/bush.css";</style>
 <style type="text/css">
     #search {
@@ -109,7 +108,7 @@ function calculateSalaryMinus(deduct,i)
     var salary = (monthlypay+ xtrapay) - Number(deduct);
     document.getElementById("totalSalary["+i+"]").value = salary;
     var finalsalary = 0;
-    for (var j=1;j<=document.getElementsByName('totalSalary').length;j++){
+    for (var j=1;j<=document.getElementsByName('totalSalary[]').length;j++){
         finalsalary = finalsalary + Number(document.getElementById('totalSalary['+j+']').value);
     }
     document.getElementById('totalOfficeSalary').value = finalsalary;
@@ -121,7 +120,7 @@ function calculateSalaryPlus(xtra,i)
     var salary = (monthlypay - deductpay) + Number(xtra);
     document.getElementById("totalSalary["+i+"]").value = salary;
     var finalsalary = 0;
-    for (var j=1;j<=document.getElementsByName('totalSalary').length;j++){
+    for (var j=1;j<=document.getElementsByName('totalSalary[]').length;j++){
         finalsalary = finalsalary + Number(document.getElementById('totalSalary['+j+']').value);
     }
     document.getElementById('totalOfficeSalary').value = finalsalary;
@@ -129,7 +128,7 @@ function calculateSalaryPlus(xtra,i)
 </script>
 
     <div class="main_text_box" style="width: 100% !important;">
-        <div style="padding-left: 50px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 50px;"><a href="notification.php"><b>ফিরে যান</b></a></div>
           <div>
                <table  class="formstyle" style="width: 90% !important; font-family: SolaimanLipi !important;margin:0 auto !important;">          
                     <tr><th colspan="6" style="text-align: center;">বেতন মঞ্জুর</th></tr>
@@ -209,8 +208,6 @@ function calculateSalaryPlus(xtra,i)
                                                $row6 = $sel_emp_salary->fetchAll();
                                                foreach ($row6 as $salaryrow) {
                                                    $db_main_salary = $salaryrow['total_salary'];
-                                                   $db_pension = $salaryrow['pension'];
-                                                   $totalsalary = $db_main_salary - $db_pension;
                                                }
                                                $sql_select_employee_grade->execute(array($db_empID));
                                                $row8 = $sql_select_employee_grade->fetchAll();
@@ -227,7 +224,7 @@ function calculateSalaryPlus(xtra,i)
                                                }
                                                echo "<tr><td style='border: 1px solid black; text-align: center'>".  english2bangla($sl)."</td>
                                                    <td style='border: 1px solid black; text-align: left'>$db_name<input type='hidden' name='empCFSid[$sl]' value='$db_userid' /></td>
-                                                    <td style='border: 1px solid black; text-align: center'>$db_empgrade</td>
+                                                    <td style='border: 1px solid black; text-align: center'>$db_empgrade<input type='hidden' name='salaApprovalID' value='$g_approvalID' /></td>
                                                     <td style='border: 1px solid black; text-align: center'>$db_post</td>
                                                    <td style='border: 1px solid black; text-align: left'>
                                                     <b>উপস্থিতঃ</b> $presentDays দিন</br>
@@ -240,7 +237,7 @@ function calculateSalaryPlus(xtra,i)
                                                    <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary[$sl]' id='monthlySalary[$sl]' value='$db_monthlypay' />".$db_monthlypay."</td>
                                                    <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay[$sl]' name='xtrapay[$sl]' onkeypress='return checkIt(event)' value='$db_xtrapay' onkeyup='calculateSalaryPlus(this.value,$sl)' /></td>
                                                    <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' id='deductpay[$sl]' name='deductpay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryMinus(this.value,$sl)' value='$db_deductpay' /></td>
-                                                   <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary[$sl]' name='totalSalary' value='$db_totalpay' /></td></tr>";
+                                                   <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly id='totalSalary[$sl]' name='totalSalary[]' value='$db_totalpay' /></td></tr>";
                                                $sl++;
                                         }
                                 ?>

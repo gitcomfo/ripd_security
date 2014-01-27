@@ -1,5 +1,5 @@
 <?php
-//include 'includes/session.inc';
+include 'includes/session.inc';
 include_once 'includes/header.php';
 $msg = "";
 function get_catagory()
@@ -175,7 +175,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
 </script>  
 
     <div class="main_text_box">
-        <div style="padding-left: 112px;"><a href=""><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 112px;"><a href="product_info_management.php"><b>ফিরে যান</b></a></div>
             <div>           
                 <form method="POST" onsubmit="" >	
                     <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          

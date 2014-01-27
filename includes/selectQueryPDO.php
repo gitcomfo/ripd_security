@@ -49,7 +49,8 @@ $sql_select_id_ons_relation = $conn->prepare("SELECT idons_relation FROM  ons_re
 $sql_select_ons_relation = $conn->prepare("SELECT * FROM ons_relation WHERE idons_relation=? ");
 $sel_office_employee = $conn->prepare("SELECT * FROM cfs_user,employee,ons_relation WHERE catagory='office' 
                                                                   AND add_ons_id=? AND idons_relation=emp_ons_id 
-                                                                  AND employee.employee_type='employee' AND cfs_user_idUser = idUser");
+                                                                  AND (employee.employee_type='employee' OR employee.employee_type='presenter' OR employee.employee_type='programmer' OR employee.employee_type='trainer') 
+                                                                  AND cfs_user_idUser = idUser");
 $sql_select_employee_grade = $conn->prepare("SELECT grade_name,employee_salary.insert_date,total_salary FROM employee_salary,employee,pay_grade
                                                                                 WHERE pay_grade_id = idpaygrade AND user_id = ? 
                                                                                AND pay_grade_idpaygrade = idpaygrade ORDER BY employee_salary.insert_date DESC LIMIT 1");
@@ -73,7 +74,7 @@ $sql_total_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,emplo
 $sql_total_overtime =$conn->prepare("SELECT SUM(emp_extratime) FROM employee,employee_attendance WHERE emp_atnd_type='present' 
                                                             AND  year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
 $sql_select_emponsid = $conn->prepare("SELECT * FROM employee, cfs_user WHERE cfs_user_idUser = idUser AND idUser =? ");
-$sql_select_all_employee = $conn->prepare("SELECT * FROM cfs_user WHERE  cfs_account_status = 'active' AND idUser = ANY(SELECT cfs_user_idUser FROM employee  WHERE emp_ons_id = ?)");
+$sql_select_all_employee = $conn->prepare("SELECT * FROM cfs_user,employee WHERE  cfs_account_status = 'active' AND cfs_user_idUser= idUser AND emp_ons_id = ?");
 //********************************** for cheque *******************************************
 $sql_select_last_cheque_making = $conn->prepare("SELECT cheque_mak_datetime FROM  acc_user_cheque WHERE cheque_type = ? AND cheque_makerid = ?
                                                                                                         ORDER BY cheque_mak_datetime DESC LIMIT 1");

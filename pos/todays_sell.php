@@ -10,7 +10,9 @@ $scatagory = $_SESSION['loggedInOfficeType'];
 $date = date("Y-m-d");
 $sql_select_today_sell = $conn->prepare("SELECT sal_totalamount, sal_invoiceno, idsalessummary
                                                             FROM sales_summary
-                                                            WHERE sal_salesdate = ?");
+                                                            WHERE sal_salesdate = ?
+                                                            AND sal_storeid = ?
+                                                            AND sal_store_type = ?");
 $sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
 
 function get_catagory() {
@@ -259,7 +261,7 @@ function get_catagory() {
                         <?php
                         $amount = 0;
                         $count = 0;
-                        $sql_select_today_sell->execute(array($date));
+                        $sql_select_today_sell->execute(array($date, $storeID, $scatagory));
                         $arr_purchase = $sql_select_today_sell->fetchAll();
                         foreach ($arr_purchase as $row) {
                             $count++;

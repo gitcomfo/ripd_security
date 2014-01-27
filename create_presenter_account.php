@@ -49,7 +49,7 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
              $cfs_user_id = mysql_insert_id();
                     
                     $ins_employee = mysql_query("INSERT INTO employee (status, employee_type, joining_date, posting_type, emp_ons_id, pay_grade_id, cfs_user_idUser)
-                                           VALUES ('non-posting', '$p_employee_type', '$p_joiningdate' ,'acting', 0, 0, '$cfs_user_id')") or exit(mysql_error()."step2");
+                                           VALUES ('contract', '$p_employee_type', '$p_joiningdate' ,'acting', 0, 0, '$cfs_user_id')") or exit(mysql_error()."step2");
                     $employee_id = mysql_insert_id();                  
                     $empinfo_ins = mysql_query("INSERT INTO employee_information (Employee_idEmployee) VALUES ($employee_id)") or exit(mysql_error()."step6");
                     $employee_info_id = mysql_insert_id();
@@ -99,7 +99,7 @@ if (isset($_POST['submitwithpass']))
              $cfs_user_id = mysql_insert_id();
                     
                     $ins_employee = mysql_query("INSERT INTO employee (status, employee_type, joining_date, posting_type, emp_ons_id, pay_grade_id, cfs_user_idUser)
-                                                                                VALUES ('non-posting', '$p_employee_type','$p_joiningdate' ,'acting', 0, 0, '$cfs_user_id')") or exit(mysql_error());
+                                                                                VALUES ('contract', '$p_employee_type','$p_joiningdate' ,'acting', 0, 0, '$cfs_user_id')") or exit(mysql_error());
                     $employee_id = mysql_insert_id();
                          
                     $empinfo_ins = mysql_query("INSERT INTO employee_information (Employee_idEmployee) VALUES ($employee_id)")or exit(mysql_error());

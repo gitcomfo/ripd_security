@@ -222,6 +222,20 @@ function setLocation(offid)
         xmlhttp.open("GET","includes/updatePresentersFromThana.php?dsd="+district_id+"&dvd="+division_id+"&ttid="+thana_id+"&type="+type,true);
         xmlhttp.send();
     }
+    
+     function beforeSubmit(){
+    if ((document.getElementById('presentation_name').value !="")
+    && (document.getElementById('presenters').value !="")
+    && (document.getElementById('off_name').value !="")
+    && (document.getElementById('place').value !="")
+    && (document.getElementById('presentation_date').value !="")
+    && (document.getElementById('presentation_time').value !=""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 
 <!--*********************Presentation List****************** -->
@@ -325,7 +339,7 @@ if ($_GET['action'] == 'first') {
     </div>
 
     <div>
-        <form method="POST" autocomplete="off" aciton="presentation_schdule_combined.php?action=first">
+        <form method="POST" autocomplete="off" aciton="presentation_schdule_combined.php?action=first" onsubmit="return beforeSubmit()">
             <table class="formstyle" style =" width:78%">
 
                 <tr>
@@ -340,31 +354,31 @@ if ($_GET['action'] == 'first') {
                 ?>
                 <tr>
                     <td ><?php echo $typeinbangla;?> নাম</td>               
-                    <td>: <input  class="box" type="text" name="presentation_name" value="" /></td>   
+                    <td>: <input  class="box" type="text" name="presentation_name" id="presentation_name" value="" /><em2> *</em2></td>   
                 </tr>
                 <tr>
                     <td ><?php echo $whoinbangla?>-এর একাউন্ট নাম্বার</td>               
-                    <td>: <input class="box" id="presenters" name="presenters" />
+                    <td>: <input class="box" id="presenters" name="presenters" /><em2> *</em2>
                     </td>
                 </tr>          
                 <tr>
                     <td>অফিস</td>               
-                    <td>: <input class="box" id="off_name" name="offname" onkeyup="getOffice(this.value);" /><em> (অ্যাকাউন্ট নাম্বার)</em>
+                    <td>: <input class="box" id="off_name" name="offname" onkeyup="getOffice(this.value);" /><em2> *</em2><em> (অ্যাকাউন্ট নাম্বার)</em>
                        <div id="parentResult"></div><input type="hidden" name="parent_id" id="parent_id"/>
                     </td>
                 </tr>
                 <tr>
                         <td>স্থান</td>
-                        <td>:    <input  class="box" type="text" id="place" name="place" value=""/></td>            
+                        <td>:    <input  class="box" type="text" id="place" name="place" value=""/><em2> *</em2></td>            
                     </tr>
                 <tr>
                     <td >তারিখ </td>
-                    <td>: <input class="box"type="text" id="presentation_date" placeholder="Date"  style="" name="presentation_date" value=""/></td>   
+                    <td>: <input class="box"type="text" id="presentation_date" placeholder="Date"  style="" name="presentation_date" value=""/><em2> *</em2></td>   
                     </td>   
                 </tr>
                 <tr>
                     <td > সময় </td>
-                    <td>: <input  class="box" type="time" name="presentation_time" value=""/></td>  
+                    <td>: <input  class="box" type="time" id="presentation_time" name="presentation_time" value=""/><em2> *</em2></td>  
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: center"><input type="submit" class="btn" name="new_submit" value="সেভ" >
@@ -470,6 +484,7 @@ if ($_GET['action'] == 'first') {
                     <td >একাউন্ট নাম্বার</td>
                     <td >সেল নাম্বার</td>
                     <td >ইমেইল</td>
+                    <td >প্রকার</td>
                     <td> থানা</td>
                     <td>জেলা</td>
                     <td>বিভাগ</td>
@@ -479,32 +494,36 @@ if ($_GET['action'] == 'first') {
             <tbody id="plist">
                 <!--Presenter List Query -->
                 <?php
-                $sql_list = "SELECT * FROM cfs_user, employee, address, thana, district, division WHERE idUser=employee.cfs_user_idUser 
-                             AND employee.employee_type='$whoType' AND adrs_cepng_id= idEmployee 
-                            AND address_type='Present' AND address_whom='emp' 
-                            AND Thana_idThana=idThana AND District_idDistrict = idDistrict AND Division_idDivision=idDivision ";
-                $db_result_presenter_info = mysql_query($sql_list); //Saves the query of Presenter Infromation
+                $arrayEmpStatus = array('posting' => 'কর্মচারী', 'contract' => 'চুক্তিবদ্ধ');
+                $db_result_presenter_info = mysql_query("SELECT * FROM cfs_user, employee WHERE idUser=employee.cfs_user_idUser 
+                                                                                    AND employee.employee_type='$whoType' "); 
                 while ($row_prstn = mysql_fetch_array($db_result_presenter_info)) {
                     $db_rl_presenter_name = $row_prstn['account_name'];
                     $db_rl_presenter_acc = $row_prstn['account_number'];
                     $db_rl_presenter_mobile = $row_prstn['mobile'];
                     $db_rl_presenter_email = $row_prstn['email'];
                     $db_rl_presenter_id = $row_prstn['idEmployee'];
-                    $db_thana = $row_prstn['thana_name'];
-                    $db_district = $row_prstn['district_name'];
-                    $db_division = $row_prstn['division_name'];
+                    $db_rl_presenter_status = $row_prstn['status'];
+                    $sql_list_address= mysql_query("SELECT * FROM employee, address, thana, district, division WHERE idEmployee=$db_rl_presenter_id AND adrs_cepng_id= idEmployee 
+                                                                            AND address_type='Present' AND address_whom='emp' 
+                                                                            AND Thana_idThana=idThana AND District_idDistrict = idDistrict AND Division_idDivision=idDivision ");
+                  $addressrow = mysql_fetch_assoc($sql_list_address);                    
+                        $db_thana = $addressrow['thana_name'];
+                        $db_district = $addressrow['district_name'];
+                        $db_division = $addressrow['division_name'];
                     ?>
                     <tr>
                         <td ><?php echo $db_rl_presenter_name; ?></td>
                         <td><?php echo $db_rl_presenter_acc; ?></td>
                         <td><?php echo $db_rl_presenter_mobile; ?></td>
                         <td><?php echo $db_rl_presenter_email; ?></td>
+                        <td><?php echo $arrayEmpStatus[$db_rl_presenter_status]; ?></td>
                         <td><?php echo $db_thana; ?></td>
                         <td><?php echo $db_district; ?></td>
                         <td><?php echo $db_division; ?></td>
                         <td style="text-align: center " > <a href="presentation_schdule_combined.php?action=sedule&id=<?php echo $db_rl_presenter_id; ?>&type=<?php echo $type;?>">সিডিউল </a></td>  
                     </tr>
-                <?php } ?>
+                <?php }?>
             </tbody>
         </table>
     </form>
@@ -518,10 +537,10 @@ if ($_GET['action'] == 'first') {
     </div>
     <form method="POST" onsubmit="">	
         <table  class="formstyle" style =" width:78%" id="presentation_fillter">          
+            <thead>
             <tr>
                 <th colspan="100" >সিডিউল  </th>                        
             </tr>
-            <thead>
             <tr id = "table_row_odd">
                 <td><?php echo $typeinbangla?>-এর নাম </td>
                 <td >তারিখ</td>
@@ -529,7 +548,6 @@ if ($_GET['action'] == 'first') {
                 <td >ভেন্যু</td>                
             </tr>
             </thead>
-
             <!--Sql query for showing the data of a presenter-->
             <?php
                     $G_presenter_id = $_GET['id'];

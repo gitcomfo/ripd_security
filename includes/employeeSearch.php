@@ -2,11 +2,20 @@
 error_reporting(0);
 include 'ConnectDB.inc';
 include_once 'selectQueryPDO.php';
+$loggedInOfficeType = $_SESSION['loggedInOfficeType'];
+$loggedInOfficeId = $_SESSION['loggedInOfficeID'];
+$sql_select_id_ons_relation = $conn->prepare("SELECT idons_relation FROM  ons_relation WHERE catagory =  ? AND add_ons_id = ?");
+$sql_select_id_ons_relation->execute(array($loggedInOfficeType,$loggedInOfficeId));
+$row = $sql_select_id_ons_relation->fetchAll();
+foreach ($row as $value) {
+    $loggedInOnSid = $value['idons_relation'];
+}
 if (isset($_GET['key']) && $_GET['key'] != '') {
 	//Add slashes to any quotes to avoid SQL problems.
 	$str_key = $_GET['key'];
                     $location = $_GET['location'];
-	$suggest_query = "SELECT * FROM  cfs_user WHERE cfs_account_status = 'active' AND account_number like('$str_key%') ORDER BY  account_number";
+	$suggest_query = "SELECT * FROM  cfs_user,employee WHERE cfs_account_status = 'active' AND account_number like('$str_key%') 
+                                                AND cfs_user_idUser = idUser AND emp_ons_id=$loggedInOnSid ORDER BY  account_number";
 	$reslt= mysql_query($suggest_query);
 	while($suggest = mysql_fetch_assoc($reslt)) {
 	            echo "<a style='text-decoration:none;color:brown;'href=".$location."?id=" . $suggest['idUser'] . ">" . $suggest['account_number'] . " (".$suggest['account_name'].")</a></br>";

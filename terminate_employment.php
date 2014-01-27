@@ -70,13 +70,31 @@ if(isset($_POST['submit']))
         xmlhttp.open("GET","includes/employeeSearch.php?key="+keystr+"&location=terminate_employment.php",true);
         xmlhttp.send();	
 }
+function beforeSubmit()
+{
+    var radiocheck = 0;
+      var radios = document.getElementsByName("status");
+      for(var i=0; i<radios.length; i++){
+	if(radios[i].checked) { radiocheck = 1; }
+	}
+    if ((document.getElementById('termination_date').value !="") 
+        && (document.getElementById('reason').value != "0")
+        && (document.getElementById('post_block').value != "")
+        && (document.getElementById('acc_block').value != "")
+        && (radiocheck == 1))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 
 <div class="column6">
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
         <div>
-            <form method="POST" enctype="multipart/form-data" action="">	
+            <form method="POST" enctype="multipart/form-data" action="" onsubmit="return beforeSubmit()">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
                     <tr><th colspan="2" style="text-align: center;">চাকুরি স্থগিতকরন</th>
                     <?php
@@ -111,17 +129,17 @@ if(isset($_POST['submit']))
                             <table>
                                  <tr>
                                     <td width="39%" >কারন</td>
-                                    <td width="61%">:  <select class="box" name="reason">
+                                    <td width="61%">:  <select class="box" name="reason" id="reason">
                                             <option value="0">-সিলেক্ট করুন-</option>
                                             <option value="retired">অবসর</option>
                                             <option value="resign">পদত্যাগ</option>
                                             <option value="dissmised">বরখাস্ত</option>
                                             <option value="other">অন্যান্য</option>
-                                        </select></td>	 
+                                        </select><em2> *</em2></td>	 
                                 </tr>  
                                 <tr>
                                     <td>তারিখ</td>
-                                    <td>: <input type="date" class="box" name="termination_date"/></td>	  
+                                    <td>: <input type="date" class="box" name="termination_date" id="termination_date"/><em2> *</em2></td>	  
                                 </tr>  
                                 <tr>
                                     <td>বর্ণনা</td>
@@ -130,16 +148,16 @@ if(isset($_POST['submit']))
                                 <tr>
                                     <td>বেতন প্রদান</td>
                                     <td>:   <input  type="radio" name="status" checked="" value="given" /> দেয়া হয়েছে 
-                                        &nbsp;&nbsp;&nbsp;<input  type="radio" name="status" value="undone"  /> দেয়া হয়নি
+                                        &nbsp;&nbsp;&nbsp;<input  type="radio" name="status" value="undone"  /> দেয়া হয়নি <em2> *</em2>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>পোস্ট স্থগিত তারিখ</td>
-                                    <td>:   <input class="box" type="date" name="post_block" /></td>
+                                    <td>:   <input class="box" type="date" name="post_block" id="post_block"/><em2> *</em2></td>
                                 </tr>
                                 <tr>
                                     <td>অ্যাকাউন্ট স্থগিত তারিখ</td>
-                                    <td>:   <input class="box" type="date" name="acc_block" /></td>
+                                    <td>:   <input class="box" type="date" name="acc_block" id="acc_block" /><em2> *</em2></td>
                                 </tr>
                                 <tr>
                                     <td>স্ক্যান ডকুমেন্ট</td>

@@ -60,11 +60,22 @@ if (isset($_POST['pro_submit'])) {
         xmlhttp.open("GET","includes/tablerow.php?id="+new_product_category,true);
         xmlhttp.send();	
     }
+function beforeSubmit()
+{
+    if ((document.getElementById('product_id').value !="") 
+        && (document.getElementById('pro_type').value != "")
+        && (document.getElementById('pro_type_code').value != ""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
         <div class="main_text_box">
         <div style="padding-left: 112px;"><a href="product_info_management.php"><b>ফিরে যান</b></a><a style="padding-left: 565px;" href="make_product_details_info.php"><b>প্রোডাক্ট ইনফরমেশন ইন</b></a></div>
        <div>           
-                <form method="POST" onsubmit="" >	
+                <form method="POST" onsubmit="return beforeSubmit()">	
                     <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          
                         <tr><th style="text-align: center" colspan="2"><h1>মেইক প্রোডাক্ট ক্যাটাগরি এন্ড টাইপ</h1>
                         </th>
@@ -79,7 +90,7 @@ if (isset($_POST['pro_submit'])) {
                         <tr>
                             <td>প্রোডাক্ট ক্যাটাগরি</td>
                                 <td> : <select class="box2" type="text" id="product_id" name="product" onchange="shownew_product_caregory(this.value)" />
-                                    <option value='' selected="selected">- প্রোডাক্ট ক্যাটাগরি -</option>
+                                    <option value="" selected="selected">- প্রোডাক্ট ক্যাটাগরি -</option>
                                     <option value="new">নতুন ক্যাটাগরি</option>
                                     <?php
                                     $product_cat_sql = mysql_query("SELECT DISTINCT pro_catagory, pro_cat_code FROM $dbname.product_catagory");
@@ -89,14 +100,14 @@ if (isset($_POST['pro_submit'])) {
                                         echo "<option style='width: 96%'  value='$db_product_cat_code'>$db_product_cat_name</option>";
                                     }
                                     ?>
-                        </select></td> 
+                        </select><em2> *</em2></td> 
                         </tr>
                         <tr><td colspan="2"><table id="new_product_category" style="font-family: SolaimanLipi !important;margin-top: 0px;margin-bottom: 0px;margin-left: 0px;margin-right: 0px;border:0px solid grey; color: black;"></table></td></tr>
                         <tr>
-                            <td >প্রোডাক্ট টাইপ</td><td> : <input class="box" type="text" id="pro_type" name="pro_type" /></td>
+                            <td >প্রোডাক্ট টাইপ</td><td> : <input class="box" type="text" id="pro_type" name="pro_type" id="pro_type"/><em2> *</em2></td>
                             </tr>
                             <tr>
-                            <td>প্রোডাক্ট টাইপ কোড</td><td> : <input class="box" type="text" id="pro_type_code" name="pro_type_code" /></td>          
+                            <td>প্রোডাক্ট টাইপ কোড</td><td> : <input class="box" type="text" id="pro_type_code" name="pro_type_code" /><em2> *</em2></td>          
                         </tr>   
                     <tr>                    
                         <td colspan="2" style="padding-top: 5px; padding-bottom: 5px;text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="pro_submit" value="সেভ করুন" />

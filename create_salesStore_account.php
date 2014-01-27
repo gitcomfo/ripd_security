@@ -57,14 +57,14 @@ if(isset($_POST['submit']))
     $reslt=mysql_query($sql) or exit('query failed insert into sales store: '.mysql_error());
     $off = mysql_insert_id();
     
-     $ssql = "INSERT INTO ". $dbname .".`ons_relation` ( `catagory` ,`insert_date` ,`add_ons_id`) VALUES (  's_store', NOW(), '$off');";
+     $ssql = "INSERT INTO `ons_relation` ( `catagory` ,`insert_date` ,`add_ons_id`) VALUES (  's_store', NOW(), '$off');";
     $sreslt = mysql_query($ssql);
     $ons = mysql_insert_id();
     
     $b_space = $_POST['office_space'];
     $b_type = $_POST['building_type'];
     $b_floor = $_POST['floor_number'];
-    $isql = "INSERT INTO ". $dbname .".`ons_information` ( `space` ,`building_type` ,`floor` ,`ons_relation_idons_relation`) VALUES ( '$b_space', '$b_type', '$b_floor', '$ons');";
+    $isql = "INSERT INTO ons_information ( `space` ,`building_type` ,`floor` ,`ons_relation_idons_relation`) VALUES ( '$b_space', '$b_type', '$b_floor', '$ons');";
     $ireslt = mysql_query($isql);
     
   
@@ -84,7 +84,7 @@ if(isset($_POST['submit']))
      $deco1 = $_POST['decoration1'];
      $deco2 = $_POST['decoration2'];
      $deco = $deco1.".".$deco2;
-     $csql = "INSERT INTO ". $dbname .".`ons_cost` (`rent` ,`current_bill` ,`water_bill` ,`advanced_amount` ,`decoration` ,`ons_relation_idons_relation`) VALUES ('$rent', '$e_bill', '$w_bill', '$adv_pay', '$deco', '$ons');";
+     $csql = "INSERT INTO `ons_cost` (`rent` ,`current_bill` ,`water_bill` ,`advanced_amount` ,`decoration` ,`ons_relation_idons_relation`) VALUES ('$rent', '$e_bill', '$w_bill', '$adv_pay', '$deco', '$ons');";
      $creslt = mysql_query($csql);
      $ons_cost = mysql_insert_id();
     
@@ -97,11 +97,10 @@ if(isset($_POST['submit']))
      for($i=0; $i<$n; $i++)
      {
          $quan[$i] = $quan1[$i].".".$quan2[$i];
-         $osql = "INSERT INTO ". $dbname .".`ons_cost_others` (`cost_type` ,`cost_amount` ,`ons_cost_idons_cost`) VALUES ( '$sub[$i]',  '$quan[$i]', '$ons_cost');";
+         $osql = "INSERT INTO `ons_cost_others` (`cost_type` ,`cost_amount` ,`ons_cost_idons_cost`) VALUES ( '$sub[$i]',  '$quan[$i]', '$ons_cost');";
          $oreslt = mysql_query($osql) or exit('query failed: '.mysql_error());
      }
-   
-        $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+
         $extension = end(explode(".", $_FILES["picture"]["name"]));
         $image_name = $_FILES["picture"]["name"];
         if($image_name != "")
@@ -114,12 +113,7 @@ if(isset($_POST['submit']))
                 {
                         move_uploaded_file($_FILES["picture"]["tmp_name"], "pic/" . $image_name);
                 } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
-                
-                  $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+
         $extension = end(explode(".", $_FILES["signature"]["name"]));
         $sign_name = $_FILES["signature"]["name"];
         if($sign_name != "")
@@ -132,12 +126,7 @@ if(isset($_POST['submit']))
                         move_uploaded_file($_FILES["signature"]["tmp_name"], "sign/" . $sign_name);
                         
                 } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
-                
-        $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+
         $extension = end(explode(".", $_FILES["owner_finger_print"]["name"]));
         $finger_name = $_FILES["owner_finger_print"]["name"];
         if($finger_name != "")
@@ -150,12 +139,7 @@ if(isset($_POST['submit']))
                         move_uploaded_file($_FILES["owner_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
                         
                 } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
                 
-        $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
         $extension = end(explode(".", $_FILES["scanDoc"]["name"]));
         $scan_name = $_FILES["scanDoc"]["name"];
         if($scan_name != "")
@@ -167,10 +151,6 @@ if(isset($_POST['submit']))
                 {
                         move_uploaded_file($_FILES["scanDoc"]["tmp_name"], "scaned/" . $scan_name);
                 } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
  
      $own_name = $_POST['owner_Name'];
      $own_add = $_POST['owner_address'];
@@ -178,7 +158,7 @@ if(isset($_POST['submit']))
      $own_mail = $_POST['mail_address'];
      $own_valid = $_POST['validity'];
     
-     $ownsql = "INSERT INTO ". $dbname .".`ons_deed` (`owner_name` ,`owner_address` ,`cell_number` ,`owner_email` ,`owner_photo` ,`owner_signature` ,`expire_date` ,`scan_documents` ,`ons_relation_idons_relation`,`owner_fingerprint` ) VALUES  ( '$own_name', '$own_add' , '$own_mbl' , '$own_mail'  , '$image_path' , '$sing_path'  , '$own_valid' , '$scan_path' , '$ons', '$finger_path');";
+     $ownsql = "INSERT INTO `ons_deed` (`owner_name` ,`owner_address` ,`cell_number` ,`owner_email` ,`owner_photo` ,`owner_signature` ,`expire_date` ,`scan_documents` ,`ons_relation_idons_relation`,`owner_fingerprint` ) VALUES  ( '$own_name', '$own_add' , '$own_mbl' , '$own_mail'  , '$image_path' , '$sing_path'  , '$own_valid' , '$scan_path' , '$ons', '$finger_path');";
      $ownreslt = mysql_query($ownsql) or exit('query failed: '.mysql_error());
 
      // ****************** default insert into post_in_ons ***************************************
@@ -246,6 +226,27 @@ function setRipd(office,offid)
         document.getElementById('parent').value = office;
         document.getElementById('parentOff_id').value = offid;
         document.getElementById('offResult').style.display = "none";
+}
+function beforeSubmit()
+{
+    alert(document.getElementById('mobile_number').value);
+    var radio = document.forms['sales_form'].elements['pwrstore'];
+    if ((document.getElementById('sales_name').value != "")
+                && (document.getElementById('mobile_number').value != "")
+                && (document.getElementById('owner_Name').value != "")
+                && (document.getElementById('advanced_payment1').value !="")
+                && (document.getElementById('floor_number').value !="")
+                && (document.getElementById('office_rent1').value !="")
+                &&(document.getElementById('sales_address_').value != "")
+                &&(document.getElementById('parentOff_id').value != "")
+                &&(document.getElementById('parent').value != "")
+                && ((radio[0].checked) || (radio[1].checked))
+                && (document.getElementById('thana_id').value !=""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
 }
 </script> 
 
@@ -404,26 +405,6 @@ var xmlhttp;
         }
         xmlhttp.open("GET","includes/getParentOffices.php?key="+key+"&off=1",true);
         xmlhttp.send();	
-}
-function beforeSubmit()
-{
-    var radio = document.forms['sales_form'].elements['pwrstore'];
-    if ((document.getElementById('sales_name').value != "")
-                && (document.getElementById('mobile_number').innerHTML != "")
-                && (document.getElementById('owner_Name').innerHTML == "")
-                && (document.getElementById('advanced_payment1').value !="")
-                && (document.getElementById('floor_number').value !="")
-                && (document.getElementById('office_rent1').value !="")
-                &&(document.getElementById('sales_address_').value != "")
-                &&(document.getElementById('parentOff_id').value != "")
-                &&(document.getElementById('parent').value != "")
-                && ((radio[0].checked) || (radio[1].checked))
-                && (document.getElementById('thana_id').value !=""))
-        { return true; }
-    else {
-        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
-        return false; 
-    }
 }
 </script>
 

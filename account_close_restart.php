@@ -4,7 +4,6 @@ include_once 'includes/header.php';
 //$loginUSERname = $_SESSION['UserID'];
 $user_id = $_SESSION['userIDUser'];
 //echo "$loginUSERname";
-
 $msg = "";
 ?>
 <?php
@@ -46,20 +45,13 @@ if (isset($_POST['submit_new'])) {
 //Check in account_close_restart Table
 ?>
 
-<style type="text/css">
-    @import "css/bush.css";
-</style>
+<style type="text/css">@import "css/bush.css";</style>
 <link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
 <script src="javascripts/tinybox.js" type="text/javascript"></script>
-
 <script type="text/javascript">
     function update(id)
     { TINY.box.show({iframe:'account_permanent_close_restart.php?acc_cfs_user='+id,width:600,height:300,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
 </script>
-<title>একাউন্ট বন্ধ-করন</title>
-<style type="text/css">@import "css/bush.css";</style>
-<title>একাউন্ট বন্ধ-করন</title>
-<style type="text/css">@import "css/bush.css";</style>
 <script>
     function getAccount(keystr) //search employee by account number***************
     {
@@ -173,9 +165,7 @@ if ($_GET['action'] == 'new' or isset($_GET['id'])) {
     <div>           
         <form name="account_close_form" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">	
             <table class="formstyle"  style=" width: 85%; ">          
-                <tr><th style="text-align: center" colspan="2"><h1>একাউন্ট বন্ধ-করণ</h1>
-                </th>
-                </tr>
+                <tr><th style="text-align: center" colspan="2"><h1>একাউন্ট বন্ধ-করণ</h1></th></tr>
                 <tr>
                     <td colspan="3" height="25px" style="text-align: center;"><b>
                             <span style="color:gray;font-size:16px;">
@@ -191,7 +181,6 @@ if ($_GET['action'] == 'new' or isset($_GET['id'])) {
                 <tr>
                     <td>
                         <table>
-
                             <tr>
                                 <td style="width: 20%">একাউন্ট নাম্বার</td>
                                 <td style="width: 1%">:</td>

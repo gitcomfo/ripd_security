@@ -57,6 +57,17 @@ function setProgram(progNo,progid)
         document.getElementById('progResult').style.display = "none";
         getall(progid);
 }
+     function beforeSubmit(){
+    if ((document.getElementById('prgrm_number').value !="")
+    && (document.getElementById('ticket_prize').value !="")
+    && (document.getElementById('number_of_seat').value !="")
+    && (document.getElementById('extra_seat').value !=""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>
 <script  type="text/javascript">
     function getname(type)
@@ -218,7 +229,7 @@ $whoinbangla =  getProgramer($P_type);
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="program_management.php"><b>ফিরে যান</b></a></div> 
         <div>
-            <form method="POST" onsubmit="" action="making_ticket.php?step=02">	
+            <form method="POST" onsubmit="return beforeSubmit()" action="making_ticket.php?step=02">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
                     <tr><th colspan="4" style="text-align: center;">টিকেট মেইকিং</th></tr>
                     <tr>
@@ -226,7 +237,7 @@ $whoinbangla =  getProgramer($P_type);
                     </tr>
                     <tr>
                         <td>প্রেজেন্টেশন / প্রোগ্রাম / ট্রেইনিং / ট্রাভেল এর নম্বর</td>
-                        <td>:  <input class="box" type="text" id="prgrm_number" name="prgrm_number" onkeyup="getProgram(this.value);"/>
+                        <td>:  <input class="box" type="text" id="prgrm_number" name="prgrm_number" onkeyup="getProgram(this.value);"/><em2> *</em2>
                             <div id="progResult"></div><input type="hidden" name="prgrm_id" id="prgrm_id"/>
                         </td>
                     </tr>
@@ -256,15 +267,15 @@ $whoinbangla =  getProgramer($P_type);
                     </tr>
                     <tr>
                         <td>টিকেট প্রাইজ</td>
-                        <td>:    <input  class="box" type="text" id="ticket_prize" name="ticket_prize" onkeypress="return checkIt(event)" /> TK/ Ticket<em> (ইংরেজিতে লিখুন)</em></td>            
+                        <td>:    <input  class="box" type="text" id="ticket_prize" name="ticket_prize" onkeypress="return checkIt(event)" /><em2> *</em2> টাকা/টিকেট<em> (ইংরেজিতে লিখুন)</em></td>            
                     </tr>
                     <tr>
                         <td>আসন সংখ্যা </td>
-                        <td>:    <input  class="box" type="text" id="number_of_seat" name="number_of_seat"  onkeypress=' return numbersonly(event)'  /><em> (ইংরেজিতে লিখুন)</em></td>           
+                        <td>:    <input  class="box" type="text" id="number_of_seat" name="number_of_seat"  onkeypress=' return numbersonly(event)'  /><em2> *</em2><em> (ইংরেজিতে লিখুন)</em></td>           
                     </tr>
                     <tr>
                         <td>অতিরিক্ত আসন সংখ্যা </td>
-                        <td>:    <input  class="box" type="text" id="extra_seat" name="extra_seat" onkeypress=' return numbersonly(event)'  /><em> (ইংরেজিতে লিখুন)</em></td>
+                        <td>:    <input  class="box" type="text" id="extra_seat" name="extra_seat" onkeypress=' return numbersonly(event)'  /><em2> *</em2><em> (ইংরেজিতে লিখুন)</em></td>
                     </tr>                       
                     <tr>                    
                         <td colspan="2" style="padding-left: 300px; padding-top: 10px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="সেভ করুন" /></td>

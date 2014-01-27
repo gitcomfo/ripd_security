@@ -101,6 +101,16 @@ function numbersonly(e)
                 return false //disable key press
             }
 }
+function beforeSubmit()
+{
+    if ((document.getElementById('post_number').value !="") 
+        && (document.getElementById('post_id').value != "0"))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
 </script>  
 <div class="column6">
     <div class="main_text_box">
@@ -164,7 +174,7 @@ function numbersonly(e)
     
         <div>
             <h2><a name="02" id="02"></a></h2><br/>
-            <form method="POST" onsubmit="" name="" action="">	
+            <form method="POST" action="" onsubmit="return beforeSubmit()">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
                     <tr><th colspan="2" style="text-align: center;"> সিলেক্ট পোস্ট এন্ড পোস্ট সংখ্যা </th></tr>
                     <tr>
@@ -188,15 +198,15 @@ function numbersonly(e)
                         echo'<option style="width: 96%" value=' . $db_post_id . '>' . $db_post_name . '</option>';
                     }
                     ?>
-                    </select></td>                                  
+                    </select><em2> *</em2></td>                                  
                     </tr>           
                     <tr><td colspan="2"><table id="post_and_responsibility" style="font-family: SolaimanLipi !important;width: 100%; margin-top: 0px;margin-bottom: 0px;margin-left: 0px;margin-right: 0px;border:0px solid grey; color: black;"></table></td></tr>
                     <tr>
                         <td>নাম্বার অফ পোস্ট</td>
-                        <td>:   <input class="box" type="text" id="post_number" name="post_number" onkeypress=' return numbersonly(event)' /> জন</td>                                  
+                        <td>:   <input class="box" type="text" id="post_number" name="post_number" onkeypress=' return numbersonly(event)' /> জন <em2> *</em2></td>                                  
                     </tr>
                     <tr>                    
-                        <td colspan="2" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit_post" value="সেভ করুন" />
+                        <td colspan="2" style="padding-left: 250px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit_post" readonly="" value="সেভ করুন" />
                             <input class="btn" style =" font-size: 12px" type="reset" name="reset" value="রিসেট করুন" /></td>                           
                     </tr>    
                 </table>

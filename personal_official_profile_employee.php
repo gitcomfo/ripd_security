@@ -13,7 +13,7 @@ $logedInUserType = $_SESSION['userType'];
         if($logedInUserType=='employee'){
         ?>
         <tr>
-            <th colspan="2">এটেন্ডেন্স স্টেটমেন্ট</th>
+            <th colspan="2">হাজিরা বিবরণী</th>
         </tr>
         <tr>
             <td><a href="current_attendance_statement_own.php">কারেন্ট (চলতি)</a></td>

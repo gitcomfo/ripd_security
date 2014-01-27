@@ -143,11 +143,11 @@ include_once 'includes/areaSearch.php';
                     <tr><th colspan="2" style="text-align: center;">অটো মেইকিং</th></tr>
                     <tr>
                         <td>পার্সেন্টেজ (%)</td>
-                        <td>:    <input  class="box" type="text" id="percent" name="percent" onkeypress=' return numbersonly(event)' /></td>            
+                        <td>:    <input  class="box" type="text" id="percent" name="percent" onkeypress=' return numbersonly(event)' /><em2> *</em2></td>            
                     </tr>
                     <tr>
                         <td >গড় এমাউন্ট</td>
-                        <td>:   <input class="box" type="text" id="avg_amount" name="avg_amount" onkeypress=' return numbersonly(event)' /></td>                                  
+                        <td>:   <input class="box" type="text" id="avg_amount" name="avg_amount" onkeypress=' return numbersonly(event)' /><em2> *</em2></td>                                  
                     </tr>
                     <tr>
                         <td>আউটের ধরন</td>

@@ -39,7 +39,17 @@ if (isset($_POST['submit'])) {
 	{ TINY.box.show({iframe:'security_role_edit.php?roleid='+id,width:500,height:280,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
 function setRole(id)
 	{ TINY.box.show({iframe:'security_role_setting.php?roleid='+id,width:700,height:600,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
-        
+   
+    function beforeSubmit()
+{
+    if ((document.getElementById('new_role').value !=""))
+        { return true; }
+    else {
+        alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false; 
+    }
+}
+
  </script>
 <style type="text/css">@import "css/bush.css";</style>
     <?php
@@ -85,7 +95,7 @@ if ($_GET['action'] == 'list') {
 } else {
     ?>
 <div style="font-size: 14px;">
-    <form  action="" method="post" style="font-family: SolaimanLipi !important;">
+    <form  action="" method="post" style="font-family: SolaimanLipi !important;" onsubmit="return beforeSubmit()">
             <div style="padding-top: 10px;">    
                 <div style="padding-left: 110px; width: 62%; float: left"><a href="command_system_management.php"><b>ফিরে যান</b></a></div>
                 <div style=" float: left" ><a href="security_role.php"> নতুন রোল </a>&nbsp;&nbsp;<a href="security_role.php?action=list">রোল লিস্ট</a></div>
@@ -99,7 +109,7 @@ if ($_GET['action'] == 'list') {
                 ?>
                 <tr>
                     <td style="text-align: center; width: 50%;">রোলের নাম</td>
-                    <td>: <input  class="box" type="text" name="new_role"  value=""/></td>   
+                    <td>: <input  class="box" type="text" name="new_role" id="new_role" value=""/><em2> *</em2></td>   
                 </tr>
                 <tr>
                     <td style="text-align: center; width: 50%;">রোলের বর্ণনা</td>

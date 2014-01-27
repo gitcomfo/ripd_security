@@ -18,6 +18,13 @@ if($offType == 'office')
         $officeEmail = $offrow['office_email']; 
         $officeOpeningDate = $offrow['opening_date']; 
         $date = date("d-m-Y",  strtotime($officeOpeningDate));
+        $officebranchName = $offrow['branch_name'];
+        $parent_id = $offrow['parent_id'];
+        $sql_select_office -> execute(array($parent_id));
+        $arr_office = $sql_select_office->fetchAll();
+        foreach ($arr_office as $offrow1) {
+            $parentName = $offrow1['office_name'];
+        }
     }
 }
 else{
@@ -28,6 +35,12 @@ else{
         $officeEmail = $storerow['salesStore_email']; 
         $officeOpeningDate = $storerow['opening_date']; 
         $date = date("d-m-Y",  strtotime($officeOpeningDate));
+        $parent_id = $offrow['office_id'];
+        $sql_select_office -> execute(array($parent_id));
+        $arr_office = $sql_select_office->fetchAll();
+        foreach ($arr_office as $offrow1) {
+            $parentName = $offrow1['office_name'];
+        }
     }
 }
 
@@ -73,8 +86,16 @@ if (!file_exists($aab_picture))
                     <legend style="color: brown;">অফিসের তথ্য</legend>
                         <table>                          
                             <tr>
-                                <td style="width: 35%;"><b>একাউন্ট নম্বর</b></td>
-                                <td style="width: 65%;">: <?php echo $aab_account_number; ?></td>
+                                <td style="width: 40%;"><b>একাউন্ট নম্বর</b></td>
+                                <td style="width: 60%;">: <?php echo $aab_account_number; ?></td>
+                            </tr>
+                            <tr>
+                                <td><b> ব্রাঞ্চ নাম </b></td>
+                                <td>: <?php echo $officebranchName; ?></td>
+                            </tr>
+                            <tr>
+                                <td><b> প্যারেন্ট অফিসের নাম </b></td>
+                                <td>: <?php echo $parentName; ?></td>
                             </tr>
                             <tr>
                                 <td><b> ঠিকানা </b></td>
@@ -90,7 +111,7 @@ if (!file_exists($aab_picture))
                             </tr>
                             <tr>
                                 <td><b>শুরুর তারিখ</b></td>
-                                <td>: <?php echo $date; ?></td>
+                                <td>: <?php echo english2bangla($date); ?></td>
                             </tr>
                         </table>
                  </fieldset>
