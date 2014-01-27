@@ -4,28 +4,29 @@ include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
 $loginUSERname = $_SESSION['UserID'];
-//echo "$loginUSERname";
-
-$queryemp = mysql_query("SELECT * FROM employee WHERE cfs_user_idUser = ANY(SELECT idUser FROM cfs_user WHERE user_name = '$loginUSERname');");
-$emprow = mysql_fetch_assoc($queryemp);
-$db_onsid = $emprow['emp_ons_id'];
-$queryonsr = mysql_query("SELECT * FROM ons_relation WHERE idons_relation ='$db_onsid' ;");
-$onsrow = mysql_fetch_assoc($queryonsr);
-$db_catagory = $onsrow['catagory'];
-$db_id = $onsrow['add_ons_id'];
-switch ($db_catagory) {
-    case 'office' :
-        $offquery = mysql_query("SELECT * FROM office WHERE idOffice= '$db_id';");
-        $offrow = mysql_fetch_assoc($offquery);
-        $db_offname = $offrow['office_name'];
-        break;
-
-    case 's_store' :
-        $salesquery = mysql_query("SELECT * FROM sales_store WHERE idSales_store=$db_id");
-        $salesrow = mysql_fetch_assoc($salesquery);
-        $db_offname = $salesrow['salesStore_name'];
-        break;
-}
+$db_id = $_SESSION['loggedInOfficeID'];
+$db_catagory= $_SESSION['loggedInOfficeType'] ;
+$db_offname = $_SESSION['loggedInOfficeName'];
+//$queryemp = mysql_query("SELECT * FROM employee WHERE cfs_user_idUser = ANY(SELECT idUser FROM cfs_user WHERE user_name = '$loginUSERname');");
+//$emprow = mysql_fetch_assoc($queryemp);
+//$db_onsid = $emprow['emp_ons_id'];
+//$queryonsr = mysql_query("SELECT * FROM ons_relation WHERE idons_relation ='$db_onsid' ;");
+//$onsrow = mysql_fetch_assoc($queryonsr);
+//$db_catagory = $onsrow['catagory'];
+//$db_id = $onsrow['add_ons_id'];
+//switch ($db_catagory) {
+//    case 'office' :
+//        $offquery = mysql_query("SELECT * FROM office WHERE idOffice= '$db_id';");
+//        $offrow = mysql_fetch_assoc($offquery);
+//        $db_offname = $offrow['office_name'];
+//        break;
+//
+//    case 's_store' :
+//        $salesquery = mysql_query("SELECT * FROM sales_store WHERE idSales_store=$db_id");
+//        $salesrow = mysql_fetch_assoc($salesquery);
+//        $db_offname = $salesrow['salesStore_name'];
+//        break;
+//}
 $msg ="";
 if (isset($_POST['submit_post'])) {
     //print_r($_POST);
@@ -66,7 +67,6 @@ if (isset($_POST['submit_post'])) {
 <title>ক্রিয়েট পোস্ট</title>
 <style type="text/css"> @import "css/bush.css";</style>
 <link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
-
 <script src="javascripts/tinybox.js" type="text/javascript"></script>
 <script type="text/javascript" src="javascripts/area.js"></script>
 <script type="text/javascript" src="javascripts/external/mootools.js"></script>
@@ -79,7 +79,6 @@ if (isset($_POST['submit_post'])) {
 <script>
     function showResponsibility(postid)
     {
-       
             if(window.XMLHttpRequest){
                 xmlhttp = new XMLHttpRequest();
             }
@@ -132,7 +131,7 @@ function beforeSubmit()
                         <span id="office2">
                             <table  style="border: black solid 1px;" align="center" width= 90%" cellpadding="1px" cellspacing="1px">
                                 <thead>
-                                    <tr><td colspan="4" style="color: sienna; text-align: center; font-size: 20px;"><?php echo $db_offname; ?></td></tr>
+                                    <tr><td colspan="5" style="color: sienna; text-align: center; font-size: 20px;"><?php echo $db_offname; ?></td></tr>
                                     <tr style="border: black solid 1px;">
                                         <th style="width: 10%">পোস্ট</th>
                                         <th style="width: 10%">পোস্টের সংখ্যা</th>
@@ -180,14 +179,14 @@ function beforeSubmit()
                     <tr>
                         <td>অফিস / সেলস স্টোর / পাওয়ার স্টোর</td>
                         <td>: 
-                            <input class="box" type="text" id="ons_name" name="ons_name" value="<?php echo $db_offname; ?>" readonly=""/>
+                            <input class="box" type="text" style="width: 210px;" id="ons_name" name="ons_name" value="<?php echo $db_offname; ?>" readonly=""/>
                             <input type="hidden" id="ons_id" name="ons_id" value="<?php echo $db_id; ?>"/>
                             <input type="hidden" id="ons_type" name="ons_type" value="<?php echo $db_catagory; ?>"/>                            
                         </td>            
                     </tr>
                     <tr>
                         <td>সিলেক্ট পোস্ট নাম</td>
-                        <td>:  <select class="box7" style="width: 200px;" type="text" id="post_id" name="post_id" onchange="showResponsibility(this.value)" />
+                        <td>:  <select class="box" type="text" id="post_id" name="post_id" onchange="showResponsibility(this.value)" />
                         <option value="0" selected="selected">-সিলেক্ট পোস্ট-</option>
                         <option value="new_post">নতুন পোস্ট</option>
                     <?php

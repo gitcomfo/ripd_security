@@ -78,7 +78,7 @@ if (!file_exists($aab_picture))
 <div class="columnSubmodule">
     <table class="formstyle">    
         <tr>
-            <th colspan="2" style="font-size: 15px;">স্বাগতম <?php echo $officename;?> -এর এডমিন</th>
+            <th colspan="2" style="font-size: 15px;">স্বাগতম <?php echo $officename;?></th>
         </tr>
         <tr>
             <td>
