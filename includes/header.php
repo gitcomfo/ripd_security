@@ -66,15 +66,16 @@ include_once 'MiscFunctions.php';
                         <?php
                         if(isset($_SESSION['UserID']) && isset($_SESSION['acc_holder_name']))
                             {
-                            $notification = 5; // it comes from the query of notification
-                            $showNotificationNum = english2bangla($notification);
-                            if($notification == 0) echo '<li><a href="notification.php">নোটিফিকেশন (0)</a></li>';
-                            else echo "<li><a href='notification.php' style='color: yellow;'>নোটিফিকেশন ($showNotificationNum)</a></li>";
                             $user_name = $_SESSION['acc_holder_name'];
                             $logged_in_office_name = $_SESSION['loggedInOfficeName'];
-                            if($logged_in_office_name!='customerOffice'){
-                            echo '<li><a href="main_account_management.php">'.$_SESSION['loggedInOfficeName'].'</a></li>';
-                            }
+                            if($logged_in_office_name!='customerOffice')
+                                {
+                                $notification = 5; // it comes from the query of notification
+                                $showNotificationNum = english2bangla($notification);
+                                if($notification == 0) echo '<li><a href="notification.php">নোটিফিকেশন (0)</a></li>';
+                                else echo "<li><a href='notification.php' style='color: yellow;'>নোটিফিকেশন ($showNotificationNum)</a></li>";
+                                echo '<li><a href="main_account_management.php">'.$_SESSION['loggedInOfficeName'].'</a></li>';
+                                }
                             echo '<li><a href="account_management.php">'.$user_name.'</a></li>';                        
                             echo '<li><a href="logout.php">লগ আউট</a></li>';
                             }
