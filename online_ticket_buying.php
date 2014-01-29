@@ -216,8 +216,9 @@ if(isset($_POST['submit_ticket']))
                $arr_matchXtra= array_intersect($arr_checkbox2, $arr_Xtra);
                if (count($arr_matchSeat) == 0  && count($arr_matchXtra) == 0 )
                {
-                   $tsql="INSERT INTO `ripd_db_comfosys`.`ticket` (`ticket_owner_name` ,`ticket_owner_mobile` ,`no_ofTicket_purchase` ,`seat_no` ,`xtra_seat` ,`total_ticket_prize` ,`total_amount`,`ticket_seller_id`, `Program_idprogram`) 
-                            VALUES ('$ownerName', '$ownerMbl', $total_no_of_seat , '$str_SelectedSeat' , '$str_SelectedXSeat', $totalTicketPrize,  $totalamount, 0, $valueID );";
+                $buyer_id = $_SESSION['userIDUser'];
+                   $tsql="INSERT INTO ticket (ticket_owner_name, ticket_owner_mobile, ticket_buyer_id, no_ofTicket_purchase, seat_no, xtra_seat, total_ticket_prize, total_amount, ticket_seller_id, Program_idprogram) 
+                            VALUES ('$ownerName', '$ownerMbl', '$buyer_id', '$total_no_of_seat', '$str_SelectedSeat', '$str_SelectedXSeat', '$totalTicketPrize', '$totalamount', 0, '$valueID');";
                     $treslt=mysql_query($tsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৭';
                     $TicketID = mysql_insert_id();
                }

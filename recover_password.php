@@ -63,9 +63,9 @@ if (isset($_POST['submit_new_password'])) {
 
             $sendResult = SendSMSFuntion($receiver_acc_mobile_number, $send_sms_content);
             //echo "Result is: " . $sendResult;
-            $sendStatus = substr($sendResult, 0, 4);
+            $sendStatus = substr($sendResult, 0, 2);
             //echo "SendStatus = ".$sendStatus;
-            if($sendStatus == '1701'){
+            if($sendStatus == 'OK'){
                 $finalPass = md5($new_pass_str);
                 $update_pass_sql = "Update cfs_user SET password = '$finalPass' WHERE idUser = '$receiver_acc_cfs_id'";
                 if(mysql_query($update_pass_sql)){

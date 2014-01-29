@@ -38,9 +38,9 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
         $passwrd = md5($pass);
         $send_sms_content = "Dear User,Your\nACC.# $account_number\nUsername: $user_username\nRIPD email: $ripdemailid\nPassword: $pass\nThanks";
         $sendResult = SendSMSFuntion($account_mobile1, $send_sms_content);
-        $sendStatus = substr($sendResult, 0, 4);
+        $sendStatus = substr($sendResult, 0, 2);
 
-        if ($sendStatus == '1701') {
+        if ($sendStatus == 'OK') {
             mysql_query("START TRANSACTION");
         //************************* create official email *************************************************
              $email_create_status = CreateEmailAccount($emailusername, $pass);
