@@ -5,9 +5,11 @@ include_once 'includes/header.php';
 include_once 'includes/columnViewAccount.php';
 include_once 'includes/selectQueryPDO.php';
 include_once 'includes/MiscFunctions.php';
+$arrayUserType = array('employee' => 'কর্মচারী', 'programmer' => 'প্রোগ্রামার', 'presenter' => 'প্রেজেন্টার', 'trainer' => 'trainer');
 
 $session_user_id = $_SESSION['userIDUser'];
 $session_account_name = $_SESSION['acc_holder_name'];
+$session_user_type = $_SESSION['userType'];
 $sql_select_cfs_user_all->execute(array($session_user_id));
 $arr_cfs_user = $sql_select_cfs_user_all->fetchAll();
 foreach ($arr_cfs_user as $acu) {
@@ -84,11 +86,17 @@ else  // for others ******************************************
         $sql_postrow = $sql_select_emp_post->fetchAll();
         foreach ($sql_postrow as $value) {
             $db_empposition = $value['post_name'];
+            $db_postingdate = $value['posting_date'];
         }
        $sql_select_pay_grade->execute(array($db_paygrdid));
         $emgrade = $sql_select_pay_grade->fetchAll();
         foreach ($emgrade as $value) {
             $db_paygrd_name = $value['grade_name'];
+        }
+        $sql_select_first_grade->execute(array($cfs_user_id));
+        $firstgrade = $sql_select_first_grade->fetchAll();
+        foreach ($firstgrade as $value) {
+            $db_firstgrade = $value['grade_name'];
         }
 }
 if (!file_exists($aab_picture))
@@ -137,6 +145,37 @@ if (!file_exists($aab_picture))
 
                 <?php
             }
+            elseif($aab_user_type == "owner")
+                {                
+                ?>
+            <td>
+                <table>
+                    <tr>
+                        <td style='font-size: 20px; text-align:center;' colspan="2"><b>আপনার একাউন্টে স্বাগতম</b></td>
+                    </tr>                            
+                    <tr>
+                        <td><b>কর্মরত হেড পাওয়ারস্টোরের নামঃ </b></td>
+                        <td><?php echo $_SESSION['loggedInOfficeName'];?></td>
+                    </tr>
+                    <tr>
+                        <td><b>হেড পাওয়ারস্টোরের নাম্বারঃ </b></td>
+                        <td><?php echo $offnumber;?></td>
+                    </tr>
+                    <tr>
+                        <td><b>হেড পাওয়ারস্টোরের ঠিকানাঃ </b></td>
+                        <td><?php echo $offaddress;?></td>
+                    </tr>
+                    <tr>
+                        <td><b> যোগদানের তারিখঃ </b></td>
+                        <td><?php echo $db_joiningDate;?></td>
+                    </tr>
+                    <tr>
+                        <td><b>দায়িত্ব/পোস্টঃ </b></td>
+                        <td><?php echo $db_empposition;?></td>
+                    </tr>
+                </table>
+            </td>
+                <?php }
             else{                
                 ?>
             <td>
@@ -145,27 +184,27 @@ if (!file_exists($aab_picture))
                         <td style='font-size: 20px; text-align:center;' colspan="2"><b>আপনার একাউন্টে স্বাগতম</b></td>
                     </tr>                            
                     <tr>
-                        <td><b>কর্মরত অফিস নামঃ </b></td>
+                        <td><b>কর্মরত অফিসের নামঃ </b></td>
                         <td><?php echo $_SESSION['loggedInOfficeName'];?></td>
                     </tr>
                     <tr>
-                        <td><b>অফিস নাম্বারঃ </b></td>
+                        <td><b>অফিসের নাম্বারঃ </b></td>
                         <td><?php echo $offnumber;?></td>
                     </tr>
                     <tr>
-                        <td><b>অফিস ঠিকানাঃ </b></td>
+                        <td><b>অফিসের ঠিকানাঃ </b></td>
                         <td><?php echo $offaddress;?></td>
                     </tr>
                     <tr>
                         <td><b> যোগদানের তারিখঃ </b></td>
-                        <td><?php echo $db_joiningDate;?></td>
+                        <td><?php echo english2bangla(date("d/m/Y",  strtotime($db_postingdate)));?></td>
                     </tr>
                     <tr>
                         <td><b>বর্তমান গ্রেডঃ </b></td>
                         <td><?php echo $db_paygrd_name;?></td>
                     </tr>
                     <tr>
-                        <td><b>দায়িত্বঃ </b></td>
+                        <td><b>বর্তমান দায়িত্ব/পোস্টঃ </b></td>
                         <td><?php echo $db_empposition;?></td>
                     </tr>
                 </table>
@@ -173,7 +212,6 @@ if (!file_exists($aab_picture))
             <?php
             }
             ?>
-
             <td style="width: 35%; text-align: center;">
                 <table >
                     <tr>
@@ -190,6 +228,7 @@ if (!file_exists($aab_picture))
                     </tr>
                 </table>
             </td>
+        </tr>
         <?php
         if ($aab_user_type == "customer") {
             ?>
@@ -204,27 +243,29 @@ if (!file_exists($aab_picture))
                 </td>
             </tr>
             <?php
-        }else{
+        }
+        elseif($aab_user_type != "customer" && $aab_user_type != "owner"){
         ?>            
         <tr>
             <td colspan="2" ><hr /></td>
         </tr>
         <tr>
-            <td style="padding-left: 20px;"><b>চাকরিতে সর্বপ্রথম যোগদানঃ </b></td>
-            <td></td>
+            <td style="padding-left: 20px;"><b>কর্মচারীর টাইপ</b></td>
+            <td>: <?php echo $arrayUserType[$session_user_type];?></td>
         </tr>
-
         <tr>
-            <td style="padding-left: 20px;"><b>ইন গ্রেডঃ </b></td>
-            <td></td>
+            <td style="padding-left: 20px;"><b>চাকরিতে সর্বপ্রথম যোগদান </b></td>
+            <td>: <?php echo $db_joiningDate;?></td>
         </tr>
+        <tr>
+            <td style="padding-left: 20px;"><b>চাকরিতে সর্বপ্রথম গ্রেড</b></td>
+            <td>: <?php echo $db_firstgrade;?></td>
         </tr>
             <?php
         }
             ?>
     </table>
 </div>
-
 <?php
 include_once 'includes/footer.php';
 ?>
