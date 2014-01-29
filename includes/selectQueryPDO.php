@@ -21,10 +21,12 @@ $sql_genology_tree = $conn->prepare("SELECT account_name, cfs_user_idUser FROM c
 $sql_select_accountType = $conn->prepare("SELECT account_name FROM account_type");
 $sql_select_office = $conn->prepare("SELECT * FROM office WHERE idOffice = ?");
 $sql_select_sales_store = $conn->prepare("SELECT * FROM sales_store WHERE idSales_store = ?");
-$sql_select_emp_post = $conn->prepare("SELECT post_name FROM employee, employee_posting, post_in_ons, post
+$sql_select_emp_post = $conn->prepare("SELECT post_name, posting_date FROM employee, employee_posting, post_in_ons, post
                                                                     WHERE idPost = Post_idPost AND idpostinons = post_in_ons_idpostinons AND Employee_idEmployee = idEmployee
-                                                                    AND  cfs_user_idUser =? ");
+                                                                    AND  cfs_user_idUser =? AND ons_relation_idons_relation= emp_ons_id ORDER BY posting_date DESC LIMIT 1 ");
 $sql_select_pay_grade = $conn->prepare("SELECT * FROM pay_grade WHERE idpaygrade = ?");
+$sql_select_first_grade = $conn->prepare("SELECT grade_name FROM employee,employee_salary,pay_grade WHERE idpaygrade=pay_grade_idpaygrade 
+    AND user_id= idEmployee AND cfs_user_idUser=? ORDER BY employee_salary.insert_date ASC LIMIT 1 ");
 // ******************* for master chart ***********************************************************
 $sql_select_all_catagory = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
 $sql_select_all_brand = $conn->prepare("SELECT DISTINCT pro_brand_or_grp, pro_brnd_or_grp_code FROM product_chart ORDER BY pro_brand_or_grp");

@@ -283,7 +283,7 @@ function beforeSubmit()
                             $offname = $offrow['salesStore_name'];
                         } 
                     }
-                    $sql_select_id_ons_relation->execute(array($db_officetype,$offname));
+                    $sql_select_id_ons_relation->execute(array($db_officetype,$db_offid));
                     $row7 = $sql_select_id_ons_relation->fetchAll();
                     foreach ($row7 as $onsrow) {
                         $db_onsID = $onsrow['idons_relation'];

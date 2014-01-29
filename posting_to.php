@@ -1,7 +1,7 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 include_once 'includes/MiscFunctions.php';
-include 'includes/header.php';
+include_once 'includes/header.php';
 include_once './includes/insertQueryPDO.php';
 include_once './includes/updateQueryPDO.php';
 include_once './includes/selectQueryPDO.php';
@@ -16,12 +16,9 @@ if(isset($_POST['submit']))
      $p_newPostingDate = $_POST['postingDate'];
      $conn->beginTransaction();
      $empposting =$sql_insert_employee_posting->execute(array($p_newPostingDate, $p_empID, $p_newOnSID,$p_newPostinID));
-     if($p_oldPostingID != "")
-     {
-         $update1=$sql_update_post_in_ons_up->execute(array($p_oldPostingID));
-     }
+     $update1=$sql_update_post_in_ons_up->execute(array($p_oldPostingID));
      $update2=$sql_update_post_in_ons_down->execute(array($p_newPostinID));
-     if(($empposting && $update2) || $update1)
+     if($empposting && $update2 && $update1)
      {
          $conn->commit();
          echo "<script>alert('পোস্টিং হয়েছে')</script>";
@@ -30,7 +27,6 @@ if(isset($_POST['submit']))
                 $conn->rollBack();
                 echo "<script>alert('দুঃখিত,পোস্টিং হয়নি')</script>";
             }
-    
 }
 ?>
 <style type="text/css">@import "css/bush.css";</style>
@@ -219,7 +215,7 @@ function beforeSubmit()
                             $offname = $offrow['salesStore_name'];
                         } 
                     }
-                    $sql_select_id_ons_relation->execute(array($db_officetype,$offname));
+                    $sql_select_id_ons_relation->execute(array($db_officetype,$db_offid));
                     $row7 = $sql_select_id_ons_relation->fetchAll();
                     foreach ($row7 as $onsrow) {
                         $db_onsID = $onsrow['idons_relation'];
