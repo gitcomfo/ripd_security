@@ -5,9 +5,10 @@ include_once 'includes/header.php';
 include_once './includes/insertQueryPDO.php';
 include_once './includes/updateQueryPDO.php';
 include_once './includes/selectQueryPDO.php';
-function getGrade($sql)
+$arrayUserType = array('employee' => 'কর্মচারী', 'programmer' => 'প্রোগ্রামার', 'presenter' => 'প্রেজেন্টার', 'trainer' => 'trainer');
+function getGrade($sql,$type)
 {
-    $sql->execute();
+    $sql->execute(array($type));
     $row5 = $sql->fetchAll();
      echo  "<option value=0> -সিলেক্ট করুন- </option>";
     foreach ($row5 as $graderow) {
@@ -27,13 +28,10 @@ if(isset($_POST['promotion']))
      $conn->beginTransaction();
      $emppromotion =$sql_insert_employee_salary->execute(array($p_newSalary, $p_empID, $p_newgrade));
      $empposting =$sql_insert_employee_posting->execute(array($p_newPostingDate, $p_empID, $p_newOnSID,$p_newPostinID));
-        if($p_oldPostingID != "")
-        {
-            $update1=$sql_update_post_in_ons_up->execute(array($p_oldPostingID));
-        }
-        $update2=$sql_update_post_in_ons_down->execute(array($p_newPostinID));
+     $update1=$sql_update_post_in_ons_up->execute(array($p_oldPostingID));
+     $update2=$sql_update_post_in_ons_down->execute(array($p_newPostinID));
      
-     if(($emppromotion) && (($empposting && $update2) || $update1))
+     if($emppromotion && $empposting && $update2 && $update1)
      {
          $conn->commit();
          echo "<script>alert('পোস্টিং ও প্রোমোশন হয়েছে')</script>";
@@ -42,7 +40,6 @@ if(isset($_POST['promotion']))
                 $conn->rollBack();
                 echo "<script>alert('দুঃখিত,পোস্টিং ও প্রোমোশন হয়নি')</script>";
             }
-    
 }
 ?>
 <style type="text/css">@import "css/bush.css";</style>
@@ -141,6 +138,7 @@ function beforeSubmit()
                     $db_mobile = $cfs_row['mobile'];
                     $db_picture = $cfs_row['emplo_scanDoc_picture'];
                     $db_cfsuserid = $cfs_row['idUser'];
+                    $db_usertype = $cfs_row['user_type'];
                 }
                 $sql_select_emp_address->execute(array($employee_id));
                 $row2 = $sql_select_emp_address->fetchAll();
@@ -159,13 +157,13 @@ function beforeSubmit()
                         $db_gradename = $arr_grade['grade_name'];
                     }
                                                            
-                    $sql_select_view_emp_post->execute(array($employee_id,$g_officeID));
-                    $row4 = $sql_select_view_emp_post->fetchAll();
+                    $sql_select_emp_post->execute(array($db_cfsuserid));
+                    $row4 = $sql_select_emp_post->fetchAll();
                     foreach ($row4 as $arr_row) {
                         $db_post = $arr_row['post_name'];
-                        $db_idposting = $arr_row['idempposting'];
+                        $db_idposting = $arr_row['idpostinons'];
                         $db_postingDate = $arr_row['posting_date'];
-                    }                                  
+                    }                                                        
                 echo "<table  class='formstyle'>";
                 echo "<tr>
                                 <th colspan='4' style='text-align: center'>
@@ -184,16 +182,16 @@ function beforeSubmit()
                             <legend style="color: brown;font-size: 14px;">বর্তমান অবস্থা</legend>
                             <table>
                             <tr>
-                                <td style="width: 25%; text-align:right">গ্রেড</td>
-                                <td style="width: 35%; text-align:left">: '.$db_gradename.'</td>
-                                <td style="width: 15%; text-align:right">পোস্ট<input type="hidden" name="oldpost" value="'.$db_idposting.'" /></td>
-                                <td style="width: 25%; text-align:left">: '.$db_post.'</td>
+                                <td style="width: 25%; text-align:right">অফিস</td>
+                                <td style="width: 25%;text-align:left">: '.$offname1.'<input type="hidden" name="oldonsID" value="'.$db_old_onsid.'" /></td>
+                                <td style="width: 25%; text-align:right">কর্মচারীর ধরন</td>
+                                <td style="width: 25%; text-align:left">: '.$arrayUserType[$db_usertype].'<input type="hidden" name="empID" value="'.$employee_id.'" /></td>
                             </tr>
                             <tr>
-                               <td style="text-align:right">অফিস</td>
-                                <td style=" text-align:left">: '.$offname1.'<input type="hidden" name="oldonsID" value="'.$db_old_onsid.'" /></td>
-                                <td style=" text-align:right">কর্মচারীর ধরন</td>
-                                <td style=" text-align:left">: কর্মচারী<input type="hidden" name="empID" value="'.$employee_id.'" /></td>
+                               <td style="text-align:right">পোস্ট<input type="hidden" name="oldpost" value="'.$db_idposting.'" /></td>
+                                <td style="text-align:left">: '.$db_post.'</td>
+                                <td style=" text-align:right">গ্রেড</td>
+                                <td style=" text-align:left">: '.$db_gradename.'</td>
                             </tr>
                             <tr>
                                <td style="text-align:right">যোগদানের তারিখ</td>
@@ -320,7 +318,7 @@ function beforeSubmit()
                                 <td style="width: 20%; text-align:left">: '.$db_gradename.'</td>
                                 <td style="width: 20%; text-align:right">নেক্সট গ্রেড</td>
                                 <td style="width: 40%; text-align:left">: <select class="box" name="nextGrade" onchange="showSalaryRange(this.value)">';
-                                    getGrade($sql_select_all_grade);
+                                    getGrade($sql_select_all_grade,$db_usertype);
                                  echo '</select><em2>*</em2></td>
                             </tr>
                             <tr>
