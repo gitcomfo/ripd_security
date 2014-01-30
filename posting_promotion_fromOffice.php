@@ -167,7 +167,7 @@ include_once './includes/selectQueryPDO.php';
                         <td>$db_post</td>
                         <td>$years বছর, $months2 মাস, $days দিন</td>
                         <td><a href='posting_to.php?0to1o1ff01i0c1e0=$empID&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t01%%offid=$get_office_id'>পোস্টিং করুন</a></td>
-                        <td><a href='promotion_to.php?0to1o1ff01i0c1e0=$empID&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t0%%offid=$get_office_id'>প্রোমোশন করুন</a></td>
+                        <td><a href='promotion_to.php?0to1o1ff01i0c1e0=$empID&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t01%%offid=$get_office_id'>প্রোমোশন করুন</a></td>
                         <td><a href='postingNpromotion.php?0to1o1ff01i0c1e0=$empID&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t01%%offid=$get_office_id'>পোস্টিং এন্ড প্রোমোশন</a></td>
                     </tr>"; // give the user id in the the place of $get_office_id
                     $sl++;
