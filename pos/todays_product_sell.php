@@ -12,7 +12,7 @@ $sql_select_today_product_sell = $conn->prepare("SELECT quantity, ins_productnam
                                                                                     FROM sales, inventory, sales_summary
                                                                                     WHERE inventory.idinventory = sales.inventory_idinventory
                                                                                     AND sales.sales_summery_idsalessummery = sales_summary.idsalessummary
-                                                                                    AND AND sales_amount = ?
+                                                                                    AND sal_salesdate = ?
                                                                                     AND ins_ons_id = ?
                                                                                     AND ins_ons_type = ?");
 $sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
@@ -260,9 +260,7 @@ function get_catagory() {
                         $amount = 0;
                         $count = 0;
                         $quantity = 0;
-                        $id_office = $_SESSION['loggedInOfficeID'];
-                        $type_office = $_SESSION['loggedInOfficeType'];
-                        $sql_select_today_product_sell->execute(array($date, $id_office, $type_office));
+                        $sql_select_today_product_sell->execute(array($date, $storeID, $scatagory));
                         $arr_purchase = $sql_select_today_product_sell->fetchAll();
                         foreach ($arr_purchase as $row) {
                             $count++;
@@ -275,15 +273,16 @@ function get_catagory() {
                             $db_amount = english2bangla($row["sales_amount"]);
                             echo '<tr>';
                             echo '<td><div align="center">' . $countShow . '</div></td>';
-                            echo '<td><div align="center">' . $db_pro_code . '</div></td>';
-                            echo '<td><div align="center">' . $db_pro_name . '</div></td>';
+                            echo '<td>' . $db_pro_code . '</td>';
+                            echo '<td>' . $db_pro_name . '</td>';
                             echo '<td><div align="center">' . $db_quantity . '</div></td>';
-                            echo '<td><div align="center">' . $db_amount . '</div></td>';
+                            echo '<td><div align="right">' . $db_amount . '</div></td>';
                         }
                         echo '<tr>';
-                        echo '<td colspan="3"><div align="right">সর্বমোট : </div></td>';
-                        echo '<td><div align="center">' . english2bangla($quantity) . '</div></td>';
-                        echo '<td><div align="center">' . english2bangla($amount) . '</div></td>';
+                        echo '<td colspan="2">তারিখঃ '.english2bangla(date("d/m/Y",  strtotime($date))).'</td>';
+                        echo '<td ><div align="right">সর্বমোট : </div></td>';
+                        echo '<td><div align="center">' . english2bangla($quantity) . 'টি</div></td>';
+                        echo '<td><div align="right">' . english2bangla($amount) . ' টাকা</div></td>';
                         ?>
                     </table>
                 </div>

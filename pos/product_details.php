@@ -25,11 +25,11 @@ $select_summary_details = $conn->prepare("SELECT *
     <div style="width: 100%;font-family: SolaimanLipi !important;">
         <table border="1" cellpadding="0" cellspacing="0">
             <tr>
-                            <td width="8%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রম</strong></div></td>
-                            <td width="20%" style="color: blue; font-size: 25px"><div align="center"><strong>কোড</strong></div></td>
-                            <td width="30%" style="color: blue; font-size: 25px"><div align="center"><strong>নাম</strong></div></td>
-                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>পরিমাণ</strong></div></td>
-                            <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>মোট (টাকা)</strong></div></td>
+                <td width="8%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রম</strong></div></td>
+                <td width="20%" style="color: blue; font-size: 25px"><div align="center"><strong>কোড</strong></div></td>
+                <td width="30%" style="color: blue; font-size: 25px"><div align="center"><strong>নাম</strong></div></td>
+                <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>পরিমাণ</strong></div></td>
+                <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>মোট (টাকা)</strong></div></td>
             </tr>
             <?php 
             $select_summary_details->execute(array($id));
@@ -39,7 +39,6 @@ $select_summary_details = $conn->prepare("SELECT *
             $total_amount = 0;
             foreach ($details as $row){
                 $count++;
-                
                 $show_count = english2bangla($count);
                 $db_ins_product_code= $row['ins_product_code'];
                 $db_ins_productname = $row['ins_productname'];
@@ -50,18 +49,17 @@ $select_summary_details = $conn->prepare("SELECT *
                 echo "
              <tr>
                 <td style='text-align: center'>$show_count</td>
-                <td style='text-align: center'>$db_ins_product_code</td>
-                <td style='text-align: center'>$db_ins_productname</td>
+                <td>$db_ins_product_code</td>
+                <td>$db_ins_productname</td>
                 <td style='text-align: center'>$show_quantity</td>
                 <td style='text-align: center'>$show_amount</td>
             </tr>";
             }
             ?>
-            <tr>
-                           
+            <tr>        
                 <td colspan="3" ><div align="right"><strong>সর্বমোট :</strong></div></td>
-                            <td ><div align="center"><?php echo english2bangla($total_quantity);?></div></td>
-                            <td ><div align="center"><?php echo english2bangla($total_amount);?></div></td>
+                <td ><div align="center"><?php echo english2bangla($total_quantity)." টি";?></div></td>
+                <td ><div align="center"><?php echo english2bangla($total_amount)." টাকা";?></div></td>
             </tr>
         </table>
    </div>

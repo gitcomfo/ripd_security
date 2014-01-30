@@ -27,7 +27,7 @@ if (isset($_GET['searchs']) && $_GET['searchs'] != '') {
                     }
 }
 
-if (isset($_GET['searchKey']) && $_GET['searchKey'] != '') {
+elseif (isset($_GET['searchKey']) && $_GET['searchKey'] != '') {
 	//Add slashes to any quotes to avoid SQL problems.
 	$str_key = $_GET['searchKey'];
                   $location = $_GET['where'];

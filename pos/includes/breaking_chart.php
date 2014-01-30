@@ -92,10 +92,10 @@ elseif ($_GET['type'] == 'pro_breaking') {
 
         echo '<tr>';
         echo '<td><div align="center">' . $db_breaking_date . '</div></td>';
-        echo '<td><div align="center">' . $db_pro_code . '</div></td>';
+        echo '<td>' . $db_pro_code . '</div></td>';
         echo '<td><div align="center">' . $db_pro_productname . '</div></td>';
         echo '<td><div align="center">' . $db_breaking_qty . '</div></td>';
-        echo '<td><div align="center">' . $db_cnvt_code . '</div></td>';
+        echo '<td>' . $db_cnvt_code . '</div></td>';
         echo '<td><div align="center">' . $db_cnvt_productname . '</div></td>';
         echo '<td><div align="center">' . $db_converted_qty . '</div></td>';
         echo '<td><div align="center">' . $db_account_name . '</div></td>';

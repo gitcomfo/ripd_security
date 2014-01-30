@@ -1,5 +1,6 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
+session_start();
 include 'ConnectDB.inc'; 
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
@@ -46,7 +47,7 @@ elseif (isset($_GET['id2'])) {
                                                 $db_productcode = $chartrow['pro_code'];
                                                 $db_unit = $chartrow['pro_unit'];
                                             }
-                                            $selstmt = mysql_query("SELECT * FROM inventory WHERE ins_product_type= 'general' AND ins_productid=$chartID");
+                                            $selstmt = mysql_query("SELECT * FROM inventory WHERE ins_product_type= 'general' AND ins_productid=$chartID AND ins_ons_id =$storeID AND ins_ons_type= '$scatagory' ");
                                             if(mysql_num_rows($selstmt) > 0)
                                             {
                                                 $row = mysql_fetch_assoc($selstmt);

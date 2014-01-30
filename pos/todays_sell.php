@@ -249,7 +249,7 @@ function get_catagory() {
             </div>
 
             <fieldset   style="border-width: 3px;margin:0 20px 50px 20px;font-family: SolaimanLipi !important;">
-                <legend style="color: brown;">পণ্যের তালিকা</legend>
+                <legend style="color: brown;">বিক্রয় তালিকা</legend>
                 <div id="resultTable">
                     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
                         <tr>
@@ -279,8 +279,9 @@ function get_catagory() {
                         <?php
                             }
                         echo '<tr>';
-                        echo '<td colspan="2"><div align="right">সর্বমোট : </div></td>';
-                        echo '<td><div align="center">' . english2bangla($amount) . '</div></td>';
+                        echo '<td>তারিখঃ '.english2bangla(date("d/m/Y",  strtotime($date))).'</td>';
+                        echo '<td><div align="right">সর্বমোট </div></td>';
+                        echo '<td><div align="center">' . english2bangla($amount) . ' টাকা</div></td>';
                         echo '<td></td>';
                         ?>
                     </table>

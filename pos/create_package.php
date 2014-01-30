@@ -152,11 +152,12 @@ function searchCode(where) // productlist-er code search box
                    document.getElementById('layer2').style.display = "none";
                }
                 else
-                    {document.getElementById('layer2').style.display = "inline"; }
-                document.getElementById('layer2').innerHTML=xmlhttp.responseText;
+                    {document.getElementById('layer2').style.display = "inline"; 
+                    document.getElementById('layer2').innerHTML=xmlhttp.responseText;
+                }
             }
         }
-        xmlhttp.open("GET","searchsuggest2.php?searchcode="+str_key+"&where="+where,true);
+        xmlhttp.open("GET","searchsuggest.php?searchcode="+str_key+"&where="+where,true);
         xmlhttp.send();
     
 }
@@ -186,7 +187,7 @@ function searchName(where) // productlist-er name search box
                 document.getElementById('searchResult').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","searchsuggest2.php?searchname="+str_key+"&where="+where,true);
+        xmlhttp.open("GET","searchsuggest.php?searchname="+str_key+"&where="+where,true);
         xmlhttp.send();
     
 }
