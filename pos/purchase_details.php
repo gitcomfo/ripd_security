@@ -25,12 +25,12 @@ $select_purchase_details = $conn->prepare("SELECT *
     <div style="width: 100%;font-family: SolaimanLipi !important;">
         <table border="1" cellpadding="0" cellspacing="0">
             <tr>
-                            <td width="8%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রম</strong></div></td>
-                            <td width="20%" style="color: blue; font-size: 25px"><div align="center"><strong>কোড</strong></div></td>
-                            <td width="20%" style="color: blue; font-size: 25px"><div align="center"><strong>নাম</strong></div></td>
-                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>পরিমাণ</strong></div></td>
-                            <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রয়মূল্য (টাকা)</strong></div></td>
-                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রয়ের ধরণ</strong></div></td>
+                <td width="8%" style="color: blue; font-size: 20px"><div align="center"><strong>ক্রম</strong></div></td>
+                <td width="20%" style="color: blue; font-size: 20px"><div align="center"><strong>কোড</strong></div></td>
+                <td width="20%" style="color: blue; font-size: 20px"><div align="center"><strong>নাম</strong></div></td>
+                <td width="10%" style="color: blue; font-size: 20px"><div align="center"><strong>পরিমাণ</strong></div></td>
+                <td width="15%" style="color: blue; font-size: 20px"><div align="center"><strong>ক্রয়মূল্য (টাকা)</strong></div></td>
+                <td width="10%" style="color: blue; font-size: 20px"><div align="center"><strong>ক্রয়ের ধরণ</strong></div></td>
             </tr>
             <?php 
             $select_purchase_details->execute(array($id));
@@ -54,8 +54,8 @@ $select_purchase_details = $conn->prepare("SELECT *
                 echo "
              <tr>
                 <td style='text-align: center'>$show_count</td>
-                <td style='text-align: center'>$db_pro_code</td>
-                <td style='text-align: center'>$db_pro_productname</td>
+                <td >$db_pro_code</td>
+                <td >$db_pro_productname</td>
                 <td style='text-align: center'>$show_quantity</td>
                 <td style='text-align: center'>$show_amount</td>
                 <td style='text-align: center'>$db_input_type</td>

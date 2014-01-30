@@ -13,9 +13,7 @@ $sql_select_purchase_list = $conn->prepare("SELECT in_input_date, chalan_no, pro
                                                     WHERE product_purchase.Product_chart_idproductchart = product_chart.idproductchart
                                                     AND product_purchase.pps_id = product_purchase_summary.ppsid
                                                     AND product_purchase_summary.cfs_user_idUser = cfs_user.idUser
-                                                    AND in_onsid = ?
-                                                    AND in_ons_type = ?
-                                                    ORDER BY in_input_date");
+                                                    AND in_onsid = ? AND in_ons_type = ? ORDER BY in_input_date,chalan_no");
 
 $sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
 
@@ -239,7 +237,6 @@ function get_catagory() {
     </head>
 
     <body onLoad="ShowTime()">
-
         <div id="maindiv">
             <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
             <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
@@ -271,17 +268,15 @@ function get_catagory() {
                             $db_how_many =  english2bangla($row['in_howmany']);
                             $db_buying_price = english2bangla($row['in_buying_price']);
                             $db_username = $row['account_name'];
-
                             echo '<tr>';
                             echo '<td><div align="center">' . $db_date . '</div></td>';
                             echo '<td><div align="center">' . $db_chalan_no . '</div></td>';
-                            echo '<td><div align="center">' . $db_procode . '</div></td>';
-                            echo '<td><div align="center">' . $db_pro_name . '</div></td>';
+                            echo '<td>' . $db_procode . '</div></td>';
+                            echo '<td>' . $db_pro_name . '</div></td>';
                             echo '<td><div align="center">' . $db_how_many . '</div></td>';
                             echo '<td><div align="center">' . $db_buying_price . '</div></td>';
                             echo '<td><div align="center">' . $db_username . '</div></td>';
                             echo '</tr>';
-                            $sl++;
                         }
                         ?>
                     </table>
