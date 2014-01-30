@@ -81,7 +81,7 @@ include_once './includes/selectQueryPDO.php';
                                         echo "<td>$db_setteleOfficeAN</td>";
                                         echo "<td>$db_setteleOfficeBranch</td>";
                                         echo "<td>$db_setteleOfficeAddress</td>";
-                                        echo "<td><a href='posting_promotion_fromOffice.php?iffimore=ll1i1s0t01&i010d10=$db_setteleOfficeID'>কর্মচারীদের তালিকা</a></td>";
+                                        echo "<td><a href='posting_promotion_fromOffice.php?iffimore=ll1i1s0t01&offid=$db_setteleOfficeID'>কর্মচারীদের তালিকা</a></td>";
                                         echo "</tr>";
                                         }
                                     ?>
@@ -108,7 +108,7 @@ include_once './includes/selectQueryPDO.php';
         <div style="padding-left: 110px;"><a href="posting_promotion_fromOffice.php"><b>ফিরে যান</b></a></div>
         <div>
             <?php
-           $get_office_id = $_GET['i010d10'];
+           $get_office_id = $_GET['offid'];
            $sql_select_office->execute(array($get_office_id));
            $arr_off = $sql_select_office->fetchAll();
            foreach ($arr_off as $row) {
@@ -166,9 +166,9 @@ include_once './includes/selectQueryPDO.php';
                         <td>$grdyears বছর, $grdmonths2 মাস, $grddays দিন</td>
                         <td>$db_post</td>
                         <td>$years বছর, $months2 মাস, $days দিন</td>
-                        <td><a href='posting_to.php?0to1o1ff01i0c1e0=$empID&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t01%%i010d10=$get_office_id'>পোস্টিং করুন</a></td>
-                        <td><a href='promotion_to.php?0to1o1ff01i0c1e0=$empID&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t01%%i010d10=$get_office_id'>প্রোমোশন করুন</a></td>
-                        <td><a href='postingNpromotion.php?0to1o1ff01i0c1e0=$empID&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t01%%i010d10=$get_office_id'>পোস্টিং এন্ড প্রোমোশন</a></td>
+                        <td><a href='posting_to.php?0to1o1ff01i0c1e0=$empID&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t01%%offid=$get_office_id'>পোস্টিং করুন</a></td>
+                        <td><a href='promotion_to.php?0to1o1ff01i0c1e0=$empID&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t0%%offid=$get_office_id'>প্রোমোশন করুন</a></td>
+                        <td><a href='postingNpromotion.php?0to1o1ff01i0c1e0=$empID&bkprnt=posting_promotion_fromOffice.php?iffimore=ll1i1s0t01%%offid=$get_office_id'>পোস্টিং এন্ড প্রোমোশন</a></td>
                     </tr>"; // give the user id in the the place of $get_office_id
                     $sl++;
                 }
