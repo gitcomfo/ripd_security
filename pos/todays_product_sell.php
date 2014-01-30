@@ -246,7 +246,7 @@ function get_catagory() {
             </div>
 
             <fieldset   style="border-width: 3px;margin:0 20px 50px 20px;font-family: SolaimanLipi !important;">
-                <legend style="color: brown;">পণ্যের তালিকা</legend>
+                <legend style="color: brown;">বিক্রয়কৃত পণ্যের তালিকা</legend>
                 <div id="resultTable">
                     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
                         <tr>

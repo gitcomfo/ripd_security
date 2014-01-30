@@ -7,12 +7,10 @@ $storeName = $_SESSION['loggedInOfficeName'];
 $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory = $_SESSION['loggedInOfficeType'];
-
-$sql_select_sell_date_range = $conn->prepare("SELECT sal_totalamount, sal_invoiceno, idsalessummary
-                                                            FROM sales_summary
-                                                            WHERE sal_salesdate >= ? AND sal_salesdate <= ?
-                                                             AND sal_storeid = ?
-                                                            AND sal_store_type = ?");
+$arr_type = array('general'=>'খুচরা','whole'=>'পাইকারি');
+$sql_select_sell_date_range = $conn->prepare("SELECT sal_totalamount, sal_invoiceno, idsalessummary,selling_type
+                                                            FROM sales_summary WHERE sal_salesdate >= ? AND sal_salesdate <= ?
+                                                             AND sal_storeid = ? AND sal_store_type = ?");
 $sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
 
 function get_catagory() {
@@ -240,7 +238,6 @@ function get_catagory() {
     </head>
 
     <body onLoad="ShowTime()">
-
         <div id="maindiv">
             <form method="post">
             <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
@@ -262,18 +259,18 @@ function get_catagory() {
                             <div style="float: left;width: 25%;"></br>
                                 <input style="width: 100px; height: 30px" type="submit" value="দেখুন" name="show"></input>
                             </div>
-                        </div>
-                    
+                        </div>                  
                 </fieldset></div>
 
             <fieldset   style="border-width: 3px;margin:0 20px 50px 20px;font-family: SolaimanLipi !important;">
-                <legend style="color: brown;">পণ্যের তালিকা</legend>
+                <legend style="color: brown;">বিক্রয় তালিকা</legend>
                 <div id="resultTable">
                     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
                         <tr>
                             <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রম</strong></div></td>
-                            <td width="40%" style="color: blue; font-size: 25px"><div align="center"><strong>চালান নং</strong></div></td>
-                            <td width="40%" style="color: blue; font-size: 25px"><div align="center"><strong>মোট (টাকা)</strong></div></td>
+                            <td width="20%" style="color: blue; font-size: 25px"><div align="center"><strong>চালান নং</strong></div></td>
+                            <td width="30%" style="color: blue; font-size: 25px"><div align="center"><strong>মোট (টাকা)</strong></div></td>
+                            <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>বিক্রয় ধরন</strong></div></td>
                             <td width="10%"></td>
                         </tr>
                         <?php
@@ -291,17 +288,21 @@ function get_catagory() {
                                 $amount += $row['sal_totalamount'];
                                 $db_amount = english2bangla($row["sal_totalamount"]);
                                 $db_idsalessummary = $row['idsalessummary'];
+                                $db_type = $row['selling_type'];
                                 echo '<tr>';
                                 echo '<td><div align="center">' . $countShow . '</div></td>';
                                 echo '<td><div align="center">' . $db_chalan_no . '</div></td>';
                                 echo '<td><div align="center">' . $db_amount . '</div></td>';
+                                echo '<td><div align="center">' . $arr_type[$db_type] . '</div></td>';
                                 ?>
                         <td><div align='center'><input type="button" name="details" value="বিস্তারিত" onclick="details_show('<?php echo $db_idsalessummary?>')"></input></div></td>
                         <?php
                             }
                             echo '<tr>';
-                            echo '<td colspan="2"><div align="right">সর্বমোট : </div></td>';
-                            echo '<td colspan="2"><div align="center">' . english2bangla($amount) . '</div></td>';
+                            echo '<td> '.english2bangla(date("d/m/Y",  strtotime($start))).'</br> হইতে</br>'.english2bangla(date("d/m/Y",  strtotime($end))).'</td>';
+                            echo '<td><div align="right">সর্বমোট </div></td>';
+                            echo '<td><div align="center">' . english2bangla($amount) .' টাকা</div></td>';
+                            echo '<td colspan="2"></td>';
                         }
                         ?>
                     </table>
