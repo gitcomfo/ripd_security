@@ -59,8 +59,8 @@ if (isset($_POST['save'])) {
                                                                     $chrg_givenby, $p_total_amount, $sts, $random));
         $sms_body = "Dear User,\nYou have received: $p_trans_amount Taka.\nTransaction Charge: $p_trans_charge Taka,\nYou will get $p_receiver_get Taka in Cash.\nYour code $random";
         $sendResult = SendSMSFuntion($receiver_mobile_num, $sms_body);
-        $sendStatus = substr($sendResult, 0, 4);
-        if($sendStatus == '1701'){
+        $sendStatus = substr($sendResult, 0, 2);
+        if($sendStatus == 'OK'){
             $msg = "টাকা সফল ভাবে সেন্ড হয়েছে, আপনার কোডটি ".$random;
         }else{
             $msg = "দুঃখিত, ম্যাসেজটি পাঠানো যায়নি, আপনার কোডটি ".$random;
