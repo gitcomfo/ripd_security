@@ -40,17 +40,17 @@ elseif(isset($_GET['type']))
         $db_progID = $progrow['idprogram'];
         echo "
                 <tr>
-                    <td style='border:1px black solid;'>$db_programname <input type='hidden' name='prgrm_id' value='$db_progID' /></td>
+                    <td style='border:1px black solid;'>$db_programname </td>
                     <td style='border:1px black solid;'>$date</td>
                     <td style='border:1px black solid;'>$time</td>
                     <td style='border:1px black solid;'>$db_programvanue</td>
-                    <td style='border:1px black solid;text-align:center;'><input style ='font-size: 12px; width:50px;border:2px solid green;cursor:pointer;' type='submit' name='submit' value='ক্রয়' /></td>
+                    <td style='border:1px black solid;text-align:center;'><a href='online_ticket_buying?opt=submit_ticket&prgrm_id=$db_progID'><input style ='font-size: 12px; width:50px;border:2px solid green;cursor:pointer;' type='button' value='ক্রয়' /></td>
                 </tr>";
             
     }
     echo "</tbody></table>";
 }
-elseif(isset($_GET['whichtype']))
+elseif(($_GET['what']=='attendance') && isset($_GET['whichtype']))
 {
     $g_type = $_GET['whichtype'];
     $typeinbangla = getProgramType($g_type);
@@ -75,11 +75,46 @@ elseif(isset($_GET['whichtype']))
         $db_progID = $progrow['idprogram'];
         echo "
                 <tr>
-                    <td style='border:1px black solid;'>$db_programname <input type='hidden' name='prgrm_id' value='$db_progID' /></td>
+                    <td style='border:1px black solid;'>$db_programname</td>
                     <td style='border:1px black solid;'>$date</td>
                     <td style='border:1px black solid;'>$time</td>
                     <td style='border:1px black solid;'>$db_programvanue</td>
-                    <td style='border:1px black solid;text-align:center;'><input style ='font-size: 12px; width:50px;border:2px solid green;cursor:pointer;' type='submit' name='submit' value='ক্রয়' /></td>
+                    <td style='border:1px black solid;text-align:center;'><a href='presenter_attendance.php?opt=submit&id=$db_progID'><input style ='font-size: 12px; width:100px;border:2px solid green;cursor:pointer;' type='button' value='হাজিরা প্রদান' /></a></td>
+                </tr>";
+            
+    }
+    echo "</tbody></table>";
+}
+elseif(($_GET['what']=='salary') && isset($_GET['whichtype']))
+{
+    $g_type = $_GET['whichtype'];
+    $typeinbangla = getProgramType($g_type);
+    $today = date("Y-m-d");
+    $sel_program = mysql_query("SELECT * FROM program WHERE program_type = '$g_type' AND program_date <= '$today' AND attendance_status='given' AND payment_status='unpaid' ORDER BY program_name ");
+     echo "<table border='1' cellpadding='0' cellspacing='0'>
+            <tr id='table_row_odd'>
+                <td style='border:1px black solid; '><b>$typeinbangla-এর নাম</b></td>
+                <td style='border:1px black solid;'><b>তারিখ</b></td>
+                <td style='border:1px black solid;'><b>সময়</b></td>
+                <td style='border:1px black solid;'><b>ভেন্যু</b></td>
+                <td style='border:1px black solid;'></td>
+            </tr><tbody>";
+    while($progrow = mysql_fetch_assoc($sel_program))
+    {
+        $db_programname = $progrow['program_name'];
+        $db_programdate = $progrow['program_date'];
+        $date = english2bangla(date('d/m/Y',  strtotime($db_programdate)));
+        $db_programtime = $progrow['program_time'];
+        $time = english2bangla($db_programtime);
+        $db_programvanue = $progrow['program_location'];
+        $db_progID = $progrow['idprogram'];
+        echo "
+                <tr>
+                    <td style='border:1px black solid;'>$db_programname</td>
+                    <td style='border:1px black solid;'>$date</td>
+                    <td style='border:1px black solid;'>$time</td>
+                    <td style='border:1px black solid;'>$db_programvanue</td>
+                    <td style='border:1px black solid;text-align:center;'><a href='presenter_salary.php?opt=submit&id=$db_progID'><input style ='font-size: 12px; width:100px;border:2px solid green;cursor:pointer;' type='button' value='বেতন প্রদান' /></a></td>
                 </tr>";
             
     }

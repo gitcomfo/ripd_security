@@ -23,8 +23,31 @@ var xmlhttp;
         {
            document.getElementById('list').innerHTML=xmlhttp.responseText;
         }
-        xmlhttp.open("GET","includes/getPrograms.php?whichtype="+type+"&what=attendance",true);
+        xmlhttp.open("GET","includes/getPrograms.php?whichtype="+type+"&what=salary",true);
         xmlhttp.send();	
+}
+</script>
+<script>
+   function checkIt(evt) // float value-er jonno***********************
+    {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode ==8 || (charCode >47 && charCode <58) || charCode==46) {
+        status = "";
+        return true;
+    }
+    status = "This field accepts numbers only.";
+    return false;
+}
+function  beforeSave()
+{
+    
+   var msg= document.getElementById("passmsg").innerText;
+        if(msg != "")
+       {
+           return false;
+       }
+       else {return true;}
 }
 </script>
 <?php
@@ -83,11 +106,11 @@ if ($_GET['opt']=='submit') {
     ?>
     <div class="column6">
         <div class="main_text_box">
-            <div style="padding-left: 110px;"><a href="presenter_attendance.php"><b>ফিরে যান</b></a></div> 
+            <div style="padding-left: 110px;"><a href="presenter_salary.php"><b>ফিরে যান</b></a></div> 
             <div> 
                 <form method="POST" action="presenter_attendance.php">	
                     <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
-                        <tr><th colspan="4" style="text-align: center;font-size: 20px;">হাজিরা প্রদান</th></tr>
+                        <tr><th colspan="4" style="text-align: center;font-size: 20px;">বেতন প্রদান</th></tr>
                         <tr>
                             <td style="width:40%" ><?php echo $typeinbangla;?> নাম্বার</td>
                             <td>: <input  class="box" type="text" name="presentation_number" readonly  value="<?php echo $db_rl_presentation_number; ?>"/></td>   
@@ -124,7 +147,7 @@ if ($_GET['opt']=='submit') {
                                         <td style="border: 1px solid black;"><?php echo $whoinbangla?>-এর নাম </td>
                                         <td style="border: 1px solid black;">একাউন্ট নাম্বার</td>
                                         <td style="border: 1px solid black;">মোবাইল নাম্বার</td>
-                                        <td style="border: 1px solid black;"></td>
+                                        <td style="border: 1px solid black;">বেতন (টাকা)</td>
                                     </tr>
                                     <?php
                                     $sl=1;
@@ -133,8 +156,7 @@ if ($_GET['opt']=='submit') {
                                     echo '<td>' . $row[1] . '</td>';
                                     echo '<td>' . $row[0].'</td>';
                                     echo '<td>' .$row[2].'</td>';
-                                    echo '<td><input type="radio" name="status['.$sl.']" value="present" checked="" /><font style="color:green">উপস্থিত</font> 
-                                                    &nbsp;&nbsp;<input type="radio" name="status['.$sl.']" value="absent" /><font style="color:red">অনুপস্থিত</font></td>';
+                                    echo '<td><input class="box" type="text" name="salary['.$sl.']" id="salary['.$sl.']" onkeypress="return checkIt(event)"/></td>';
                                     echo '</tr>';
                                     $sl++;
                                 }

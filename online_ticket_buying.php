@@ -1,6 +1,6 @@
 <?php
 error_reporting(0);
-include_once 'includes/session.inc';
+//include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
@@ -137,14 +137,14 @@ function  beforeSave()
 }
 </script>
 <?php
-if(isset($_POST['submit'])) 
+if(isset($_GET['prgrm_id'])) 
 {
    $db_name = $cfsrow['account_name'];
    $db_mbl = $cfsrow['mobile'];
     $sel_charge = mysql_query("SELECT * FROM charge WHERE charge_criteria='ticket making charge' ");
     $chargerow = mysql_fetch_assoc($sel_charge);
     $making_prize=$chargerow['charge_amount'];
-    $P_value=$_POST['prgrm_id'];
+    $P_value=$_GET['prgrm_id'];
     $allsql="SELECT * FROM program WHERE idprogram= $P_value ;";
     $allrslt=mysql_query($allsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন';
     while($all=  mysql_fetch_assoc($allrslt))

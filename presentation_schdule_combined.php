@@ -255,6 +255,10 @@ if ($_GET['action'] == 'first') {
 
                     <!--######################SELECT QUERY########################## -->
                     <?php
+                     if (isset($_SESSION['arrPresenters']))
+                    {
+                         unset($_SESSION['arrPresenters']);
+                    }
                     $db_result_presenter_name = mysql_query("SELECT * FROM program WHERE program_type = '$type' AND program_date >= NOW() ORDER BY program_date ");
                     while ($row_prstn = mysql_fetch_array($db_result_presenter_name)) {
                         $str_presenter_list = "";
@@ -336,6 +340,10 @@ if ($_GET['action'] == 'first') {
                 }
                 ?>
                 <?php
+                 if (isset($_SESSION['arrPresenters']))
+                    {
+                         unset($_SESSION['arrPresenters']);
+                    }
                 foreach ($_SESSION['arrProgram'] as $value) {
                     $pname = $value[0];
                     $offid = $value[1];
@@ -428,22 +436,18 @@ if ($_GET['action'] == 'first') {
         if (!isset($_SESSION['arrPresenters']))
            {
             $_SESSION['arrPresenters'] = array();
-           }
-        $sel_presenters = mysql_query("SELECT * FROM presenter_list,cfs_user,employee  
-                                                            WHERE fk_idprogram =$G_presentation_id 
-                                                            AND fk_Employee_idEmployee = idEmployee AND cfs_user_idUser= idUser");
-        while ($row_presenters = mysql_fetch_assoc($sel_presenters))
-        {
-           $db_acc = $row_presenters['account_number'];
-           $db_name = $row_presenters['account_name'];
-           $db_mbl = $row_presenters['mobile'];
-           $db_eid = $row_presenters['idEmployee'];
-           if (!isset($_SESSION['arrPresenters']))
-           {
-                $_SESSION['arrPresenters'] = array();
-                $arr_temp = array($db_acc,$db_name,$db_mbl);
+            $sel_presenters = mysql_query("SELECT * FROM presenter_list,cfs_user,employee  
+                                                                WHERE fk_idprogram =$G_presentation_id 
+                                                                AND fk_Employee_idEmployee = idEmployee AND cfs_user_idUser= idUser");
+            while ($row_presenters = mysql_fetch_assoc($sel_presenters))
+            {
+               $db_acc = $row_presenters['account_number'];
+               $db_name = $row_presenters['account_name'];
+               $db_mbl = $row_presenters['mobile'];
+               $db_eid = $row_presenters['idEmployee'];
+               $arr_temp = array($db_acc,$db_name,$db_mbl);
                $_SESSION['arrPresenters'][$db_eid] = $arr_temp;
-           }
+               }
         }
         ?>
         <form method="POST" action=""> <!--Redirect from one page to another -->
@@ -504,10 +508,10 @@ if ($_GET['action'] == 'first') {
                             $url= urlencode($_SERVER['REQUEST_URI']);
                              foreach ($_SESSION['arrPresenters'] as $key => $row) {
                             echo '<tr>';
-                            echo '<td><div align="left">' . $row[1] . '</div></td>';
-                            echo '<td><div align="left">&nbsp;&nbsp;&nbsp;' . $row[0].'</div></td>';
-                            echo '<td><div align="center">' .$row[2].'</div></td>';
-                            echo '<td style="text-align:center"><a href="includes/getParentOffices.php?delete=1&id='.$key.'&url='.$url.'"><img src="images/del.png" style="cursor:pointer;" width="20px" height="20px" /></a></td>';
+                            echo '<td>' . $row[1] .'</td>';
+                            echo '<td>' . $row[0].'</td>';
+                            echo '<td>' .$row[2].'</td>';
+                            echo '<td ><a href="includes/getParentOffices.php?delete=1&id='.$key.'&url='.$url.'"><img src="images/del.png" style="cursor:pointer;" width="20px" height="20px" /></a></td>';
                             echo '</tr>';
                         }
                     ?>
