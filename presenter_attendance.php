@@ -50,7 +50,7 @@ var xmlhttp;
         {
            document.getElementById('list').innerHTML=xmlhttp.responseText;
         }
-        xmlhttp.open("GET","includes/getPrograms.php?type="+type,true);
+        xmlhttp.open("GET","includes/getPrograms.php?whichtype="+type,true);
         xmlhttp.send();	
 }
 function  checkCorrectPass(passwrd) // match password with account
@@ -494,7 +494,7 @@ if ($_GET['opt']=='submit_ticket') {
             <?php } 
              elseif($sqlerror !="") { QueryFailedMsg($sqlerror);}
                 else{ ?>
-            <div style="padding-left: 110px;"><a href="online_ticket_buying.php"><b>ফিরে যান</b></a></div> 
+            <div style="padding-left: 110px;"><a href="program_management.php"><b>ফিরে যান</b></a></div> 
             <div> 
                 <form method="POST" onsubmit="" action="online_ticket_buying.php?opt=accept_price">	
                     <table  class="formstyle" style="color: #3333CC; font-weight:600;font-family: SolaimanLipi !important;">          
@@ -637,7 +637,7 @@ if ($_GET['opt']=='submit_ticket') {
             <?php } 
             elseif($sqlerror !="") { QueryFailedMsg($sqlerror);}
             else{ ?>
-            <div id="noprint"style="padding-left: 110px;"><a href="online_ticket_buying.php"><b>ফিরে যান</b></a></div> 
+            <div id="noprint"style="padding-left: 110px;"><a href="program_management.php"><b>ফিরে যান</b></a></div> 
             <div>
                 <form method="POST" onsubmit="" action="selling_ticket.php?opt=submit_account">	
                     <table  class="formstyle" style="color: #3333CC; font-weight:600;page-break-inside: auto;">          
@@ -660,11 +660,11 @@ else {
     ?>
     <div class="column6">
         <div class="main_text_box">
-            <div style="padding-left: 110px;"><a href="account_management.php"><b>ফিরে যান</b></a></div> 
+            <div style="padding-left: 110px;"><a href="program_management.php"><b>ফিরে যান</b></a></div> 
             <div>
-                <form method="POST" onsubmit="" action="online_ticket_buying.php?opt=submit_ticket">	
+                <form method="POST" onsubmit="" action="presenter_attendance.php?opt=submit_ticket">	
                     <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
-                        <tr><th colspan="4" style="text-align: center;font-size: 22px;">টিকেট ক্রয়</th></tr>
+                        <tr><th colspan="4" style="text-align: center;font-size: 20px;">হাজিরা প্রদান</th></tr>
                         <tr>
                             <td style="width: 40%">প্রেজেন্টেশন / প্রোগ্রাম / ট্রেইনিং / ট্রাভেল</td>
                             <td>: <select class="selectOption" name="type" id="type" onchange="getList(this.value)" style="width: 170px !important;">
@@ -688,3 +688,4 @@ else {
 }
 include 'includes/footer.php';
 ?>
+
