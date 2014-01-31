@@ -210,7 +210,7 @@ function getProgramer2($type)
 }
 function getProgramerType($type)
 {
-   $arr_who_type = array('presentation'=>'presenter','program'=>'programmer','training'=>'trainer','travel'=>'traveler');
+   $arr_who_type = array('presentation'=>'presenter','program'=>'programmer','training'=>'trainer','travel'=>'programmer');
    return $arr_who_type[$type];
 }
 function getTypeFromWho($type)

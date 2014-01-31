@@ -1,9 +1,8 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 include 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
-$arr_presenter = array();
 $type=$_GET['type'];
 $typeinbangla = getProgramType($type);
 $whoinbangla =  getProgramer($type);
@@ -14,7 +13,7 @@ $sql_program_ins = $conn->prepare("INSERT INTO program (program_no, program_name
               VALUES (?, ?, ?, ?, ?, ?, ?)");
  $sql_presenterlist_ins = $conn->prepare("INSERT INTO presenter_list (fk_idprogram, fk_Employee_idEmployee) VALUES (?, ?)");
 
- if (($_POST['new_submit'])) {
+if (($_POST['new_submit'])) {
     $P_prstn_name = $_POST['presentation_name'];
     $P_prstn_date = $_POST['presentation_date'];
     $P_prstn_location = $_POST['place'];
@@ -22,25 +21,19 @@ $sql_program_ins = $conn->prepare("INSERT INTO program (program_no, program_name
      $str_program_random= str_pad($str_random_no,4, "0", STR_PAD_LEFT);
     $prstn_number_final = $type."-".$str_program_random;
     $P_prstn_time = $_POST['presentation_time'];
-    $arr_presenter = $_POST['p_acno'];
-    $no_ofpresenters = count($arr_presenter);
     $P_officeID = $_POST['parent_id'];
 
     $conn->beginTransaction();
         $y1 = $sql_program_ins->execute(array($prstn_number_final,$P_prstn_name,$P_prstn_location, $P_prstn_date, $P_prstn_time, $type, $P_officeID ));
         $db_last_insert_id = $conn->lastInsertId();
-      for($i=0;$i<$no_ofpresenters;$i++)
+       foreach ($_SESSION['arrPresenters'] as $key => $row) 
       {
-          $account = $arr_presenter[$i];
-          $sql_cfs_emp_sel->execute(array($account));
-          $get =  $sql_cfs_emp_sel->fetchAll();
-          foreach ($get as $value) {
-              $empid = $value['idEmployee'];
-          }
-          $y = $sql_presenterlist_ins->execute(array($db_last_insert_id,$empid));
+          $y = $sql_presenterlist_ins->execute(array($db_last_insert_id,$key));
       }
     if ($y1 && $y) {
         $conn->commit();
+         unset($_SESSION['arrPresenters']);
+         unset($_SESSION['arrProgram']);
         $msg = "<font style='color:green'>তথ্য সংরক্ষিত হয়েছে</font>";
     } else {
         $conn->rollBack();
@@ -55,26 +48,21 @@ elseif (isset($_POST['submit1'])) {
     $P_prstn_location = $_POST['place'];
     $P_prstn_udate = $_POST['presentation_date'];
     $P_prstn_utime = $_POST['presentation_time'];
-    $P_presenter_name = $_POST['presenters'];
-     $str_presenter_list = substr($P_presenter_name, 0, -2);
-    $arr_presenter = explode(", ", $str_presenter_list);
-    $no_ofpresenters = count($arr_presenter);
-     mysql_query("START TRANSACTION");
+    $P_officeID = $_POST['parent_id'];
+    mysql_query("START TRANSACTION");
     $sql_up = mysql_query("UPDATE program 
                                  SET program_name='$P_prstn_uname', program_date='$P_prstn_udate', 
-                                 program_time='$P_prstn_utime' ,program_location= '$P_prstn_location'
+                                 program_time='$P_prstn_utime' ,program_location= '$P_prstn_location', Office_idOffice='$P_officeID'
                                  WHERE program_no='$P_prstn_unumber'");
     $del_prsnterlist = mysql_query("DELETE FROM presenter_list WHERE fk_idprogram='$P_prstn_id' ");
-     for($i=0;$i<$no_ofpresenters;$i++)
-             {
-                 $account = $arr_presenter[$i];
-                 $sql = mysql_query("SELECT idEmployee FROM cfs_user, employee WHERE cfs_user_idUser = idUser AND account_number= '$account'");
-                 $getrow = mysql_fetch_assoc($sql);
-                 $empid = $getrow['idEmployee'];
-                 $y =mysql_query("INSERT INTO presenter_list (fk_idprogram, fk_Employee_idEmployee) VALUES ($P_prstn_id,$empid)");
-             }
+      foreach ($_SESSION['arrPresenters'] as $key => $row) 
+      { 
+          $y =  mysql_query("INSERT INTO presenter_list (fk_idprogram, fk_Employee_idEmployee) VALUES ($P_prstn_id, $key)");
+      }
     if ($sql_up && $del_prsnterlist && $y) {
         mysql_query("COMMIT");
+        unset($_SESSION['arrPresenters']);
+        unset($_SESSION['arrProgram']);
         $msgi = "<font style='color:green'>তথ্য সংরক্ষিত হয়েছে</font>";
     } else {
          mysql_query("ROLLBACK");
@@ -91,28 +79,8 @@ elseif (isset($_POST['submit1'])) {
 <script type="text/javascript" src="javascripts/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="javascripts/area.js"></script>
 <link rel="stylesheet" type="text/css" href="css/jquery.autocomplete.css"/>
-<script type="text/javascript" src="javascripts/jquery-1.4.3.min.js"></script>
 <style type="text/css">@import "css/bush.css";</style>
 <script type="text/javascript">
-$('.del').live('click',function(){
-	$(this).parent().parent().remove();
-        });
-        $('.add').live('click',function()
-        {
-            var appendTxt= "<tr><td><input class='box' id='p_acno' name='p_acno[]' /></td><td><input class='box' id='p_name'  />\n\
-                                        <td><input class='box' id='p_mbl' /></td>\n\
-                                         <td style='text-align:right;'><input type='button' class='del' />&nbsp;<input type='button' class='add' /></td></tr>";
-            $("#container_others:last").after(appendTxt);
-        })
-window.onclick = function()
-    {
-        new JsDatePick({
-            useMode: 2,
-            target: "presentation_date",
-            dateFormat: "%Y-%m-%d"
-        });
-    };
-    
 function setOffice(office,offid)
 {
         document.getElementById('off_name').value = office;
@@ -160,6 +128,32 @@ function getOffice(str_key) // for searching parent offices
         xmlhttp.open("GET","includes/getParentOffices.php?search="+str_key+"&office=1",true);
         xmlhttp.send();	
 }
+function getPresenters(key,type) // for searching presenters
+{
+    var xmlhttp;
+       if (window.XMLHttpRequest)
+        {
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if(key.length ==0)
+                {
+                   document.getElementById('presenterList').style.display = "none";
+               }
+                else
+                    {document.getElementById('presenterList').style.visibility = "visible";
+                document.getElementById('presenterList').setAttribute('style','position:absolute;top:40%;left:54%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                    }
+                document.getElementById('presenterList').innerHTML=xmlhttp.responseText;
+        }
+        xmlhttp.open("GET","includes/getParentOffices.php?key="+key+"&type="+type,true);
+        xmlhttp.send();	
+}
 
 function setLocation(offid)
 {     
@@ -193,10 +187,10 @@ function setLocation(offid)
         xmlhttp.send();
     }
     
-     function beforeSubmit(){
+     function beforeSubmit(countrow){
     if ((document.getElementById('presentation_name').value !="")
-    && (document.getElementById('presenters').value !="")
     && (document.getElementById('off_name').value !="")
+    && (countrow !="0")
     && (document.getElementById('place').value !="")
     && (document.getElementById('presentation_date').value !="")
     && (document.getElementById('presentation_time').value !=""))
@@ -206,6 +200,26 @@ function setLocation(offid)
         return false; 
     }
 }
+function addToList(acc,name,mbl,eID) // to add into temporary array*******************
+{
+    
+    var parentid = document.getElementById("parent_id").value;
+    var pname = document.getElementById("presentation_name").value;
+    var offname = document.getElementById("off_name").value;
+    var place = document.getElementById("place").value;
+    var pdate = document.getElementById("presentation_date").value;
+    var ptime = document.getElementById("presentation_time").value;
+    var xmlhttp;
+        if (window.XMLHttpRequest) xmlhttp=new XMLHttpRequest();
+        else xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) 
+                location.reload();
+        }
+        xmlhttp.open("GET","includes/getParentOffices.php?acc="+acc+"&name="+name+"&mbl="+mbl+"&eID="+eID+"&parentid="+parentid+"&pname="+pname+"&offname="+offname+"&place="+place+"&pdate="+pdate+"&ptime="+ptime, true);
+        xmlhttp.send();
+}
 </script>
 
 <!--*********************Presentation List****************** -->
@@ -214,11 +228,11 @@ if ($_GET['action'] == 'first') {
     ?>
     <div style="padding-top: 10px;">    
         <div style="padding-left: 110px; width: 49%; float: left"><a href="program_management.php"><b>ফিরে যান</b></a></div>
-        <div><a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
+        <div style="padding-left: 70px;width: 30%;float: left;"><a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
     </div>
     <div>
         <form method="POST" onsubmit="">	
-            <table  class="formstyle" style =" width:78%" id="make_presentation_fillter">      
+            <table  class="formstyle" style =" width:85%" id="make_presentation_fillter">      
                 <thead>
                     <tr>
                         <th colspan="8" ><?php echo $typeinbangla;?> সিডিউল</th>                        
@@ -241,7 +255,7 @@ if ($_GET['action'] == 'first') {
 
                     <!--######################SELECT QUERY########################## -->
                     <?php
-                    $db_result_presenter_name = mysql_query("SELECT * FROM program WHERE program_type = '$type' AND program_date >= NOW() ORDER BY program_no ");
+                    $db_result_presenter_name = mysql_query("SELECT * FROM program WHERE program_type = '$type' AND program_date >= NOW() ORDER BY program_date ");
                     while ($row_prstn = mysql_fetch_array($db_result_presenter_name)) {
                         $str_presenter_list = "";
                         $str_presenter_email_list = "";
@@ -309,7 +323,7 @@ if ($_GET['action'] == 'first') {
     </div>
 
     <div>
-        <form method="POST" autocomplete="off" aciton="presentation_schdule_combined.php?action=first" onsubmit="return beforeSubmit()">
+        <form method="POST" autocomplete="off" aciton="presentation_schdule_combined.php?action=first" onsubmit="return beforeSubmit('<?php echo count($_SESSION['arrPresenters'])?>')">
             <table class="formstyle" style =" width:78%">
                 <tr>
                     <th colspan="5">  মেইক <?php echo $typeinbangla;?></th>
@@ -321,43 +335,66 @@ if ($_GET['action'] == 'first') {
                 </tr>";
                 }
                 ?>
+                <?php
+                foreach ($_SESSION['arrProgram'] as $value) {
+                    $pname = $value[0];
+                    $offid = $value[1];
+                    $offname = $value[2];
+                    $place = $value[3];
+                    $pdate = $value[4];
+                    $ptime = $value[5];
+                }
+                ?>
                 <tr>
                     <td ><?php echo $typeinbangla;?>-এর নাম</td>               
-                    <td colspan="3">: <input  class="box" type="text" name="presentation_name" id="presentation_name" value="" /><em2> *</em2></td>   
+                    <td colspan="3">: <input  class="box" type="text" name="presentation_name" id="presentation_name" value="<?php echo $pname;?>" /><em2> *</em2></td>   
                 </tr>      
                 <tr>
                     <td>অফিস</td>               
-                    <td colspan="3">: <input class="box" id="off_name" name="offname" onkeyup="getOffice(this.value);" /><em2> *</em2><em> (অ্যাকাউন্ট নাম্বার)</em>
-                       <div id="parentResult"></div><input type="hidden" name="parent_id" id="parent_id"/>
+                    <td colspan="3">: <input class="box" id="off_name" name="offname" onkeyup="getOffice(this.value);" value="<?php echo $offname;?>" /><em2> *</em2><em> (অ্যাকাউন্ট নাম্বার)</em>
+                       <div id="parentResult"></div><input type="hidden" name="parent_id" id="parent_id"value="<?php echo $offid;?>" />
                     </td>
                 </tr>
                 <tr>
                     <td>স্থান</td>
-                    <td colspan="3">: <input  class="box" type="text" id="place" name="place" value=""/><em2> *</em2></td>            
+                    <td colspan="3">: <input  class="box" type="text" id="place" name="place" value="<?php echo $place;?>"/><em2> *</em2></td>            
                 </tr>
                 <tr>
                     <td >তারিখ </td>
-                    <td colspan="3">: <input class="box"type="text" id="presentation_date" placeholder="Date"  style="" name="presentation_date" value=""/><em2> *</em2></td>   
+                    <td colspan="3">: <input class="box"type="date" id="presentation_date" name="presentation_date" value="<?php echo $pdate;?>"/><em2> *</em2></td>   
                     </td>   
                 </tr>
                 <tr>
-                    <td > সময় </td>
-                    <td colspan="3">: <input  class="box" type="time" id="presentation_time" name="presentation_time" value=""/><em2> *</em2></td>  
+                    <td> সময় </td>
+                    <td colspan="3">: <input  class="box" type="time" id="presentation_time" name="presentation_time" value="<?php echo $ptime;?>"/><em2> *</em2></td>  
                 </tr>
                 <tr>
-                    <td colspan="4" style="text-align: center;"></br><?php echo $whoinbangla?> সিলেক্ট করুন<em2> *</em2></td>               
+                    <td> <?php echo $whoinbangla?> সিলেক্ট করুন</td>
+                    <td colspan="3">: <input  class="box" type="text" id="preserters" name="preserters" onkeyup="getPresenters(this.value,'<?php echo $whoType ?>');" /><em2> *</em2><em> (অ্যাকাউন্ট নাম্বার)</em>
+                                                <div id="presenterList"></div></td>  
                 </tr>
                 <tr>
-                    <td>একাউন্ট নাম্বার</td>
-                    <td>নাম</td>
-                    <td>মোবাইল নং</td>
-                    <td></td>
-                </tr>
-                <tr id="container_others">
-                    <td><input class="box" id="p_acno" name="p_acno[]" /></td>
-                    <td><input class="box" id="p_name"  /></td>
-                    <td><input class="box" id="p_mbl"  /></td>
-                    <td style="text-align: right"><input type="button" class="add" /></td>
+                    <td colspan="2">
+                        <table cellspacing="0">
+                            <tr id="table_row_odd">
+                                <td style="border: 1px solid black;"><?php echo $whoinbangla?>-এর নাম </td>
+                                <td style="border: 1px solid black;">একাউন্ট নাম্বার</td>
+                                <td style="border: 1px solid black;">মোবাইল নাম্বার</td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+                            <?php
+                            $url= urlencode($_SERVER['REQUEST_URI']);
+                             foreach ($_SESSION['arrPresenters'] as $key => $row) {
+                            echo '<tr>';
+                            echo '<td >' . $row[1] . '</td>';
+                            echo '<td>' . $row[0].'</td>';
+                            echo '<td>' .$row[2].'</td>';
+                            echo '<td style="text-align:center"><a href="includes/getParentOffices.php?delete=1&id='.$key.'&url='.$url.'"><img src="images/del.png" style="cursor:pointer;" width="20px" height="20px" /></a></td>';
+                            echo '</tr>';
+                        }
+                    ?>
+                        </table>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: center"></br><input type="submit" class="btn" name="new_submit" value="সেভ" >
@@ -373,23 +410,43 @@ if ($_GET['action'] == 'first') {
     ?>
     <div style="padding-top: 10px;">    
         <div style="padding-left: 110px; width: 49%; float: left"><a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>">ফিরে যান</b></a></div>
-        <div> <a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
+        <div > <a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a></div>
     </div>
     <div>
         <!--PHP coding for SHOWING THE DATA IN EDIT SCHEDULE -->     
         <?php
         $G_presentation_id = $_GET['id'];
-        $sql_edit = "SELECT * FROM program WHERE idprogram =$G_presentation_id ";
-        $db_result_edit = mysql_query($sql_edit);
+        $db_result_edit = mysql_query("SELECT * FROM program,office WHERE idprogram =$G_presentation_id AND Office_idOffice=idOffice");
         $row_edit = mysql_fetch_array($db_result_edit);
         $db_rl_presentation_number = $row_edit['program_no'];
         $db_rl_presentation_name = $row_edit['program_name'];
         $db_rl_presentation_date = $row_edit['program_date'];
         $db_rl_presentation_time = $row_edit['program_time'];
         $db_rl_presentation_location = $row_edit['program_location'];
-      
+        $db_rl_officeacc = $row_edit['account_number'];
+        $db_rl_officeID = $row_edit['idOffice'];
+        if (!isset($_SESSION['arrPresenters']))
+           {
+            $_SESSION['arrPresenters'] = array();
+           }
+        $sel_presenters = mysql_query("SELECT * FROM presenter_list,cfs_user,employee  
+                                                            WHERE fk_idprogram =$G_presentation_id 
+                                                            AND fk_Employee_idEmployee = idEmployee AND cfs_user_idUser= idUser");
+        while ($row_presenters = mysql_fetch_assoc($sel_presenters))
+        {
+           $db_acc = $row_presenters['account_number'];
+           $db_name = $row_presenters['account_name'];
+           $db_mbl = $row_presenters['mobile'];
+           $db_eid = $row_presenters['idEmployee'];
+           if (!isset($_SESSION['arrPresenters']))
+           {
+                $_SESSION['arrPresenters'] = array();
+                $arr_temp = array($db_acc,$db_name,$db_mbl);
+               $_SESSION['arrPresenters'][$db_eid] = $arr_temp;
+           }
+        }
         ?>
-        <form method="POST"> <!--Redirect from one page to another -->
+        <form method="POST" action=""> <!--Redirect from one page to another -->
             <table class="formstyle" style =" width:78%" id="presentation_fillter">       
                 <tr>
                     <th colspan="5">  এডিট সিডিউল </th>
@@ -406,40 +463,59 @@ if ($_GET['action'] == 'first') {
                     <td>: <input  class="box" type="text" name="presentation_number" readonly  value="<?php echo $db_rl_presentation_number; ?>"/></td>   
                 </tr>
                 <tr>
-                    <td ><?php echo $typeinbangla;?> নাম</td>               
-                    <td>: <input  class="box" type="text" name="presentation_name" value="<?php echo $db_rl_presentation_name; ?>"/>
+                    <td ><?php echo $typeinbangla;?>-এর নাম</td>               
+                    <td>: <input  class="box" type="text" name="presentation_name" id="presentation_name" value="<?php echo $db_rl_presentation_name; ?>"/>
                         <input type="hidden" name="pesentation_id" value="<?php echo $G_presentation_id;?>"</td>   
                 </tr>
                 <tr>
+                    <td>অফিস</td>               
+                    <td colspan="3">: <input class="box" id="off_name" name="offname" onkeyup="getOffice(this.value);" value="<?php echo $db_rl_officeacc;?>" /><em2> *</em2><em> (অ্যাকাউন্ট নাম্বার)</em>
+                       <div id="parentResult"></div><input type="hidden" name="parent_id" id="parent_id"value="<?php echo $db_rl_officeID;?>" />
+                    </td>
+                </tr>
+                <tr>
                     <td>স্থান</td>
-                    <td>:    <input  class="box" type="text" id="place" name="place" value="<?php echo $db_rl_presentation_location;?>"/></td>            
+                    <td>: <input  class="box" type="text" id="place" name="place" value="<?php echo $db_rl_presentation_location;?>"/></td>            
                 </tr>
                 <tr>
                     <td >তারিখ</td>
-                    <td>: <input class="box" type="text" id="presentation_date" placeholder="Date"  style="" name="presentation_date" value="<?php echo $db_rl_presentation_date; ?>"/></td>
+                    <td>: <input class="box" type="date" id="presentation_date" name="presentation_date" value="<?php echo $db_rl_presentation_date; ?>"/></td>
                     </td>   
                 </tr>
                 <tr>
                     <td > সময় </td>
-                    <td>: <input  class="box" type="time" name="presentation_time" value="<?php echo $db_rl_presentation_time; ?>"/></td>
+                    <td>: <input  class="box" type="time" name="presentation_time" id="presentation_time" value="<?php echo $db_rl_presentation_time; ?>"/></td>
                 </tr>
                 <tr>
-                    <td colspan="4" style="text-align: center;"></br><?php echo $whoinbangla?> সিলেক্ট করুন<em2> *</em2></td>               
+                    <td> <?php echo $whoinbangla?> সিলেক্ট করুন</td>
+                    <td colspan="3">: <input  class="box" type="text" id="preserters" name="preserters" onkeyup="getPresenters(this.value,'<?php echo $whoType ?>');" /><em2> *</em2><em> (অ্যাকাউন্ট নাম্বার)</em>
+                                                <div id="presenterList"></div></td>  
                 </tr>
                 <tr>
-                    <td>একাউন্ট নাম্বার</td>
-                    <td>নাম</td>
-                    <td>মোবাইল নং</td>
-                    <td></td>
-                </tr>
-                <tr id="container_others">
-                    <td><input class="box" id="p_acno" name="p_acno[]" /></td>
-                    <td><input class="box" id="p_name"  /></td>
-                    <td><input class="box" id="p_mbl"  /></td>
-                    <td style="text-align: right"><input type="button" class="add" /></td>
+                    <td colspan="2">
+                        <table cellspacing="0">
+                            <tr id="table_row_odd">
+                                <td style="border: 1px solid black;"><?php echo $whoinbangla?>-এর নাম </td>
+                                <td style="border: 1px solid black;">একাউন্ট নাম্বার</td>
+                                <td style="border: 1px solid black;">মোবাইল নাম্বার</td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+                            <?php
+                            $url= urlencode($_SERVER['REQUEST_URI']);
+                             foreach ($_SESSION['arrPresenters'] as $key => $row) {
+                            echo '<tr>';
+                            echo '<td><div align="left">' . $row[1] . '</div></td>';
+                            echo '<td><div align="left">&nbsp;&nbsp;&nbsp;' . $row[0].'</div></td>';
+                            echo '<td><div align="center">' .$row[2].'</div></td>';
+                            echo '<td style="text-align:center"><a href="includes/getParentOffices.php?delete=1&id='.$key.'&url='.$url.'"><img src="images/del.png" style="cursor:pointer;" width="20px" height="20px" /></a></td>';
+                            echo '</tr>';
+                        }
+                    ?>
+                        </table>
+                    </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: center"><input type="submit" class="btn" name="submit1" id="submit1" readonly="" onclick="return beforeSave();" value="সেভ" > 
+                    <td colspan="2" style="text-align: center"><input type="submit" class="btn" name="submit1" id="submit1" value="আপডেট" > 
                         &nbsp;<input type="reset" class="btn" name="reset" value="রিসেট"></td>
                 </tr>
             </table>
@@ -451,9 +527,8 @@ if ($_GET['action'] == 'first') {
     ?>
     <div style="padding-top: 10px;">    
         <div style="padding-left: 110px; width: 49%; float: left"><a href="program_management.php"><b> ফিরে যান</b></a></div>
-        <div><a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a> </div> 
+        <div style="padding-left: 70px;width: 30%;float: left;"><a href="presentation_schdule_combined.php?action=first&type=<?php echo $type;?>"><?php echo $typeinbangla;?> লিস্ট</a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=new&type=<?php echo $type;?>">মেইক <?php echo $typeinbangla;?></a>&nbsp;&nbsp;<a href="presentation_schdule_combined.php?action=list&type=<?php echo $type;?>"><?php echo $whoinbangla?>-এর  লিস্ট</a> </div> 
     </div> 
-
     <form method="POST" onsubmit="">	
         <table  class="formstyle" style =" width:85%"id="presentation_fillter">          
             <thead>
@@ -471,7 +546,7 @@ if ($_GET['action'] == 'first') {
                 <tr id = "table_row_odd">
                     <td><?php echo $whoinbangla?>-এর নাম </td>
                     <td >একাউন্ট নাম্বার</td>
-                    <td >সেল নাম্বার</td>
+                    <td >মোবাইল নাম্বার</td>
                     <td >ইমেইল</td>
                     <td >প্রকার</td>
                     <td> থানা</td>

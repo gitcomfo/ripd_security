@@ -9,286 +9,286 @@ $storeName = $_SESSION['loggedInOfficeName'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
-        <meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
-        <link rel="icon" type="image/png" href="images/favicon.png" />
-        <title>বিক্রয় কার্যক্রম</title>
-        <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-        <script language="JavaScript" type="text/javascript" src="scripts/suggest.js"></script>
-        <script language="JavaScript" type="text/javascript" src="scripts/productsearch.js"></script>
-        <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
-        <script src="scripts/tinybox.js" type="text/javascript"></script>
-        <style type="text/css">
-            .prolinks:focus{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
-            .prolinks:hover{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
-        </style>
-        <!--===========================================================================================================================-->
-        <script language="javascript" type="text/javascript">
-            function multiply(){
-                a=Number(document.abc.QTY.value);
-                b=Number(document.abc.PPRICE.value);
-                c=a*b;
-                document.abc.TOTAL.value=c;
-                z=Number(document.abc.ProPV.value);
-                pv=a*z;
-                document.abc.SubTotalPV.value=pv;
+<meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
+<link rel="icon" type="image/png" href="images/favicon.png" />
+<title>বিক্রয় কার্যক্রম</title>
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
+<script language="JavaScript" type="text/javascript" src="scripts/suggest.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/productsearch.js"></script>
+<link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
+<script src="scripts/tinybox.js" type="text/javascript"></script>
+<style type="text/css">
+    .prolinks:focus{
+        background-color: cadetblue;
+        color: yellow !important;
+    }
+    .prolinks:hover{
+        background-color: cadetblue;
+        color: yellow !important;
+    }
+</style>
+<!--===========================================================================================================================-->
+<script language="javascript" type="text/javascript">
+    function multiply(){
+        a=Number(document.abc.QTY.value);
+        b=Number(document.abc.PPRICE.value);
+        c=a*b;
+        document.abc.TOTAL.value=c;
+        z=Number(document.abc.ProPV.value);
+        pv=a*z;
+        document.abc.SubTotalPV.value=pv;
 
-                if (a!=0) // some logic to determine if it is ok to go
-                {document.getElementById("addtoCart").disabled = false;}
-                else // in case it was enabled and the user changed their mind
-                {document.getElementById("addtoCart").disabled = true;}
+        if (a!=0) // some logic to determine if it is ok to go
+        {document.getElementById("addtoCart").disabled = false;}
+        else // in case it was enabled and the user changed their mind
+        {document.getElementById("addtoCart").disabled = true;}
 
-            }
-            function beforeSave()
-            {
-                if((document.getElementById('checkField').value != 0))
-                {
-                    document.getElementById('print').readonly = false; 
-                    return true; 
-                }
-                else { return false; }        
-            }
+    }
+    function beforeSave()
+    {
+        if((document.getElementById('checkField').value != 0))
+        {
+            document.getElementById('print').readonly = false; 
+            return true; 
+        }
+        else { return false; }        
+    }
 
-            function checkIt(evt) // float value******************** 
-            {
-                evt = (evt) ? evt : window.event
-                var charCode = (evt.which) ? evt.which : evt.keyCode
-                if (charCode ==8 || (charCode >47 && charCode <58) || charCode==46) {
-                    status = ""
-                    return true
-                }
-                status = "This field accepts numbers only."
-                return false
+    function checkIt(evt) // float value******************** 
+    {
+        evt = (evt) ? evt : window.event
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode ==8 || (charCode >47 && charCode <58) || charCode==46) {
+            status = ""
+            return true
+        }
+        status = "This field accepts numbers only."
+        return false
+    }
+    function numbersonly(e)
+    {
+        var unicode=e.charCode? e.charCode : e.keyCode
+        if (unicode!=8)
+        { //if the key isn't the backspace key (which we should allow)
+            if (unicode<48||unicode>57) //if not a number
+                return false //disable key press
+        }
+    }
+    function minus(){
+        a=Number(document.mn.cash.value);
+        b=Number(document.mn.gtotal.value);
+        c=a-b;
+        document.mn.change.value=c;
+        if(c >= 0)
+        {
+            document.getElementById('checkField').value=1;
+        }
+        else { document.getElementById('checkField').value=0; }
+    }
+    function minus2(){
+        a=Number(document.mn.cash2.value);
+        b=Number(document.mn.cashTopay.value);
+        c=a-b;
+        document.mn.change2.value=c;
+        if(c >= 0)
+        {
+            document.getElementById('checkField').value=1;
+        }
+        else { document.getElementById('checkField').value=0; }
+    }
+    function calculateCash(byacc)
+    {
+        var total =Number(document.mn.gtotal.value);
+        var bycash = total - Number(byacc);
+        document.getElementById('cashTopay').value= bycash;
+    }
+</script>
+<script>
+    function getXMLHTTP() { 
+        var xmlhttp=false;	
+        try{ xmlhttp=new XMLHttpRequest();}
+        catch(e){		
+            try{xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");}
+            catch(e){
+                try{xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");}
+                catch(e1){xmlhttp=false;}
             }
-            function numbersonly(e)
-            {
-                var unicode=e.charCode? e.charCode : e.keyCode
-                if (unicode!=8)
-                { //if the key isn't the backspace key (which we should allow)
-                    if (unicode<48||unicode>57) //if not a number
-                        return false //disable key press
-                }
-            }
-            function minus(){
-                a=Number(document.mn.cash.value);
-                b=Number(document.mn.gtotal.value);
-                c=a-b;
-                document.mn.change.value=c;
-                if(c >= 0)
-                {
-                    document.getElementById('checkField').value=1;
-                }
-                else { document.getElementById('checkField').value=0; }
-            }
-            function minus2(){
-                a=Number(document.mn.cash2.value);
-                b=Number(document.mn.cashTopay.value);
-                c=a-b;
-                document.mn.change2.value=c;
-                if(c >= 0)
-                {
-                    document.getElementById('checkField').value=1;
-                }
-                else { document.getElementById('checkField').value=0; }
-            }
-            function calculateCash(byacc)
-            {
-                var total =Number(document.mn.gtotal.value);
-                var bycash = total - Number(byacc);
-                document.getElementById('cashTopay').value= bycash;
-            }
-        </script>
-        <script>
-            function getXMLHTTP() { 
-                var xmlhttp=false;	
-                try{ xmlhttp=new XMLHttpRequest();}
-                catch(e){		
-                    try{xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");}
-                    catch(e){
-                        try{xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");}
-                        catch(e1){xmlhttp=false;}
-                    }
-                }
-                return xmlhttp;
-            }
-	
-            function checkQty(qty)
-            {
-                var inventoryid = document.getElementById('inventoryID').value;
-                var reqst = getXMLHTTP();		
-                if (reqst) 
-                {
-                    reqst.onreadystatechange = function()
-                    {
-                        if (reqst.readyState == 4) 
-                        {			
-                            if (reqst.status == 200)
-                            {
-                                var jc= document.getElementById('checkresult').innerHTML=reqst.responseText;
-                                if(jc == 1) {multiply();}
-                                else {                                                                                     
-                                    document.getElementById('TOTAL').value=0;
-                                    document.getElementById("QTY").value = 0;
-                                    alert("দুঃখিত, পর্যাপ্ত পরিমান প্রোডাক্ট নেই");
-                                                                                   
-                                }
-                            } 
-                            else 
-                            {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
-                        }				
-                    }			
-                    reqst.open("GET","includes/checkProductQty.php?qty="+qty+"&id="+inventoryid, true);
-                    reqst.send(null);
-                }	
-            }
+        }
+        return xmlhttp;
+    }
 
-            function showCustInfo(custType)
+    function checkQty(qty)
+    {
+        var inventoryid = document.getElementById('inventoryID').value;
+        var reqst = getXMLHTTP();		
+        if (reqst) 
+        {
+            reqst.onreadystatechange = function()
             {
-                var reqst = getXMLHTTP();		
-                if (reqst) 
-                {
-                    reqst.onreadystatechange = function()
+                if (reqst.readyState == 4) 
+                {			
+                    if (reqst.status == 200)
                     {
-                        if (reqst.readyState == 4) 
-                        {			
-                            if (reqst.status == 200)
-                            { document.getElementById('customerInfo').innerHTML=reqst.responseText;} 
-                            else 
-                            {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
-                        }				
-                    }			
-                    reqst.open("GET","includes/showCustomerInfo.php?type="+custType+"&selltype=1", true);
-                    reqst.send(null);
-                }		
-            }
-            function showPayType(payType)
+                        var jc= document.getElementById('checkresult').innerHTML=reqst.responseText;
+                        if(jc == 1) {multiply();}
+                        else {                                                                                     
+                            document.getElementById('TOTAL').value=0;
+                            document.getElementById("QTY").value = 0;
+                            alert("দুঃখিত, পর্যাপ্ত পরিমান প্রোডাক্ট নেই");
+
+                        }
+                    } 
+                    else 
+                    {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+                }				
+            }			
+            reqst.open("GET","includes/checkProductQty.php?qty="+qty+"&id="+inventoryid, true);
+            reqst.send(null);
+        }	
+    }
+
+    function showCustInfo(custType)
+    {
+        var reqst = getXMLHTTP();		
+        if (reqst) 
+        {
+            reqst.onreadystatechange = function()
             {
-                var reqst = getXMLHTTP();		
-                if (reqst) 
-                {
-                    reqst.onreadystatechange = function()
-                    {
-                        if (reqst.readyState == 4) 
-                        {			
-                            if (reqst.status == 200)
-                            { document.getElementById('payInfo').innerHTML=reqst.responseText;} 
-                            else 
-                            {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
-                        }				
-                    }			
-                    reqst.open("GET","includes/showPayInfo.php?type="+payType+"&selltype=1", true);
-                    reqst.send(null);
-                }		
-            }
-            function showCustName(acNo)
+                if (reqst.readyState == 4) 
+                {			
+                    if (reqst.status == 200)
+                    { document.getElementById('customerInfo').innerHTML=reqst.responseText;} 
+                    else 
+                    {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+                }				
+            }			
+            reqst.open("GET","includes/showCustomerInfo.php?type="+custType+"&selltype=1", true);
+            reqst.send(null);
+        }		
+    }
+    function showPayType(payType)
+    {
+        var reqst = getXMLHTTP();		
+        if (reqst) 
+        {
+            reqst.onreadystatechange = function()
             {
-                var reqst = getXMLHTTP();		
-                if (reqst) 
-                {
-                    reqst.onreadystatechange = function()
-                    {
-                        if (reqst.readyState == 4) 
-                        {			
-                            if (reqst.status == 200)
-                            { document.getElementById('acName').value=reqst.responseText;} 
-                            else 
-                            {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
-                        }				
-                    }			
-                    reqst.open("GET","includes/getAccountInfo.php?acno="+acNo+"&type=cust", true);
-                    reqst.send(null);
-                }		
-            }
-            function showEmpName(acNo)
+                if (reqst.readyState == 4) 
+                {			
+                    if (reqst.status == 200)
+                    { document.getElementById('payInfo').innerHTML=reqst.responseText;} 
+                    else 
+                    {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+                }				
+            }			
+            reqst.open("GET","includes/showPayInfo.php?type="+payType+"&selltype=1", true);
+            reqst.send(null);
+        }		
+    }
+    function showCustName(acNo)
+    {
+        var reqst = getXMLHTTP();		
+        if (reqst) 
+        {
+            reqst.onreadystatechange = function()
             {
-                var reqst = getXMLHTTP();		
-                if (reqst) 
-                {
-                    reqst.onreadystatechange = function()
-                    {
-                        if (reqst.readyState == 4) 
-                        {			
-                            if (reqst.status == 200)
-                            { document.getElementById('empName').value=reqst.responseText;} 
-                            else 
-                            {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
-                        }				
-                    }			
-                    reqst.open("GET","includes/getAccountInfo.php?acno="+acNo+"&type=emp", true);
-                    reqst.send(null);
-                }	
-            }
-            function checkAccountBalance(accNo)
+                if (reqst.readyState == 4) 
+                {			
+                    if (reqst.status == 200)
+                    { document.getElementById('acName').value=reqst.responseText;} 
+                    else 
+                    {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+                }				
+            }			
+            reqst.open("GET","includes/getAccountInfo.php?acno="+acNo+"&type=cust", true);
+            reqst.send(null);
+        }		
+    }
+    function showEmpName(acNo)
+    {
+        var reqst = getXMLHTTP();		
+        if (reqst) 
+        {
+            reqst.onreadystatechange = function()
             {
-                var toPayAmount = document.getElementById('gtotal').value;
-                var reqst = getXMLHTTP();		
-                if (reqst) 
-                {
-                    reqst.onreadystatechange = function()
-                    {
-                        if (reqst.readyState == 4) 
-                        {			
-                            if (reqst.status == 200)
-                            { 
-                                var amount = reqst.responseText;
-                                if(Number(amount) >= Number(toPayAmount))
-                                {
-                                    document.getElementById('amount').value=toPayAmount;
-                                    document.getElementById('checkField').value=1;
-                                }
-                                else
-                                {
-                                    document.getElementById('amount').value=0;
-                                    document.getElementById('checkField').value=0;
-                                    alert("দুঃখিত, এই পরিমান টাকা আপনার অ্যাকাউন্টে নেই")
-                                }
-                            } 
-                            else 
-                            {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
-                        }				
-                    }			
-                    reqst.open("GET","includes/getAccountInfo.php?AcNo="+accNo, true);
-                    reqst.send(null);
-                }	
-            }
-            function addToCart() // to add into temporary array*******************
+                if (reqst.readyState == 4) 
+                {			
+                    if (reqst.status == 200)
+                    { document.getElementById('empName').value=reqst.responseText;} 
+                    else 
+                    {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+                }				
+            }			
+            reqst.open("GET","includes/getAccountInfo.php?acno="+acNo+"&type=emp", true);
+            reqst.send(null);
+        }	
+    }
+    function checkAccountBalance(accNo)
+    {
+        var toPayAmount = document.getElementById('gtotal').value;
+        var reqst = getXMLHTTP();		
+        if (reqst) 
+        {
+            reqst.onreadystatechange = function()
             {
-                var id = document.getElementById("inventoryID").value;
-                var name = document.getElementById("pname").value;
-                var code = document.getElementById("procode").value;
-                var qty = Number(document.getElementById("QTY").value);
-                var totalamount = Number(document.getElementById("TOTAL").value);
-                var sell = Number(document.getElementById("PPRICE").value);
-                var buy = Number(document.getElementById("buyprice").value);
-                var totalpv = Number(document.getElementById("SubTotalPV").value);
-                if(qty != 0)
-                {
-                    var reqst = getXMLHTTP();		
-                    if (reqst) 
-                    {
-                        reqst.onreadystatechange = function()
+                if (reqst.readyState == 4) 
+                {			
+                    if (reqst.status == 200)
+                    { 
+                        var amount = reqst.responseText;
+                        if(Number(amount) >= Number(toPayAmount))
                         {
-                            if (reqst.readyState == 4) 
-                            {			
-                                if (reqst.status == 200)
-                                {location.reload();} 
-                                else 
-                                {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
-                            }				
-                        }			
-                        reqst.open("GET","addorder.php?selltype=1&id="+id+"&code="+code+"&name="+name+"&qty="+qty+"&total="+totalamount+"&selling="+sell+"&buying="+buy+"&totalpv="+totalpv, true);
-                        reqst.send(null);
-                    }	
-                }
-                else { alert("দুঃখিত, পরিমান অথবা ক্রয়মূল্য ০ হতে পারবে না") ;}
-            }
-        </script>   
-    </head>
+                            document.getElementById('amount').value=toPayAmount;
+                            document.getElementById('checkField').value=1;
+                        }
+                        else
+                        {
+                            document.getElementById('amount').value=0;
+                            document.getElementById('checkField').value=0;
+                            alert("দুঃখিত, এই পরিমান টাকা আপনার অ্যাকাউন্টে নেই")
+                        }
+                    } 
+                    else 
+                    {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+                }				
+            }			
+            reqst.open("GET","includes/getAccountInfo.php?AcNo="+accNo, true);
+            reqst.send(null);
+        }	
+    }
+    function addToCart() // to add into temporary array*******************
+    {
+        var id = document.getElementById("inventoryID").value;
+        var name = document.getElementById("pname").value;
+        var code = document.getElementById("procode").value;
+        var qty = Number(document.getElementById("QTY").value);
+        var totalamount = Number(document.getElementById("TOTAL").value);
+        var sell = Number(document.getElementById("PPRICE").value);
+        var buy = Number(document.getElementById("buyprice").value);
+        var totalpv = Number(document.getElementById("SubTotalPV").value);
+        if(qty != 0)
+        {
+            var reqst = getXMLHTTP();		
+            if (reqst) 
+            {
+                reqst.onreadystatechange = function()
+                {
+                    if (reqst.readyState == 4) 
+                    {			
+                        if (reqst.status == 200)
+                        {location.reload();} 
+                        else 
+                        {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+                    }				
+                }			
+                reqst.open("GET","addorder.php?selltype=1&id="+id+"&code="+code+"&name="+name+"&qty="+qty+"&total="+totalamount+"&selling="+sell+"&buying="+buy+"&totalpv="+totalpv, true);
+                reqst.send(null);
+            }	
+        }
+        else { alert("দুঃখিত, পরিমান অথবা ক্রয়মূল্য ০ হতে পারবে না") ;}
+    }
+</script>   
+</head>
 
     <body>
         <div id="maindiv">
