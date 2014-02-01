@@ -11,11 +11,13 @@
             
             if($district_id == "all")
                     {
-                    if($division_id != "all")                    
-                            $thana_sql = mysql_query("SELECT * FROM ".$dbname.".thana, ".$dbname.".district, ".$dbname.".division WHERE District_idDistrict=idDistrict AND Division_idDivision=idDivision
-                                                                            AND idDivision = '" . $division_id . "'ORDER BY thana_name ASC");
-                    else
-                            $thana_sql = mysql_query("SELECT * FROM ".$dbname.".thana ORDER BY thana_name ASC");
+                        if($division_id != "all")
+                        {
+                                $thana_sql = mysql_query("SELECT * FROM thana, district,division WHERE District_idDistrict=idDistrict AND Division_idDivision=idDivision
+                                                                                AND idDivision = $division_id ORDER BY thana_name ASC");
+                        }
+                        else
+                                $thana_sql = mysql_query("SELECT * FROM thana ORDER BY thana_name ASC");
                     }
             else
                     {

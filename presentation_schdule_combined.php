@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 include 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
@@ -221,7 +221,6 @@ function addToList(acc,name,mbl,eID) // to add into temporary array*************
         xmlhttp.send();
 }
 </script>
-
 <!--*********************Presentation List****************** -->
 <?php
 if ($_GET['action'] == 'first') {
@@ -252,8 +251,6 @@ if ($_GET['action'] == 'first') {
                     </tr>
                 </thead>
                 <tbody> 
-
-                    <!--######################SELECT QUERY########################## -->
                     <?php
                      if (isset($_SESSION['arrPresenters']))
                     {
@@ -575,7 +572,7 @@ if ($_GET['action'] == 'first') {
                     $sql_list_address= mysql_query("SELECT * FROM employee, address, thana, district, division WHERE idEmployee=$db_rl_presenter_id AND adrs_cepng_id= idEmployee 
                                                                             AND address_type='Present' AND address_whom='emp' 
                                                                             AND Thana_idThana=idThana AND District_idDistrict = idDistrict AND Division_idDivision=idDivision ");
-                  $addressrow = mysql_fetch_assoc($sql_list_address);                    
+                    $addressrow = mysql_fetch_assoc($sql_list_address);                    
                         $db_thana = $addressrow['thana_name'];
                         $db_district = $addressrow['district_name'];
                         $db_division = $addressrow['division_name'];
