@@ -121,7 +121,7 @@ function getOffice(str_key) // for searching parent offices
                }
                 else
                     {document.getElementById('parentResult').style.visibility = "visible";
-                document.getElementById('parentResult').setAttribute('style','position:absolute;top:40%;left:54%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('parentResult').setAttribute('style','position:absolute;top:41%;left:65.5%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('parentResult').innerHTML=xmlhttp.responseText;
         }
@@ -143,11 +143,10 @@ function getPresenters(key,type) // for searching presenters
         {
             if(key.length ==0)
                 {
-                   document.getElementById('presenterList').style.display = "none";
+                   document.getElementById('presenterList').style.visibility = "hidden";
                }
                 else
                     {document.getElementById('presenterList').style.visibility = "visible";
-                document.getElementById('presenterList').setAttribute('style','position:absolute;top:40%;left:54%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('presenterList').innerHTML=xmlhttp.responseText;
         }
@@ -376,7 +375,7 @@ if ($_GET['action'] == 'first') {
                 <tr>
                     <td> <?php echo $whoinbangla?> সিলেক্ট করুন</td>
                     <td colspan="3">: <input  class="box" type="text" id="preserters" name="preserters" onkeyup="getPresenters(this.value,'<?php echo $whoType ?>');" /><em2> *</em2><em> (অ্যাকাউন্ট নাম্বার)</em>
-                                                <div id="presenterList"></div></td>  
+                                                <div id="presenterList" style="position:absolute;top:58%;left:65.5%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;visibility: hidden"></div></td>  
                 </tr>
                 <tr>
                     <td colspan="2">
@@ -490,7 +489,7 @@ if ($_GET['action'] == 'first') {
                 <tr>
                     <td> <?php echo $whoinbangla?> সিলেক্ট করুন</td>
                     <td colspan="3">: <input  class="box" type="text" id="preserters" name="preserters" onkeyup="getPresenters(this.value,'<?php echo $whoType ?>');" /><em2> *</em2><em> (অ্যাকাউন্ট নাম্বার)</em>
-                                                <div id="presenterList"></div></td>  
+                <div id="presenterList" style="position:absolute;top:62%;left:59%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;visibility: hidden"></div></td>  
                 </tr>
                 <tr>
                     <td colspan="2">
