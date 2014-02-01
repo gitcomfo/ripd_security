@@ -35,7 +35,7 @@ else{
         $officeEmail = $storerow['salesStore_email']; 
         $officeOpeningDate = $storerow['opening_date']; 
         $date = date("d-m-Y",  strtotime($officeOpeningDate));
-        $parent_id = $offrow['office_id'];
+        $parent_id = $storerow['office_id'];
         $sql_select_office -> execute(array($parent_id));
         $arr_office = $sql_select_office->fetchAll();
         foreach ($arr_office as $offrow1) {
