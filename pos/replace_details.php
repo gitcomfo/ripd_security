@@ -6,10 +6,8 @@ include 'includes/connectionPDO.php';
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
 $id = $_GET['rep_id'];
-$select_replace_details = $conn->prepare("SELECT * 
-                                                    FROM replace_product, inventory
-                                                    WHERE replace_product_summary_idreproductsum = ?
-                                                    AND inventory_idinventory = idinventory");
+$select_replace_details = $conn->prepare("SELECT * FROM replace_product, inventory WHERE replace_product_summary_idreproductsum = ?
+                                                                    AND inventory_idinventory = idinventory");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -26,7 +24,7 @@ $select_replace_details = $conn->prepare("SELECT *
         <table border="1" cellpadding="0" cellspacing="0">
             <tr>
                 <td>প্রোডাক্ট কোড</td>
-                <td>নাম</td>
+                <td>প্রোডাক্ট নাম</td>
                 <td>রিপ্লেস পরিমাণ</td>
                 <td>টাকা</td>
             </tr>
