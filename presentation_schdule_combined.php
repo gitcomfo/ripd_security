@@ -230,23 +230,23 @@ if ($_GET['action'] == 'first') {
     </div>
     <div>
         <form method="POST" onsubmit="">	
-            <table  class="formstyle" style =" width:85%" id="make_presentation_fillter">      
+            <table  class="formstyle" style =" width:85%" id="make_presentation_fillter" cellspacing="0">      
                 <thead>
                     <tr>
                         <th colspan="8" ><?php echo $typeinbangla;?> সিডিউল</th>                        
                     </tr>          
                     <tr>
-                        <td colspan="8" style="text-align: right">খুঁজুন:  <input type="text" class="box" id="search_filter" /></td>
+                        <td colspan="8" style="text-align: right"><b>খুঁজুন: </b><input type="text" class="box" id="search_filter" /></td>
                     </tr>
                     <tr id = "table_row_odd">
-                        <td ><?php echo $typeinbangla;?> নাম্বার</td>
-                        <td ><?php echo $typeinbangla;?> নাম</td>
-                        <td ><?php echo $whoinbangla?>-এর নাম</td>
-                        <td >রিপড ই মেইল</td>
-                        <td >তারিখ</td>
-                        <td>বার</td>
-                        <td > সময় </td>     
-                        <td>অপশন</td>
+                        <td ><b><?php echo $typeinbangla;?> নাম্বার</b></td>
+                        <td ><b><?php echo $typeinbangla;?> নাম</b></td>
+                        <td ><b><?php echo $whoinbangla?>-এর নাম</b></td>
+                        <td ><b>রিপড ই মেইল</b></td>
+                        <td ><b>তারিখ</b></td>
+                        <td><b>বার</b></td>
+                        <td ><b>সময় </b></td>     
+                        <td><b>অপশন</b></td>
                     </tr>
                 </thead>
                 <tbody> 
@@ -276,7 +276,7 @@ if ($_GET['action'] == 'first') {
                             <td><?php echo $db_rl_prstn_name; ?></td>
                             <td><?php echo $str_presenter_list; ?></td>
                             <td><?php echo $str_presenter_email_list; ?></td>
-                            <td><?php echo $db_rl_prstn_date; ?></td>
+                            <td style="padding-left: 2px;"><?php echo english2bangla(date("d/m/Y",  strtotime($db_rl_prstn_date))); ?></td>
                             <td>
                                 <?php
                                 $timestamp = strtotime($db_rl_prstn_date);
@@ -298,7 +298,7 @@ if ($_GET['action'] == 'first') {
                                 }
                                 ?>
                             </td>
-                            <td><?php echo $db_rl_prstn_time; ?></td>
+                            <td><?php echo english2bangla(date('g:i a' , strtotime($db_rl_prstn_time))); ?></td>
                             <td style="text-align: center " > <a href="presentation_schdule_combined.php?action=edit&id=<?php echo $db_programID; ?>&type=<?php echo $type;?>"> এডিট সিডিউল </a></td>  
                         </tr>
                     <?php } ?>
@@ -544,15 +544,15 @@ if ($_GET['action'] == 'first') {
                     </td>
                 </tr>
                 <tr id = "table_row_odd">
-                    <td><?php echo $whoinbangla?>-এর নাম </td>
-                    <td >একাউন্ট নাম্বার</td>
-                    <td >মোবাইল নাম্বার</td>
-                    <td >ইমেইল</td>
-                    <td >প্রকার</td>
-                    <td> থানা</td>
-                    <td>জেলা</td>
-                    <td>বিভাগ</td>
-                    <td>অপশন</td>
+                    <td><b><?php echo $whoinbangla?>-এর নাম </td>
+                    <td ><b>একাউন্ট নাম্বার</b></td>
+                    <td ><b>মোবাইল নাম্বার</b></td>
+                    <td ><b>ইমেইল</b></td>
+                    <td ><b>প্রকার</b></td>
+                    <td><b>থানা</b></td>
+                    <td><b>জেলা</b></td>
+                    <td><b>বিভাগ</b></td>
+                    <td><b>অপশন</b></td>
                 </tr>
             </thead>
             <tbody id="plist">
@@ -606,10 +606,10 @@ if ($_GET['action'] == 'first') {
                 <th colspan="100" >সিডিউল  </th>                        
             </tr>
             <tr id = "table_row_odd">
-                <td><?php echo $typeinbangla?>-এর নাম </td>
-                <td >তারিখ</td>
-                <td >সময়</td>
-                <td >ভেন্যু</td>                
+                <td><b><?php echo $typeinbangla?>-এর নাম </b></td>
+                <td ><b>তারিখ</b></td>
+                <td ><b>সময়</b></td>
+                <td ><b>ভেন্যু</b></td>                
             </tr>
             </thead>
             <!--Sql query for showing the data of a presenter-->
@@ -626,8 +626,8 @@ if ($_GET['action'] == 'first') {
             <tbody>
                  <tr>
                     <td ><?php echo $db_sedule_presentation_name; ?></td>
-                    <td><?php echo $db_sedule_presentaiton_date; ?></td>                    
-                    <td><?php echo $db_sedule_presentation_time; ?></td>
+                    <td><?php echo english2bangla(date("d/m/Y",  strtotime($db_sedule_presentaiton_date))); ?></td>                    
+                    <td><?php echo english2bangla(date('g:i a' , strtotime($db_sedule_presentation_time))); ?></td>
                     <td><?php echo $db_sedule_presentation_venue; ?></td>                    
                 </tr>
             </tbody>
