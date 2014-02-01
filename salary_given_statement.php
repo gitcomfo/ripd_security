@@ -1,5 +1,5 @@
 <?php
-//include_once 'includes/session.inc';
+include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 include_once 'includes/selectQueryPDO.php';
@@ -30,42 +30,41 @@ if (isset($_GET['id'])) {
     $empsalrow = mysql_fetch_assoc($sql_empsal);
     $db_empsalary = $empsalrow['total_salary'];
     
-    
-$loginUSERname = $_SESSION['acc_holder_name'] ;
-$loginUSERid = $_SESSION['userIDUser'] ;   
-$currentMonth = date('n');
-$currentYear = date('Y');
-if($currentMonth == 1){
-    $currentYear = $currentYear - 1;
-    $preMonth = 12;
-} else {
-    $preMonth = $currentMonth -1;
-}
-$select_attendance = mysql_query("SELECT COUNT(idempattend) FROM employee,employee_attendance 
-    WHERE   year_no ='$currentYear' AND month_no='$preMonth' AND  cfs_user_idUser = $loginUSERid AND idEmployee = emp_user_id ");
-$row = mysql_fetch_assoc($select_attendance);
-$workingDays = $row['COUNT(idempattend)'];
+    $loginUSERname = $_SESSION['acc_holder_name'] ;
+    $loginUSERid = $_SESSION['userIDUser'] ;   
+    $currentMonth = date('n');
+    $currentYear = date('Y');
+    if($currentMonth == 1){
+        $currentYear = $currentYear - 1;
+        $preMonth = 12;
+    } else {
+        $preMonth = $currentMonth -1;
+    }
+    $select_attendance = mysql_query("SELECT COUNT(idempattend) FROM employee,employee_attendance 
+        WHERE   year_no ='$currentYear' AND month_no='$preMonth' AND  cfs_user_idUser = $loginUSERid AND idEmployee = emp_user_id ");
+    $row = mysql_fetch_assoc($select_attendance);
+    $workingDays = $row['COUNT(idempattend)'];
 
-$sql_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? AND  year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
-$status1 = "present";
-$sql_attend->execute(array($status1,$currentYear,$preMonth,$loginUSERid));
-$row1 = $sql_attend->fetchAll();
-foreach ($row1 as $value) {
-    $presentDays = $value['COUNT(idempattend)'];
-}
-$status2 ="absent";
-$sql_attend->execute(array($status2,$currentYear,$preMonth,$loginUSERid));
-$row2 = $sql_attend->fetchAll();
-foreach ($row2 as $value) {
-    $absentDays = $value['COUNT(idempattend)'];
-}
-$status3 = "leave";
-$sql_attend->execute(array($status3,$currentYear,$preMonth,$loginUSERid));
-$row3 = $sql_attend->fetchAll();
-foreach ($row3 as $value) {
-    $leaveDays = $value['COUNT(idempattend)'];
-}
-$attendPercent = ($presentDays / $workingDays) * 100;
+    $sql_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? AND  year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
+    $status1 = "present";
+    $sql_attend->execute(array($status1,$currentYear,$preMonth,$loginUSERid));
+    $row1 = $sql_attend->fetchAll();
+    foreach ($row1 as $value) {
+        $presentDays = $value['COUNT(idempattend)'];
+    }
+    $status2 ="absent";
+    $sql_attend->execute(array($status2,$currentYear,$preMonth,$loginUSERid));
+    $row2 = $sql_attend->fetchAll();
+    foreach ($row2 as $value) {
+        $absentDays = $value['COUNT(idempattend)'];
+    }
+    $status3 = "leave";
+    $sql_attend->execute(array($status3,$currentYear,$preMonth,$loginUSERid));
+    $row3 = $sql_attend->fetchAll();
+    foreach ($row3 as $value) {
+        $leaveDays = $value['COUNT(idempattend)'];
+    }
+    $attendPercent = ($presentDays / $workingDays) * 100;
     ?>
     <title>বেতন প্রদানের স্টেটমেন্ট</title>
     <style type="text/css"> @import "css/bush.css";</style>
@@ -75,14 +74,15 @@ $attendPercent = ($presentDays / $workingDays) * 100;
             <form method="POST" onsubmit="" name="" enctype="multipart/form-data" action="">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          
                     <tr><th colspan="2" style="text-align: center;">বেতন প্রদানের স্টেটমেন্ট, <?php
-    $last_month = date('F', strtotime('last month'));
-    echo $last_month . "'";
-    $year = date("Y");
-    if ($last_month == "December")
-        echo $year - 1;
-    else
-        echo $year;
-    ?></th></tr>
+                            $last_month = date('F', strtotime('last month'));
+                            echo $last_month . "'";
+                            $year = date("Y");
+                            if ($last_month == "December")
+                                echo $year - 1;
+                            else
+                                echo $year;
+                            ?>
+                        </th></tr>
                     <tr>
                         <td colspan="2" style=" text-align: right; padding-left: 120px !important; margin: 0px">
                             <table style="border: 1px solid black; width: 80%; ">
@@ -208,7 +208,7 @@ $attendPercent = ($presentDays / $workingDays) * 100;
 <?php } else {
     ?>
     <title>বেতনের জন্য কর্মচারী লিস্ট</title>
-<style type="text/css">@import "css/style.css";</style>
+<style type="text/css"> @import "css/style.css";</style>
 <div class="column6">
     <div class="main_text_box">      
         <div style="padding-left: 110px;">
@@ -218,15 +218,13 @@ $attendPercent = ($presentDays / $workingDays) * 100;
                     <tr><th style="text-align: center; background-image: radial-gradient(circle farthest-corner at center top , #FFFFFF 0%, #0883FF 100%);height: 45px;padding-bottom: 5px;padding-top: 5px;" colspan="2" ><h1>কর্মচারীর লিস্ট</h1></th></tr>
                 </table>
                 <fieldset id="fieldset_style" style=" width: 90% !important; margin-left: 30px !important;" >
-                    <span id="office">
-                        <br/><br />
                         <div>
                             <table id="office_info_filter" border="1" align="center" width= 99%" cellpadding="5px" cellspacing="0px">
                                 <thead>
                                     <tr align="left" id="table_row_odd">
-                                        <td>কর্মচারীর নাম</td>
-                                        <td>একাউন্ট</td>
-                                        <td>মোবাইল</td>
+                                        <td><b>কর্মচারীর নাম</b></td>
+                                        <td><b>একাউন্ট</b></td>
+                                        <td><b>মোবাইল</b></td>
                                         <td></td>
                                     </tr>
                                 </thead>
@@ -248,7 +246,7 @@ $attendPercent = ($presentDays / $workingDays) * 100;
                                          $db_empaccount = $rowemployee['account_number'];
                                         $db_empname = $rowemployee['account_name'];
                                        ?>
-                                       <tr align="left" id="table_row_odd">
+                                       <tr align="left">
                                            <td><?php echo $db_empname;?></td>
                                         <td><?php echo $db_empaccount;?></td>
                                         <td><?php echo $db_mobile;?></td>
@@ -259,8 +257,7 @@ $attendPercent = ($presentDays / $workingDays) * 100;
                                     ?>
                                 </tbody>
                             </table>                        
-                        </div>
-                    </span>          
+                        </div>     
                 </fieldset>
             </div>
         </div>
