@@ -5,6 +5,28 @@ include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
 $userID = $_SESSION['userIDUser'];
+if(isset($_POST['submit'])) 
+{
+    $p_programID=$_POST['pesentation_id'];
+    $p_totalsalary=$_POST['totalsalary'];
+    $p_salary = $_POST['salary'];
+    $sl = 0;
+     mysql_query("START TRANSACTION");
+    $sql_up = mysql_query("UPDATE program SET payment_status='paid', total_payment=$p_totalsalary WHERE idprogram='$p_programID'");
+      foreach ($_SESSION['arrPresenters'] as $key => $row) 
+      { 
+          $y =  mysql_query("UPDATE presenter_list SET payment='$p_salary[$sl]' WHERE fk_idprogram='$p_programID' AND fk_Employee_idEmployee=$key ");
+          $sl++;
+      }
+    if ($sql_up && $y) {
+        mysql_query("COMMIT");
+        unset($_SESSION['arrPresenters']);
+         echo "<script>alert('বেতন দেয়া হয়েছে')</script>";
+    } else {
+         mysql_query("ROLLBACK");
+         echo "<script>alert('দুঃখিত,বেতন দেয়া হয়নি')</script>";
+    }
+}
 ?>
 <link href="css/bush.css" rel="stylesheet" type="text/css"/>
 <script  type="text/javascript">
@@ -39,40 +61,15 @@ var xmlhttp;
     status = "This field accepts numbers only.";
     return false;
 }
-function  beforeSave()
+function calculateSalary(i)
 {
-    
-   var msg= document.getElementById("passmsg").innerText;
-        if(msg != "")
-       {
-           return false;
-       }
-       else {return true;}
+    var finalsalary = 0;
+    for (var j=1;j<=document.getElementsByName('salary[]').length;j++){
+        finalsalary = finalsalary + Number(document.getElementById('salary['+j+']').value);
+    }
+    document.getElementById('totalsalary').value = finalsalary;
 }
 </script>
-<?php
-if(isset($_POST['submit'])) 
-{
-    $p_programID=$_POST['pesentation_id'];
-    $p_status=$_POST['status'];
-    $sl = 1;
-     mysql_query("START TRANSACTION");
-    $sql_up = mysql_query("UPDATE program SET attendance_status='given' WHERE idprogram='$p_programID'");
-      foreach ($_SESSION['arrPresenters'] as $key => $row) 
-      { 
-          $y =  mysql_query("UPDATE presenter_list SET prog_attendance='$p_status[$sl]' WHERE fk_idprogram='$p_programID' AND fk_Employee_idEmployee=$key ") or exit(mysql_error());
-          $sl++;
-      }
-    if ($sql_up && $y) {
-        mysql_query("COMMIT");
-        unset($_SESSION['arrPresenters']);
-         echo "<script>alert('হাজিরা দেয়া হয়েছে')</script>";
-    } else {
-         mysql_query("ROLLBACK");
-         echo "<script>alert('দুঃখিত,হাজিরা দেয়া হয়নি')</script>";
-    }
-}
-?>
 <?php
 if ($_GET['opt']=='submit') {
         $G_presentation_id = $_GET['id'];
@@ -89,7 +86,7 @@ if ($_GET['opt']=='submit') {
            {
             $_SESSION['arrPresenters'] = array();
             $sel_presenters = mysql_query("SELECT * FROM presenter_list,cfs_user,employee  
-                                                                WHERE fk_idprogram =$G_presentation_id 
+                                                                WHERE fk_idprogram =$G_presentation_id AND prog_attendance='present'
                                                                 AND fk_Employee_idEmployee = idEmployee AND cfs_user_idUser= idUser");
             while ($row_presenters = mysql_fetch_assoc($sel_presenters))
             {
@@ -108,7 +105,7 @@ if ($_GET['opt']=='submit') {
         <div class="main_text_box">
             <div style="padding-left: 110px;"><a href="presenter_salary.php"><b>ফিরে যান</b></a></div> 
             <div> 
-                <form method="POST" action="presenter_attendance.php">	
+                <form method="POST" action="presenter_salary.php">	
                     <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
                         <tr><th colspan="4" style="text-align: center;font-size: 20px;">বেতন প্রদান</th></tr>
                         <tr>
@@ -156,16 +153,23 @@ if ($_GET['opt']=='submit') {
                                     echo '<td>' . $row[1] . '</td>';
                                     echo '<td>' . $row[0].'</td>';
                                     echo '<td>' .$row[2].'</td>';
-                                    echo '<td><input class="box" type="text" name="salary['.$sl.']" id="salary['.$sl.']" onkeypress="return checkIt(event)"/></td>';
+                                    echo '<td><input class="box" type="text" name="salary[]" id="salary['.$sl.']" onkeypress="return checkIt(event)" style="text-align: right;" onkeyup="calculateSalary(this.value,'.$sl.')"/></td>';
                                     echo '</tr>';
                                     $sl++;
                                 }
                             ?>
+                                    <tr>
+                                        <td colspan="4" ><hr /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="text-align: right"><b>মোটঃ</b></td>
+                                        <td><input class="box" type="text" name="totalsalary" id="totalsalary" style="text-align: right;" /> টাকা</td>
+                                    </tr>
                                 </table>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="text-align: center;"><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="হাজিরা দিন" /></td>
+                            <td colspan="2" style="text-align: center;"><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="বেতন দিন" /></td>
                         </tr>
                     </table>
                 </form>

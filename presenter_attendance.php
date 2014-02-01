@@ -5,29 +5,6 @@ include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
 $userID = $_SESSION['userIDUser'];
-?>
-<link href="css/bush.css" rel="stylesheet" type="text/css"/>
-<script  type="text/javascript">
-function getList(type)
-{
-var xmlhttp;
-    if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function()
-        {
-           document.getElementById('list').innerHTML=xmlhttp.responseText;
-        }
-        xmlhttp.open("GET","includes/getPrograms.php?whichtype="+type+"&what=attendance",true);
-        xmlhttp.send();	
-}
-</script>
-<?php
 if(isset($_POST['submit'])) 
 {
     $p_programID=$_POST['pesentation_id'];
@@ -50,6 +27,27 @@ if(isset($_POST['submit']))
     }
 }
 ?>
+<link href="css/bush.css" rel="stylesheet" type="text/css"/>
+<script  type="text/javascript">
+function getList(type)
+{
+var xmlhttp;
+    if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+           document.getElementById('list').innerHTML=xmlhttp.responseText;
+        }
+        xmlhttp.open("GET","includes/getPrograms.php?whichtype="+type+"&what=attendance",true);
+        xmlhttp.send();	
+}
+</script>
 <?php
 if ($_GET['opt']=='submit') {
         $G_presentation_id = $_GET['id'];
