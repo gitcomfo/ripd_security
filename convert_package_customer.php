@@ -7,11 +7,9 @@ $msg = "";
 $loginUSERname = $_SESSION['UserID'];
 $queryemp = mysql_query("SELECT idUser FROM cfs_user WHERE user_name = '$loginUSERname';");
 $emprow = mysql_fetch_assoc($queryemp);
-$db_onsid = $emprow['idUser'];
 ?>
 <title>কনভার্ট একাউন্ট প্যাকেজ</title>
 <style type="text/css"> @import "css/bush.css";</style>
-<link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
 
 <div class="main_text_box">
     <div style="padding-left: 110px;"><a href="profile_account_management.php"><b>ফিরে যান</b></a></div>
