@@ -132,7 +132,7 @@ if(isset($_POST['submit']))
                                 <table>
                                     <tr>
                                             <td > হাজিরার হার :</td>
-                                            <td ><?php echo english2bangla($totalattendPercent);?> %</td>
+                                            <td ><?php echo english2bangla(round($totalattendPercent, 2));?> %</td>
                                         </tr>
                                         <tr>
                                             <td >মোট কার্যদিবস :</td>
