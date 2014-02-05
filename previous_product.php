@@ -16,8 +16,8 @@ function get_catagory() {
 <link rel="stylesheet" href="css/tinybox.css" type="text/css">
 <script src="javascripts/tinybox.js" type="text/javascript"></script>
 <script type="text/javascript">
-    function previousProductDetails(id)
-    { TINY.box.show({url:'includes/ripd_previous_product_details.php?inventID='+id,width:700,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+    function previousProductDetails(id,typeNid)
+    { TINY.box.show({url:'includes/ripd_previous_product_details.php?inventID='+id+'&typeNid='+typeNid,width:700,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
 </script>
 <div class="main_text_box">
     <div>           
@@ -43,7 +43,7 @@ function get_catagory() {
                 <tr>
                     <td>
                         <fieldset   style="border: 3px solid #686c70 ; width: 99%;font-family: SolaimanLipi !important;">
-                            <legend style="color: brown;font-size: 14px;"><?php echo ''; ?></legend>
+                            <legend style="color: brown;font-size: 14px;">প্রিভিয়াস প্রোডাক্টের তালিকা</legend>
 <!--                            <table>
                                 <tr>
                                     <td><b>পণ্যের ক্যাটাগরি</b></br>
@@ -64,12 +64,12 @@ function get_catagory() {
                                 <table style="width: 96%;margin: 0 auto;" cellspacing="0" cellpadding="0">
                                     <thead>
                                         <tr id="table_row_odd">
-                                            <td width="8%" style="border: solid black 1px;text-align: center;"><strong>ক্রম</strong></td>
-                                            <td width="30%"  style="border: solid black 1px;text-align: center;"><strong>প্রোডাক্ট নাম</strong></td>
+                                            <td width="6%" style="border: solid black 1px;text-align: center;"><strong>ক্রম</strong></td>
+                                            <td width="40%"  style="border: solid black 1px;text-align: center;"><strong>প্রোডাক্ট নাম</strong></td>
                                             <td width="20%"  style="border: solid black 1px;text-align: center;"><strong>কোড</strong></td>
-                                            <td width="20%"  style="border: solid black 1px;text-align: center;"><strong>সেল শুরুর তারিখ</strong></td>
-                                            <td width="20%"  style="border: solid black 1px;text-align: center;"><strong>বন্ধের তারিখ</strong></td>
-                                            <td width="11%"  style="border: solid black 1px;text-align: center;"><strong>অপশন</strong></td>
+                                            <td width="15%"  style="border: solid black 1px;"><strong>বিক্রয় শুরু</strong></td>
+                                            <td width="15%"  style="border: solid black 1px;"><strong>বিক্রয় বন্ধ</strong></td>
+                                            <td width="11%"  style="border: solid black 1px;"><strong>অপশন</strong></td>
                                         </tr>
                                     </thead>
                                     <tbody id="resultTable" style="background-color: #FCFEFE">
