@@ -218,10 +218,14 @@ function beforeSubmit()
                     <td colspan="2"></br>
                         <form method="post" action="" onsubmit="return beforeSubmit();">
                         <table cellspacing="0" cellpadding="0">
+                            <?php 
+                                if(isset($_POST['submit']))
+                                     { ?>
                             <tr>
                                 <td colspan="10" style="width: 25%; text-align: center"><b><?php echo $monthName.", ".$p_year;?>-এ মোট কার্যদিবস</b> : <?php echo $workingDays?><input type="hidden" id="workingdays" value="<?php echo $workingDays?>" />দিন 
                                     <input type="hidden" name="yearNo" value="<?php echo $p_year;?>" /><input type="hidden" name="monthNo" value="<?php echo $p_month;?>" /></br></br></td>
                             </tr>
+                                     <?php }?>
                             <tr id="table_row_odd">
                                         <td style='border: 1px solid #000099;text-align: center;width: 1%;' ><strong>ক্রম</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;' ><strong>কর্মচারীর নাম</strong></td>
