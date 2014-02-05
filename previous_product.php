@@ -44,23 +44,7 @@ function get_catagory() {
                     <td>
                         <fieldset   style="border: 3px solid #686c70 ; width: 99%;font-family: SolaimanLipi !important;">
                             <legend style="color: brown;font-size: 14px;">প্রিভিয়াস প্রোডাক্টের তালিকা</legend>
-<!--                            <table>
-                                <tr>
-                                    <td><b>পণ্যের ক্যাটাগরি</b></br>
-                                        <select class="box" id="catagorySearch" name="catagorySearch" onchange="showTypes(this.value);showCatProducts(this.value);" style="width: 200px;font-family: SolaimanLipi !important;">
-                                            <?php echo get_catagory(); ?>
-                                        </select>
-                                    </td>
-                                    <td><b>পণ্যের টাইপ</b></br>
-                                        <span id="showtype"><select class="box" style="width: 200px;font-family: SolaimanLipi !important;"></select></span>
-                                    </td>
-                                    <td><b>ব্র্যান্ড / গ্রুপ</b></br>
-                                        <span id="brand"><select class="box" id="brandSearch" name="brandSearch" style="width: 200px;font-family: SolaimanLipi !important;"></select></span>
-                                    </td>
-                                </tr>
-                            </table>-->
-
-                            <div></br>
+                            <div>
                                 <table style="width: 96%;margin: 0 auto;" cellspacing="0" cellpadding="0">
                                     <thead>
                                         <tr id="table_row_odd">
@@ -80,7 +64,6 @@ function get_catagory() {
                         </fieldset>
                     </td>
                 </tr>
-                <tr><td></br></td></tr>
             </table>
     </div>
 </div>   
