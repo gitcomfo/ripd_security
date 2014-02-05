@@ -24,7 +24,6 @@ include_once 'includes/header.php';
         });
     };
 </script>
-
 <script type="text/javascript">
     function infoPresentationFromThana()
     {
@@ -42,30 +41,28 @@ include_once 'includes/header.php';
         thana_id = document.getElementById('thana_id').value;
         date_from = document.getElementById('date_from').value;
         date_to = document.getElementById('date_to').value;
-        //xmlhttp.open("GET","includes/infoPresentationFromThana.php?dsd="+district_id+"&dvd="+division_id+"&ttid="+thana_id+"&df="+date_from+"&dt="+date_to,true);
-       // xmlhttp.send();
+        xmlhttp.open("GET","includes/infoProgramFromThana.php?dsd="+district_id+"&dvd="+division_id+"&ttid="+thana_id+"&df="+date_from+"&dt="+date_to+"&type=training",true);
+        xmlhttp.send();
     }
 </script>
-<div class="page_header_div">
-    <div class="page_header_title">ট্রেইনিং সিডিউল</div>
-</div>
+<div class="page_header_div"><div class="page_header_title">ট্রেইনিং সিডিউল</div></div>
 <fieldset id="award_fieldset_style">
     <div style="float: left;">
             <?php
             include_once('includes/areaSearch.php');
-            getArea("infoTrainingFromThana()");
+            getArea("infoPresentationFromThana()");
             ?>
     </div>
     <div style="float: right; margin-right: 10px;">        
-        <input type="hidden" id="method" value="infoTrainingFromThana()">
+        <input type="hidden" id="method" value="infoPresentationFromThana()">
         সার্চ/খুঁজুন:  <input type = "text" id ="search_box_filter">
     </div>    
 
     <div style="float: left; padding-bottom: 10px;padding-top: 10px; margin-left: 0px;">
         <b>শুরুর তারিখঃ</b><input type="text" name="date_from" id="date_from" placeholder="Date From"  style="">&nbsp;&nbsp;
-        <b>শেষের তারিখঃ</b> <input type="text" name="date_to" id="date_to" placeholder="Date To"  onclick="infoTrainingFromThana()">
-        <input type="hidden" id="method" value="infoTrainingFromThana()">
-        <input type="submit" onclick="infoTrainingFromThana()" value="সাবমিট">
+        <b>শেষের তারিখঃ</b> <input type="text" name="date_to" id="date_to" placeholder="Date To"  >
+        <input type="hidden" id="method" value="infoPresentationFromThana()">
+        <input type="button" onclick="infoPresentationFromThana()" value="সাবমিট">
     </div>
 
     <span id="office">
@@ -73,7 +70,7 @@ include_once 'includes/header.php';
             <table id="office_info_filter" border="1" align="center" width= 99%" cellpadding="5px" cellspacing="0px">
                 <thead>
                     <tr align="left" id="table_row_odd">
-                        <th><?php echo "ট্রেইনিং নাম"; ?></th>                  
+                        <th><?php echo "ট্রেইনিং-এর নাম"; ?></th>                  
                         <th><?php echo "লোকেশন"; ?></th>
                         <th><?php echo "বিষয়" ?></th>
                         <th><?php echo "তারিখ"; ?></th>
@@ -85,56 +82,51 @@ include_once 'includes/header.php';
                 </thead>
                 <tbody>
                     <?php
-                    $sql_programTable = "SELECT * from program, office where program_type = 'training' AND Office_idOffice =idOffice AND program_date between curdate() and '2099-12-31' ORDER BY program_date ASC";
-                    $db_slNo = 0;
-                    $rs = mysql_query($sql_programTable);
-                    while ($row = mysql_fetch_array($rs)) {
-                        $db_slNo = $db_slNo + 1;
-                        $db_programId = $row['idprogram'];
-                        $db_programName = $row['program_name'];
-                        $db_programLocation = $row['program_location'];
-                        $db_programDate = $row['program_date'];
-                        $db_programTime = $row['program_time'];           
-                        $db_programSubject = $row['subject'];          
-                        $db_program_office_name = $row_location['office_name'];   
-                        $db_program_office_address = $row_location['office_details_address'];
-                        
-                        $demonastrators = '';
-                        ///////////////////////////////////
-                        $sql_demonastrators_name = "SELECT * FROM presenter_list, employee, cfs_user WHERE fk_idprogram = '$db_programId' AND fk_Employee_idEmployee = idEmployee AND cfs_user_idUser = idUser";
-                        $row_demonastrators_name = mysql_query($sql_demonastrators_name);
-                        while ($row_names = mysql_fetch_array($row_demonastrators_name)){
-                            $db_demons_name = $row_names['account_name'];
-                            $demonastrators = $demonastrators. ", ".$db_demons_name;
-                        }
-                        
-                        ///////////////////////////////////
-                        echo "<tr>";
-                        echo "<td>$db_programName</td>";
-                        echo "<td>$db_program_location</td>";
-                        echo "<td>$db_programSubject</td>";
-                        echo "<td>$db_programDate</td>";
-                        echo "<td>$db_programTime</td>";
-                        echo "<td>$demonastrators</td>";
-                        echo "<td>$db_program_office_name</td>";
-                        echo "<td>$db_program_office_address</td>";
-                        echo "</tr>";
+                $sql_programTable = "SELECT * FROM program,office WHERE program_type = 'training'
+                                                    AND Office_idOffice = idOffice
+                                                    AND program_date BETWEEN CURDATE() AND '2099-12-31' ORDER BY program_date ASC";
+                $db_slNo = 0;
+                $rs = mysql_query($sql_programTable);
+                while ($row = mysql_fetch_array($rs)) {
+                    $db_slNo = $db_slNo + 1;
+                    $db_programId = $row['idprogram'];
+                    $db_programName = $row['program_name'];
+                    $db_programLocation = $row['program_location'];
+                    $db_programDate = $row['program_date'];
+                    $db_programTime = $row['program_time'];           
+                    $db_programSubject = $row['subject'];
+                    $db_office_name = $row['office_name'];
+                    $db_office_address = $row['office_details_address'];
+                    $demonastrators = '';
+                    $sql_demonastrators_name = "SELECT * FROM presenter_list, employee, cfs_user WHERE fk_idprogram = '$db_programId' AND fk_Employee_idEmployee = idEmployee AND cfs_user_idUser = idUser";
+                    $row_demonastrators_name = mysql_query($sql_demonastrators_name);
+                    while ($row_names = mysql_fetch_array($row_demonastrators_name)){
+                        $db_demons_name = $row_names['account_name'];
+                        $demonastrators = $db_demons_name.", ".$demonastrators;
                     }
-                    ?>
-
+                    echo "<tr>";
+                    echo "<td>$db_programName</td>";
+                    echo "<td>$db_programLocation</td>";
+                    echo "<td>$db_programSubject</td>";
+                    echo "<td>".english2bangla(date("d/m/Y",  strtotime($db_programDate)))."</td>";
+                    echo "<td>".english2bangla(date('g:i a' , strtotime($db_programTime)))."</td>";
+                    echo "<td>$demonastrators</td>";
+                    echo "<td>$db_office_name</td>";
+                    echo "<td>$db_office_address</td>";
+                    echo "</tr>";
+                }
+                ?>
                 </tbody>
             </table>                        
         </div>
     </span>          
 </fieldset>
-
 <script type="text/javascript">
     var filter = new DG.Filter({
 //        filterField : $('search_box_filter'),
 //        filterEl : $('office_info_filter')
     });
 </script>
-
 <?php
 include_once 'includes/footer.php';
 ?>
