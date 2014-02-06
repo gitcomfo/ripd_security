@@ -2,9 +2,25 @@
 //include 'includes/session.inc';
 include_once 'includes/header.php';
 $userID = $_SESSION['userIDUser'];
-$select_refered = $conn->prepare("SELECT cfs_user.account_name AS refered, account_type.account_name FROM pin_makingused, cfs_user,customer_account,account_type 
-                                                        WHERE sales_summery_idsalessummery = ? AND pin_state='newaccount' AND pin_usedby_cfsuserid= idUser
-                                                        AND idUser = cfs_user_idUser AND Account_type_idAccount_type = idAccount_type ");
+$select_refered = $conn->prepare("SELECT ss.sal_salesdate, ss.sal_salestime, ss.sal_totalamount,ss.sal_invoiceno, ss.sal_totalpv,idsalessummary,temp.refered,temp.package  
+    FROM sales_summary AS ss
+    LEFT JOIN 
+        (SELECT pin.pin_state, pin.pin_usedby_cfsuserid, cfs.idUser, cust.cfs_user_idUser, cust.Account_type_idAccount_type, acc.idAccount_type, pin.sales_summery_idsalessummery, cfs.account_name AS refered, acc.account_name AS package 
+        FROM pin_makingused AS pin, cfs_user AS cfs, customer_account AS cust, account_type AS acc
+        WHERE pin.pin_state='newaccount' AND pin.pin_usedby_cfsuserid= cfs.idUser
+         AND cfs.idUser = cust.cfs_user_idUser AND cust.Account_type_idAccount_type = acc.idAccount_type) AS temp
+    ON ss.idsalessummary = temp.sales_summery_idsalessummery
+    WHERE ss.sal_buyerid = ? ");
+
+$select_refered_selected = $conn->prepare("SELECT ss.sal_salesdate, ss.sal_salestime, ss.sal_totalamount,ss.sal_invoiceno, ss.sal_totalpv,idsalessummary,temp.refered,temp.package  
+    FROM sales_summary AS ss
+    LEFT JOIN 
+        (SELECT pin.pin_state, pin.pin_usedby_cfsuserid, cfs.idUser, cust.cfs_user_idUser, cust.Account_type_idAccount_type, acc.idAccount_type, pin.sales_summery_idsalessummery, cfs.account_name AS refered, acc.account_name AS package 
+        FROM pin_makingused AS pin, cfs_user AS cfs, customer_account AS cust, account_type AS acc
+        WHERE pin.pin_state='newaccount' AND pin.pin_usedby_cfsuserid= cfs.idUser
+         AND cfs.idUser = cust.cfs_user_idUser AND cust.Account_type_idAccount_type = acc.idAccount_type) AS temp
+    ON ss.idsalessummary = temp.sales_summery_idsalessummery
+    WHERE ss.sal_buyerid = ? AND ss.sal_salesdate BETWEEN ? AND ? ORDER BY ss.sal_salesdate ");
 ?>
 <style type="text/css">@import "css/bush.css";</style>
 <link rel="stylesheet" href="css/tinybox.css" type="text/css">
@@ -51,8 +67,7 @@ function details_show(id){
                                             <td width="11%"  style="border: solid black 1px;"><div align="center"><strong>মূল্য(টাকা)</strong></div></td>
                                             <td width="12%" style="border: solid black 1px;"><div align="center"><strong>মোট পিভি</strong></div></td>
                                             <td width="20%" style="border: solid black 1px;"><div align="center"><strong>রেফার্ড</strong></div></td>
-                                            <td width="18%" style="border: solid black 1px;"><div align="center"><strong>প্যাকেজ</strong></div></td>
-                                            
+                                            <td width="18%" style="border: solid black 1px;"><div align="center"><strong>প্যাকেজ</strong></div></td>                                          
                                         </tr>
                                     </thead>
                                     <tbody style="background-color: #FCFEFE">
@@ -62,22 +77,17 @@ function details_show(id){
                                             $p_startdate = $_POST['startDate'];
                                             $p_lastDate = $_POST['lastDate'];
                                             $slNo = 1;
-                                            $userID = $_SESSION['userIDUser'];
-                                            $result = mysql_query("SELECT * FROM sales_summary WHERE sal_buyerid = $userID 
-                                                                                AND sal_salesdate BETWEEN '$p_startdate' AND '$p_lastDate' ORDER BY sal_salesdate");
-                                            while ($row = mysql_fetch_assoc($result)) {
-                                                $db_sal_salesdate = $row["sal_salesdate"];
-                                                $db_sal_salestime = $row["sal_salestime"];
-                                                $db_sal_totalamount = $row["sal_totalamount"];
-                                                $db_sal_invoiceno = $row["sal_invoiceno"];
-                                                $db_sal_totalpv = $row['sal_totalpv'];
-                                                $db_salsumid = $row['idsalessummary'];
-                                                $select_refered->execute(array($db_salsumid));
-                                                $row1 = $select_refered->fetchAll();
+                                            $select_refered_selected->execute(array($userID,$p_startdate,$p_lastDate));
+                                                $row1 = $select_refered_selected->fetchAll();
                                                 foreach ($row1 as $value) {
-                                                    $db_refered = $value['refered'];
-                                                    $db_package = $value['account_name'];
-                                                }
+                                                $db_sal_salesdate = $value["sal_salesdate"];
+                                                $db_sal_salestime = $value["sal_salestime"];
+                                                $db_sal_totalamount = $value["sal_totalamount"];
+                                                $db_sal_invoiceno = $value["sal_invoiceno"];
+                                                $db_sal_totalpv = $value['sal_totalpv'];
+                                                $db_salsumid = $value['idsalessummary'];
+                                                $db_refered = $value['refered'];
+                                                $db_package = $value['package'];
                                                 echo '<tr>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla(date("d/m/Y",  strtotime($db_sal_salesdate))) . '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="left">' . english2bangla(date('g:i a' , strtotime($db_sal_salestime))) . '</div></td>';
@@ -93,20 +103,17 @@ function details_show(id){
                                         else
                                         {
                                             $slNo = 1;                                            
-                                            $result = mysql_query("SELECT * FROM sales_summary WHERE sal_buyerid = $userID ORDER BY sal_salesdate");
-                                            while ($row = mysql_fetch_assoc($result)) {
-                                                $db_sal_salesdate = $row["sal_salesdate"];
-                                                $db_sal_salestime = $row["sal_salestime"];
-                                                $db_sal_totalamount = $row["sal_totalamount"];
-                                                $db_sal_invoiceno = $row["sal_invoiceno"];
-                                                $db_sal_totalpv = $row['sal_totalpv'];
-                                                $db_salsumid = $row['idsalessummary'];
-                                                $select_refered->execute(array($db_salsumid));
+                                            $select_refered->execute(array($userID));
                                                 $row1 = $select_refered->fetchAll();
                                                 foreach ($row1 as $value) {
-                                                    $db_refered = $value['refered'];
-                                                    $db_package = $value['account_name'];
-                                                }
+                                                $db_sal_salesdate = $value["sal_salesdate"];
+                                                $db_sal_salestime = $value["sal_salestime"];
+                                                $db_sal_totalamount = $value["sal_totalamount"];
+                                                $db_sal_invoiceno = $value["sal_invoiceno"];
+                                                $db_sal_totalpv = $value['sal_totalpv'];
+                                                $db_salsumid = $value['idsalessummary'];
+                                                $db_refered = $value['refered'];
+                                                $db_package = $value['package'];
                                                 echo '<tr>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla(date("d/m/Y",  strtotime($db_sal_salesdate))) . '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="left">' . english2bangla(date('g:i a' , strtotime($db_sal_salestime))) . '</div></td>';
@@ -127,8 +134,6 @@ function details_show(id){
                     </td>
                 </tr>
             </table>
-        
     </div>
 </div>   
-
 <?php include_once 'includes/footer.php'; ?>
