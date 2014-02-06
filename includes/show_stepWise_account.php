@@ -1,17 +1,15 @@
 <?php
+error_reporting(0);
 include_once 'selectQueryPDO.php';
 include_once 'ConnectDB.inc';
 include_once 'MiscFunctions.php';
 $user_own_id = $_SESSION['userIDUser'];
-error_reporting(0);
 ?>
-
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <style type="text/css"> @import "../css/bush.css";</style>
     </head>
-    
     <body>
             <table  class="formstyle" style="margin: 5px 10px 15px 10px; width: 100%; font-family: SolaimanLipi !important; font-size: 13px;">          
                 <tr><th colspan="7" style="text-align: center; font-size: 14px;">প্রতি স্টেপে টোটাল একাউন্টধারীর সংখ্যা</th></tr>
