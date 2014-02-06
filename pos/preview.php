@@ -164,8 +164,7 @@ $result= $sel_sales_summary->fetchAll();
 <script type="text/javascript">
  function pinGenerate(ssumid,totalpv)
 	{ TINY.box.show({url:'pinGenerator.php?ssumid='+ssumid+'&pv='+totalpv,animate:true,close:true,boxid:'success',top:100,width:400,height:100}); }
- </script> 
-<script type="text/javascript">
+
  function accGenerate()
 	{ TINY.box.show({iframe:'accountGenerator.php',width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
  </script> 
@@ -200,8 +199,10 @@ $result= $sel_sales_summary->fetchAll();
         echo '</tr>';
 }
  $finalTotal =0;
+ $finalPV=0;
              foreach($_SESSION['arrSellTemp'] as $key => $row) {
                    $finalTotal = $finalTotal + $row[5];
+                   $finalPV +=  $row[6];
               }
 ?>
 <td colspan="4" ><div align="right"><strong>সর্বমোট:</strong>&nbsp;</div></td>
@@ -223,6 +224,12 @@ $result= $sel_sales_summary->fetchAll();
     <td colspan="4" ><div align="right"><strong>ক্যাশ টাকা ফেরত:</strong>&nbsp;</div></td>
     <td width="13%" ><div align="right" style="padding-right: 8px;"><?php echo english2bangla($P_backTaka);?></div></td>
 </tr>
+<?php if($buyertype == 'customer') {?>
+<tr>
+    <td colspan="4" ><div align="right"><strong>মোট পিভি:</strong>&nbsp;</div></td>
+    <td width="13%" ><div align="right" style="padding-right: 8px;"><?php echo english2bangla($finalPV);?></div></td>
+</tr>
+<?php }?>
 </table>
 <?php
     
