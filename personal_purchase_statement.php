@@ -2,7 +2,7 @@
 //include 'includes/session.inc';
 include_once 'includes/header.php';
 $userID = $_SESSION['userIDUser'];
-$select_refered = $conn->prepare("SELECT cfs_user.account_name, account_name FROM pin_makingused, cfs_user,customer_account,account_type 
+$select_refered = $conn->prepare("SELECT cfs_user.account_name AS refered, account_type.account_name FROM pin_makingused, cfs_user,customer_account,account_type 
                                                         WHERE sales_summery_idsalessummery = ? AND pin_state='newaccount' AND pin_usedby_cfsuserid= idUser
                                                         AND idUser = cfs_user_idUser AND Account_type_idAccount_type = idAccount_type ");
 ?>
@@ -45,13 +45,13 @@ function details_show(id){
                                 <table style="width: 98%;margin: 0 auto;" cellspacing="0" cellpadding="0">
                                     <thead>
                                         <tr id="table_row_odd">
-                                            <td width="16%" style="border: solid black 1px;"><div align="center"><strong>তারিখ</strong></div></td>
+                                            <td width="10%" style="border: solid black 1px;"><div align="center"><strong>তারিখ</strong></div></td>
                                             <td width="12%"  style="border: solid black 1px;"><div align="center"><strong>সময়</strong></div></td>
                                             <td width="25%"  style="border: solid black 1px;"><div align="center"><strong>রশিদ নং</strong></div></td>
                                             <td width="11%"  style="border: solid black 1px;"><div align="center"><strong>মূল্য(টাকা)</strong></div></td>
                                             <td width="12%" style="border: solid black 1px;"><div align="center"><strong>মোট পিভি</strong></div></td>
                                             <td width="20%" style="border: solid black 1px;"><div align="center"><strong>রেফার্ড</strong></div></td>
-                                            <td width="12%" style="border: solid black 1px;"><div align="center"><strong>প্যাকেজ</strong></div></td>
+                                            <td width="18%" style="border: solid black 1px;"><div align="center"><strong>প্যাকেজ</strong></div></td>
                                             
                                         </tr>
                                     </thead>
@@ -75,7 +75,7 @@ function details_show(id){
                                                 $select_refered->execute(array($db_salsumid));
                                                 $row1 = $select_refered->fetchAll();
                                                 foreach ($row1 as $value) {
-                                                    $db_refered = $value['cfs_user.account_name'];
+                                                    $db_refered = $value['refered'];
                                                     $db_package = $value['account_name'];
                                                 }
                                                 echo '<tr>';
@@ -104,7 +104,7 @@ function details_show(id){
                                                 $select_refered->execute(array($db_salsumid));
                                                 $row1 = $select_refered->fetchAll();
                                                 foreach ($row1 as $value) {
-                                                    $db_refered = $value['cfs_user.account_name'];
+                                                    $db_refered = $value['refered'];
                                                     $db_package = $value['account_name'];
                                                 }
                                                 echo '<tr>';
