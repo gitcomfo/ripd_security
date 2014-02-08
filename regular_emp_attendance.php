@@ -48,8 +48,8 @@ if(isset($_POST['submit']))
     $xtratime = $_POST['xtratime'];
     for($i=1;$i<$count;$i++)
     {
-        $month = date("n");
-        $year=date('Y');
+        $month = date("n",  strtotime($atten_date));
+        $year=date('Y',strtotime($atten_date));
         $atten_type = $attendance[$i];
         if($atten_type == 'yes')
         {
