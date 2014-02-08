@@ -20,7 +20,7 @@ $sel_posting = $conn->prepare("SELECT * FROM employee_posting, post_in_ons, post
     <div style="padding-left: 110px;"><a href="personal_official_profile_employee.php"><b>ফিরে যান</b></a></div>
     <div>
         <table  class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          
-            <tr><th colspan="2" style="text-align: center;">পোস্টিং ডেসক্রিপশন</th></tr>
+            <tr><th colspan="2" style="text-align: center;font-size: 20px;">পোস্টিং ডেসক্রিপশন</th></tr>
             <?php
                 $sel_posting->execute(array($empID));
                 $arr_posting = $sel_posting->fetchAll();
@@ -78,12 +78,12 @@ $sel_posting = $conn->prepare("SELECT * FROM employee_posting, post_in_ons, post
                             <legend style="color: brown;">প্রিভিইয়াস পোস্টিং</legend>
                             <table style="width: 95%; margin: 0 auto" border="1" cellpadding="5px" cellspacing="0px">    
                             <tr  id="table_row_odd">
-                                <td style="border: black 1px solid; text-align: center">ক্রম</td>
-                                <td style="border: black 1px solid; text-align: center">পোস্ট</td>
-                                <td style="border: black 1px solid; text-align: center">অফিস নাম</td>
-                                <td style="border: black 1px solid; text-align: center" >নাম্বার / একাউন্ট</td>
-                                <td style="border: black 1px solid; text-align: center">পোস্টিং তারিখ</td>
-                                <td style="border: black 1px solid; text-align: center">পোস্টে অবস্থানকাল</td>
+                                <td style="border: black 1px solid; text-align: center;font-weight: bold;">ক্রম</td>
+                                <td style="border: black 1px solid; text-align: center;font-weight: bold;">পোস্ট</td>
+                                <td style="border: black 1px solid; text-align: center;font-weight: bold;">অফিস নাম</td>
+                                <td style="border: black 1px solid; text-align: center;font-weight: bold;" >নাম্বার / একাউন্ট</td>
+                                <td style="border: black 1px solid; text-align: center;font-weight: bold;">পোস্টিং তারিখ</td>
+                                <td style="border: black 1px solid; text-align: center;font-weight: bold;">পোস্টে অবস্থানকাল</td>
                             </tr>
                             <?php
                                 }
@@ -91,6 +91,13 @@ $sel_posting = $conn->prepare("SELECT * FROM employee_posting, post_in_ons, post
                                 {
                                     $db_post = $value['post_name'];
                                     $db_posting_date = $value['posting_date'];
+                                    $db_previous_key = $key -1;
+                                    $timestamp_start= strtotime( $arr_posting[$key]['posting_date']);
+                                    $timestamp_end = strtotime($arr_posting[$db_previous_key]['posting_date']);
+                                    $difference = abs($timestamp_end - $timestamp_start); 
+                                    $postyears = english2bangla(floor($difference / (365 * 60 * 60 * 24)));
+                                    $postmonths2 = english2bangla(floor(($difference - ($postyears * 365 * 60 * 60 * 24)) / ((365 * 60 * 60 * 24) / 12)));
+                                    $postdays = english2bangla(floor(($difference - ($postyears * 365 * 60 * 60 * 24) -( $postmonths2 * 30 * 60 * 60 * 24))/ (60 * 60 * 24)));
                                     $db_officeType = $value['post_onstype'];
                                     $db_officeID = $value['post_onsid'];
                                     if( $db_officeType == 'office')
@@ -119,7 +126,7 @@ $sel_posting = $conn->prepare("SELECT * FROM employee_posting, post_in_ons, post
                                 <td style="border: black 1px solid; text-align: center"><?php echo $offname;?></td>
                                 <td style="border: black 1px solid; text-align: center"><?php echo $offnumber;?></td>
                                 <td style="border: black 1px solid; text-align: center"><?php echo english2bangla(date("d/m/Y",  strtotime($db_posting_date)));?></td>
-                                <td style="border: black 1px solid; text-align: center">??</td>
+                                <td style="border: black 1px solid; text-align: center"><?php echo $postyears ."বছর,". $postmonths2. "মাস,". $postdays ."দিন";?></td>
                             </tr>
                             <?php
                             $sl++;
