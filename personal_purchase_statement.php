@@ -23,20 +23,27 @@ $select_refered_selected = $conn->prepare("SELECT ss.sal_salesdate, ss.sal_sales
     WHERE ss.sal_buyerid = ? AND ss.sal_salesdate BETWEEN ? AND ? ORDER BY ss.sal_salesdate ");
 ?>
 <style type="text/css">@import "css/bush.css";</style>
+<link rel="stylesheet" href="css/print.css" type="text/css">
 <link rel="stylesheet" href="css/tinybox.css" type="text/css">
 <script type="text/javascript" src="javascripts/tinybox.js"></script>
 <script type="text/javascript">
 function details_show(id){
-           TINY.box.show({url:'includes/personal_purchase_details.php?sum_id='+id,width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+           TINY.box.show({url:'includes/personal_purchase_details.php?sum_id='+id,width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});           
+}
+function printthis()
+{
+    window.print();
+}
 </script>
 
 <div class="main_text_box">
-    <div style="padding-left: 112px;"><a href="personal_reporting.php"><b>ফিরে যান</b></a></div>
-    <div>           
-            <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">          
+    <div id="noprint" style="padding-left: 112px;"><a href="personal_reporting.php"><b>ফিরে যান</b></a></div>
+    <div>
+        <div id="onprint" style="display: none;text-align: center;"><font style="font-size: 16px;">রিপড ইউনিভার্সেল</font> <sub>লিমিটেড</sub></br><?php echo english2bangla(date("d-m-Y"))?></div>
+            <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">
                 <tr><th style="text-align: center" colspan="2"><h1>পার্সোনাল পারচেজ স্টেটমেন্ট</h1></th></tr>
                 <tr>
-                    <td>
+                    <td id="noprint">
                         <fieldset style="border:3px solid #686c70;width: 99%;">
                             <legend style="color: brown;font-size: 14px;">সার্চ</legend>
                             <form method="POST" action="">	
@@ -53,6 +60,7 @@ function details_show(id){
                         </fieldset>
                     </td> 
                 </tr>
+                <tr id="noprint"><td style="text-align: right"><div style="width: 30px;height: 30px;background-image: url('images/print.gif');background-size: 100% 100%;cursor: pointer;" onclick="printthis()"></div></td></tr>
                 <tr>
                     <td>
                         <fieldset style="border: 3px solid #686c70 ; width: 99%;font-family: SolaimanLipi !important;">
@@ -92,8 +100,8 @@ function details_show(id){
                                                 echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla(date("d/m/Y",  strtotime($db_sal_salesdate))) . '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="left">' . english2bangla(date('g:i a' , strtotime($db_sal_salestime))) . '</div></td>';
                                                 echo "<td  style='border: solid black 1px;'><a onclick=details_show('$db_salsumid') style='color:green;cursor:pointer;'><u>$db_sal_invoiceno<u><a></td>";
-                                                echo '<td  style="border: solid black 1px;"><div align="center">' . $db_sal_totalamount . '</div></td>';
-                                                echo '<td  style="border: solid black 1px;"><div align="center">' . $db_sal_totalpv . '</div></td>';
+                                                echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla($db_sal_totalamount) . '</div></td>';
+                                                echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla($db_sal_totalpv) . '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.$db_refered.'</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.$db_package.'</div></td>';                                                
                                                 echo '</tr>';
@@ -118,8 +126,8 @@ function details_show(id){
                                                 echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla(date("d/m/Y",  strtotime($db_sal_salesdate))) . '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="left">' . english2bangla(date('g:i a' , strtotime($db_sal_salestime))) . '</div></td>';
                                                 echo "<td  style='border: solid black 1px;'><a onclick=details_show('$db_salsumid') style='color:green;cursor:pointer;'><u>$db_sal_invoiceno<u><a></td>";
-                                                echo '<td  style="border: solid black 1px;"><div align="center">' . $db_sal_totalamount . '</div></td>';
-                                                echo '<td  style="border: solid black 1px;"><div align="center">' . $db_sal_totalpv . '</div></td>';
+                                                echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla($db_sal_totalamount) . '</div></td>';
+                                                echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla($db_sal_totalpv) . '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.$db_refered.'</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.$db_package.'</div></td>';                                              
                                                 echo '</tr>';
