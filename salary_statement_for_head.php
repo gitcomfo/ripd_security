@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
 include_once 'includes/MiscFunctions.php';
-include 'includes/header.php';
+include_once 'includes/header.php';
 $logedinOfficeId = $_SESSION['loggedInOfficeID'];
 $logedinOfficeType=$_SESSION['loggedInOfficeType'];
 ?>
@@ -57,7 +57,6 @@ $logedinOfficeType=$_SESSION['loggedInOfficeType'];
                                             <?php
                                                 $thisYear = date('Y');
                                                 $startYear = '2000';
-
                                                 foreach (range($thisYear, $startYear) as $year) {
                                                 echo '<option value='.$year.'>'. $year .'</option>'; }
                                             ?>

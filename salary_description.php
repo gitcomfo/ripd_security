@@ -71,6 +71,7 @@ include_once 'includes/selectQueryPDO.php';
     ?>
     <title>বেতন প্রদানের স্টেটমেন্ট</title>
     <style type="text/css"> @import "css/bush.css";</style>
+    <link rel="stylesheet" href="css/print.css" type="text/css">
     <style type="text/css">
     #search {
         width: 50px;background-color: #009933;border: 2px solid #0077D5;cursor: pointer; color: wheat;
@@ -79,10 +80,17 @@ include_once 'includes/selectQueryPDO.php';
         background-color: #0077D5;border: 2px inset #009933;color: wheat;
     }
 </style>
+<script type="text/javascript">
+function printthis()
+{
+    window.print();
+}
+</script>
 
     <div class="main_text_box">
-        <div style="padding-left: 110px;"><a href="personal_official_profile_employee.php"><b>ফিরে যান</b></a></div>
+        <div id="noprint" style="padding-left: 110px;"><a href="personal_official_profile_employee.php"><b>ফিরে যান</b></a></div>
         <div>
+            <div id="onprint" style="display: none;text-align: center;"><font style="font-size: 16px;">রিপড ইউনিভার্সেল</font> <sub>লিমিটেড</sub></br><?php echo english2bangla(date("d-m-Y"))?></div>
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          
                     <tr><th colspan="2" style="text-align: center;font-size: 18px;">বেতন স্টেটমেন্ট</th></tr>
                     <tr>
@@ -122,8 +130,8 @@ include_once 'includes/selectQueryPDO.php';
                             </table>
                         </td>
                     </tr>
-                    <tr>
-                        <td colspan="2">
+                    <tr id="noprint">
+                        <td  colspan="2">
                             <fieldset style="border: #686c70 solid 3px;width: 68%;margin-left:15%;">
                                 <legend style="color: brown">সার্চ</legend>
                                 <form method="POST"  action="">	
@@ -196,6 +204,9 @@ include_once 'includes/selectQueryPDO.php';
                                     ?>
                                 </table>
                             </fieldset>
+                            <table>
+                                 <tr id="noprint"><td style="text-align: right"><div style="width: 50px;height: 50px;background-image: url('images/print.gif');background-size: 100% 100%;cursor: pointer;" onclick="printthis()"></div></td></tr>
+                            </table>
                         </td>
                         <td style=" text-align: left; padding-left: 0px !important; margin: 0px;">
                             <fieldset style="border: #686c70 solid 3px;width: 70%;">

@@ -67,6 +67,9 @@ if (isset($_GET['id'])) {
     $db_deduct = $sal_chart_row['deducted_amount'];
     $db_bonus = $sal_chart_row['bonus_amount'];
     $db_given_salary = $sal_chart_row['total_given_amount'];
+    $db_actual_salary = $sal_chart_row['actual_salary'];
+    $db_pension_amount = $sal_chart_row['pension_amount'];
+    $db_loan_amount = $sal_chart_row['loan_amount'];
     ?>
     <title>বেতন প্রদানের স্টেটমেন্ট</title>
     <style type="text/css"> @import "css/bush.css";</style>
@@ -127,7 +130,7 @@ if (isset($_GET['id'])) {
                                 </tr>
                                 <tr>
                                     <td style="width: 50%; text-align: right"><b>সেলারী :</b></td>
-                                    <td style="width: 50%; text-align: left"><?php echo english2bangla($db_salary)." টাকা"?></td>
+                                    <td style="width: 50%; text-align: left"><?php echo english2bangla($db_actual_salary)." টাকা"?></td>
                                 </tr>
                                 <tr>
                             </table>
@@ -150,13 +153,13 @@ if (isset($_GET['id'])) {
                                     {
                                         $db_criteria = $sal_criteria_row['criteria_name'];
                                         $db_percentange = $sal_criteria_row['percentage'];
-                                        $salary_part = round((($db_salary * $db_percentange) / 100),2);
+                                        $salary_part = round((($db_actual_salary * $db_percentange) / 100),2);
                                         $criteria_total+= $salary_part;
                                         echo "<tr><td style='border: 1px solid black;'>$db_criteria</td>";
                                         echo "<td style='border: 1px solid black;'>".english2bangla($salary_part)." টাকা</td></tr>";
                                     }
                                         echo "<tr><td style='border: 1px solid black;'>মূল</td>";
-                                        echo "<td style='border: 1px solid black;'>".english2bangla($db_salary-$criteria_total)." টাকা</td></tr>";
+                                        echo "<td style='border: 1px solid black;'>".english2bangla($db_actual_salary-$criteria_total)." টাকা</td></tr>";
                                     ?>
                                 </table>
                             </fieldset>
@@ -196,8 +199,12 @@ if (isset($_GET['id'])) {
                                         <td >: <?php echo english2bangla($db_deduct) ?> টাকা</td>
                                     </tr>
                                     <tr>
-                                        <td  ><b>পেনশন এমাউন্ট</b></td>
-                                        <td >: </td>
+                                        <td><b>পেনশন এমাউন্ট</b></td>
+                                        <td>: <?php echo english2bangla($db_pension_amount) ?> টাকা</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>লোন এমাউন্ট</b></td>
+                                        <td>: <?php echo english2bangla($db_loan_amount) ?> টাকা</td>
                                     </tr>
                                     <tr>
                                         <td  ><b>মোট প্রদেয় বেতন</b></td>
