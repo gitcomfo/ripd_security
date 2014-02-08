@@ -55,12 +55,12 @@ $sel_emp_grade = $conn->prepare("SELECT * FROM employee_salary, pay_grade WHERE 
                                     $db_grade = $value['grade_name'];
                                     $db_grading_date = $value['insert_date'];
                                     $db_previous_key = $key -1;
-                                    $timestamp_start= strtotime( $arr_grade[$key]['insert_date']);
-                                    $timestamp_end = strtotime($arr_grade[$db_previous_key]['insert_date']);
-                                    $difference = abs($timestamp_end - $timestamp_start); 
-                                    $postyears = english2bangla(floor($difference / (365 * 60 * 60 * 24)));
-                                    $postmonths2 = english2bangla(floor(($difference - ($postyears * 365 * 60 * 60 * 24)) / ((365 * 60 * 60 * 24) / 12)));
-                                    $postdays = english2bangla(floor(($difference -($postyears * 365 * 60 * 60 * 24) - ( $postmonths2 * 30 * 60 * 60 * 24))/ (60 * 60 * 24)));
+                                    $datetime1 = date_create($arr_grade[$key]['insert_date']);
+                                    $datetime2 = date_create($arr_grade[$db_previous_key]['insert_date']);
+                                    $interval = date_diff($datetime1, $datetime2);
+                                    $postyears = english2bangla($interval->format('%Y'));
+                                    $postmonths2 = english2bangla($interval->format('%M'));
+                                    $postdays = english2bangla($interval->format('%d'));
                               ?>
                            <tr>
                                 <td style="border: black 1px solid; text-align: center"><?php echo english2bangla($sl);?></td>
