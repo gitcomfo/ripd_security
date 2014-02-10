@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include_once 'includes/MiscFunctions.php';
 include 'includes/header.php';
 ?>

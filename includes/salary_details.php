@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 //include 'includes/session.inc';
 include_once './connectionPDO.php';
 include_once 'selectQueryPDO.php';
@@ -33,17 +33,17 @@ foreach ($row as $value) {
         }
 }
 $total_employee = 0;
-$sel_total_employee = $conn->prepare("SELECT idEmployee, employee.employee_type, idpaygrade, grade_name FROM employee,pay_grade WHERE pay_grade_id = idpaygrade AND employee.employee_type = pay_grade.employee_type
-                                                            AND cfs_user_idUser = ANY(SELECT user_id FROM salary_chart, salary_approval WHERE salapp_onsid= ? AND salappid=fk_sal_aprv_salappid AND salary_chart.month_no= ? AND salary_chart.year_no=?) 
-                                                            GROUP BY idpaygrade ORDER BY idEmployee");
+$sel_total_employee = $conn->prepare("SELECT COUNT(idEmployee) , employee.employee_type, pay_grade_id, SUM(total_given_amount), grade_name
+                                                                FROM salary_approval, salary_chart, employee, pay_grade
+                                                                WHERE salapp_onsid =? AND salary_approval.month_no =?                                                             
+                                                                AND salary_approval.year_no =? AND salappid = fk_sal_aprv_salappid
+                                                                AND user_id = cfs_user_idUser AND pay_grade_id = idpaygrade
+                                                                GROUP BY employee.employee_type, pay_grade_id");
 $sel_total_employee->execute(array($g_onsID,$g_month,$g_year));
 $row1 = $sel_total_employee->fetchAll();
 foreach ($row1 as $row_emp_sal) {
-    $total_employee+= $row_emp_sal['idEmployee'];
+    $total_employee+= $row_emp_sal['COUNT(idEmployee)'];
 }
-$sel_grade_salary = $conn->prepare("SELECT total_given_amount FROM salary_chart, salary_approval WHERE salapp_onsid= ? AND salappid=fk_sal_aprv_salappid AND salary_chart.month_no= ? AND salary_chart.year_no=?
-                                                            AND user_id = ANY(SELECT cfs_user_idUser FROM employee WHERE pay_grade_id= ?)")
-
 ?>
 <style type="text/css">@import "css/bush.css";</style> 
 
@@ -69,22 +69,16 @@ $sel_grade_salary = $conn->prepare("SELECT total_given_amount FROM salary_chart,
                                     <?php
                                             $sl = 1; $total_salary = 0;
                                             foreach ($row1 as $row_emp_sal) {
-                                                    $count_employee= $row_emp_sal['idEmployee'];
+                                                    $count_employee= $row_emp_sal['COUNT(idEmployee)'];
                                                     $employee_type = $row_emp_sal['employee_type'];
                                                     $emp_grade = $row_emp_sal['grade_name'];
-                                                    $gradeid = $row_emp_sal['idpaygrade'];
-                                                    $sel_grade_salary->execute(array($g_onsID,$g_month,$g_year,$gradeid));
-                                                    $row2 = $sel_grade_salary->fetchAll();
-                                                    foreach ($row2 as $value) {
-                                                        $salary = $value['SUM(total_given_amount)'];
-                                                        $total_salary+=$salary;
-                                                    }
+                                                    $total_salary += $row_emp_sal['SUM(total_given_amount)'];
                                                 echo "<tr>
                                                         <td style='border: 1px solid black'>". english2bangla($sl)."</td>
                                                         <td style='border: 1px solid black'>$arr_who[$employee_type]</td>
                                                         <td style='border: 1px solid black;text-align:center;'>$emp_grade</td>
                                                         <td style='border: 1px solid black;text-align:center;'>".english2bangla($count_employee)." জন</td>
-                                                        <td style='border: 1px solid black;text-align:right;'>".english2bangla($salary)."</td>
+                                                        <td style='border: 1px solid black;text-align:right;'>".english2bangla($row_emp_sal['SUM(total_given_amount)'])."</td>
                                                     </tr>";
                                                 $sl++;
                                             }
