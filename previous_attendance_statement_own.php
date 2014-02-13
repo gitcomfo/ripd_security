@@ -132,7 +132,7 @@ if(isset($_POST['submit']))
                                 <table>
                                     <tr>
                                             <td > হাজিরার হার :</td>
-                                            <td ><?php echo english2bangla($totalattendPercent);?> %</td>
+                                            <td ><?php echo english2bangla(round($totalattendPercent, 2));?> %</td>
                                         </tr>
                                         <tr>
                                             <td >মোট কার্যদিবস :</td>
@@ -159,7 +159,7 @@ if(isset($_POST['submit']))
                             <tr>
                                 <td colspan="5" style="text-align: center;">
                                     <fieldset style="border: #686c70 solid 3px;width: 60%;margin-left: 20%;">
-                                        <legend style="color: brown">মোট সারসংক্ষেপ</legend>
+                                        <legend style="color: brown">মাসিক সারসংক্ষেপ</legend>
                                         <table>
                                             <tr>
                                             <td > হাজিরার হার :</td>

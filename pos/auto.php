@@ -349,20 +349,22 @@ $storeName = $_SESSION['loggedInOfficeName'];
                 <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;font-family: SolaimanLipi !important;">
                     <tr>
                         <td width="17%"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
-                        <td width="27%"><div align="center"><strong><span style="width:130px;">প্রোডাক্ট-এর নাম</span></strong></div></td>
+                        <td width="27%"><div align="center"><strong>প্রোডাক্টের নাম</strong></div></td>
                         <td width="16%"><div align="center"><strong>খুচরা মূল্য</strong></div></td>
-                        <td width="14%"><div align="center"><strong>পরিমাণ</strong></div></td>
-                        <td width="19%"><div align="center"><strong>মোট টাকা</strong></div></td>
-                        <td width="7%">&nbsp;</td>
+                        <td width="10%"><div align="center"><strong>পরিমাণ</strong></div></td>
+                        <td width="15%"><div align="center"><strong>মোট টাকা</strong></div></td>
+                        <td width="10%"><div align="center"><strong>মোট পিভি</strong></div></td>
+                        <td width="10%">&nbsp;</td>
                     </tr>
                     <?php
                     foreach ($_SESSION['arrSellTemp'] as $key => $row) {
                         echo '<tr>';
                         echo '<td><div align="left">' . $row[0] . '</div></td>';
-                        echo '<td><div align="left">&nbsp;&nbsp;&nbsp;' . $row[1] . '</div></td>';
+                        echo '<td><div align="left">' . $row[1] . '</div></td>';
                         echo '<td><div align="center">' . english2bangla($row[3]) . '</div></td>';
                         echo '<td><div align="center">' . english2bangla($row[4]) . '</div></td>';
                         echo '<td><div align="center">' . english2bangla($row[5]) . '</div></td>';
+                        echo '<td><div align="center">' . english2bangla($row[6]) . '</div></td>';
                         echo '<td style="text-align:center"><a href=delete.php?selltype=auto.php&id=' . $key . '><img src="images/del.png" style="cursor:pointer;" width="20px" height="20px" /></a></td>';
                         echo '</tr>';
                     }
@@ -370,14 +372,17 @@ $storeName = $_SESSION['loggedInOfficeName'];
                 </table>
             </fieldset>
             <form action="preview.php" method="post" name="mn" id="suggestSearch">
-                <div align="right" style="margin-top:10px;margin-right:100px;font-family: SolaimanLipi !important;"><b>সর্বমোট :</b>
+                <div align="right" style="margin-top:10px;margin-right:100px;font-family: SolaimanLipi !important;">
                     <?php
-                    $finalTotal = 0;
-                    foreach ($_SESSION['arrSellTemp'] as $key => $row) {
-                        $finalTotal = $finalTotal + $row[5];
-                    }
+                        $finalTotal = 0;
+                        $finalPV = 0;
+                        foreach ($_SESSION['arrSellTemp'] as $key => $row) {
+                            $finalTotal = $finalTotal + $row[5];
+                            $finalPV +=  $row[6];
+                        }
                     ?>
-                    <input name="tretail" type="hidden" id="tretail" size="20" style="text-align:right;" value="<?php echo $finalTotal; ?>" readonly/><?php echo english2bangla($finalTotal); ?> টাকা</br>
+                    <b>সর্বমোট পিভি :</b><?php echo english2bangla($finalPV); ?></br>
+                    <b>সর্বমোট :</b><input name="tretail" type="hidden" id="tretail" size="20" style="text-align:right;" value="<?php echo $finalTotal; ?>" readonly/><?php echo english2bangla($finalTotal); ?> টাকা</b></br>
                     <b>প্রদেয় টাকা&nbsp;:</b> <input name="gtotal" type="hidden" id="gtotal" size="20" readonly style="text-align:right;" value="<?php echo $finalTotal; ?>"/><?php echo english2bangla($finalTotal); ?> টাকা
                 </div>    
                 <fieldset style="border-width: 3px;padding-bottom:50px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">

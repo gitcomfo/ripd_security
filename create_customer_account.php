@@ -45,14 +45,14 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
             $cfs_user_id = mysql_insert_id();
        
              // **************************get referer ID*****************************
-                    $getreferer_sql = mysql_query("SELECT * FROM pin_makingused, sales_summery WHERE idsalessummery = sales_summery_idsalessummery AND pin_no = '$pin_number'");
+                    $getreferer_sql = mysql_query("SELECT * FROM pin_makingused, sales_summary WHERE idsalessummary = sales_summery_idsalessummery AND pin_no = '$pin_number'");
                     $refererrow = mysql_fetch_assoc($getreferer_sql);
                     $db_referid = $refererrow['sal_buyerid'];
-                    $db_pv= $refererrow['sal_totalpv'];
+                    echo $db_pv= $refererrow['sal_totalpv'];
            //*************************************get account type from pv ************************
                     $getactype_sql = mysql_query("SELECT * FROM account_type WHERE account_minPV_value <= $db_pv ORDER BY account_minPV_value DESC LIMIT 1");
                     $actyperow = mysql_fetch_assoc($getactype_sql);
-                    $db_accounttypeID = $actyperow['idAccount_type'];
+                    echo $db_accounttypeID = $actyperow['idAccount_type'];
              //*************************cutomer_account table-e insert*************
                     $ins_custaccount=mysql_query("INSERT INTO customer_account (opening_pin_no, referer_id, Account_type_idAccount_type, Designation_idDesignation, cfs_user_idUser)
                                             VALUES ('$pin_number', $db_referid, $db_accounttypeID, 1, $cfs_user_id )") or exit(mysql_error());
@@ -107,14 +107,14 @@ if (isset($_POST['submitwithpass']))
             $cfs_user_id = mysql_insert_id();
        
              // **************************get referer ID*****************************
-                    $getreferer_sql = mysql_query("SELECT * FROM pin_makingused, sales_summery WHERE idsalessummery = sales_summery_idsalessummery AND pin_no = '$pin_number'");
+                    $getreferer_sql = mysql_query("SELECT * FROM pin_makingused, sales_summary WHERE idsalessummary = sales_summery_idsalessummery AND pin_no = '$pin_number'");
                     $refererrow = mysql_fetch_assoc($getreferer_sql);
                     $db_referid = $refererrow['sal_buyerid'];
-                    $db_pv= $refererrow['sal_totalpv'];
+                    echo $db_pv= $refererrow['sal_totalpv'];
            //*************************************get account type from pv ************************
                     $getactype_sql = mysql_query("SELECT * FROM account_type WHERE account_minPV_value <= $db_pv ORDER BY account_minPV_value DESC LIMIT 1");
                     $actyperow = mysql_fetch_assoc($getactype_sql);
-                    $db_accounttypeID = $actyperow['idAccount_type'];
+                    echo $db_accounttypeID = $actyperow['idAccount_type'];
              //*************************cutomer_account table-e insert*************
                     $ins_custaccount=mysql_query("INSERT INTO customer_account (opening_pin_no, referer_id, Account_type_idAccount_type, Designation_idDesignation, cfs_user_idUser)
                                             VALUES ('$pin_number', $db_referid, $db_accounttypeID, 1, $cfs_user_id )") or exit(mysql_error());
@@ -312,7 +312,7 @@ function passminlength(pass)
             {
                 document.getElementById("mblValidationMsg").innerHTML = xmlhttp.responseText;
                 var message = document.getElementById("mblValidationMsg").innerText;
-                if (message != "OK")
+                if (message != "")
                 {
                     document.getElementById('mobile').focus();
                 }

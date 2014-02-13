@@ -36,6 +36,7 @@ function show_stepWise_account()
                                         <th style="border: black 1px solid;">প্যাকেজের নাম</th>
                                         <th style="border: black 1px solid;">অ্যাকাউন্ট করার তারিখ</th>
                                         <th style="border: black 1px solid;">রেফারারের নাম</th>
+                                        <th style="border: black 1px solid;">স্টেপ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -85,6 +86,7 @@ function show_stepWise_account()
                                                                 echo "<td style='border: black 1px solid;'>$db_package</td>";
                                                                 echo "<td style='border: black 1px solid;'>$show_date</td>"; 
                                                                 echo "<td style='border: black 1px solid;'>$db_referer_name</td>";                                        
+                                                                echo "<td style='border: black 1px solid;'>স্টেপ ".english2bangla($a)."</td>";                                        
                                                                 echo "</tr>";
                                                                 }
                                                         }

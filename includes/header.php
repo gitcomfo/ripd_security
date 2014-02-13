@@ -39,6 +39,7 @@ include_once 'MiscFunctions.php';
                                 <li><a href="product_finder.php" title="">প্রোডাক্ট খোঁজা</a></li>
                                 <li><a href="product_price_finder.php" title="">প্রোডাক্ট প্রাইজ ফাইন্ডার</a></li>
                                 <li><a href="find_product_chart.php" title="">ফাইন্ড প্রাতিষ্ঠানিক চার্ট</a></li>
+                                <li><a href="previous_product.php" title="">প্রিভিয়াস প্রোডাক্ট চার্ট</a></li>
                             </ul>
                         </li>
                         <li><a>যোগাযোগ</a>

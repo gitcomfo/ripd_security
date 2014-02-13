@@ -11,8 +11,6 @@ $db_onsid = $emprow['idUser'];
 ?>
 <title>কনভার্ট একাউন্ট প্যাকেজ</title>
 <style type="text/css"> @import "css/bush.css";</style>
-<link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
-
 <script>
     function getAccount(keystr) //search employee by account number***************
     {
@@ -34,7 +32,7 @@ $db_onsid = $emprow['idUser'];
             }
             else
             {document.getElementById('accountfound').style.visibility = "visible";
-                document.getElementById('accountfound').setAttribute('style','position:absolute;top:41%;left:61.5%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('accountfound').setAttribute('style','position:absolute;top:36%;left:81%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
             }
             document.getElementById('accountfound').innerHTML=xmlhttp.responseText;
         }
@@ -48,12 +46,7 @@ $db_onsid = $emprow['idUser'];
     <div>
         <form method="POST" onsubmit="" name="" enctype="multipart/form-data" action="">	
             <table  class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          
-                <tr><th colspan="2" style="text-align: center;">কনভার্ট একাউন্ট প্যাকেজ</th></tr>
-<?php
-if ($msg != "") {
-    echo "<tr><td colspan='2' style='color:red;font-size:16px;text-align:center;'>$msg</td></tr>";
-}
-?>
+                <tr><th colspan="2" style="text-align: center;font-size: 18px;">কনভার্ট একাউন্ট প্যাকেজ</th></tr>
                 <tr>
                 <?php
                 if (isset($_GET['id'])) {
@@ -79,54 +72,55 @@ if ($msg != "") {
                     $db_empsalary = $empsalrow['total_salary'];
                 }
                 ?>
-                    <td></br>
+                    <td>
                         <table style="margin-left: 0px !important;">
                             <tr>
-                                <td style="padding-left: 0px; text-align: right; width: 35%" >একাউন্ট ধারীর নামঃ</td>
-                                <td style="width: 65%; text-align: left"></td>	 
+                                <td style="padding-left: 0px; text-align: left; width: 35%;font-weight: bold;" >একাউন্ট ধারীর নাম</td>
+                                <td style="width: 65%; text-align: left">: </td>	 
                             </tr> 
                             <tr>
-                                <td style="padding-left: 0px; text-align: right; width: 35%" >একাউন্ট নাম্বারঃ</td>
-                                <td style="width: 65%; text-align: left"></td>	 
+                                <td style="padding-left: 0px; text-align: left; width: 35%;font-weight: bold;" >একাউন্ট নাম্বার</td>
+                                <td style="width: 65%; text-align: left">: </td>	 
                             </tr> 
                             <tr>
-                                <td style="padding-left: 0px; text-align: right; width: 35%"  >বর্তমান প্যাকেজঃ</td>
-                                <td style="width: 65%; text-align: left"><input class="box" type="text" name="loanamount" id="loanamount" onkeypress="return checkIt(event)" /></td>	 
-                            </tr> 
+                                <td style="padding-left: 0px; text-align: left; width: 35%;font-weight: bold;"  >বর্তমান প্যাকেজ</td>
+                                <td style="width: 65%; text-align: left">: <input class="box" type="text" name="loanamount" id="loanamount" onkeypress="return checkIt(event)" /></td>	 
+                            </tr>
                             <tr>
-                                <td colspan="2">
-                                    <fieldset style="border: #686c70 solid 3px;width: 100%;">
-                                        <legend style="color: brown;">সার্চ প্যাকেজ</legend>
-                                        পরবর্তী প্যাকেজঃ <select class="box" name="fund">
-                                             <option value="">-সিলেক্ট করুন-</option>
-                                        <option value="pension">পেনশন</option>
-                                        </select>
-                                        
-                                        প্রয়োজনীয় পি.ভি. : 
-                                        <input class="box" type="text" id="instalment_period" name="instalment_period" style="width: 50px" />
-                                    </fieldset>
-                                </td>
+                                <td style="padding-left: 0px; text-align: left; width: 35%;font-weight: bold;"  >পরবর্তী প্যাকেজ</td>
+                                <td style="width: 65%; text-align: left">: <select class="box" name="fund"><?php ?></select></td>	 
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 0px; text-align: left; width: 35%;font-weight: bold;"  >প্রয়োজনীয় পি.ভি.</td>
+                                <td style="width: 65%; text-align: left">: <input class="box" type="text" name="loanamount" id="loanamount" onkeypress="return checkIt(event)" /></td>	 
                             </tr>
                              <tr>
-                                <td style="padding-left: 0px; text-align: right; width: 35%" >এন্টার PIN No :</td>
-                                <td style="width: 65%; text-align: left"><input class="box" type="text" id="instalment_period" name="instalment_period" /></td>
+                                <td style="padding-left: 0px; text-align: left; width: 35%;font-weight: bold;" >পিন নাম্বার</td>
+                                <td style="width: 65%; text-align: left">: <input class="box" type="text" id="instalment_period" name="instalment_period" /></td>
                             </tr>
                             <tr>
-                                <td style="padding-left: 0px; text-align: right; width: 35%" >টোটাল পি.ভি. :</td>
-                                <td style="width: 65%; text-align: left"><input class="box" type="text" id="instalment_period" name="instalment_period" /></td>
+                                <td style="padding-left: 0px; text-align: left; width: 35%;font-weight: bold;" >মোট পি.ভি.</td>
+                                <td style="width: 65%; text-align: left">: <input class="box" type="text" id="instalment_period" name="instalment_period" /></td>
                             </tr>
                              <tr>
-                                <td style="padding-left: 0px; text-align: right; width: 35%" ">নিউ প্যাকেজ :</td>
-                                <td style="width: 65%; text-align: left"><input class="box" type="text" id="instalment_period" name="instalment_period" /></td>
+                                <td style="padding-left: 0px; text-align: left; width: 35%;font-weight: bold;">নতুন প্যাকেজ</td>
+                                <td style="width: 65%; text-align: left">: <input class="box" type="text" id="instalment_period" name="instalment_period" /></td>
                             </tr>
                             <tr>
-                                <td style="padding-left: 0px; text-align: right; width: 35%" >কনভার্ট সার্ভিস চার্জ :</td>
-                                <td style="width: 65%; text-align: left"><input class="box" type="text" id="instalment_period" name="instalment_period" /></td>
+                                <td style="padding-left: 0px; text-align: left; width: 35%;font-weight: bold;" >কনভার্ট চার্জ</td>
+                                <td style="width: 65%; text-align: left">: <input class="box" type="text" id="instalment_period" name="instalment_period" /></td>
                             </tr>
-                            
+                            <tr>
+                                <td style="padding-left: 0px; text-align: left; width: 35%;font-weight: bold;" >সার্ভিস চার্জ</td>
+                                <td style="width: 65%; text-align: left">: <input class="box" type="text" id="instalment_period" name="instalment_period" /></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 0px; text-align: left; width: 35%;font-weight: bold;">মোট প্রদেয়</td>
+                                <td>: <input class="box" type="text" id="instalment_period" name="instalment_period" /></td>
+                            </tr>
                         </table>     
                     </td>
-                    <td width="41%"></br>
+                    <td width="41%">
                         <table>
                             <tr>
                                 <td colspan="2" style="text-align: right">একাউন্ট:  <input type="text" class="box" style="width: 200px;" id="accountsearch" name="accountsearch" onkeyup="getAccount(this.value)" placeholder="টাইপ একাউন্ট নাম্বার"/>
@@ -145,8 +139,7 @@ if ($msg != "") {
                             <tr>
                                 <td><input type="hidden" readonly="" value="<?php echo $db_empmobile; ?>" /><?php echo $db_empmobile; ?>
                                     <input type="hidden" readonly="" name="empid"value="<?php echo $db_empid; ?>" /></td>
-                            </tr>
-                                 
+                            </tr>                                 
                             <tr>
                                 <td style="text-align: center;">নামঃ</td>
                                 <td></td>
@@ -163,7 +156,7 @@ if ($msg != "") {
                     </td>
                 </tr>
                 <tr>                    
-                    <td colspan="2" style="padding-left: 250px; " ></br></br><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="কনভার্ট" />
+                    <td colspan="2" style="padding-left: 350px; " ></br><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="কনভার্ট" />
                   </br></br></td>                           
                 </tr>    
             </table>

@@ -36,6 +36,12 @@ if ($aab_user_type == 'customer') // for customer ******************************
         {
             $ar_referrer = $ar['account_name'];
         }
+        $sel_acc_balance = $conn->prepare("SELECT total_balanace FROM acc_user_balance WHERE cfs_user_iduser = ?");
+        $sel_acc_balance->execute(array($session_user_id));
+        $arr_balance= $sel_acc_balance->fetchAll();
+        foreach ($arr_balance as $value) {
+            $db_cust_balance = $value['total_balanace'];
+        }
     } 
 elseif ($aab_user_type == 'owner') // for proprietor *********************************
         {
@@ -137,8 +143,8 @@ if (!file_exists($aab_picture))
                             <td>সেটেল একাউন্ট</td>
                         </tr>
                         <tr>
-                            <td><b>এমাউন্টঃ </b></td>
-                            <td>৫৪৮৭ টাকা</td>
+                            <td><b>মোট এমাউন্টঃ </b></td>
+                            <td><?php echo english2bangla($db_cust_balance)." টাকা";?></td>
                         </tr>
                     </table>
                 </td>
