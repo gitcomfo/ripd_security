@@ -331,7 +331,7 @@ $storeName = $_SESSION['loggedInOfficeName'];
                                             <input name="less" type="hidden"/></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2"><span style="color: #03C;">প্রোডাক্টের বিক্রয়মূল্য: </span><input name="PPRICE" id="PPRICE" type="text" value="<?php echo $db_price; ?>" style="border:0px;font-size: 18px;width:100px;text-align: right;"/> টাকা<input  id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>      
+                                        <td colspan="2"><span style="color: #03C;">প্রোডাক্টের বিক্রয়মূল্য: </span><input name="PPRICE" id="PPRICE" readonly type="text" value="<?php echo $db_price; ?>" style="border:0px;font-size: 18px;width:100px;text-align: right;"/> টাকা<input  id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>      
                                         <td rowspan="2" ><input type="button" onclick="addToCart()" name="addButton" style="height:100px; width: 100px;background-image: url('images/add to cart.jpg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
                                     </tr>
                                     <tr>
