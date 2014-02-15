@@ -92,6 +92,7 @@ function getVillage()
     xmlhttp.open("GET","includes/getVillage.php?PoId="+post_id,true);
     xmlhttp.send();
 }
+
 //**************###########****************##########********************###############******************
 function getDistrict1()
 {

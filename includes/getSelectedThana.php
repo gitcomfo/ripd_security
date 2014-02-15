@@ -35,6 +35,5 @@
                     $arr_thanaID[$count] = $db_thana_id;
                     $count = $count +1;
                     }
-                    
-            //echo "division id: ".$division_id." district id: ".$district_id." thana id: ".$th_id;
+
 ?>
