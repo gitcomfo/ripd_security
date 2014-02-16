@@ -34,8 +34,8 @@
                                 $thana_sql = mysql_query("SELECT * FROM thana ORDER BY thana_name ASC");
                         else
                                 $thana_sql = mysql_query("SELECT * FROM thana, district, division
-                                                                        WHERE District_idDistrict=idDistrict AND Division_idDivision=idDivision
-                                                                                AND idDivision = $division_id ORDER BY thana_name ASC");
+                                                                            WHERE District_idDistrict=idDistrict AND Division_idDivision=idDivision
+                                                                            AND idDivision = $division_id ORDER BY thana_name ASC");
                         }
                 else
                         {

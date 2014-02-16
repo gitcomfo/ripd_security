@@ -68,7 +68,7 @@ function getPostOffice()
     }
     var thana_id = document.getElementById('thana_id').value;
     var method_name = document.getElementById('method').value;
-    xmlhttp.open("GET","includes/getPostOffice.php?ThId="+thana_id+"&mtT="+method_name,true);
+    xmlhttp.open("GET","includes/getPostOfficeCust.php?ThId="+thana_id+"&mtT="+method_name,true);
     xmlhttp.send();
 }
 
@@ -92,7 +92,7 @@ function getVillage()
     }
     var post_id = document.getElementById('post_id').value;
     var method_name = document.getElementById('method').value;
-    xmlhttp.open("GET","includes/getVillage.php?PoId="+post_id+"&mtT="+method_name,true);
+    xmlhttp.open("GET","includes/getVillageCust.php?PoId="+post_id+"&mtT="+method_name,true);
     xmlhttp.send();
 }
     

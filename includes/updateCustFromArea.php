@@ -4,21 +4,21 @@
     $joinArray = implode(',', $arr_thanaID);
     $postArray = implode(',', $arr_postID);
     $vilgArray = implode(',', $arr_vilgID);
-    echo $vilgArray;
     if(count($arr_postID) == 0 && count($arr_vilgID) == 0)
-    {
-        $sql_officeTable = "SELECT * FROM cfs_user,customer_account,address,thana WHERE address_whom='cust' AND address_type='Permanent' 
+    { 
+        $sql_officeTable = "SELECT * FROM cfs_user,customer_account,address,thana,post_office,village WHERE address_whom='cust' AND address_type='Permanent' 
                                         AND adrs_cepng_id= idCustomer_account AND cfs_user_idUser=idUser AND user_type='customer' 
-                                        AND address.Thana_idThana=idThana AND idThana IN ($joinArray) ORDER BY account_name ASC";
+                                        AND address.Thana_idThana=idThana AND idThana IN ($joinArray) 
+                                        AND village_idvillage = idvillage AND post_idpost = idPost_office ORDER BY account_name ASC";
     }
     elseif (count($arr_postID) != 0 && count($arr_vilgID) == 0) 
-        {
+        { 
             $sql_officeTable = "SELECT * FROM cfs_user,customer_account,address,thana,post_office,village WHERE address_whom='cust' AND address_type='Permanent' 
                                         AND adrs_cepng_id= idCustomer_account AND cfs_user_idUser=idUser AND user_type='customer'
                                         AND address.Thana_idThana = idThana AND village_idvillage = idvillage
                                         AND post_idpost = idPost_office AND idPost_office IN ($postArray) ORDER BY account_name ASC";
         }
-    else{
+   else{ 
             $sql_officeTable = "SELECT * FROM cfs_user,customer_account,address,thana,post_office,village WHERE address_whom='cust' AND address_type='Permanent' 
                                         AND adrs_cepng_id= idCustomer_account AND cfs_user_idUser=idUser AND user_type='customer' 
                                         AND address.Thana_idThana = idThana AND post_idpost = idPost_office
