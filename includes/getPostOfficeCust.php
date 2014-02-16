@@ -10,7 +10,7 @@ include 'ConnectDB.inc';
                     {
                     $post_sql = mysql_query("SELECT * FROM post_office WHERE Thana_idThana='$thana_id' ORDER BY post_offc_name ASC");
                     }
-            echo "<select name='post_id' id='post_id' class='box2' onchange='getVillage(),$gt_methodT' >
+            echo "<select name='post_id' id='post_id' class='box2' onchange='getVillageCust(),$gt_methodT' >
                         <option value='all'>-পোস্টঅফিস-</option>";
             while ($post_rows = mysql_fetch_array($post_sql)) {
                 $db_post_id = $post_rows['idPost_office'];

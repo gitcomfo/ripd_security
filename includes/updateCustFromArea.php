@@ -4,6 +4,7 @@
     $joinArray = implode(',', $arr_thanaID);
     $postArray = implode(',', $arr_postID);
     $vilgArray = implode(',', $arr_vilgID);
+    echo $vilgArray;
     if(count($arr_postID) == 0 && count($arr_vilgID) == 0)
     {
         $sql_officeTable = "SELECT * FROM cfs_user,customer_account,address,thana WHERE address_whom='cust' AND address_type='Permanent' 

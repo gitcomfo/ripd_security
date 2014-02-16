@@ -15,7 +15,7 @@ function getArea($getMethod_name)
         ?>
     </select> &nbsp;&nbsp;
     <span id="did">
-        <select name="district_id"  id="district_id" class="box2" onChange="getThana();getVillage();<?php echo $getMethod_name; ?>">
+        <select name="district_id"  id="district_id" class="box2" onChange="getThana();getVillageCust();<?php echo $getMethod_name; ?>">
             <option value="all">----জেলা----</option>
             <?php
             $district_sql = mysql_query("SELECT * FROM district ORDER BY district_name ASC");
@@ -28,7 +28,7 @@ function getArea($getMethod_name)
         </select>
     </span> &nbsp;&nbsp;
     <span id="tid">
-        <select name='thana_id' id='thana_id' class="box2" onChange="getPostOffice();getVillage();<?php echo $getMethod_name; ?>">
+        <select name='thana_id' id='thana_id' class="box2" onChange="getPostOfficeCust();getVillageCust();<?php echo $getMethod_name; ?>">
             <option value="all">----থানা----</option>
             <?php
             $thana_sql = mysql_query("SELECT * FROM thana ORDER BY thana_name ASC");
@@ -41,7 +41,7 @@ function getArea($getMethod_name)
         </select>
     </span> &nbsp;&nbsp; &nbsp;&nbsp;
     <span id="pid">
-        <select name='post_id' id='post_id' class="box2" onchange="getVillage();<?php echo $getMethod_name; ?>" >
+        <select name='post_id' id='post_id' class="box2" onchange="getVillageCust();<?php echo $getMethod_name; ?>" >
             <option value="all">-পোস্টঅফিস-</option>
             <?php
             $post_sql = mysql_query("SELECT * FROM post_office ORDER BY post_offc_name ASC");
@@ -58,7 +58,7 @@ function getArea($getMethod_name)
         </select>
     </span> &nbsp;&nbsp; &nbsp;&nbsp;
     <span id="vid">
-         <select name='vilg_id' id='vilg_id' class="box2" onchange="getVillage();<?php echo $getMethod_name; ?>" >
+         <select name='vilg_id' id='vilg_id' class="box2" onchange="<?php echo $getMethod_name; ?>" >
             <option value="all">-গ্রাম/পাড়া/প্রোজেক্ট-</option>
             <?php
             $vilg_sql = mysql_query("SELECT * FROM village ORDER BY village_name ASC");
