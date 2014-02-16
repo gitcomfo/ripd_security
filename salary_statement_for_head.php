@@ -2,15 +2,17 @@
 error_reporting(0);
 include_once 'includes/MiscFunctions.php';
 include 'includes/header.php';
+ $logedinOfficeId = $_SESSION['loggedInOfficeID'];
+$logedinOfficeType=$_SESSION['loggedInOfficeType'];
 ?>
 <style type="text/css">@import "css/bush.css";</style>
 <style type="text/css">
-    #search {
-        width: 50px;background-color: #009933;border: 2px solid #0077D5;cursor: pointer; color: wheat;
-    }
-    #search:hover {
-        background-color: #0077D5;border: 2px inset #009933;color: wheat;
-    }
+#search {
+    width: 50px;background-color: #009933;border: 2px solid #0077D5;cursor: pointer; color: wheat;
+}
+#search:hover {
+    background-color: #0077D5;border: 2px inset #009933;color: wheat;
+}
 </style>
 <link rel="stylesheet" href="css/tinybox.css" type="text/css" />
 <script src="javascripts/tinybox.js" type="text/javascript"></script>
@@ -97,52 +99,57 @@ include 'includes/header.php';
                                 if(isset($_POST['submit']))
                                 {
                                     $db_slNo = 1;
-                                    $rs = mysql_query("SELECT * FROM office ORDER BY office_name ASC");
-                                    while ($row_officeTable = mysql_fetch_array($rs)) 
-                                        {
-                                        $db_setteleOfficeID = $row_officeTable['idOffice'];
-                                        $db_setteleOfficeName = $row_officeTable['office_name'];
-                                        $db_setteleOfficeNumber = $row_officeTable['office_number'];
-                                        $db_setteleOfficeAddress = $row_officeTable['office_details_address'];
-                                        $sel_office_salary = mysql_query("SELECT total_month_salary, idons_relation FROM salary_approval LEFT JOIN ons_relation ON salapp_onsid = idons_relation
-                                               WHERE add_ons_id= $db_setteleOfficeID AND catagory ='office' AND month_no=$p_month AND year_no =$p_year AND salary_approver_id != 0");
-                                        $off_sal_row = mysql_fetch_assoc($sel_office_salary);
-                                        $ons_id = $off_sal_row['idons_relation'];
-                                        echo "<tr>";
-                                        echo "<td>".english2bangla($db_slNo)."</td>";
-                                        echo "<td>অফিস</td>";
-                                        echo "<td>$db_setteleOfficeName</td>";
-                                        echo "<td>$db_setteleOfficeNumber</td>";
-                                        echo "<td>$db_setteleOfficeAddress</td>";
-                                        echo "<td>".english2bangla($off_sal_row['total_month_salary'])."</td>";
-                                        echo '<td><a onclick="details('.$ons_id.','.$p_month.','.$p_year.')" style="cursor:pointer;color:blue;"><u>বিস্তারিত<u></a></td>';
-                                        echo "</tr>";
-                                        $db_slNo++;
-                                        }
-
-                                        $rs2 = mysql_query("SELECT * FROM sales_store ORDER BY salesStore_name ASC");
-                                        while ($row_salestoreTable = mysql_fetch_array($rs2)) 
+                                    if($logedinOfficeType == 'office')
+                                    {
+                                        $rs = mysql_query("SELECT * FROM office WHERE idOffice= $logedinOfficeId OR parent_id= $logedinOfficeId ORDER BY office_name ASC");
+                                        while ($row_officeTable = mysql_fetch_array($rs)) 
                                             {
-                                            $db_storeID = $row_salestoreTable['idSales_store'];
-                                            $db_storeName = $row_salestoreTable['salesStore_name'];
-                                            $db_storeNumber = $row_salestoreTable['salesStore_number'];
-                                            $db_storeAddress = $row_salestoreTable['salesStore_details_address'];
+                                            $db_setteleOfficeID = $row_officeTable['idOffice'];
+                                            $db_setteleOfficeName = $row_officeTable['office_name'];
+                                            $db_setteleOfficeNumber = $row_officeTable['office_number'];
+                                            $db_setteleOfficeAddress = $row_officeTable['office_details_address'];
                                             $sel_office_salary = mysql_query("SELECT total_month_salary, idons_relation FROM salary_approval LEFT JOIN ons_relation ON salapp_onsid = idons_relation
-                                                                                                   WHERE add_ons_id= $db_storeID AND catagory ='s_store' 
-                                                                                                   AND month_no=$p_month AND year_no =$p_year AND salary_approver_id != 0");
+                                                   WHERE add_ons_id= $db_setteleOfficeID AND catagory ='office' AND month_no=$p_month AND year_no =$p_year AND salary_approver_id != 0");
                                             $off_sal_row = mysql_fetch_assoc($sel_office_salary);
                                             $ons_id = $off_sal_row['idons_relation'];
                                             echo "<tr>";
                                             echo "<td>".english2bangla($db_slNo)."</td>";
-                                            echo "<td>সেলসস্টোর</td>";
-                                            echo "<td>$db_storeName</td>";
-                                            echo "<td>$db_storeNumber</td>";
-                                            echo "<td>$db_storeAddress</td>";
+                                            echo "<td>অফিস</td>";
+                                            echo "<td>$db_setteleOfficeName</td>";
+                                            echo "<td>$db_setteleOfficeNumber</td>";
+                                            echo "<td>$db_setteleOfficeAddress</td>";
                                             echo "<td>".english2bangla($off_sal_row['total_month_salary'])."</td>";
                                             echo '<td><a onclick="details('.$ons_id.','.$p_month.','.$p_year.')" style="cursor:pointer;color:blue;"><u>বিস্তারিত<u></a></td>';
                                             echo "</tr>";
                                             $db_slNo++;
-                                        }
+                                            }
+                                    }
+                                    else
+                                        {
+                                            $rs2 = mysql_query("SELECT * FROM sales_store WHERE idSales_store= $logedinOfficeId ORDER BY salesStore_name ASC");
+                                            while ($row_salestoreTable = mysql_fetch_array($rs2)) 
+                                                {
+                                                $db_storeID = $row_salestoreTable['idSales_store'];
+                                                $db_storeName = $row_salestoreTable['salesStore_name'];
+                                                $db_storeNumber = $row_salestoreTable['salesStore_number'];
+                                                $db_storeAddress = $row_salestoreTable['salesStore_details_address'];
+                                                $sel_office_salary = mysql_query("SELECT total_month_salary, idons_relation FROM salary_approval LEFT JOIN ons_relation ON salapp_onsid = idons_relation
+                                                                                                       WHERE add_ons_id= $db_storeID AND catagory ='s_store' 
+                                                                                                       AND month_no=$p_month AND year_no =$p_year AND salary_approver_id != 0");
+                                                $off_sal_row = mysql_fetch_assoc($sel_office_salary);
+                                                $ons_id = $off_sal_row['idons_relation'];
+                                                echo "<tr>";
+                                                echo "<td>".english2bangla($db_slNo)."</td>";
+                                                echo "<td>সেলসস্টোর</td>";
+                                                echo "<td>$db_storeName</td>";
+                                                echo "<td>$db_storeNumber</td>";
+                                                echo "<td>$db_storeAddress</td>";
+                                                echo "<td>".english2bangla($off_sal_row['total_month_salary'])."</td>";
+                                                echo '<td><a onclick="details('.$ons_id.','.$p_month.','.$p_year.')" style="cursor:pointer;color:blue;"><u>বিস্তারিত<u></a></td>';
+                                                echo "</tr>";
+                                                $db_slNo++;
+                                            }
+                                    }
                                 }
                                 ?>
                             </tbody>
