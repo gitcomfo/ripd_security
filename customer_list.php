@@ -2,71 +2,54 @@
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
-include_once 'includes/selectQueryPDO.php';
 if (isset($_GET['id'])) {
-    $empCfsid = $_GET['id'];
-    $selreslt = mysql_query("SELECT * FROM  cfs_user WHERE idUser = $empCfsid");
-    $getrow = mysql_fetch_assoc($selreslt);
-    $db_empname = $getrow['account_name'];
-    $db_empmobile = $getrow['mobile'];
-    $db_email = $getrow['email'];
-    $db_account_number = $getrow['account_number'];
-    $sql_post = mysql_query("SELECT post_name FROM employee, employee_posting, post_in_ons, post
-                                              WHERE idPost = Post_idPost AND idpostinons = post_in_ons_idpostinons AND Employee_idEmployee = idEmployee
-                                              AND  cfs_user_idUser = $empCfsid");
-    $sql_postrow = mysql_fetch_assoc($sql_post);
-    $db_empposition = $sql_postrow['post_name'];
-    $sql_employee = mysql_query("SELECT * FROM employee WHERE cfs_user_idUser = $empCfsid");
-    $emprow = mysql_fetch_assoc($sql_employee);
-    $db_paygrdid = $emprow['pay_grade_id'];
-    $sql_grade = mysql_query("SELECT * FROM pay_grade WHERE idpaygrade = $db_paygrdid");
-    $emgrade = mysql_fetch_assoc($sql_grade);
-    $db_paygrd_name = $emgrade['grade_name'];
-    $db_empid = $emprow['idEmployee'];
-    $sql_empinfo = mysql_query("SELECT * FROM employee_information WHERE Employee_idEmployee = $db_empid");
-    $empinforow = mysql_fetch_assoc($sql_empinfo);
-    $db_empphoto = $empinforow['emplo_scanDoc_picture'];
-
-    $currentMonth = date('n');
-    $currentYear = date('Y');
-    if($currentMonth == 1){
-        $currentYear = $currentYear - 1;
-        $preMonth = 12;
-    } else {
-        $preMonth = $currentMonth -1;
+    $g_custid = $_GET['id'];
+    $custAcid = base64_decode($g_custid);
+    
+    $sel_customer = mysql_query("SELECT * FROM customer_account, cfs_user,address, village, post_office, thana, district, division
+                                                      WHERE address_whom = 'cust' AND village_idvillage= idvillage AND post_office_idPost_office =idPost_office
+                                                      AND post_office.Thana_idThana = idThana AND District_idDistrict = idDistrict
+                                                      AND Division_idDivision = idDivision
+                                                      AND adrs_cepng_id = idCustomer_account AND idCustomer_account = $custAcid 
+                                                      AND cfs_user_idUser = idUser");
+    while ($custrow = mysql_fetch_assoc($sel_customer)) {
+        $db_custname = $custrow['account_name'];
+        $db_custacc = $custrow['account_number'];
+        $db_custmobile = $custrow['mobile'];
+        $db_custripdemail = $custrow['ripd_email'];
+        $db_custAccOpenDate = $custrow['account_open_date'];
+        $db_custImage = $custrow['scanDoc_picture'];
+        $db_custOpeningPin = $custrow['opening_pin_no'];
+        $db_custReferer = $custrow['referer_id'];
+        $sel_referer = mysql_query("SELECT account_name FROM cfs_user WHERE idUser = $db_custReferer");
+        $referer_row = mysql_fetch_assoc($sel_referer);
+        $refere_name = $referer_row['account_name'];
+        $db_addressType = $custrow['address_type'];
+        if($db_addressType == 'Present') //  present address
+        {
+            $db_prhouse = $custrow['house'];
+            $db_prhouseno = $custrow['house_no'];
+            $db_prroad = $custrow['road'];
+            $db_prvilg = $custrow['village_name'];
+            $db_prpost = $custrow['post_offc_name'];
+            $db_prthana = $custrow['thana_name'];
+            $db_prdistrict = $custrow['district_name'];
+            $db_prdiv = $custrow['division_name'];
+        }
+        //permanent address
+        else 
+        {
+            $db_phouse = $custrow['house'];
+            $db_phouseno = $custrow['house_no'];
+            $db_proad = $custrow['road'];
+            $db_pvilg = $custrow['village_name'];
+            $db_ppost = $custrow['post_offc_name'];
+            $db_pthana = $custrow['thana_name'];
+            $db_pdistrict = $custrow['district_name'];
+            $db_pdiv = $custrow['division_name'];
+        }
     }
-    // ************** attendance *************************************
-    $select_attendance = mysql_query("SELECT COUNT(idempattend) FROM employee,employee_attendance 
-        WHERE   year_no ='$currentYear' AND month_no='$preMonth' AND  cfs_user_idUser = $empCfsid AND idEmployee = emp_user_id ");
-    $row = mysql_fetch_assoc($select_attendance);
-    $workingDays = $row['COUNT(idempattend)'];
-
-    $sql_attend =$conn->prepare("SELECT COUNT(idempattend) FROM employee,employee_attendance WHERE emp_atnd_type=? AND  year_no =? AND month_no=? AND  cfs_user_idUser = ? AND idEmployee = emp_user_id ");
-    $status1 = "present";
-    $sql_attend->execute(array($status1,$currentYear,$preMonth,$empCfsid));
-    $row1 = $sql_attend->fetchAll();
-    foreach ($row1 as $value) {
-        $presentDays = $value['COUNT(idempattend)'];
-    }
-    $status2 ="absent";
-    $sql_attend->execute(array($status2,$currentYear,$preMonth,$empCfsid));
-    $row2 = $sql_attend->fetchAll();
-    foreach ($row2 as $value) {
-        $absentDays = $value['COUNT(idempattend)'];
-    }
-    $status3 = "leave";
-    $sql_attend->execute(array($status3,$currentYear,$preMonth,$empCfsid));
-    $row3 = $sql_attend->fetchAll();
-    foreach ($row3 as $value) {
-        $leaveDays = $value['COUNT(idempattend)'];
-    }
-    // ****************************** salary select ***************************************************************
-    $select_salary_chart = mysql_query("SELECT * FROM salary_chart WHERE month_no='$preMonth' AND year_no='$currentYear' AND user_id=$empCfsid ");
-    $sal_chart_row = mysql_fetch_assoc($select_salary_chart);
-    $db_salary = $sal_chart_row['given_amount'];
-    $db_deduct = $sal_chart_row['deducted_amount'];
-    $db_bonus = $sal_chart_row['bonus_amount'];
-    $db_given_salary = $sal_chart_row['total_given_amount'];
+    
 }
     ?>
     <style type="text/css"> @import "css/bush.css";</style>
@@ -96,152 +79,99 @@ if (isset($_GET['id'])) {
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="customer_list.php"><b>ফিরে যান</b></a></div>
         <div>
-            <form method="POST" onsubmit="" name="" enctype="multipart/form-data" action="">	
+            <form  enctype="multipart/form-data">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          
-                    <tr><th colspan="2" style="text-align: center;font-size: 18px;">বেতন প্রদানের স্টেটমেন্ট, <?php
-                            $last_month = date('F', strtotime('last month'));
-                            echo $last_month . "'";
-                            $year = date("Y");
-                            if ($last_month == "December")
-                                echo $year - 1;
-                            else
-                                echo $year;
-                            ?>
-                        </th></tr>
+                    <tr><th colspan="2" style="text-align: center;font-size: 18px;">কাস্টমারের পরিচিতি</th></tr>
                     <tr>
-                        <td colspan="2" style=" text-align: right; padding-left: 120px !important; margin: 0px">
-                            <table style="border: 1px solid black; width: 80%; ">
+                        <td colspan="2" style=" text-align: right; padding-left: 10px !important; margin: 0px">
+                            <table>
                                 <tr>
-                                    <td style="width: 50%; text-align: right"><b>নাম :</b></td>
-                                    <td style="width: 50%; text-align: left"><?php echo $db_empname ?></td>
-                                    <td width="40%" style="padding-right: 0px;" rowspan="4"> 
-                                        <img src="<?php echo $db_empphoto; ?>" width="128px" height="128px" alt="">
+                                    <td ><b>কাস্টমারের নাম :</b></td>
+                                    <td >: <?php echo $db_custname ?></td>
+                                    <td colspan="2" style="padding-right: 0px;text-align: center;" rowspan="4"> 
+                                        <img src="<?php echo $db_custImage; ?>" width="128px" height="128px" alt="">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 50%; text-align: right"><b>একাউন্ট নাম্বার :</b></td>
-                                    <td style="width: 50%; text-align: left"><?php echo $db_account_number ?></td>
+                                    <td ><b>একাউন্ট নাম্বার </b></td>
+                                    <td>: <?php echo $db_custacc ?></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 50%; text-align: right"><b>মোবাইল :</b></td>
-                                    <td style="width: 50%; text-align: left"><?php echo $db_empmobile ?></td>
+                                    <td ><b>মোবাইল </b></td>
+                                    <td >: <?php echo $db_custmobile ?></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 50%; text-align: right"><b>ইমেল :</b></td>
-                                    <td style="width: 50%; text-align: left"><?php echo $db_email ?></td>
+                                    <td ><b>ইমেল </b></td>
+                                    <td >: <?php echo $db_custripdemail ?></td>
+                                </tr>
+                                <tr>
+                                    <td ><b>একাউন্ট খোলার তারিখ</b></td>
+                                    <td >: <?php echo english2bangla(date("d/m/Y",  strtotime($db_custAccOpenDate))); ?></td>
+                                </tr>
+                                <tr>
+                                    <td ><b>পিন নং </b></td>
+                                    <td >: <?php echo $db_custOpeningPin ?></td>
+                                </tr>
+                                <tr>
+                                    <td ><b>রেফারারের নাম</b></td>
+                                    <td >: <?php echo $refere_name ?></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="font-size: 16px;"><b>বর্তমান ঠিকানা</b></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" ><hr /></td>
+                                </tr>
+                                <tr>
+                                    <td ><b>ঠিকানা</b></td>
+                                    <td >: <?php echo "বাসা- ".$db_prhouse.", ".$db_prhouseno.", রোড-".$db_prroad; ?></td>
+                                    <td ><b>গ্রাম/ পাড়া / প্রোজেক্ট</b></td>
+                                    <td >: <?php echo $db_prvilg ?></td>
+                                </tr>
+                                <tr>
+                                    <td ><b>পোস্টঅফিস</b></td>
+                                    <td >: <?php echo $db_prpost ?></td>
+                                    <td ><b>থানা</b></td>
+                                    <td >: <?php echo $db_prthana ?></td>
+                                </tr>
+                                <tr>
+                                    <td ><b>জেলা</b></td>
+                                    <td >: <?php echo $db_prdistrict ?></td>
+                                    <td ><b>বিভাগ</b></td>
+                                    <td >: <?php echo $db_prdiv; ?></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="font-size: 16px;"><b>স্থায়ী ঠিকানা</b></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" ><hr /></td>
+                                </tr>
+                                <tr>
+                                    <td ><b>ঠিকানা</b></td>
+                                    <td >: <?php echo "বাসা- ".$db_phouse.", ".$db_phouseno.", রোড-".$db_proad; ?></td>
+                                    <td ><b>গ্রাম/ পাড়া / প্রোজেক্ট</b></td>
+                                    <td >: <?php echo $db_pvilg ?></td>
+                                </tr>
+                                <tr>
+                                    <td ><b>পোস্টঅফিস</b></td>
+                                    <td >: <?php echo $db_ppost ?></td>
+                                    <td ><b>থানা</b></td>
+                                    <td >: <?php echo $db_pthana ?></td>
+                                </tr>
+                                <tr>
+                                    <td ><b>জেলা</b></td>
+                                    <td >: <?php echo $db_pdistrict ?></td>
+                                    <td ><b>বিভাগ</b></td>
+                                    <td >: <?php echo $db_pdiv ?></td>
                                 </tr>
                             </table>
                         </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style=" text-align: right; padding-left: 120px !important; margin: 0px">
-                            <table style="width: 80%; ">
-                                <tr>
-                                    <td style="width: 50%; text-align: right"><b>অফিস :</b></td>
-                                    <td style="width: 50%; text-align: left"><?php echo $_SESSION['loggedInOfficeName']; ?></td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 50%; text-align: right"><b>পোস্ট :</b></td>
-                                    <td style="width: 50%; text-align: left"><?php echo $db_empposition;?></td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 50%; text-align: right"><b>গ্রেড :</b></td>
-                                    <td style="width: 50%; text-align: left"><?php echo $db_paygrd_name ?></td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 50%; text-align: right"><b>সেলারী :</b></td>
-                                    <td style="width: 50%; text-align: left"><?php echo english2bangla($db_salary)." টাকা"?></td>
-                                </tr>
-                                <tr>
-                            </table>
-                        </td>
-                    </tr> 
-
-                    <tr>
-                        <td style=" text-align: left; padding-left: 120px !important; margin: 0px; width: 50%">
-                            <fieldset style="border: #686c70 solid 3px;width: 95%;">
-                                <legend style="color: brown;">বেতনের শ্রেণী বিন্যাস</legend>
-                                <table style=" width: 95%; padding-left: 5%" cellspacing="0">
-                                    <tr>
-                                        <td style="border: 1px solid black;"><b>শ্রেণী</b></td>
-                                        <td style="border: 1px solid black;"><b>এমাউন্ট</b></td>
-                                    </tr>
-                                    <?php
-                                    $criteria_total = 0;
-                                    $select_salary_criteria = mysql_query("SELECT * FROM salary_criteria");
-                                    while($sal_criteria_row = mysql_fetch_assoc($select_salary_criteria))
-                                    {
-                                        $db_criteria = $sal_criteria_row['criteria_name'];
-                                        $db_percentange = $sal_criteria_row['percentage'];
-                                        $salary_part = round((($db_salary * $db_percentange) / 100),2);
-                                        $criteria_total+= $salary_part;
-                                        echo "<tr><td style='border: 1px solid black;'>$db_criteria</td>";
-                                        echo "<td style='border: 1px solid black;'>".english2bangla($salary_part)." টাকা</td></tr>";
-                                    }
-                                        echo "<tr><td style='border: 1px solid black;'>মূল</td>";
-                                        echo "<td style='border: 1px solid black;'>".english2bangla($db_salary-$criteria_total)." টাকা</td></tr>";
-                                    ?>
-                                </table>
-                            </fieldset>
-                        </td>
-                        <td style=" text-align: left; padding-left: 0px !important; margin: 0px;">
-                            <fieldset style="border: #686c70 solid 3px;width: 70%;">
-                                <legend style="color: brown;">হাজিরা সারসংক্ষেপ</legend>
-                                <table style=" width: 95%; padding-left: 5%" cellspacing="0">
-                                    <tr>
-                                        <td  ><b>মোট কার্যদিবস</b></td>
-                                        <td >: <?php echo english2bangla($workingDays) ?> দিন</td>
-                                    </tr>
-                                    <tr>
-                                        <td  ><b>উপস্থিত</b></td>
-                                        <td >: <?php echo english2bangla($presentDays) ?> দিন</td>
-                                    </tr>
-                                    <tr>
-                                        <td  ><b>অনুপস্থিত</b></td>
-                                        <td >: <?php echo english2bangla($absentDays) ?> দিন</td>
-                                    </tr>
-                                    <tr>
-                                        <td  ><b>ছুটি</b></td>
-                                        <td >: <?php echo english2bangla($leaveDays) ?> দিন</td>
-                                    </tr>                                    
-                                </table>
-                            </fieldset>
-
-                            <fieldset style="border: #686c70 solid 3px;width: 70%;">
-                                <legend style="color: brown;">অন্যান্য</legend>
-                                <table style=" width: 95%; padding-left: 5%" cellspacing="0">
-                                    <tr>
-                                        <td  ><b>বোনাস</b></td>
-                                        <td >: <?php echo english2bangla($db_bonus) ?> টাকা</td>
-                                    </tr>
-                                    <tr>
-                                        <td  ><b>হ্রাস</b></td>
-                                        <td >: <?php echo english2bangla($db_deduct) ?> টাকা</td>
-                                    </tr>
-                                    <tr>
-                                        <td  ><b>পেনশন এমাউন্ট</b></td>
-                                        <td >: </td>
-                                    </tr>
-                                    <tr>
-                                        <td  ><b>মোট প্রদেয় বেতন</b></td>
-                                        <td >: <?php echo english2bangla($db_given_salary) ?> টাকা</td>
-                                    </tr>
-                                </table>
-                            </fieldset>
-                        </td>
-                    </tr>
-                    <tr >
-                        <td style="padding-top: 100px; width: 40%; padding-left: 120px"><hr></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 40%; padding-left: 120px; text-align: center">কর্তৃপক্ষের স্বাক্ষর</td>
-                    </tr>
+                    </tr>  
                 </table>
             </form>
         </div>           
     </div>
-<?php } else {
-    ?>
+<?php } else { ?>
     
     <div class="main_text_box">      
         <div style="padding-left: 10px;">
@@ -297,7 +227,7 @@ if (isset($_GET['id'])) {
                                             echo "<td style='border: 1px solid #969797;'>$db_post</td>";
                                             echo "<td style='border: 1px solid #969797;'>$db_village</td>";
                                                 $v = base64_encode($db_custID);
-                                            echo "<td style='border: 1px solid black;'><a href='update_customer_account_inner.php?id=$v'>বিস্তারিত</a></td>";
+                                            echo "<td style='border: 1px solid black;'><a href='customer_list.php?id=$v'>বিস্তারিত</a></td>";
                                             echo "</tr>";
                                         }
                                     ?>
