@@ -78,10 +78,24 @@ $storeName = $_SESSION['loggedInOfficeName'];
         a=Number(document.mn.cash.value);
         b=Number(document.mn.gtotal.value);
         c=a-b;
-        document.mn.change.value=c;
+        document.mn.change.value= c.toFixed(2);
         if(c >= 0)
         {
             document.getElementById('checkField').value=1;
+            if( c % 1 !== 0)
+                {
+                    document.getElementById('floorvalue').value= Math.floor(c);
+                    document.getElementById('floor').innerHTML=Math.floor(c);
+                    document.getElementById('ceilingvalue').value=Math.ceil(c);
+                    document.getElementById('ceiling').innerHTML=Math.ceil(c);
+                }
+              else
+                {
+                    document.getElementById('floorvalue').value= 0;
+                    document.getElementById('floor').innerHTML=Math.floor(c);
+                    document.getElementById('ceilingvalue').value= 0;
+                    document.getElementById('ceiling').innerHTML=Math.ceil(c);
+                }
         }
         else { document.getElementById('checkField').value=0; }
     }
@@ -89,10 +103,24 @@ $storeName = $_SESSION['loggedInOfficeName'];
         a=Number(document.mn.cash2.value);
         b=Number(document.mn.cashTopay.value);
         c=a-b;
-        document.mn.change2.value=c;
+        document.mn.change2.value=c.toFixed(2);
         if(c >= 0)
         {
             document.getElementById('checkField').value=1;
+            if( c % 1 !== 0)
+                {
+                    document.getElementById('floorvalue').value= Math.floor(c);
+                    document.getElementById('floor').innerHTML=Math.floor(c);
+                    document.getElementById('ceilingvalue').value=Math.ceil(c);
+                    document.getElementById('ceiling').innerHTML=Math.ceil(c);
+                }
+              else
+                {
+                    document.getElementById('floorvalue').value= 0;
+                    document.getElementById('floor').innerHTML=Math.floor(c);
+                    document.getElementById('ceilingvalue').value= 0;
+                    document.getElementById('ceiling').innerHTML=Math.ceil(c);
+                }
         }
         else { document.getElementById('checkField').value=0; }
     }
@@ -391,12 +419,6 @@ $storeName = $_SESSION['loggedInOfficeName'];
                     &nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(2)" value="2" checked />নন-রেজিস্টার কাস্টমার
                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(1)" value="1"/>রেজিস্টার কাস্টমার
                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="customerType" id="customerType" onclick="showCustInfo(3)" value="3"/>কর্মচারী
-                    <!--<select name="customerType" id="customerType" onchange="showCustInfo(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
-                        <option value="0">-সিলেক্ট করুন-</option>
-                        <option value="1">রেজিস্টার কাস্টমার</option>
-                        <option value="2">নন-রেজিস্টার কাস্টমার</option>
-                        <option value="3">কর্মচারী</option>
-                    </select>-->
                     </br>
                     <div id="customerInfo" style="width: 100%; margin-top: 20px;">
                         <table width='100%' cellspacing='0' cellpadding='0' style='border: #000000 inset 1px; font-size:20px;'><tr>
@@ -412,18 +434,16 @@ $storeName = $_SESSION['loggedInOfficeName'];
                     &nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(1)" value="1" checked />ক্যাশ
                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(2)" value="2" />অ্যাকাউন্ট
                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="payType" id="payType" onclick="showPayType(3)" value="3" />ক্যাশ ও অ্যাকাউন্ট
-                    <!--<select name="payType" id="payType" onchange="showPayType(this.value)" style="font-size: 20px;font-family: SolaimanLipi !important;">
-                        <option value="0">-সিলেক্ট করুন-</option>
-                        <option value="1">ক্যাশ</option>
-                        <option value="2">অ্যাকাউন্ট</option>
-                        <option value="3">ক্যাশ ও অ্যাকাউন্ট</option>
-                    </select>-->
                     </br>
                     <div id="payInfo" class="text" style="margin-top: 10px;">
-                        <label style='margin-left:200px;'><b>টাকা গ্রহন&nbsp;&nbsp;:</b>
+                        <label style='margin-left:20px;'><b>টাকা গ্রহন&nbsp;&nbsp;:</b>
                             <input name='cash' id='cash' type='text' onkeypress='return checkIt(event)' onkeyup='minus()' /> টাকা</label>
                         <label style='margin-left: 63px;'><b>টাকা ফেরত : </b>
                             <input name='change' id='change' type='text' readonly/> টাকা <input type='hidden' id='checkField' value='0' /></label>
+                        <label style='margin-left: 63px;'><b>প্রকৃত ফেরত : </b>
+                            <input name='actualChange' id='floorvalue' type='radio' checked /><span id="floor"></span> &nbsp;&nbsp;
+                            <input name='actualChange' id='ceilingvalue' type='radio' /><span id="ceiling"></span> 
+                        </label>
                     </div></br></br>
                     <input class="btn" name="print" id="print" onclick="return beforeSave()" readonly  type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:42%;font-family: SolaimanLipi !important;" />
                 </fieldset>
