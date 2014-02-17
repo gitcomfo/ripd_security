@@ -91,9 +91,9 @@ $storeName = $_SESSION['loggedInOfficeName'];
                 }
               else
                 {
-                    document.getElementById('floorvalue').value= 0;
+                    document.getElementById('floorvalue').value= Math.floor(c);
                     document.getElementById('floor').innerHTML=Math.floor(c);
-                    document.getElementById('ceilingvalue').value= 0;
+                    document.getElementById('ceilingvalue').value=Math.ceil(c);
                     document.getElementById('ceiling').innerHTML=Math.ceil(c);
                 }
         }
@@ -116,9 +116,9 @@ $storeName = $_SESSION['loggedInOfficeName'];
                 }
               else
                 {
-                    document.getElementById('floorvalue').value= 0;
+                    document.getElementById('floorvalue').value= Math.floor(c);
                     document.getElementById('floor').innerHTML=Math.floor(c);
-                    document.getElementById('ceilingvalue').value= 0;
+                    document.getElementById('ceilingvalue').value=Math.ceil(c);
                     document.getElementById('ceiling').innerHTML=Math.ceil(c);
                 }
         }
