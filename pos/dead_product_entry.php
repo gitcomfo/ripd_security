@@ -68,8 +68,8 @@ function beforeSave()
 {
       var a=document.getElementById('proInventID').value;
       var b=document.getElementById('QTY').value;
-    if ((a != "") && (b != 0)) { return true; }
-    else { return false; }
+        if ((a != "") && (b != 0)) { return true; }
+        else { return false; }
  }
 </script>
 </head>

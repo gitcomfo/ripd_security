@@ -205,17 +205,17 @@ function getProgramer($type)
 }
 function getProgramer2($type)
 {
-   $arr_who = array('presenter'=>'প্রেজেন্টার','programmer'=>'প্রোগ্রামার','trainer'=>'ট্রেইনার');
+   $arr_who = array('presenter'=>'প্রেজেন্টার','programmer'=>'প্রোগ্রামার','trainer'=>'ট্রেইনার','traveller'=>'ট্র্যাভেলার');
    return $arr_who[$type];
 }
 function getProgramerType($type)
 {
-   $arr_who_type = array('presentation'=>'presenter','program'=>'programmer','training'=>'trainer','travel'=>'programmer');
+   $arr_who_type = array('presentation'=>'presenter','program'=>'programmer','training'=>'trainer','travel'=>'traveller');
    return $arr_who_type[$type];
 }
 function getTypeFromWho($type)
 {
-   $arr_who_type = array('presenter'=>'presentation','programmer'=>'program','trainer'=>'training','traveler'=>'travel');
+   $arr_who_type = array('presenter'=>'presentation','programmer'=>'program','trainer'=>'training','traveller'=>'travel');
    return $arr_who_type[$type];
 }
 function getAwardReceiverType($aType){
