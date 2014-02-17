@@ -2,7 +2,7 @@
 error_reporting(0);
 include_once 'includes/MiscFunctions.php';
 include 'includes/header.php';
- $logedinOfficeId = $_SESSION['loggedInOfficeID'];
+$logedinOfficeId = $_SESSION['loggedInOfficeID'];
 $logedinOfficeType=$_SESSION['loggedInOfficeType'];
 ?>
 <style type="text/css">@import "css/bush.css";</style>
