@@ -16,8 +16,8 @@ $sel_unreg_customer = $conn->prepare("SELECT * FROM unregistered_customer WHERE 
 $ins_unreg_customer = $conn->prepare("INSERT INTO `unregistered_customer` (`unregcust_name` ,`unregcust_address` ,`unregcust_occupation` ,`unregcust_mobile` ,`unregcust_email` ,`unregcust_buyingcount` ,`unregcust_status` ,`unregcust_lastupdated_date`) 
                     VALUES (?, ?, ?, ?, '', '1', 'unregistered', NOW())");
 $up_ureg_customer = $conn->prepare("UPDATE `unregistered_customer` SET `unregcust_buyingcount` = ? WHERE unregcust_mobile= ? ");
-$ins_sales_summary = $conn->prepare("INSERT INTO sales_summary(sal_store_type, sal_storeid, sal_buyer_type,sal_buyerid, sal_salesdate ,sal_salestime ,sal_total_buying_price, sal_totalamount ,sal_totalpv ,sal_total_lessprofit, sal_totalextra_less, sal_givenamount ,sal_invoiceno, cfs_userid,sal_cash_paid,sal_acc_paid,status,selling_type) 
-            VALUES (?, ?,?, ?,CURDATE(), CURTIME(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,'not_replaced',?);");
+$ins_sales_summary = $conn->prepare("INSERT INTO sales_summary(sal_store_type, sal_storeid, sal_buyer_type,sal_buyerid, sal_salesdate ,sal_salestime ,sal_total_buying_price, sal_totalamount ,sal_totalpv ,sal_total_lessprofit, sal_totalextra_less, sal_givenamount ,sal_invoiceno, cfs_userid,sal_return_org,sal_cash_paid,sal_acc_paid,status,selling_type) 
+            VALUES (?, ?,?, ?,CURDATE(), CURTIME(), ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?,'not_replaced',?);");
 $ins_sales = $conn->prepare("INSERT INTO sales(quantity ,sales_buying_price, sales_amount ,sales_less_profit, sales_extra_less, sales_pv , sales_profit, sales_extra_profit, inventory_idinventory ,sales_summery_idsalessummery) 
             VALUES (? ,?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
@@ -75,7 +75,7 @@ if(isset($_POST['print']))
     {
         $pay = "ক্যাশ";
         $P_getTaka=$_POST['cash'];
-        $P_backTaka=$_POST['change'];
+        $P_backTaka=$_POST['actualChange'];
         $P_paiedByCash = $_POST['gtotal'];
         $P_paiedByAcc = 0;
     }
@@ -85,6 +85,7 @@ if(isset($_POST['print']))
             $P_paiedByAcc = $_POST['amount'];
             $P_paiedByCash = 0;
             $P_getTaka = 0;
+            $P_backTaka = 0;
         }
 }
 $id=$_SESSION['SESS_MEMBER_ID']; // চালান নং যাচাই**********************
@@ -129,7 +130,7 @@ $result= $sel_sales_summary->fetchAll();
     $invoiceNo = $_SESSION['SESS_MEMBER_ID'];
     $conn->beginTransaction();
     $sellingtype = 'whole';
-    $sqlresult1=$ins_sales_summary->execute(array($G_s_type,$G_s_id,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$totalLessProfit,$totalLessXtra,$P_getTaka,$invoiceNo,$cfsID,$P_paiedByCash,$P_paiedByAcc,$sellingtype));
+    $sqlresult1=$ins_sales_summary->execute(array($G_s_type,$G_s_id,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$totalLessProfit,$totalLessXtra,$P_getTaka,$invoiceNo,$cfsID,$P_backTaka, $P_paiedByCash,$P_paiedByAcc,$sellingtype));
     $sales_sum_id= $conn->lastInsertId();
     
      foreach($_SESSION['arrSellTemp'] as $key => $row) 

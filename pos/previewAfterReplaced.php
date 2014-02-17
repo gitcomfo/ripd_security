@@ -13,8 +13,8 @@ $sel_sales_summary = $conn->prepare("SELECT * FROM sales_summary WHERE sal_invoi
 $sel_cfs_user = $conn->prepare("SELECT * FROM cfs_user WHERE idUser = ? ");
 $sel_unreg_customer = $conn->prepare("SELECT * FROM unregistered_customer WHERE idunregcustomer = ? ");
 $up_ureg_customer = $conn->prepare("UPDATE unregistered_customer SET unregcust_buyingcount = ? WHERE unregcust_mobile= ? ");
-$ins_sales_summary = $conn->prepare("INSERT INTO sales_summary(sal_store_type, sal_storeid, sal_buyer_type,sal_buyerid, sal_salesdate ,sal_salestime ,sal_total_buying_price, sal_totalamount ,sal_totalpv ,sal_givenamount ,sal_invoiceno, cfs_userid,sal_cash_paid,sal_acc_paid,status) 
-            VALUES (?, ?, ?, ?, CURDATE(), CURTIME(), ?, ?, ?, ?, ?, ?,?, ?,'not_replaced')");
+$ins_sales_summary = $conn->prepare("INSERT INTO sales_summary(sal_store_type, sal_storeid, sal_buyer_type,sal_buyerid, sal_salesdate ,sal_salestime ,sal_total_buying_price, sal_totalamount ,sal_totalpv ,sal_givenamount ,sal_invoiceno, cfs_userid,sal_return_org,sal_cash_paid,sal_acc_paid,status) 
+            VALUES (?, ?, ?, ?, CURDATE(), CURTIME(), ?, ?, ?, ?, ?, ?,?, ?, ?,'not_replaced')");
 $ins_sales = $conn->prepare("INSERT INTO sales(quantity ,sales_buying_price, sales_amount ,sales_pv , sales_profit, sales_extra_profit, inventory_idinventory ,sales_summery_idsalessummery) 
             VALUES (? ,?, ?, ?, ?, ?, ?, ?);");
 $ins_replace_sum = $conn->prepare("INSERT INTO replace_product_summary(reprosum_store_type,reprosum_storeid,reprosum_replace_date , reprosum_replace_time ,reprosum_total_amount ,reprosum_invoiceno,cfs_userid) 
@@ -59,7 +59,7 @@ if(isset($_POST['print']))
     {
         $pay = "ক্যাশ";
         $P_getTaka=$_POST['cash'];
-        $P_backTaka=$_POST['change'];
+        $P_backTaka=$_POST['actualChange'];
         $P_paiedByCash = $_POST['gtotal'];
         $P_paiedByAcc = 0;
     }
@@ -69,6 +69,7 @@ if(isset($_POST['print']))
             $P_paiedByAcc = $_POST['amount'];
             $P_paiedByCash = 0;
             $P_getTaka = 0;
+            $P_backTaka = 0;
         }
 }
 $id=$_SESSION['SESS_MEMBER_ID']; // চালান নং যাচাই**********************
@@ -127,7 +128,7 @@ $result= $sel_sales_summary->fetchAll();
           }
           $sqlresult3 = $up_sales_summary->execute(array($prevRecipt));
           // ******************* sales table-e insert ***************************************
-        $sqlresult4=$ins_sales_summary->execute(array($scatagory,$storeID,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$P_getTaka,$invoiceNo,$cfsID,$P_paiedByCash,$P_paiedByAcc));
+        $sqlresult4=$ins_sales_summary->execute(array($scatagory,$storeID,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$P_getTaka,$invoiceNo,$cfsID,$P_backTaka,$P_paiedByCash,$P_paiedByAcc));
         $sales_sum_id= $conn->lastInsertId();
         foreach($_SESSION['arrSellTemp'] as $key => $row) 
         {

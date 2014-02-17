@@ -82,6 +82,7 @@ if(isset($_POST['print']))
             $P_paiedByAcc = $_POST['amount'];
             $P_paiedByCash = 0;
             $P_getTaka = 0;
+            $P_backTaka= 0;
         }
     else {
         $pay = "ক্যাশ এন্ড অ্যাকাউন্ট";
