@@ -46,10 +46,14 @@ elseif($_GET['selltype']=='2')
     switch($G_type)
     {
       case 1:
-            echo "<label style='margin-left:200px;'><b>টাকা গ্রহন&nbsp;&nbsp;:</b>
+            echo "<label style='margin-left:20px;'><b>টাকা গ্রহন&nbsp;&nbsp;:</b>
                         <input name='cash' id='cash' type='text' onkeypress='return checkIt(event)' onkeyup='minus()' /> টাকা</label>
                         <label style='margin-left: 63px;'><b>টাকা ফেরত : </b>
-                        <input name='change' id='change' type='text' readonly/> টাকা <input type='hidden' id='checkField' value='0' /></label>";
+                        <input name='change' id='change' type='text' readonly/> টাকা <input type='hidden' id='checkField' value='0' /></label>
+                        <label style='margin-left: 63px;'><b>প্রকৃত ফেরত : </b>
+                    <input name='actualChange' id='floorvalue' type='radio' checked /><span id='floor'></span> &nbsp;&nbsp;
+                    <input name='actualChange' id='ceilingvalue' type='radio' /><span id='ceiling'></span> 
+                    </label>";
         break;
         case 2:
             echo "<label style='margin-left:200px;'><b>অ্যাকাউন্ট নং&nbsp;&nbsp;:</b>
