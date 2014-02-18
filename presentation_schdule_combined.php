@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 include 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
@@ -120,12 +120,12 @@ function getOffice(str_key) // for searching parent offices
                    document.getElementById('parentResult').style.display = "none";
                }
                 else
-                    {document.getElementById('parentResult').style.visibility = "visible";
-                document.getElementById('parentResult').setAttribute('style','position:absolute;top:41%;left:65.5%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                    {   document.getElementById('parentResult').style.visibility = "visible";
+                        document.getElementById('parentResult').setAttribute('style','position:absolute;top:41%;left:65.5%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('parentResult').innerHTML=xmlhttp.responseText;
         }
-        xmlhttp.open("GET","includes/getParentOffices.php?search="+str_key+"&office=1",true);
+        xmlhttp.open("GET","includes/getParentOffices.php?search="+str_key+"&alloffice=1",true);
         xmlhttp.send();	
 }
 function getPresenters(key,type) // for searching presenters
@@ -209,12 +209,14 @@ function addToList(acc,name,mbl,eID) // to add into temporary array*************
     var pdate = document.getElementById("presentation_date").value;
     var ptime = document.getElementById("presentation_time").value;
     var xmlhttp;
-        if (window.XMLHttpRequest) xmlhttp=new XMLHttpRequest();
-        else xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        if (window.XMLHttpRequest) { xmlhttp=new XMLHttpRequest();}
+        else  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
         xmlhttp.onreadystatechange=function()
-        {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200) 
-                location.reload();
+        {  
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                  {
+                     location.reload();
+                  }
         }
         xmlhttp.open("GET","includes/getParentOffices.php?acc="+acc+"&name="+name+"&mbl="+mbl+"&eID="+eID+"&parentid="+parentid+"&pname="+pname+"&offname="+offname+"&place="+place+"&pdate="+pdate+"&ptime="+ptime, true);
         xmlhttp.send();
@@ -329,25 +331,25 @@ if ($_GET['action'] == 'first') {
                     <th colspan="5">  মেইক <?php echo $typeinbangla;?></th>
                 </tr>
                 <?php
-               if ($msg != "") {
-                    echo "<tr>
-                    <td colspan='2' style='text-align: center;font-size:16px;'>$msg </td>
-                </tr>";
-                }
+                    if ($msg != "") {
+                         echo "<tr>
+                         <td colspan='2' style='text-align: center;font-size:16px;'>$msg </td>
+                     </tr>";
+                     }
                 ?>
                 <?php
-                 if (isset($_SESSION['arrPresenters']))
-                    {
-                         unset($_SESSION['arrPresenters']);
-                    }
-                foreach ($_SESSION['arrProgram'] as $value) {
-                    $pname = $value[0];
-                    $offid = $value[1];
-                    $offname = $value[2];
-                    $place = $value[3];
-                    $pdate = $value[4];
-                    $ptime = $value[5];
-                }
+//                    if (isset($_SESSION['arrPresenters']))
+//                       {
+//                            unset($_SESSION['arrPresenters']);
+//                       }
+                   foreach ($_SESSION['arrProgram'] as $value) {
+                       $pname = $value[0];
+                       $offid = $value[1];
+                       $offname = $value[2];
+                       $place = $value[3];
+                       $pdate = $value[4];
+                       $ptime = $value[5];
+                   }
                 ?>
                 <tr>
                     <td ><?php echo $typeinbangla;?>-এর নাম</td>               
@@ -374,8 +376,10 @@ if ($_GET['action'] == 'first') {
                 </tr>
                 <tr>
                     <td> <?php echo $whoinbangla?> সিলেক্ট করুন</td>
-                    <td colspan="3">: <input  class="box" type="text" id="preserters" name="preserters" onkeyup="getPresenters(this.value,'<?php echo $whoType ?>');" /><em2> *</em2><em> (অ্যাকাউন্ট নাম্বার)</em>
-                                                <div id="presenterList" style="position:absolute;top:58%;left:65.5%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;visibility: hidden"></div></td>  
+                    <td colspan="3">: 
+                        <input  class="box" type="text" id="preserters" name="preserters" onkeyup="getPresenters(this.value,'<?php echo $whoType ?>');" /><em2> *</em2><em> (অ্যাকাউন্ট নাম্বার)</em>
+                        <div id="presenterList" style="position:absolute;top:58%;left:65.5%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;visibility: hidden"></div>
+                    </td>  
                 </tr>
                 <tr>
                     <td colspan="2">

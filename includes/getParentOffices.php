@@ -38,6 +38,18 @@ elseif (isset($_GET['key']) && ($_GET['key'] != '') && ($_GET['pwr']==1)) {
         	}
                 
 }
+elseif (isset($_GET['search']) && ($_GET['search'] != '') && ($_GET['alloffice'] == 1)) {
+	//Add slashes to any quotes to avoid SQL problems.
+	$str_key = $_GET['search'];
+	$suggest_query = "SELECT * FROM  office WHERE account_number like('$str_key%') ORDER BY account_number";
+	$reslt= mysql_query($suggest_query);
+	while($suggest = mysql_fetch_assoc($reslt)) {
+                    $acc = $suggest['account_number'];
+                    $id = $suggest['idOffice'];
+	            echo "<u><a onclick=setOffice('$acc','$id'); style='text-decoration:none;color:brown;cursor:pointer;'>" . $suggest['account_number'] . " (".$suggest['office_name'].")</a></u></br>";
+        	}
+                
+}
 elseif (isset($_GET['key']) && ($_GET['key'] != '') && ($_GET['off']==1)) {
 	//Add slashes to any quotes to avoid SQL problems.
 	$str_key = $_GET['key'];
