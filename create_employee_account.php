@@ -512,6 +512,7 @@ function searchOSP(keystr)
                                 <option value='programmer'>প্রোগ্রামার</option>
                                 <option value='presenter'>প্রেজেন্টার</option>
                                 <option value='trainer'>ট্রেইনার</option>
+                                <option value='traveller'>ট্র্যাভেলার</option>
                                 <option value='employee'>এমপ্লয়ী</option> 
                             </select><em2> *</em2></td>
                     </tr>   
@@ -623,6 +624,7 @@ function searchOSP(keystr)
                                 <option value='programmer'>প্রোগ্রামার</option>
                                 <option value='presenter'>প্রেজেন্টার</option>
                                 <option value='trainer'>ট্রেইনার</option>
+                                <option value='traveller'>ট্র্যাভেলার</option>
                                 <option value='employee'>এমপ্লয়ী</option> 
                             </select><em2> *</em2></td>
                     </tr>   

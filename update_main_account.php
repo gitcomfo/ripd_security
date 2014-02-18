@@ -128,7 +128,7 @@ function infoFromThana2()
                             }
                     }
                     elseif($input == 'employee'){
-                        $sql_officeTable = "SELECT * from cfs_user,employee WHERE emp_ons_id = $loggedInOnSid AND (user_type='employee' OR user_type='presenter' OR user_type='programmer' OR user_type='trainer')
+                        $sql_officeTable = "SELECT * from cfs_user,employee WHERE emp_ons_id = $loggedInOnSid AND (user_type='employee' OR user_type='presenter' OR user_type='programmer' OR user_type='trainer' OR user_type='traveller')
                                                         AND cfs_user_idUser= idUser ORDER BY account_name ASC";
                         $rs = mysql_query($sql_officeTable);
                             while ($row_officeNcontact = mysql_fetch_array($rs)) {

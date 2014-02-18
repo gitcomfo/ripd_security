@@ -80,6 +80,7 @@ function beforSubmit()
                                 <option value="presenter">প্রেজেন্টার</option>
                                 <option value="programmer">প্রোগ্রামার</option>
                                 <option value="trainer">ট্রেইনার</option>
+                                <option value='traveller'>ট্র্যাভেলার</option>
                                 <option value="employee">এমপ্লই</option>
                             </select>
                         </td>            
@@ -128,7 +129,7 @@ function beforSubmit()
                                 </thead>
                                 <tbody>
                                 <?php
-                                    $sql_paygrade = "SELECT * from ".$dbname.".pay_grade ORDER BY employee_type ASC";
+                                    $sql_paygrade = "SELECT * FROM pay_grade ORDER BY employee_type ASC";
                                     $rs = mysql_query($sql_paygrade);
 
                                     while ($rowpaygrade = mysql_fetch_assoc($rs)) 
