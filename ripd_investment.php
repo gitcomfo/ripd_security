@@ -4,7 +4,7 @@ include 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 $sql = $conn->prepare("SELECT * FROM main_fund ORDER BY fund_name");
-$ins_ripd_invest = $conn->prepare("INSERT INTO ripd_investment (invest_amount, invest_desc, indest_scandoc, invest_date,fk_fund_idfund) 
+$ins_ripd_invest = $conn->prepare("INSERT INTO ripd_investment (invest_amount, invest_desc, invest_scandoc, invest_date,fk_fund_idfund) 
                                                             VALUES (?,?,?,NOW(),?)");
 function getFunds($sql)
 {
@@ -31,6 +31,7 @@ if(isset($_POST['submit']))
             move_uploaded_file($_FILES["scanDoc"]["tmp_name"], "scaned/" . $image_name);
         } 
     }
+    $image_path="";
     $sqlresult = $ins_ripd_invest->execute(array($p_amount,$p_description,$image_path,$p_fundid));
      if($sqlresult)
      {
@@ -94,7 +95,6 @@ function beforeSubmit()
                         <td colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="ইনভেস্ট করুন" /></td>                           
                     </tr>    
                 </table>
-                </fieldset>
             </form>
         </div>
     </div>
