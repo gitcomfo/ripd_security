@@ -86,7 +86,7 @@ function getAmount(fundID)
         {
           document.getElementById('fundAmount').value = xmlhttp.responseText;
         }
-        xmlhttp.open("GET","includes/fund_includes.php?fundID="+fundID,true);
+        xmlhttp.open("GET","includes/fund_includes.php?fundID="+fundID+"&type=1",true);
         xmlhttp.send();	
 }
 </script>
