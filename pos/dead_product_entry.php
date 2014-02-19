@@ -7,14 +7,16 @@ include_once 'includes/MiscFunctions.php';
 $storeName= $_SESSION['loggedInOfficeName'];
 $logedInUserID = $_SESSION['userIDUser'];
 
-$ins_dead_product = $conn->prepare("INSERT INTO dead_product (inventory_id, qty, reason, entry_date, cfs_user_id) VALUES (?,?,?,NOW(),?)");
+$ins_dead_product = $conn->prepare("INSERT INTO dead_product (inventory_id, qty,dd_buy_price, reason, entry_date, cfs_user_id) VALUES (?,?,?,?,NOW(),?)");
 
 if(isset($_POST['submit']))
 {
     $p_productID = $_POST['proInventID'];
+    $result = $_SESSION['pro_inventory_array'][$p_productID];
+    $db_buyingprice = $result["ins_buying_price"];
     $p_productQty = $_POST['QTY'];
     $p_productReason = $_POST['reason'];
-    $result1= $ins_dead_product->execute(array($p_productID,$p_productQty,$p_productReason,$logedInUserID));
+    $result1= $ins_dead_product->execute(array($p_productID,$p_productQty, $db_buyingprice, $p_productReason,$logedInUserID));
     if($result1 == 1)
     {
        echo "<script>alert('প্রোডাক্ট সফলভাবে বাতিল হয়েছে')</script>"; 
@@ -88,9 +90,9 @@ function beforeSave()
     <div class="top" style="width: 100%;">
         <div class="topleft" style="float: left;width: 30%;"><b>প্রোডাক্ট কোড :</b>
             <input type="text" id="amots" name="amots" onKeyUp="bleble('dead_product_entry.php');" autocomplete="off" style="width: 250px;"/>
-            <div style="width:430px;position:absolute;top:41.5%;left:18%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="layer2" ></div></br></br>
+            <div style="width:430px;position:absolute;top:45.5%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="layer2" ></div></br></br>
             <b>প্রোডাক্ট নাম&nbsp;&nbsp;: </b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('dead_product_entry.php');" autocomplete="off" style="width: 250px;"/>
-            <div style="position:absolute;top:50%;left:18%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult" ></div>
+            <div style="position:absolute;top:57.5%;left:8%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult" ></div>
         </div>
     <div class="topright" style="float:left; width: 70%;">
     <?php
