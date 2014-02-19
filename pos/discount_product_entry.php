@@ -14,8 +14,9 @@ foreach ($pvrow as $row) {
     $unitpv= $row['pv_value'];
 }
 
-$sel_discount_product = $conn->prepare("SELECT * FROM product_purchase_summary WHERE chalan_no= ? ");
-$ins_dead_product = $conn->prepare("INSERT INTO dead_product (inventory_id, qty, reason, entry_date, cfs_user_id) VALUES (?,?,?,NOW(),?)");
+$sel_discount_product = $conn->prepare("SELECT * FROM discount_product WHERE dis_procode= ? ");
+$ins_dead_product = $conn->prepare("INSERT INTO discount_product (fk_inventoryid, dis_qty, dis_procode, dis_orgprice, dis_newbuyprc,dis_profit,dis_extraprofit, dis_sellprice, dis_newpv, dis_startdate, dis_made_userid) 
+                                                                VALUES (?,?,?,?,?,?,?,?,?,NOW(),?)");
 
 if(isset($_POST['submit']))
 {
@@ -32,14 +33,20 @@ if(isset($_POST['submit']))
     }
     $p_productID = $_POST['proInventID'];
     $p_productQty = $_POST['QTY'];
-    $p_productReason = $_POST['reason'];
-    $result1= $ins_dead_product->execute(array($p_productID,$p_productQty,$p_productReason,$logedInUserID));
+    $p_originalBuying = $_POST['buyingprice'];
+    $p_newBuying = $_POST['updatedbuying'];
+    $p_newSelling = $_POST['updatedselling'];
+    $p_newXprofit = $_POST['updatedxprofit'];
+    $p_newProfit = $_POST['updatedprofit'];
+    $p_newPV = $_POST['updatedpv'];
+    
+    $result1= $ins_dead_product->execute(array($p_productID,$p_productQty,$discountProductCode,$p_originalBuying,$p_newBuying,$p_newProfit, $p_newXprofit, $p_newSelling, $p_newPV, $logedInUserID));
     if($result1 == 1)
     {
-       echo "<script>alert('প্রোডাক্ট সফলভাবে বাতিল হয়েছে')</script>"; 
+       echo "<script>alert('ডিসকাউন্ট দেয়া হয়েছে')</script>"; 
     }
     else {
-        echo "<script>alert('প্রোডাক্ট সফলভাবে বাতিল হয়নি')</script>";
+        echo "<script>alert('ডিসকাউন্ট দেয়া যায়নি')</script>";
     }
 }
 ?>
@@ -146,7 +153,7 @@ function beforeSave()
             $db_pv = $result["ins_pv"];
         }
     ?>
-        <form method="POST" onsubmit="return beforeSave();" action="">
+        <form method="POST" onsubmit="return beforeSave();" action="discount_product_entry.php">
             <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
               <tr>
                   <td width="60%"><span style="color: #03C;"> প্রোডাক্টের কোড : </span><input name="pcode" id="pcode" type="text" value="<?php echo $db_procode; ?>" style="border:0px;font-size: 18px;width: 150px;" readonly/>
