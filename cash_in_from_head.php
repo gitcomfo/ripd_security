@@ -2,8 +2,18 @@
 include 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
+ $loginUSERid = $_SESSION['userIDUser'] ;
+ 
 $sql = $conn->prepare("SELECT * FROM main_fund ORDER BY fund_name");
 $sel_banks = $conn->prepare("SELECT * FROM bank_list ORDER BY bank_name");
+$ins_acc_ofc = $conn->prepare("INSERT INTO acc_ofc_physc_in (inamount, bank_id, cheque_number, amount_status, sender_id, office_id, sending_date)
+                                                    VALUES (?,?,?,'send', ?,?,NOW()) ");
+$ins_acc_dist = $conn->prepare("INSERT INTO acc_ofc_physc_dist (fk_fundid, amount, fk_idofcphysin) VALUES (?,?,?)");
+$insert_notification = $conn->prepare("INSERT INTO notification (nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
+                                                            VALUES (?,?,?,?,NOW(),?,?,?)");
+$sel_onsID = $conn->prepare("SELECT idons_relation FROM ons_relation LEFT JOIN office ON add_ons_id = idOffice 
+                                                WHERE catagory='office' AND account_number = ?");
+
 function getFunds($sql)
 {
     echo "<option value= 0> -সিলেক্ট করুন- </option>";
@@ -20,6 +30,56 @@ function getBanks($sql)
     $arr_bank = $sql->fetchAll();
     foreach ($arr_bank as $bankrow) {
         echo "<option value=".$bankrow['idbank'].">". $bankrow['bank_name'] ."</option>";
+    }
+}
+
+if(isset($_POST['submit']))
+{
+    $p_officeAccountNo = $_POST['acNo'];
+    $p_amount = $_POST['t_in_amount'];
+    $p_inType = $_POST['cashInType'];
+    if($p_inType == 'cheque')
+    {
+        $p_bankID = $_POST['bankName'];
+        $p_chequeNo = $_POST['chequeNo'];
+    }
+    else
+    {
+        $p_bankID = 0;
+        $p_chequeNo = 0;
+    }
+    $sel_onsID->execute(array($p_officeAccountNo));
+    $offrow = $sel_onsID->fetchAll();
+    foreach ($offrow as $value) {
+       $office_ons_id = $value['idons_relation'];
+    }
+    $p_fundamount = $_POST['inAmount'];
+    
+    $conn->beginTransaction();
+        $y1 = $ins_acc_ofc->execute(array($p_amount,$p_bankID,$p_chequeNo, $loginUSERid, $office_ons_id));
+        $db_last_insert_id = $conn->lastInsertId();
+        $sl = 0;
+       foreach ($_SESSION['arrFunds'] as $key => $row) 
+      {
+           $fundamount = $p_fundamount[$sl];
+          $y = $ins_acc_dist->execute(array($key,$fundamount,$db_last_insert_id));
+          $sl ++;
+      }
+        $msg = "টাকা প্রাপ্তি";
+        $url = "cash_receive_from_head.php?id=".$db_last_insert_id;
+        $status = "unread";
+        $type="action";
+        $nfc_catagory="official";
+        $sqlrslt3 = $insert_notification->execute(array($loginUSERid,$office_ons_id,$msg,$url,$status,$type,$nfc_catagory));
+        
+    if ($y1 && $y && $sqlrslt3) {
+        $conn->commit();
+         unset($_SESSION['arrFunds']);
+         unset($_SESSION['arrCashinInfo']);
+        $msg = "<font style='color:green'>তথ্য সংরক্ষিত হয়েছে</font>";
+    } else {
+        $conn->rollBack();
+        $msg = "<font style='color:red''>ভুল হয়েছে</font>";
     }
 }
 ?>
