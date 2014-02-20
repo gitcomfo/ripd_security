@@ -15,6 +15,7 @@ elseif($_GET['type'] == 2)
     if (!isset($_SESSION['arrFunds']))
     {
      $_SESSION['arrFunds'] = array();
+     $_SESSION['arrCashinInfo'] = array();
     }
     
     $g_fundID = $_GET['fundID'];
@@ -27,6 +28,11 @@ elseif($_GET['type'] == 2)
         $arr_temp = array($db_fundname,$db_amount);
         $_SESSION['arrFunds'][$g_fundID] = $arr_temp;
     }
+    $g_office_acc = $_GET['offAcc'];
+    $g_office_name = $_GET['offname'];
+    $g_amount = $_GET['totalAmount'];
+    $arr_temp1 = array($g_office_acc,$g_amount,$g_office_name);
+    $_SESSION['arrCashinInfo'][0] = $arr_temp1;
 }
 elseif (isset($_GET['delete'])) {
     $g_id = $_GET['id'];

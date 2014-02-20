@@ -28,10 +28,7 @@ if($_GET['type'] == 'personal')
 }
 elseif ($_GET['type'] == 'office') {
     $g_accountNo = $_GET['acNo'];
-    $g_offtype = $_GET['what'];
-    if($g_offtype == 'office')
-    {
-        $sel_office = $conn->prepare("SELECT * FROM office WHERE account_number= ?");
+        $sel_office = $conn->prepare("SELECT * FROM office WHERE office_selection='ripd' AND account_number= ?");
         $sel_office->execute(array($g_accountNo));
         $row = $sel_office->fetchAll();
         $countrow = count($row);
@@ -44,24 +41,7 @@ elseif ($_GET['type'] == 'office') {
                     {
                          echo ": <input class='box' type='text' readonly value='".$value['office_name']."' />";
                      }
-         }
-    }
- else {
-        $sel_office = $conn->prepare("SELECT * FROM sales_store WHERE account_number= ?");
-        $sel_office->execute(array($g_accountNo));
-        $row = $sel_office->fetchAll();
-        $countrow = count($row);
-            if($countrow == 0)
-            {
-                echo "<font style='color:red'>দুঃখিত, এই একাউন্ট নাম্বারটি সঠিক নয়</font>";
-            }
-             else {
-                foreach ($row as $value) 
-                    {
-                         echo ": <input class='box' type='text' readonly value='".$value['salesStore_name']."' />";
-                     }
-         }
-    }
+             }
 }
 
 ?>
