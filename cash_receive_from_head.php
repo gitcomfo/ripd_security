@@ -4,8 +4,8 @@ error_reporting(0);
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
  $loginUSERid = $_SESSION['userIDUser'] ;
-$g_acc_ofc_physc_in = $_GET['id'];
-$g_nfcid = $_GET['nfcid'];
+ $g_acc_ofc_physc_in = $_GET['id'];
+ $g_nfcid = $_GET['nfcid'];
 
 $sql_update_notification = $conn->prepare("UPDATE notification SET nfc_status=? WHERE idnotification=? ");
 $sel_select_acc_ofc = $conn->prepare("SELECT * FROM acc_ofc_physc_in LEFT JOIN bank_list ON idbank = bank_id WHERE idofcphysin= ?");
@@ -14,7 +14,7 @@ $up_acc_ofc_physc_in = $conn->prepare("UPDATE acc_ofc_physc_in SET receving_date
 $sel_select_acc_ofc->execute(array($g_acc_ofc_physc_in));
 $row = $sel_select_acc_ofc->fetchAll();
 foreach ($row as $value) {
-     $db_inamount = $value['inamount'];
+    $db_inamount = $value['inamount'];
     $db_bank = $value['bank_name'];
     $db_cheque = $value['cheque_number'];
     $db_sendingDate = $value['sending_date'];
@@ -36,6 +36,7 @@ if(isset($_POST['submit']))
         {
             $conn->commit();
             echo "<script>alert('টাকা গ্রহন করা হল')</script>";
+            header('location: main_account_management.php');
         }
         else {
             $conn->rollBack();
