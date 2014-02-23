@@ -1,12 +1,11 @@
 <?php
 //include 'includes/session.inc';
-error_reporting();
+error_reporting(0);
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
  $loginUSERid = $_SESSION['userIDUser'] ;
 $g_acc_ofc_physc_in = $_GET['id'];
 $g_nfcid = $_GET['nfcid'];
-$office_id = $_SESSION['loggedInOfficeID'] ;
 
 $sql_update_notification = $conn->prepare("UPDATE notification SET nfc_status=? WHERE idnotification=? ");
 $sel_select_acc_ofc = $conn->prepare("SELECT * FROM acc_ofc_physc_in LEFT JOIN bank_list ON idbank = bank_id WHERE idofcphysin= ?");
