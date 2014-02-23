@@ -3,7 +3,7 @@ error_reporting(0);
 include_once './ConnectDB.inc';
 include_once './connectionPDO.php';
 include_once './MiscFunctions.php';
-
+$officeID = $_SESSION['loggedInOfficeID'];
 if (isset($_GET['key']) && ($_GET['key'] != '')) {
 	$str_key = $_GET['key'];
                    $today = date("Y-m-d");
@@ -55,7 +55,8 @@ elseif(($_GET['what']=='attendance') && isset($_GET['whichtype']))
     $g_type = $_GET['whichtype'];
     $typeinbangla = getProgramType($g_type);
     $today = date("Y-m-d");
-    $sel_program = mysql_query("SELECT * FROM program WHERE program_type = '$g_type' AND program_date <= '$today' AND attendance_status='not_given' ORDER BY program_name ");
+    $sel_program = mysql_query("SELECT * FROM program WHERE program_type = '$g_type' AND program_date <= '$today' 
+        AND attendance_status='not_given' AND Office_idOffice = $officeID ORDER BY program_name ");
      echo "<table border='1' cellpadding='0' cellspacing='0'>
             <tr id='table_row_odd'>
                 <td style='border:1px black solid; '><b>$typeinbangla-এর নাম</b></td>
@@ -90,7 +91,8 @@ elseif(($_GET['what']=='salary') && isset($_GET['whichtype']))
     $g_type = $_GET['whichtype'];
     $typeinbangla = getProgramType($g_type);
     $today = date("Y-m-d");
-    $sel_program = mysql_query("SELECT * FROM program WHERE program_type = '$g_type' AND program_date <= '$today' AND attendance_status='given' AND payment_status='unpaid' ORDER BY program_name ");
+    $sel_program = mysql_query("SELECT * FROM program WHERE program_type = '$g_type' AND program_date <= '$today' 
+        AND attendance_status='given' AND payment_status='unpaid' AND Office_idOffice =$officeID ORDER BY program_name ");
      echo "<table border='1' cellpadding='0' cellspacing='0'>
             <tr id='table_row_odd'>
                 <td style='border:1px black solid; '><b>$typeinbangla-এর নাম</b></td>

@@ -189,7 +189,7 @@ else {
             <div>
                 <form method="POST" onsubmit="" action="presenter_attendance.php?opt=submit">	
                     <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
-                        <tr><th colspan="4" style="text-align: center;font-size: 20px;">হাজিরা প্রদান</th></tr>
+                        <tr><th colspan="4" style="text-align: center;font-size: 20px;">বেতন প্রদান</th></tr>
                         <tr>
                             <td style="width: 40%">প্রেজেন্টেশন / প্রোগ্রাম / ট্রেইনিং / ট্রাভেল</td>
                             <td>: <select class="selectOption" name="type" id="type" onchange="getList(this.value)" style="width: 170px !important;">
