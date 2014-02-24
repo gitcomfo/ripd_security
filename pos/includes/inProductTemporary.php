@@ -1,5 +1,9 @@
 <?php
 session_start();
+include_once './connectionPDO.php';
+$ons_id =  $_SESSION['loggedInOfficeID'];
+$ons_type =  $_SESSION['loggedInOfficeType'];
+
 if (!isset($_SESSION['arrProductTemp']))
 {
  $_SESSION['arrProductTemp'] = array();
@@ -19,5 +23,24 @@ if(isset($_GET['name']))
 elseif (isset ($_GET['type'])) {
     $g_id = $_GET['chartID'];
     unset($_SESSION['arrProductTemp'][$g_id]);
+}
+
+elseif(isset($_GET['check']))
+{
+    $g_amount = $_GET['reuseamount'];
+    $sel_acc_store_logc = $conn->prepare("SELECT buying_price FROM acc_store_logc WHERE ons_type = ?  AND ons_id =?");
+    $sel_acc_store_logc->execute(array($ons_type, $ons_id));
+    $row = $sel_acc_store_logc->fetchAll();
+    foreach ($row as $value) {
+        $db_amount = $value['buying_price'];
+    }
+    if($g_amount > $db_amount)
+    {
+        echo '0';
+    }
+    else
+    {
+        echo '1';
+    }
 }
 ?>

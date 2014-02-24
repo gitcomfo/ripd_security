@@ -62,12 +62,7 @@ function hidebox()
         $(this).css("visibility","hidden"); 
     });
 }
-function calculateInvest(reuse)
-{
-    var total = Number(document.getElementById('totalBuyingPrice').value) + Number(document.getElementById('transportCost').value);
-    var invest = total - Number(reuse);
-    document.getElementById('investAmount').value = invest;
-}
+
 function beforeSave()
 {
       a=document.getElementById('transportCost').value;
@@ -143,6 +138,43 @@ function searchName(where) // productlist-er name search box
         }
         xmlhttp.open("GET","searchsuggest.php?searchname="+str_key+"&where="+where,true);
         xmlhttp.send();    
+}
+var  state="";
+function checkbalan(reuse) // to check balance for reuse*******************
+{
+      var xmlhttp;  
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                state = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET","includes/inProductTemporary.php?check=1&reuseamount="+reuse,false);
+        xmlhttp.send();    
+}
+function calculateInvest(reuse)
+{
+    checkbalan(reuse);
+    if(state == '1')
+        {
+            var total = Number(document.getElementById('totalBuyingPrice').value) + Number(document.getElementById('transportCost').value);
+            var invest = total - Number(reuse);
+            document.getElementById('investAmount').value = invest;
+        }
+        else if(state == '0'){
+            alert('দুঃখিত, এই পরিমান টাকা রিইউজ করতে পারবেন না');
+            document.getElementById('reuseAmount').value = 0;
+             document.getElementById('investAmount').value = 0;
+        }
 }
 function addToTable() // to add into temporary array*******************
 {
