@@ -15,7 +15,7 @@ $arr_rslt = $sel_command->fetchAll();
 foreach ($arr_rslt as $value) {
     $db_pv = $value['pv_value'];
 }
-$ins_purchase_sum = $conn->prepare("INSERT INTO product_purchase_summary(chalan_no, chln_invest_amount, chln_reuse_amount, total_chalan_cost, transport_cost ,others_cost ,chalan_comment , chalan_date , cfs_user_idUser ,chalan_scan_copy) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)");
+$ins_purchase_sum = $conn->prepare("INSERT INTO product_purchase_summary(chalan_no, chln_invest_amount, chln_reuse_amount, total_chalan_cost, transport_cost ,others_cost ,chalan_comment , chalan_date , cfs_user_idUser ,chalan_scan_copy,pps_onstype,pps_onsID) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?)");
 $ins_purchase = $conn->prepare("INSERT INTO product_purchase(in_ons_type, in_onsid, in_input_date ,input_type ,in_howmany , in_pv , in_extra_profit ,in_profit, in_buying_price, in_sellingprice, pps_id, Product_chart_idproductchart) VALUES (?, ?, NOW(), 'in', ?, ?, ?, ?, ?, ?, ?, ?)");
 $sel_purchase_sum = $conn->prepare("SELECT * FROM product_purchase_summary WHERE chalan_no= ? ");
 
@@ -31,9 +31,13 @@ if(isset($_POST['next']))
         $invest_amount = $p_totalBuyingPrice + $p_totalTransportCost;
         $reuse_amount = 0;
     }
-    else {
+    elseif($p_purchaseType == 'reuse') {
         $invest_amount = 0;
         $reuse_amount = $p_totalBuyingPrice + $p_totalTransportCost;
+    }
+    else {
+        $invest_amount = $_POST['investAmount'];
+        $reuse_amount = $_POST['reuseAmount'];
     }
     
       $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
@@ -98,7 +102,7 @@ if(isset($_POST['entry']))
     $p_qty = $_POST['porQty']; 
 
     $conn->beginTransaction();
-            $sqlrslt1 = $ins_purchase_sum->execute(array($chalanNo,$invest,$reuse,$totalbuying,$totaltarnsport,$totalother,$comment,$cfsID,$chalancopy));
+            $sqlrslt1 = $ins_purchase_sum->execute(array($chalanNo,$invest,$reuse,$totalbuying,$totaltarnsport,$totalother,$comment,$cfsID,$chalancopy,$scatagory,$storeID));
             $purchase_sum_id = $conn->lastInsertId();
             for($i=1;$i<=$noRows;$i++)
             {

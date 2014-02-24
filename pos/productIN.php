@@ -26,6 +26,7 @@ $sel_product_chart = $conn->prepare("SELECT * FROM product_chart WHERE idproduct
     color: yellow !important;
 }
 </style>
+<script type="text/javascript" src="scripts/jquery-1.4.3.min.js"></script>
 <!--===========================================================================================================================-->
 <script LANGUAGE="JavaScript">
 function checkIt(evt) {
@@ -46,6 +47,26 @@ function numbersonly(e)
                 if (unicode<48||unicode>57) //if not a number
                 return false //disable key press
             }
+}
+function showbox()
+{
+     elements = $('.both_box');
+    elements.each(function() { 
+        $(this).css("visibility","visible"); 
+    });
+}
+function hidebox()
+{
+    elements = $('.both_box');
+    elements.each(function() { 
+        $(this).css("visibility","hidden"); 
+    });
+}
+function calculateInvest(reuse)
+{
+    var total = Number(document.getElementById('totalBuyingPrice').value) + Number(document.getElementById('transportCost').value);
+    var invest = total - Number(reuse);
+    document.getElementById('investAmount').value = invest;
 }
 function beforeSave()
 {
@@ -290,8 +311,13 @@ function deleteProduct(id) // to add into temporary array*******************
             <td>: <input type="file" name="chalanCopy" /></td>
         </tr>
         <tr>
-            <td><input type="radio" name="purchaseType" value="invest" />ইনভেস্ট</td>
-            <td><input type="radio" name="purchaseType" value="reuse" />রিইউজ</td>
+            <td><input type="radio" name="purchaseType" value="invest" onclick="hidebox()" />ইনভেস্ট</td>
+            <td><input type="radio" name="purchaseType" value="reuse" onclick="hidebox()" />রিইউজ</td>
+            <td><input type="radio" name="purchaseType" value="both" onclick="showbox();" />ইনভেস্ট এন্ড রিইউজ</td>
+        </tr>
+        <tr class="both_box" style="visibility: hidden;">
+            <td colspan="2" style="text-align: right;">রিইউজের পরিমান : <input type="text" id="reuseAmount" name="reuseAmount" style="text-align: right;" onkeypress="return checkIt(event)" onkeyup="calculateInvest(this.value);"  /> টাকা</td>
+            <td style="text-align: right;">ইনভেস্টের পরিমান : <input type="text" id="investAmount" name="investAmount" style="text-align: right;" readonly /> টাকা</td>
         </tr>
     </table>
 </fieldset>
