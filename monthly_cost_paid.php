@@ -3,14 +3,13 @@
 error_reporting(0);
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
-$loginUSERid = $_SESSION['userIDUser'] ;
-$g_acc_ofc_physc_in = $_GET['id'];
+ $loginUSERid = $_SESSION['userIDUser'] ;
+ $g_acc_ofc_physc_in = $_GET['id'];
  $g_nfcid = $_GET['nfcid'];
 
 $sql_update_notification = $conn->prepare("UPDATE notification SET nfc_status=? WHERE idnotification=? ");
-$sql_fixed_expenditure = $conn->prepare("UPDATE ons_fixed_expenditure SET status='approved' WHERE idfixexp=? ");
-$insert_notification = $conn->prepare("INSERT INTO notification (nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
-                                                            VALUES (?,?,?,?,NOW(),?,?,?)");
+$sql_fixed_expenditure = $conn->prepare("UPDATE ons_fixed_expenditure SET status='paid' WHERE idfixexp=? ");
+
 ////$sel_select_acc_ofc = $conn->prepare("SELECT * FROM acc_ofc_physc_in LEFT JOIN bank_list ON idbank = bank_id WHERE idofcphysin= ?");
 //$up_acc_ofc_physc_in = $conn->prepare("UPDATE acc_ofc_physc_in SET receving_date = NOW(), rceiver_id = ? WHERE idofcphysin = ?");
 //
@@ -32,17 +31,11 @@ $insert_notification = $conn->prepare("INSERT INTO notification (nfc_senderid,nf
 if(isset($_POST['submit']))
 {
      $conn->beginTransaction(); 
-    echo $sqlrslt1= $sql_fixed_expenditure->execute(array($g_acc_ofc_physc_in ));
+    $sqlrslt1= $sql_fixed_expenditure->execute(array($g_acc_ofc_physc_in ));
     $status = 'complete';
-    $sqlrslt2 = $sql_update_notification->execute(array($status,$g_nfcid));
-    $url = "monthly_cost_paid.php?id=".$g_acc_ofc_physc_in;
-    $status1 = "unread";
-    $type="action";
-    $nfc_catagory="official";
-    $msg = "মাসিক খরচ অনুমোদন";
-    $onsID = 50;
-    $sqlrslt3 = $insert_notification->execute(array($loginUSERid,$onsID,$msg,$url,$status1,$type,$nfc_catagory));
-     if($sqlrslt1 && $sqlrslt2 && $sqlrslt3)
+    $sqlrslt3 = $sql_update_notification->execute(array($status,$g_nfcid));
+    
+     if($sqlrslt1 && $sqlrslt3)
         {
             $conn->commit();
             echo "<script>alert('টাকা গ্রহন করা হল')</script>";
