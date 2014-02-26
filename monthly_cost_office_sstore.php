@@ -2,14 +2,56 @@
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/selectQueryPDO.php';
-$ins_ons_fixed_exp = $conn->prepare("INSERT INTO ons_fixed_expenditure (month, year, ons_rent, ons_current_bill, ons_water_bill, ons_others_total, ons_monthly_total, fk_onsid) 
-                                                                VALUES(?,?,?,?,?,?,?,? )");
+$ins_ons_fixed_exp = $conn->prepare("INSERT INTO ons_fixed_expenditure (month, year, ons_rent, ons_current_bill, ons_water_bill, ons_others_total, ons_monthly_total, status, fk_onsid) 
+                                                                VALUES (?,?,?,?,?,?,?,'made',? )");
 $ins_others_fixed_exp = $conn->prepare("INSERT INTO ons_fixed_exp_others(ons_cost_type ,ons_cost_amount ,ons_fixed_expenditure_idfixexp) VALUES (?,?,?)");
+$insert_notification = $conn->prepare("INSERT INTO notification (nfc_tablename,nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
+                                                            VALUES ('ons_fixed_expenditure',?,?,?,?,NOW(),?,?,?)");
 
 $exp_ons_type = $_SESSION['loggedInOfficeType'];
 $exp_ons_id = $_SESSION['loggedInOfficeID'];
 $exp_maker_id = $_SESSION['userIDUser'];
 
+// parent ons id find --------------------------------
+   if($exp_ons_type == 'office') 
+ {
+     $sql_select_office->execute(array($exp_ons_id));
+     $offrow = $sql_select_office->fetchAll();
+     foreach ($offrow as $value) {
+         $db_parent_id = $value['parent_id'];
+         $sql_select_id_ons_relation->execute(array($exp_ons_type,$db_parent_id));
+         $onsrow = $sql_select_id_ons_relation->fetchAll();
+         foreach ($onsrow as $value) {
+             $db_parent_onsID = $value['idons_relation'];
+         }
+     }    
+ }
+ else
+ {
+     $sql_select_sales_store->execute(array($exp_ons_id));
+     $offrow = $sql_select_sales_store->fetchAll();
+     foreach ($offrow as $value) {
+         $db_parent_id = $value['powerstore_officeid'];
+         if($db_parent_id == 0)
+         {
+              $sql_select_id_ons_relation->execute(array($exp_ons_type,$exp_ons_id));
+                $onsrow = $sql_select_id_ons_relation->fetchAll();
+                foreach ($onsrow as $value) {
+                    $db_parent_onsID = $value['idons_relation'];
+                }
+         }
+         else
+         {
+             $catagory = 'office';
+             $sql_select_id_ons_relation->execute(array($catagory,$db_parent_id));
+                $onsrow = $sql_select_id_ons_relation->fetchAll();
+                foreach ($onsrow as $value) {
+                    $db_parent_onsID = $value['idons_relation'];
+                }
+         }
+     }    
+ }
+ 
 $sql_select_id_ons_relation->execute(array($exp_ons_type,$exp_ons_id));
 $row = $sql_select_id_ons_relation->fetchAll();
 foreach ($row as $onsrow) {
@@ -56,14 +98,22 @@ if (isset($_POST['submit'])) // ************************ insert query **********
     for ($i = 0; $i < $n; $i++) {
        $sqlresult2 = $ins_others_fixed_exp->execute(array($sub[$i],$quan1[$i],$ons_fexp_id));
     }
-     if($sqlresult1  && $sqlresult2)
+    
+    $url = "monthly_cost_approval.php?id=".$ons_fexp_id;
+    $status = "unread";
+    $type="action";
+    $nfc_catagory="official";
+    $msg = "অফিস / স্টোরের মাসিক খরচ";
+    $sqlrslt3 = $insert_notification->execute(array($exp_maker_id,$db_parent_onsID,$msg,$url,$status,$type,$nfc_catagory));
+    
+     if($sqlresult1  && $sqlresult2 && $sqlrslt3)
         {
             $conn->commit();
-            echo "<script>alert('মাসিক অফিস খরচ দেয়া হল')</script>";
+            echo "<script>alert('মাসিক অফিস খরচের আবেদন করা হল')</script>";
         }
         else {
             $conn->rollBack();
-            echo "<script>alert('দুঃখিত, মাসিক অফিস খরচ দেয়া হয়নি')</script>";
+            echo "<script>alert('দুঃখিত, মাসিক অফিস খরচের আবেদন করা হয়নি')</script>";
         }
 }
 ?>
@@ -159,12 +209,12 @@ function beforeSubmit()
                         <td>
                             <b>বছরঃ </b>
                             <select class='box2' name='year'>
-                                                <?php
-                                                    $thisYear = date('Y');
-                                                    $startYear = '2000';
-                                                    foreach (range($thisYear, $startYear) as $year) {
-                                                    echo '<option value='.$year.'>'. $year .'</option>'; }
-                                                ?>
+                                <?php
+                                    $thisYear = date('Y');
+                                    $startYear = '2000';
+                                    foreach (range($thisYear, $startYear) as $year) {
+                                    echo '<option value='.$year.'>'. $year .'</option>'; }
+                                ?>
                             </select><em2> *</em2>
                         </td>  
                     </tr>     
@@ -195,12 +245,12 @@ function beforeSubmit()
                                       <td>পরিমান : <em> (ইংরেজিতে লিখুন)</em></td>
                                  </tr>
                                 <?php
-                                for ($i = 0; $i < $count; $i++) {
-                                    echo "<tr>";
-                                    echo "<td style='width:20%;'><input class='textfield' type='text'  id='sub' name='sub[]' value='$sub[$i]' /></td>";
-                                    echo"<td style='width:27%;'><input class='inbox' style='text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;' id='quantity1' name='quantity1[]' type='text' onkeypress='return checkIt(event)' value='$quan[$i]' /><em2> *</em2> TK</td>";
-                                    echo "<td><input type='button' class='add' /></td></tr>";
-                                }
+                                    for ($i = 0; $i < $count; $i++) {
+                                        echo "<tr>";
+                                        echo "<td style='width:20%;'><input class='textfield' type='text'  id='sub' name='sub[]' value='$sub[$i]' /></td>";
+                                        echo"<td style='width:27%;'><input class='inbox' style='text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;' id='quantity1' name='quantity1[]' type='text' onkeypress='return checkIt(event)' value='$quan[$i]' /><em2> *</em2> TK</td>";
+                                        echo "<td><input type='button' class='add' /></td></tr>";
+                                    }
                                 ?>
                             </table>
                         </td>
