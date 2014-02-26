@@ -101,7 +101,7 @@ var xmlhttp;
                     }
                 document.getElementById('progResult').innerHTML=xmlhttp.responseText;
         }
-        xmlhttp.open("GET","includes/getPrograms.php?key="+key,true);
+        xmlhttp.open("GET","includes/getPrograms.php?ticketkey="+key,true);
         xmlhttp.send();	
 }
 function checkProgramForTicket(progID) 
@@ -145,7 +145,7 @@ function getBuyer(keystr) //search employee by account number***************
             }
             else
             {document.getElementById('accountfound').style.visibility = "visible";
-                document.getElementById('accountfound').setAttribute('style','position:absolute;top:171%;left:65%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('accountfound').setAttribute('style','position:absolute;top:168%;left:78%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
             }
             document.getElementById('accountfound').innerHTML=xmlhttp.responseText;
         }
@@ -350,9 +350,15 @@ function setBuyer(acc,name,mbl,image,cfsid)
 <?php
 if(isset($_POST['submit'])) 
 {
-    $sel_charge = mysql_query("SELECT * FROM charge WHERE charge_criteria='ticket making charge' ");
+    $sel_charge = mysql_query("SELECT * FROM charge WHERE charge_code='tcm' ");
     $chargerow = mysql_fetch_assoc($sel_charge);
     $making_prize=$chargerow['charge_amount'];
+    $db_charge_type=$chargerow['charge_type'];
+    $db_charge_status=$chargerow['charge_status'];
+    if($db_charge_status == 'postpond')
+    {
+        $making_prize = 0;
+    }
     $P_value=$_POST['prgrm_id'];
     $allsql="SELECT * FROM program WHERE idprogram= $P_value ;";
     $allrslt=mysql_query($allsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন';
@@ -385,8 +391,6 @@ if(isset($_POST['submit_ticket']))
    $ownerName=$_POST['owner_name'];
    $ownerMbl=$_POST['owner_mbl'];
    $buyerid = $_POST['buyerID'];
-   //$takaPerTicket=$_POST['ticket'];
-  // $makePerTicket = $_POST['Maketicket'];
    $arr_checkbox1 = $_POST['checkbox_Seat'];
    $str_SelectedSeat = implode(",", $arr_checkbox1);
    $arr_checkbox2 = $_POST['checkbox_Xtra'];
@@ -396,9 +400,19 @@ if(isset($_POST['submit_ticket']))
    $no_of_seats=count($arr_checkbox1);
    $no_of_xtra=count($arr_checkbox2);
    $total_no_of_seat=$no_of_seats+$no_of_xtra;
-   $totalTicketPrize=$_POST['totalTaka'];        //$total_no_of_seat * $takaPerTicket;
-   //$totalMakingCharge=$total_no_of_seat * $makePerTicket;
-   $totalamount= $totalTicketPrize ;
+   $totalTicketPrize=$_POST['totalTicketPrize'];
+   $totalMakingCharge=$_POST['totalMakingCharge'];  
+   $totalamount=$_POST['totalTaka'];
+   if($paymentType == 'cash')
+   {
+       $paymentByCash =  $totalamount;
+       $paymentByAccount =  0;
+   }
+   else
+   {
+       $paymentByCash =  0;
+       $paymentByAccount =  $totalamount;
+   }
     
    if(($no_of_seats<=10 && $no_of_seats>0) || ($no_of_xtra<=$freeXtra && $no_of_xtra >0))
    {
@@ -415,7 +429,7 @@ if(isset($_POST['submit_ticket']))
             $arr_Seats = explode(',', $str_seatstring);
             $arr_matchSeat= array_intersect($arr_checkbox1, $arr_Seats);
             
-            $sqlx="SELECT xtra_seat FROM " . $dbname . ".ticket WHERE Program_idprogram = $valueID;";
+            $sqlx="SELECT xtra_seat FROM ticket WHERE Program_idprogram = $valueID";
             $rsltx=mysql_query($sqlx) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৬';
             $str_Xseatstring="";
             while($db_xseat=  mysql_fetch_assoc($rsltx))
@@ -429,8 +443,8 @@ if(isset($_POST['submit_ticket']))
                $arr_matchXtra= array_intersect($arr_checkbox2, $arr_Xtra);
                if (count($arr_matchSeat) == 0  && count($arr_matchXtra) == 0 )
                {
-                   $tsql="INSERT INTO ticket (`ticket_owner_name` ,`ticket_owner_mobile` ,ticket_buyer_id, `no_ofTicket_purchase` ,`seat_no` ,`xtra_seat` ,`total_ticket_prize` ,`total_amount`,`ticket_seller_id`, `Program_idprogram`) 
-                            VALUES ('$ownerName', '$ownerMbl',$buyerid, $total_no_of_seat , '$str_SelectedSeat' , '$str_SelectedXSeat', $totalTicketPrize,  $totalamount, $db_onsid, $valueID );";
+                   $tsql="INSERT INTO ticket (ticket_owner_name ,ticket_owner_mobile ,ticket_buyer_id, no_ofTicket_purchase ,seat_no ,xtra_seat ,total_ticket_prize ,total_amount, total_makingCharge, tckt_cash_paid, tckt_acc_paid, ticket_seller_id, Program_idprogram) 
+                            VALUES ('$ownerName', '$ownerMbl',$buyerid, $total_no_of_seat , '$str_SelectedSeat' , '$str_SelectedXSeat', $totalTicketPrize,  $totalamount,$totalMakingCharge, $paymentByCash, $paymentByAccount, $db_onsid, $valueID );";
                     $treslt=mysql_query($tsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৭';
                     $TicketID = mysql_insert_id();
                }
@@ -441,7 +455,7 @@ if(isset($_POST['submit_ticket']))
 function freeSeat($progID)
 {
     $str_seatstring="";
-        $sql="SELECT seat_no FROM " . $dbname . ".ticket WHERE Program_idprogram = $progID;";
+        $sql="SELECT seat_no FROM ticket WHERE Program_idprogram = $progID;";
         $rslt=mysql_query($sql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৮';
         while($db_seats=  mysql_fetch_assoc($rslt))
             {
@@ -452,7 +466,7 @@ function freeSeat($progID)
              }
             $arr_Seats = explode(',', $str_seatstring);
         
-        $sql2="SELECT total_seat FROM " . $dbname . ".program WHERE idprogram = $progID;";
+        $sql2="SELECT total_seat FROM program WHERE idprogram = $progID;";
         $rslt2=mysql_query($sql2) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৯';
         $totalseat=  mysql_fetch_assoc($rslt2);
         $db_maxSeat=$totalseat['total_seat'];
@@ -480,7 +494,7 @@ function countSeat($progID)
 
 function freeXtraSeat($progID)
 {
-    $sqlx="SELECT xtra_seat FROM " . $dbname . ".ticket WHERE Program_idprogram = $progID;";
+    $sqlx="SELECT xtra_seat FROM ticket WHERE Program_idprogram = $progID;";
             $rsltx=mysql_query($sqlx) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন১০';
             $str_Xseatstring="";
             while($db_xseat=  mysql_fetch_assoc($rsltx))
@@ -492,7 +506,7 @@ function freeXtraSeat($progID)
                  }
                 $arr_Xtra = explode(',', $str_Xseatstring);
         
-        $sql2="SELECT extra_seat FROM " . $dbname . ".program WHERE idprogram = $progID;";
+        $sql2="SELECT extra_seat FROM program WHERE idprogram = $progID;";
          $rslt2=mysql_query($sql2) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন১১';
         $totalseat=  mysql_fetch_assoc($rslt2);
         $db_maxXseat=$totalseat['extra_seat'];
@@ -665,9 +679,15 @@ if ($_GET['opt']=='submit_ticket') {
         <div class="main_text_box">
             <?php  if($_GET['programID']!=0)
                         { 
-                            $sel_charge = mysql_query("SELECT * FROM charge WHERE charge_criteria='ticket making charge' ");
+                            $sel_charge = mysql_query("SELECT * FROM charge WHERE charge_code='tcm' ");
                             $chargerow = mysql_fetch_assoc($sel_charge);
                             $making_prize=$chargerow['charge_amount'];
+                            $db_charge_type=$chargerow['charge_type'];
+                            $db_charge_status=$chargerow['charge_status'];
+                            if($db_charge_status == 'postpond')
+                            {
+                                $making_prize = 0;
+                            }
                             $value = $_GET['programID']; 
                             $allsql="SELECT * FROM " . $dbname . ".program WHERE idprogram=$value;";
                                 $allrslt=mysql_query($allsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন';

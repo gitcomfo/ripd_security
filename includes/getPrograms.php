@@ -7,7 +7,18 @@ $officeID = $_SESSION['loggedInOfficeID'];
 if (isset($_GET['key']) && ($_GET['key'] != '')) {
 	$str_key = $_GET['key'];
                    $today = date("Y-m-d");
-                  $suggest_query = "SELECT * FROM program WHERE program_no LIKE('$str_key%') AND program_date >= '$today' ORDER BY program_no";
+                  $suggest_query = "SELECT * FROM program WHERE program_no LIKE('$str_key%') AND program_date >= '$today' AND ticket_prize IS NULL ORDER BY program_no";
+	$reslt= mysql_query($suggest_query);
+	while($suggest = mysql_fetch_assoc($reslt)) {
+                    $pNo = $suggest['program_no'];
+                     $id = $suggest['idprogram'];
+	            echo "<u><a onclick=setProgram('$pNo','$id'); style='text-decoration:none;color:brown;cursor:pointer;'>" . $pNo . "</a></u></br>";
+        	}               
+}
+elseif (isset($_GET['ticketkey']) && ($_GET['ticketkey'] != '')) {
+	$str_key = $_GET['ticketkey'];
+                   $today = date("Y-m-d");
+                  $suggest_query = "SELECT * FROM program WHERE program_no LIKE('$str_key%') AND program_date >= '$today' AND ticket_prize IS NOT NULL ORDER BY program_no";
 	$reslt= mysql_query($suggest_query);
 	while($suggest = mysql_fetch_assoc($reslt)) {
                     $pNo = $suggest['program_no'];

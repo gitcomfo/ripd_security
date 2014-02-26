@@ -23,15 +23,15 @@ if(isset($_GET['TP']))
         </tr>
         <tr>
         <td style='padding-left: 0px !important;'>মোট টিকেট প্রাইজ</td>
-        <td style='color: black;'>: $total_ticketprize TK</td>
+        <td style='color: black;'>: $total_ticketprize TK <input type= 'hidden' name='totalTicketPrize' value='$total_ticketprize' /></td>
          </tr>
          <tr>
          <td style='padding-left: 0px !important;'>মোট মেকিং চার্জ</td>
-        <td style='color: black;'>: $total_makingcharge TK</td>
+        <td style='color: black;'>: $total_makingcharge TK <input type= 'hidden' name='totalMakingCharge' value='$total_makingcharge' /></td>
         </tr>
         <tr>
          <td style='padding-left: 0px !important;'>মোট টিকেট বিক্রয়মূল্য</td>
-        <td style='color: black;'>: $total_amount TK</td>
+        <td style='color: black;'>: $total_amount TK<input type= 'hidden' name='totalTaka' value='$total_amount' /></td>
         </tr>
         <tr>
         <td style='width:50%;padding-left: 0px !important;text-align:center;'><input type='radio' name='bycash' onclick='paycash($total_amount)' />পেমেন্ট বাই ক্যাশ</td>
