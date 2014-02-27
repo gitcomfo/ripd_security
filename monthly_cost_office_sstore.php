@@ -7,6 +7,7 @@ $ins_ons_fixed_exp = $conn->prepare("INSERT INTO ons_fixed_expenditure (month, y
 $ins_others_fixed_exp = $conn->prepare("INSERT INTO ons_fixed_exp_others(ons_cost_type ,ons_cost_amount ,ons_fixed_expenditure_idfixexp) VALUES (?,?,?)");
 $insert_notification = $conn->prepare("INSERT INTO notification (nfc_tablename,nfc_tableid,nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
                                                             VALUES ('ons_fixed_expenditure',?,?,?,?,?,NOW(),?,?,?)");
+$sql_fixed_expenditure = $conn->prepare("SELECT * FROM ons_fixed_expenditure WHERE fk_onsid =? AND month=? AND year= ? ");
 
 $exp_ons_type = $_SESSION['loggedInOfficeType'];
 $exp_ons_id = $_SESSION['loggedInOfficeID'];
@@ -92,29 +93,38 @@ if (isset($_POST['submit'])) // ************************ insert query **********
     for ($i = 0; $i < $n; $i++) {
         $othertotal = $othertotal + $quan1[$i];
      }
-     $conn->beginTransaction();
-     $sqlresult1 = $ins_ons_fixed_exp->execute(array($month,$year,$rent1,$e_bill1,$w_bill1,$othertotal,$monthly_total,$onsID));
-     $ons_fexp_id = $conn->lastInsertId();
-    for ($i = 0; $i < $n; $i++) {
-       $sqlresult2 = $ins_others_fixed_exp->execute(array($sub[$i],$quan1[$i],$ons_fexp_id));
-    }
-    
-    $url = "monthly_cost_approval.php?id=".$ons_fexp_id;
-    $status = "unread";
-    $type="action";
-    $nfc_catagory="official";
-    $msg = "অফিস / স্টোরের মাসিক খরচ";
-    $sqlrslt3 = $insert_notification->execute(array($ons_fexp_id,$exp_maker_id,$db_parent_onsID,$msg,$url,$status,$type,$nfc_catagory));
-    
-     if($sqlresult1  && $sqlresult2 && $sqlrslt3)
-        {
-            $conn->commit();
-            echo "<script>alert('মাসিক অফিস খরচের আবেদন করা হল')</script>";
-        }
-        else {
-            $conn->rollBack();
-            echo "<script>alert('দুঃখিত, মাসিক অফিস খরচের আবেদন করা হয়নি')</script>";
-        }
+     $sql_fixed_expenditure->execute(array($onsID,$month,$year));
+     $num_rows = count($sql_fixed_expenditure->fetchAll());
+     if($num_rows > 0)
+     {
+         echo "<script>alert('দুঃখিত, এই মাসের মাসিক খরচ তৈরি হয়েগেছে')</script>";
+     }
+     else
+     {
+        $conn->beginTransaction();
+        $sqlresult1 = $ins_ons_fixed_exp->execute(array($month,$year,$rent1,$e_bill1,$w_bill1,$othertotal,$monthly_total,$onsID));
+        $ons_fexp_id = $conn->lastInsertId();
+       for ($i = 0; $i < $n; $i++) {
+          $sqlresult2 = $ins_others_fixed_exp->execute(array($sub[$i],$quan1[$i],$ons_fexp_id));
+       }
+
+       $url = "monthly_cost_approval.php?id=".$ons_fexp_id;
+       $status = "unread";
+       $type="action";
+       $nfc_catagory="official";
+       $msg = "অফিস / স্টোরের মাসিক খরচ";
+       $sqlrslt3 = $insert_notification->execute(array($ons_fexp_id,$exp_maker_id,$db_parent_onsID,$msg,$url,$status,$type,$nfc_catagory));
+
+        if($sqlresult1  && $sqlresult2 && $sqlrslt3)
+           {
+               $conn->commit();
+               echo "<script>alert('মাসিক অফিস খরচের আবেদন করা হল')</script>";
+           }
+           else {
+               $conn->rollBack();
+               echo "<script>alert('দুঃখিত, মাসিক অফিস খরচের আবেদন করা হয়নি')</script>";
+           }
+     }
 }
 ?>
 <style type="text/css">@import "css/bush.css";</style>
@@ -169,7 +179,7 @@ function validate() {
         var notOK= 0;
         $(".inbox").filter(function() {
          var val = $(this).val();
-        if((val == "") || (val == 0))
+        if((val == ""))
             {
                  notOK++;
             }
@@ -263,7 +273,7 @@ function beforeSubmit()
                         <td>: <input class="textfield" id="totalamount" name="totalamount"  type="text" readonly="" style="text-align: right;" value="<?php echo $totalcost;?>" /> TK</td>
                     </tr>
                     <tr>                    
-                        <td colspan="4" style="padding-left: 250px; " >
+                        <td colspan="4" style="padding-left: 300px; " >
                             </br><input class="btn" style =" font-size: 12px " type="submit" name="submit" id="submit" value="সেভ করুন" />
                         </td>                           
                     </tr>
