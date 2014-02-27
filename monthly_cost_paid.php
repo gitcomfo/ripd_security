@@ -4,34 +4,26 @@ error_reporting(0);
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
  $loginUSERid = $_SESSION['userIDUser'] ;
- $g_acc_ofc_physc_in = $_GET['id'];
+ $g_ons_exp_id = $_GET['id'];
  $g_nfcid = $_GET['nfcid'];
 
 $sql_update_notification = $conn->prepare("UPDATE notification SET nfc_status=? WHERE idnotification=? ");
-$sql_fixed_expenditure = $conn->prepare("UPDATE ons_fixed_expenditure SET status='paid' WHERE idfixexp=? ");
+$sql_fixed_expenditure = $conn->prepare("UPDATE ons_fixed_expenditure SET status='given' WHERE idfixexp=? ");
+$sel_fixed_exp = $conn->prepare("SELECT * FROM ons_fixed_expenditure WHERE idfixexp= ? AND 	status = 'approved' ");
+// ************************* select query ****************************************
+$sel_fixed_exp->execute(array($g_ons_exp_id));
+$row = $sel_fixed_exp->fetchAll();
+foreach ($row as $value) {
+    $db_month = $value['month'];
+    $db_year = $value['year'];
+    $monthName = date("F", mktime(0, 0, 0, $db_month, 10));
+    $db_monthlytotal = $value['ons_monthly_total'];
+}
 
-////$sel_select_acc_ofc = $conn->prepare("SELECT * FROM acc_ofc_physc_in LEFT JOIN bank_list ON idbank = bank_id WHERE idofcphysin= ?");
-//$up_acc_ofc_physc_in = $conn->prepare("UPDATE acc_ofc_physc_in SET receving_date = NOW(), rceiver_id = ? WHERE idofcphysin = ?");
-//
-//$sel_select_acc_ofc->execute(array($g_acc_ofc_physc_in));
-//$row = $sel_select_acc_ofc->fetchAll();
-//foreach ($row as $value) {
-//    $db_inamount = $value['inamount'];
-//    $db_bank = $value['bank_name'];
-//    $db_cheque = $value['cheque_number'];
-//    $db_sendingDate = $value['sending_date'];
-//    if($db_cheque == '0')
-//    {
-//        $intype = "ক্যাশ";
-//    }
-//    else {
-//           $intype = "চেক";
-//       }
-//}
 if(isset($_POST['submit']))
 {
      $conn->beginTransaction(); 
-    $sqlrslt1= $sql_fixed_expenditure->execute(array($g_acc_ofc_physc_in ));
+    $sqlrslt1= $sql_fixed_expenditure->execute(array($g_ons_exp_id ));
     $status = 'complete';
     $sqlrslt3 = $sql_update_notification->execute(array($status,$g_nfcid));
     
@@ -55,27 +47,12 @@ if(isset($_POST['submit']))
         <div>           
             <form method="POST" action="">	
                 <table  class="formstyle" style="width: 90%; margin: 1px 1px 1px 1px;">          
-                    <tr><th colspan="2" style="text-align: center;font-size: 22px;">রিপড হেড অফিস হতে টাকা গ্রহন</th></tr>
-<!--                    <tr>
-                        <td >গ্রহনকৃত মোট টাকা</td>
-                        <td>: <input class="box" type="text" style="text-align: right;" readonly="" value="<?php echo $db_inamount;?>" /> টাকা</td>          
-                    </tr>
+                    <tr><th colspan="2" style="text-align: center;font-size: 22px;">মাসিক খরচের টাকা গ্রহন</th></tr>
                     <tr>
-                        <td >পদ্ধতি</td>
-                        <td>: <input class="box" type="text" readonly="" value="<?php echo $intype;?>" /></td> 
+                        <td colspan="2" style="text-align: center;font-size: 16px;">
+                            <?php echo $monthName." , ".$db_year?>-এর মাসিক খরচ বাবদ <?php echo $db_monthlytotal?> টাকা গ্রহন করা হল
+                        </td>          
                     </tr>
-                    <tr>
-                        <td >ব্যাংকের নাম</td>
-                        <td>: <input class="box" type="text" readonly="" value="<?php echo $db_bank;?>" /></td> 
-                    </tr>
-                    <tr>
-                        <td >চেক নং</td>
-                        <td>: <input class="box" type="text" readonly="" value="<?php echo $db_cheque;?>" /></td> 
-                    </tr>
-                    <tr>
-                        <td >টাকা প্রেরনের তারিখ</td>
-                        <td>: <input class="box" type="text" readonly="" value="<?php echo date("d/m/Y",  strtotime($db_sendingDate));?>" /></td> 
-                    </tr> -->
                     <tr>                    
                         <td colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="গ্রহন করা হল" /></td>                           
                     </tr>    

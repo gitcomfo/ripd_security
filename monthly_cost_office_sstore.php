@@ -5,8 +5,8 @@ include_once 'includes/selectQueryPDO.php';
 $ins_ons_fixed_exp = $conn->prepare("INSERT INTO ons_fixed_expenditure (month, year, ons_rent, ons_current_bill, ons_water_bill, ons_others_total, ons_monthly_total, status, fk_onsid) 
                                                                 VALUES (?,?,?,?,?,?,?,'made',? )");
 $ins_others_fixed_exp = $conn->prepare("INSERT INTO ons_fixed_exp_others(ons_cost_type ,ons_cost_amount ,ons_fixed_expenditure_idfixexp) VALUES (?,?,?)");
-$insert_notification = $conn->prepare("INSERT INTO notification (nfc_tablename,nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
-                                                            VALUES ('ons_fixed_expenditure',?,?,?,?,NOW(),?,?,?)");
+$insert_notification = $conn->prepare("INSERT INTO notification (nfc_tablename,nfc_tableid,nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
+                                                            VALUES ('ons_fixed_expenditure',?,?,?,?,?,NOW(),?,?,?)");
 
 $exp_ons_type = $_SESSION['loggedInOfficeType'];
 $exp_ons_id = $_SESSION['loggedInOfficeID'];
@@ -104,7 +104,7 @@ if (isset($_POST['submit'])) // ************************ insert query **********
     $type="action";
     $nfc_catagory="official";
     $msg = "অফিস / স্টোরের মাসিক খরচ";
-    $sqlrslt3 = $insert_notification->execute(array($exp_maker_id,$db_parent_onsID,$msg,$url,$status,$type,$nfc_catagory));
+    $sqlrslt3 = $insert_notification->execute(array($ons_fexp_id,$exp_maker_id,$db_parent_onsID,$msg,$url,$status,$type,$nfc_catagory));
     
      if($sqlresult1  && $sqlresult2 && $sqlrslt3)
         {

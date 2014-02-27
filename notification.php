@@ -13,7 +13,6 @@ $logedinOfficeType = $_SESSION['loggedInOfficeType'];
                         <tr align="left" id="table_row_odd">
                             <th><?php echo "ক্রম";?></th>
                             <th><?php echo "নোটিফিকেশন";?></th>
-<!--                            <th><?php echo "অবস্থা";?></th>-->
                             <th><?php echo "করনীয়";?></th>                   
                         </tr>
                     </thead>
@@ -22,7 +21,7 @@ $logedinOfficeType = $_SESSION['loggedInOfficeType'];
                     $db_slNo = 1;
                     $catagory='official';
                     $sel_official_notification = $conn->prepare("SELECT * FROM ons_relation, notification WHERE catagory=? AND add_ons_id=?
-                       AND idons_relation=nfc_receiverid AND nfc_status !='complete' AND nfc_catagory =?");
+                                                                                            AND idons_relation=nfc_receiverid AND nfc_status !='complete' AND nfc_catagory =?");
                     $sel_official_notification ->execute(array($logedinOfficeType,$logedinOfficeId,$catagory));
                     $notificationrow = $sel_official_notification->fetchAll();
                     $countrow = count($notificationrow);
@@ -39,7 +38,6 @@ $logedinOfficeType = $_SESSION['loggedInOfficeType'];
                                 $db_status = $value['nfc_status'];
                                 $db_url = $value['nfc_actionurl'];
                                 $db_type = $value['nfc_type'];
-                                //$status = $arr_notification_status[$db_status];
                                 if($db_status == 'unread')
                                 {
                                     echo "<tr style='background-color:#ffcc99'>";
@@ -49,7 +47,6 @@ $logedinOfficeType = $_SESSION['loggedInOfficeType'];
                                 }
                                 echo "<td>".english2bangla($db_slNo)."</td>";
                                 echo "<td>$db_msg</td>";
-    //                            echo "<td>$status</td>";
                                 if($db_type == 'action')
                                 {
                                     echo "<td><a href='notification_gateway.php?url=$db_url&nfcid=$db_nfc_id' ><b>দেখুন</b></a></td>";

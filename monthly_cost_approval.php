@@ -4,49 +4,71 @@ error_reporting(0);
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 $loginUSERid = $_SESSION['userIDUser'] ;
-$g_acc_ofc_physc_in = $_GET['id'];
- $g_nfcid = $_GET['nfcid'];
+$g_ons_exp_id = $_GET['id'];
+$g_nfcid = $_GET['nfcid'];
 
 $sql_update_notification = $conn->prepare("UPDATE notification SET nfc_status=? WHERE idnotification=? ");
 $sql_fixed_expenditure = $conn->prepare("UPDATE ons_fixed_expenditure SET status='approved' WHERE idfixexp=? ");
 $insert_notification = $conn->prepare("INSERT INTO notification (nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
                                                             VALUES (?,?,?,?,NOW(),?,?,?)");
-////$sel_select_acc_ofc = $conn->prepare("SELECT * FROM acc_ofc_physc_in LEFT JOIN bank_list ON idbank = bank_id WHERE idofcphysin= ?");
-//$up_acc_ofc_physc_in = $conn->prepare("UPDATE acc_ofc_physc_in SET receving_date = NOW(), rceiver_id = ? WHERE idofcphysin = ?");
-//
-//$sel_select_acc_ofc->execute(array($g_acc_ofc_physc_in));
-//$row = $sel_select_acc_ofc->fetchAll();
-//foreach ($row as $value) {
-//    $db_inamount = $value['inamount'];
-//    $db_bank = $value['bank_name'];
-//    $db_cheque = $value['cheque_number'];
-//    $db_sendingDate = $value['sending_date'];
-//    if($db_cheque == '0')
-//    {
-//        $intype = "ক্যাশ";
-//    }
-//    else {
-//           $intype = "চেক";
-//       }
-//}
+$sel_fixed_exp = $conn->prepare("SELECT * FROM ons_fixed_expenditure WHERE idfixexp= ? AND 	status = 'made' ");
+$sql_select_ons = $conn->prepare("SELECT * FROM ons_relation WHERE idons_relation = ?");
+$sql_select_office = $conn->prepare("SELECT * FROM office WHERE idOffice = ?");
+$sql_select_sales_store = $conn->prepare("SELECT * FROM sales_store WHERE idSales_store = ?");
+
+$sel_fixed_exp->execute(array($g_ons_exp_id));
+$row = $sel_fixed_exp->fetchAll();
+foreach ($row as $value) {
+    $db_month = $value['month'];
+    $db_year = $value['year'];
+    $monthName = date("F", mktime(0, 0, 0, $db_month, 10));
+    $db_rent = $value['ons_rent'];
+    $db_currentbill = $value['ons_current_bill'];
+    $db_waterbill = $value['ons_water_bill'];
+    $db_otherscost = $value['ons_others_total'];
+    $db_monthlytotal = $value['ons_monthly_total'];
+    $db_onsID = $value['fk_onsid'];
+    $sql_select_ons->execute(array($db_onsID));
+   $row2 = $sql_select_ons->fetchAll();
+    foreach ($row2 as $value2) {
+        $db_catagory = $value2['catagory'];
+        $db_id = $value2['add_ons_id'];
+    }
+    if($db_catagory == 'office')
+    {
+        $sql_select_office->execute(array($db_id));
+        $row3 = $sql_select_office->fetchAll();
+        foreach ($row3 as $value3) {
+            $db_officename = $value3['office_name'];
+        }
+    }
+    else
+    {
+        $sql_select_sales_store->execute(array($db_id));
+        $row3 = $sql_select_sales_store->fetchAll();
+        foreach ($row3 as $value3) {
+            $db_officename = $value3['salesStore_name'];
+        }
+    }
+}
 if(isset($_POST['submit']))
 {
      $conn->beginTransaction(); 
-    echo $sqlrslt1= $sql_fixed_expenditure->execute(array($g_acc_ofc_physc_in ));
+    $sqlrslt1= $sql_fixed_expenditure->execute(array($g_ons_exp_id ));
     $status = 'complete';
     $sqlrslt2 = $sql_update_notification->execute(array($status,$g_nfcid));
-    $url = "monthly_cost_paid.php?id=".$g_acc_ofc_physc_in;
+    $url = "monthly_cost_paid.php?id=".$g_ons_exp_id;
     $status1 = "unread";
     $type="action";
     $nfc_catagory="official";
     $msg = "মাসিক খরচ অনুমোদন";
-    $onsID = 50;
+    $onsID = $_POST['senderOnsID'];
     $sqlrslt3 = $insert_notification->execute(array($loginUSERid,$onsID,$msg,$url,$status1,$type,$nfc_catagory));
      if($sqlrslt1 && $sqlrslt2 && $sqlrslt3)
         {
             $conn->commit();
             echo "<script>alert('টাকা গ্রহন করা হল')</script>";
-            header('location: main_account_management.php');
+            header('location: notification.php');
         }
         else {
             $conn->rollBack();
@@ -62,29 +84,29 @@ if(isset($_POST['submit']))
         <div>           
             <form method="POST" action="">	
                 <table  class="formstyle" style="width: 90%; margin: 1px 1px 1px 1px;">          
-                    <tr><th colspan="2" style="text-align: center;font-size: 22px;">রিপড হেড অফিস হতে টাকা গ্রহন</th></tr>
-<!--                    <tr>
-                        <td >গ্রহনকৃত মোট টাকা</td>
-                        <td>: <input class="box" type="text" style="text-align: right;" readonly="" value="<?php echo $db_inamount;?>" /> টাকা</td>          
+                    <tr><th colspan="2" style="text-align: center;font-size: 22px;"><?php echo $db_officename?> -এর মাসিক খরচ অনুমোদন, <?php echo $monthName." ,".$db_year?></th></tr>
+                    <tr>
+                        <td >অফিস ভাড়া</td>
+                        <td>: <input class="box" type="text" style="text-align: right;" readonly="" value="<?php echo $db_rent;?>" /> টাকা <input type="hidden" name="senderOnsID" value="<?php echo $db_onsID?>" /></td>          
                     </tr>
                     <tr>
-                        <td >পদ্ধতি</td>
-                        <td>: <input class="box" type="text" readonly="" value="<?php echo $intype;?>" /></td> 
+                        <td >কারেন্ট বিল</td>
+                        <td>: <input class="box" type="text" style="text-align: right;" readonly="" value="<?php echo $db_currentbill;?>" /> টাকা</td> 
                     </tr>
                     <tr>
-                        <td >ব্যাংকের নাম</td>
-                        <td>: <input class="box" type="text" readonly="" value="<?php echo $db_bank;?>" /></td> 
+                        <td >পানির বিল</td>
+                        <td>: <input class="box" type="text" style="text-align: right;" readonly="" value="<?php echo $db_waterbill;?>" /> টাকা</td> 
                     </tr>
                     <tr>
-                        <td >চেক নং</td>
-                        <td>: <input class="box" type="text" readonly="" value="<?php echo $db_cheque;?>" /></td> 
+                        <td >অন্যান্য</td>
+                        <td>: <input class="box" type="text" style="text-align: right;" readonly="" value="<?php echo $db_otherscost;?>" /> টাকা</td> 
                     </tr>
                     <tr>
-                        <td >টাকা প্রেরনের তারিখ</td>
-                        <td>: <input class="box" type="text" readonly="" value="<?php echo date("d/m/Y",  strtotime($db_sendingDate));?>" /></td> 
-                    </tr> -->
+                        <td >মোট মাসিক খরচ</td>
+                        <td>: <input class="box" type="text" style="text-align: right;" readonly="" value="<?php echo $db_monthlytotal;?>" /> টাকা</td> 
+                    </tr> 
                     <tr>                    
-                        <td colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="গ্রহন করা হল" /></td>                           
+                        <td colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="অনুমোদন হল" /></td>                           
                     </tr>    
                 </table>
                 </fieldset>
