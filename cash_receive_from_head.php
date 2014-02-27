@@ -35,8 +35,9 @@ if(isset($_POST['submit']))
      if($sqlrslt1 && $sqlrslt3)
         {
             $conn->commit();
-            echo "<script>alert('টাকা গ্রহন করা হল')</script>";
-            header('location: main_account_management.php');
+            echo "<script>alert('টাকা গ্রহন করা হল'); 
+                window.location = 'main_account_management.php';</script>";
+
         }
         else {
             $conn->rollBack();

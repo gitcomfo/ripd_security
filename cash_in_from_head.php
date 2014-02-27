@@ -4,25 +4,14 @@ include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
  $loginUSERid = $_SESSION['userIDUser'] ;
  
-$sql = $conn->prepare("SELECT * FROM main_fund ORDER BY fund_name");
 $sel_banks = $conn->prepare("SELECT * FROM bank_list ORDER BY bank_name");
 $ins_acc_ofc = $conn->prepare("INSERT INTO acc_ofc_physc_in (inamount, bank_id, cheque_number, amount_status, sender_id, office_id, sending_date)
                                                     VALUES (?,?,?,'send', ?,?,NOW()) ");
-$ins_acc_dist = $conn->prepare("INSERT INTO acc_ofc_physc_dist (fk_fundid, amount, fk_idofcphysin) VALUES (?,?,?)");
 $insert_notification = $conn->prepare("INSERT INTO notification (nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
                                                             VALUES (?,?,?,?,NOW(),?,?,?)");
 $sel_onsID = $conn->prepare("SELECT idons_relation FROM ons_relation LEFT JOIN office ON add_ons_id = idOffice 
                                                 WHERE catagory='office' AND account_number = ?");
 
-function getFunds($sql)
-{
-    echo "<option value= 0> -সিলেক্ট করুন- </option>";
-    $sql->execute(array());
-    $arr_fund = $sql->fetchAll();
-    foreach ($arr_fund as $fundrow) {
-        echo "<option value=".$fundrow['idmainfund'].">". $fundrow['fund_name'] ."</option>";
-    }
-}
 function getBanks($sql)
 {
      echo "<option value= 0> -সিলেক্ট করুন- </option>";
@@ -53,18 +42,10 @@ if(isset($_POST['submit']))
     foreach ($offrow as $value) {
        $office_ons_id = $value['idons_relation'];
     }
-    $p_fundamount = $_POST['inAmount'];
     
     $conn->beginTransaction();
         $y1 = $ins_acc_ofc->execute(array($p_amount,$p_bankID,$p_chequeNo, $loginUSERid, $office_ons_id));
         $db_last_insert_id = $conn->lastInsertId();
-        $sl = 0;
-       foreach ($_SESSION['arrFunds'] as $key => $row) 
-      {
-           $fundamount = $p_fundamount[$sl];
-          $y = $ins_acc_dist->execute(array($key,$fundamount,$db_last_insert_id));
-          $sl ++;
-      }
         $msg = "টাকা প্রাপ্তি";
         $url = "cash_receive_from_head.php?id=".$db_last_insert_id;
         $status = "unread";
@@ -72,14 +53,14 @@ if(isset($_POST['submit']))
         $nfc_catagory="official";
         $sqlrslt3 = $insert_notification->execute(array($loginUSERid,$office_ons_id,$msg,$url,$status,$type,$nfc_catagory));
         
-    if ($y1 && $y && $sqlrslt3) {
+    if ($y1 && $sqlrslt3) {
         $conn->commit();
          unset($_SESSION['arrFunds']);
          unset($_SESSION['arrCashinInfo']);
-        $msg = "<font style='color:green'>তথ্য সংরক্ষিত হয়েছে</font>";
+       echo "<script>alert('টাকা প্রদান করা হল')</script>";
     } else {
         $conn->rollBack();
-        $msg = "<font style='color:red''>ভুল হয়েছে</font>";
+        echo "<script>alert('টাকা প্রদান করা হয়নি')</script>";
     }
 }
 ?>
@@ -127,23 +108,6 @@ function hideBox(classname)
         $(this).css("visibility","hidden"); 
     });
 }
-function checkBalance(qty,i)
-{
-    var totalbalance = Number(document.getElementById("balanceAmount["+i+"]").value);
-    if(Number(qty) > totalbalance)
-        {
-            document.getElementById("inAmount["+i+"]").value = "";
-            document.getElementById('totalGivenAmount').value = "0";
-            alert("দুঃখিত,পরিমান অতিক্রম করেছে");
-        }
-        else{
-            var givenAmount = 0;
-            for (var j=1;j<=document.getElementsByName('inAmount[]').length;j++){
-                givenAmount = givenAmount + Number(document.getElementById('inAmount['+j+']').value);
-            }
-            document.getElementById('totalGivenAmount').value = givenAmount;
-        }
-}
 </script>
 <script>
     function getAccountInfo(acNo)
@@ -167,31 +131,7 @@ function checkBalance(qty,i)
         xmlhttp.open("GET","includes/getAccountInfoForCashIn.php?acNo="+acNo+"&type=office",true);
         xmlhttp.send();
     }
-function setFund(fundID)
-{
-    var officeAcc = document.getElementById("acNo").value;
-    var totalAmount = document.getElementById("t_in_amount").value;
-    var officeName = document.getElementById("info").innerHTML;
 
-   var xmlhttp;
-   if (window.XMLHttpRequest)
-   {// code for IE7+, Firefox, Chrome, Opera, Safari
-       xmlhttp=new XMLHttpRequest();
-   }
-   else
-   {// code for IE6, IE5
-       xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-   }
-   xmlhttp.onreadystatechange=function()
-   {
-       if (xmlhttp.readyState==4 && xmlhttp.status==200)
-       {
-           location.reload();
-       }
-   }
-   xmlhttp.open("GET","includes/fund_includes.php?fundID="+fundID+"&type=2&offAcc="+officeAcc+"&totalAmount="+totalAmount+"&offname="+officeName,true);
-   xmlhttp.send();
-}
 </script>
 
 <div class="columnSld" style=" padding-left: 50px;">
@@ -234,44 +174,6 @@ function setFund(fundID)
                     <tr class="bank" style="visibility: hidden;">
                         <td >চেক নং</td>
                         <td>: <input class="box" type="text" name="chequeNo" value="0"/> 
-                    </tr>
-                    <tr>
-                        <td >ফান্ড</td>
-                        <td>: <select class="box" name="fromfund" id="fromfund" onchange="setFund(this.value);">
-                                <?php getFunds($sql);?>
-                            </select><em2> *</em2></td>          
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <table cellspacing="0">
-                                <tr id="table_row_odd">
-                                    <td style="border: 1px solid black;">ফান্ড </td>
-                                    <td style="border: 1px solid black;">মোট টাকার পরিমান</td>
-                                    <td style="border: 1px solid black;">টাকা প্রদানের পরিমান</td>
-                                    <td style="border: 1px solid black;"></td>
-                                </tr>
-                                <?php
-                                        $sl = 1;
-                                        $url= urlencode($_SERVER['REQUEST_URI']);
-                                         foreach ($_SESSION['arrFunds'] as $key => $row) {
-                                        echo '<tr>';
-                                        echo '<td >' . $row[0] . '</td>';
-                                        echo '<td><input class="box" id="balanceAmount['.$sl.']" value="' . $row[1].'" style="text-align:right" /> টাকা</td>';
-                                        echo "<td><input class='box' name='inAmount[]' id='inAmount[$sl]' onkeyup='checkBalance(this.value,$sl)' style='text-align:right' /> টাকা</td>";
-                                        echo '<td style="text-align:center"><a href="includes/fund_includes.php?delete=1&id='.$key.'&url='.$url.'"><img src="images/del.png" style="cursor:pointer;" width="20px" height="20px" /></a></td>';
-                                        echo '</tr>';
-                                        $sl++;
-                                    }
-                                ?>
-                                <tr>
-                                    <td colspan="4"><hr/></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" style="text-align: right">মোট টাকা</td>
-                                    <td><input class="box" name="totalGivenAmount" id="totalGivenAmount" value="0" style="text-align: right;" readonly=""  /> টাকা</td>
-                                </tr>
-                            </table>
-                        </td>
                     </tr>
                     <tr>                    
                         <td colspan="2" style="text-align: center; " ><br/><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="টাকা প্রদান করুন" /></td>                           
