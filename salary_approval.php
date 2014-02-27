@@ -72,7 +72,8 @@ if(isset($_POST['givsalary']))
      if($sqlrslt1  && $sqlrslt2 && $sqlrslt3)
         {
             $conn->commit();
-            echo "<script>alert('বেতন সফলভাবে মঞ্জুর হয়েছে')</script>";
+            echo "<script>alert('বেতন সফলভাবে মঞ্জুর হয়েছে');
+                window.location = 'main_account_management.php';</script>";
         }
         else {
             $conn->rollBack();
