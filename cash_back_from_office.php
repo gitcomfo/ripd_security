@@ -2,15 +2,18 @@
 include 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
- $loginUSERid = $_SESSION['userIDUser'] ;
+$loginUSERid = $_SESSION['userIDUser'] ;
+$loginOfcAcc = $_SESSION['loggedInOfficeAccNo'];
  
 $sel_banks = $conn->prepare("SELECT * FROM bank_list ORDER BY bank_name");
 $ins_acc_ofc = $conn->prepare("INSERT INTO acc_ofc_physc_in (inamount, bank_id, cheque_number, amount_status, sender_id, office_id, sending_date)
-                                                    VALUES (?,?,?,'to_office', ?,?,NOW()) ");
-$insert_notification = $conn->prepare("INSERT INTO notification (nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
-                                                            VALUES (?,?,?,?,NOW(),?,?,?)");
+                                                    VALUES (?,?,?,'to_ripd', ?,?,NOW()) ");
+$insert_notification = $conn->prepare("INSERT INTO notification (nfc_tablename,nfc_tableid,nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
+                                                            VALUES ('acc_ofc_physc_in',?,?,?,?,?,NOW(),?,?,?)");
 $sel_onsID = $conn->prepare("SELECT idons_relation FROM ons_relation LEFT JOIN office ON add_ons_id = idOffice 
                                                 WHERE catagory='office' AND account_number = ?");
+$sel_ripd_head = $conn->prepare("SELECT idons_relation FROM ons_relation LEFT JOIN office ON add_ons_id = idOffice 
+                                                    WHERE catagory='office' AND office_type = 'ripd_head' ");
 
 function getBanks($sql)
 {
@@ -24,7 +27,6 @@ function getBanks($sql)
 
 if(isset($_POST['submit']))
 {
-    $p_officeAccountNo = $_POST['acNo'];
     $p_amount = $_POST['t_in_amount'];
     $p_inType = $_POST['cashInType'];
     if($p_inType == 'cheque')
@@ -37,26 +39,29 @@ if(isset($_POST['submit']))
         $p_bankID = 0;
         $p_chequeNo = 0;
     }
-    $sel_onsID->execute(array($p_officeAccountNo));
+    $sel_onsID->execute(array($loginOfcAcc));
     $offrow = $sel_onsID->fetchAll();
     foreach ($offrow as $value) {
        $office_ons_id = $value['idons_relation'];
+    }
+    $sel_ripd_head->execute();
+    $headrow = $sel_ripd_head->fetchAll();
+    foreach ($headrow as $value) {
+       $head_ons_id = $value['idons_relation'];
     }
     
     $conn->beginTransaction();
         $y1 = $ins_acc_ofc->execute(array($p_amount,$p_bankID,$p_chequeNo, $loginUSERid, $office_ons_id));
         $db_last_insert_id = $conn->lastInsertId();
         $msg = "টাকা প্রাপ্তি";
-        $url = "cash_receive_from_head.php?id=".$db_last_insert_id;
+        $url = "cash_recieve_from_office.php?id=".$db_last_insert_id;
         $status = "unread";
         $type="action";
         $nfc_catagory="official";
-        $sqlrslt3 = $insert_notification->execute(array($loginUSERid,$office_ons_id,$msg,$url,$status,$type,$nfc_catagory));
+        $sqlrslt3 = $insert_notification->execute(array($db_last_insert_id,$loginUSERid,$head_ons_id,$msg,$url,$status,$type,$nfc_catagory));
         
     if ($y1 && $sqlrslt3) {
         $conn->commit();
-         unset($_SESSION['arrFunds']);
-         unset($_SESSION['arrCashinInfo']);
        echo "<script>alert('টাকা প্রদান করা হল')</script>";
     } else {
         $conn->rollBack();
@@ -83,11 +88,9 @@ function beforeSubmit()
       for(var i=0; i<radios.length; i++){
 	if(radios[i].checked) { radiocheck = 1; }
 	}
-    if ((document.getElementById('acNo').value != "")
-            && (document.getElementById('t_in_amount').value != "")
+    if ((document.getElementById('t_in_amount').value != "")
             && (document.getElementById('t_in_amount').value != "0")
-            && (radiocheck == 1)
-            && (document.getElementById('t_in_amount').value == document.getElementById('totalGivenAmount').value))
+            && (radiocheck == 1))
         { return true; }
     else {
         alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
@@ -138,24 +141,9 @@ function hideBox(classname)
     <div class="main_text_box">
         <div style="padding-left: 9px;"><a href="accounting_sys_management.php"><b>ফিরে যান</b></a></div>
         <div>           
-            <form method="POST" onsubmit="return beforeSubmit('<?php echo count($_SESSION['arrFunds'])?>')" action="">	
+            <form method="POST" onsubmit="return beforeSubmit()" action="">	
                 <table  class="formstyle" style="width: 90%; margin: 1px 1px 1px 1px;">          
-                    <tr><th colspan="2" style="text-align: center;font-size: 22px;">অফিস / সেলসস্টোরে টাকা প্রদান</th></tr>
-                    <?php
-                            foreach ($_SESSION['arrCashinInfo'] as $value) {
-                           $officeAccontNo = $value[0];
-                           $totalAmount = $value[1];
-                           $officeName = $value[2];
-                       }
-                    ?>
-                    <tr>
-                        <td >অফিসের একাউন্ট নাম্বার</td>
-                        <td>: <input class="box" type="text" id="acNo" name="acNo" maxlength="15" onblur="getAccountInfo(this.value)" value="<?php echo $officeAccontNo;?>" /><em2> *</em2></td>          
-                    </tr>
-                    <tr>
-                        <td>অফিসের নাম</td>
-                        <td id="info"><?php echo $officeName;?></td>
-                    </tr>
+                    <tr><th colspan="2" style="text-align: center;font-size: 22px;">রিপড টাকা প্রদান</th></tr>
                     <tr>
                         <td >মোট পরিমান</td>
                         <td>: <input class="box" type="text" id="t_in_amount" name="t_in_amount" onkeypress=' return numbersonly(event)' value="<?php echo $totalAmount;?>" /><em2> *</em2> TK</td>          
