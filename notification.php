@@ -2,8 +2,16 @@
 include_once 'includes/header.php';
 $logedinOfficeId = $_SESSION['loggedInOfficeID'];
 $logedinOfficeType = $_SESSION['loggedInOfficeType'];
-//$arr_notification_status = array('unread'=>'দেখা হয়নি', 'read'=>'দেখা হয়েছে', 'complete'=>'সম্পূর্ণ');
+$sql_update_notification = $conn->prepare("UPDATE notification SET nfc_status='read' WHERE idnotification=? ");
 ?>
+<link rel="stylesheet" href="css/tinybox.css" type="text/css">
+<script src="javascripts/tinybox.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function detailsNotice(url)
+    { 
+        TINY.box.show({url:url,width:550,height:200,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); 
+    }
+</script>
 <div class="page_header_div">
     <div class="page_header_title">অফিসিয়াল নোটিফিকেশন</div>
 </div>
@@ -53,7 +61,8 @@ $logedinOfficeType = $_SESSION['loggedInOfficeType'];
                                 }
                                 else
                                 {
-                                    echo "<td></td>";
+                                    echo "<td><a onclick= detailsNotice('$db_url') style='cursor:pointer;' ><b><u>বিস্তারিত</u></b></a></td>";
+                                    $sql_update_notification->execute(array($db_nfc_id));
                                 }
                                 echo "</tr>";
                                 $db_slNo++;

@@ -59,7 +59,6 @@ if(isset($_POST['submit_edit'])) {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <style type="text/css"> @import "css/bush.css";</style>
-<script src="javascripts/tinybox.js" type="text/javascript"></script>
 <script>
     function calculateFreePost(totalPost) // for calculation instalment amount*************
 {

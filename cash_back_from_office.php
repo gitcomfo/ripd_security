@@ -3,15 +3,14 @@ include 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 $loginUSERid = $_SESSION['userIDUser'] ;
-$loginOfcAcc = $_SESSION['loggedInOfficeAccNo'];
+$loginOfcAcc = $_SESSION['loggedInOfficeID'];
  
 $sel_banks = $conn->prepare("SELECT * FROM bank_list ORDER BY bank_name");
 $ins_acc_ofc = $conn->prepare("INSERT INTO acc_ofc_physc_in (inamount, bank_id, cheque_number, amount_status, sender_id, office_id, sending_date)
                                                     VALUES (?,?,?,'to_ripd', ?,?,NOW()) ");
 $insert_notification = $conn->prepare("INSERT INTO notification (nfc_tablename,nfc_tableid,nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
                                                             VALUES ('acc_ofc_physc_in',?,?,?,?,?,NOW(),?,?,?)");
-$sel_onsID = $conn->prepare("SELECT idons_relation FROM ons_relation LEFT JOIN office ON add_ons_id = idOffice 
-                                                WHERE catagory='office' AND account_number = ?");
+$sel_onsID = $conn->prepare("SELECT idons_relation FROM ons_relation WHERE add_ons_id = ? AND catagory='office'");
 $sel_ripd_head = $conn->prepare("SELECT idons_relation FROM ons_relation LEFT JOIN office ON add_ons_id = idOffice 
                                                     WHERE catagory='office' AND office_type = 'ripd_head' ");
 
@@ -70,7 +69,6 @@ if(isset($_POST['submit']))
 }
 ?>
 <style type="text/css"> @import "css/bush.css";</style>
-<script type="text/javascript" src="javascripts/jquery-1.4.3.min.js"></script>
 <script>
 function numbersonly(e)
     {
