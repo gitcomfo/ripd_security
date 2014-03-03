@@ -151,7 +151,7 @@ function calculateSalaryPlus(xtra,i)
                                         <td style='border: 1px solid #000099;text-align: center;width: 15%;'><strong>উপস্থিতির হিসেব</strong></td>
                                          <td style='border: 1px solid #000099;text-align: center;width: 3%;'><strong>উপস্থিতির বিস্তারিত তথ্য</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মূল বেতন (টাকা)</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মাসে পাবে (পেনসন কর্তিত)</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মাসে পাবে (পেনসন ও লোন বাদ)</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>অতিরিক্ত প্রদান (টাকা)</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>বেতন কর্তন (টাকা)</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মোট বেতন (টাকা)</strong></td>

@@ -4,9 +4,11 @@ include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 include_once './includes/selectQueryPDO.php';
 include_once './includes/insertQueryPDO.php';
+
 $logedinOfficeId = $_SESSION['loggedInOfficeID'];
 $logedinOfficeType = $_SESSION['loggedInOfficeType'];
- $loginUSERid = $_SESSION['userIDUser'] ;
+ $loginUSERid = $_SESSION['userIDUser'];
+ 
 if(isset($_POST['submit']))
 {
     $p_month = $_POST['month'];;
@@ -234,7 +236,7 @@ function beforeSubmit()
                                         <td style='border: 1px solid #000099;text-align: center;width: 15%;'><strong>উপস্থিতির হিসেব</strong></td>
                                          <td style='border: 1px solid #000099;text-align: center;width: 3%;'><strong>উপস্থিতির বিস্তারিত তথ্য</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মূল বেতন (টাকা)</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মাসে পাবে (পেনসন কর্তিত)</strong></td>
+                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মাসে পাবে (পেনসন ও লোন বাদ)</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>অতিরিক্ত প্রদান (টাকা)</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>বেতন কর্তন (টাকা)</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মোট বেতন (টাকা)</strong></td>
@@ -282,13 +284,14 @@ function beforeSubmit()
                                                foreach ($row7 as $value) {
                                                    $db_overtime = $value['SUM(emp_extratime)'];
                                                }
-                                               $sel_emp_salary = $conn->prepare("SELECT * FROM employee_salary WHERE user_id= ?");
+                                               $sel_emp_salary = $conn->prepare("SELECT * FROM employee_salary WHERE user_id= ? ORDER BY insert_date DESC LIMIT 1");
                                                $sel_emp_salary->execute(array($db_empID));
                                                $row6 = $sel_emp_salary->fetchAll();
                                                foreach ($row6 as $salaryrow) {
                                                    $db_main_salary = $salaryrow['total_salary'];
                                                    $db_pension = $salaryrow['pension'];
-                                                   $totalsalary = $db_main_salary - $db_pension;
+                                                   $db_loan = $salaryrow['loan_next'];
+                                                   $totalsalary = $db_main_salary - ($db_pension + $db_loan);
                                                    $offTotalSalary = $offTotalSalary+$totalsalary;
                                                }
                                                $sql_select_employee_grade->execute(array($db_empID));

@@ -17,19 +17,20 @@ $onsrow = mysql_fetch_assoc($queryonsr);
 $db_catagory = $onsrow['catagory'];
 $db_id = $onsrow['add_ons_id'];
 switch($db_catagory)
-                   {
-                       case 'office' : 
-                           $offquery=mysql_query("SELECT * FROM office WHERE idOffice= '$db_id';");
-                          $offrow = mysql_fetch_assoc($offquery);
-                          $db_offname= $offrow['office_name'];
-                       break;
-                       
-                        case 's_store' :
-                            $salesquery=mysql_query("SELECT * FROM sales_store WHERE idSales_store=$db_id");
-                          $salesrow = mysql_fetch_assoc($salesquery);
-                            $db_offname= $salesrow['salesStore_name'];
-                        break;
-                   }          
+    {
+        case 'office' : 
+            $offquery=mysql_query("SELECT * FROM office WHERE idOffice= '$db_id';");
+           $offrow = mysql_fetch_assoc($offquery);
+           $db_offname= $offrow['office_name'];
+        break;
+
+         case 's_store' :
+             $salesquery=mysql_query("SELECT * FROM sales_store WHERE idSales_store=$db_id");
+           $salesrow = mysql_fetch_assoc($salesquery);
+             $db_offname= $salesrow['salesStore_name'];
+         break;
+    }          
+// submit query ***********************************    
 if(isset($_POST['submit']))
     {
     $makerid = $loginUSERid;
@@ -72,7 +73,11 @@ if(isset($_POST['submit']))
     $xtra= $xtratime[$i];
         $yes = $stmt->execute(array($in,$out,$work,$xtra,$atten_date,$type,'general',$causes,$mingap,$mindes,$majgap,$majdes,$month,$year,$emp,$makerid));
     }
-   
+   if($yes)
+        {
+            echo "<script>alert('হাজিরা দেয়া হল');</script>";
+        }
+        else { echo "<script>alert('হাজিরা দেয়া হয়নি');</script>"; }
 }
 
 ?>

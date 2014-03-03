@@ -12,18 +12,28 @@ $db_onsid = $emprow['idUser'];
 if(isset($_POST['submit']))
 {
     $p_empid = $_POST['empid'];
+    $p_empsalID = $_POST['empsalid'];
     $giverid = $db_onsid;
     $p_fund = $_POST['fund'];
     $p_loanamount = $_POST['loanamount'];
     $p_repaymonths = $_POST['instalment_period'];
     $p_repayamount = $_POST['instalment_amount'];
-    $sql_fund = mysql_query("INSERT INTO loan (loan_amount, fund_name, repay_howmany_month, repay_amount_monthly, loan_date, loan_givenbyid, Employee_idEmployee)
-                                                VALUES ($p_loanamount,'$p_fund', $p_repaymonths, $p_repayamount, NOW(), $giverid, $p_empid)"); //or exit('query failed: '.mysql_error());
-    if($sql_fund ==1)
+    mysql_query("START TRANSACTION");
+    
+    $sql_fund = mysql_query("INSERT INTO loan (loan_amount, fund_name, repay_howmany_month, repay_amount_monthly, loan_date, loan_givenbyid, Employee_idEmployee,loan_status)
+                                                VALUES ($p_loanamount,'$p_fund', $p_repaymonths, $p_repayamount, NOW(), $giverid, $p_empid, 'given')"); //or exit('query failed: '.mysql_error());
+    $loan_id = mysql_insert_id();
+    $up_emp_salary = mysql_query("UPDATE employee_salary SET loan_next = $p_repayamount, loan_repay_month=$p_repaymonths,
+                                                        fk_idloan = $loan_id WHERE idempsal = $p_empsalID");
+    if($sql_fund && $up_emp_salary)
     {
+        mysql_query("COMMIT");
         $msg = "লোন প্রদান হয়েছে";
     }
-    else { $msg = "দুঃখিত, লোন তৈরি হয়নি";}
+    else { 
+        mysql_query("ROLLBACK");
+        $msg = "দুঃখিত, লোন তৈরি হয়নি";
+    }
 }
 ?>
 <title>লোন প্রদান</title>
@@ -97,7 +107,7 @@ function beforeSubmit()
                }
                 else
                     {document.getElementById('empfound').style.visibility = "visible";
-                document.getElementById('empfound').setAttribute('style','position:absolute;top:41%;left:61.5%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('empfound').setAttribute('style','position:absolute;top:43%;left:62%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('empfound').innerHTML=xmlhttp.responseText;
         }
@@ -110,17 +120,17 @@ function beforeSubmit()
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
         <div>
-            <form method="POST" onsubmit="return beforeSubmit()" enctype="multipart/form-data" action="">	
+            <form method="POST" onsubmit="return beforeSubmit()" enctype="multipart/form-data" action="loan_given.php">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          
-                    <tr><th colspan="2" style="text-align: center;">লোন প্রদান</th></tr>
+                    <tr><th colspan="2" style="text-align: center;font-size: 22px;">লোন প্রদান</th></tr>
                     <?php
-                    if($msg !="")
-                    {
-                        echo "<tr><td colspan='2' style='color:red;font-size:16px;text-align:center;'>$msg</td></tr>";                        
-                    }
+                        if($msg !="")
+                        {
+                            echo "<tr><td colspan='2' style='color:red;font-size:16px;text-align:center;'>$msg</td></tr>";                        
+                        }
                     ?>
                     <tr>
-                                                <?php
+                       <?php
                                         if(isset($_GET['id']))
                                         {
                                             $empCfsid = $_GET['id'];
@@ -140,9 +150,23 @@ function beforeSubmit()
                                             $sql_empinfo = mysql_query("SELECT * FROM employee_information WHERE Employee_idEmployee = $db_empid");
                                             $empinforow = mysql_fetch_assoc($sql_empinfo);
                                             $db_empphoto = $empinforow['emplo_scanDoc_picture'];
-                                            $sql_empsal = mysql_query("SELECT * FROM employee_salary WHERE user_id=$db_empid AND pay_grade_idpaygrade= $db_paygrdid;");
+                                            $sql_empsal = mysql_query("SELECT * FROM employee_salary WHERE user_id=$db_empid AND pay_grade_idpaygrade= $db_paygrdid ORDER BY insert_date DESC LIMIT 1");
                                             $empsalrow = mysql_fetch_assoc($sql_empsal);
                                             $db_empsalary = $empsalrow['total_salary'];
+                                            $db_empsalID = $empsalrow['idempsal'];
+                                            // check for current Or previous loan *********************
+                                            $sel_loan = mysql_query("SELECT * FROM loan WHERE Employee_idEmployee=$db_empid AND loan_status='given'");
+                                            $loanrow = mysql_fetch_assoc($sel_loan);
+                                            if(mysql_num_rows($loanrow) > 0)
+                                            {
+                                                $db_loan = $empsalrow['loan_amount'];
+                                                $loan_description = $db_loan." টাকার লোন দেয়া আছে";
+                                            }
+                                            else
+                                            {
+                                                $loan_description = "কোন লোন নেই";
+                                            }
+                                            
                                         }
                             ?>
                         <td></br>
@@ -155,9 +179,9 @@ function beforeSubmit()
                                     <td style="padding-left: 0px;">ফান্ডের নাম</td>
                                     <td>: <select class="box2" name="fund" id="fund"style="width: 167px;">
                                         <option value="">-সিলেক্ট করুন-</option>
-                                        <option value="pension">পেনশন</option>
-                                        <option value="ripd_income">রিপড ইনকাম</option>
-                                        <option value="extra">এক্সট্রা</option>
+                                        <option value="HPA">পেনশন</option>
+                                        <option value="ARI">রিপড ইনকাম</option>
+                                        <option value="SER">অতিরিক্ত</option>
                                     </select><em2> *</em2></br></br></td>	  
                                 </tr>  
                                 <tr>
@@ -180,7 +204,7 @@ function beforeSubmit()
                                     <div id="empfound"></div></td>
                                     </tr>
                                     <tr>
-                                        <td width="40%" rowspan='5' style="padding-left: 0px;"> <img src="<?php echo $db_empphoto;?>" width="128px" height="128px" alt=""></td> 
+                                        <td width="40%" rowspan='6' style="padding-left: 0px;"> <img src="<?php echo $db_empphoto;?>" width="128px" height="128px" alt=""></td> 
                                     </tr>
                                     <tr>
                                         <td width="57%"><input type="hidden" readonly="" value="<?php echo $db_empname;?>" /><?php echo $db_empname;?></td>
@@ -195,7 +219,10 @@ function beforeSubmit()
                                     </tr>
                                      <tr>
                                         <td><input type="hidden" readonly="" value="<?php echo $db_empsalary;?>" />বেতন : <?php echo $db_empsalary;?> টাকা</td>
-                                    </tr>     
+                                    </tr>
+                                    <tr>
+                                        <td><b><?php echo $loan_description;?></b><input type="hidden" name="empsalid"value="<?php echo $db_empsalID;?>" /></td>
+                                    </tr> 
                                     <tr>
                                         <td style="text-align: center;"><a href="">বিস্তারিত</a></td>
                                     </tr>     
