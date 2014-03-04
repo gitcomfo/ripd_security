@@ -16,7 +16,8 @@ if($_GET['selltype']==1)
      $P_inventoryID=$_GET['id'];
      $P_procode=$_GET['code'];
      $P_pv=$_GET['totalpv'];
-     $arr_temp = array($P_procode,$P_pname,$P_buy,$P_price,$P_QTY,$P_TOTAL,$P_pv);
+     $P_profit=$_GET['profit'];
+     $arr_temp = array($P_procode,$P_pname,$P_buy,$P_price,$P_QTY,$P_TOTAL,$P_pv,$P_profit);
     $_SESSION['arrSellTemp'][$P_inventoryID] = $arr_temp;
 }
 elseif($_GET['selltype']==3)

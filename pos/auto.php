@@ -294,6 +294,7 @@ $storeName = $_SESSION['loggedInOfficeName'];
         var sell = Number(document.getElementById("PPRICE").value);
         var buy = Number(document.getElementById("buyprice").value);
         var totalpv = Number(document.getElementById("SubTotalPV").value);
+        var profit = Number(document.getElementById("profit").value);
         if(qty != 0)
         {
             var reqst = getXMLHTTP();		
@@ -309,7 +310,7 @@ $storeName = $_SESSION['loggedInOfficeName'];
                         {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
                     }				
                 }			
-                reqst.open("GET","addorder.php?selltype=1&id="+id+"&code="+code+"&name="+name+"&qty="+qty+"&total="+totalamount+"&selling="+sell+"&buying="+buy+"&totalpv="+totalpv, true);
+                reqst.open("GET","addorder.php?selltype=1&id="+id+"&code="+code+"&name="+name+"&qty="+qty+"&total="+totalamount+"&selling="+sell+"&buying="+buy+"&totalpv="+totalpv+"&profit="+profit, true);
                 reqst.send(null);
             }	
         }
@@ -348,6 +349,7 @@ $storeName = $_SESSION['loggedInOfficeName'];
                                     $db_inventoryid = $result["idinventory"];
                                     $db_procode = $result["ins_product_code"];
                                     $db_proPV = $result["ins_pv"];
+                                    $db_profit = $result["ins_profit"];
                                     $db_buyingprice = $result['ins_buying_price'];
                                 }
                                 ?>
@@ -356,7 +358,7 @@ $storeName = $_SESSION['loggedInOfficeName'];
                                         <td colspan="3"><span style="color: #03C;"> প্রোডাক্টের নাম: </span><input name="PNAME" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width:310px;" readonly/>
                                             <input id="inventoryID" type="hidden" value="<?php echo $db_inventoryid; ?>"/>      
                                             <input id="procode" type="hidden" value="<?php echo $db_procode; ?>"/><input id="ProPV" type="hidden" value="<?php echo $db_proPV; ?>"/>
-                                            <input name="less" type="hidden"/></td>
+                                            <input name="less" type="hidden"/><input id="profit" type="hidden" value="<?php echo $db_profit; ?>"/></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2"><span style="color: #03C;">প্রোডাক্টের বিক্রয়মূল্য: </span><input name="PPRICE" id="PPRICE" readonly type="text" value="<?php echo $db_price; ?>" style="border:0px;font-size: 18px;width:100px;text-align: right;"/> টাকা<input  id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>      
