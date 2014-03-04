@@ -1,27 +1,15 @@
 <?php
-session_start();
-include_once 'connectionPDO.php';
-
-$store_type = $_SESSION['loggedInOfficeType'];
+include_once 'ConnectDB.inc';
 function pv_hitting($custID, $cust_type, $sumID)
 {
-    $up_acc_user_balance = $conn->prepare("UPDATE acc_user_balance SET pv_balance = pv_balance + ?, total_balanace = total_balanace + ? WHERE cfs_user_iduser = ? ");
-    $up_main_fund = $conn->prepare("UPDATE main_fund SET fund_amount = fund_amount + ?, last_update = NOW() WHERE fund_code = ? ");
-    $ins_cust_hitting = $conn->prepare("INSERT INTO sales_customer_hitting (selling_earn,soft_costing,own,Rone,Rtwo,Rthree,Rfour,Rfive,ripd_income,borkot,sales_summery_idsalessummery) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
-    $sel_summary = $conn->prepare("SELECT selling_type,sal_total_profit FROM sales_summary WHERE idsalessummary = ?");
-    $sel_referer = $conn->prepare("SELECT * FROM view_usertree WHERE ut_customerid = ?");
-    $sel_pv_view = $conn->prepare("SELECT * FROM view_pv_view WHERE cust_type = ? AND sales_type= ? AND store_type='both' AND account_type_id=?");
-    $sel_cust_pkg = $conn->prepare("SELECT Account_type_idAccount_type FROM customer_account WHERE cfs_user_idUser = ?");
-    
     if($cust_type == 'unregcustomer')
     {
         $type = 'no_acc';
     }
     else { $type = 'account'; }
-    // select sales summary ***********************88
-    $sel_summary->execute(array($sumID));
-    $summaryrow = $sel_summary->fetchAll();
-        foreach ($summaryrow as $row) {
+    // select sales summary ***********************
+    $sel_summary = mysql_query("SELECT selling_type,sal_total_profit FROM sales_summary WHERE idsalessummary = $sumID");
+        while($row = mysql_fetch_assoc($sel_summary)) {
             $db_selling_type = $row['selling_type'];
             $db_total_profit = $row['sal_total_profit'];
         }
@@ -29,9 +17,8 @@ function pv_hitting($custID, $cust_type, $sumID)
     if($type == 'account')
     {
         // select referers *************************************
-        $sel_referer->execute(array($custID));
-        $refererrow = $sel_referer->fetchAll();
-        foreach ($refererrow as $row) {
+        $sel_referer = mysql_query("SELECT * FROM view_usertree WHERE ut_customerid = $custID");
+        while($row = mysql_fetch_assoc($sel_referer)) {
             $one = $row['ut_first_parentid'];
             $two = $row['ut_second_parentid'];
             $three = $row['ut_third_parentid'];
@@ -39,16 +26,14 @@ function pv_hitting($custID, $cust_type, $sumID)
             $five = $row['ut_fifth_parentid'];
         }
         // select customer pkg ******************************
-        $sel_cust_pkg->execute(array($custID));
-        $pkgrow = $sel_cust_pkg->fetchAll();
-        foreach ($pkgrow as $row) {
+        $sel_cust_pkg = mysql_query("SELECT Account_type_idAccount_type FROM customer_account WHERE cfs_user_idUser = $custID");
+        while($row = mysql_fetch_assoc($sel_cust_pkg)) {
             $pkgtype = $row['Account_type_idAccount_type'];
         }
     }
     // select view pv view **************************
-    $sel_pv_view->execute(array($type,$db_selling_type,$pkgtype));
-    $viewpvrow = $sel_pv_view->fetchAll();
-    foreach ($viewpvrow as $row) {
+     $sel_pv_view = mysql_query("SELECT * FROM view_pv_view WHERE cust_type = '$type' AND sales_type= '$db_selling_type' AND store_type='both' AND account_type_id=$pkgtype");
+    while($row = mysql_fetch_assoc($sel_pv_view)) {
             $less_amount = $row['less_amount'];
             $pnh = $row['patent_nh'];
             $se = $row['selling_earn'];
@@ -105,53 +90,54 @@ function pv_hitting($custID, $cust_type, $sumID)
         
         $total_softcost = 0;
         $borkot = 0;
-        $conn->beginTransaction();
+        mysql_query("START TRANSACTION");
         if($one != 0)
         {
             $one_hit = ($db_total_profit * $Rone) / 100;
-            $sql1 = $up_acc_user_balance->execute(array($one_hit,$one_hit,$one));
+            $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $one_hit, total_balanace = total_balanace + $one_hit WHERE cfs_user_iduser = $one ");
         }
         else { $borkot = $borkot + (($db_total_profit * $Rone) / 100); $one_hit = 0;  }
         if($two != 0)
         {
             $two_hit = ($db_total_profit * $Rtwo) / 100;
-            $sql1=$up_acc_user_balance->execute(array($two_hit,$two_hit,$two));
+            $sql1=mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $two_hit, total_balanace = total_balanace + $two_hit WHERE cfs_user_iduser = $two ");
         }
         else { $borkot = $borkot + (($db_total_profit * $Rtwo) / 100); $two_hit = 0;  }
         if($three != 0)
         {
             $three_hit = ($db_total_profit * $Rthree) / 100;
-            $sql1 = $up_acc_user_balance->execute(array($three_hit,$three_hit,$three));
+            $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $three_hit, total_balanace = total_balanace + $three_hit WHERE cfs_user_iduser = $three ");
         }
         else { $borkot = $borkot + (($db_total_profit * $Rthree) / 100); $three_hit = 0;  }
         if($four != 0)
         {
             $four_hit = ($db_total_profit * $Rfour) / 100;
-            $sql1 = $up_acc_user_balance->execute(array($four_hit,$four_hit,$four));
+            $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $four_hit, total_balanace = total_balanace + $four_hit WHERE cfs_user_iduser = $four ");
         }
         else { $borkot = $borkot + (($db_total_profit * $Rfour) / 100); $four_hit = 0;  }
         if($five != 0)
         {
             $five_hit = ($db_total_profit * $Rfive) / 100;
-            $sql1 = $up_acc_user_balance->execute(array($five_hit,$five_hit,$five));
+            $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $five_hit, total_balanace = total_balanace + $five_hit WHERE cfs_user_iduser = $five ");
         }
         else { $borkot = $borkot + (($db_total_profit * $Rfive) / 100); $five_hit = 0;  }
    // calculate total soft cost ****************************     
   foreach ($arr_softcost as $key => $value) {
-      $sql2 = $up_main_fund->execute(array($value,$key));
+      $sql2 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $value, last_update = NOW() WHERE fund_code = '$key' ");
       $total_softcost =$total_softcost+$value;
   }
   $se_hit = ($db_total_profit * $se) / 100;
   $ri_hit = ($db_total_profit * $ri) / 100;
   $own_hit = ($db_total_profit * $direct_sales) / 100;
-  $sql3 = $ins_cust_hitting->execute(array($se_hit,$total_softcost,$own_hit,$one_hit,$two_hit,$three_hit,$four_hit,$five_hit,$ri_hit,$borkot,$sumID));
+  $sql3 = mysql_query("INSERT INTO sales_customer_hitting (selling_earn,soft_costing,own,Rone,Rtwo,Rthree,Rfour,Rfive,ripd_income,borkot,sales_summery_idsalessummery) 
+                                    VALUES($se_hit,$total_softcost,$own_hit,$one_hit,$two_hit,$three_hit,$four_hit,$five_hit,$ri_hit,$borkot,$sumID)");
   if($sql1 && $sql2 && $sql3)
   {
-       $conn->commit();
+       mysql_query("COMMIT");
        $flag = 1;
   }
  else {
-      $conn->rollBack();
+      mysql_query("ROLLBACK");
       $flag = 0;
   }
   return $flag;

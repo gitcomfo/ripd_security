@@ -3,6 +3,7 @@ error_reporting(0);
 session_start();
 include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
+include_once './includes/pv_hitting_after_sell.php';
 
 $G_s_type = $_SESSION['loggedInOfficeType'];
 $G_s_id= $_SESSION['loggedInOfficeID'];
@@ -145,11 +146,11 @@ $result= $sel_sales_summary->fetchAll();
         $pro_xprofit = $invenrow['ins_extra_profit'] * $pro_qty;
         $sqlresult2= $ins_sales->execute(array($pro_qty,$pro_buy,$pro_amount,$pro_pv,$pro_profit,$pro_xprofit,$key,$sales_sum_id));
     }
-    $pv_hitting = pv_hitting($buyerid,$buyertype,$sales_sum_id);
     
-    if($sqlresult1 && $sqlresult2 && $pv_hitting)
+    if($sqlresult1 && $sqlresult2)
     {
         $conn->commit();
+        $pv_hitting = pv_hitting($buyerid,$buyertype,$sales_sum_id);
     }
  else {
         $conn->rollBack();
