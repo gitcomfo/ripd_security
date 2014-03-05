@@ -79,7 +79,8 @@ function beforeSubmit()
     if ((document.getElementById('loanamount').value !="") 
         && (document.getElementById('fund').value != "")
         && (document.getElementById('instalment_period').value != "")
-        && (document.getElementById('instalment_amount').value != ""))
+        && (document.getElementById('instalment_amount').value != "")
+        && (document.getElementById('showError').innerHTML == ""))
         { return true; }
     else {
         alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
@@ -115,6 +116,25 @@ function beforeSubmit()
         xmlhttp.send();	
 }
 
+function checkFund(need) //check fund amount ***************
+{
+    var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+                document.getElementById('showError').innerHTML=xmlhttp.responseText;
+        }
+        var fundcode = document.getElementById('fund').value;
+        xmlhttp.open("GET","includes/fund_includes.php?needamount="+need+"&type=loan&fundcode="+fundcode,true);
+        xmlhttp.send();	
+}
 </script>
 
     <div class="main_text_box">
@@ -171,19 +191,22 @@ function beforeSubmit()
                             ?>
                         <td></br>
                             <table style="margin-left: 0px !important;">
-                                 <tr>
-                                     <td width="35%" style="padding-left: 0px;" >লোনের পরিমাণ</td>
-                                    <td width="65%">:  <input class="box" type="text" name="loanamount" id="loanamount" onkeypress="return checkIt(event)" /> টাকা <em2> *</em2></td>	 
-                                </tr>  
                                 <tr>
                                     <td style="padding-left: 0px;">ফান্ডের নাম</td>
                                     <td>: <select class="box2" name="fund" id="fund"style="width: 167px;">
-                                        <option value="">-সিলেক্ট করুন-</option>
-                                        <option value="HPA">পেনশন</option>
-                                        <option value="ARI">রিপড ইনকাম</option>
-                                        <option value="SER">অতিরিক্ত</option>
-                                    </select><em2> *</em2></br></br></td>	  
-                                </tr>  
+                                                <option value="">-সিলেক্ট করুন-</option>
+                                                <option value="HPA">পেনশন</option>
+                                                <option value="ARI">রিপড ইনকাম</option>
+                                                <option value="SER">অতিরিক্ত</option>
+                                            </select><em2> *</em2>
+                                    </td>	  
+                                </tr>
+                                 <tr>
+                                     <td width="35%" style="padding-left: 0px;" >লোনের পরিমাণ</td>
+                                     <td width="65%">:  <input class="box" type="text" name="loanamount" id="loanamount" onkeypress="return checkIt(event)" onkeyup="checkFund(this.value)" /> টাকা <em2> *</em2>
+                                 <span id="showError" style="color: red"></span><br/><br/>
+                                </td>	 
+                                </tr>    
                                 <tr>
                                     <td colspan="2" style="text-align: center;font-size: 16px;padding-left: 0px;">------------------লোন পরিশোধ সিস্টেম--------------------</td>                                    
                                 </tr> 
