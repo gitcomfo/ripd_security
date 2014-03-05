@@ -33,9 +33,12 @@ if(isset($_POST['promotion']))
      $p_newgrade = $_POST['nextGrade'];
      $p_newSalary = $_POST['nextSalary'];
      $p_newPostinID = $_POST['newpostID'];
+     echo $p_loannext = $_POST['loanAmount'];
+     echo $p_repaymonth = $_POST['repayMonth'];
+     $p_loanID = $_POST['loanID'];
      $todate = date("Y-m-d");
      $conn->beginTransaction();
-     $emppromotion =$sql_insert_employee_salary->execute(array($p_newSalary, $p_empID, $p_newgrade));
+     $emppromotion =$sql_insert_employee_salary->execute(array($p_newSalary,$p_loannext,$p_repaymonth,$p_loanID,$p_empID, $p_newgrade));
      if($p_newPostinID != 0)
      {
             $empposting =$sql_insert_employee_posting->execute(array($todate, $p_empID, $p_oldOnSID,$p_newPostinID));
@@ -165,6 +168,9 @@ function beforeSubmit()
                     foreach ($row3 as $arr_grade) {
                         $db_salary = $arr_grade['total_salary'];
                         $db_gradename = $arr_grade['grade_name'];
+                        $db_loannext = $arr_grade['loan_next'];
+                        $db_repaymonth = $arr_grade['loan_repay_month'];
+                        $db_loanID = $arr_grade['fk_idloan'];
                     }
                                                            
                     $sql_select_emp_post->execute(array($db_cfsuserid));
@@ -272,7 +278,7 @@ function beforeSubmit()
                             <table>
                             <tr>
                                 <td style="width: 20%; text-align:right">রানিং গ্রেড</td>
-                                <td style="width: 20%; text-align:left">: '.$db_gradename.'</td>
+                                <td style="width: 20%; text-align:left">: '.$db_gradename.'<input type="hidden" name="loanAmount" value="'.$db_loannext.'" /></td>
                                 <td style="width: 20%; text-align:right">নেক্সট গ্রেড</td>
                                 <td style="width: 40%; text-align:left">: <select class="box" name="nextGrade" onchange="showSalaryRange(this.value)">';
                                     getGrade($sql_select_all_grade,$db_usertype);
@@ -280,8 +286,8 @@ function beforeSubmit()
                             </tr>
                             <tr>
                                 <td style="text-align:right">রানিং সেলারি</td>
-                                <td style="text-align:left">: '.english2bangla($db_salary).' টাকা</td>
-                                <td style="text-align:right">নেক্সট সেলারি</td>
+                                <td style="text-align:left">: '.english2bangla($db_salary).' টাকা<input type="hidden" name="repayMonth" value="'.$db_repaymonth.'" /></td>
+                                <td style="text-align:right">নেক্সট সেলারি<input type="hidden" name="loanID" value="'.$db_loanID.'" /></td>
                                 <td style="text-align:left">: <input type="text" class="box" name="nextSalary" id="nextSalary" style="width:60px;text-align:right;" onkeypress="return checkIt(event)" onkeyup="checkSalaryRange(this.value);" /> টাকা<em2>*</em2>
                                 (সেলারি রেঞ্জঃ <span id="SalaryRange" style="color:red;"></span>)
                                 </td>
