@@ -11,7 +11,7 @@ include_once './includes/selectQueryPDO.php';
             {
             $showGradeName = array('employee' => 'কর্মচারীর', 'presenter' => 'প্রেজেন্টারের', 'programmer' => 'প্রোগ্রামারের', 'trainer' => 'ট্রেইনারের');
             $printGradeName = $showGradeName[$gradeName];
-            echo "<table  class='formstyle'>";          
+            echo "<table  class='formstyle' style='margin:20px;width:95%;'>";          
                 echo "<tr><th colspan='7' style='text-align: center;'>গ্রেড ভিত্তিক $printGradeName সংখ্যা</th></tr>";
                 echo "<tr align='left' id='table_row_odd'>
                     <td>গ্রেডের নাম</td>
@@ -158,7 +158,7 @@ include_once './includes/selectQueryPDO.php';
         else {
     ?>
     <div class="main_text_box">
-        <div style="padding-left: 110px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
+        <div style="padding-left: 10px;"><a href="hr_employee_management.php"><b>ফিরে যান</b></a></div>
         <div class="domtab">
             <ul class="domtabs">
                 <li class="current"><a href="#01">কর্মচারী</a></li>
