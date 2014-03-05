@@ -23,7 +23,7 @@ $get_command_num = $_GET['no'];
                 <div style="width: 95%; height: 400px; overflow: auto;">
                 <table class="formstyle" style =" width:100%; margin-left: 5%;">        
                     <tr>
-                        <th colspan="11">বিভিন্ন কনফিগারেশনে কমান্ড-<?php echo english2bangla($get_command_num);?> এ পিভি বন্টন</th>
+                        <th colspan="11" id="table_row_odd">বিভিন্ন কনফিগারেশনে কমান্ড-<?php echo english2bangla($get_command_num);?> এ পিভি বন্টন</th>
                         <th colspan="11">বিভিন্ন কনফিগারেশনে কমান্ড-<?php echo english2bangla($get_command_num);?> এ পিভি বন্টন</th>
                         <th colspan="12">বিভিন্ন কনফিগারেশনে কমান্ড-<?php echo english2bangla($get_command_num);?> এ পিভি বন্টন</th>
                     </tr>
@@ -31,7 +31,7 @@ $get_command_num = $_GET['no'];
                                 <?php
                                 foreach ($arr_pv_all_name as $spcl_val)
                                         {
-                                        echo"<th><b>$spcl_val</b></th>"; 
+                                        echo"<td id='table_row_odd'><b>$spcl_val</b></td>"; 
                                         }
                                 ?>
                     </tr>

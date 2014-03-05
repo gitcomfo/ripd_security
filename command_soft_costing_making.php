@@ -12,8 +12,8 @@ $arr_soft_cost_name = array('office'=>'অফিস', 'staff'=>'কর্মচ�
 
 if($_POST['submit_command_soft_cost'])
         {
-        $param_values = array_intersect_key($_POST, array_flip($columns_scc));
-        $sql_insert_soft_cost_command->execute($param_values);
+            $param_values = array_intersect_key($_POST, array_flip($columns_scc));
+            $sql_insert_soft_cost_command->execute($param_values);
         }
 ?>
 

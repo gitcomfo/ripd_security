@@ -80,7 +80,7 @@ if ($_GET['action'] == 'edit') {
         $pv_value_100 = 100 * $acd_key['pv_value'];
         ?>
         <div style="padding-top: 10px;">    
-            <div style="padding-left: 110px; width: 63%; float: left"><a href="command_system_management.php"><b>ফিরে যান</b></a></div>
+            <div style="padding-left: 110px; width: 63%; float: left"><a href="command_making.php"><b>ফিরে যান</b></a></div>
             <div ><a href="command_making.php?action=new"> নতুন কমান্ড  </a>&nbsp;&nbsp;<a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>"> কমান্ড লিস্ট</a></div>
         </div>
         <div>
@@ -197,7 +197,7 @@ if ($_GET['action'] == 'edit') {
                                     <td>$acd_command_desc</td>
                                     <td>$pv_value2taka টাকা</td>
                                     <td>$acd_pv_value পিভি</td>
-                                    <td style='text-align: center ' > <a href='command_making.php?action=edit&id=$acd_command_id'> এডিট কমান্ড </a></td>  
+                                    <td style='text-align: center ' ><a href='command_making.php?action=edit&id=$acd_command_id'>এডিট কমান্ড</a></td>  
                                 </tr>
                             </form>";
                 }
