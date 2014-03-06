@@ -236,9 +236,7 @@ $result= $sel_sales_summary->fetchAll();
 </tr>
 <?php }?>
 </table>
-<?php
-    
-     ?></br>
+<br/>
 <div align="center" style="width: 100%;font-family: SolaimanLipi !important;">
    <span id="noprint"><a href="javascript: window.print()"style="margin: 1% 5% 5% 20%;display: block;width: 100px;height: 100px;float: left;background-image: url('images/print-icon.png');background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;">
         <span  style="font-size:20px;font-weight:bolder;position: absolute;margin:100px 5px 10px -15px;">প্রিন্ট </span></a></span>
