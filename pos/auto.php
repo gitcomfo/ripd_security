@@ -6,6 +6,12 @@ include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 
 $storeName = $_SESSION['loggedInOfficeName'];
+$sel_current_pv = $conn->prepare("SELECT pv_value FROM running_command");
+$sel_current_pv->execute();
+$arr_rslt = $sel_current_pv->fetchAll();
+foreach ($arr_rslt as $value) {
+    $running_pv = $value['pv_value'];
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -349,8 +355,8 @@ $storeName = $_SESSION['loggedInOfficeName'];
                                     $db_price = $result["ins_sellingprice"];
                                     $db_inventoryid = $result["idinventory"];
                                     $db_procode = $result["ins_product_code"];
-                                    $db_proPV = $result["ins_pv"];
                                     $db_profit = $result["ins_profit"];
+                                    $db_proPV = $db_profit * $running_pv;
                                     $db_buyingprice = $result['ins_buying_price'];
                                     $db_xprofit = $result['ins_extra_profit'];
                                 }

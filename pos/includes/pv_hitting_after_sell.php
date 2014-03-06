@@ -7,7 +7,8 @@ function pv_hitting($custID, $cust_type, $sumID,$selling_type,$total_profit)
     {
         $type = 'no_acc';
     }
-    else { $type = 'account'; }
+    else 
+        { $type = 'account'; }
       
     if($type == 'account')
     {
