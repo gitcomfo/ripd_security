@@ -5,6 +5,12 @@ include_once './includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 $G_replaceRecipt= $_SESSION['recipt'];
 $storeName= $_SESSION['loggedInOfficeName'];
+$sel_current_pv = $conn->prepare("SELECT pv_value FROM running_command");
+$sel_current_pv->execute();
+$arr_rslt = $sel_current_pv->fetchAll();
+foreach ($arr_rslt as $value) {
+    $running_pv = $value['pv_value'];
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -16,104 +22,104 @@ $storeName= $_SESSION['loggedInOfficeName'];
 <script language="JavaScript" type="text/javascript" src="scripts/productsearch.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
  <style type="text/css">
-            .prolinks:focus{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
-            .prolinks:hover{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
+.prolinks:focus{
+    background-color: cadetblue;
+    color: yellow !important;
+}
+.prolinks:hover{
+    background-color: cadetblue;
+    color: yellow !important;
+}
  </style>
 <script language="javascript" type="text/javascript">
-            function multiply(){
-                a=Number(document.abc.QTY.value);
-                b=Number(document.abc.PPRICE.value);
-                c=a*b;
-                document.abc.TOTAL.value=c;
-                z=Number(document.abc.ProPV.value);
-                pv=a*z;
-                document.abc.SubTotalPV.value=pv;
+function multiply(){
+    a=Number(document.abc.QTY.value);
+    b=Number(document.abc.PPRICE.value);
+    c=a*b;
+    document.abc.TOTAL.value=c;
+    z=Number(document.abc.ProPV.value);
+    pv=a*z;
+    document.abc.SubTotalPV.value=pv;
 
-                if (a!=0) // some logic to determine if it is ok to go
-                {document.getElementById("addtoCart").disabled = false;}
-                else // in case it was enabled and the user changed their mind
-                {document.getElementById("addtoCart").disabled = true;}
+    if (a!=0) // some logic to determine if it is ok to go
+    {document.getElementById("addtoCart").disabled = false;}
+    else // in case it was enabled and the user changed their mind
+    {document.getElementById("addtoCart").disabled = true;}
 
-            }
-            function beforeSave()
-            {
-                if((document.getElementById('checkField').value != 0))
-                {
-                    document.getElementById('print').readonly = false; 
-                    return true; 
-                }
-                else { return false; }        
-            }
+}
+function beforeSave()
+{
+    if((document.getElementById('checkField').value != 0))
+    {
+        document.getElementById('print').readonly = false; 
+        return true; 
+    }
+    else { return false; }        
+}
 
-            function checkIt(evt) // float value******************** 
-            {
-                evt = (evt) ? evt : window.event
-                var charCode = (evt.which) ? evt.which : evt.keyCode
-                if (charCode ==8 || (charCode >47 && charCode <58) || charCode==46) {
-                    status = ""
-                    return true
-                }
-                status = "This field accepts numbers only."
-                return false
-            }
-            function numbersonly(e)
-            {
-                var unicode=e.charCode? e.charCode : e.keyCode
-                if (unicode!=8)
-                { //if the key isn't the backspace key (which we should allow)
-                    if (unicode<48||unicode>57) //if not a number
-                        return false //disable key press
-                }
-            }
+function checkIt(evt) // float value******************** 
+{
+    evt = (evt) ? evt : window.event
+    var charCode = (evt.which) ? evt.which : evt.keyCode
+    if (charCode ==8 || (charCode >47 && charCode <58) || charCode==46) {
+        status = ""
+        return true
+    }
+    status = "This field accepts numbers only."
+    return false
+}
+function numbersonly(e)
+{
+    var unicode=e.charCode? e.charCode : e.keyCode
+    if (unicode!=8)
+    { //if the key isn't the backspace key (which we should allow)
+        if (unicode<48||unicode>57) //if not a number
+            return false //disable key press
+    }
+}
 
-    function minus(){
-                a=Number(document.mn.cash.value);
-                b=Number(document.mn.gtotal.value);
-                c=a-b;
-                document.mn.change.value=c.toFixed(2);
-                if(c >= 0)
-                {
-                    document.getElementById('checkField').value=1;
-                    if( c % 1 !== 0)
-                    {
-                        document.getElementById('floorvalue').value= Math.floor(c);
-                        document.getElementById('floor').innerHTML=Math.floor(c);
-                        document.getElementById('ceilingvalue').value=Math.ceil(c);
-                        document.getElementById('ceiling').innerHTML=Math.ceil(c);
-                    }
-                  else
-                    {
-                        document.getElementById('floorvalue').value= Math.floor(c);
-                        document.getElementById('floor').innerHTML=Math.floor(c);
-                        document.getElementById('ceilingvalue').value=Math.ceil(c);
-                        document.getElementById('ceiling').innerHTML=Math.ceil(c);
-                    }
-                }
-                else { document.getElementById('checkField').value=0; }
-            }
-            function minus2(){
-                a=Number(document.mn.cash2.value);
-                b=Number(document.mn.cashTopay.value);
-                c=a-b;
-                document.mn.change2.value=c;
-                if(c >= 0)
-                {
-                    document.getElementById('checkField').value=1;
-                }
-                else { document.getElementById('checkField').value=0; }
-            }
-            function calculateCash(byacc)
-            {
-                var total =Number(document.mn.gtotal.value);
-                var bycash = total - Number(byacc);
-                document.getElementById('cashTopay').value= bycash;
-            }
+function minus(){
+    a=Number(document.mn.cash.value);
+    b=Number(document.mn.gtotal.value);
+    c=a-b;
+    document.mn.change.value=c.toFixed(2);
+    if(c >= 0)
+    {
+        document.getElementById('checkField').value=1;
+        if( c % 1 !== 0)
+        {
+            document.getElementById('floorvalue').value= Math.floor(c);
+            document.getElementById('floor').innerHTML=Math.floor(c);
+            document.getElementById('ceilingvalue').value=Math.ceil(c);
+            document.getElementById('ceiling').innerHTML=Math.ceil(c);
+        }
+      else
+        {
+            document.getElementById('floorvalue').value= Math.floor(c);
+            document.getElementById('floor').innerHTML=Math.floor(c);
+            document.getElementById('ceilingvalue').value=Math.ceil(c);
+            document.getElementById('ceiling').innerHTML=Math.ceil(c);
+        }
+    }
+    else { document.getElementById('checkField').value=0; }
+}
+function minus2(){
+    a=Number(document.mn.cash2.value);
+    b=Number(document.mn.cashTopay.value);
+    c=a-b;
+    document.mn.change2.value=c;
+    if(c >= 0)
+    {
+        document.getElementById('checkField').value=1;
+    }
+    else { document.getElementById('checkField').value=0; }
+}
+function calculateCash(byacc)
+{
+    var total =Number(document.mn.gtotal.value);
+    var bycash = total - Number(byacc);
+    document.getElementById('cashTopay').value= bycash;
+}
 </script>
 <!--===========================================================================================================================-->
 <script>
@@ -130,119 +136,121 @@ function getXMLHTTP() {
 		 return xmlhttp;
 }
 function checkQty(qty)
-            {
-                var inventoryid = document.getElementById('inventoryID').value;
-                var reqst = getXMLHTTP();		
-                if (reqst) 
+{
+    var inventoryid = document.getElementById('inventoryID').value;
+    var reqst = getXMLHTTP();		
+    if (reqst) 
+    {
+        reqst.onreadystatechange = function()
+        {
+            if (reqst.readyState == 4) 
+            {			
+                if (reqst.status == 200)
                 {
-                    reqst.onreadystatechange = function()
-                    {
-                        if (reqst.readyState == 4) 
-                        {			
-                            if (reqst.status == 200)
-                            {
-                                var jc= document.getElementById('checkresult').innerHTML=reqst.responseText;
-                                if(jc == 1) {multiply();}
-                                else {                                                                                     
-                                    document.getElementById('TOTAL').value=0;
-                                    document.getElementById("QTY").value = 0;
-                                    alert("দুঃখিত, পর্যাপ্ত পরিমান প্রোডাক্ট নেই");
-                                                                                   
-                                }
-                            } 
-                            else 
-                            {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
-                        }				
-                    }			
-                    reqst.open("GET","includes/checkProductQty.php?qty="+qty+"&id="+inventoryid, true);
-                    reqst.send(null);
-                }	
-            }
+                    var jc= document.getElementById('checkresult').innerHTML=reqst.responseText;
+                    if(jc == 1) {multiply();}
+                    else {                                                                                     
+                        document.getElementById('TOTAL').value=0;
+                        document.getElementById("QTY").value = 0;
+                        alert("দুঃখিত, পর্যাপ্ত পরিমান প্রোডাক্ট নেই");
 
-            function showPayType(payType)
-            {
-                var reqst = getXMLHTTP();		
-                if (reqst) 
-                {
-                    reqst.onreadystatechange = function()
-                    {
-                        if (reqst.readyState == 4) 
-                        {			
-                            if (reqst.status == 200)
-                            { document.getElementById('payInfo').innerHTML=reqst.responseText;} 
-                            else 
-                            {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
-                        }				
-                    }			
-                    reqst.open("GET","includes/showPayInfo.php?type="+payType+"&selltype=1", true);
-                    reqst.send(null);
-                }		
-            }
+                    }
+                } 
+                else 
+                {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+            }				
+        }			
+        reqst.open("GET","includes/checkProductQty.php?qty="+qty+"&id="+inventoryid, true);
+        reqst.send(null);
+    }	
+}
+
+function showPayType(payType)
+{
+    var reqst = getXMLHTTP();		
+    if (reqst) 
+    {
+        reqst.onreadystatechange = function()
+        {
+            if (reqst.readyState == 4) 
+            {			
+                if (reqst.status == 200)
+                { document.getElementById('payInfo').innerHTML=reqst.responseText;} 
+                else 
+                {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+            }				
+        }			
+        reqst.open("GET","includes/showPayInfo.php?type="+payType+"&selltype=1", true);
+        reqst.send(null);
+    }		
+}
 
 function checkAccountBalance(accNo)
-            {
-                var toPayAmount = document.getElementById('gtotal').value;
-                var reqst = getXMLHTTP();		
-                if (reqst) 
-                {
-                    reqst.onreadystatechange = function()
+{
+    var toPayAmount = document.getElementById('gtotal').value;
+    var reqst = getXMLHTTP();		
+    if (reqst) 
+    {
+        reqst.onreadystatechange = function()
+        {
+            if (reqst.readyState == 4) 
+            {			
+                if (reqst.status == 200)
+                { 
+                    var amount = reqst.responseText;
+                    if(Number(amount) >= Number(toPayAmount))
                     {
-                        if (reqst.readyState == 4) 
-                        {			
-                            if (reqst.status == 200)
-                            { 
-                                var amount = reqst.responseText;
-                                if(Number(amount) >= Number(toPayAmount))
-                                {
-                                    document.getElementById('amount').value=toPayAmount;
-                                    document.getElementById('checkField').value=1;
-                                }
-                                else
-                                {
-                                    document.getElementById('amount').value=0;
-                                    document.getElementById('checkField').value=0;
-                                    alert("দুঃখিত, এই পরিমান টাকা আপনার অ্যাকাউন্টে নেই")
-                                }
-                            } 
-                            else 
-                            {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
-                        }				
-                    }			
-                    reqst.open("GET","includes/getAccountInfo.php?AcNo="+accNo, true);
-                    reqst.send(null);
-                }	
-            }
+                        document.getElementById('amount').value=toPayAmount;
+                        document.getElementById('checkField').value=1;
+                    }
+                    else
+                    {
+                        document.getElementById('amount').value=0;
+                        document.getElementById('checkField').value=0;
+                        alert("দুঃখিত, এই পরিমান টাকা আপনার অ্যাকাউন্টে নেই")
+                    }
+                } 
+                else 
+                {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+            }				
+        }			
+        reqst.open("GET","includes/getAccountInfo.php?AcNo="+accNo, true);
+        reqst.send(null);
+    }	
+}
  function addToCart() // to add into temporary array*******************
+{
+    var id = document.getElementById("inventoryID").value;
+    var name = document.getElementById("pname").value;
+    var code = document.getElementById("procode").value;
+    var qty = Number(document.getElementById("QTY").value);
+    var totalamount = Number(document.getElementById("TOTAL").value);
+    var sell = document.getElementById("PPRICE").value;
+    var buy = document.getElementById("buyprice").value;
+    var totalpv = Number(document.getElementById("SubTotalPV").value);
+    var profit = Number(document.getElementById("profit").value);
+    var xprofit = Number(document.getElementById("xprofit").value);
+    if(qty != 0)
+    {
+        var reqst = getXMLHTTP();		
+        if (reqst) 
+        {
+            reqst.onreadystatechange = function()
             {
-                var id = document.getElementById("inventoryID").value;
-                var name = document.getElementById("pname").value;
-                var code = document.getElementById("procode").value;
-                var qty = Number(document.getElementById("QTY").value);
-                var totalamount = Number(document.getElementById("TOTAL").value);
-                var sell = document.getElementById("PPRICE").value;
-                var buy = document.getElementById("buyprice").value;
-                var totalpv = Number(document.getElementById("SubTotalPV").value);
-                if(qty != 0)
-                {
-                    var reqst = getXMLHTTP();		
-                    if (reqst) 
-                    {
-                        reqst.onreadystatechange = function()
-                        {
-                            if (reqst.readyState == 4) 
-                            {			
-                                if (reqst.status == 200)
-                                {location.reload();} 
-                                else 
-                                {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
-                            }				
-                        }			
-                        reqst.open("GET","addorder.php?selltype=3&id="+id+"&code="+code+"&name="+name+"&qty="+qty+"&total="+totalamount+"&selling="+sell+"&buying="+buy+"&totalpv="+totalpv, true);
-                        reqst.send(null);
-                    }	
-                }
-                else { alert("দুঃখিত, পরিমান অথবা ক্রয়মূল্য ০ হতে পারবে না") ;}
-            }
+                if (reqst.readyState == 4) 
+                {			
+                    if (reqst.status == 200)
+                    {location.reload();} 
+                    else 
+                    {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+                }				
+            }			
+            reqst.open("GET","addorder.php?selltype=3&id="+id+"&code="+code+"&name="+name+"&qty="+qty+"&total="+totalamount+"&selling="+sell+"&buying="+buy+"&totalpv="+totalpv+"&profit="+profit+"&xprofit="+xprofit, true);
+            reqst.send(null);
+        }	
+    }
+    else { alert("দুঃখিত, পরিমান অথবা ক্রয়মূল্য ০ হতে পারবে না") ;}
+}
 </script>    
 </head>
     
@@ -277,7 +285,8 @@ function checkAccountBalance(accNo)
                         $db_price=$row["ins_sellingprice"];
                         $db_inventoryid=$row["idinventory"];
                         $db_procode=$row["ins_product_code"];
-                        $db_proPV=$row["ins_pv"];
+                        $db_profit = $row["ins_profit"];
+                        $db_proPV = $db_profit * $running_pv;
                         $db_buyingprice = $row['ins_buying_price'];
                     }
 ?>
@@ -285,8 +294,9 @@ function checkAccountBalance(accNo)
   <tr>
       <td colspan="3" ><span style="color: #03C;"> প্রোডাক্টের নাম&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span><input name="PNAME" id="pname" type="text" value="<?php echo $db_proname; ?>" style="border:0px;font-size: 18px;width:320px;" readonly/>
         <input name="inventoryID" id="inventoryID" type="hidden" value="<?php echo $db_inventoryid; ?>"/>      
-      <input name="procode" id="procode" type="hidden" value="<?php echo $db_procode; ?>"/><input name="propv" id="ProPV" type="hidden" value="<?php echo $db_proPV; ?>"/>
-      <input name="less" type="hidden"/></td>
+        <input name="procode" id="procode" type="hidden" value="<?php echo $db_procode; ?>"/><input name="propv" id="ProPV" type="hidden" value="<?php echo $db_proPV; ?>"/>
+        <input name="less" type="hidden"/><input id="profit" type="hidden" value="<?php echo $db_profit; ?>"/><input id="xprofit" type="hidden" value="<?php echo $db_xprofit; ?>"/>
+      </td>
   </tr>
   <tr>
       <td colspan="3"><span style="color: #03C;">প্রোডাক্টের বিক্রয়মূল্য: </span><input name="PPRICE" id="PPRICE" type="text" value="<?php echo $db_price ;?>" style="border:0px;font-size: 18px;width:50px;text-align: right;"/> টাকা<input name="buyprice" id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>

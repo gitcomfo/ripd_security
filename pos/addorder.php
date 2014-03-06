@@ -31,7 +31,9 @@ elseif($_GET['selltype']==3)
      $P_procode=$_GET['code'];
      $P_pv=$_GET['totalpv'];
      $P_buy= $_GET['buying'];
-    $arr_temp = array($P_procode,$P_pname,$P_buy,$P_price,$P_QTY,$P_TOTAL,$P_pv);
+     $P_profit=$_GET['profit'];
+     $P_xprofit=$_GET['xprofit'];
+    $arr_temp = array($P_procode,$P_pname,$P_buy,$P_price,$P_QTY,$P_TOTAL,$P_pv,$P_profit,$P_xprofit);
     $_SESSION['arrSellTemp'][$P_inventoryID] = $arr_temp;
 }
 
@@ -47,8 +49,10 @@ elseif($_GET['selltype']==2)
      $P_pv=$_GET['totalpv'];
      $P_profitLess=$_GET['lessProfit'];
      $P_xtraprofitLess=$_GET['lessxtraProfit'];
+     $P_profit=$_GET['profit'];
+     $P_xprofit=$_GET['xprofit'];
      $totalAmount = $P_subTotal - ($P_profitLess + $P_xtraprofitLess);
-     $arr_temp = array($P_procode, $P_pname,$P_buy, $P_price, $P_QTY, $totalAmount, $P_pv, $P_profitLess, $P_xtraprofitLess);
+     $arr_temp = array($P_procode, $P_pname,$P_buy, $P_price, $P_QTY, $totalAmount, $P_pv, $P_profitLess, $P_xtraprofitLess,$P_profit,$P_xprofit);
      
      $_SESSION['arrSellTemp'][$P_inventoryID] = $arr_temp;
 }

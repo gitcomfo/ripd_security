@@ -5,6 +5,12 @@ include 'includes/ConnectDB.inc';
 include_once 'includes/MiscFunctions.php';
 
 $storeName= $_SESSION['loggedInOfficeName'];
+$sel_current_pv = $conn->prepare("SELECT pv_value FROM running_command");
+$sel_current_pv->execute();
+$arr_rslt = $sel_current_pv->fetchAll();
+foreach ($arr_rslt as $value) {
+    $running_pv = $value['pv_value'];
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -239,6 +245,8 @@ function addToCart() // to add into temporary array*******************
         var totalpv = Number(document.getElementById("SubTotalPV").value);
         var xtraless =Number(document.getElementById("lessxtraProfit").value);
         var profitless = Number(document.getElementById("lessProfit").value);
+        var profit = Number(document.getElementById("Profit").value);
+        var xprofit = Number(document.getElementById("XProfit").value);
         if(qty != 0)
             {
               var reqst = getXMLHTTP();		
@@ -254,7 +262,7 @@ function addToCart() // to add into temporary array*******************
 				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
 			}				
 		 }			
-		 reqst.open("GET","addorder.php?selltype=2&id="+id+"&code="+code+"&name="+name+"&qty="+qty+"&total="+totalamount+"&selling="+sell+"&buying="+buy+"&totalpv="+totalpv+"&lessProfit="+profitless+"&lessxtraProfit="+xtraless, true);
+		 reqst.open("GET","addorder.php?selltype=2&id="+id+"&code="+code+"&name="+name+"&qty="+qty+"&total="+totalamount+"&selling="+sell+"&buying="+buy+"&totalpv="+totalpv+"&lessProfit="+profitless+"&lessxtraProfit="+xtraless+"&profit="+profit+"&xprofit="+xprofit, true);
 		 reqst.send(null);
 	}	
             }
@@ -297,8 +305,8 @@ function addToCart() // to add into temporary array*******************
                         $db_price=$row["ins_sellingprice"];
                         $db_inventoryid=$row["idinventory"];
                         $db_procode=$row["ins_product_code"];
-                        $db_proPV=$row["ins_pv"];
                         $db_profit=$row["ins_profit"];
+                        $db_proPV = $db_profit * $running_pv;
                         $db_xtraProfit=$row["ins_extra_profit"];
                         $db_buyingprice = $row['ins_buying_price'];
                     }
