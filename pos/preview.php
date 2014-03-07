@@ -73,9 +73,10 @@ if(isset($_POST['print']))
     {
         $pay = "ক্যাশ";
         $P_getTaka=$_POST['cash'];
-        $P_backTaka=$_POST['actualChange'];
+        $P_actualChange=$_POST['actualChange'];
         $P_paiedByCash = $_POST['gtotal'];
         $P_paiedByAcc = 0;
+        $P_backTaka = ($P_getTaka - $P_paiedByCash) - $P_actualChange;
     }
     elseif($P_payType ==2) 
         {
@@ -90,7 +91,8 @@ if(isset($_POST['print']))
         $P_paiedByAcc = $_POST['amount'];
         $P_paiedByCash = $_POST['cashTopay'];
         $P_getTaka=$_POST['cash2'];
-        $P_backTaka=$_POST['actualChange'];
+        $P_actualChange=$_POST['actualChange'];
+        $P_backTaka = ($P_getTaka - $P_paiedByCash) - $P_actualChange;
     }
 }
 $id=$_SESSION['SESS_MEMBER_ID']; // চালান নং যাচাই**********************
@@ -228,7 +230,7 @@ $result= $sel_sales_summary->fetchAll();
 </tr>
 <tr>
     <td colspan="4" ><div align="right"><strong>ক্যাশ টাকা ফেরত:</strong>&nbsp;</div></td>
-    <td width="13%" ><div align="right" style="padding-right: 8px;"><?php echo english2bangla($P_backTaka);?></div></td>
+    <td width="13%" ><div align="right" style="padding-right: 8px;"><?php echo english2bangla($P_actualChange);?></div></td>
 </tr>
 <?php if($buyertype == 'customer') {?>
 <tr>
