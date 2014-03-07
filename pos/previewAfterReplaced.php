@@ -59,9 +59,10 @@ if(isset($_POST['print']))
     {
         $pay = "ক্যাশ";
         $P_getTaka=$_POST['cash'];
-        $P_backTaka=$_POST['actualChange'];
+        $P_actualChange=$_POST['actualChange'];
         $P_paiedByCash = $_POST['gtotal'];
         $P_paiedByAcc = 0;
+        $P_backTaka = ($P_getTaka - $P_paiedByCash) - $P_actualChange;
     }
     elseif($P_payType ==2) 
         {
@@ -232,7 +233,7 @@ if($P_getTaka != 0) {
 </tr>
 <tr>
     <td colspan="4" ><div align="right"><strong>টাকা ফেরত:</strong>&nbsp;</div></td>
-    <td width="13%" ><div align="right"><?php echo english2bangla($P_backTaka);?></div></td>
+    <td width="13%" ><div align="right"><?php echo english2bangla($P_actualChange);?></div></td>
 </tr>
 <?php } ?>
 </table>

@@ -75,9 +75,10 @@ if(isset($_POST['print']))
     {
         $pay = "ক্যাশ";
         $P_getTaka=$_POST['cash'];
-        $P_backTaka=$_POST['actualChange'];
+        $P_actualChange=$_POST['actualChange'];
         $P_paiedByCash = $_POST['gtotal'];
         $P_paiedByAcc = 0;
+        $P_backTaka = ($P_getTaka - $P_paiedByCash) - $P_actualChange;
     }
     else 
         {
@@ -227,7 +228,7 @@ foreach($_SESSION['arrSellTemp'] as $key => $row)
 </tr>
 <tr>
     <td height="24" colspan="6" ><div align="right" style="padding-right: 8px;"><strong>টাকা ফেরত:</strong>&nbsp;</div></td>
-    <td width="10%" ><div align="right"><?php echo english2bangla($P_backTaka);?></div></td>
+    <td width="10%" ><div align="right"><?php echo english2bangla($P_actualChange);?></div></td>
 </tr>
 </table>
 <div align="center" style="width: 100%;font-family: SolaimanLipi !important;">
