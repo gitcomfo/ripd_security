@@ -28,213 +28,51 @@ function get_catagory() {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
-        <meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
-        <link rel="icon" type="image/png" href="images/favicon.png" />
-        <title>পণ্যের তালিকা</title>
-        <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-        <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
-        <style type="text/css">
-            .prolinks:focus{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
-            .prolinks:hover{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
-        </style>
-        <script type="text/javascript">
-            function ShowTime()
-            {
-                var time=new Date()
-                var h=time.getHours()
-                var m=time.getMinutes()
-                var s=time.getSeconds()
-  
-                m=checkTime(m)
-                s=checkTime(s)
-                document.getElementById('txt').value=h+" : "+m+" : "+s
-                t=setTimeout('ShowTime()',1000)
-                if(document.getElementById('pname').value !="")
-                { document.getElementById("QTY").disabled = false;}
-                else {document.getElementById("QTY").disabled = true;}
-     
-                if(document.getElementById('tretail').value !="")
-                { document.getElementById("cash").disabled = false;}
-                else {document.getElementById("cash").disabled = true;}
-          
-                a=Number(document.abc.QTY.value);
-                if (a!=0) {document.getElementById("addtoCart").disabled = false;}
-                else {document.getElementById("addtoCart").disabled = true;}
-                payable = Number(document.getElementById('gtotal').value);
-                cash = Number(document.getElementById('cash').value);
-                if(cash<payable)
-                {document.getElementById("print").disabled = true;}
-                else {document.getElementById("print").disabled =false ;}
+<meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
+<link rel="icon" type="image/png" href="images/favicon.png" />
+<title>ক্রয়কৃত পণ্যের তালিকা</title>
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
+<link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
+<script type="text/javascript">
+    function ShowTime()
+    {
+        var time=new Date()
+        var h=time.getHours()
+        var m=time.getMinutes()
+        var s=time.getSeconds()
 
-            }
-            function checkTime(i)
-            {
-                if (i<10)
-                {
-                    i="0" + i
-                }
-                return i
-            }
-        </script>
+        m=checkTime(m)
+        s=checkTime(s)
+        document.getElementById('txt').value=h+" : "+m+" : "+s
+        t=setTimeout('ShowTime()',1000)
+        if(document.getElementById('pname').value !="")
+        { document.getElementById("QTY").disabled = false;}
+        else {document.getElementById("QTY").disabled = true;}
 
-        <!--===========================================================================================================================-->
-        <script>
-            function showTypes(catagory) // for types dropdown list
-            {
-                var xmlhttp;
-                if (window.XMLHttpRequest)
-                {// code for IE7+, Firefox, Chrome, Opera, Safari
-                    xmlhttp=new XMLHttpRequest();
-                }
-                else
-                {// code for IE6, IE5
-                    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                xmlhttp.onreadystatechange=function()
-                {
-                    if (xmlhttp.readyState==4 && xmlhttp.status==200)
-                    {
-                        document.getElementById('showtype').innerHTML=xmlhttp.responseText;
-                    }
-                }
-                xmlhttp.open("GET","includes/searchProcess.php?id=t&catagory="+catagory,true);
-                xmlhttp.send();	
-            }
-            function showBrands(type) // for brand dropdown list
-            {
-                var xmlhttp;
-                if (window.XMLHttpRequest)
-                {// code for IE7+, Firefox, Chrome, Opera, Safari
-                    xmlhttp=new XMLHttpRequest();
-                }
-                else
-                {// code for IE6, IE5
-                    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                xmlhttp.onreadystatechange=function()
-                {
-                    if (xmlhttp.readyState==4 && xmlhttp.status==200)
-                    {
-                        document.getElementById('brand').innerHTML=xmlhttp.responseText;
-                    }
-                }
-                xmlhttp.open("GET","includes/searchProcess.php?id=b&type="+type,true);
-                xmlhttp.send();	
-            }
-            function showClass(brand,protype) // for product name dropdown list
-            {
-                var xmlhttp;
-                if (window.XMLHttpRequest)
-                {// code for IE7+, Firefox, Chrome, Opera, Safari
-                    xmlhttp=new XMLHttpRequest();
-                }
-                else
-                {// code for IE6, IE5
-                    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                xmlhttp.onreadystatechange=function()
-                {
-                    if (xmlhttp.readyState==4 && xmlhttp.status==200)
-                    {
-                        document.getElementById('classi').innerHTML=xmlhttp.responseText;
-                    }
-                }
-                xmlhttp.open("GET","includes/searchProcess.php?id=c&brand="+brand+"&type="+protype,true);
-                xmlhttp.send();	
-            }
-            function showProduct(productChartId,idbrand,cataID) // show product details from selecting product from dropdown
-            {
-                var xmlhttp;
-                if (window.XMLHttpRequest)
-                {// code for IE7+, Firefox, Chrome, Opera, Safari
-                    xmlhttp=new XMLHttpRequest();
-                }
-                else
-                {// code for IE6, IE5
-                    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                xmlhttp.onreadystatechange=function()
-                {
-                    if (xmlhttp.readyState==4 && xmlhttp.status==200)
-                    {
-                        document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
-                    }
-                }
-                xmlhttp.open("GET","includes/searchProcess.php?id=all&chartID="+productChartId+"&idbrand="+idbrand+"&cataID="+cataID,true);
-                xmlhttp.send();
-            }
-            function showCatProducts(code) // show products from selecting catagory
-            {
-                var xmlhttp;
-                if (window.XMLHttpRequest)
-                {// code for IE7+, Firefox, Chrome, Opera, Safari
-                    xmlhttp=new XMLHttpRequest();
-                }
-                else
-                {// code for IE6, IE5
-                    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                xmlhttp.onreadystatechange=function()
-                {
-                    if (xmlhttp.readyState==4 && xmlhttp.status==200)
-                    {
-                        document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
-                    }
-                }
-                xmlhttp.open("GET","includes/searchProcess.php?id=catagory&proCatCode="+code,true);
-                xmlhttp.send();
-            }
-            function showTypeProducts(proCatID) // show products from selecting types
-            {
-                var xmlhttp;
-                if (window.XMLHttpRequest)
-                {// code for IE7+, Firefox, Chrome, Opera, Safari
-                    xmlhttp=new XMLHttpRequest();
-                }
-                else
-                {// code for IE6, IE5
-                    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                xmlhttp.onreadystatechange=function()
-                {
-                    if (xmlhttp.readyState==4 && xmlhttp.status==200)
-                    {
-                        document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
-                    }
-                }
-                xmlhttp.open("GET","includes/searchProcess.php?id=type&proCatID="+proCatID,true);
-                xmlhttp.send();
-            }
+        if(document.getElementById('tretail').value !="")
+        { document.getElementById("cash").disabled = false;}
+        else {document.getElementById("cash").disabled = true;}
 
-            function showBrandProducts(brandcode,procatid) // show products from brand
-            {
-                var xmlhttp;
-                if (window.XMLHttpRequest)
-                {// code for IE7+, Firefox, Chrome, Opera, Safari
-                    xmlhttp=new XMLHttpRequest();
-                }
-                else
-                {// code for IE6, IE5
-                    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                xmlhttp.onreadystatechange=function()
-                {
-                    if (xmlhttp.readyState==4 && xmlhttp.status==200)
-                    {
-                        document.getElementById('resultTable').innerHTML=xmlhttp.responseText;
-                    }
-                }
-                xmlhttp.open("GET","includes/searchProcess.php?id=brnd&brandCode="+brandcode+"&procatid="+procatid,true);
-                xmlhttp.send();
-            }
-        </script>  
-    </head>
+        a=Number(document.abc.QTY.value);
+        if (a!=0) {document.getElementById("addtoCart").disabled = false;}
+        else {document.getElementById("addtoCart").disabled = true;}
+        payable = Number(document.getElementById('gtotal').value);
+        cash = Number(document.getElementById('cash').value);
+        if(cash<payable)
+        {document.getElementById("print").disabled = true;}
+        else {document.getElementById("print").disabled =false ;}
+
+    }
+    function checkTime(i)
+    {
+        if (i<10)
+        {
+            i="0" + i
+        }
+        return i
+    }
+</script>
+</head>
 
     <body onLoad="ShowTime()">
         <div id="maindiv">
