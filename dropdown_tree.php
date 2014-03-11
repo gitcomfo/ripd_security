@@ -1,30 +1,33 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 include_once 'includes/MiscFunctions.php';
-include 'includes/ConnectDB.inc';
 include 'includes/header.php';
+$logedInUser = $_SESSION['acc_holder_name'];
+$logedInUserID = $_SESSION['userIDUser'];
+$arr_refered = array();
 
-function showList($sl)
+$sel_cfsuser = $conn->prepare("SELECT * FROM cfs_user,customer_account WHERE cfs_user_idUser = idUser AND  idUser = ?");
+$sel_all_refered = $conn->prepare("SELECT * FROM customer_account WHERE referer_id = ?");
+$sel_all_refered->execute(array($logedInUserID));
+$refered_row = $sel_all_refered->fetchAll();
+foreach ($refered_row as $row) {
+    $db_refered_id = $row['cfs_user_idUser'];
+    array_push($arr_refered, $db_refered_id);
+}
+
+function showList($referedid,$sl,$sql)
 {
+    $sql->execute(array($referedid));
+    $cfs_row = $sql->fetchAll();
+    foreach ($cfs_row as $row) {
+        $db_name = $row['account_name'];
+    }
      echo '<li><div id="left" style="height:auto;width:350px;opacity:0;position: absolute;left:-999999px;">
-                                            <div style="float:left;border:1px solid black;background-color:cornsilk;width:80%">
-                                                <table>
-                                                <tr><td colspan="2" style="border:1px solid black;"><img src="<?php echo $osign;?>" width="50px" height="50px"/></td></tr>
-                                                <tr><td colspan="2" style="border:1px solid black;">স্টেপ পজিসন</td></tr>
-                                                <tr><td colspan="2" style="border:1px solid black;"><a href="#" style="width:100%; background-color:none;">ইন</a></td></tr>
-                                                <tr><td style="border:1px solid black;">অ্যাকাউন্ট নং </td><td style="border:1px solid black;">dd-3428u4-jdh</td></tr>
-                                                <tr><td style="border:1px solid black;">মোবাইল নং </td><td style="border:1px solid black;">0128394372</td></tr>
-                                                <tr><td colspan="2" style="border:1px solid black;">রেফারকারির নাম </td></tr>
-                                                <tr><td style="border:1px solid black;">আর ১</td><td style="border:1px solid black;">৭</td></tr>
-                                                <tr><td style="border:1px solid black;">আর ২</td><td style="border:1px solid black;">৩৪</td></tr>
-                                                <tr><td style="border:1px solid black;">আর ৩</td><td style="border:1px solid black;">৫৩২</td></tr>
-                                                <tr><td style="border:1px solid black;">আর ৪</td><td style="border:1px solid black;">১৩৪৩</td></tr>
-                                                <tr><td style="border:1px solid black;">আর ৫</td><td style="border:1px solid black;">৩৫৪৩১৩৪</td></tr>
-                                                </table>
-                                            </div>
-                                            <div style="width:15%;height:25px;float:left; text-align:right;background-image: url(images/left.png); background-size: 100% 100%;background-repeat: no-repeat;"></div>
+         <div id="info" style="float:left;border:1px solid black;background-color:cornsilk;width:80%"></div>';
+                        
+     echo '<div style="width:15%;height:25px;float:left; text-align:right;background-image: url(images/left.png); background-size: 100% 100%;background-repeat: no-repeat;"></div>
                     </div>
-                   <a id="target" onmouseover="showspecifics('.$sl.')" ><b>রেফারার -১  নাম</b></a>
+                   <a id="target" onmouseover="showspecifics('.$sl.');showLeftInfo('.$referedid.')" ><b>'.$db_name.'</b></a>
                     <div id="ri8" style="height:auto;width:330px;opacity:0;position: absolute;left:-999999px;">
                         <div style="width:15%;height:25px;float:left; text-align:right;background-image: url(images/right.png); background-size: 100% 100%;background-repeat: no-repeat;"></div>                                            
                         <div style="float:left;background-color:red;width:80%">
@@ -44,27 +47,6 @@ function showList($sl)
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 <script type="text/javascript" src="javascripts/jquery-1.10.2.min.js"></script>
-<script>
-
-    var fieldName='chkName[]';
-    function numbersonly(e)
-   {
-        var unicode=e.charCode? e.charCode : e.keyCode
-            if (unicode!=8)
-            { //if the key isn't the backspace key (which we should allow)
-                if (unicode<48||unicode>57) //if not a number
-                return false //disable key press
-            }
-}
-window.onclick = function()
-    {
-        new JsDatePick({
-            useMode: 2,
-            target: "date",
-            dateFormat: "%Y-%m-%d"
-        });
-    }
-</script>
 <script>
      function showall()
     {
@@ -90,6 +72,26 @@ window.onclick = function()
         document.getElementById('ri8').style.opacity = 0;
     }
 </script>
+<script type="text/javascript">
+function showLeftInfo(id) // for searching parent offices
+{
+    var xmlhttp;
+       if (window.XMLHttpRequest)
+        {
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+                document.getElementById('info').innerHTML=xmlhttp.responseText;
+        }
+        xmlhttp.open("GET","includes/dropdown_info.php?cfsid="+id,true);
+        xmlhttp.send();	
+}
+</script>
 
 <div class="column6" style="width: 100% !important;">
     <div class="main_text_box" style="width: 100% !important;height: 500px;">
@@ -102,25 +104,21 @@ window.onclick = function()
                         <td height="368" style="padding-left: 35%;">
                             <div class="treeButton">
                                 <ul>
-                                <li><a><b>অ্যাকাউন্টধারীর নাম</b></a>
-                                    
+                                <li><a><b><?php echo $logedInUser;?></b></a>                                  
                                     <ul>
                                            <?php
-                                    for($i=0;$i<7;$i++)
-                                    {
-                                       showList($i);
-                                    }
-                                   ?>
+                                           $sl = 0;
+                                                foreach ($arr_refered as $value) {
+                                                    showList($value,$sl,$sel_cfsuser);
+                                                    $sl++;
+                                                }
+                                            ?>
                                     </ul>
                                 </li>
                                 </ul>
-                                </div>
+                            </div>
                         </td>
-                    </tr>
-                    <tr>                    
-                        <td colspan="2" style="padding-left: 5%; " ><input class="btn" style =" font-size: 12px;" type="submit" name="submit" value="সেভ করুন" />
-                        <input class="btn" style =" font-size: 12px" type="reset" name="reset" value="রিসেট করুন" /></td>                           
-                    </tr>    
+                    </tr> 
                 </table>
             </form>
         </div>           
