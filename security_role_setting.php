@@ -54,53 +54,52 @@ function out()
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <style type="text/css"> @import "css/bush.css";</style>
 <script type="text/javaScript">
-     function moveToRightOrLeft(side)
-        {
-            var listLeft= document.getElementById('selectLeft');
-            var listRight=document.getElementById('selectRight');
+function moveToRightOrLeft(side)
+   {
+       var listLeft= document.getElementById('selectLeft');
+       var listRight=document.getElementById('selectRight');
 
-            if(side==1) // left to right
-            {
-                if(listLeft.options.length==0){
-                    alert('সব সাবমডিউল অব্যবহৃত করা হয়ে গেছে');
-                    return false;
-                }else{
-                    var selectedCountry=listLeft.options.selectedIndex;
+       if(side==1) // left to right
+       {
+           if(listLeft.options.length==0){
+               alert('সব সাবমডিউল অব্যবহৃত করা হয়ে গেছে');
+               return false;
+           }else{
+               var selectedCountry=listLeft.options.selectedIndex;
 
-                    move(listRight,listLeft.options[selectedCountry].value,listLeft.options[selectedCountry].text);
-                    listLeft.remove(selectedCountry);
+               move(listRight,listLeft.options[selectedCountry].value,listLeft.options[selectedCountry].text);
+               listLeft.remove(selectedCountry);
 
-                    if(listLeft.options.length>0){
-                        listLeft.options[0].selected=true;
-                    }
-                }
-            }
-            else if(side==2)// right to left
-            {
-                if(listRight.options.length==0){
-                    alert('সব সাবমডিউল ব্যবহার করা হয়ে গেছে');
-                    return false;
-                }else{
-                    var selectedCountry=listRight.options.selectedIndex;
+               if(listLeft.options.length>0){
+                   listLeft.options[0].selected=true;
+               }
+           }
+       }
+       else if(side==2)// right to left
+       {
+           if(listRight.options.length==0){
+               alert('সব সাবমডিউল ব্যবহার করা হয়ে গেছে');
+               return false;
+           }else{
+               var selectedCountry=listRight.options.selectedIndex;
 
-                    move(listLeft,listRight.options[selectedCountry].value,listRight.options[selectedCountry].text);
-                    listRight.remove(selectedCountry);
+               move(listLeft,listRight.options[selectedCountry].value,listRight.options[selectedCountry].text);
+               listRight.remove(selectedCountry);
 
-                    if(listRight.options.length>0){
-                        listRight.options[0].selected=true;
-                    }
-                }
-            }
-        }
-
-        function move(listBoxTo,optionValue,optionDisplayText)// move function
-        {
-            var newOption = document.createElement("option");
-            newOption.value = optionValue;
-            newOption.text = optionDisplayText;
-            listBoxTo.add(newOption, null);
-            return true;
-        }
+               if(listRight.options.length>0){
+                   listRight.options[0].selected=true;
+               }
+           }
+       }
+   }
+   function move(listBoxTo,optionValue,optionDisplayText)// move function
+   {
+       var newOption = document.createElement("option");
+       newOption.value = optionValue;
+       newOption.text = optionDisplayText;
+       listBoxTo.add(newOption, null);
+       return true;
+   }
 </script>
 <script type="text/javascript">
 function show()

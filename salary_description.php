@@ -220,20 +220,24 @@ if(isset($_POST['submit']))
                                 <legend style="color: brown;">অন্যান্য</legend>
                                 <table style=" width: 95%; padding-left: 5%" cellspacing="0">
                                     <tr>
-                                        <td  ><b>বোনাস</b></td>
-                                        <td >: <?php echo english2bangla($db_bonus) ?> টাকা</td>
+                                        <td><b>বোনাস</b></td>
+                                        <td>: <?php echo english2bangla($db_bonus) ?> টাকা</td>
                                     </tr>
                                     <tr>
-                                        <td  ><b>হ্রাস</b></td>
-                                        <td >: <?php echo english2bangla($db_deduct) ?> টাকা</td>
+                                        <td><b>হ্রাস</b></td>
+                                        <td>: <?php echo english2bangla($db_deduct) ?> টাকা</td>
                                     </tr>
                                     <tr>
-                                        <td  ><b>পেনশন এমাউন্ট</b></td>
-                                        <td >: </td>
+                                        <td><b>পেনশন এমাউন্ট</b></td>
+                                        <td>: </td>
                                     </tr>
                                     <tr>
-                                        <td  ><b>মোট প্রাপ্ত বেতন</b></td>
-                                        <td >: <?php echo english2bangla($db_given_salary) ?> টাকা</td>
+                                        <td><b>লোন এমাউন্ট</b></td>
+                                        <td>: </td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>মোট প্রাপ্ত বেতন</b></td>
+                                        <td>: <?php echo english2bangla($db_given_salary) ?> টাকা</td>
                                     </tr>
                                 </table>
                             </fieldset>
@@ -242,6 +246,4 @@ if(isset($_POST['submit']))
                 </table>
         </div>           
     </div>
-<?php
-include_once 'includes/footer.php';
-?>
+<?php include_once 'includes/footer.php';?>

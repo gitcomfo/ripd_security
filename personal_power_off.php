@@ -7,53 +7,53 @@ include_once 'includes/MiscFunctions.php';
 <style type="text/css"> @import "css/bush.css";</style>
 <link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
 <script type="text/javaScript">
-     function moveToRightOrLeft(side)
-        {
-            var listLeft= document.getElementById('selectLeft');
-            var listRight=document.getElementById('selectRight');
+function moveToRightOrLeft(side)
+   {
+       var listLeft= document.getElementById('selectLeft');
+       var listRight=document.getElementById('selectRight');
 
-            if(side==1) // left to right
-            {
-                if(listLeft.options.length==0){
-                    alert('সব সাবমডিউল অব্যবহৃত করা হয়ে গেছে');
-                    return false;
-                }else{
-                    var selectedCountry=listLeft.options.selectedIndex;
+       if(side==1) // left to right
+       {
+           if(listLeft.options.length==0){
+               alert('সব সাবমডিউল অব্যবহৃত করা হয়ে গেছে');
+               return false;
+           }else{
+               var selectedCountry=listLeft.options.selectedIndex;
 
-                    move(listRight,listLeft.options[selectedCountry].value,listLeft.options[selectedCountry].text);
-                    listLeft.remove(selectedCountry);
+               move(listRight,listLeft.options[selectedCountry].value,listLeft.options[selectedCountry].text);
+               listLeft.remove(selectedCountry);
 
-                    if(listLeft.options.length>0){
-                        listLeft.options[0].selected=true;
-                    }
-                }
-            }
-            else if(side==2)// right to left
-            {
-                if(listRight.options.length==0){
-                    alert('সব সাবমডিউল ব্যবহার করা হয়ে গেছে');
-                    return false;
-                }else{
-                    var selectedCountry=listRight.options.selectedIndex;
+               if(listLeft.options.length>0){
+                   listLeft.options[0].selected=true;
+               }
+           }
+       }
+       else if(side==2)// right to left
+       {
+           if(listRight.options.length==0){
+               alert('সব সাবমডিউল ব্যবহার করা হয়ে গেছে');
+               return false;
+           }else{
+               var selectedCountry=listRight.options.selectedIndex;
 
-                    move(listLeft,listRight.options[selectedCountry].value,listRight.options[selectedCountry].text);
-                    listRight.remove(selectedCountry);
+               move(listLeft,listRight.options[selectedCountry].value,listRight.options[selectedCountry].text);
+               listRight.remove(selectedCountry);
 
-                    if(listRight.options.length>0){
-                        listRight.options[0].selected=true;
-                    }
-                }
-            }
-        }
+               if(listRight.options.length>0){
+                   listRight.options[0].selected=true;
+               }
+           }
+       }
+   }
 
-        function move(listBoxTo,optionValue,optionDisplayText)// move function
-        {
-            var newOption = document.createElement("option");
-            newOption.value = optionValue;
-            newOption.text = optionDisplayText;
-            listBoxTo.add(newOption, null);
-            return true;
-        }
+   function move(listBoxTo,optionValue,optionDisplayText)// move function
+   {
+       var newOption = document.createElement("option");
+       newOption.value = optionValue;
+       newOption.text = optionDisplayText;
+       listBoxTo.add(newOption, null);
+       return true;
+   }
 </script>
 <script type="text/javascript">
 function show()
@@ -67,36 +67,6 @@ for(var i=0; i < select1.options.length; i++){
 document.getElementById('optionlist').value = arr.toString();
 }
 </script>
-<script>
-    function getEmployee(keystr) //search employee by account number***************
-{
-    var xmlhttp;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function()
-        {
-            if(keystr.length ==0)
-                {
-                   document.getElementById('empfound').style.display = "none";
-               }
-                else
-                    {document.getElementById('empfound').style.visibility = "visible";
-                document.getElementById('empfound').setAttribute('style','position:absolute;top:36%;left:62.5%;width:225px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
-                    }
-                document.getElementById('empfound').innerHTML=xmlhttp.responseText;
-        }
-        xmlhttp.open("GET","includes/employeeSearch.php?key="+keystr+"&location=personal_power_distribution.php",true);
-        xmlhttp.send();	
-}
-
-</script>
-
     <div class="main_text_box">
         <div style="padding-left: 50px;"><a href="employee_for_power_distribution.php"><b>ফিরে যান</b></a></div>
         <div>
