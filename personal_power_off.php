@@ -102,7 +102,7 @@ document.getElementById('optionlist').value = arr.toString();
         <div>
             <form method="POST" enctype="multipart/form-data" action="">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;width: 90%;margin-left: 50px;">          
-                    <tr><th colspan="2" style="text-align: center;font-size: 20px;">ক্ষমতা বিকেন্দ্রীকরণ</th></tr>
+                    <tr><th colspan="2" style="text-align: center;font-size: 20px;">ক্ষমতা স্থগিতকরন</th></tr>
                     <tr>
                         <?php
                                         if(isset($_GET['id']))
@@ -135,7 +135,7 @@ document.getElementById('optionlist').value = arr.toString();
                                     <tr>
                                         <td width="45%">
                                              <fieldset style="border: #999999 solid 2px; text-align: center;">
-                                                 <legend  style="color: brown;">নিজের দায়িত্ব</legend>
+                                                 <legend  style="color: brown;">বিকেন্দ্রীকৃত দায়িত্ব</legend>
                                                     <select name="selectLeft" size="10" id="selectLeft" style="width: 240px; overflow: auto; padding: 3px; border: 1px solid #808080">
                                                         <?php // getUsedSubMod($g_roleid);?>
                                                     </select>
@@ -147,7 +147,7 @@ document.getElementById('optionlist').value = arr.toString();
                                         </td>
                                         <td width="45%">
                                              <fieldset style="border:#999999 solid 2px;text-align: center;">
-                                                 <legend  style="color: brown;">বিকেন্দ্রীকৃত দায়িত্ব</legend>
+                                                 <legend  style="color: brown;">স্থগিতকৃত দায়িত্ব</legend>
                                                     <select name="selectRight" size="10" id="selectRight" style="width: 240px; overflow: auto; padding: 3px; border: 1px solid #808080;">
                                                        <?php // getUnusedSubMod($g_roleid);?>
                                                    </select>

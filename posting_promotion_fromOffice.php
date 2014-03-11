@@ -139,12 +139,12 @@ include_once './includes/selectQueryPDO.php';
                         $db_gradeInsertDate = $arr_grade['insert_date'];
                         $db_gradename = $arr_grade['grade_name'];      
                     }
-                    $start= abs(strtotime(date("Y/m/d",  strtotime($db_gradeInsertDate))));
-                     $end =abs(strtotime(date("Y/m/d", $timestamp)));
-                     $grddifference = $end - $start;
-                     $grdyears = english2bangla(floor($grddifference / (365 * 60 * 60 * 24)));
-                     $grdmonths2 = english2bangla(floor(($grddifference - ($grdyears * 365 * 60 * 60 * 24)) / ((365 * 60 * 60 * 24) / 12)));
-                     $grddays = english2bangla(floor(($grddifference - ($grdyears * 365 * 60 * 60 * 24) -( $grdmonths2 * 30 * 60 * 60 * 24))/ (60 * 60 * 24)));
+                  
+                    $start = date_create($db_gradeInsertDate);
+                    $interval1 = date_diff(date_create(), $start);
+                    $grdyears = english2bangla($interval1->format('%Y'));
+                    $grdmonths2 = english2bangla($interval1->format('%M'));
+                    $grddays = english2bangla($interval1->format('%d'));
                     
                     $sql_select_view_emp_post->execute(array($empID,$get_office_id));
                     $result = $sql_select_view_emp_post->fetchAll();
@@ -152,12 +152,12 @@ include_once './includes/selectQueryPDO.php';
                         $db_post = $arr_row['post_name'];
                         $db_postingDate = $arr_row['posting_date'];
                     }
-                    $timestamp_start= abs(strtotime(date("Y/m/d",  strtotime($db_postingDate))));
-                     $timestamp_end =abs(strtotime(date("Y/m/d", $timestamp)));
-                     $difference = $timestamp_end - $timestamp_start;
-                        $years = english2bangla(floor($difference / (365 * 60 * 60 * 24)));
-                        $months2 = english2bangla(floor(($difference - ($years * 365 * 60 * 60 * 24)) / ((365 * 60 * 60 * 24) / 12)));
-                        $days = english2bangla(floor(($difference - ($years * 365 * 60 * 60 * 24) -( $months2 * 30 * 60 * 60 * 24))/ (60 * 60 * 24)));
+//                                           
+                        $datetime1 = date_create($db_postingDate);
+                        $interval = date_diff(date_create(), $datetime1);
+                        $years = english2bangla($interval->format('%Y'));
+                        $months2 = english2bangla($interval->format('%M'));
+                        $days = english2bangla($interval->format('%d'));
                     echo "<tr>
                         <td>".english2bangla($sl)."</td>
                         <td>".$emprow['account_name']."</td>

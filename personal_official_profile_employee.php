@@ -50,6 +50,12 @@ $logedInUserType = $_SESSION['userType'];
             <td><a href="current_loan.php">কারেন্ট (চলতি) লোন</a></td>
             <td><a href="previous_loan_statement.php">প্রিভিয়াস (পুরাতন) লোন</a></td>
         </tr>
+        <tr>
+            <th colspan="2">নিজ ক্ষমতা সংক্রান্ত</th>
+        </tr>
+        <tr>
+            <td><a href="employee_for_power_distribution.php">ক্ষমতা বিকেন্দ্রীকরণ / স্থগিতকরন</a></td>
+        </tr>
     </table>
 </div>
 <?php
