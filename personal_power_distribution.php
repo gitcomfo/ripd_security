@@ -13,7 +13,7 @@ if(isset($_GET['id']))
     
     $sql_post = mysql_query("SELECT post_name FROM employee, employee_posting, post_in_ons, post
                                                 WHERE idPost = Post_idPost AND idpostinons = post_in_ons_idpostinons AND Employee_idEmployee = idEmployee
-                                                    AND  cfs_user_idUser = $empCfsid");
+                                                AND  cfs_user_idUser = $empCfsid");
     $sql_postrow = mysql_fetch_assoc($sql_post);
     $db_empposition = $sql_postrow['post_name'];
     $sql_employee = mysql_query("SELECT * FROM employee WHERE cfs_user_idUser = $empCfsid");
@@ -38,15 +38,15 @@ function getUsedPages($id)
 	echo  "<option value=".$submodrow['idsecuritypage'].">".$submodrow['page_view_name']."</option>";
     }
 }
-//function getUnusedSubMod($id)
-//{
-//    $submodRslt= mysql_query("SELECT * FROM securiy_submodules WHERE idsecuritysubmod NOT IN 
-//                                                (SELECT security_submodules_idsecuritysubmod FROM security_groups WHERE security_roles_idsecurityrole = $id);");
-//    while($submodrow = mysql_fetch_assoc($submodRslt))
-//    {
-//	echo  "<option value=".$submodrow['idsecuritysubmod'].">".$submodrow['submod_name']."</option>";
-//    }
-//}
+function getUnusedSubMod($id)
+{
+    $submodRslt= mysql_query("SELECT * FROM securiy_submodules WHERE idsecuritysubmod NOT IN 
+                                                (SELECT security_submodules_idsecuritysubmod FROM security_groups WHERE security_roles_idsecurityrole = $id);");
+    while($submodrow = mysql_fetch_assoc($submodRslt))
+    {
+	echo  "<option value=".$submodrow['idsecuritysubmod'].">".$submodrow['submod_name']."</option>";
+    }
+}
 ?>
 <style type="text/css"> @import "css/bush.css";</style>
 <link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
@@ -138,7 +138,7 @@ document.getElementById('optionlist').value = arr.toString();
                                              <fieldset style="border:#999999 solid 2px;text-align: center;">
                                                  <legend  style="color: brown;">বিকেন্দ্রীকৃত দায়িত্ব</legend>
                                                     <select name="selectRight" size="10" id="selectRight" style="width: 240px; overflow: auto; padding: 3px; border: 1px solid #808080;">
-                                                       <?php // getUnusedSubMod($g_roleid);?>
+                                                       <?php getXtraPages($db_roleid);?>
                                                    </select>
                                               </fieldset>
                                          </td>
