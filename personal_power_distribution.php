@@ -1,7 +1,36 @@
 <?php
-//include_once 'includes/session.inc';
+error_reporting();
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
+$logedInUserID = $_SESSION['userIDUser'];
+$sel_role= mysql_query("SELECT * FROM  cfs_user WHERE idUser = $logedInUserID");
+$row = mysql_fetch_assoc($sel_role);
+$db_roleid = $row['security_roles_idsecurityrole'];
+$db_withdrawal =$row['withdrawl_access'];
+
+if(isset($_POST['submit']))
+{
+    $p_str_pagelist = $_POST['optionlist'];
+    if($p_str_pagelist == "")
+    {
+        $p_str_pagelist = 0;
+    }
+    $p_id = $_POST['empID'];
+    mysql_query("START TRANSACTION");
+    $up_xtraaccess = mysql_query("UPDATE cfs_user SET extra_access = '$p_str_pagelist' WHERE idUser = $p_id") or exit(mysql_error());
+    $up_withdrawal = mysql_query("UPDATE cfs_user SET withdrawl_access = '$p_str_pagelist' WHERE idUser = $logedInUserID") or exit(mysql_error());
+   
+    if ($up_xtraaccess && $up_withdrawal)
+    {
+        mysql_query("COMMIT");
+        echo "<script>alert('বিকেন্দ্রীকরণ হয়েছে')</script>";
+    }
+        else {
+            mysql_query("ROLLBACK");
+            echo "<script>alert('বিকেন্দ্রীকরণ হয়নি')</script>";
+        }
+}
+
 if(isset($_GET['id']))
 {
     $empCfsid = $_GET['id'];
@@ -9,7 +38,9 @@ if(isset($_GET['id']))
     $getrow = mysql_fetch_assoc($selreslt);
     $db_empname = $getrow['account_name'];
     $db_empmobile = $getrow['mobile'];
-    $db_roleid = $getrow['security_roles_idsecurityrole'];
+    $db_emproleid = $getrow['security_roles_idsecurityrole'];
+    $db_xaccess =$getrow['extra_access'];
+    $db_withdrawaccess =$getrow['withdrawl_access'];
     
     $sql_post = mysql_query("SELECT post_name FROM employee, employee_posting, post_in_ons, post
                                                 WHERE idPost = Post_idPost AND idpostinons = post_in_ons_idpostinons AND Employee_idEmployee = idEmployee
@@ -23,28 +54,36 @@ if(isset($_GET['id']))
     $sql_empinfo = mysql_query("SELECT * FROM employee_information WHERE Employee_idEmployee = $db_empid");
     $empinforow = mysql_fetch_assoc($sql_empinfo);
     $db_empphoto = $empinforow['emplo_scanDoc_picture'];
-    $sql_empsal = mysql_query("SELECT * FROM employee_salary WHERE user_id=$db_empid AND pay_grade_idpaygrade= $db_paygrdid;");
-    $empsalrow = mysql_fetch_assoc($sql_empsal);
-    $db_empsalary = $empsalrow['total_salary'];
 }
 
-function getUsedPages($id)
+function getUsedPages($id,$withdrawal)
 {
     $submodRslt= mysql_query("SELECT * FROM security_pages LEFT JOIN security_groups 
                                                     ON security_pages.security_submodule_idsecuritysubmod = security_groups.security_submodules_idsecuritysubmod 
-                                                    WHERE security_roles_idsecurityrole = $id ORDER BY page_view_name");
+                                                    WHERE security_roles_idsecurityrole = $id 
+                                                     AND idsecuritypage NOT IN ($withdrawal) ORDER BY page_view_name");
     while($submodrow = mysql_fetch_assoc($submodRslt))
     {
 	echo  "<option value=".$submodrow['idsecuritypage'].">".$submodrow['page_view_name']."</option>";
     }
 }
-function getUnusedSubMod($id)
+function getHavingAccess($id,$withdrawal)
 {
-    $submodRslt= mysql_query("SELECT * FROM securiy_submodules WHERE idsecuritysubmod NOT IN 
-                                                (SELECT security_submodules_idsecuritysubmod FROM security_groups WHERE security_roles_idsecurityrole = $id);");
+    $submodRslt= mysql_query("SELECT * FROM security_pages LEFT JOIN security_groups 
+                                                    ON security_pages.security_submodule_idsecuritysubmod = security_groups.security_submodules_idsecuritysubmod 
+                                                    WHERE security_roles_idsecurityrole = $id 
+                                                     AND idsecuritypage NOT IN ($withdrawal) ORDER BY page_view_name");
     while($submodrow = mysql_fetch_assoc($submodRslt))
     {
-	echo  "<option value=".$submodrow['idsecuritysubmod'].">".$submodrow['submod_name']."</option>";
+	echo  "<option value=".$submodrow['idsecuritypage'].">".$submodrow['page_view_name']."</option>";
+    }
+}
+function getXtraPages($db_xaccess)
+{
+    $submodRslt= mysql_query("SELECT * FROM security_pages WHERE idsecuritypage IN ($db_xaccess) ORDER BY page_view_name");
+    while($submodrow = mysql_fetch_assoc($submodRslt))
+    {
+	echo  "<option value=".$submodrow['idsecuritypage'].">".$submodrow['page_view_name']."</option>";
     }
 }
 ?>
@@ -103,7 +142,7 @@ function move(listBoxTo,optionValue,optionDisplayText)// move function
 function show()
 {
 var arr = new Array();
-var select1 = document.getElementById('selectLeft');
+var select1 = document.getElementById('selectRight');
 
 for(var i=0; i < select1.options.length; i++){
     arr.push(select1.options[i].value);
@@ -122,11 +161,11 @@ document.getElementById('optionlist').value = arr.toString();
                             <table style="margin-left: 0px !important;">
                                  <tbody>
                                     <tr>
-                                        <td width="45%">
+                                        <td width="45%"><input type="hidden" name="empID" value="<?php echo $empCfsid?>" />
                                              <fieldset style="border: #999999 solid 2px; text-align: center;">
-                                                 <legend  style="color: brown;">নিজের দায়িত্ব</legend>
+                                                 <legend  style="color: brown;font-size: 16px;">নিজের দায়িত্ব</legend>
                                                     <select name="selectLeft" size="10" id="selectLeft" style="width: 240px; overflow: auto; padding: 3px; border: 1px solid #808080">
-                                                        <?php getUsedPages($db_roleid);?>
+                                                        <?php getUsedPages($db_roleid,$db_withdrawal);?>
                                                     </select>
                                              </fieldset>
                                          </td>
@@ -134,11 +173,11 @@ document.getElementById('optionlist').value = arr.toString();
                                             <input name="btnRight" type="button" id="btnRight" value="&gt;&gt;" onClick="javaScript:moveToRightOrLeft(1);"/><br/>
                                              <input name="btnLeft" type="button" id="btnLeft" value="&lt;&lt;" onClick="javaScript:moveToRightOrLeft(2);"/>                            
                                         </td>
-                                        <td width="45%">
+                                        <td width="45%"><input type="hidden" name="optionlist" id="optionlist" />
                                              <fieldset style="border:#999999 solid 2px;text-align: center;">
-                                                 <legend  style="color: brown;">বিকেন্দ্রীকৃত দায়িত্ব</legend>
+                                                 <legend  style="color: brown;font-size: 16px;">কর্মচারীর বিকেন্দ্রীকৃত দায়িত্ব</legend>
                                                     <select name="selectRight" size="10" id="selectRight" style="width: 240px; overflow: auto; padding: 3px; border: 1px solid #808080;">
-                                                       <?php getXtraPages($db_roleid);?>
+                                                       <?php getXtraPages($db_xaccess);?>
                                                    </select>
                                               </fieldset>
                                          </td>
@@ -149,7 +188,7 @@ document.getElementById('optionlist').value = arr.toString();
                          <td width="41%"></br>
                             <table>
                                     <tr>
-                                        <td width="40%" rowspan='5' style="padding-left: 0px;"> <img src="<?php echo $db_empphoto;?>" width="128px" height="128px" alt=""></td> 
+                                        <td width="40%" rowspan='4' style="padding-left: 0px;"> <img src="<?php echo $db_empphoto;?>" width="128px" height="128px" alt=""></td> 
                                     </tr>
                                     <tr>
                                         <td width="57%"><input type="hidden" readonly="" value="<?php echo $db_empname;?>" /><?php echo $db_empname;?></td>
@@ -161,12 +200,24 @@ document.getElementById('optionlist').value = arr.toString();
                                     <tr>
                                         <td><input type="hidden" readonly="" value="<?php echo $db_empmobile;?>" /><?php echo $db_empmobile;?>
                                                 <input type="hidden" readonly="" name="empid"value="<?php echo $db_empid;?>" /></td>
-                                    </tr>    
+                                    </tr> 
+                                    </table>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <fieldset style="border:#999999 solid 2px;text-align: center;">
+                                                        <legend  style="color: brown;font-size: 16px;">কর্মচারীর প্রধান দায়িত্ব</legend>
+                                                           <select size="10" style="width: 240px; overflow: auto; padding: 3px; border: 1px solid #808080;">
+                                                              <?php getHavingAccess($db_emproleid,$db_withdrawaccess);?>
+                                                          </select>
+                                                     </fieldset>
+                                            </td>
+                                        </tr>
                                     </table>
                                 </td>
                             </tr>
                             <tr>                    
-                        <td colspan="2" style="padding-left: 250px; " ></br></br><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="সেভ করুন" /></td>                           
+                        <td colspan="2" style="padding-left: 250px; " ></br></br><input class="btn" style =" font-size: 12px; " type="submit" onclick="show()" name="submit" value="সেভ করুন" /></td>                           
                     </tr>    
                 </table>
                 </fieldset>
