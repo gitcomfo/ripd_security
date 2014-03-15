@@ -18,9 +18,9 @@ if(isset($_POST['submit']))
     $p_id = $_POST['empID'];
     mysql_query("START TRANSACTION");
     $up_xtraaccess = mysql_query("UPDATE cfs_user SET extra_access = '$p_str_pagelist' WHERE idUser = $p_id") or exit(mysql_error());
-    $up_withdrawal = mysql_query("UPDATE cfs_user SET withdrawl_access = '$p_str_pagelist' WHERE idUser = $logedInUserID") or exit(mysql_error());
+    //$up_withdrawal = mysql_query("UPDATE cfs_user SET withdrawl_access = '$p_str_pagelist' WHERE idUser = $logedInUserID") or exit(mysql_error());
    
-    if ($up_xtraaccess && $up_withdrawal)
+    if ($up_xtraaccess)
     {
         mysql_query("COMMIT");
         echo "<script>alert('বিকেন্দ্রীকরণ হয়েছে')</script>";
