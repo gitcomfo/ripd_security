@@ -34,6 +34,7 @@ if(isset($_POST['submit']))
     }
  else { $msg = "";}
 }
+
 if(isset($_POST['makesalary']))
 {
     // parent ons id find --------------------------------
@@ -80,6 +81,9 @@ if(isset($_POST['makesalary']))
     $p_onsid = $_POST['onsID'];
     $p_empCfsID = $_POST['empCFSid'];
     $p_monthlyPay = $_POST['monthlySalary'];
+    $p_pension = $_POST['pension'];
+    $p_loan = $_POST['loan'];
+    $p_actual = $_POST['actual'];
     $p_xtrapay = $_POST['xtrapay'];
     $p_deduct = $_POST['deductpay'];
     $p_totalpay = $_POST['totalSalary'];
@@ -93,7 +97,7 @@ if(isset($_POST['makesalary']))
     $sal_approval_id = $conn->lastInsertId();
     for($i=1;$i<=$numberOfRows;$i++)
     {
-         $sqlrslt2= $insert_sal_chart->execute(array($p_monthNo, $p_yearNo, $p_monthlyPay[$i], $p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i-1], $p_empCfsID[$i], $sal_approval_id));
+         $sqlrslt2= $insert_sal_chart->execute(array($p_monthNo, $p_yearNo,$p_actual[$i],$p_pension[$i],$p_loan[$i], $p_monthlyPay[$i], $p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i-1], $p_empCfsID[$i], $sal_approval_id));
     }
     $url = "salary_approval.php?id=".$sal_approval_id;
     $status = "unread";
@@ -228,19 +232,19 @@ function beforeSubmit()
                                     <input type="hidden" name="yearNo" value="<?php echo $p_year;?>" /><input type="hidden" name="monthNo" value="<?php echo $p_month;?>" /></br></br></td>
                             </tr>
                                      <?php }?>
-                            <tr id="table_row_odd">
-                                        <td style='border: 1px solid #000099;text-align: center;width: 1%;' ><strong>ক্রম</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;' ><strong>কর্মচারীর নাম</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 5%;' ><strong>গ্রেড</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;' ><strong>পোস্ট</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 15%;'><strong>উপস্থিতির হিসেব</strong></td>
-                                         <td style='border: 1px solid #000099;text-align: center;width: 3%;'><strong>উপস্থিতির বিস্তারিত তথ্য</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মূল বেতন (টাকা)</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মাসে পাবে (পেনসন ও লোন বাদ)</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>অতিরিক্ত প্রদান (টাকা)</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>বেতন কর্তন (টাকা)</strong></td>
-                                        <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মোট বেতন (টাকা)</strong></td>
-                            </tr>
+                                        <tr id="table_row_odd">
+                                                    <td style='border: 1px solid #000099;text-align: center;width: 1%;' ><strong>ক্রম</strong></td>
+                                                    <td style='border: 1px solid #000099;text-align: center;width: 10%;' ><strong>কর্মচারীর নাম</strong></td>
+                                                    <td style='border: 1px solid #000099;text-align: center;width: 5%;' ><strong>গ্রেড</strong></td>
+                                                    <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>পোস্ট</strong></td>
+                                                    <td style='border: 1px solid #000099;text-align: center;width: 15%;'><strong>উপস্থিতির হিসেব</strong></td>
+                                                     <td style='border: 1px solid #000099;text-align: center;width: 3%;'><strong>উপস্থিতির বিস্তারিত তথ্য</strong></td>
+                                                    <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মূল বেতন (টাকা)</strong></td>
+                                                    <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মাসে পাবে (পেনসন ও লোন বাদ)</strong></td>
+                                                    <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>অতিরিক্ত প্রদান (টাকা)</strong></td>
+                                                    <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>বেতন কর্তন (টাকা)</strong></td>
+                                                    <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মোট বেতন (টাকা)</strong></td>
+                                        </tr>
                                 <tbody style="font-size: 12px !important">
                                  <?php
                                  if(isset($_POST['submit']))
@@ -317,8 +321,8 @@ function beforeSubmit()
                                                     <b>ছুটিঃ</b> $leaveDays দিন</br>
                                                     <b>ওভারটাইমঃ</b> $db_overtime ঘণ্টা    
                                                    </td>
-                                                   <td style='border: 1px solid black; text-align: center'><a style='cursor:pointer;color:blue;' id='details[$sl]' ><u>বিস্তারিত</u></a></td>
-                                                   <td style='border: 1px solid black; text-align: center'>".$db_main_salary."</td>
+                                                   <td style='border: 1px solid black; text-align: center'><a style='cursor:pointer;color:blue;' id='details[$sl]' ><u>বিস্তারিত</u></a><input type='hidden' name='actual[$sl]' value='$db_main_salary' /></td>
+                                                   <td style='border: 1px solid black; text-align: center'>".$db_main_salary."<input type='hidden' name='pension[$sl]' value='$db_pension' /><input type='hidden' name='loan[$sl]' value='$db_loan' /></td>
                                                    <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary[$sl]' id='monthlySalary[$sl]' value='$totalsalary' />".$totalsalary."</td>
                                                    <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay[$sl]' name='xtrapay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryPlus(this.value,$sl)'  /></td>
                                                    <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' id='deductpay[$sl]' name='deductpay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryMinus(this.value,$sl)' /></td>
@@ -333,7 +337,6 @@ function beforeSubmit()
                                     }
                                  }
                                 ?>
-                                    
                                 </tbody>
                             </table>
                             </form>

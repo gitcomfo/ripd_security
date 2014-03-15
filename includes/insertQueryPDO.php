@@ -45,8 +45,8 @@ $sql_insert_cheque_making = $conn->prepare("INSERT INTO acc_user_cheque (cheque_
 // ************************************* employee salary give ***************************************************************************
 $insert_sal_approval = $conn->prepare("INSERT INTO salary_approval (total_month_salary, month_no,year_no,salapp_onsid,salary_makerid,salary_making_date)
         VALUES (?,?,?, ?, ?, NOW())");
-$insert_sal_chart = $conn->prepare("INSERT INTO salary_chart (month_no,year_no,given_amount,deducted_amount,bonus_amount,total_given_amount,user_id,salary_status,fk_sal_aprv_salappid)
-        VALUES (?, ?, ?, ?, ?, ?, ?, 'made', ?)");
+$insert_sal_chart = $conn->prepare("INSERT INTO salary_chart (month_no,year_no,actual_salary,pension_amount,loan_amount,given_amount,deducted_amount,bonus_amount,total_given_amount,user_id,salary_status,fk_sal_aprv_salappid)
+        VALUES (?, ?, ?,?,?,?, ?, ?, ?, ?, 'made', ?)");
 $insert_notification = $conn->prepare("INSERT INTO notification (nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
                                                             VALUES (?,?,?,?,NOW(),?,?,?)");
 

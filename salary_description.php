@@ -26,7 +26,8 @@ include_once 'includes/selectQueryPDO.php';
     $sql_empinfo = mysql_query("SELECT * FROM employee_information WHERE Employee_idEmployee = $db_empid");
     $empinforow = mysql_fetch_assoc($sql_empinfo);
     $db_empphoto = $empinforow['emplo_scanDoc_picture'];
-if(isset($_POST['submit']))
+
+    if(isset($_POST['submit']))
 {
     $p_month = $_POST['month'];
     $p_year = $_POST['year'];
@@ -63,6 +64,9 @@ if(isset($_POST['submit']))
     $db_deduct = $sal_chart_row['deducted_amount'];
     $db_bonus = $sal_chart_row['bonus_amount'];
     $db_given_salary = $sal_chart_row['total_given_amount'];
+    $db_actual_salary = $sal_chart_row['actual_salary'];
+    $db_pension_amount = $sal_chart_row['pension_amount'];
+    $db_loan_amount = $sal_chart_row['loan_amount'];
 }
     ?>
     <title>বেতন প্রদানের স্টেটমেন্ট</title>
@@ -164,7 +168,7 @@ if(isset($_POST['submit']))
                     </tr> 
                     <tr>
                          <td style="width: 50%; text-align: right"><b>মাস : </b><?php echo $monthName;?> <b>বছর : </b><?php echo $p_year;?></td>
-                         <td style="width: 50%; text-align: left"><b>প্রদেয় বেতন : </b><?php echo english2bangla($db_salary)." টাকা"?></td>
+                         <td style="width: 50%; text-align: left"><b>প্রদেয় বেতন : </b><?php echo english2bangla($db_actual_salary)." টাকা"?></td>
                     </tr>
                     <tr>
                         <td style=" text-align: left; padding-left: 120px !important; margin: 0px; width: 50%">
@@ -182,13 +186,13 @@ if(isset($_POST['submit']))
                                     {
                                         $db_criteria = $sal_criteria_row['criteria_name'];
                                         $db_percentange = $sal_criteria_row['percentage'];
-                                        $salary_part = round((($db_salary * $db_percentange) / 100),2);
+                                        $salary_part = round((($db_actual_salary * $db_percentange) / 100),2);
                                         $criteria_total+= $salary_part;
                                         echo "<tr><td style='border: 1px solid black;'>$db_criteria</td>";
                                         echo "<td style='border: 1px solid black;'>".english2bangla($salary_part)." টাকা</td></tr>";
                                     }
                                         echo "<tr><td style='border: 1px solid black;'>মূল</td>";
-                                        echo "<td style='border: 1px solid black;'>".english2bangla($db_salary-$criteria_total)." টাকা</td></tr>";
+                                        echo "<td style='border: 1px solid black;'>".english2bangla($db_actual_salary-$criteria_total)." টাকা</td></tr>";
                                     ?>
                                 </table>
                             </fieldset>
@@ -229,11 +233,11 @@ if(isset($_POST['submit']))
                                     </tr>
                                     <tr>
                                         <td><b>পেনশন এমাউন্ট</b></td>
-                                        <td>: </td>
+                                        <td>: <?php echo english2bangla($db_pension_amount) ?> টাকা</td>
                                     </tr>
                                     <tr>
                                         <td><b>লোন এমাউন্ট</b></td>
-                                        <td>: </td>
+                                        <td>: <?php echo english2bangla($db_loan_amount) ?> টাকা</td>
                                     </tr>
                                     <tr>
                                         <td><b>মোট প্রাপ্ত বেতন</b></td>
