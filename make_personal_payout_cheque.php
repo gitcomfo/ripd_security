@@ -57,7 +57,9 @@ echo '<script> window.print(); </script>';
                         $sql_select_last_cheque_making->execute(array($cheque_type, $sender_id));
                         $row_last_cheque_making_date = $sql_select_last_cheque_making->fetchAll();
                         foreach ($row_last_cheque_making_date as $rlat)
+                        {
                             $db_last_cheque_make_date = date("d-m-Y", strtotime($rlat['cheque_mak_datetime']));
+                        }
                         $sql_userBalance->execute(array($sender_id));
                         $row_user_balance = $sql_userBalance->fetchAll();
                         foreach ($row_user_balance as $rub) {
