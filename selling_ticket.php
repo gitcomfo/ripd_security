@@ -5,6 +5,8 @@ include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 
 $loginUSERname = $_SESSION['UserID'] ;
+$logedinOfficeId = $_SESSION['loggedInOfficeID'];
+
 $queryemp = mysql_query("SELECT idUser FROM cfs_user WHERE user_name = '$loginUSERname';");
 $emprow = mysql_fetch_assoc($queryemp);
 $db_onsid = $emprow['idUser'];
@@ -413,6 +415,12 @@ if(isset($_POST['submit_ticket']))
        $paymentByCash =  0;
        $paymentByAccount =  $totalamount;
    }
+    $sel_onsID = $conn->prepare("SELECT idons_relation FROM ons_relation WHERE add_ons_id = ? AND catagory='office'");
+    $sel_onsID->execute(array($logedinOfficeId));
+    $offrow = $sel_onsID->fetchAll();
+    foreach ($offrow as $value) {
+       $office_ons_id = $value['idons_relation'];
+    }
     
    if(($no_of_seats<=10 && $no_of_seats>0) || ($no_of_xtra<=$freeXtra && $no_of_xtra >0))
    {
@@ -441,12 +449,26 @@ if(isset($_POST['submit_ticket']))
                  }
                 $arr_Xtra = explode(',', $str_Xseatstring);
                $arr_matchXtra= array_intersect($arr_checkbox2, $arr_Xtra);
+               
                if (count($arr_matchSeat) == 0  && count($arr_matchXtra) == 0 )
                {
+                   mysql_query("START TRANSACTION");
+                   
                    $tsql="INSERT INTO ticket (ticket_owner_name ,ticket_owner_mobile ,ticket_buyer_id, no_ofTicket_purchase ,seat_no ,xtra_seat ,total_ticket_prize ,total_amount, total_makingCharge, tckt_cash_paid, tckt_acc_paid, ticket_seller_id, Program_idprogram) 
                             VALUES ('$ownerName', '$ownerMbl',$buyerid, $total_no_of_seat , '$str_SelectedSeat' , '$str_SelectedXSeat', $totalTicketPrize,  $totalamount,$totalMakingCharge, $paymentByCash, $paymentByAccount, $db_onsid, $valueID );";
                     $treslt=mysql_query($tsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৭';
                     $TicketID = mysql_insert_id();
+                    
+                    $ins_daily_inout = mysql_query("INSERT INTO acc_ofc_daily_inout (daily_date, daily_onsid, in_amount) VALUES (NOW(),$office_ons_id,$paymentByCash)") or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন?';
+                     if($treslt && $ins_daily_inout)
+                        {
+                            mysql_query("COMMIT");
+                        }
+                        else
+                        {
+                             mysql_query("ROLLBACK");
+                             echo "<script>alert('দুঃখিত, টিকিট বিক্রয় হয়নি')</script>";
+                        }
                }
                else { $bookedmsg = "error"; }
        }

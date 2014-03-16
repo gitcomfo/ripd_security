@@ -62,11 +62,12 @@ if(isset($_POST['pay']))
                 if($update && $insert)
                 {
                     $conn->commit();
+                    echo "<script>alert('টাকা প্রদান করা হল')</script>";
                 }
                 else
                 {
                     $conn->rollBack();
-                    echo "<script>alert('টাকা প্রদান করা হয়নি')</script>";
+                    echo "<script>alert('দুঃখিত, টাকা প্রদান করা হয়নি')</script>";
                 }
        }
 }
@@ -115,7 +116,7 @@ if(isset($_POST['pay']))
                             {
                     ?> 
                     <tr>
-                        <td colspan="2"><?php echo $msg?></td>
+                        <td colspan="2" style="color: red;text-align: center;"><?php echo $msg?></td>
                     </tr>
                             <?php } else { ?>
                     <tr>
