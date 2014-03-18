@@ -3,9 +3,11 @@ include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once './includes/selectQueryPDO.php';
 $ins_ons_exp = $conn->prepare("INSERT INTO ons_operational_exp(exp_total_amount ,exp_date ,exp_ons_id, exp_maker_id,exp_making_date) 
-            VALUES (?,?,?,?,NOW())");
+                                                         VALUES (?,?,?,?,NOW())");
 $ins_ons_exp_details = $conn->prepare("INSERT INTO ons_opexp_details(onsexp_sector ,onsexp_amount, onsexp_description ,onsexp_scandoc, fk_onsopexp_idonsopexp) 
-            VALUES (?,?,?,?,?)");
+                                                                    VALUES (?,?,?,?,?)");
+$ins_daily_inout = $conn->prepare("INSERT INTO acc_ofc_daily_inout (daily_date, daily_onsid, out_amount) VALUES (NOW(),?,?)");
+
 $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
 if (isset($_POST['submit'])) {
     $exp_ons_type = $_SESSION['loggedInOfficeType'];
@@ -38,7 +40,10 @@ if (isset($_POST['submit'])) {
                 } 
         $sqlresult2 = $ins_ons_exp_details ->execute(array($sub[$i],$quan1[$i],$desc[$i],$image_path,$ons_exp_id));
     }
-    if($sqlresult1  && $sqlresult2)
+    
+    $insert = $ins_daily_inout->execute(array($db_onsID,$total_exp));
+    
+    if($sqlresult1  && $sqlresult2 && $insert)
         {
             $conn->commit();
             echo "<script>alert('দৈনিক অফিস খরচ দেয়া হল')</script>";
