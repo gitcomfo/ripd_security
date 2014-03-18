@@ -102,7 +102,7 @@ function getEmployee(accountNo) //search employee by account number*************
     <form  action="" id="amountTransForm" method="post" style="font-family: SolaimanLipi !important;">
             <table class="formstyle" style ="width: 100%; margin-left: 0px; font-family: SolaimanLipi !important;">        
                 <tr>
-                    <th colspan="3">ব্যাক্তিগত অ্যামাউন্ট ট্রান্সফার</th>
+                    <th colspan="3">টাকা ট্রান্সফার</th>
                 </tr>
                 <?php
             showMessage($flag, $msg);

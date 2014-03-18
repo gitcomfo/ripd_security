@@ -21,7 +21,7 @@ include_once 'includes/columnViewAccount.php';
             <th colspan="2">নতুন একাউন্ট তৈরি</th>
         </tr>
         <tr>
-            <td><a href="#">নতুন কাস্টমার একাউন্ট তৈরি</a></td>
+            <td><a href="create_customer_account.php">নতুন কাস্টমার একাউন্ট তৈরি</a></td>
             <td><a onclick="accGenerate();" style="cursor: pointer;color: #03C;"><u>নতুন এগ্রিমেন্ট একাউন্ট তৈরি</u></a></td>
         </tr>
     </table>

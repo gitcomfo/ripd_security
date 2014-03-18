@@ -41,7 +41,7 @@ function printthis()
     <div>
         <div id="onprint" style="display: none;text-align: center;"><font style="font-size: 16px;">রিপড ইউনিভার্সেল</font> <sub>লিমিটেড</sub></br><?php echo english2bangla(date("d-m-Y"))?></div>
             <table class="formstyle"  style="font-family: SolaimanLipi !important;width: 80%;">
-                <tr><th style="text-align: center" colspan="2"><h1>পার্সোনাল পারচেজ স্টেটমেন্ট</h1></th></tr>
+                <tr><th style="text-align: center" colspan="2"><h1>ব্যক্তিগত ক্রয় স্টেটমেন্ট</h1></th></tr>
                 <tr>
                     <td id="noprint">
                         <fieldset style="border:3px solid #686c70;width: 99%;">
@@ -64,7 +64,7 @@ function printthis()
                 <tr>
                     <td>
                         <fieldset style="border: 3px solid #686c70 ; width: 99%;font-family: SolaimanLipi !important;">
-                            <legend style="color: brown;font-size: 14px;">পার্সোনাল পারচেজ স্টেটমেন্ট</legend>
+                            <legend style="color: brown;font-size: 14px;">ব্যক্তিগত ক্রয় স্টেটমেন্ট</legend>
                             <div id="resultTable">
                                 <table style="width: 98%;margin: 0 auto;" cellspacing="0" cellpadding="0">
                                     <thead>

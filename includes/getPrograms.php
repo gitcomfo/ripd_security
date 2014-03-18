@@ -55,7 +55,7 @@ elseif(isset($_GET['type']))
                     <td style='border:1px black solid;'>$date</td>
                     <td style='border:1px black solid;'>$time</td>
                     <td style='border:1px black solid;'>$db_programvanue</td>
-                    <td style='border:1px black solid;text-align:center;'><a href='online_ticket_buying?opt=submit_ticket&prgrm_id=$db_progID'><input style ='font-size: 12px; width:50px;border:2px solid green;cursor:pointer;' type='button' value='ক্রয়' /></td>
+                    <td style='border:1px black solid;text-align:center;'><a href='online_ticket_buying.php?opt=submit_ticket&prgrm_id=$db_progID'><input style ='font-size: 12px; width:50px;border:2px solid green;cursor:pointer;' type='button' value='ক্রয়' /></td>
                 </tr>";
             
     }

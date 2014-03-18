@@ -77,7 +77,7 @@ if (isset($_POST['save'])) {
     <form  action="" id="amountTransForm" method="post" style="font-family: SolaimanLipi !important;">
         <table class="formstyle" style ="width: 100%; margin-left: 0px; font-family: SolaimanLipi !important;">        
             <tr>
-                <th colspan="2">সেন্ড এমাউন্ট</th>
+                <th colspan="2">টাকা পাঠানো</th>
             </tr>
             <?php
             showMessage($flag, $msg);
