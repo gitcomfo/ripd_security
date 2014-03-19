@@ -1,12 +1,12 @@
 <?php
 error_reporting(0);
-include_once 'includes/ConnectDB.inc';
 include_once 'includes/header.php';
 include_once 'includes/columnViewAccount.php';
-include_once 'includes/connectionPDO.php';
 include_once 'includes/selectQueryPDO.php';
 include_once 'includes/insertQueryPDO.php';
 include_once 'includes/sms_send_function.php';
+$loginUSERname = $_SESSION['acc_holder_name'];
+$loginUSERid = $_SESSION['userIDUser'];
 
 $charge_code = "tra";
 $db_charge_amount = 0;
@@ -63,15 +63,26 @@ if (isset($_POST['save'])) {
     }
     else{
         $receiver_mobile_num = $_POST['user_mobile'];
+        $conn->beginTransaction(); 
         $sql_insert_acc_user_amount_transfer->execute(array($trans_type, $trans_senderid, $receiver_id, $receiver_mobile_num,
                                                                     $p_trans_amount, $p_receiver_get, $p_trans_charge, $trans_purpose,
                                                                     $chrg_givenby, $p_total_amount, $sts, $random));
         $sms_body = "Dear User,\nYou have received: $p_trans_amount Taka.\nTransaction Charge: $p_trans_charge Taka,\nYou will get $p_receiver_get Taka in Cash.\nYour code $random";
         $sendResult = SendSMSFuntion($receiver_mobile_num, $sms_body);
         $sendStatus = substr($sendResult, 0, 2);
-        if($sendStatus == 'OK'){
+        
+        $url = "";
+        $status = "unread";
+        $type="msg";
+        $nfc_catagory="personal";
+        $notice = $loginUSERname." হতে ".$p_receiver_get." টাকা ট্রান্সফার হয়ে একাউন্টে জমা হয়েছে";
+        $sqlrslt3 = $insert_notification->execute(array($loginUSERid,$receiver_id,$notice,$url,$status,$type,$nfc_catagory));
+        
+        if(($sendStatus == 'OK') &&  $sql_insert_acc_user_amount_transfer && $sqlrslt3){
+            $conn->commit();
             $msg = "টাকা সফল ভাবে ট্রান্সফার হয়েছে, আপনার কোডটি ".$random;
         }else{
+            $conn->rollBack();
             $msg = "দুঃখিত, ম্যাসেজটি পাঠানো যায়নি, আপনার কোডটি ".$random;
         }
     }
