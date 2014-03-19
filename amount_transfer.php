@@ -8,7 +8,6 @@ include_once 'includes/selectQueryPDO.php';
 include_once 'includes/insertQueryPDO.php';
 include_once 'includes/sms_send_function.php';
 
-
 $charge_code = "tra";
 $db_charge_amount = 0;
 $db_charge_type = "";
@@ -39,7 +38,13 @@ function showMessage($flag, $msg)
                 }
         }
 if (isset($_POST['save'])) {
-    $receiver_id =$_POST['receiver_user_id'];
+    $receiver_acc =$_POST['accountNo'];
+    $sql_select_cfs_user = $conn->prepare("SELECT idUser FROM cfs_user WHERE account_number = ?");
+    $sql_select_cfs_user->execute(array($receiver_acc));
+    $row = $sql_select_cfs_user->fetchAll();
+    foreach ($row as $value) {
+        $receiver_id = $value['idUser'];
+    }
     $p_trans_amount = $_POST['amount'];
     $trans_purpose = $_POST['trans_des'];
     $p_receiver_get= $_POST['trans_amount_val'];
@@ -58,11 +63,11 @@ if (isset($_POST['save'])) {
     }
     else{
         $receiver_mobile_num = $_POST['user_mobile'];
-        $sql_insert_acc_user_amount_transfer->execute(array($trans_type, $trans_senderid, $reciever_id, $receiver_mobile_num,
+        $sql_insert_acc_user_amount_transfer->execute(array($trans_type, $trans_senderid, $receiver_id, $receiver_mobile_num,
                                                                     $p_trans_amount, $p_receiver_get, $p_trans_charge, $trans_purpose,
                                                                     $chrg_givenby, $p_total_amount, $sts, $random));
         $sms_body = "Dear User,\nYou have received: $p_trans_amount Taka.\nTransaction Charge: $p_trans_charge Taka,\nYou will get $p_receiver_get Taka in Cash.\nYour code $random";
-        //$sendResult = SendSMSFuntion($receiver_mobile_num, $sms_body);
+        $sendResult = SendSMSFuntion($receiver_mobile_num, $sms_body);
         $sendStatus = substr($sendResult, 0, 2);
         if($sendStatus == 'OK'){
             $msg = "টাকা সফল ভাবে ট্রান্সফার হয়েছে, আপনার কোডটি ".$random;

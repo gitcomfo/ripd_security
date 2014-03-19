@@ -8,18 +8,34 @@ $logedInUserType = $_SESSION['userType'];
 <div class="columnSubmodule" style="font-size: 14px;">
     <table class="formstyle" style ="width: 100%; margin-left: 0px; font-family: SolaimanLipi !important;"> 
         <tr>
-            <th colspan="2">সকল ধরনের রিপোর্ট</th>
+            <th colspan="2">পণ্য ক্রয় সংক্রান্ত রিপোর্ট</th>
         </tr>
         <tr>
             <td><a href="personal_purchase_statement.php">ব্যক্তিগত ক্রয় স্টেটমেন্ট</a></td>
-            <td><a href="payment_statement_chart.php">পেমেন্ট স্টেটমেন্ট চার্ট</a></td>
-        </tr>
-        <tr>
-            <td><a href="systemic_earn_system.php">সিস্টেমিক আর্ন স্টেটমেন্ট</a></td>
             <td><a href="in_amount_description.php">ইন ডেসক্রিপশন</a></td>
         </tr>
         <tr>
             <td><a href="personal_balanced_description.php">ব্যালেন্সড ডেসক্রিপশন</a></td>
+        </tr>
+        <tr>
+            <th colspan="2">পেমেন্ট সংক্রান্ত রিপোর্ট</th>
+        </tr>
+        <tr>
+            <td><a href="withdrawal_statement.php">টাকা উত্তোলনের স্টেটমেন্ট</a></td>
+            <td><a href="transfer_statement.php">ট্রান্সফার এমাউন্ট স্টেটমেন্ট</a></td>
+        </tr>
+        <tr>
+            <td><a href="payment_statement_chart.php">টাকা পাঠানোর স্টেটমেন্ট</a></td>
+        </tr>
+        <tr>
+            <th colspan="2">আর্ন সংক্রান্ত রিপোর্ট</th>
+        </tr>
+        <tr>
+            <td><a href="systemic_earn_system.php">পিভি ইন স্টেটমেন্ট</a></td>
+            <td><a href="transfer_in_statement.php">ট্রান্সফার এমাউন্ট স্টেটমেন্ট</a></td>
+        </tr>
+        <tr>
+            <td><a href="cash_in_statement.php">ক্যাশ ইন স্টেটমেন্ট</a></td>
         </tr>
         <?php 
         if($logedInUserType=='customer'){

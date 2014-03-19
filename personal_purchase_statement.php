@@ -84,7 +84,6 @@ function printthis()
                                         {
                                             $p_startdate = $_POST['startDate'];
                                             $p_lastDate = $_POST['lastDate'];
-                                            $slNo = 1;
                                             $select_refered_selected->execute(array($userID,$p_startdate,$p_lastDate));
                                                 $row1 = $select_refered_selected->fetchAll();
                                                 foreach ($row1 as $value) {
@@ -105,12 +104,10 @@ function printthis()
                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.$db_refered.'</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.$db_package.'</div></td>';                                                
                                                 echo '</tr>';
-                                                $slNo++;
                                             }
                                         }
                                         else
-                                        {
-                                            $slNo = 1;                                            
+                                        {                                         
                                             $select_refered->execute(array($userID));
                                                 $row1 = $select_refered->fetchAll();
                                                 foreach ($row1 as $value) {
@@ -131,7 +128,6 @@ function printthis()
                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.$db_refered.'</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.$db_package.'</div></td>';                                              
                                                 echo '</tr>';
-                                                $slNo++;
                                             }
                                         }
                                         ?>
