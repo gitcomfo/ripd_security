@@ -31,7 +31,7 @@ $logedInUserType = $_SESSION['userType'];
             <th colspan="2">আর্ন সংক্রান্ত রিপোর্ট</th>
         </tr>
         <tr>
-            <td><a href="systemic_earn_system.php">পিভি ইন স্টেটমেন্ট</a></td>
+            <td><a href="systemic_earn_system.php">পিভি আর্ন স্টেটমেন্ট</a></td>
             <td><a href="transfer_in_statement.php">ট্রান্সফার এমাউন্ট স্টেটমেন্ট</a></td>
         </tr>
         <tr>
