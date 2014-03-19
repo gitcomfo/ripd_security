@@ -89,30 +89,35 @@ function pv_hitting($custID, $cust_type, $sumID,$selling_type,$total_profit)
         {
             $one_hit = ($total_profit * $Rone) / 100;
             $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $one_hit, total_balanace = total_balanace + $one_hit WHERE cfs_user_iduser = $one ");
+            $sql5 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $one_hit, last_update = NOW() WHERE fund_code = 'RHC'");
         }
         else { $borkot = $borkot + (($total_profit * $Rone) / 100); $one_hit = 0;  }
         if($two != 0)
         {
             $two_hit = ($total_profit * $Rtwo) / 100;
             $sql1=mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $two_hit, total_balanace = total_balanace + $two_hit WHERE cfs_user_iduser = $two ");
+            $sql5 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $two_hit, last_update = NOW() WHERE fund_code = 'RHC'");
         }
         else { $borkot = $borkot + (($total_profit * $Rtwo) / 100); $two_hit = 0;  }
         if($three != 0)
         {
             $three_hit = ($total_profit * $Rthree) / 100;
             $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $three_hit, total_balanace = total_balanace + $three_hit WHERE cfs_user_iduser = $three ");
+            $sql5 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $three_hit, last_update = NOW() WHERE fund_code = 'RHC'");
         }
         else { $borkot = $borkot + (($total_profit * $Rthree) / 100); $three_hit = 0;  }
         if($four != 0)
         {
             $four_hit = ($total_profit * $Rfour) / 100;
             $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $four_hit, total_balanace = total_balanace + $four_hit WHERE cfs_user_iduser = $four ");
+            $sql5 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $four_hit, last_update = NOW() WHERE fund_code = 'RHC'");
         }
         else { $borkot = $borkot + (($total_profit * $Rfour) / 100); $four_hit = 0;  }
         if($five != 0)
         {
             $five_hit = ($total_profit * $Rfive) / 100;
             $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $five_hit, total_balanace = total_balanace + $five_hit WHERE cfs_user_iduser = $five ");
+            $sql5 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $five_hit, last_update = NOW() WHERE fund_code = 'RHC'");
         }
         else { $borkot = $borkot + (($total_profit * $Rfive) / 100); $five_hit = 0;  }
             // calculate total soft cost ****************************     
@@ -129,7 +134,7 @@ function pv_hitting($custID, $cust_type, $sumID,$selling_type,$total_profit)
            $sql3 = mysql_query("INSERT INTO sales_customer_hitting (selling_earn,soft_costing,own,Rone,Rtwo,Rthree,Rfour,Rfive,ripd_income,borkot,sales_summery_idsalessummery) 
                                              VALUES($se_hit,$total_softcost,$own_hit,$one_hit,$two_hit,$three_hit,$four_hit,$five_hit,$ri_hit,$borkot,$sumID)");
 
-           if($sql1 && $sql2 && $sql3 && $sql4)
+           if($sql1 && $sql2 && $sql3 && $sql4 && $sql5)
            {
                 mysql_query("COMMIT");
                 $flag = 1;
