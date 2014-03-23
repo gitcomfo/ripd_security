@@ -15,7 +15,7 @@ if($_GET['type'] == 'personal')
         foreach ($row as $value) {
             echo '<table>
                         <tr>
-                            <td style="padding-left: 8px !important;width:29.5%;">একাউন্টধারীর নাম</td>
+                            <td style="padding-left: 8px !important;width:29.5%;">একাউন্টধারীর নাম<input type="hidden" name="acID" value="'.$value['idUser'].'" /></td>
                             <td>: <input class="box" type="text" id="acName" name="acName" readonly="" value="'.$value['account_name'].'" /></td>
                         </tr>
                         <tr>
