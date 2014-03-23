@@ -389,7 +389,8 @@ if(isset($_POST['submit']))
 if(isset($_POST['submit_ticket'])) 
 {
    $paymentType=$_POST['paymenttype'];
-    $valueID=$_POST['progID'];
+   $program_name = $_POST['progname'];
+   $valueID=$_POST['progID'];
    $ownerName=$_POST['owner_name'];
    $ownerMbl=$_POST['owner_mbl'];
    $buyerid = $_POST['buyerID'];
@@ -452,6 +453,12 @@ if(isset($_POST['submit_ticket']))
                
                if (count($arr_matchSeat) == 0  && count($arr_matchXtra) == 0 )
                {
+                    $url = "";
+                    $status = "unread";
+                    $type="msg";
+                    $nfc_catagory="personal";
+                    $notice = "আপনার একাউন্ট হতে ".$program_name."-এর ".$total_no_of_seat." টি টিকেট কেনা হয়েছে";
+                    
                    mysql_query("START TRANSACTION");
                    
                    $tsql="INSERT INTO ticket (ticket_owner_name ,ticket_owner_mobile ,ticket_buyer_id, no_ofTicket_purchase ,seat_no ,xtra_seat ,total_ticket_prize ,total_amount, total_makingCharge, tckt_cash_paid, tckt_acc_paid, ticket_seller_id, Program_idprogram) 
@@ -460,7 +467,9 @@ if(isset($_POST['submit_ticket']))
                     $TicketID = mysql_insert_id();
                     
                     $ins_daily_inout = mysql_query("INSERT INTO acc_ofc_daily_inout (daily_date, daily_onsid, in_amount) VALUES (NOW(),$office_ons_id,$paymentByCash)") or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন?';
-                     if($treslt && $ins_daily_inout)
+                    $sqlrslt3 = mysql_query("INSERT INTO notification (nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
+                                                                VALUES ($db_onsid,$buyerid,'$notice','$url',NOW(),'$status','$type','$nfc_catagory')");
+                     if($treslt && $ins_daily_inout && $sqlrslt3)
                         {
                             mysql_query("COMMIT");
                         }
@@ -779,7 +788,8 @@ if ($_GET['opt']=='submit_ticket') {
                                             <div><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 35px;">রিপড ইউনিভার্সাল</span><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;"> লিমিটেড</span></div>
                                             <div><span style="font-family: SolaimanLipi;color: #8A8B8C;font-size: 20px;">রিলীভ এন্ড ইমপ্রুভমেন্ট প্ল্যান অব ডেপ্রাইভড</span></div>
                                         </div>
-                                       <div style="width: 570px; float: left;padding-left: 4px;text-align: center;"><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;"><span style="color: black;"><?php echo $p_name;?></span></span></div>
+                                       <div style="width: 570px; float: left;padding-left: 4px;text-align: center;"><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;"><span style="color: black;"><?php echo $p_name;?></span></span>
+                                        <input type="hidden" name="progname" value="<?php echo $p_name;?>" /></div>
                                         <div id="front_info" style="width: 570px; float: left;padding-left: 4px;">
                                             <span><?php echo $whoinbangla;?>-এর নামঃ <span style="color: black;"><?php echo $str_emp_name;?></span></span></br>
                                             <span><?php echo $whoinbangla; ?> ই-মেইলঃ <span style="color: black;"><?php echo $str_emp_email;?></span></span></br>

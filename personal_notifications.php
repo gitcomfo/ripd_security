@@ -23,7 +23,8 @@ $sql_update_notification = $conn->prepare("UPDATE notification SET nfc_status='r
                     <?php        
                         $db_slNo = 1;
                         $catagory='personal';
-                        $sel_personal_notification = $conn->prepare("SELECT * FROM notification WHERE nfc_receiverid = ? AND nfc_status !='complete' AND nfc_catagory =?");
+                        $sel_personal_notification = $conn->prepare("SELECT * FROM notification WHERE nfc_receiverid = ? 
+                            AND nfc_status !='complete' AND nfc_catagory =? ORDER BY nfc_date DESC");
                         $sel_personal_notification ->execute(array($loginUSERid,$catagory));
                         $notificationrow = $sel_personal_notification->fetchAll();
                         $countrow = count($notificationrow);

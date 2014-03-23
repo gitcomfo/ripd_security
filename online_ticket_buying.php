@@ -171,8 +171,8 @@ if(isset($_GET['prgrm_id']))
 
 if(isset($_POST['submit_ticket'])) 
 {
-   $paymentType=$_POST['paymenttype'];
-    $valueID=$_POST['progID'];
+   $valueID=$_POST['progID'];
+   $program_name = $_POST['progname'];
    $ownerName=$_POST['owner_name'];
    $ownerMbl=$_POST['owner_mbl'];
    $arr_checkbox1 = $_POST['checkbox_Seat'];
@@ -185,7 +185,7 @@ if(isset($_POST['submit_ticket']))
    $no_of_xtra=count($arr_checkbox2);
    $total_no_of_seat=$no_of_seats+$no_of_xtra;
    $totalTicketPrize=$_POST['totalTaka'];  
-     $totalamount= $totalTicketPrize ;
+   $totalamount= $totalTicketPrize ;
     
    if(($no_of_seats<=10 && $no_of_seats>0) || ($no_of_xtra<=$freeXtra && $no_of_xtra >0))
    {
@@ -216,11 +216,29 @@ if(isset($_POST['submit_ticket']))
                $arr_matchXtra= array_intersect($arr_checkbox2, $arr_Xtra);
                if (count($arr_matchSeat) == 0  && count($arr_matchXtra) == 0 )
                {
-                $buyer_id = $_SESSION['userIDUser'];
-                   $tsql="INSERT INTO ticket (ticket_owner_name, ticket_owner_mobile, ticket_buyer_id, no_ofTicket_purchase, seat_no, xtra_seat, total_ticket_prize, total_amount, ticket_seller_id, Program_idprogram) 
-                            VALUES ('$ownerName', '$ownerMbl', '$buyer_id', '$total_no_of_seat', '$str_SelectedSeat', '$str_SelectedXSeat', '$totalTicketPrize', '$totalamount', 0, '$valueID');";
+                    $buyer_id = $_SESSION['userIDUser'];
+                    $url = "";
+                    $status = "unread";
+                    $type="msg";
+                    $nfc_catagory="personal";
+                    $notice = "আপনার একাউন্ট হতে ".$program_name."-এর ".$total_no_of_seat." টি টিকেট কেনা হয়েছে";
+                    mysql_query("START TRANSACTION");
+
+                    $tsql="INSERT INTO ticket (ticket_owner_name, ticket_owner_mobile, ticket_buyer_id, no_ofTicket_purchase, seat_no, xtra_seat, total_ticket_prize, total_amount, ticket_seller_id, Program_idprogram) 
+                                VALUES ('$ownerName', '$ownerMbl', '$buyer_id', '$total_no_of_seat', '$str_SelectedSeat', '$str_SelectedXSeat', '$totalTicketPrize', '$totalamount', 0, '$valueID');";
                     $treslt=mysql_query($tsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৭';
                     $TicketID = mysql_insert_id();
+
+                    $sqlrslt3 = mysql_query("INSERT INTO notification (nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
+                                                                VALUES ($buyer_id,$buyer_id,'$notice','$url',NOW(),'$status','$type','$nfc_catagory')");
+                    if($treslt && $sqlrslt3)
+                    {
+                        mysql_query("COMMIT");
+                    }
+                    else
+                    {
+                        mysql_query("ROLLBACK");
+                    }
                }
                else { $bookedmsg = "error"; }
        }
@@ -522,7 +540,8 @@ if ($_GET['opt']=='submit_ticket') {
                                             <div><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 35px;">রিপড ইউনিভার্সাল</span><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;"> লিমিটেড</span></div>
                                             <div><span style="font-family: SolaimanLipi;color: #8A8B8C;font-size: 20px;">রিলীভ এন্ড ইমপ্রুভমেন্ট প্ল্যান অব ডেপ্রাইভড</span></div>
                                         </div>
-                                       <div style="width: 570px; float: left;padding-left: 4px;text-align: center;"><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;"><span style="color: black;"><?php echo $p_name;?></span></span></div>
+                                       <div style="width: 570px; float: left;padding-left: 4px;text-align: center;"><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;"><span style="color: black;"><?php echo $p_name;?></span></span>
+                                           <input type="hidden" name="progname" value="<?php echo $p_name;?>" /></div>
                                         <div id="front_info" style="width: 570px; float: left;padding-left: 4px;">
                                             <span><?php echo $whoinbangla;?>-এর নামঃ <span style="color: black;"><?php echo $str_emp_name;?></span></span></br>
                                             <span><?php echo $whoinbangla; ?> ই-মেইলঃ <span style="color: black;"><?php echo $str_emp_email;?></span></span></br>
