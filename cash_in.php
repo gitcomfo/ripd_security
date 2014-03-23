@@ -83,6 +83,4 @@ function beforeSubmit()
         </div>
     </div>
 </div>
-<?php
-include 'includes/footer.php';
-?>
+<?php include 'includes/footer.php'; ?>

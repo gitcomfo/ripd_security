@@ -142,8 +142,7 @@ if ($_GET['action'] == 'new' or isset($_GET['id'])) {
         $db_accountnumber = $getrow['account_number'];
         $db_accountmobile = $getrow['mobile'];
         $db_user_type = $getrow['user_type'];
-        $db_account_status = $getrow['cfs_account_status'];
-        $account_status = $db_account_status;
+        $db_account_status = $getrow['cfs_account_status'];        $account_status = $db_account_status;
         if ($db_account_status != "active") {
             $account_msg = "এই একাউন্টটি already " . $db_account_status . " আছে";
         }

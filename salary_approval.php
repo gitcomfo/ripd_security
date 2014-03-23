@@ -61,15 +61,22 @@ if(isset($_POST['givsalary']))
     $p_totalpay = $_POST['totalSalary'];
     $numberOfRows = count($p_empCfsID);
     
+    $url = "";
+    $personal_status = "unread";
+    $type="msg";
+    $nfc_catagory="personal"; 
+    
     $conn->beginTransaction(); 
     $sqlrslt1= $sql_update_sal_approval->execute(array($p_officeTotalSalary,$loginUSERid,$p_approvalID));
     for($i=1;$i<=$numberOfRows;$i++)
     {
          $sqlrslt2= $sql_update_salary_chart->execute(array($p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i-1], $p_approvalID,$p_empCfsID[$i]));
+         $notice = $monthName." ,".$db_year." -এর বেতন বাবদ ".$p_totalpay[$i-1]." টাকা আপনার একাউন্টে জমা হয়েছে";
+         $sqlrslt4 = $insert_notification->execute(array($loginUSERid,$p_empCfsID[$i],$notice,$url,$personal_status,$type,$nfc_catagory));
     }
     $status = 'complete';
     $sqlrslt3 = $sql_update_notification->execute(array($status,$g_nfcid));
-     if($sqlrslt1  && $sqlrslt2 && $sqlrslt3)
+     if($sqlrslt1  && $sqlrslt2 && $sqlrslt3 && $sqlrslt4)
         {
             $conn->commit();
             echo "<script>alert('বেতন সফলভাবে মঞ্জুর হয়েছে');
