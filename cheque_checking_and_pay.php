@@ -149,7 +149,7 @@ if(isset($_POST['pay']))
                                     </tr>
                                     <tr>
                                         <td style="text-align: right;width: 50%;">এডমিনের পাসওয়ার্ড:</td>
-                                        <td style="text-align: left;width: 50%;"><input class="box" type="text" name='pass' id="pass" /> </td>
+                                        <td style="text-align: left;width: 50%;"><input class="box" type="password" name='pass' id="pass" /> </td>
                                     </tr>
                                     <tr>                    
                                         <td id="noprint" colspan="2" style="text-align: center; " ><input class="btn" style =" font-size: 12px; width: 150px;" type="submit" name="pay" value="ঠিক আছে" /></td>                           

@@ -48,7 +48,8 @@ $sel_selected_send_amount = $conn->prepare("SELECT * FROM acc_user_amount_transf
                                 <td width="20%"  style="border: solid black 1px;"><div align="center"><strong>প্রেরকের নাম</strong></div></td>
                                 <td width="15%"  style="border: solid black 1px;"><div align="center"><strong>চার্জ মাধ্যম</strong></div></td>
                                 <td width="15%"  style="border: solid black 1px;"><div align="center"><strong>চার্জ (টাকা)</strong></div></td>
-                                <td width="15%" style="border: solid black 1px;"><div align="center"><strong>ট্রান্সফার এমাউন্ট (টাকা)</strong></div></td>
+                                <td width="15%" style="border: solid black 1px;"><div align="center"><strong>প্রেরিত এমাউন্ট (টাকা)</strong></div></td>
+                                <td width="15%" style="border: solid black 1px;"><div align="center"><strong>প্রাপ্ত এমাউন্ট (টাকা)</strong></div></td>
                                 <td width="15%" style="border: solid black 1px;"><div align="center"><strong>ট্রান্সফারের কারন</strong></div></td>
                             </tr>
                         </thead>
@@ -68,6 +69,7 @@ $sel_selected_send_amount = $conn->prepare("SELECT * FROM acc_user_amount_transf
                                                 $db_charge = $value["trans_servicecharge"];
                                                 $db_send_amount = $value['trans_amount'];
                                                 $db_status = $value['trans_purpose'];
+                                                $db_get_amount = $value['reciever_get'];
                                                 echo '<tr>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla($slNo) . '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="left">' . english2bangla(date('d/m/Y',strtotime($db_send_date))) . '</div></td>';
@@ -75,6 +77,7 @@ $sel_selected_send_amount = $conn->prepare("SELECT * FROM acc_user_amount_transf
                                                 echo '<td  style="border: solid black 1px;"><div align="center">' .$arr_trans[$db_charger]. '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla($db_charge) . '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($db_send_amount).'</div></td>';
+                                                echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($db_get_amount).'</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.$db_status.'</div></td>';                                              
                                                 echo '</tr>';
                                                 $slNo++;
@@ -92,6 +95,7 @@ $sel_selected_send_amount = $conn->prepare("SELECT * FROM acc_user_amount_transf
                                                 $db_charge = $value["trans_servicecharge"];
                                                 $db_send_amount = $value['trans_amount'];
                                                 $db_status = $value['trans_purpose'];
+                                                $db_get_amount = $value['reciever_get'];
                                                 echo '<tr>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla($slNo) . '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="left">' . english2bangla(date('d/m/Y',strtotime($db_send_date))) . '</div></td>';
@@ -99,6 +103,7 @@ $sel_selected_send_amount = $conn->prepare("SELECT * FROM acc_user_amount_transf
                                                 echo '<td  style="border: solid black 1px;"><div align="center">' .$arr_trans[$db_charger]. '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla($db_charge) . '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($db_send_amount).'</div></td>';
+                                                echo '<td  style="border: solid black 1px;"><div align="center">'.english2bangla($db_get_amount).'</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">'.$db_status.'</div></td>';                                              
                                                 echo '</tr>';
                                                 $slNo++;

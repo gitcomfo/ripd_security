@@ -67,10 +67,10 @@ if (isset($_POST['save'])) {
         $sql_insert_acc_user_amount_transfer->execute(array($trans_type, $trans_senderid, $receiver_id, $receiver_mobile_num,
                                                                     $p_trans_amount, $p_receiver_get, $p_trans_charge, $trans_purpose,
                                                                     $chrg_givenby, $p_total_amount, $sts, $random));
-        $sms_body = "Dear User,\nYou have received: $p_trans_amount Taka.\nTransaction Charge: $p_trans_charge Taka,\nYou will get $p_receiver_get Taka in Cash.\nYour code $random";
-        $sendResult = SendSMSFuntion($receiver_mobile_num, $sms_body);
-        $sendStatus = substr($sendResult, 0, 2);
-        
+//        $sms_body = "Dear User,\nYou have received: $p_trans_amount Taka.\nTransaction Charge: $p_trans_charge Taka,\nYou will get $p_receiver_get Taka in Cash.\nYour code $random";
+//        $sendResult = SendSMSFuntion($receiver_mobile_num, $sms_body);
+//        $sendStatus = substr($sendResult, 0, 2);
+        $sendStatus = "OK";
         $url = "";
         $status = "unread";
         $type="msg";
