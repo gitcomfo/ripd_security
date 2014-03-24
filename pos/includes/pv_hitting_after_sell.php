@@ -3,6 +3,10 @@ include_once 'ConnectDB.inc';
 
 function pv_hitting($custID, $cust_type, $sumID,$selling_type,$total_profit)
 {
+    $sel_current_command = mysql_query("SELECT idcommand FROM command LEFT JOIN running_command 
+                                                                    ON command.commandno = running_command.commandno");
+    $rowcommand = mysql_fetch_assoc($sel_current_command);
+    $commandID = $rowcommand['idcommand'];
     if($cust_type == 'unregcustomer')
     {
         $type = 'no_acc';
@@ -28,7 +32,7 @@ function pv_hitting($custID, $cust_type, $sumID,$selling_type,$total_profit)
         }
     
     // select view pv view **************************
-     $sel_pv_view = mysql_query("SELECT * FROM view_pv_view WHERE cust_type = '$type' AND sales_type= '$selling_type' AND store_type='both' AND account_type_id=$pkgtype");
+     $sel_pv_view = mysql_query("SELECT * FROM view_pv_view WHERE cust_type = '$type' AND sales_type= '$selling_type' AND store_type='both' AND account_type_id=$pkgtype AND idcommand = $commandID");
     while($row = mysql_fetch_assoc($sel_pv_view)) {
             $se = $row['selling_earn'];
             $ri = $row['pv_ripd_income'];
@@ -91,7 +95,7 @@ function pv_hitting($custID, $cust_type, $sumID,$selling_type,$total_profit)
             $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $one_hit, total_balanace = total_balanace + $one_hit WHERE cfs_user_iduser = $one ");
             $sql5 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $one_hit, last_update = NOW() WHERE fund_code = 'RHC'");
         }
-        else { $borkot = $borkot + (($total_profit * $Rone) / 100); $one_hit = 0;  }
+        else { $borkot = $borkot + (($total_profit * $Rone) / 100); $one_hit = 0; $sql1=1; $sql5=1; }
         if($two != 0)
         {
             $two_hit = ($total_profit * $Rtwo) / 100;
@@ -132,7 +136,7 @@ function pv_hitting($custID, $cust_type, $sumID,$selling_type,$total_profit)
            $sql4 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $own_hit, total_balanace = total_balanace + $own_hit WHERE cfs_user_iduser = $custID ");
 
            $sql3 = mysql_query("INSERT INTO sales_customer_hitting (selling_earn,soft_costing,own,Rone,Rtwo,Rthree,Rfour,Rfive,ripd_income,borkot,sales_summery_idsalessummery) 
-                                             VALUES($se_hit,$total_softcost,$own_hit,$one_hit,$two_hit,$three_hit,$four_hit,$five_hit,$ri_hit,$borkot,$sumID)");
+                                             VALUES($se_hit,$total_softcost,$own_hit,$one_hit,$two_hit,$three_hit,$four_hit,$five_hit,$ri_hit,$borkot,$sumID)") or exit(mysql_error());
 
            if($sql1 && $sql2 && $sql3 && $sql4 && $sql5)
            {
