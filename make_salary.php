@@ -44,11 +44,21 @@ if(isset($_POST['makesalary']))
      $offrow = $sql_select_office->fetchAll();
      foreach ($offrow as $value) {
          $db_parent_id = $value['parent_id'];
-         $sql_select_id_ons_relation->execute(array($logedinOfficeType,$db_parent_id));
-         $onsrow = $sql_select_id_ons_relation->fetchAll();
-         foreach ($onsrow as $value) {
-             $db_onsID = $value['idons_relation'];
+         if($db_parent_id == 0)
+         {
+             $sql_select_id_ons_relation->execute(array($logedinOfficeType,$logedinOfficeId));
+            $onsrow = $sql_select_id_ons_relation->fetchAll();
+            foreach ($onsrow as $value) {
+                $db_onsID = $value['idons_relation'];
+            }
          }
+        else {
+            $sql_select_id_ons_relation->execute(array($logedinOfficeType,$db_parent_id));
+            $onsrow = $sql_select_id_ons_relation->fetchAll();
+            foreach ($onsrow as $value) {
+                $db_onsID = $value['idons_relation'];
+            }
+        }
      }    
  }
  else

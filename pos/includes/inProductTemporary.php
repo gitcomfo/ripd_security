@@ -28,11 +28,11 @@ elseif (isset ($_GET['type'])) {
 elseif(isset($_GET['check']))
 {
     $g_amount = $_GET['reuseamount'];
-    $sel_acc_store_logc = $conn->prepare("SELECT buying_price FROM acc_store_logc WHERE ons_type = ?  AND ons_id =?");
+    $sel_acc_store_logc = $conn->prepare("SELECT ACM FROM acc_store_logc WHERE ons_type = ?  AND ons_id =?");
     $sel_acc_store_logc->execute(array($ons_type, $ons_id));
     $row = $sel_acc_store_logc->fetchAll();
     foreach ($row as $value) {
-        $db_amount = $value['buying_price'];
+        $db_amount = $value['ACM'];
     }
     if($g_amount > $db_amount)
     {
