@@ -3,6 +3,7 @@ error_reporting(0);
 session_start();
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
+$storeName = $_SESSION['loggedInOfficeName'];
 $office_id = $_SESSION['loggedInOfficeID'];
 $office_type = $_SESSION['loggedInOfficeType'];
 $sql_select_replace = $conn->prepare("SELECT * FROM replace_product_summary, cfs_user
