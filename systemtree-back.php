@@ -50,7 +50,7 @@ error_reporting(0);
                             }
                     elseif($reversed_array[$a][0] < $reversed_array[$a+1][0])
                             {
-                            $new_string = "{".$reversed_array[$a][1]. ", children: [";
+           $                $new_string = "{".$reversed_array[$a][1]. ", children: [";
                             }
                     elseif($reversed_array[$a][0] > $reversed_array[$a+1][0])
                             {
