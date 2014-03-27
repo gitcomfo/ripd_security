@@ -3,11 +3,9 @@
 include_once 'includes/header.php';
 $userID = $_SESSION['userIDUser'];
 
-$sel_pv_in = $conn->prepare("SELECT sal_salesdate, sal_totalpv FROM sales_summary WHERE sal_buyerid = ?
-                                                            AND (sal_buyer_type='customer' OR sal_buyer_type='unregcustomer') ORDER BY sal_salesdate");
-$sel_selected_pv_in = $conn->prepare("SELECT sal_salesdate, sal_totalpv FROM sales_summary WHERE sal_buyerid = ?
-                                                                    AND (sal_buyer_type='customer' OR sal_buyer_type='unregcustomer')
-                                                                    AND sal_salesdate BETWEEN ? AND ? ORDER BY sal_salesdate");
+$sel_pv_in = $conn->prepare("SELECT * FROM cust_pv_child_date WHERE cust_own_id= ? ORDER BY date");
+$sel_selected_pv_in = $conn->prepare("SELECT * FROM cust_pv_child_date WHERE cust_own_id= ?
+                                                                    AND date BETWEEN ? AND ? ORDER BY date");
 
 $sel_current_pv = $conn->prepare("SELECT pv_value FROM running_command");
 $sel_current_pv->execute();
@@ -61,21 +59,23 @@ foreach ($arr_rslt as $value) {
                                         {
                                             $slNo = 1;
                                             $total_pv_value = 0;
+                                            $total_pv = 0;
                                             $p_startdate = $_POST['startDate'];
                                             $p_lastDate = $_POST['lastDate'];
                                             $sel_selected_pv_in->execute(array($userID,$p_startdate,$p_lastDate));
                                                 $row1 = $sel_selected_pv_in->fetchAll();
                                                 foreach ($row1 as $value) {
                                                 $db_date = $value["sal_salesdate"];
-                                                $db_pv = $value["sal_totalpv"];
-                                                $db_pv_value = $value["sal_totalpv"] / $running_pv;
+                                                $pv_value = $value["cust_own_pv"] + $value["cust_c1"] + $value["cust_c2"] + $value["cust_c3"] + $value["cust_c4"] + $value["cust_c5"];
+                                                $pv = $pv_value * $running_pv;
                                                 echo '<tr>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla($slNo) . '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="left">' . english2bangla(date('d/m/Y',strtotime($db_date))) . '</div></td>';
-                                                echo "<td  style='border: solid black 1px;'>".english2bangla($db_pv)."</td>";
-                                                echo '<td  style="border: solid black 1px;"><div align="right">' .english2bangla($db_pv_value). '</div></td>';                                   
+                                                echo "<td  style='border: solid black 1px;'>".english2bangla($pv)."</td>";
+                                                echo '<td  style="border: solid black 1px;"><div align="right">' .english2bangla($pv_value). '</div></td>';                                   
                                                 echo '</tr>';
-                                                $total_pv_value+= $db_pv_value;
+                                                $total_pv_value+= $pv_value;
+                                                $total_pv+= $pv;
                                                 $slNo++;
                                             }
                                         }
@@ -83,25 +83,28 @@ foreach ($arr_rslt as $value) {
                                         {          
                                             $slNo = 1;
                                             $total_pv_value = 0;
+                                            $total_pv = 0;
                                             $sel_pv_in->execute(array($userID));
                                                 $row1 = $sel_pv_in->fetchAll();
                                                 foreach ($row1 as $value) {
-                                                $db_date = $value["sal_salesdate"];
-                                                $db_pv = $value["sal_totalpv"];
-                                                $db_pv_value = $value["sal_totalpv"] / $running_pv;
+                                                $db_date = $value["date"];
+                                                $pv_value = $value["cust_own_pv"] + $value["cust_c1"] + $value["cust_c2"] + $value["cust_c3"] + $value["cust_c4"] + $value["cust_c5"];
+                                                $pv = $pv_value * $running_pv;
                                                 echo '<tr>';
                                                 echo '<td  style="border: solid black 1px;"><div align="center">' . english2bangla($slNo) . '</div></td>';
                                                 echo '<td  style="border: solid black 1px;"><div align="left">' . english2bangla(date('d/m/Y',strtotime($db_date))) . '</div></td>';
-                                                echo "<td  style='border: solid black 1px;'>".english2bangla($db_pv)."</td>";
-                                                echo '<td  style="border: solid black 1px;"><div align="right">' .english2bangla($db_pv_value). '</div></td>';                                   
+                                                echo "<td  style='border: solid black 1px;'>".english2bangla($pv)."</td>";
+                                                echo '<td  style="border: solid black 1px;"><div align="right">' .english2bangla($pv_value). '</div></td>';                                   
                                                 echo '</tr>';
-                                                $total_pv_value+= $db_pv_value;
+                                               $total_pv_value+= $pv_value;
+                                               $total_pv+= $pv;
                                                 $slNo++;
                                             }
                                         }
                                         echo "<tr>
-                                                <td colspan='3' style='text-align:right;border: solid black 1px;'><b>মোট</b></td>
-                                                <td style='text-align:right;border: solid black 1px;'>".english2bangla($total_pv_value)."</td>
+                                                <td colspan='2' style='text-align:right;border: solid black 1px;'><b>মোট</b></td>
+                                                <td style='text-align:left;border: solid black 1px;'>".english2bangla($total_pv)." পিভি</td>
+                                                <td style='text-align:right;border: solid black 1px;'>".english2bangla($total_pv_value)." টাকা</td>
                                                 </tr>";
                             ?>
                         </tbody>
