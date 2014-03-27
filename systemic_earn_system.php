@@ -65,7 +65,7 @@ foreach ($arr_rslt as $value) {
                                             $sel_selected_pv_in->execute(array($userID,$p_startdate,$p_lastDate));
                                                 $row1 = $sel_selected_pv_in->fetchAll();
                                                 foreach ($row1 as $value) {
-                                                $db_date = $value["sal_salesdate"];
+                                                $db_date = $value["date"];
                                                 $pv_value = $value["cust_own_pv"] + $value["cust_c1"] + $value["cust_c2"] + $value["cust_c3"] + $value["cust_c4"] + $value["cust_c5"];
                                                 $pv = $pv_value * $running_pv;
                                                 echo '<tr>';
