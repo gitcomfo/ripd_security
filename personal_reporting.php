@@ -12,9 +12,10 @@ $logedInUserType = $_SESSION['userType'];
         </tr>
         <tr>
             <td><a href="personal_purchase_statement.php">ব্যক্তিগত ক্রয় স্টেটমেন্ট</a></td>
-            <td><a href="in_amount_description.php">ইন ডেসক্রিপশন</a></td>
+            <td><a href="own_replace_statement.php">পণ্য রিপ্লেসের তালিকা</a></td>
         </tr>
         <tr>
+            <td><a href="in_amount_description.php">ইন ডেসক্রিপশন</a></td>
             <td><a href="personal_balanced_description.php">ব্যালেন্সড ডেসক্রিপশন</a></td>
         </tr>
         <tr>
