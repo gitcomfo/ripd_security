@@ -74,6 +74,15 @@ if(isset($_POST['print']))
             $P_getTaka = 0;
             $P_backTaka = 0;
         }
+    elseif($P_payType ==0) 
+        {
+            $pay = "রিপ্লেস";
+            $P_getTaka=$_POST['cash'];
+            $P_actualChange=$_POST['actualChange'];
+            $P_paiedByCash = $_POST['gtotal'];
+            $P_paiedByAcc = 0;
+            $P_backTaka = 0;
+        }
 }
 $id=$_SESSION['SESS_MEMBER_ID']; // চালান নং যাচাই**********************
 $sel_sales_summary->execute(array($id));

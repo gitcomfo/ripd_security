@@ -387,9 +387,9 @@ function checkAccountBalance(accNo)
     <?php }
     else{  ?>
             <input name="gtotal" type="hidden" value="<?php echo $finalTotal?>"/>
-            <input type="hidden" name="payType" value="1" />
+            <input type="hidden" name="payType" value="0" />
             <input name='cash'  type='hidden' value="0"  />
-            <input name='change' type='hidden' readonly value="0" />
+            <input name='actualChange' type='hidden' readonly value="0" />
             <input name="print" type="submit" value="বিক্রয় করুন" style="cursor:pointer;margin-left:42%;font-family: SolaimanLipi !important;" />
     <?php }?>
   </form>
