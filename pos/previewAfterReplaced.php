@@ -3,6 +3,8 @@ error_reporting(0);
 session_start();
 include 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
+include_once './includes/pv_hitting_after_sell.php';
+
 $storeName= $_SESSION['loggedInOfficeName'];
 $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
@@ -148,6 +150,7 @@ $result= $sel_sales_summary->fetchAll();
     {
         unset($_SESSION['arrRepTemp']);
         $conn->commit();
+        $pv_hitting = pv_hitting($buyerid,$buyertype,$sales_sum_id,'general',$totalprofit);
     }
  else {
         $conn->rollBack();
