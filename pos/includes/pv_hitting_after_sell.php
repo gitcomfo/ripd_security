@@ -7,12 +7,12 @@ function pv_hitting($custID, $cust_type, $sumID,$selling_type,$total_profit)
                                                                     ON command.commandno = running_command.commandno");
     $rowcommand = mysql_fetch_assoc($sel_current_command);
     $commandID = $rowcommand['idcommand'];
-    if($cust_type == 'unregcustomer')
+    if($cust_type == 'customer')
     {
-        $type = 'no_acc';
+        $type = 'account';
     }
     else 
-        { $type = 'account'; }
+        { $type = 'no_acc'; }
       
     if($type == 'account')
     {
@@ -210,10 +210,9 @@ function pv_hitting($custID, $cust_type, $sumID,$selling_type,$total_profit)
  else 
      {
                 $G_s_type = $_SESSION['loggedInOfficeType'];
-                $sel_pv_view = mysql_query("SELECT * FROM view_pv_view WHERE cust_type = '$type' AND sales_type= '$selling_type' AND store_type='$G_s_type' AND account_type_id= 0 ");
+                $sel_pv_view = mysql_query("SELECT * FROM view_pv_view WHERE cust_type = '$type' AND sales_type= '$selling_type' AND store_type='$G_s_type' AND account_type_id= 0 AND idcommand = $commandID");
             
                 while($row = mysql_fetch_assoc($sel_pv_view)) {
-                    $less_amount = $row['less_amount'];
                     $pnh_outside = $row['patent_nh'];
                     $se = $row['selling_earn'];
                     $ri = $row['pv_ripd_income'];
@@ -270,7 +269,6 @@ function pv_hitting($custID, $cust_type, $sumID,$selling_type,$total_profit)
                $se_hit = ($total_profit * $se) / 100;
                $ri_hit = ($total_profit * $ri) / 100;
                $spo_hit =  ($total_profit * $pnh_outside) / 100;
-               $less_amount_hit =  ($total_profit * $less_amount) / 100;
                $sql3 = mysql_query("INSERT INTO sales_customer_hitting (selling_earn,soft_costing,ripd_income,pn_outside,sales_summery_idsalessummery) 
                                                     VALUES($se_hit,$total_softcost,$ri_hit,$spo_hit,$sumID)");
                
