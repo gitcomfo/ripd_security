@@ -20,12 +20,13 @@ $sel_posting = $conn->prepare("SELECT * FROM employee_posting, post_in_ons, post
     <div style="padding-left: 110px;"><a href="personal_official_profile_employee.php"><b>ফিরে যান</b></a></div>
     <div>
         <table  class="formstyle" style="font-family: SolaimanLipi !important;width: 80%;">          
-            <tr><th colspan="2" style="text-align: center;font-size: 20px;">পোস্টিং ডেসক্রিপশন</th></tr>
+            <tr><th colspan="6" style="text-align: center;font-size: 20px;">পোস্টিং ডেসক্রিপশন</th></tr>
             <?php
                 $sel_posting->execute(array($empID));
                 $arr_posting = $sel_posting->fetchAll();
                 foreach ($arr_posting as $key=> $value) 
-                { $sl = 1;
+                { 
+                    $sl = 1;
                     if(($value['ons_relation_idons_relation'] == $empOnSID) && $key == 0)
                     {
                         $db_current_post = $value['post_name'];
@@ -129,8 +130,8 @@ $sel_posting = $conn->prepare("SELECT * FROM employee_posting, post_in_ons, post
                                 <td style="border: black 1px solid; text-align: center"><?php echo $postyears ."বছর,". $postmonths2. "মাস,". $postdays ."দিন";?></td>
                             </tr>
                             <?php
-                            $sl++;
                                      }
+                                     $sl++;
                                  }
                              ?>
                         </table>
