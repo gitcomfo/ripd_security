@@ -41,7 +41,7 @@
             echo "<td style='border: 1px solid #969797;'>$db_post</td>";
             echo "<td style='border: 1px solid #969797;'>$db_vilg</td>";
            $v = base64_encode($db_custID);
-            echo "<td style='border: 1px solid #969797;'><a href='update_customer_account_inner.php?id=$v'>আপডেট</a></td>";
+            echo "<td style='border: 1px solid #969797;'><a href='customer_list.php?id=$v'>বিস্তারিত</a></td>";
             echo "</tr>";
     }
     ?>
