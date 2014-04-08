@@ -1,30 +1,23 @@
 <?php
 error_reporting(0);
-include_once 'includes/ConnectDB.inc';
+include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
+$session_user_id = $_SESSION['userIDUser'];
 
+$sql_select_cfs_user= $conn->prepare("SELECT idUser FROM cfs_user WHERE account_number = ?");
+$ins_msg = $conn->prepare("INSERT INTO send_message (sender_id,receiver_id,msg,status,sending_date,sending_time) VALUES (?,?,?,'send',NOW(),NOW())");
 $msg = "";
 
 if (isset($_POST['submit_message'])) {
-    $sender_name = $_POST['name'];
-    $sender_email = $_POST['email'];
-    $sender_mobile = $_POST['mobile'];
+    $p_accNo= $_POST['acc_no'];
     $sender_message = $_POST['message'];
-    $sender_msg_subject = $_POST['subject'];
-    $receiver_email = $_POST['office_store_email'];
-    
-    $affiliation= "Dear Admin,";
-    $sender_moblie_number = "My Contact Number: ".$sender_mobile;
-
-    //echo "Sender Name: " . $sender_name . " Email: " . $sender_email . "Mobile " . $sender_mobile . "Subject " . $sender_msg_subject . "Message " . $sender_message . "R-email: " . $receiver_email . "<br/>";
-
-    //mail($receiver_email, "Subject: $sender_msg_subject", $sender_message, "From: $sender_email");
-    //$headers .= 'MIME-Version: 1.0' . "\r\n";
-    //$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-    //$sendMailValue = mail($receiver_email, $sender_msg_subject, $sender_message, "$headers \r\n From: $sender_email");
-    
-    $sendMailValue = mail($receiver_email, $sender_msg_subject, "$affiliation \n $sender_moblie_number \n\n $sender_message", "From: $sender_email");
-    if ($sendMailValue){
+    $sql_select_cfs_user->execute(array($p_accNo));
+    $idrow = $sql_select_cfs_user->fetchAll();
+    foreach ($idrow as $value) {
+        $receiver_id = $value['idUser'];
+    }
+    $result = $ins_msg->execute(array($session_user_id,$receiver_id,$sender_message));
+    if ($result){
         $msg = "আপনার মেসেজটি সফলভাবে পাঠানো হয়েছে";
     } else {
         $msg = "দুঃখিত, আপনার মেসেজটি পাঠানো যাচ্ছে না।";
