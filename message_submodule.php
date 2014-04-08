@@ -47,9 +47,9 @@ $sel_personal_notification_selected = $conn->prepare("SELECT * FROM send_message
                 </tr>
                 <tr><td colspan="3" style="text-align: center"><br/><font style="color: green;"><b>প্রাপ্ত ক্ষুদে বার্তা</b></font><hr><br/></td></tr>
                 <tr id="table_row_odd">
+                    <td style="width: 20%;border-bottom:1px solid black"><b><?php echo "প্রেরক";?></b></td>
+                    <td style="width: 60%;text-align: center;border-bottom:1px solid black"><b><?php echo "বার্তা";?></b></td>               
                     <td style="width: 20%;text-align: center;border-bottom:1px solid black"><b><?php echo "তারিখ";?></b></td>
-                    <td style="width: 60%;text-align: center;border-bottom:1px solid black"><b><?php echo "বার্তা";?></b></td>
-                    <td style="width: 20%;text-align: center;border-bottom:1px solid black"><b><?php echo "প্রেরক";?></b></td>
                             
                 </tr>
                 <tbody>
@@ -87,9 +87,9 @@ $sel_personal_notification_selected = $conn->prepare("SELECT * FROM send_message
                                     else {
                                      echo "<tr>";   
                                     } 
+                                     echo "<td style=';border-bottom:1px solid black'>$db_sender_name</td>";
+                                    echo "<td style='border-bottom:1px solid black'><a onclick=message_details(".$db_nfc_id.") style='cursor:pointer;' >$rest ...</a></td>";                                 
                                     echo "<td style='text-align: center;border-bottom:1px solid black'>".english2bangla(date('d/m/Y', strtotime($db_date)))."</td>";
-                                    echo "<td style='border-bottom:1px solid black'>$rest <a onclick=message_details(".$db_nfc_id.") style='cursor:pointer;color:red;' >...</a></td>";
-                                    echo "<td style='text-align: center;border-bottom:1px solid black'>$db_sender_name</td>";                                 
                                     echo "</tr>";
                                   }
                         }
@@ -125,10 +125,9 @@ $sel_personal_notification_selected = $conn->prepare("SELECT * FROM send_message
                                     else {
                                      echo "<tr>";   
                                     }
+                                    echo "<td style='border-bottom:1px solid black'>$db_sender_name</td>";            
+                                    echo "<td style='border-bottom:1px solid black'><a onclick=message_details(".$db_nfc_id.") style='cursor:pointer;' >$rest...</a></td>";
                                     echo "<td style='text-align: center;border-bottom:1px solid black'>".english2bangla(date('d/m/Y', strtotime($db_date)))."</td>";
-                                    echo "<td style='border-bottom:1px solid black'>$rest <a onclick=message_details(".$db_nfc_id.") style='cursor:pointer;color:red;' >...</a></td>";
-                                    echo "<td style='text-align: center;border-bottom:1px solid black'>$db_sender_name</td>";
-                                    
                                     echo "</tr>";
                                   }
                         }
