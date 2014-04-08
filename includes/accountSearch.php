@@ -19,4 +19,18 @@ if (isset($_GET['key']) && $_GET['key'] != '') {
         	echo '</form>';             
                 }            
 }
+
+elseif (isset($_GET['acc']) && $_GET['acc'] != '') {
+	//Add slashes to any quotes to avoid SQL problems.
+	$str_key = $_GET['acc'];
+	$suggest_query = "SELECT * FROM  cfs_user WHERE account_number='$str_key'";
+	$reslt= mysql_query($suggest_query);
+                    if(mysql_num_rows($reslt)<1)
+                        {echo "<font style='color:red'>দুঃখিত, এই নাম্বারের কোনো একাউন্ট নেই</font>";}
+                        
+	while($suggest = mysql_fetch_assoc($reslt)){
+                            $acc_name = $suggest['account_name'];
+                            echo $acc_name;            
+                }            
+}
 ?>
