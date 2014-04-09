@@ -3,6 +3,14 @@ error_reporting(0);
 session_start();
 include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
+$g_back = $_GET['back'];
+$sql_update_notification = $conn->prepare("UPDATE notification SET nfc_status=? WHERE idnotification=? ");
+$sql_update_transfer = $conn->prepare("UPDATE product_transfer SET pt_rcv_date = NOW(),pt_transfer_status= 'receive' WHERE idprotransfer= ?");
+if($g_back == 0)
+{
+    $back = 'productIN.php';
+}
+else { $back = 'receive_transfer_product.php';}
 	
 $storeName= $_SESSION['loggedInOfficeName'];
 $cfsID = $_SESSION['userIDUser'];
@@ -122,7 +130,16 @@ if(isset($_POST['entry']))
                 unset($_SESSION['chalanNO']);
                 unset($_SESSION['arrProductTemp']);
                 unset($_SESSION['pro_chart_array']);
+                if($g_back==1)
+                {
+                    $g_nfcid = $_GET['nfcid'];
+                    $g_ptid = $_GET['ptID'];
+                    $status = 'complete';
+                    $sqlrslt3 = $sql_update_notification->execute(array($status,$g_nfcid));
+                    $sql_update_transfer->execute(array($g_ptid));
+                }
                 echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>";
+                
                 header('Location:productIN.php');
             }
             else {
@@ -212,7 +229,7 @@ var blank = validate();
 <div id="maindiv">
 <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
 <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
-    <div style="width: 33%;height: 100%; float: left;"><a href="productIN.php"><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
+    <div style="width: 33%;height: 100%; float: left;"><a href=<?php echo $back;?>><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
     <div style="width: 33%;height: 100%; float: left;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div>
 </div></br>
 <form action="productIN_details.php" method="post" >  
