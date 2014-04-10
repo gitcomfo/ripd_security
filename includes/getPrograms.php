@@ -26,7 +26,7 @@ elseif (isset($_GET['ticketkey']) && ($_GET['ticketkey'] != '')) {
 	            echo "<u><a onclick=setProgram('$pNo','$id'); style='text-decoration:none;color:brown;cursor:pointer;'>" . $pNo . "</a></u></br>";
         	}               
 }
-elseif(isset($_GET['type']))
+elseif(isset($_GET['type']) && !isset($_GET['report']))
 {
     $g_type = $_GET['type'];
     $today = date("Y-m-d");
@@ -61,6 +61,43 @@ elseif(isset($_GET['type']))
     }
     echo "</tbody></table>";
 }
+
+elseif(isset($_GET['report'])) //for program cost report *************************************
+{
+    $g_type = $_GET['type'];
+    $today = date("Y-m-d");
+    $typeinbangla = getProgramType($g_type);
+    $sel_program = mysql_query("SELECT * FROM program WHERE program_type = '$g_type' AND program_date < '$today' AND payment_status= 'paid' ORDER BY program_date ");
+     echo "<table border='1' cellpadding='0' cellspacing='0'>
+            <tr id='table_row_odd'>
+                <td style='border:1px black solid; '><b>$typeinbangla-এর নাম</b></td>
+                <td style='border:1px black solid;'><b>তারিখ</b></td>
+                <td style='border:1px black solid;'><b>সময়</b></td>
+                <td style='border:1px black solid;'><b>ভেন্যু</b></td>
+                <td style='border:1px black solid;'></td>
+            </tr><tbody>";
+    while($progrow = mysql_fetch_assoc($sel_program))
+    {
+        $db_programname = $progrow['program_name'];
+        $db_programdate = $progrow['program_date'];
+        $date = english2bangla(date('d/m/Y',  strtotime($db_programdate)));
+        $db_programtime = $progrow['program_time'];
+        $time = english2bangla($db_programtime);
+        $db_programvanue = $progrow['program_location'];
+        $db_progID = $progrow['idprogram'];
+        echo "
+                <tr>
+                    <td style='border:1px black solid;'>$db_programname </td>
+                    <td style='border:1px black solid;'>$date</td>
+                    <td style='border:1px black solid;'>$time</td>
+                    <td style='border:1px black solid;'>$db_programvanue</td>
+                    <td style='border:1px black solid;text-align:center;'><a onclick=showProgReport('$db_progID')><input style ='font-size: 12px; width:50px;border:2px solid green;cursor:pointer;' type='button' value='রিপোর্ট' /></td>
+                </tr>";
+            
+    }
+    echo "</tbody></table>";
+}
+
 elseif(($_GET['what']=='attendance') && isset($_GET['whichtype']))
 {
     $g_type = $_GET['whichtype'];
