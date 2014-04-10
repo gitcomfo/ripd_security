@@ -192,11 +192,12 @@ function pv_hitting($custID, $cust_type, $sumID,$selling_type,$total_profit)
                 }
 
            $sql4 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $own_hit, total_balanace = total_balanace + $own_hit WHERE cfs_user_iduser = $custID ");
+           $sql8 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $own_hit, last_update = NOW() WHERE fund_code = 'RHC'");
 
            $sql3 = mysql_query("INSERT INTO sales_customer_hitting (selling_earn,soft_costing,own,Rone,Rtwo,Rthree,Rfour,Rfive,ripd_income,borkot,sales_summery_idsalessummery) 
                                              VALUES($se_hit,$total_softcost,$own_hit,$one_hit,$two_hit,$three_hit,$four_hit,$five_hit,$ri_hit,$borkot,$sumID)") or exit(mysql_error());
 
-           if($sql1 && $sql2 && $sql3 && $sql4 && $sql5 && $sql6 && $sql7)
+           if($sql1 && $sql2 && $sql3 && $sql4 && $sql5 && $sql6 && $sql7 && $sql8)
            {
                 mysql_query("COMMIT");
                 $flag = 1;
