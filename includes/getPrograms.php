@@ -17,8 +17,10 @@ if (isset($_GET['key']) && ($_GET['key'] != '')) {
 }
 elseif (isset($_GET['budgetkey']) && ($_GET['budgetkey'] != '')) {
 	$str_key = $_GET['budgetkey'];
+                    $officeID = $_GET['offid'];
                    $today = date("Y-m-d");
-                  $suggest_query = "SELECT * FROM program WHERE program_no LIKE('$str_key%') AND program_date >= '$today' AND payment_status != 'paid' ORDER BY program_no";
+                  $suggest_query = "SELECT * FROM program WHERE program_no LIKE('$str_key%') AND program_date >= '$today' 
+                                                AND payment_status != 'paid' AND Office_idOffice =$officeID  ORDER BY program_no";
 	$reslt= mysql_query($suggest_query);
 	while($suggest = mysql_fetch_assoc($reslt)) {
                     $pNo = $suggest['program_no'];

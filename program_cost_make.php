@@ -43,31 +43,6 @@ if(isset($_POST['submit']))
               }
           }    
       }
-      else
-      {
-          $sql_select_sales_store->execute(array($prog_ons_id));
-          $offrow = $sql_select_sales_store->fetchAll();
-          foreach ($offrow as $value) {
-              $db_parent_id = $value['powerstore_officeid'];
-              if($db_parent_id == 0)
-              {
-                   $sql_select_id_ons_relation->execute(array($prog_ons_type,$prog_ons_id));
-                     $onsrow = $sql_select_id_ons_relation->fetchAll();
-                     foreach ($onsrow as $value) {
-                         $db_parent_onsID = $value['idons_relation'];
-                     }
-              }
-              else
-              {
-                  $catagory = 'office';
-                  $sql_select_id_ons_relation->execute(array($catagory,$db_parent_id));
-                     $onsrow = $sql_select_id_ons_relation->fetchAll();
-                     foreach ($onsrow as $value) {
-                         $db_parent_onsID = $value['idons_relation'];
-                     }
-              }
-          }    
-      }
 
      $sql_select_id_ons_relation->execute(array($prog_ons_type,$prog_ons_id));
      $row = $sql_select_id_ons_relation->fetchAll();
@@ -184,7 +159,7 @@ function setProgram(progNo,progid)
         xmlhttp.send();
     }
 
-function getProgram(key)
+function getProgram(key,offid)
 {
 var xmlhttp;
     if (window.XMLHttpRequest)
@@ -207,7 +182,7 @@ var xmlhttp;
                     }
                 document.getElementById('progResult').innerHTML=xmlhttp.responseText;
         }
-        xmlhttp.open("GET","includes/getPrograms.php?budgetkey="+key,true);
+        xmlhttp.open("GET","includes/getPrograms.php?budgetkey="+key+"&offid="+offid,true);
         xmlhttp.send();	
 }
 </script>
@@ -221,7 +196,7 @@ var xmlhttp;
                     <tr><th colspan="4" style="text-align: center;">বাজেট তৈরি</th></tr>
                     <tr>
                         <td style="width: 310px;">প্রেজেন্টেশন / প্রোগ্রাম / ট্রেইনিং / ট্রাভেল এর নম্বর</td>
-                        <td>:  <input class="box" type="text" id="prgrm_number" name="prgrm_number" onkeyup="getProgram(this.value);"/><em2> *</em2>
+                        <td>:  <input class="box" type="text" id="prgrm_number" name="prgrm_number" onkeyup="getProgram(this.value,'<?php echo $prog_ons_id;?>');"/><em2> *</em2>
                             <div id="progResult"></div><input type="hidden" name="prgrm_id" id="prgrm_id"/>
                         </td>
                     </tr>
