@@ -1,11 +1,12 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 //include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 $loginUSERid = $_SESSION['userIDUser'] ;
 $g_progcost_id = $_GET['id'];
 $g_nfcid = $_GET['nfcid'];
+$arr_fundtype = array('presentation'=>'SPR','program'=>'SPG','training'=>'STR','travel'=>'STL');
 
 $sql_update_notification = $conn->prepare("UPDATE notification SET nfc_status=? WHERE idnotification=? ");
 $upl_program_cost = $conn->prepare("UPDATE program_cost SET pc_status='approved' , pc_approver_id = ?, pc_approve_date = NOW() WHERE idprogcost=? ");
@@ -15,6 +16,7 @@ $sel_program_cost = $conn->prepare("SELECT * FROM program_cost JOIN program ON f
                                                                 WHERE idprogcost= ? AND pc_status = 'made' ");
 $sql_select_ons = $conn->prepare("SELECT * FROM ons_relation WHERE add_ons_id = ? AND catagory='office' ");
 $sql_select_office = $conn->prepare("SELECT * FROM office WHERE idOffice = ?");
+$sql_sel_fundamount = $conn->prepare("SELECT fund_amount FROM main_fund WHERE fund_code = ?");
 
 // get program info...........................................
 $sel_program_cost->execute(array($g_progcost_id)); 
@@ -43,10 +45,16 @@ $sql_select_ons->execute(array($db_prog_officeID));
     }
     
 $typeinbangla = getProgramType($db_prog_type);
+echo $fundcode = $arr_fundtype[$db_prog_type];
+$sql_sel_fundamount->execute(array($fundcode));
+$row = $sql_sel_fundamount->fetchAll();
+foreach ($row as $value) {
+     echo $fundamount = $value['fund_amount'];
+}
 
 if(isset($_POST['submit']))
 {
-    echo $nfcID=$_POST['nfcIDs'];
+    $nfcID=$_POST['nfcID'];
     $progCostID=$_POST['progcostID'];
     $onsID = $_POST['senderOnsID'];
     
@@ -74,12 +82,25 @@ if(isset($_POST['submit']))
 ?>
 
 <style type="text/css">@import "css/bush.css";</style>
+<script type="text/javascript">
+   function beforeSave()
+   {
+       var fundamount = <?php echo $fundamount?>;     
+       var needamount = Number(document.getElementById('need_amount').value);
+       alert(needamount);
+       if(needamount > Number(fundamount))
+           {
+               return false;
+           }
+           else { return true;}
+   }
+</script>
 
 <div class="column6">
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="notification.php"><b>ফিরে যান</b></a></div> 
         <div>
-            <form method="POST" action="program_cost_approval.php">	
+            <form method="POST" onsubmit="return beforeSave()" action="program_cost_approval.php">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
                     <tr><th colspan="4" style="text-align: center;">বাজেট তৈরি</th></tr>
                     <tr>
@@ -115,7 +136,7 @@ if(isset($_POST['submit']))
                 </tr>
                     <tr>
                         <td>প্রয়োজনীয় টাকার পরিমান</td>
-                        <td>: <input  class="box" type="text" id="need_amount" name="need_amount" readonly="" value="<?php echo english2bangla($db_need_amount);?>"  /> টাকা</td>
+                        <td>: <input  class="box" type="text" id="need_amount" name="need_amount" readonly="" value="<?php echo $db_need_amount;?>"  /> টাকা</td>
                     </tr>
                     <tr>                    
                         <td colspan="2" style="padding-left: 300px; padding-top: 10px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="ঠিক আছে" /></td>
