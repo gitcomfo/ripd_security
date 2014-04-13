@@ -67,11 +67,11 @@ $sql = "SELECT * FROM cfs_user,employee WHERE idUser =  cfs_user_idUser AND idEm
                     </tr>
                     <tr>
                         <td style='padding-left: 0px !important;'>তারিখ</td>
-                        <td>:   $p_date </td>            
+                        <td>:  ".english2bangla(date('d/m/Y',  strtotime($p_date)))." </td>            
                     </tr>
                     <tr>
                         <td style='padding-left: 0px !important;'>সময়</td>
-                        <td>:  $p_time  </td>
+                        <td>: ".english2bangla(date('h:i a',  strtotime($p_time)))."   </td>
                     </tr>
                     <tr><td>
                     <input type='hidden' name='programID'' value=$value />

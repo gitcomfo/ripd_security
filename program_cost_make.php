@@ -3,24 +3,99 @@ error_reporting(0);
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
+include_once 'includes/selectQueryPDO.php';
+
+$userID = $_SESSION['userIDUser'];
+$prog_ons_type = $_SESSION['loggedInOfficeType'];
+$prog_ons_id = $_SESSION['loggedInOfficeID'];
+
+$ins_progcost = $conn->prepare("INSERT INTO program_cost (fk_program_id,pc_need_amount,pc_maker_id,pc_maker_ons_id,pc_make_date,pc_status)
+                                                        VALUES (?,?,?,?,NOW(),'made')");
+$insert_notification = $conn->prepare("INSERT INTO notification (nfc_tablename,nfc_tableid,nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
+                                                            VALUES ('program_cost',?,?,?,?,?,NOW(),?,?,?)");
 
 if(isset($_POST['submit']))
 {
-    $t_prize=$_POST['ticket_prize'];
-    $seat=$_POST['number_of_seat'];
-    $xtra_seat=$_POST['extra_seat'];
-    $programID=$_POST['programID'];
-    $programname=$_POST['programName'];
-    $date=$_POST['programDate'];
-    $time=$_POST['programTime'];
-    $employee_name=$_POST['emp_name'];
-    $employee_mail = $_POST['emp_mail'];
-    $P_description = $_POST['description'];
-    $P_type = $_POST['type'];
+    $programID=$_POST['prgrm_id'];
+    $budget=$_POST['budget'];
+    // parent ons id find --------------------------------
+        if($prog_ons_type == 'office') 
+      {
+          $sql_select_office->execute(array($prog_ons_id));
+          $offrow = $sql_select_office->fetchAll();
+          foreach ($offrow as $value) {
+              $db_parent_id = $value['parent_id'];
+               if($db_parent_id == 0)
+              {
+                   $sql_select_id_ons_relation->execute(array($prog_ons_type,$prog_ons_id));
+                     $onsrow = $sql_select_id_ons_relation->fetchAll();
+                     foreach ($onsrow as $value) {
+                         $db_parent_onsID = $value['idons_relation'];
+                     }
+              }
+                else 
+                    {
+                        $sql_select_id_ons_relation->execute(array($prog_ons_type,$db_parent_id));
+                        $onsrow = $sql_select_id_ons_relation->fetchAll();
+                        foreach ($onsrow as $value) {
+                            $db_parent_onsID = $value['idons_relation'];
+                    }
+              }
+          }    
+      }
+      else
+      {
+          $sql_select_sales_store->execute(array($prog_ons_id));
+          $offrow = $sql_select_sales_store->fetchAll();
+          foreach ($offrow as $value) {
+              $db_parent_id = $value['powerstore_officeid'];
+              if($db_parent_id == 0)
+              {
+                   $sql_select_id_ons_relation->execute(array($prog_ons_type,$prog_ons_id));
+                     $onsrow = $sql_select_id_ons_relation->fetchAll();
+                     foreach ($onsrow as $value) {
+                         $db_parent_onsID = $value['idons_relation'];
+                     }
+              }
+              else
+              {
+                  $catagory = 'office';
+                  $sql_select_id_ons_relation->execute(array($catagory,$db_parent_id));
+                     $onsrow = $sql_select_id_ons_relation->fetchAll();
+                     foreach ($onsrow as $value) {
+                         $db_parent_onsID = $value['idons_relation'];
+                     }
+              }
+          }    
+      }
+
+     $sql_select_id_ons_relation->execute(array($prog_ons_type,$prog_ons_id));
+     $row = $sql_select_id_ons_relation->fetchAll();
+     foreach ($row as $onsrow) {
+         $db_onsID = $onsrow['idons_relation'];
+     }
     
-    $pupsql = "UPDATE `program` SET `total_seat` = '$seat',`extra_seat` = '$xtra_seat', `ticket_prize` = '$t_prize', `subject`= '$P_description' WHERE `program`.`idprogram` = '$programID' ;";
-    $pusresult=mysql_query($pupsql) or exit('query failed: '.mysql_error());
-    $msg = " টিকেটটি সফলভাবে তৈরি হয়েছে " ;
+    $conn->beginTransaction();
+    $sqlresult1 = $ins_progcost->execute(array($programID,$budget,$userID,$db_onsID));
+    $progcost_id = $conn->lastInsertId();
+    
+       $url = "program_cost_approval.php?id=".$progcost_id;
+       $status = "unread";
+       $type="action";
+       $nfc_catagory="official";
+       $msg = "প্রোগ্রাম বাজেটের আবেদন";
+       $sqlrslt3 = $insert_notification->execute(array($progcost_id,$userID,$db_parent_onsID,$msg,$url,$status,$type,$nfc_catagory));
+    
+    if($sqlresult1 && $sqlrslt3)
+       {
+           $conn->commit();
+           echo "<script>alert('প্রোগ্রাম খরচের আবেদন করা হল')</script>";
+       }
+       else {
+           $conn->rollBack();
+           echo "<script>alert('দুঃখিত, প্রোগ্রাম খরচের আবেদন করা হয়নি')</script>";
+       }
+    
 }
 ?>
 
@@ -55,9 +130,7 @@ function setProgram(progNo,progid)
 }
      function beforeSubmit(){
     if ((document.getElementById('prgrm_number').value !="")
-    && (document.getElementById('ticket_prize').value !="")
-    && (document.getElementById('number_of_seat').value !="")
-    && (document.getElementById('extra_seat').value !=""))
+    && (document.getElementById('budget').value !=""))
         { return true; }
     else {
         alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
@@ -134,7 +207,7 @@ var xmlhttp;
                     }
                 document.getElementById('progResult').innerHTML=xmlhttp.responseText;
         }
-        xmlhttp.open("GET","includes/getPrograms.php?key="+key,true);
+        xmlhttp.open("GET","includes/getPrograms.php?budgetkey="+key,true);
         xmlhttp.send();	
 }
 </script>
@@ -143,14 +216,11 @@ var xmlhttp;
     <div class="main_text_box">
         <div style="padding-left: 110px;"><a href="program_management.php"><b>ফিরে যান</b></a></div> 
         <div>
-            <form method="POST" onsubmit="return beforeSubmit()" action="making_ticket.php?step=02">	
+            <form method="POST" onsubmit="return beforeSubmit()" action="">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;">          
                     <tr><th colspan="4" style="text-align: center;">বাজেট তৈরি</th></tr>
                     <tr>
-                        <td colspan="2"><?php if($msg!=""){echo $msg; } ?></td>
-                    </tr>
-                    <tr>
-                        <td>প্রেজেন্টেশন / প্রোগ্রাম / ট্রেইনিং / ট্রাভেল এর নম্বর</td>
+                        <td style="width: 310px;">প্রেজেন্টেশন / প্রোগ্রাম / ট্রেইনিং / ট্রাভেল এর নম্বর</td>
                         <td>:  <input class="box" type="text" id="prgrm_number" name="prgrm_number" onkeyup="getProgram(this.value);"/><em2> *</em2>
                             <div id="progResult"></div><input type="hidden" name="prgrm_id" id="prgrm_id"/>
                         </td>
@@ -160,12 +230,8 @@ var xmlhttp;
                         </td>
                     </tr>
                     <tr>
-                        <td>সম্ভাব্য বাজেট</td>
-                        <td>: <input  class="box" type="text" id="budget" name="budget" onkeypress=' return numbersonly(event)'  /> টাকা<em2> *</em2></td>
-                    </tr>
-                    <tr>
                         <td>প্রয়োজনীয় টাকার পরিমান</td>
-                        <td>: <input  class="box" type="text" id="need_amount" name="need_amount" onkeypress=' return numbersonly(event)'  /> টাকা<em2> *</em2></td>
+                        <td>: <input  class="box" type="text" id="budget" name="budget" onkeypress=' return numbersonly(event)'  /> টাকা<em2> *</em2></td>
                     </tr>
                     <tr>                    
                         <td colspan="2" style="padding-left: 300px; padding-top: 10px; " ><input class="btn" style =" font-size: 12px; " type="submit" name="submit" value="বাজেট করুন" /></td>

@@ -20,6 +20,22 @@ $exp_maker_id = $_SESSION['userIDUser'];
      $offrow = $sql_select_office->fetchAll();
      foreach ($offrow as $value) {
          $db_parent_id = $value['parent_id'];
+         if($db_parent_id == 0)
+              {
+                   $sql_select_id_ons_relation->execute(array($prog_ons_type,$prog_ons_id));
+                     $onsrow = $sql_select_id_ons_relation->fetchAll();
+                     foreach ($onsrow as $value) {
+                         $db_parent_onsID = $value['idons_relation'];
+                     }
+              }
+                else 
+                    {
+                            $sql_select_id_ons_relation->execute(array($prog_ons_type,$db_parent_id));
+                            $onsrow = $sql_select_id_ons_relation->fetchAll();
+                            foreach ($onsrow as $value) {
+                                $db_parent_onsID = $value['idons_relation'];
+                        }
+                    }
          $sql_select_id_ons_relation->execute(array($exp_ons_type,$db_parent_id));
          $onsrow = $sql_select_id_ons_relation->fetchAll();
          foreach ($onsrow as $value) {

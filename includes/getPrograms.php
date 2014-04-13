@@ -15,6 +15,17 @@ if (isset($_GET['key']) && ($_GET['key'] != '')) {
 	            echo "<u><a onclick=setProgram('$pNo','$id'); style='text-decoration:none;color:brown;cursor:pointer;'>" . $pNo . "</a></u></br>";
         	}               
 }
+elseif (isset($_GET['budgetkey']) && ($_GET['budgetkey'] != '')) {
+	$str_key = $_GET['budgetkey'];
+                   $today = date("Y-m-d");
+                  $suggest_query = "SELECT * FROM program WHERE program_no LIKE('$str_key%') AND program_date >= '$today' AND payment_status != 'paid' ORDER BY program_no";
+	$reslt= mysql_query($suggest_query);
+	while($suggest = mysql_fetch_assoc($reslt)) {
+                    $pNo = $suggest['program_no'];
+                     $id = $suggest['idprogram'];
+	            echo "<u><a onclick=setProgram('$pNo','$id'); style='text-decoration:none;color:brown;cursor:pointer;'>" . $pNo . "</a></u></br>";
+        	}               
+}
 elseif (isset($_GET['ticketkey']) && ($_GET['ticketkey'] != '')) {
 	$str_key = $_GET['ticketkey'];
                    $today = date("Y-m-d");

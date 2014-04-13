@@ -1,8 +1,25 @@
 <?php
 error_reporting(0);
-include_once 'includes/session.inc';
+//include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
+$loginUSERid = $_SESSION['userIDUser'] ;
+$g_progcost_id = $_GET['id'];
+$g_nfcid = $_GET['nfcid'];
+
+$sql_update_notification = $conn->prepare("UPDATE notification SET nfc_status=? WHERE idnotification=? ");
+$sql_fixed_expenditure = $conn->prepare("UPDATE ons_fixed_expenditure SET status='approved' WHERE idfixexp=? ");
+$insert_notification = $conn->prepare("INSERT INTO notification (nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
+                                                            VALUES (?,?,?,?,NOW(),?,?,?)");
+$sel_fixed_exp = $conn->prepare("SELECT * FROM ons_fixed_expenditure WHERE idfixexp= ? AND 	status = 'made' ");
+$sql_select_ons = $conn->prepare("SELECT * FROM ons_relation WHERE idons_relation = ?");
+$sql_select_office = $conn->prepare("SELECT * FROM office WHERE idOffice = ?");
+$sql_select_sales_store = $conn->prepare("SELECT * FROM sales_store WHERE idSales_store = ?");
+
+
+// get program info...........................................
+$typeinbangla = getProgramType($P_type);
+$whoinbangla =  getProgramer($P_type);
 
 if(isset($_POST['submit']))
 {
@@ -101,10 +118,6 @@ function setProgram(progNo,progid)
                     <td> সময় </td>
                     <td colspan="3">: <input  class="box" type="time" id="presentation_time" name="presentation_time" value="<?php echo $ptime;?>"/><em2> *</em2></td>  
                 </tr>
-                    <tr>
-                        <td>সম্ভাব্য বাজেট</td>
-                        <td>: <input  class="box" type="text" id="budget" name="budget" onkeypress=' return numbersonly(event)'  /> টাকা<em2> *</em2></td>
-                    </tr>
                     <tr>
                         <td>প্রয়োজনীয় টাকার পরিমান</td>
                         <td>: <input  class="box" type="text" id="need_amount" name="need_amount" onkeypress=' return numbersonly(event)'  /> টাকা<em2> *</em2></td>
