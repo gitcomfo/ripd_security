@@ -25,7 +25,8 @@ foreach ($row as $value) {
     $db_prog_type = $value['program_type'];
 }
 $fundcode = $arr_fundtype[$db_prog_type];
-if(isset($_POST['submit']))
+
+if(isset($_POST['submit'])) // after submit***************************************
 {
     $sel_onsID = $conn->prepare("SELECT idons_relation FROM ons_relation WHERE add_ons_id = ? AND catagory='office'");
     $sel_onsID->execute(array($logedinOfficeId));
