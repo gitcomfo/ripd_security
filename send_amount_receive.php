@@ -1,5 +1,5 @@
 <?php
-include 'includes/header.php';
+include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
 $logedInUserID = $_SESSION['userIDUser'];
 $logedinOfficeId = $_SESSION['loggedInOfficeID'];
@@ -24,6 +24,8 @@ if(isset($_POST['check']))
             $db_charge = $row["trans_servicecharge"];
             $db_get_amount = $row['reciever_get'];
             $db_sendID = $row['idpamounttrans'];
+            $db_send_track = $row['send_track'];
+            $db_amount_track = $row['send_amount_track'];
         }
     }
     else
@@ -37,6 +39,13 @@ if(isset($_POST['pay']))
     $p_adminpass = md5($_POST['pass']);
     $p_sendID = $_POST['sendID'];
     $p_amount = $_POST['getamount'];
+    $p_send_track = $_POST['sendtrack'];
+    $p_amount_track = $_POST['amounttrack'];
+    $arr_send_track = explode(',', $p_send_track);
+    $arr_amount_track = explode(',', $p_amount_track);
+    $arr_fund = array('1'=>'HIA','2'=>'RHC');
+    
+    $up_main_fund = $conn->prepare("UPDATE main_fund SET fund_amount = fund_amount - ? WHERE fund_code = ?");
     
     $sel_onsID = $conn->prepare("SELECT idons_relation FROM ons_relation WHERE add_ons_id = ? AND catagory='office'");
     $sel_onsID->execute(array($logedinOfficeId));
@@ -56,12 +65,19 @@ if(isset($_POST['pay']))
             $conn->beginTransaction();
             
             $up_amount_transfer = $conn->prepare("UPDATE acc_user_amount_transfer SET send_amt_status='paid', send_paid_date=NOW(), 
-                                                                paid_office_id=? WHERE idpamounttrans = ? ");
+                                                                                paid_office_id=? WHERE idpamounttrans = ? ");
             $update = $up_amount_transfer->execute(array($office_ons_id,$p_sendID));
+            
+            for($i=0;$i<count($arr_send_track);$i++)
+            {
+                $track_no = $arr_send_track[$i];
+                $fundcode = $arr_fund[$track_no];
+                $update1 = $up_main_fund->execute(array($arr_amount_track[$i],$fundcode));
+            }
             
             $ins_daily_inout = $conn->prepare("INSERT INTO acc_ofc_daily_inout (daily_date, daily_onsid, out_amount) VALUES (NOW(),?,?)");
             $insert = $ins_daily_inout->execute(array($office_ons_id,$p_amount));
-                if($update && $insert)
+                if($update && $insert && $update1)
                 {
                     $conn->commit();
                     echo "<script>alert('টাকা প্রদান করা হল')</script>";
@@ -142,11 +158,11 @@ if(isset($_POST['pay']))
                                         <td style="text-align: left;width: 50%;"><input class="box" type="text" name='chargeamount' id='' readonly="" value="<?php echo $db_charge;?>" /> টাকা</td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: right;width: 50%;">প্রাপ্ত টাকার পরিমান :</td>
+                                        <td style="text-align: right;width: 50%;">প্রাপ্ত টাকার পরিমান :<input type="hidden" name="amounttrack" value="<?php echo $db_amount_track?>" /></td>
                                         <td style="text-align: left;width: 50%;"><input class="box" type="text" name='getamount' id='' readonly="" value="<?php echo $db_get_amount;?>" /> টাকা</td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: right;width: 50%;">পাঠানোর তারিখ :</td>
+                                        <td style="text-align: right;width: 50%;">পাঠানোর তারিখ :<input type="hidden" name="sendtrack" value="<?php echo $db_send_track?>" /></td>
                                         <td style="text-align: left;width: 50%;"><input class="box" type="text" name='send_date' id='' readonly="" value="<?php echo english2bangla($date);?>" /> </td>
                                     </tr>
                                     <tr>

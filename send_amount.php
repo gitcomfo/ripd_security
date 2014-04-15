@@ -34,8 +34,10 @@ function showMessage($flag, $msg) {
 }
 
 if (isset($_POST['save'])) {
-    $receiver_mobile_num = $_POST['mobileNo'];
-    $receiver_mobile_num = "88$receiver_mobile_num";
+    $arr_send_track = array();
+    $arr_amount_track = array();
+    $receiver_mobile_num1 = $_POST['mobileNo'];
+    $receiver_mobile_num = "88".$receiver_mobile_num1;
     $p_trans_amount = $_POST['amount'];
     $trans_purpose = $_POST['trans_des'];
     $p_receiver_get= $_POST['trans_amount_val'];
@@ -54,17 +56,95 @@ if (isset($_POST['save'])) {
     }
     else{
         $reciever_id = 0;
-        $sql_insert_acc_user_amount_transfer->execute(array($trans_type, $trans_senderid, $reciever_id, $receiver_mobile_num,
-                                                                    $p_trans_amount, $p_receiver_get, $p_trans_charge, $trans_purpose,
-                                                                    $chrg_givenby, $p_total_amount, $sts, $random));
-        $sms_body = "Dear User,\nYou have received: $p_trans_amount Taka.\nTransaction Charge: $p_trans_charge Taka,\nYou will get $p_receiver_get Taka in Cash.\nYour code $random";
-        $sendResult = SendSMSFuntion($receiver_mobile_num, $sms_body);
-        $sendStatus = substr($sendResult, 0, 2);
-        if($sendStatus == 'OK'){
-            $msg = "টাকা সফল ভাবে সেন্ড হয়েছে, আপনার কোডটি ".$random;
-        }else{
-            $msg = "দুঃখিত, ম্যাসেজটি পাঠানো যায়নি, আপনার কোডটি ".$random;
+                
+        $sel_balance = mysql_query("SELECT pv_balance,liquid_balance, transferred_balance, salary_amount FROM acc_user_balance
+                                                        WHERE cfs_user_iduser = $trans_senderid") or exit(mysql_error()."-1");
+       $acc_balance_row = mysql_fetch_assoc($sel_balance);
+       $db_pv_balance = $acc_balance_row['pv_balance'];
+       $db_liquid_balance = $acc_balance_row['liquid_balance'];
+       $db_trans_balance = $acc_balance_row['transferred_balance'];
+       $db_salary_balance = $acc_balance_row['salary_amount'];
+       
+       mysql_query("START TRANSACTION");
+       
+        $up_acc_balance = mysql_query("UPDATE acc_user_balance SET total_balanace = total_balanace - $p_total_amount,last_withdrawl = NOW()
+                                                                WHERE cfs_user_iduser = $trans_senderid") or exit(mysql_error()."-2");
+        if($p_total_amount> $db_liquid_balance)
+        {
+            $up_acc_balance2 = mysql_query("UPDATE acc_user_balance  SET liquid_balance = 0 WHERE cfs_user_iduser = $trans_senderid")or exit(mysql_error()."-3");
+            $paid_amount = $p_total_amount - $db_liquid_balance;
+            
+            array_push($arr_send_track, 1);
+            array_push($arr_amount_track, $db_liquid_balance);
+            
+            if($paid_amount > $db_trans_balance)
+                    { 
+                        $up_acc_balance3 = mysql_query("UPDATE acc_user_balance SET transferred_balance = 0 WHERE cfs_user_iduser = $trans_senderid") or exit(mysql_error()."-4");
+                        $paid_amount = $paid_amount - $db_trans_balance;
+                        
+                        array_push($arr_send_track, 1);
+                        array_push($arr_amount_track, $db_trans_balance);
+                        
+                        if($paid_amount > $db_pv_balance)
+                            {
+                                $up_acc_balance4 = mysql_query("UPDATE acc_user_balance SET pv_balance= 0 WHERE cfs_user_iduser = $trans_senderid") or exit(mysql_error()."-5");
+                                $paid_amount = $paid_amount - $db_pv_balance;
+                                
+                                array_push($arr_send_track, 2);
+                                array_push($arr_amount_track, $db_pv_balance);
+
+                                $up_acc_balance5 = mysql_query("UPDATE acc_user_balance SET salary_amount = salary_amount - $paid_amount
+                                                                                        WHERE cfs_user_iduser =$trans_senderid") or exit(mysql_error()."-6");
+                            }
+                        else
+                            {	
+                                $up_acc_balance4 = mysql_query("UPDATE acc_user_balance SET pv_balance= pv_balance - $paid_amount 
+                                                                                        WHERE cfs_user_iduser = $trans_senderid") or exit(mysql_error()."-7");	
+                                array_push($arr_send_track, 2);
+                                array_push($arr_amount_track, $paid_amount);
+                            }
+                    }
+            else 
+                {
+                         $up_acc_balance3 = mysql_query("UPDATE acc_user_balance SET transferred_balance = transferred_balance - $paid_amount 
+                                                                                   WHERE cfs_user_iduser = $trans_senderid") or exit(mysql_error()."-4");
+                         array_push($arr_send_track, 1);
+                         array_push($arr_amount_track, $paid_amount);
+                }
         }
+			
+    else
+        {
+            $up_acc_balance2 = mysql_query("UPDATE acc_user_balance SET liquid_balance = liquid_balance - $p_total_amount
+                                                                    WHERE cfs_user_iduser = $trans_senderid")or exit(mysql_error()."-3");
+            array_push($arr_send_track, 1);
+            array_push($arr_amount_track, $p_total_amount);
+        }
+        
+        $str_send_track = implode(',', $arr_send_track);
+        $str_amount_track = implode(',', $arr_amount_track);
+        
+        $sql_insert_acc_user_amount_transfer = mysql_query("INSERT INTO acc_user_amount_transfer (trans_type, trans_senderid, trans_receiverid, receiver_mobile_num, trans_amount, reciever_get, trans_servicecharge, trans_purpose, chrg_givenby, total_transaction, send_amt_status, send_amt_pin,send_track,send_amount_track, trans_date_time) 
+                                                                                                VALUES ('$trans_type', $trans_senderid, $reciever_id, '$receiver_mobile_num',$p_trans_amount, $p_receiver_get, $p_trans_charge, '$trans_purpose','$chrg_givenby', $p_total_amount, '$sts', $random,'$str_send_track','$str_amount_track',NOW())")or exit(mysql_error()."-9");
+        
+//        $sms_body = "Dear User,\nYou have received: $p_trans_amount Taka.\nTransaction Charge: $p_trans_charge Taka,\nYou will get $p_receiver_get Taka in Cash.\nYour code $random";
+//        $sendResult = SendSMSFuntion($receiver_mobile_num, $sms_body);
+//        $sendStatus = substr($sendResult, 0, 2);
+            if($up_acc_balance && ($up_acc_balance2 || $up_acc_balance3 || $up_acc_balance4 || $up_acc_balance5) &&$sql_insert_acc_user_amount_transfer)
+            {
+                mysql_query("COMMIT");
+                $msg = "টাকা সফল ভাবে সেন্ড হয়েছে, আপনার কোডটি ".$random;
+            }
+            else
+            {
+                 mysql_query("ROLLBACK");
+                 $msg = "দুঃখিত, ম্যাসেজটি পাঠানো যায়নি, আপনার কোডটি ".$random;
+            }
+//        if($sendStatus == 'OK'){
+//            
+//        }else{
+//            
+//        }
     }
 }
 ?>
