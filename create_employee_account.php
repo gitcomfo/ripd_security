@@ -207,7 +207,7 @@ if (isset($_POST['submitwithpass']))
             document.getElementById('showerror').innerHTML = "";
         }
         else {
-            document.getElementById('showerror').innerHTML = "দুঃখিত, সেলারি রেঞ্জ অতিক্রম করেছে";
+            document.getElementById('showerror').innerHTML = "দুঃখিত, রেঞ্জের মধ্যেই বেতন দিন";
         }
     }
     function setParent(office, offid)
