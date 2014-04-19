@@ -7,7 +7,6 @@ include_once 'includes/MiscFunctions.php';
 $userID = $_SESSION['userIDUser'];
 $sel_cfs = mysql_query("SELECT * FROM cfs_user WHERE idUser = $userID");
 $cfsrow = mysql_fetch_assoc($sel_cfs);
-$sqlerror="";$str_emp_name="";$str_emp_email="";
 ?>
 
 <link href="css/bush.css" rel="stylesheet" type="text/css"/>
@@ -21,28 +20,6 @@ $sqlerror="";$str_emp_name="";$str_emp_email="";
     }
 </script>
 <script  type="text/javascript">
-function showTotal(ticket_prize)
-    {
-        var seat = countCheckboxes();
-        var xmlhttp;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
-        }
-        else
-        {// code for IE6, IE5
-            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function()
-        {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-                document.getElementById('prize').innerHTML=xmlhttp.responseText;
-            }
-        }
-        xmlhttp.open("GET","includes/getTotal.php?ticketTotal="+ticket_prize+"&seat="+seat,true);
-        xmlhttp.send();
-    }
 function getList(type)
 {
 var xmlhttp;
@@ -61,28 +38,6 @@ var xmlhttp;
         xmlhttp.open("GET","includes/getPrograms.php?type="+type+"&report=1",true);
         xmlhttp.send();	
 }
-function  checkCorrectPass(passwrd) // match password with account
-        {
-        var xmlhttp;
-        if (window.XMLHttpRequest)
-                {// code for IE7+, Firefox, Chrome, Opera, Safari
-                xmlhttp=new XMLHttpRequest();
-                }
-        else
-                {// code for IE6, IE5
-                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-                }
-        xmlhttp.onreadystatechange=function()
-                {
-                if (xmlhttp.readyState==4 && xmlhttp.status==200)
-                        {
-                        document.getElementById('passmsg').style.color='red';
-                        document.getElementById("passmsg").innerHTML=xmlhttp.responseText;                      
-                        }
-                }
-        xmlhttp.open("GET","includes/matchPassword.php?pass="+passwrd,true);
-        xmlhttp.send();
-  }
 </script>
 
     <div class="column6">
