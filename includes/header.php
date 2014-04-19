@@ -4,12 +4,14 @@ session_start();
 include_once 'ConnectDB.inc';
 include_once 'connectionPDO.php';
 include_once 'MiscFunctions.php';
+$logedinOfficeId = $_SESSION['loggedInOfficeID'];
+$logedinOfficeType = $_SESSION['loggedInOfficeType'];
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <title>রিপড ইউনিভার্সাল</title>
             <?php 
             include_once 'headContent_css_js_others.php';
@@ -69,13 +71,18 @@ include_once 'MiscFunctions.php';
                             {
                             $user_name = $_SESSION['acc_holder_name'];
                             $logged_in_office_name = $_SESSION['loggedInOfficeName'];
-                            if($logged_in_office_name!='customerOffice')
+                            if($logged_in_office_name != 'customerOffice')
                                 {
-                                $notification = 5; // it comes from the query of notification
-                                $showNotificationNum = english2bangla($notification);
-                                if($notification == 0) echo '<li><a href="notification.php">নোটিফিকেশন (0)</a></li>';
-                                else echo "<li><a href='notification.php' style='color: yellow;'>নোটিফিকেশন ($showNotificationNum)</a></li>";
-                                echo '<li><a href="main_account_management.php">'.$_SESSION['loggedInOfficeName'].'</a></li>';
+                                    $catagory='official';
+                                    $sel_official_notification = $conn->prepare("SELECT * FROM ons_relation, notification WHERE catagory=? AND add_ons_id=?
+                                                                                                            AND idons_relation=nfc_receiverid AND nfc_status !='complete' AND nfc_catagory =?");
+                                    $sel_official_notification ->execute(array($logedinOfficeType,$logedinOfficeId,$catagory));
+                                    $notificationrow = $sel_official_notification->fetchAll();
+                                    $countrow = count($notificationrow);
+                                    $showNotificationNum = english2bangla($countrow);
+                                    if($countrow == 0) echo '<li><a href="notification.php">নোটিফিকেশন (0)</a></li>';
+                                    else echo "<li><a href='notification.php' style='color: yellow;'>নোটিফিকেশন ($showNotificationNum)</a></li>";
+                                    echo '<li><a href="main_account_management.php">'.$_SESSION['loggedInOfficeName'].'</a></li>';
                                 }
                             echo '<li><a href="account_management.php">'.$user_name.'</a></li>';                        
                             echo '<li><a href="logout.php">লগ আউট</a></li>';
