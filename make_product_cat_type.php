@@ -1,5 +1,5 @@
 <?php
-include 'includes/session.inc';
+include_once 'includes/session.inc';
 include_once 'includes/header.php';
 $msg = "";
 
@@ -107,7 +107,7 @@ function beforeSubmit()
                             <td >প্রোডাক্ট টাইপ</td><td> : <input class="box" type="text" id="pro_type" name="pro_type" id="pro_type"/><em2> *</em2></td>
                             </tr>
                             <tr>
-                            <td>প্রোডাক্ট টাইপ কোড</td><td> : <input class="box" type="text" id="pro_type_code" name="pro_type_code" /><em2> *</em2></td>          
+                                <td>প্রোডাক্ট টাইপ কোড</td><td> : <input class="box" type="text" id="pro_type_code" name="pro_type_code" maxlength="2" /><em2> *</em2></td>          
                         </tr>   
                     <tr>                    
                         <td colspan="2" style="padding-top: 5px; padding-bottom: 5px;text-align: center; " ><input class="btn" style =" font-size: 12px; " type="submit" name="pro_submit" value="সেভ করুন" />
