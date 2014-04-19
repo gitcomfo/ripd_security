@@ -10,7 +10,10 @@ if($g_back == 0)
 {
     $back = 'productIN.php';
 }
-else { $back = 'receive_transfer_product.php';}
+else { 
+    $back = 'receive_transfer_product.php';
+    
+}
 	
 $storeName= $_SESSION['loggedInOfficeName'];
 $cfsID = $_SESSION['userIDUser'];
@@ -137,10 +140,14 @@ if(isset($_POST['entry']))
                     $status = 'complete';
                     $sqlrslt3 = $sql_update_notification->execute(array($status,$g_nfcid));
                     $sql_update_transfer->execute(array($g_ptid));
+                    echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>";
+                    header('Location:main_account_management.php');
                 }
-                echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>";
-                
-                header('Location:productIN.php');
+                else
+                {
+                    echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>";
+                    header('Location:productIN.php');
+                }
             }
             else {
                 $conn->rollBack();
@@ -232,7 +239,7 @@ var blank = validate();
     <div style="width: 33%;height: 100%; float: left;"><a href=<?php echo $back;?>><img src="images/back.png" style="width: 70px;height: 70px;"/></a></div>
     <div style="width: 33%;height: 100%; float: left;font-family: SolaimanLipi !important;text-align: center;font-size: 36px;"><?php echo $storeName;?></div>
 </div></br>
-<form action="productIN_details.php" method="post" >  
+<form action="" method="post" >  
 <fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
 <legend style="color: brown;">প্রবেশকৃত পণ্যের তালিকা</legend>
     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">

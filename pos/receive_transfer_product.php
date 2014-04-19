@@ -120,18 +120,16 @@ function hidebox()
 
 function beforeSave()
 {
-      a=document.getElementById('transportCost').value;
-      b=document.getElementById('otherCost').value;
+      var a=document.getElementById('transportCost').value;
       var radiocheck = 0;
       var radios = document.getElementsByName("purchaseType");
       for(var i=0; i<radios.length; i++){
 	if(radios[i].checked) { radiocheck = 1; }
 	}
-    if ((a != "") && (b != "") && (radiocheck == 1)) 
-    {
-        document.getElementById("next").readonly = false; return true;}
-    else {
-            document.getElementById("next").readonly = true; return false;}
+    if ((a != "") && (radiocheck == 1)) 
+    { return true; }
+    else { alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
+        return false;  }
  }
 </script>
 <script>
@@ -258,7 +256,7 @@ function calculateInvest(reuse)
         </tr>
         <tr>
             <td>পরিবহন খরচ</td>
-            <td>: <input type="text" id="transportCost" name="transportCost" style="text-align: right;" onkeypress="return checkIt(event)" value="<?php echo $totalTransportCost;?>" /> টাকা</td>
+            <td>: <input type="text" id="transportCost" name="transportCost" style="text-align: right;" onkeypress="return checkIt(event)" value="<?php echo $totalTransportCost;?>" /> টাকা <em>*</em></td>
             <td rowspan="3">মন্তব্য</br><textarea name="transportComment"><?php echo $comment;?></textarea></td>
         </tr>
         <tr>
