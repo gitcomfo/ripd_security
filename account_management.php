@@ -1,4 +1,5 @@
 <?php
+//echo "test";
 error_reporting(0);
 session_start();
 include_once 'includes/header.php';
