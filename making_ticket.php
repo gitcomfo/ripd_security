@@ -6,7 +6,8 @@ include_once 'includes/MiscFunctions.php';
 
 if(isset($_POST['submit_ticket']))
 {
-    $msg = " টিকেটটি সফলভাবে তৈরি হয়েছে " ;
+    echo "<script>alert('টিকেটটি সফলভাবে তৈরি হয়েছে')</script>";
+    header('Location:making_ticket.php');
 }
 
 if(isset($_POST['submit']))
@@ -22,6 +23,7 @@ if(isset($_POST['submit']))
     $employee_mail = $_POST['emp_mail'];
     $P_description = $_POST['description'];
     $P_type = $_POST['type'];
+    $p_place = $_POST['place'];
     
     $pupsql = "UPDATE `program` SET `total_seat` = '$seat',`extra_seat` = '$xtra_seat', `ticket_prize` = '$t_prize', `subject`= '$P_description' WHERE `program`.`idprogram` = '$programID' ;";
     $pusresult=mysql_query($pupsql) or exit('query failed: '.mysql_error());
@@ -134,7 +136,7 @@ var xmlhttp;
                }
                 else
                     {document.getElementById('progResult').style.visibility = "visible";
-                document.getElementById('progResult').setAttribute('style','position:absolute;top:38%;left:62.2%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
+                document.getElementById('progResult').setAttribute('style','position:absolute;top:38%;left:61.2%;width:250px;z-index:10;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;');
                     }
                 document.getElementById('progResult').innerHTML=xmlhttp.responseText;
         }
@@ -154,7 +156,6 @@ $whoinbangla =  getProgramer($P_type);
                 <form method="POST" onsubmit="" >	
                     <table  class="formstyle" style="color: #3333CC; font-weight:600;font-family: SolaimanLipi !important;">          
                         <tr><th colspan="4" style="text-align: center;">টিকেট মেইকিং </th></tr>
-                        <tr><td style="text-align: center"><span style="color: green;font-size: 15px;"><?php if($msg != '') {echo $msg;}?></span></td></tr>
                         <tr>
                             <td style="text-align: center;">টিকেট প্রাইজঃ <span style="color: black;"><?php echo $t_prize;?> TK /Ticket</span></td>
                         </tr>
@@ -187,7 +188,7 @@ $whoinbangla =  getProgramer($P_type);
                                         <div id="front_info" style="width: 570px; float: left;padding-left: 4px;">
                                             <span><?php echo $whoinbangla;?>-এর নামঃ <span style="color: black;"><?php echo $employee_name;?></span></span></br>
                                             <span><?php echo $whoinbangla;?>-এর ই-মেইলঃ <span style="color: black;"><?php echo $employee_mail;?></span></span></br>
-                                            <span>স্থানঃ <span style="color: black;"><?php echo $place;?></span></span></br>
+                                            <span>স্থানঃ <span style="color: black;"><?php echo $p_place;?></span></span></br>
                                             <span>তারিখঃ <span style="color: black;"><?php echo $date;?></span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>সময়ঃ <span style="color: black;"><?php echo $time;?></span></span>
                                         </div>
                                         <div id="entry" style="width: 574px;float:left;padding-top: 5px;text-align: center;"><span style="font-family: SolaimanLipi;color: #3333CC;font-size: 20px;">এন্ট্রি পাস</span></div>

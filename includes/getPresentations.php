@@ -8,7 +8,7 @@ if(isset($_GET['t']))
 $type=$_GET['t'];
 $typeinbangla = getProgramType($type);
 
-            $psql="SELECT * FROM " . $dbname . ".program WHERE program_type='$type' AND program_location IS NULL;";
+            $psql="SELECT * FROM program WHERE program_type='$type' AND program_location IS NULL;";
             $prslt=mysql_query($psql) or exit('query failed: '.mysql_error());
             echo "<select class='selectOption' name='nam' onchange='getall(this.value)' style='width: 167px !important;'>";
             echo "<option value=''>----$typeinbangla সিলেক্ট করুন-----</option>";
@@ -27,7 +27,7 @@ $str_emp_name = "";
 $str_emp_email = "";
 if($value !="")
 {
-$allsql="SELECT * FROM " . $dbname . ".program WHERE idprogram=$value;";
+$allsql="SELECT * FROM program WHERE idprogram=$value;";
 $allrslt=mysql_query($allsql) or exit('query failed: '.mysql_error());
 while($all=  mysql_fetch_assoc($allrslt))
 {
@@ -63,7 +63,7 @@ $sql = "SELECT * FROM cfs_user,employee WHERE idUser =  cfs_user_idUser AND idEm
                     </tr>
                     <tr>
                         <td style='padding-left: 0px !important;'>স্থান</td>
-                        <td>: $p_location</td>            
+                        <td>: $p_location <input type='place' value='$p_location' /></td>            
                     </tr>
                     <tr>
                         <td style='padding-left: 0px !important;'>তারিখ</td>
@@ -74,7 +74,8 @@ $sql = "SELECT * FROM cfs_user,employee WHERE idUser =  cfs_user_idUser AND idEm
                         <td>: ".english2bangla(date('h:i a',  strtotime($p_time)))."   </td>
                     </tr>
                     <tr><td>
-                    <input type='hidden' name='programID'' value=$value />
+                    <input type='hidden' name='programID' value=$value />
+                     <input type='hidden' name='type' value=$p_type />
                     <input type='hidden' name='programName'  value='$p_name' />
                     <input type='hidden' name='programDate'  value='$p_date' />
                     <input type='hidden' name='programTime' value='$p_time' />

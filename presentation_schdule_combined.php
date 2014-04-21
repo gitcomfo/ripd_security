@@ -241,14 +241,14 @@ if ($_GET['action'] == 'first') {
                         <td colspan="8" style="text-align: right"><b>খুঁজুন: </b><input type="text" class="box" id="search_filter" /></td>
                     </tr>
                     <tr id = "table_row_odd">
-                        <td ><b><?php echo $typeinbangla;?> নাম্বার</b></td>
-                        <td ><b><?php echo $typeinbangla;?> নাম</b></td>
-                        <td ><b><?php echo $whoinbangla?>-এর নাম</b></td>
-                        <td ><b>রিপড ই মেইল</b></td>
-                        <td ><b>তারিখ</b></td>
-                        <td><b>বার</b></td>
-                        <td ><b>সময় </b></td>     
-                        <td><b>অপশন</b></td>
+                        <td style="border-bottom: 1px solid black;"><b><?php echo $typeinbangla;?> নাম্বার</b></td>
+                        <td style="border-bottom: 1px solid black;"><b><?php echo $typeinbangla;?> নাম</b></td>
+                        <td style="border-bottom: 1px solid black;"><b><?php echo $whoinbangla?>-এর নাম</b></td>
+                        <td style="border-bottom: 1px solid black;"><b>রিপড ই মেইল</b></td>
+                        <td style="border-bottom: 1px solid black;"><b>তারিখ</b></td>
+                        <td style="border-bottom: 1px solid black;"><b>বার</b></td>
+                        <td style="border-bottom: 1px solid black;"><b>সময় </b></td>     
+                        <td style="border-bottom: 1px solid black;"><b>অপশন</b></td>
                     </tr>
                 </thead>
                 <tbody> 
@@ -274,12 +274,12 @@ if ($_GET['action'] == 'first') {
                          }
                         ?>
                         <tr>
-                            <td><?php echo $db_rl_prstn_number; ?></td>
-                            <td><?php echo $db_rl_prstn_name; ?></td>
-                            <td><?php echo $str_presenter_list; ?></td>
-                            <td><?php echo $str_presenter_email_list; ?></td>
-                            <td style="padding-left: 2px;"><?php echo english2bangla(date("d/m/Y",  strtotime($db_rl_prstn_date))); ?></td>
-                            <td>
+                            <td style="border-bottom: 1px solid black;"><?php echo $db_rl_prstn_number; ?></td>
+                            <td style="border-bottom: 1px solid black;"><?php echo $db_rl_prstn_name; ?></td>
+                            <td style="border-bottom: 1px solid black;"><?php echo $str_presenter_list; ?></td>
+                            <td style="border-bottom: 1px solid black;"><?php echo $str_presenter_email_list; ?></td>
+                            <td style="padding-left: 2px;border-bottom: 1px solid black;"><?php echo english2bangla(date("d/m/Y",  strtotime($db_rl_prstn_date))); ?></td>
+                            <td style="border-bottom: 1px solid black;">
                                 <?php
                                 $timestamp = strtotime($db_rl_prstn_date);
                                 $day = date('D', $timestamp);
@@ -300,8 +300,8 @@ if ($_GET['action'] == 'first') {
                                 }
                                 ?>
                             </td>
-                            <td><?php echo english2bangla(date('g:i a' , strtotime($db_rl_prstn_time))); ?></td>
-                            <td style="text-align: center " > <a href="presentation_schdule_combined.php?action=edit&id=<?php echo $db_programID; ?>&type=<?php echo $type;?>"> এডিট সিডিউল </a></td>  
+                            <td style="border-bottom: 1px solid black;"><?php echo english2bangla(date('g:i a' , strtotime($db_rl_prstn_time))); ?></td>
+                            <td style="text-align: center;border-bottom: 1px solid black;" > <a href="presentation_schdule_combined.php?action=edit&id=<?php echo $db_programID; ?>&type=<?php echo $type;?>"> এডিট সিডিউল </a></td>  
                         </tr>
                     <?php } ?>
                 </tbody>
