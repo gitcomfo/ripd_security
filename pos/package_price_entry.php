@@ -62,13 +62,13 @@ if(isset($_POST['entry']))
 <script type="text/javascript">
 function getPrice(xprofitless)
 {
-    var totalsell = document.getElementById('totalsellprz').value;
-    var totalxtra = document.getElementById('totalxprofit').value;
-    var buy = document.getElementById('pckgbuying').value;
-    var sell = document.getElementById('pckgsellprz').value;
-    if((sell < totalsell) || (xprofitless < totalxtra))
+    var totalsell = Number(document.getElementById('totalsellprz').value);
+    var totalxtra = Number(document.getElementById('totalxprofit').value);
+    var buy = Number(document.getElementById('pckgbuying').value);
+    var sell = Number(document.getElementById('pckgsellprz').value);
+    if((sell < totalsell) || (Number(xprofitless) < totalxtra))
         {
-            var pckgprofit = sell - (buy + xprofitless); 
+            var pckgprofit = sell - (buy + Number(xprofitless)); 
             var cur_pv = <?php echo $current_pv?>;
             var pv = cur_pv * pckgprofit;
             pv = (pv).toFixed(5);

@@ -177,9 +177,9 @@ function checkFund(need) //check fund amount ***************
                                             // check for current Or previous loan *********************
                                             $sel_loan = mysql_query("SELECT * FROM loan WHERE Employee_idEmployee=$db_empid AND loan_status='given'");
                                             $loanrow = mysql_fetch_assoc($sel_loan);
-                                            if(mysql_num_rows($loanrow) > 0)
+                                            if(mysql_num_rows($sel_loan) > 0)
                                             {
-                                                $db_loan = $empsalrow['loan_amount'];
+                                                $db_loan = $loanrow['loan_amount'];
                                                 $loan_description = $db_loan." টাকার লোন দেয়া আছে";
                                             }
                                             else

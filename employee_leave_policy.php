@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/MiscFunctions.php';
@@ -37,10 +38,6 @@ if(isset($_POST['submit']))
                 {
                     move_uploaded_file($_FILES["leavescan"]["tmp_name"], "pic/" . $scan_name);
                 } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
     $p_startingdate = $_POST['startdate'];
     $p_totaldays = $_POST['leavedays'];
     $days = $p_totaldays -1;
@@ -154,7 +151,7 @@ function getEmployee(keystr) //search employee by account number***************
         <form method="POST" action="" enctype="multipart/form-data" style=" font-family: SolaimanLipi !important;">	
             <table  class="formstyle" style =" width:80%"id="make_presentation_fillter">                   
                     <tr>
-                        <th colspan="8" >কর্মচারীর ছুটি গণনা</th>
+                        <th colspan="8" style="font-size: 22px;" >কর্মচারীর ছুটি গণনা</th>
                         <?php
                                         if(isset($_GET['id']))
                                         {
