@@ -45,11 +45,11 @@ $sql_select_ons->execute(array($db_prog_officeID));
     }
     
 $typeinbangla = getProgramType($db_prog_type);
-echo $fundcode = $arr_fundtype[$db_prog_type];
+$fundcode = $arr_fundtype[$db_prog_type];
 $sql_sel_fundamount->execute(array($fundcode));
 $row = $sql_sel_fundamount->fetchAll();
 foreach ($row as $value) {
-     echo $fundamount = $value['fund_amount'];
+     $fundamount = $value['fund_amount'];
 }
 
 if(isset($_POST['submit']))
@@ -72,6 +72,7 @@ if(isset($_POST['submit']))
        {
            $conn->commit();
            echo "<script>alert('বাজেট অনুমোদন করা হল');</script>";
+           header('Location:main_account_management.php');
        }
        else {
            $conn->rollBack();
@@ -87,9 +88,9 @@ if(isset($_POST['submit']))
    {
        var fundamount = <?php echo $fundamount?>;     
        var needamount = Number(document.getElementById('need_amount').value);
-       alert(needamount);
        if(needamount > Number(fundamount))
            {
+               alert("দুঃখিত,নির্ধারিত ফান্ডে প্রয়োজনীয় পরিমান টাকা নেই");
                return false;
            }
            else { return true;}

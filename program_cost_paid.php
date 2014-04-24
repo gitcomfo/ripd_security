@@ -40,7 +40,7 @@ if(isset($_POST['submit'])) // after submit*************************************
     $nfcID=$_POST['nfcID'];
     
     $conn->beginTransaction(); 
-    $sqlrslt1= $up_prog_cost->execute(array($g_progcost_id ));
+    $sqlrslt1= $up_prog_cost->execute(array($g_progcost_id));
     $status = 'complete';
     $sqlrslt3 = $sql_update_notification->execute(array($status,$nfcID));
     $insert = $ins_daily_inout->execute(array($office_ons_id,$p_total));
@@ -49,6 +49,7 @@ if(isset($_POST['submit'])) // after submit*************************************
         {
             $conn->commit();
             echo "<script>alert('বাজেট উত্তোলন করা হল');</script>";
+            header('Location:main_account_management.php');
         }
         else {
             $conn->rollBack();

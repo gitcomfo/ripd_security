@@ -63,7 +63,7 @@ $sql = "SELECT * FROM cfs_user,employee WHERE idUser =  cfs_user_idUser AND idEm
                     </tr>
                     <tr>
                         <td style='padding-left: 0px !important;'>স্থান</td>
-                        <td>: $p_location <input type='place' value='$p_location' /></td>            
+                        <td>: $p_location <input type='hidden' name='place' value='$p_location' /></td>            
                     </tr>
                     <tr>
                         <td style='padding-left: 0px !important;'>তারিখ</td>

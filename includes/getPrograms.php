@@ -80,9 +80,9 @@ elseif(isset($_GET['report'])) //for program cost report ***********************
     $g_type = $_GET['type'];
     $today = date("Y-m-d");
     $typeinbangla = getProgramType($g_type);
-    $sel_program = mysql_query("SELECT * FROM program JOIN program_cost ON fk_program_id = idprogram 
-                                                    WHERE program_type = '$g_type' AND program_date < '$today' AND payment_status= 'paid' 
-                                                    AND pc_status = 'given' ORDER BY program_date ");
+    $sel_program = mysql_query("SELECT * FROM program,program_cost WHERE fk_program_id = idprogram 
+                                                    AND program_type = '$g_type' AND program_date < '$today' AND payment_status= 'paid' 
+                                                    AND pc_status = 'given' ORDER BY program_date");
      echo "<table border='1' cellpadding='0' cellspacing='0'>
             <tr id='table_row_odd'>
                 <td style='border:1px black solid; '><b>$typeinbangla-এর নাম</b></td>
