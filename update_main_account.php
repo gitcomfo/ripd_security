@@ -88,7 +88,7 @@ function infoFromThana2()
             <table id="office_info_filter" border="1" align="center" width= 99%" cellpadding="5px" cellspacing="0px">
                 <thead>
                     <tr align="left" id="table_row_odd">
-                        <th><?php echo $showAccountType." নাম"; ?></th>
+                        <th style="width: 20%"><?php echo $showAccountType." নাম"; ?></th>
                         <th><?php echo $showAccountType."  অ্যাকাউন্ট নাম্বার"; ?></th>
                         <th><?php echo $showAccountType." ইমেইল"; ?></th>
                         <?php if($input == 'employee') {?>
@@ -167,7 +167,7 @@ function infoFromThana2()
                             echo "<td>$db_mobile</td>";
                             echo "<td>$db_thana</td>";
                            $v = base64_encode($db_custID);
-                            echo "<td><a href='update_customer_account_inner.php?id=$v'>আপডেট</a></td>";
+                            echo "<td><a href='update_customer_account_inner.php?id=$v'>আপডেট.</a></td>";
                             echo "</tr>";
                         }
                     }

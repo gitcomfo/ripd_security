@@ -8,7 +8,7 @@ include_once 'getSelectedThana.php';
             <table id="office_info_filter" border="1" align="center" width= 100%" cellpadding="5px" cellspacing="0px">
                 <thead>
                     <tr align="left" id="table_row_odd">
-                        <th><?php echo "কাস্টমার নাম"; ?></th>
+                        <th style="width: 20%"><?php echo "কাস্টমার নাম"; ?></th>
                         <th><?php echo "কাস্টমার অ্যাকাউন্ট নাম্বার"; ?></th>
                         <th><?php echo "কাস্টমার ইমেইল"; ?></th>
                         <th><?php echo "কাস্টমার মোবাইল নং"; ?></th>
