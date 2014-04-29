@@ -155,7 +155,7 @@ function setProgram(progNo,progid)
                 document.getElementById('pall').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","includes/getPresentations.php?v="+val,true);
+        xmlhttp.open("GET","includes/getPresentations.php?v="+val+"&budget=1",true);
         xmlhttp.send();
     }
 

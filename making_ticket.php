@@ -6,8 +6,10 @@ include_once 'includes/MiscFunctions.php';
 
 if(isset($_POST['submit_ticket']))
 {
-    echo "<script>alert('টিকেটটি সফলভাবে তৈরি হয়েছে')</script>";
-    header('Location:making_ticket.php');
+    echo "<script>alert('টিকেটটি সফলভাবে তৈরি হয়েছে');
+        window.open(making_ticket.php, '_blank'');
+        </script>";
+    //header('Location:making_ticket.php');
 }
 
 if(isset($_POST['submit']))
