@@ -351,6 +351,7 @@ function passminlength(pass)
                                 <option value='programmer'>প্রোগ্রামার</option>
                                 <option value='presenter'>প্রেজেন্টার</option>
                                 <option value='trainer'>ট্রেইনার</option>
+                                <option value='traveller'>ট্র্যাভেলার</option>
                             </select><em2> *</em2></td>
                     </tr>   
                     <tr>
@@ -415,6 +416,7 @@ function passminlength(pass)
                                 <option value='programmer'>প্রোগ্রামার</option>
                                 <option value='presenter'>প্রেজেন্টার</option>
                                 <option value='trainer'>ট্রেইনার</option>
+                                <option value='traveller'>ট্র্যাভেলার</option>
                             </select><em2> *</em2></td>
                     </tr>   
                     <tr>
@@ -440,6 +442,4 @@ function passminlength(pass)
         </div>
     </div>      
 </div> 
-<?php
-include_once 'includes/footer.php';
-?>
+<?php include_once 'includes/footer.php';?>
