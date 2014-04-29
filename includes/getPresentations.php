@@ -32,7 +32,8 @@ if($value !="")
         $rslt=mysql_query("SELECT * FROM program_cost WHERE fk_program_id=$value");
         if(mysql_num_rows($rslt) > 0)
         {
-            echo "দুঃখিত, এই প্রোগ্রামের বাজেট তৈরি করা হয়ে গেছে";
+            echo "<font style='color:red'>দুঃখিত, এই প্রোগ্রামের বাজেট তৈরি করা হয়ে গেছে</font>
+                <input type='hidden' name='programName' id='programName' value='0' />";
         }
         else
         {
@@ -84,7 +85,7 @@ if($value !="")
                                 <tr><td>
                                 <input type='hidden' name='programID' value=$value />
                                  <input type='hidden' name='type' value=$p_type />
-                                <input type='hidden' name='programName'  value='$p_name' />
+                                <input type='hidden' name='programName' id='programName' value='$p_name' />
                                 <input type='hidden' name='programDate'  value='$p_date' />
                                 <input type='hidden' name='programTime' value='$p_time' />
                                 <input type='hidden' name='emp_name' value='$str_emp_name' />
@@ -143,7 +144,7 @@ if($value !="")
                             <tr><td>
                             <input type='hidden' name='programID' value=$value />
                              <input type='hidden' name='type' value=$p_type />
-                            <input type='hidden' name='programName'  value='$p_name' />
+                            <input type='hidden' name='programName' value='$p_name' />
                             <input type='hidden' name='programDate'  value='$p_date' />
                             <input type='hidden' name='programTime' value='$p_time' />
                             <input type='hidden' name='emp_name' value='$str_emp_name' />

@@ -103,9 +103,10 @@ function setProgram(progNo,progid)
         document.getElementById('progResult').style.display = "none";
         getall(progid);
 }
-     function beforeSubmit(){
-    if ((document.getElementById('prgrm_number').value !="")
-    && (document.getElementById('budget').value !=""))
+function beforeSubmit()
+{
+    if ((document.getElementById('programName').value !="0")
+            && (document.getElementById('budget').value !=""))
         { return true; }
     else {
         alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");

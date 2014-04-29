@@ -199,6 +199,7 @@ function showPaymentBox2(taka)
 }
 function paybyaccount(ticketprize)
 {
+    var buyerid = document.getElementById('buyerID').value;
     var xmlhttp;
         if (window.XMLHttpRequest)
         {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -215,7 +216,7 @@ function paybyaccount(ticketprize)
                 document.getElementById('payByCash').innerHTML=xmlhttp.responseText;
             }
         }
-        xmlhttp.open("GET","includes/paymentBox.php?ticketprizeForAcc="+ticketprize,true);
+        xmlhttp.open("GET","includes/paymentBox.php?ticketprizeForAcc="+ticketprize+"&buyer="+buyerid,true);
         xmlhttp.send();
 }
 function paycash(ticketprize)
@@ -568,7 +569,7 @@ function showTicket($Tid)
     $row = mysql_fetch_assoc($result);
     $db_pID = $row ['Program_idprogram'];
     
-    $sql2 = "SELECT * FROM `program` WHERE idprogram = $db_pID ; ";
+    $sql2 = "SELECT * FROM program WHERE idprogram = $db_pID ; ";
     $result2 = mysql_query($sql2) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন২';
     $row2 = mysql_fetch_assoc($result2);
     
@@ -576,6 +577,7 @@ function showTicket($Tid)
     $location = $row2['program_location'];
     $date = $row2['program_date'];
     $time = $row2['program_time'];
+    $subject = $row2['subject'];
     $type = $row2['program_type'];
     $whoinbangla =  getProgramer($type);
     
@@ -638,6 +640,9 @@ function showTicket($Tid)
                                     <div id='back_ri8' style='width: 574px; height: 384px; float: left;border-right: blue dotted 1px;'>
                                         <div id='back_head' style='text-align: center;padding-top: 10px;'>
                                         <span style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'> কার্যবিবরণী</span>
+                                            <div id='back_content' style='padding: 10px;'>
+                                                <span style='font-family: SolaimanLipi;color: #000000;font-size: 16px;'>$subject</span>
+                                            </div>
                                         </div>
                                   </div>
                                 </div></td></tr><tr><td id='jc'></td></tr>";
@@ -684,6 +689,9 @@ function showTicket($Tid)
                                     <div id='back_ri8' style='width: 574px; height: 384px; float: left;border-right: blue dotted 1px;'>
                                         <div id='back_head' style='text-align: center;padding-top: 10px;'>
                                         <span style='font-family: SolaimanLipi;color: #3333CC;font-size: 20px;'> কার্যবিবরণী</span>
+                                            <div id='back_content' style='padding: 10px;'>
+                                                <span style='font-family: SolaimanLipi;color: #000000;font-size: 16px;'>$subject</span>
+                                            </div>
                                         </div>
                                         </div>
                                 </div></td></tr><tr><td id='jc'></td></tr>";
@@ -720,7 +728,7 @@ if ($_GET['opt']=='submit_ticket') {
                                 $making_prize = 0;
                             }
                             $value = $_GET['programID']; 
-                            $allsql="SELECT * FROM " . $dbname . ".program WHERE idprogram=$value;";
+                            $allsql="SELECT * FROM program WHERE idprogram=$value;";
                                 $allrslt=mysql_query($allsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন';
                                 while($all=  mysql_fetch_assoc($allrslt))
                                     {
