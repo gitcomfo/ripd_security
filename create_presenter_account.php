@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 //include_once 'includes/session.inc';
 include_once 'includes/MiscFunctions.php';
 include_once 'includes/makeAccountNumbers.php';
@@ -116,7 +116,6 @@ if (isset($_POST['submitwithpass']))
 
 ?>
 <?php include_once 'includes/header.php';?>
-<title>ক্রিয়েট কর্মচারী অ্যাকাউন্ট</title>
 <style type="text/css">@import "css/bush.css";</style>
 <link rel="stylesheet" type="text/css" media="all" href="javascripts/jsDatePick_ltr.min.css" />
 <script type="text/javascript" src="javascripts/jsDatePick.min.1.3.js"></script>
@@ -298,7 +297,7 @@ function passminlength(pass)
             {
                 document.getElementById("mblValidationMsg").innerHTML = xmlhttp.responseText;
                 var message = document.getElementById("mblValidationMsg").innerText;
-                if (message != "ঠিক আছে")
+                if (message != "")
                 {
                     document.getElementById('mobile').focus();
                 }

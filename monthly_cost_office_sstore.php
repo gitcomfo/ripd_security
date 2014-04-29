@@ -22,7 +22,7 @@ $exp_maker_id = $_SESSION['userIDUser'];
          $db_parent_id = $value['parent_id'];
          if($db_parent_id == 0)
               {
-                   $sql_select_id_ons_relation->execute(array($prog_ons_type,$prog_ons_id));
+                   $sql_select_id_ons_relation->execute(array($exp_ons_type,$exp_ons_id));
                      $onsrow = $sql_select_id_ons_relation->fetchAll();
                      foreach ($onsrow as $value) {
                          $db_parent_onsID = $value['idons_relation'];
@@ -30,7 +30,7 @@ $exp_maker_id = $_SESSION['userIDUser'];
               }
                 else 
                     {
-                            $sql_select_id_ons_relation->execute(array($prog_ons_type,$db_parent_id));
+                            $sql_select_id_ons_relation->execute(array($exp_ons_type,$db_parent_id));
                             $onsrow = $sql_select_id_ons_relation->fetchAll();
                             foreach ($onsrow as $value) {
                                 $db_parent_onsID = $value['idons_relation'];
@@ -298,6 +298,4 @@ function beforeSubmit()
         </div>
     </div>  
 </div>    
-<?php 
-include_once 'includes/footer.php'; 
-?>
+<?php  include_once 'includes/footer.php'; ?>

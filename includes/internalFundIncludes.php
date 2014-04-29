@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include_once './connectionPDO.php';
 $ons_id = $_SESSION['loggedInOfficeID'];
 $ons_type = $_SESSION['loggedInOfficeType'];
