@@ -110,7 +110,7 @@ function getAmount(fundID)
                                             </select><em2> *</em2></td>          
                                     </tr>
                                     <tr>
-                                        <td >ট্রান্সফার এ্যামাউন্ট</td>
+                                        <td >বর্তমান পরিমান</td>
                                         <td>: <input class="box" type="text" id="fundAmount" style="text-align: right;" readonly="" /> TK</td>          
                                     </tr>
                                 </table>
@@ -127,7 +127,7 @@ function getAmount(fundID)
                                             </select><em2> *</em2></td>          
                                     </tr>
                                     <tr>
-                                        <td >টোটাল ইন এ্যামাউন্ট</td>
+                                        <td >মোট ট্রান্সফার এ্যামাউন্ট</td>
                                         <td>: <input class="box" type="text" id="t_in_amount" name="t_in_amount" style="text-align: right;" onkeypress=' return numbersonly(event)' onkeyup="checkAmount(this.value)" /><em2> *</em2> TK</td>          
                                     </tr>
                                     <tr>
