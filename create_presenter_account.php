@@ -57,6 +57,7 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
                     
                      if ($ins_cfsuser && $ins_employee && $empinfo_ins) {
                         mysql_query("COMMIT");
+                        echo "<script>alert('কর্মচারী তৈরি হয়েছে')</script>";
                         header( 'Location: create_employee_account_inner.php?empInfoID='.$encodedID);
                     } else {
                         mysql_query("ROLLBACK");
@@ -107,6 +108,7 @@ if (isset($_POST['submitwithpass']))
                     $encodedID = base64_encode($employee_info_id);
                      if ($ins_cfsuser && $ins_employee && $empinfo_ins) {
                         mysql_query("COMMIT");
+                        echo "<script>alert('কর্মচারী তৈরি হয়েছে')</script>";
                         header( 'Location: create_employee_account_inner.php?empInfoID='.$encodedID);
                     } else {
                         mysql_query("ROLLBACK");
@@ -170,19 +172,23 @@ if (isset($_POST['submitwithpass']))
 
     function beforeSave()
     {
-        if ((document.getElementById('usernamecheck').innerHTML == "") && (document.getElementById('role').value != 0))
+        if ((document.getElementById('usernamecheck').innerHTML == "")
+                && (document.getElementById('employee_type').value != 0)
+                && (document.getElementById('role').value != 0))
         {
             document.getElementById('save').readonly = false;
             return true;
         }
         else {
             document.getElementById('save').readonly = true;
+            alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
             return false;
         }
     }
     function beforeSave2()
     {
         if ((document.getElementById('usernamecheck').innerHTML == "")
+                && (document.getElementById('employee_type').value != 0)
                 && (document.getElementById('role').value != 0)
                 && (document.getElementById('passcheck').innerHTML == "OK"))
         {
@@ -191,12 +197,14 @@ if (isset($_POST['submitwithpass']))
         }
         else {
             document.getElementById('save2').readonly = true;
+            alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
             return false;
         }
     }
     function beforeSaveRetry()
     {
         if ((document.getElementById('usernamecheck').innerHTML == "")
+                && (document.getElementById('employee_type').value != 0)
                 && (document.getElementById('role').value != 0)
                 && (document.getElementById('passcheck').innerHTML == ""))
         {
@@ -205,6 +213,7 @@ if (isset($_POST['submitwithpass']))
         }
         else {
             document.getElementById('retry').readonly = true;
+            alert("ফর্মের * বক্সগুলো সঠিকভাবে পূরণ করুন");
             return false;
         }
     }
@@ -229,6 +238,10 @@ function passminlength(pass)
         else{
             document.getElementById('minlengtherror').innerHTML= "";
         }
+}
+function clearreappass()
+{
+    document.getElementById('reap_password').value="";
 }
 </script>
 <script>
@@ -346,8 +359,8 @@ function passminlength(pass)
                     </tr>
                     <tr>
                         <td>কাজের ধরন</td>
-                      <td>:   <select  class='box'  name='employee_type' style =' font-size: 14px'>
-                                <option >-একটি নির্বাচন করুন-</option>
+                      <td>:   <select  class='box'  name='employee_type' id='employee_type' style =' font-size: 14px'>
+                                <option value=0>-একটি নির্বাচন করুন-</option>
                                 <option value='programmer'>প্রোগ্রামার</option>
                                 <option value='presenter'>প্রেজেন্টার</option>
                                 <option value='trainer'>ট্রেইনার</option>
@@ -367,7 +380,7 @@ function passminlength(pass)
                     </tr>   
                     <tr>
                         <td>পাসওয়ার্ড</td>
-                       <td>: <input class='box' type='password' id='user_password' name='user_password' maxlength='15' onblur='passminlength(this.value)'/><em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span style='color:red;' id='minlengtherror'></span></td>
+                       <td>: <input class='box' type='password' id='user_password' name='user_password' maxlength='15' onblur='passminlength(this.value)' onkeyup='clearreappass()' /><em2>*</em2><em>ইংরেজিতে লিখুন</em></br><span style='color:red;' id='minlengtherror'></span></td>
                     </tr>
                     <tr>
                         <td>কনফার্ম পাসওয়ার্ড</td>
@@ -411,8 +424,8 @@ function passminlength(pass)
                     </tr>
                     <tr>
                         <td>কাজের ধরন</td>
-                      <td>:   <select  class='box'  name='employee_type' style =' font-size: 14px'>
-                                <option >-একটি নির্বাচন করুন-</option>
+                      <td>:   <select  class='box'  name='employee_type' id='employee_type' style =' font-size: 14px'>
+                                <option value=0>-একটি নির্বাচন করুন-</option>
                                 <option value='programmer'>প্রোগ্রামার</option>
                                 <option value='presenter'>প্রেজেন্টার</option>
                                 <option value='trainer'>ট্রেইনার</option>
