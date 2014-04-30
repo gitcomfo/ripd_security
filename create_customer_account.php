@@ -64,6 +64,7 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
                     $encodedID = base64_encode($cust_acc_id);
                     if ($ins_cfsuser && $ins_custaccount && $up_pinmakingused) {
                         mysql_query("COMMIT");
+                        echo "<script>alert('কাস্টমার তৈরি হয়েছে')</script>";
                         header( 'Location: create_customer_account_inner.php?custACid='.$encodedID);
                     } else {
                         mysql_query("ROLLBACK");
@@ -126,6 +127,7 @@ if (isset($_POST['submitwithpass']))
                      $encodedID = base64_encode($cust_acc_id);
                     if ($ins_cfsuser && $ins_custaccount) {
                         mysql_query("COMMIT");
+                        echo "<script>alert('কাস্টমার তৈরি হয়েছে')</script>";
                         header( 'Location: create_customer_account_inner.php?custACid='.$encodedID);
                     } else {
                         mysql_query("ROLLBACK");

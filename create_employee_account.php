@@ -71,6 +71,7 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
                     
                      if ($ins_cfsuser && $ins_employee && $ins_empposting && $ins_postinons && $ins_postinons && $ins_empsalary && $empinfo_ins) {
                         mysql_query("COMMIT");
+                        echo "<script>alert('কর্মচারী তৈরি হয়েছে')</script>";
                         header( 'Location: create_employee_account_inner.php?empInfoID='.$encodedID);
                     } else {
                         mysql_query("ROLLBACK");
@@ -134,6 +135,7 @@ if (isset($_POST['submitwithpass']))
                     $encodedID = base64_encode($employee_info_id);
                      if ($ins_cfsuser && $ins_employee && $ins_empposting && $ins_postinons && $ins_postinons && $ins_empsalary && $empinfo_ins) {
                         mysql_query("COMMIT");
+                        echo "<script>alert('কর্মচারী তৈরি হয়েছে')</script>";
                         header( 'Location: create_employee_account_inner.php?empInfoID='.$encodedID);
                     } else {
                         mysql_query("ROLLBACK");
