@@ -41,6 +41,8 @@ if(isset($_POST['pay']))
     $p_amount = $_POST['getamount'];
     $p_send_track = $_POST['sendtrack'];
     $p_amount_track = $_POST['amounttrack'];
+    $p_charge_amount = $_POST['chargeamount'];
+    $charge_code = 'CSA';
     $arr_send_track = explode(',', $p_send_track);
     $arr_amount_track = explode(',', $p_amount_track);
     $arr_fund = array('1'=>'HIA','2'=>'RHC');
@@ -75,9 +77,11 @@ if(isset($_POST['pay']))
                 $update1 = $up_main_fund->execute(array($arr_amount_track[$i],$fundcode));
             }
             
+            $update2 = $up_main_fund->execute(array($p_charge_amount,$charge_code));
+            
             $ins_daily_inout = $conn->prepare("INSERT INTO acc_ofc_daily_inout (daily_date, daily_onsid, out_amount) VALUES (NOW(),?,?)");
             $insert = $ins_daily_inout->execute(array($office_ons_id,$p_amount));
-                if($update && $insert && $update1)
+                if($update && $insert && $update1 && $update2)
                 {
                     $conn->commit();
                     echo "<script>alert('টাকা প্রদান করা হল')</script>";
