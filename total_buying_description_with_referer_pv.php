@@ -68,20 +68,20 @@ foreach ($arr_rslt as $value) {
                                                 $pv = $pv_value * $running_pv;
                                                 echo '<tr>';
                                                 echo '<td style="border: solid black 1px;">'.  english2bangla(date("d/m/Y",  strtotime($db_date))).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla(($value["cust_own_pv"])*$running_pv).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla($value["cust_own_pv"]).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla(($value["cust_c1"])*$running_pv).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla($value["cust_c1"]).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla(($value["cust_c2"])*$running_pv).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla($value["cust_c2"]).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla(($value["cust_c3"])*$running_pv).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla($value["cust_c3"]).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla(($value["cust_c4"])*$running_pv).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla($value["cust_c4"]).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla(($value["cust_c5"])*$running_pv).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla($value["cust_c5"]).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla($pv).'</td>
-                                                        <td style="border: solid black 1px;">'.english2bangla($pv_value).'</td>';                                   
+                                                        <td style="border: solid black 1px;">'.english2bangla(round((($value["cust_own_pv"])*$running_pv),4)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round(($value["cust_own_pv"]),2)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round((($value["cust_c1"])*$running_pv),4)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round(($value["cust_c1"]),2)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round((($value["cust_c2"])*$running_pv),4)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round(($value["cust_c2"]),2)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round((($value["cust_c3"])*$running_pv),4)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round(($value["cust_c3"]),2)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round((($value["cust_c4"])*$running_pv),4)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round(($value["cust_c4"]),2)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round((($value["cust_c5"])*$running_pv),4)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round(($value["cust_c5"]),2)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round($pv,4)).'</td>
+                                                        <td style="border: solid black 1px;">'.english2bangla(round($pv_value,2)).'</td>';                                   
                                                 echo '</tr>';
                                                $total_pv_value+= $pv_value;
                                                $total_pv+= $pv;
@@ -89,8 +89,8 @@ foreach ($arr_rslt as $value) {
                                     ?>
                                     <tr>
                                         <td colspan="13" style="text-align: right">সর্বমোট</td>
-                                        <td style="border: solid black 1px;"><?php echo english2bangla($total_pv);?></td>
-                                        <td style="border: solid black 1px;"><?php echo english2bangla($total_pv_value);?></td>
+                                        <td style="border: solid black 1px;"><?php echo english2bangla(round($total_pv,4));?></td>
+                                        <td style="border: solid black 1px;"><?php echo english2bangla(round($total_pv_value,2));?></td>
                                     </tr>
                                 </table>
                         </fieldset>
