@@ -110,10 +110,7 @@ function getAmount(fundCode)
                                                 <option value="AEP">এক্সট্রা প্রফিট</option>                                            
                                                 <option value="ASE">সেলিং আর্ন</option>
                                                 <option value="ARI">রিপড ইনকাম</option>
-                                                <option value="SOC">সফট কস্টিং</option>
-                                                <option value="RHC">হিটিং কাস্টমার</option>
                                                 <option value="AVG">ভগ্নাংশ এমাউন্ট</option>
-                                                <option value="SPO">প্যাটেন্ট আউটসাইড</option>
                                                 </select><em2> *</em2>
                                         </td>          
                                     </tr>
@@ -136,10 +133,7 @@ function getAmount(fundCode)
                                                 <option value="AEP">এক্সট্রা প্রফিট</option>                                            
                                                 <option value="ASE">সেলিং আর্ন</option>
                                                 <option value="ARI">রিপড ইনকাম</option>
-                                                <option value="SOC">সফট কস্টিং</option>
-                                                <option value="RHC">হিটিং কাস্টমার</option>
                                                 <option value="AVG">ভগ্নাংশ এমাউন্ট</option>
-                                                <option value="SPO">প্যাটেন্ট আউটসাইড</option>
                                             </select><em2> *</em2></td>          
                                     </tr>
                                     <tr>
