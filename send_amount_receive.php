@@ -47,7 +47,7 @@ if(isset($_POST['pay']))
     $arr_amount_track = explode(',', $p_amount_track);
     $arr_fund = array('1'=>'HIA','2'=>'RHC');
     
-    $up_main_fund = $conn->prepare("UPDATE main_fund SET fund_amount = fund_amount - ? WHERE fund_code = ?");
+    $up_main_fund = $conn->prepare("UPDATE main_fund SET fund_amount = fund_amount - ?, last_update=NOW() WHERE fund_code = ?");
     
     $sel_onsID = $conn->prepare("SELECT idons_relation FROM ons_relation WHERE add_ons_id = ? AND catagory='office'");
     $sel_onsID->execute(array($logedinOfficeId));
