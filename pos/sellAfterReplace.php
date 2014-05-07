@@ -21,6 +21,7 @@ foreach ($arr_rslt as $value) {
 <script language="JavaScript" type="text/javascript" src="scripts/suggest.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/productsearch.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
+ <script src="scripts/jquery-1.4.3.min.js" type="text/javascript"></script>
  <style type="text/css">
 .prolinks:focus{
     background-color: cadetblue;
@@ -32,6 +33,16 @@ foreach ($arr_rslt as $value) {
 }
  </style>
 <script language="javascript" type="text/javascript">
+        $(document).ready(function(){
+    $("#amots").keydown(function(e){
+        if(e.which==17 || e.which==74){
+            e.preventDefault();
+        }else{
+            console.log(e.which);
+        }
+    })
+});
+
 function multiply(){
     a=Number(document.abc.QTY.value);
     b=Number(document.abc.PPRICE.value);
