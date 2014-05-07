@@ -42,6 +42,7 @@ var xmlhttp;
         xmlhttp.send();	
         	
 }
+
 function searchProductAll(where) // productlist-er search box
 {
    var xmlhttp;

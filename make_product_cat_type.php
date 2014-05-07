@@ -10,7 +10,7 @@ if (isset($_POST['pro_submit'])) {
         $pro_type = $_POST['pro_type'];
         $pro_type_code = $_POST['pro_type_code'];
 
-        $sql_product_insert = mysql_query("INSERT INTO $dbname.product_catagory 
+        $sql_product_insert = mysql_query("INSERT INTO product_catagory 
                                     (pro_catagory, pro_cat_code, pro_type, pro_type_code)
                                      VALUES  ('$pro_catagory', '$pro_cat_code', '$pro_type', '$pro_type_code')");
         if ($sql_product_insert) {
@@ -22,10 +22,10 @@ if (isset($_POST['pro_submit'])) {
         $pro_category_code = $_POST['product'];
         $pro_type = $_POST['pro_type'];
         $pro_type_code = $_POST['pro_type_code'];
-        $sql_select = mysql_query("Select pro_catagory  from $dbname.product_catagory where pro_cat_code ='$pro_category_code' ");
+        $sql_select = mysql_query("SELECT pro_catagory  FROM product_catagory where pro_cat_code ='$pro_category_code' ");
         $product_result= mysql_fetch_assoc($sql_select);
         $product_cat_name = $product_result['pro_catagory'];
-        $sql_product_insert = mysql_query("INSERT INTO $dbname.product_catagory 
+        $sql_product_insert = mysql_query("INSERT INTO product_catagory 
                                     (pro_catagory, pro_cat_code, pro_type, pro_type_code)
                                      VALUES  ('$product_cat_name', '$pro_category_code', '$pro_type', '$pro_type_code')");
         if ($sql_product_insert) {

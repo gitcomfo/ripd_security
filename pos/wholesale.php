@@ -37,8 +37,10 @@ foreach ($arr_rslt as $value) {
 <!--===========================================================================================================================-->
 <script language="javascript" type="text/javascript">
         $(document).ready(function(){
-    $("#amots").keydown(function(e){
+    $("#barcode").keydown(function(e){
         if(e.which==17 || e.which==74){
+            var code = $('#barcode').val();
+            readBarcode(code,'wholesale.php');
             e.preventDefault();
         }else{
             console.log(e.which);
@@ -245,6 +247,30 @@ function showOffName(acNo)
 		 reqst.send(null);
 	}	
 }
+
+function readBarcode(code,location) {
+    var reqst = getXMLHTTP();		
+        if (reqst) 
+        {
+            
+            reqst.onreadystatechange = function()
+            {
+                if (reqst.readyState == 4) 
+                {			
+                    if (reqst.status == 200)
+                    { 
+                        var id =reqst.responseText;
+                        window.location=location+"?code="+id;
+                    } 
+                    else 
+                    {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+                }				
+            }			
+            reqst.open("GET", "searchsuggest2.php?code="+code, true);
+            reqst.send(null);
+        }	
+}   
+
 function addToCart() // to add into temporary array*******************
 {
         var id = document.getElementById("inventoryID").value;
@@ -300,7 +326,10 @@ function addToCart() // to add into temporary array*******************
      <fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
          <legend style="color: brown;">পণ্যের বিবরণী</legend>
     <div class="top" style="width: 100%;">
-        <div class="topleft" style="float: left;width: 15%;"><b>প্রোডাক্ট কোড:</b></br>
+        <div class="topleft" style="float: left;width: 15%;">
+            <b>বার কোড :</b><br/>
+            <input type="text" id="barcode" name="barcode"/><br/>
+            <b>প্রোডাক্ট কোড:</b></br>
       <input type="text" id="amots" name="amots" onKeyUp="bleble('wholesale.php');" autocomplete="off"/>
       <div id="layer2"style="width:400px;position:absolute;top:45.5%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br>
       <b>প্রোডাক্ট নাম:</b>

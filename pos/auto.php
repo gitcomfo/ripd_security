@@ -37,9 +37,11 @@ foreach ($arr_rslt as $value) {
 <!--===========================================================================================================================-->
 <script language="javascript" type="text/javascript">
     $(document).ready(function(){
-    $("#amots").keydown(function(e){
+    $("#barcode").keydown(function(e){
         if(e.which==17 || e.which==74){
             e.preventDefault();
+            var code = $('#barcode').val();
+            readBarcode(code,'auto.php');
         }else{
             console.log(e.which);
         }
@@ -300,7 +302,31 @@ foreach ($arr_rslt as $value) {
             reqst.send(null);
         }	
     }
-    function addToCart() // to add into temporary array*******************
+
+function readBarcode(code,location) {
+    var reqst = getXMLHTTP();		
+        if (reqst) 
+        {
+            
+            reqst.onreadystatechange = function()
+            {
+                if (reqst.readyState == 4) 
+                {			
+                    if (reqst.status == 200)
+                    { 
+                        var id =reqst.responseText;
+                        window.location=location+"?code="+id;
+                    } 
+                    else 
+                    {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+                }				
+            }			
+            reqst.open("GET", "searchsuggest2.php?code="+code, true);
+            reqst.send(null);
+        }	
+}       	
+
+function addToCart() // to add into temporary array*******************
     {
         var id = document.getElementById("inventoryID").value;
         var name = document.getElementById("pname").value;
@@ -350,11 +376,15 @@ foreach ($arr_rslt as $value) {
                     <fieldset style="border-width: 3px;margin:0 20px 0 20px;">
                         <legend style="color: brown;">পণ্যের বিবরণী</legend>
                         <div class="top" style="width: 100%;">
-                            <div class="topleft" style="float: left;width: 40%;"><b>প্রোডাক্ট কোড :</b>
-                                <input type="text" id="amots" name="amots" onKeyUp="bleble('auto.php');" autocomplete="off" style="width: 250px;"/>
-                                <div style="width:430px;position:absolute;top:41.5%;left:18%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="layer2" ></div></br></br>
-                                <b>প্রোডাক্ট নাম&nbsp;&nbsp;: </b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('auto.php');" autocomplete="off" style="width: 250px;"/>
-                                <div style="position:absolute;top:50%;left:18%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult" ></div>
+                            <div class="topleft" style="float: left;width: 40%;">
+                                <b>বার কোড&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b>
+                                <input type="text" id="barcode" name="barcode" style="width: 250px;"/><br/>
+                                <b>প্রোডাক্ট কোড :</b>
+                                <input type="text" id="amots" name="amots" onKeyUp="bleble('auto.php');" onkeydown="" autocomplete="off" style="width: 250px;"/>
+                                <div style="width:430px;position:absolute;top:45.8%;left:18%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="layer2" ></div></br></br>
+                                <b>প্রোডাক্ট নাম&nbsp;&nbsp;: </b>
+                                <input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('auto.php');" autocomplete="off" style="width: 250px;"/>
+                                <div style="position:absolute;top:54%;left:18%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="searchResult" ></div>
                             </div>
                             <div class="topright" style="float:left; width: 60%;">
                                 <?php

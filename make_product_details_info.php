@@ -22,15 +22,15 @@ if (isset($_POST['submit'])) {
     if (($_FILES["image"]["size"] < 999999999999) && in_array($extension, $allowedExts)) {
         move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
     }
-    $product_cat_sql = mysql_query("SELECT pro_cat_code FROM $dbname.product_catagory where idproduct_catagory='$pro_typeid'");
+    $product_cat_sql = mysql_query("SELECT pro_cat_code FROM product_catagory WHERE idproduct_catagory='$pro_typeid'");
     $product_cat_row = mysql_fetch_assoc($product_cat_sql);
     $pro_cat_code = $product_cat_row['pro_cat_code'];
 
-    $product_type_sql = mysql_query("SELECT pro_type_code FROM $dbname.product_catagory where idproduct_catagory='$pro_typeid'");
+    $product_type_sql = mysql_query("SELECT pro_type_code FROM product_catagory WHERE idproduct_catagory='$pro_typeid'");
     $product_type_row = mysql_fetch_assoc($product_type_sql);
     $pro_type_code = $product_type_row['pro_type_code'];
 
-    $product_chart_sql = mysql_query("SELECT idproductchart FROM $dbname.product_chart where product_catagory_idproduct_catagory='$pro_typeid'");
+    $product_chart_sql = mysql_query("SELECT idproductchart FROM product_chart WHERE product_catagory_idproduct_catagory='$pro_typeid'");
     $pchart_id = mysql_fetch_array($product_chart_sql);
     $prounit_userid = $pchart_id['idproductchart'];
     $brand_name = $_POST['product_brand_name'];
@@ -46,24 +46,25 @@ if (isset($_POST['submit'])) {
             $brand_code = '100';
         }
         $classification_code = '100';
-        $pro_code = $pro_cat_code . '-' . $pro_type_code . '-' . $brand_code . '-' . $classification_code;
+        //$pro_code = $pro_cat_code . '-' . $pro_type_code . '-' . $brand_code . '-' . $classification_code;
+        $pro_code = $pro_cat_code . $pro_type_code . $brand_code . $classification_code;
         $pro_brand_or_grp = $_POST['new_brand'];
         if ($_POST['pro_unit'] == '0') {
             $pro_unit = $_POST['new_unit'];
-            $sql_product_insert = mysql_query("INSERT INTO $dbname.product_chart 
+            $sql_product_insert = mysql_query("INSERT INTO product_chart 
                                     (pro_brand_or_grp, pro_classification, pro_unit, pro_brnd_or_grp_code,pro_classification_code, pro_code, pro_productname, pro_article, pro_guarantee, pro_warantee, pro_companyname, pro_madein, pro_picture, product_catagory_idproduct_catagory)
                                      VALUES  ('$pro_brand_or_grp', '$pro_classification', '$pro_unit', '$brand_code', '$classification_code', '$pro_code', '$pro_productname', '$pro_article','$pro_guarantee', '$pro_warantee', '$pro_companyname', '$pro_madein','$image_path', '$pro_typeid')") or exit('query failed: ' . mysql_error());
-            $sql_product_unit = mysql_query("INSERT INTO $dbname.product_unit 
+            $sql_product_unit = mysql_query("INSERT INTO product_unit 
                                     (prounit_name, prounit_insertdate, prounit_userid)
                                      VALUES  ('$pro_unit', NOW(),'$prounit_userid')") or exit('query failed: ' . mysql_error());
         } else {
             $pro_unit = $_POST['pro_unit'];
-            $sql_product_insert = mysql_query("INSERT INTO $dbname.product_chart (pro_brand_or_grp, pro_classification, pro_unit,pro_brnd_or_grp_code, pro_classification_code, pro_code,pro_productname, pro_article, pro_guarantee, pro_warantee, pro_companyname, pro_madein, pro_picture,product_catagory_idproduct_catagory)
+            $sql_product_insert = mysql_query("INSERT INTO product_chart (pro_brand_or_grp, pro_classification, pro_unit,pro_brnd_or_grp_code, pro_classification_code, pro_code,pro_productname, pro_article, pro_guarantee, pro_warantee, pro_companyname, pro_madein, pro_picture,product_catagory_idproduct_catagory)
                                      VALUES  ('$pro_brand_or_grp', '$pro_classification', '$pro_unit', '$brand_code','$classification_code', '$pro_code','$pro_productname', '$pro_article','$pro_guarantee', '$pro_warantee', '$pro_companyname', '$pro_madein','$image_path',  '$pro_typeid')");
         }
     } else {
         $pro_brand_or_grp = $_POST['product_brand_name'];
-        $sql_select = mysql_query("Select pro_brnd_or_grp_code  from $dbname.product_chart where pro_brand_or_grp ='$pro_brand_or_grp' ") or exit('query failed: ' . mysql_error());
+        $sql_select = mysql_query("SELECT pro_brnd_or_grp_code FROM product_chart where pro_brand_or_grp ='$pro_brand_or_grp' ") or exit('query failed: ' . mysql_error());
         $product_result = mysql_fetch_assoc($sql_select);
         $pro_brand_code = $product_result['pro_brnd_or_grp_code'];
 
@@ -72,19 +73,20 @@ if (isset($_POST['submit'])) {
         if ($classification_code_row['max( pro_classification_code )'] >= 100 && $classification_code_row['max( pro_classification_code )'] < 999) {
             $classification_code = $classification_code_row['max( pro_classification_code )'] + 1;
         }
-        $pro_code = $pro_cat_code . '-' . $pro_type_code . '-' . $pro_brand_code . '-' . $classification_code;
+        //$pro_code = $pro_cat_code . '-' . $pro_type_code . '-' . $pro_brand_code . '-' . $classification_code;
+        $pro_code = $pro_cat_code . $pro_type_code . $pro_brand_code . $classification_code;
         if ($_POST['pro_unit'] == '0') {
             $pro_unit = $_POST['new_unit'];
-            $sql_product_insert = mysql_query("INSERT INTO $dbname.product_chart 
+            $sql_product_insert = mysql_query("INSERT INTO product_chart 
                                     (pro_brand_or_grp, pro_classification, pro_unit,pro_brnd_or_grp_code,pro_classification_code, pro_code,pro_productname, pro_article, pro_guarantee, pro_warantee, pro_companyname, pro_madein, pro_picture,product_catagory_idproduct_catagory)
                                      VALUES  ('$pro_brand_or_grp', '$pro_classification', '$pro_unit','$pro_brand_code','$classification_code', '$pro_code','$pro_productname', '$pro_article','$pro_guarantee', '$pro_warantee', '$pro_companyname', '$pro_madein','$image_path',  '$pro_typeid');") or exit('query failed: ' . mysql_error());
 
-            $sql_product_unit = mysql_query("INSERT INTO $dbname.product_unit 
+            $sql_product_unit = mysql_query("INSERT INTO product_unit 
                                     (prounit_name, prounit_insertdate, prounit_userid)
                                      VALUES  ('$pro_unit', NOW(),'$prounit_userid')") or exit('query failed: ' . mysql_error());
         } else {
             $pro_unit = $_POST['pro_unit'];
-            $sql_product_insert = mysql_query("INSERT INTO $dbname.product_chart 
+            $sql_product_insert = mysql_query("INSERT INTO product_chart 
                                     (pro_brand_or_grp, pro_classification, pro_unit,pro_brnd_or_grp_code, pro_classification_code, pro_code,pro_productname, pro_article, pro_guarantee, pro_warantee, pro_companyname, pro_madein,pro_picture, product_catagory_idproduct_catagory)
                                      VALUES  ('$pro_brand_or_grp', '$pro_classification', '$pro_unit', '$pro_brand_code','$classification_code', '$pro_code','$pro_productname', '$pro_article','$pro_guarantee', '$pro_warantee', '$pro_companyname', '$pro_madein','$image_path',  '$pro_typeid')");
         }
@@ -148,7 +150,7 @@ function makeProductName(unit)
                         <td>: <select class="box2" type="text" id="product_id" name="product" style="width: 150px;" onchange="getproduct_type() " />
                     <option value='' selected="selected">- প্রোডাক্ট ক্যাটাগরি -</option>
                     <?php
-                    $product_cat_sql = mysql_query("SELECT DISTINCT pro_catagory, pro_cat_code FROM $dbname.product_catagory");
+                    $product_cat_sql = mysql_query("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory");
                     while ($product_cat_rows = mysql_fetch_array($product_cat_sql)) {
                         $db_product_cat_code = $product_cat_rows['pro_cat_code'];
                         $db_product_cat_name = $product_cat_rows['pro_catagory'];
@@ -174,7 +176,7 @@ function makeProductName(unit)
                         <td>একক</td>
                         <td>: 
                             <?php
-                            $product_unit_sql = mysql_query("SELECT DISTINCT prounit_name FROM  $dbname.product_unit");
+                            $product_unit_sql = mysql_query("SELECT DISTINCT prounit_name FROM product_unit");
                             echo "<select  class='box2' style = 'border: 1px gray inset;width: 150px;' name='pro_unit' id='pro_unit' onchange='makeProductName(this.value)'>
                                         <option value= '0'>- একক -</option>";
                             while ($product_unit_rows = mysql_fetch_array($product_unit_sql)) {
