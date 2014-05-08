@@ -7,14 +7,14 @@ $storeName = $_SESSION['loggedInOfficeName'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory = $_SESSION['loggedInOfficeType'];
 
-$sql_select_discount_product = $conn->prepare("SELECT * FROM discount_product, inventory, cfs_user WHERE fk_inventoryid = idinventory
-                                                                            AND dis_made_userid = idUser AND ins_ons_id = ? AND ins_ons_type = ? ORDER BY dis_startdate");
+$sql_select_own_buy = $conn->prepare("SELECT * FROM sal_for own_store, inventory, cfs_user WHERE fk_inventory_id = idinventory
+                                                                            AND buyerid = idUser AND ons_id = ? AND ons_type = ? ORDER BY buying_date");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
 <link rel="icon" type="image/png" href="images/favicon.png" />
-<title>ডিসকাউন্ট পণ্যের তালিকা</title>
+<title>নিজস্ব ক্রয়ের তালিকা</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 </head>
@@ -28,42 +28,35 @@ $sql_select_discount_product = $conn->prepare("SELECT * FROM discount_product, i
         </div>
 
         <fieldset   style="border-width: 3px;margin:0 20px 50px 20px;font-family: SolaimanLipi !important;">
-            <legend style="color: brown;">ডিসকাউন্ট পণ্যের তালিকা</legend>
+            <legend style="color: brown;">নিজস্ব ক্রয়ের তালিকা</legend>
             <div id="resultTable">
                 <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
                     <tr>
+                        <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>তারিখ</strong></div></td>
                         <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>প্রোডাক্টের কোড</strong></div></td>
                         <td width="25%" style="color: blue; font-size: 25px"><div align="center"><strong>প্রোডাক্টের নাম</strong></div></td>
-                        <td width="8%" style="color: blue; font-size: 25px"><div align="center"><strong>প্রকৃত ক্রয়মূল্য</strong></div></td>
-                        <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>হ্রাসকৃত ক্রয়মূল্য</strong></div></td>
-                        <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>হ্রাসকৃত বিক্রয়মূল্য</strong></div></td>
-                        <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>হ্রাসকৃত পরিমান</strong></div></td>
-                        <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রয়মুল্ল্যে ঘাটতি</strong></div></td>
-                        <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>তারিখ</strong></div></td>
-                        <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>হ্রাসকারী</strong></div></td>
+                        <td width="8%" style="color: blue; font-size: 25px"><div align="center"><strong>একক ক্রয়মূল্য</strong></div></td>
+                        <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রয়কৃত পরিমান</strong></div></td>   
+                        <td width="8%" style="color: blue; font-size: 25px"><div align="center"><strong>মোট ক্রয়মূল্য</strong></div></td><td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রয়কারী</strong></div></td>
                     </tr>
                     <?php
-                       $sql_select_discount_product->execute(array($storeID, $scatagory));
-                       $arr_discount = $sql_select_discount_product->fetchAll();
+                       $sql_select_own_buy->execute(array($storeID, $scatagory));
+                       $arr_discount = $sql_select_own_buy->fetchAll();
                        foreach ($arr_discount as $row) {
-                        $db_date = english2bangla(date('d-m-Y', strtotime($row["dis_startdate"])));
-                        $db_procode = $row["dis_procode"];
+                        $db_date = english2bangla(date('d-m-Y', strtotime($row["buying_date"])));
+                        $db_procode = $row["ins_product_code"];
                         $db_pro_name = $row["ins_productname"];
-                        $db_how_many =  english2bangla($row['dis_qty']);
-                        $db_buying_price_org = english2bangla($row['dis_orgprice']);
-                        $db_buying_price_new = english2bangla($row['dis_newbuyprc']);
-                        $db_selling_price = english2bangla($row['dis_sellprice']);
+                        $db_how_many =  english2bangla($row['qty']);
+                        $db_buying_price_org = english2bangla($row['ins_buying_price']);
+                        $db_buying_price_total = english2bangla($row['total_buying_price']);
                         $db_username = $row['account_name'];
-                        $buying_price_loss =  english2bangla($row['dis_orgprice'] - $row['dis_newbuyprc']);
                         echo '<tr>';
+                        echo '<td><div align="center">' . $db_date . '</div></td>';
                         echo '<td>' . $db_procode . '</td>';
                         echo '<td>' . $db_pro_name . '</td>';
                         echo '<td><div align="center">' . $db_buying_price_org . '</div></td>';
-                        echo '<td><div align="center">' . $db_buying_price_new . '</div></td>';
-                        echo '<td><div align="center">' . $db_selling_price . '</div></td>';
                         echo '<td><div align="center">' . $db_how_many . '</div></td>';
-                        echo '<td><div align="center">' . $buying_price_loss . '</div></td>';
-                        echo '<td><div align="center">' . $db_date . '</div></td>';
+                        echo '<td><div align="center">' . $db_buying_price_total . '</div></td>';                      
                         echo '<td><div align="center">' . $db_username . '</div></td>';
                         echo '</tr>';
                     }

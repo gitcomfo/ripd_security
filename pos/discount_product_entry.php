@@ -21,13 +21,13 @@ $ins_dead_product = $conn->prepare("INSERT INTO discount_product (fk_inventoryid
 if(isset($_POST['submit']))
 {
     $forwhileLoop = 1;
-    $discountProductCode  = "discount-".get_time_random_no(5);
+    $discountProductCode  = "DIS-".get_time_random_no(5);
     $arr_discount = $sel_discount_product->execute(array($discountProductCode));
     while ($forwhileLoop == 1)
     {
         if(count($arr_discount) > 1)
         {
-           $discountProductCode  = "discount-".get_time_random_no(5);
+           $discountProductCode  = "DIS-".get_time_random_no(5);
         }
         else { $forwhileLoop = 0 ; $discountProductCode = $discountProductCode; }
     }
