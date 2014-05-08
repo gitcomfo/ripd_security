@@ -140,13 +140,15 @@ if(isset($_POST['entry']))
                     $status = 'complete';
                     $sqlrslt3 = $sql_update_notification->execute(array($status,$g_nfcid));
                     $sql_update_transfer->execute(array($g_ptid));
-                    echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>";
-                    header('Location:main_account_management.php');
+                    echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে');
+                                        window.location='../main_account_management.php'; 
+                                </script>";
                 }
                 else
                 {
-                    echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>";
-                    header('Location:productIN.php');
+                    echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>;
+                                        window.location='productIN.php'; 
+                              </script>";
                 }
             }
             else {

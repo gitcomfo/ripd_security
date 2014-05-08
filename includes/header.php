@@ -80,7 +80,7 @@ $logedinOfficeType = $_SESSION['loggedInOfficeType'];
                                     $notificationrow = $sel_official_notification->fetchAll();
                                     $countrow = count($notificationrow);
                                     $showNotificationNum = english2bangla($countrow);
-                                    if($countrow == 0) echo '<li><a href="notification.php">নোটিফিকেশন (0)</a></li>';
+                                    if($countrow > 0) echo '<li><a href="notification.php">নোটিফিকেশন (0)</a></li>';
                                     else echo "<li><a href='notification.php' style='color: yellow;'>নোটিফিকেশন ($showNotificationNum)</a></li>";
                                     echo '<li><a href="main_account_management.php">'.$_SESSION['loggedInOfficeName'].'</a></li>';
                                 }
