@@ -326,17 +326,17 @@ function addToCart() // to add into temporary array*******************
      <fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
          <legend style="color: brown;">পণ্যের বিবরণী</legend>
     <div class="top" style="width: 100%;">
-        <div class="topleft" style="float: left;width: 15%;">
+        <div class="topleft" style="float: left;width: 25%;">
             <b>বার কোড :</b><br/>
             <input type="text" id="barcode" name="barcode"/><br/>
             <b>প্রোডাক্ট কোড:</b></br>
       <input type="text" id="amots" name="amots" onKeyUp="bleble('wholesale.php');" autocomplete="off"/>
-      <div id="layer2"style="width:400px;position:absolute;top:45.5%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br>
+      <div id="layer2"style="width:400px;position:absolute;top:53%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br>
       <b>প্রোডাক্ট নাম:</b>
       <input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('wholesale.php');" autocomplete="off"/>
-      <div  id="searchResult"style="position:absolute;top:53.5%;left:8%;width:350px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
+      <div  id="searchResult"style="position:absolute;top:61.5%;left:8%;width:350px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
     </div>
-    <div class="topright" style="float:left; width: 85%;">
+    <div class="topright" style="float:left; width: 75%;">
 <?php
 	if (isset($_GET['code']))
      	{
@@ -350,6 +350,12 @@ function addToCart() // to add into temporary array*******************
                         $db_proPV = $db_profit * $running_pv;
                         $db_xtraProfit=$row["ins_extra_profit"];
                         $db_buyingprice = $row['ins_buying_price'];
+                        
+                        $sel_pv_view = mysql_query("SELECT * FROM view_pv_view WHERE cust_type = 'no_acc' AND sales_type= 'whole' AND account_type_id= 0");
+            
+                        while($row = mysql_fetch_assoc($sel_pv_view)) {
+                            $less = $row['less_amount'];
+                        }
                     }
 ?>
 <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
@@ -361,18 +367,16 @@ function addToCart() // to add into temporary array*******************
            <input name="xtraprofit" id="XProfit" type="hidden" value="<?php echo $db_xtraProfit; ?>"/>
            <input name="less" type="hidden"/>
       </td>
-      <td colspan="2"><span style="color: #03C;">প্রোডাক্টের মূল্য: </span><input name="PPRICE" id="PPRICE" type="text" value="<?php echo $db_price ;?>" style="border:0px;font-size: 18px;width: 100px;text-align: right;"/> টাকা<input name="buyprice" id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>
+      <td><span style="color: #03C;">প্রোডাক্টের মূল্য: </span><input name="PPRICE" id="PPRICE" type="text" value="<?php echo $db_price ;?>" style="border:0px;font-size: 18px;width: 100px;text-align: right;"/> টাকা<input name="buyprice" id="buyprice" type="hidden" value="<?php echo $db_buyingprice; ?>"/></td>
   </tr>
   <tr>
       <td ><span style="color: #03C;"> পরিমাণ</span> <input name="QTY" id="QTY" type="text" onkeyup="checkQty(this.value);" onkeypress="return checkIt(event)" style="width:100px;"/><input type="hidden" id="checkresult" value=""/></td>
-      <td ><span style="color: #03C;">এক্সট্রা প্রফিট</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input name="subxtraProfit" id="subxtraProfit" type="text"  readonly style="width:100px;text-align: right;"/> টাকা</td>
-      <td ><span style="color: #03C;"> প্রফিট </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="subprofit" id="subprofit" type="text"  readonly style="width:100px;text-align: right;"/> টাকা</td>     
+        <td ><span style="color: #03C;"> প্রফিটে সর্বোচ্চ ছাড় </span><input name="subprofit" id="subprofit" type="text"  readonly style="width:100px;text-align: right;"/> টাকা</td>     
       <td  rowspan="2"><input type="button" onclick="addToCart();" name="addButton" style="height:100px; width: 100px;background-image: url('images/add to cart.jpg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
     </tr>
   <tr>
       <td><span style="color: #03C;"> মোট</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="TOTAL" id="TOTAL" type="text" readonly="readonly" style="width:100px;text-align: right;"/> টাকা<input name="subTotalpv" id="SubTotalPV"type="hidden"/></td>
-    <td><span style="color: #03C;"> এক্সট্রা প্রফিটে ছাড়</span> <input name="lessxtraProfit" id="lessxtraProfit" type="text" onkeypress="return checkIt(event)" style="width:100px;text-align: right;"/> টাকা</td>
-    <td ><span style="color: #03C;"> প্রফিটে ছাড়</span> <input name="lessProfit" id="lessProfit" type="text" onkeypress="return checkIt(event)" style="width:100px;text-align: right;"/> টাকা</td>
+      <td ><span style="color: #03C;"> প্রফিটে ছাড় </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="lessProfit" id="lessProfit" type="text" onkeypress="return checkIt(event)" style="width:100px;text-align: right;"/> টাকা</td>
     <td></td>
   </tr>
 </table>

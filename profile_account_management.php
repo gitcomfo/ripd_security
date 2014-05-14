@@ -16,6 +16,7 @@ include_once 'includes/columnViewAccount.php';
         </tr>
         <tr>
             <td><a href="convert_package_customer.php">কনভার্ট ওউন একাউন্ট প্যাকেজ</a></td>
+            <td><a href="use_pin.php">পিন নং ব্যবহার</a></td>
         </tr> 
         <tr>
             <th colspan="2">নতুন একাউন্ট তৈরি</th>
