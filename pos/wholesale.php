@@ -12,6 +12,11 @@ $arr_rslt = $sel_current_pv->fetchAll();
 foreach ($arr_rslt as $value) {
     $running_pv = $value['pv_value'];
 }
+$sel_pv_view = mysql_query("SELECT * FROM view_pv_view WHERE cust_type = 'no_acc' AND sales_type= 'whole' AND account_type_id= 0");
+
+while($row = mysql_fetch_assoc($sel_pv_view)) {
+    $less = $row['less_amount'];
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -53,14 +58,18 @@ function multiply(){
     b=Number(document.abc.PPRICE.value);
     c=a*b;
     document.abc.TOTAL.value=c;
+    
+    var less_percent = <?php echo $less?>;
 
     z=Number(document.abc.ProPV.value);
     pv=a*z;
     document.abc.SubTotalPV.value=pv;
-
+    
     profit = Number(document.abc.Profit.value);
     subtotalprofit = profit * a;
-    document.abc.subprofit.value= subtotalprofit;
+    maxprofitless = (subtotalprofit * less_percent) / 100;
+    document.abc.maxprofitless.value= maxprofitless;
+    //document.abc.subprofit.value= subtotalprofit;
 
     xtraprofit = Number(document.abc.XProfit.value);
     subtotalXtraprofit = xtraprofit * a;
@@ -94,6 +103,14 @@ function numbersonly(e)
             }
 }
 
+function checkLimit(lessprofit)
+{
+    var maxprofitless =  Number(document.getElementById('maxprofitless').value);
+    if(Number(lessprofit) > maxprofitless)
+        {
+            alert("দুঃখিত, এই পরিমান প্রফিট লেস দেয়া যাবে না");
+        }
+}
 function minus(){
 a=Number(document.mn.cash.value);
 w=Number(document.mn.gtotal.value);
@@ -281,7 +298,6 @@ function addToCart() // to add into temporary array*******************
         var sell = Number(document.getElementById("PPRICE").value);
         var buy = Number(document.getElementById("buyprice").value) * (qty); 
         var totalpv = Number(document.getElementById("SubTotalPV").value);
-        var xtraless =Number(document.getElementById("lessxtraProfit").value);
         var profitless = Number(document.getElementById("lessProfit").value);
         var profit = Number(document.getElementById("Profit").value);
         var xprofit = Number(document.getElementById("XProfit").value);
@@ -300,7 +316,7 @@ function addToCart() // to add into temporary array*******************
 				{alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
 			}				
 		 }			
-		 reqst.open("GET","addorder.php?selltype=2&id="+id+"&code="+code+"&name="+name+"&qty="+qty+"&total="+totalamount+"&selling="+sell+"&buying="+buy+"&totalpv="+totalpv+"&lessProfit="+profitless+"&lessxtraProfit="+xtraless+"&profit="+profit+"&xprofit="+xprofit, true);
+		 reqst.open("GET","addorder.php?selltype=2&id="+id+"&code="+code+"&name="+name+"&qty="+qty+"&total="+totalamount+"&selling="+sell+"&buying="+buy+"&totalpv="+totalpv+"&lessProfit="+profitless+"&profit="+profit+"&xprofit="+xprofit, true);
 		 reqst.send(null);
 	}	
             }
@@ -349,13 +365,7 @@ function addToCart() // to add into temporary array*******************
                         $db_profit=$row["ins_profit"];
                         $db_proPV = $db_profit * $running_pv;
                         $db_xtraProfit=$row["ins_extra_profit"];
-                        $db_buyingprice = $row['ins_buying_price'];
-                        
-                        $sel_pv_view = mysql_query("SELECT * FROM view_pv_view WHERE cust_type = 'no_acc' AND sales_type= 'whole' AND account_type_id= 0");
-            
-                        while($row = mysql_fetch_assoc($sel_pv_view)) {
-                            $less = $row['less_amount'];
-                        }
+                        $db_buyingprice = $row['ins_buying_price'];                     
                     }
 ?>
 <table width="100%" cellspacing="0"  cellpadding="0" style="border: #000000 inset 1px; font-size:20px;">
@@ -371,12 +381,12 @@ function addToCart() // to add into temporary array*******************
   </tr>
   <tr>
       <td ><span style="color: #03C;"> পরিমাণ</span> <input name="QTY" id="QTY" type="text" onkeyup="checkQty(this.value);" onkeypress="return checkIt(event)" style="width:100px;"/><input type="hidden" id="checkresult" value=""/></td>
-        <td ><span style="color: #03C;"> প্রফিটে সর্বোচ্চ ছাড় </span><input name="subprofit" id="subprofit" type="text"  readonly style="width:100px;text-align: right;"/> টাকা</td>     
+        <td ><span style="color: #03C;"> প্রফিটে সর্বোচ্চ ছাড় </span><input name="maxprofitless" id="maxprofitless" type="text"  readonly style="width:100px;text-align: right;"/> টাকা</td>     
       <td  rowspan="2"><input type="button" onclick="addToCart();" name="addButton" style="height:100px; width: 100px;background-image: url('images/add to cart.jpg');background-repeat: no-repeat;background-size:100% 100%;cursor:pointer;" id="addtoCart" value="" /></td>
     </tr>
   <tr>
       <td><span style="color: #03C;"> মোট</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="TOTAL" id="TOTAL" type="text" readonly="readonly" style="width:100px;text-align: right;"/> টাকা<input name="subTotalpv" id="SubTotalPV"type="hidden"/></td>
-      <td ><span style="color: #03C;"> প্রফিটে ছাড় </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="lessProfit" id="lessProfit" type="text" onkeypress="return checkIt(event)" style="width:100px;text-align: right;"/> টাকা</td>
+      <td ><span style="color: #03C;"> প্রফিটে ছাড় </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="lessProfit" id="lessProfit" type="text" onkeyup="checkLimit(this.value)" onkeypress="return checkIt(event)" style="width:100px;text-align: right;"/> টাকা</td>
     <td></td>
   </tr>
 </table>
@@ -389,13 +399,13 @@ function addToCart() // to add into temporary array*******************
     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
       <tr>
         <td width="15%"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
-        <td width="23%"><div align="center"><strong><span style="width:130px;">প্রোডাক্ট-এর নাম</span></strong></div></td>
+        <td width="23%"><div align="center"><strong><span style="width:130px;">প্রোডাক্টের নাম</span></strong></div></td>
         <td width="7%"><div align="center"><strong>পরিমাণ</strong></div></td>
-        <td width="11%"><div align="center"><strong>মূল বিক্রয় মূল্য</strong></div></td>
+        <td width="11%"><div align="center"><strong>একক বিক্রয়মূল্য</strong></div></td>
+        <td width="11%"><div align="center"><strong>মোট বিক্রয়মূল্য</strong></div></td>
         <td width="11%"><div align="center"><strong>প্রফিটে ছাড়</strong></div></td>
-        <td width="13%"><div align="center"><strong>এক্সট্রা প্রফিটে ছাড়</strong></div></td>
         <td width="13%"><div align="center"><strong>মোট টাকা</strong></div></td>
-        <td width="7%">&nbsp;</td>
+        <td width="5%">&nbsp;</td>
       </tr>
     <?php
         foreach($_SESSION['arrSellTemp'] as $key => $row) 
@@ -405,8 +415,8 @@ function addToCart() // to add into temporary array*******************
                   echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row[1].'</div></td>';
                   echo '<td><div align="center">'.english2bangla($row[4]).'</div></td>';
                   echo '<td><div align="center">'.english2bangla($row[3]).'</div></td>';
+                  echo '<td><div align="center">'.english2bangla($row[3] * $row[4]).'</div></td>';
                   echo '<td><div align="center">'.english2bangla($row[7]).'</div></td>';
-                  echo '<td><div align="center">'.english2bangla($row[8]).'</div></td>';
                   echo '<td><div align="center">'.english2bangla($row[5]).'</div></td>';
                   echo '<td style="text-align:center"><a href=delete.php?selltype=wholesale.php&id='.$key.'><img src="images/del.png" style="cursor:pointer;" width="20px" height="20px" /></a></td>';
                   echo '</tr>';
@@ -417,15 +427,15 @@ function addToCart() // to add into temporary array*******************
 <form action="preview2.php" method="post" name="mn" id="suggestSearch">
 <div align="right" style="margin-top:10px;margin-right:100px;font-family: SolaimanLipi !important;">
     <?php
-        $finalTotal =0; $finalProfitless = 0; $finalXtraProfitless=0;
+        $finalTotal =0; $finalProfitless = 0; $totalsellingprice = 0;
              foreach($_SESSION['arrSellTemp'] as $key => $row) {
                    $finalTotal = $finalTotal + $row[5];
                    $finalProfitless= $finalProfitless+ $row[7];
-                   $finalXtraProfitless= $finalXtraProfitless+ $row[8];
+                   $totalsellingprice = $totalsellingprice + ($row[3] * $row[4]);
               }
     ?>
+    <b>মোট বিক্রয়মূল্য&nbsp;:</b> <?php echo english2bangla($totalsellingprice);?> টাকা</br>
     <b>মোট প্রফিট ছাড়&nbsp;:</b> <input name="totalprofiless" type="hidden" id="totalprofitless" size="20"  readonly style="text-align:right;" value="<?php echo $finalProfitless;?>"/><?php echo english2bangla($finalProfitless);?> টাকা</br>
-    <b>মোট এক্সট্রা প্রফিট ছাড়&nbsp;:</b> <input name="totalXprofitless" type="hidden" id="totalXprofitless" size="20"  readonly style="text-align:right;" value="<?php echo $finalXtraProfitless;?>"/><?php echo english2bangla($finalXtraProfitless);?> টাকা</br>
     <b>সর্বমোট : </b><input name="tretail" type="hidden" id="tretail" size="20" style="text-align:right;" value="<?php echo $finalTotal;?>" readonly/><?php echo english2bangla($finalTotal);?> টাকা</br>
     <b>প্রদেয় টাকা : </b><input name="gtotal" type="hidden" id="gtotal" size="20" value="<?php echo $finalTotal;?>" readonly style="text-align:right;" /><?php echo english2bangla($finalTotal);?> টাকা
 </div>
