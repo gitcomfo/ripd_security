@@ -16,9 +16,9 @@ $sel_unreg_customer = $conn->prepare("SELECT * FROM unregistered_customer WHERE 
 $ins_unreg_customer = $conn->prepare("INSERT INTO `unregistered_customer` (`unregcust_name` ,`unregcust_address` ,`unregcust_occupation` ,`unregcust_mobile` ,`unregcust_email` ,`unregcust_buyingcount` ,`unregcust_status` ,`unregcust_lastupdated_date`) 
                     VALUES (?, ?, ?, ?, '', '1', 'unregistered', NOW())");
 $up_ureg_customer = $conn->prepare("UPDATE `unregistered_customer` SET `unregcust_buyingcount` = ? WHERE unregcust_mobile= ? ");
-$ins_sales_summary = $conn->prepare("INSERT INTO sales_summary(sal_store_type, sal_storeid, sal_buyer_type,sal_buyerid, sal_salesdate ,sal_salestime ,sal_total_buying_price, sal_totalamount ,sal_totalpv ,sal_total_lessprofit, sal_totalextra_less,sal_total_profit,sal_total_xtraprofit, sal_givenamount ,sal_invoiceno, cfs_userid,sal_return_org,sal_cash_paid,sal_acc_paid,status,selling_type) 
+$ins_sales_summary = $conn->prepare("INSERT INTO sales_summary(sal_store_type, sal_storeid, sal_buyer_type,sal_buyerid, sal_salesdate ,sal_salestime ,sal_total_buying_price, sal_totalamount ,sal_totalpv ,sal_total_lessprofit, sal_total_profit,sal_total_xtraprofit, sal_givenamount ,sal_invoiceno, cfs_userid,sal_return_org,sal_cash_paid,sal_acc_paid,status,selling_type) 
             VALUES (?, ?,?, ?,CURDATE(), CURTIME(), ?, ?, ?, ?, ?, ?, ?,?,?, ?, ?,?, ?,'not_replaced',?);");
-$ins_sales = $conn->prepare("INSERT INTO sales(quantity ,sales_buying_price, sales_amount ,sales_less_profit, sales_extra_less, sales_pv , sales_profit, sales_extra_profit, inventory_idinventory ,sales_summery_idsalessummery) 
+$ins_sales = $conn->prepare("INSERT INTO sales(quantity ,sales_buying_price, sales_amount ,sales_less_profit, sales_pv , sales_profit, sales_extra_profit, inventory_idinventory ,sales_summery_idsalessummery) 
             VALUES (? ,?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 if(isset($_POST['print']))
@@ -119,21 +119,20 @@ $result= $sel_sales_summary->fetchAll();
               $_SESSION['SESS_MEMBER_ID']=$str_recipt;
         }
 
-        $totalamount =0; $totalPV = 0; $totalbuy = 0;$totalLessProfit=0;$totalLessXtra=0;$totalprofit = 0;$totalxprofit=0;
+        $totalamount =0; $totalPV = 0; $totalbuy = 0;$totalLessProfit=0;$totalprofit = 0;$totalxprofit=0;
              foreach($_SESSION['arrSellTemp'] as $key => $row) {
                  $pro_qty = $row[4];
                    $totalamount = $totalamount + $row[5];
                    $totalPV = $totalPV + $row[6];
                    $totalbuy = $totalbuy + ($row[2] * $pro_qty);
                    $totalLessProfit = $totalLessProfit + $row[7];
-                   $totalLessXtra = $totalLessXtra + $row[8];
-                   $totalprofit = $totalprofit + ($row[9] * $pro_qty);
-                   $totalxprofit = $totalxprofit + ($row[10] * $pro_qty);
+                   $totalprofit = $totalprofit + ($row[8] * $pro_qty);
+                   $totalxprofit = $totalxprofit + ($row[9] * $pro_qty);
               }
     $invoiceNo = $_SESSION['SESS_MEMBER_ID'];
     $conn->beginTransaction();
     $sellingtype = 'whole';
-    $sqlresult1=$ins_sales_summary->execute(array($G_s_type,$G_s_id,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$totalLessProfit,$totalLessXtra,$totalprofit,$totalxprofit,$P_getTaka,$invoiceNo,$cfsID,$P_backTaka, $P_paiedByCash,$P_paiedByAcc,$sellingtype));
+    $sqlresult1=$ins_sales_summary->execute(array($G_s_type,$G_s_id,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$totalLessProfit,$totalprofit,$totalxprofit,$P_getTaka,$invoiceNo,$cfsID,$P_backTaka, $P_paiedByCash,$P_paiedByAcc,$sellingtype));
     $sales_sum_id= $conn->lastInsertId();
     
      foreach($_SESSION['arrSellTemp'] as $key => $row) 
@@ -142,12 +141,11 @@ $result= $sel_sales_summary->fetchAll();
         $pro_amount = $row[5];
         $pro_pv = $row[6];
         $pro_profitless = $row[7];
-        $pro_xtraProfitless = $row[8];
         $pro_buy= $row[2] * $pro_qty;
        // $invenrow = $_SESSION['pro_inventory_array'][$key];
-        $pro_profit = ($row[9] * $pro_qty) - $pro_profitless;
-        $pro_xprofit = ($row[10] * $pro_qty) - $pro_xtraProfitless;
-        $sqlresult2=$ins_sales->execute(array($pro_qty,$pro_buy,$pro_amount,$pro_profitless,$pro_xtraProfitless,$pro_pv,$pro_profit,$pro_xprofit,$key,$sales_sum_id));
+        $pro_profit = ($row[8] * $pro_qty) - $pro_profitless;
+        $pro_xprofit = ($row[9] * $pro_qty);
+        $sqlresult2=$ins_sales->execute(array($pro_qty,$pro_buy,$pro_amount,$pro_profitless,$pro_pv,$pro_profit,$pro_xprofit,$key,$sales_sum_id));
     }
   if($sqlresult1 && $sqlresult2)
     {
@@ -177,9 +175,9 @@ $result= $sel_sales_summary->fetchAll();
       <tr><td width="13%" height="43"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
         <td width="34%"><div align="center"><strong>প্রোডাক্টের নাম</strong></div></td>
         <td width="9%"><div align="center"><strong>পরিমাণ</strong></div></td>
-        <td width="12%"><div align="center"><strong>মূল বিক্রয়মূল্য</strong></div></td>
+        <td width="12%"><div align="center"><strong>একক বিক্রয়মূল্য</strong></div></td>
+        <td width="11%"><div align="center"><strong>মোট বিক্রয়মূল্য</strong></div></td>
         <td width="10%"><div align="center"><strong>প্রফিটে ছাড়</strong></div></td>
-        <td width="8%"><div align="center"><strong>এক্সট্রা প্রফিটে ছাড়</strong></div></td>
         <td width="14%"><div align="center"><strong>মোট টাকা</strong></div></td>
       </tr>
 <?php
@@ -190,25 +188,20 @@ foreach($_SESSION['arrSellTemp'] as $key => $row)
         echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row[1].'</div></td>';        
         echo '<td><div align="center">'.english2bangla($row[4]).'</div></td>';
         echo '<td><div align="center">'.english2bangla($row[3]).'</div></td>';
+        echo '<td><div align="center">'.english2bangla($row[3] * $row[4]).'</div></td>';
         echo '<td><div align="center">'.english2bangla($row[7]).'</div></td>';
-        echo '<td><div align="center">'.english2bangla($row[8]).'</div></td>';
         echo '<td><div align="center">'.english2bangla($row[5]).'</div></td>';
         echo '</tr>';
 }
- $finalTotal =0; $finalProfitless = 0; $finalXtraProfitless=0;
+ $finalTotal =0; $finalProfitless = 0;
              foreach($_SESSION['arrSellTemp'] as $key => $row) {
                    $finalTotal = $finalTotal + $row[5];
                    $finalProfitless= $finalProfitless+ $row[7];
-                   $finalXtraProfitless= $finalXtraProfitless+ $row[8];
               }
 ?>
 <tr>    
 <td height="24" colspan="6" ><div align="right" style="padding-right: 8px;"><strong>মোট প্রফিট ছাড়:</strong>&nbsp;</div></td>
 <td width="10%"><div align="right"><?php echo english2bangla($finalProfitless);?></div></td>
-</tr>
-<tr>    
-<td height="24" colspan="6" ><div align="right" style="padding-right: 8px;"><strong>মোট এক্সট্রা প্রফিট ছাড়:</strong>&nbsp;</div></td>
-<td width="10%"><div align="right"><?php echo english2bangla($finalXtraProfitless);?></div></td>
 </tr>
 <tr>    
 <td height="24" colspan="6" ><div align="right" style="padding-right: 8px;"><strong>সর্বমোট:</strong>&nbsp;</div></td>
