@@ -12,8 +12,8 @@ $msg ="";
 $sel_inventory = $conn->prepare("SELECT * FROM inventory,product_chart WHERE idproductchart= ins_productid AND ins_product_type = 'general' AND idinventory = ?");
 $sel_prochart = $conn->prepare("SELECT * FROM product_chart WHERE idproductchart=?");
 $sel_inventory2 = $conn->prepare("SELECT * FROM inventory WHERE ins_ons_id= ? AND ins_ons_type=? AND ins_product_type='general' AND ins_productid=?");
-$ins_product_breaking = $conn->prepare("INSERT INTO product_breaking (ons_id, ons_type, breaking_date, breaking_pro_id, breaking_qty, converted_pro_id, converted_qty, original_buying_price, buying_price, selling_price, xtra_profit, profit, pv, cfs_user_id)
-                                                                    VALUES (?,?,NOW(),?,?,?,?,?,?,?,?,?,?,?)");
+$ins_product_breaking = $conn->prepare("INSERT INTO product_breaking (ons_id, ons_type, breaking_date, breaking_pro_id, breaking_qty, converted_pro_id, converted_qty, original_buying_price, buying_price, selling_price, xtra_profit, profit, cfs_user_id)
+                                                                    VALUES (?,?,NOW(),?,?,?,?,?,?,?,?,?,?)");
 $sqlpv = $conn->prepare("SELECT * FROM running_command;");
 $sqlpv->execute();
 $pvrow = $sqlpv->fetchAll();
@@ -46,7 +46,6 @@ if(isset($_POST['break']))
             $db_sellingprice = $row3['ins_sellingprice'];
             $db_xtraprofit = $row3['ins_extra_profit'];
             $db_profit = $row3['ins_profit'];
-            $db_pv = $row3['ins_pv'];
         }
     }
     else 
@@ -55,7 +54,6 @@ if(isset($_POST['break']))
         $db_sellingprice = 0;
         $db_xtraprofit = 0;
         $db_profit = 0;
-        $db_pv = 0;
     }
 }
 
@@ -70,8 +68,7 @@ if(isset($_POST['entry'])) // ********************* final entry ****************
     $p_selling = $_POST['newSellingPrice'];
     $p_xtraprofit = $_POST['newXtraprofit'];
     $p_profit = $_POST['newProfit'];
-    $p_pv = $_POST['newPV'];
-    $yes= $ins_product_breaking->execute(array($storeID,$scatagory,$p_breakingid,$p_breakingQty,$p_makingID,$p_makingQty,$p_originalBuying,$p_buying,$p_selling,$p_xtraprofit,$p_profit,$p_pv,$cfsID));
+    $yes= $ins_product_breaking->execute(array($storeID,$scatagory,$p_breakingid,$p_breakingQty,$p_makingID,$p_makingQty,$p_originalBuying,$p_buying,$p_selling,$p_xtraprofit,$p_profit,$cfsID));
     if($yes ==1)
     {
        $msg = "প্রোডাক্টটি সফলভাবে ব্রেক হয়েছে";}
@@ -162,31 +159,26 @@ function setNewValues(getstring3)
     document.getElementById('newSellingPrice').value = array3[1];
     document.getElementById('newProfit').value = array3[2];
     document.getElementById('newXtraprofit').value = array3[3];
-    document.getElementById('newPV').value = array3[4];
 }
 function calculate(val)
 { 
     var xprofit = Number(val);
     var buying = Number(document.getElementById("newBuyingPrice").value);
     var selling = Number(document.getElementById("newSellingPrice").value);
-    var currentpv = <?php echo $unitpv?> ;
     var profit = selling - (buying + xprofit);
-    var pv = profit * currentpv;
-    if((selling < buying) || (pv <= 0))
+    if(selling <= buying)
         {
-            alert("দুঃখিত, বিক্রয়মূল্য < ক্রয়মূল্য হতে পারবে না\n এবং\n পিভি ০ হতে পারবে না");
+            alert("দুঃখিত, বিক্রয়মূল্য <= ক্রয়মূল্য হতে পারবে না\n এবং\n প্রফিট ০ হতে পারবে না");
             document.getElementById("newProfit").value = 0;
-            document.getElementById("newPV").value = 0;
         }
         else {
                 document.getElementById("newProfit").value = profit;
-                 document.getElementById("newPV").value = pv;
         }
 }
 function beforeSave()
 {
-   var pv = document.getElementById("newPV").value;
-   if(pv !="" && pv!= 0)
+   var profit = document.getElementById("newProfit").value;
+   if(profit !="" && profit!= 0)
        {
            return true;
        }
@@ -396,10 +388,6 @@ function getValues(procode)
                                 <td width="50%" style="border: 1px black solid;text-align:right;">প্রফিট </td>
                                 <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly style="text-align: right;" value="<?php echo $db_profit?>" /></td>
                             </tr>
-                            <tr>
-                                <td width="50%" style="border: 1px black solid;text-align:right;"> পিভি</td>
-                                <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly style="text-align: right;" value="<?php echo $db_pv?>" /></td>
-                            </tr>
                         </table>
                     </fieldset>
                 </td>
@@ -422,10 +410,6 @@ function getValues(procode)
                                 <tr>
                                     <td width="50%" style="border: 1px black solid;text-align:right;">একক প্রফিট </td>
                                     <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly style="text-align: right;" name="newProfit" id="newProfit"  /></td>
-                                </tr>
-                                <tr>
-                                    <td width="50%" style="border: 1px black solid;text-align:right;">একক পিভি</td>
-                                    <td width="50%" style="border: 1px black solid;text-align: center;"><input type="text" readonly style="text-align: right;" name="newPV" id="newPV" /></td>
                                 </tr>
                             </table>
                     </fieldset>

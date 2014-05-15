@@ -10,7 +10,7 @@ $msg ="";
 
 $sql_inven_sel = $conn->prepare("SELECT * FROM inventory WHERE idinventory = ? AND ins_ons_type= ? AND ins_ons_id = ? AND ins_product_type='general';");
 $sql_puchase_sel = $conn->prepare("SELECT * FROM product_purchase WHERE Product_chart_idproductchart = ? AND in_ons_type= ? AND in_onsid = ? ORDER BY in_input_date DESC LIMIT 1");
-$upquery_inven = $conn->prepare("UPDATE `inventory` SET ins_buying_price=?, `ins_extra_profit` = ?, `ins_sellingprice` = ?, `ins_profit` = ?,ins_pv =?, `ins_lastupdate` = NOW()  WHERE `idinventory` =? AND ins_ons_type= ? AND ins_ons_id = ? AND ins_product_type='general' ");
+$upquery_inven = $conn->prepare("UPDATE `inventory` SET ins_buying_price=?, `ins_extra_profit` = ?, `ins_sellingprice` = ?, `ins_profit` = ?,`ins_lastupdate` = NOW()  WHERE `idinventory` =? AND ins_ons_type= ? AND ins_ons_id = ? AND ins_product_type='general' ");
 
 $sqlpv = $conn->prepare("SELECT * FROM running_command;");
 $sqlpv->execute();
@@ -27,7 +27,6 @@ foreach ($getresult as $row1) {
     $db_xtraprofit = $row1['ins_extra_profit'];
     $db_qty = $row1['ins_how_many'];
     $db_profit = $row1['ins_profit'];
-    $db_pv = $row1['ins_pv'];
     $db_chartID = $row1['ins_productid'];
 }
 $sql_puchase_sel->execute(array($db_chartID,$scatagory,$storeID));
@@ -39,7 +38,6 @@ foreach ($result_purchase as $row2) {
     $db_pur_xtraprofit = $row2['in_extra_profit'];
     $db_pur_qty = $row2['in_howmany'];
     $db_pur_profit = $row2['in_profit'];
-    $db_pur_pv = $row2['in_pv'];
 }
 
 if(isset($_POST['update'])) //************************ update query **********************************
@@ -49,8 +47,7 @@ if(isset($_POST['update'])) //************************ update query ************
     $p_selling = $_POST['updatedselling'];
     $p_xtraprofit = $_POST['updatedxprofit'];
     $p_profit = $_POST['updatedprofit'];
-    $p_pv = $_POST['updatedpv'];
-    $uprslt = $upquery_inven->execute(array($p_buying,$p_xtraprofit,$p_selling,$p_profit,$p_pv,$p_proid,$scatagory,$storeID));
+    $uprslt = $upquery_inven->execute(array($p_buying,$p_xtraprofit,$p_selling,$p_profit,$p_proid,$scatagory,$storeID));
     if ($uprslt ==1)
         {$msg = "প্রোডাক্টের মূল্য আপডেট হয়েছে";}
         else { $msg ="দুঃখিত, আপডেট হয়নি"; }
@@ -75,24 +72,20 @@ function calculate(val)
     var xprofit = Number(val);
     var buying = Number(document.getElementById("updatedbuying").value);
     var selling = Number(document.getElementById("updatedselling").value);
-    var currentpv = <?php echo $unitpv?> ;
     var profit = selling - (buying + xprofit);
-    var pv = profit * currentpv;
-    if((selling < buying) || (pv <= 0))
+    if(selling < buying)
         {
-            alert("দুঃখিত, বিক্রয়মূল্য < ক্রয়মূল্য হতে পারবে না\n এবং\n পিভি ০ হতে পারবে না");
+            alert("দুঃখিত, বিক্রয়মূল্য <= ক্রয়মূল্য হতে পারবে না\n এবং\n প্রফিট ০ হতে পারবে না");
             document.getElementById("updatedprofit").value = 0;
-            document.getElementById("updatedpv").value = 0;
         }
         else {
                 document.getElementById("updatedprofit").value = profit;
-                 document.getElementById("updatedpv").value = pv;
         }
 }
 function beforeSave()
 {
-   var pv = document.getElementById("updatedpv").value;
-   if(pv !="" && pv!= 0)
+   var profit = document.getElementById("updatedprofit").value;
+   if(profit !="" && profit!= 0)
        {
            return true;
        }
@@ -142,9 +135,6 @@ function out()
                     <tr>
                         <td colspan="2">প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" readonly name="xprofit" value="<?php echo $db_pur_profit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /> টাকা</td>
                     </tr>
-                    <tr>
-                        <td colspan="2">পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" readonly name="xprofit" value="<?php echo $db_pur_pv;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
-                    </tr>
                 </table>
             </fieldset>
                 <table cellpadding="0" cellspacing="0" style="font-family: SolaimanLipi !important;">
@@ -165,9 +155,6 @@ function out()
                                     <tr>
                                         <td colspan="2">প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" readonly name="xprofit" value="<?php echo $db_profit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /> টাকা</td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="2">পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" readonly name="xprofit" value="<?php echo $db_pv;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
-                                    </tr>
                                 </table>
                             </fieldset>
                         </td>
@@ -186,9 +173,6 @@ function out()
                                     </tr>
                                     <tr>
                                         <td colspan="2">প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" name="updatedprofit" id="updatedprofit" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /> টাকা</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" name="updatedpv" id="updatedpv"  style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
                                     </tr>
                                 </table>
                             </fieldset>

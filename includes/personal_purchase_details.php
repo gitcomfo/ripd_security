@@ -6,6 +6,12 @@ include 'connectionPDO.php';
 $id = $_GET['sum_id'];
 $select_summary_details = $conn->prepare("SELECT *  FROM sales, inventory WHERE sales_summery_idsalessummery = ?
                                                                         AND inventory_idinventory = idinventory");
+$sel_command = $conn->prepare("SELECT * FROM running_command");
+$sel_command->execute();
+$arr_rslt = $sel_command->fetchAll();
+foreach ($arr_rslt as $value) {
+    $db_pv = $value['pv_value'];
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -40,7 +46,7 @@ $select_summary_details = $conn->prepare("SELECT *  FROM sales, inventory WHERE 
                 $show_quantity = english2bangla($db_quantity);
                 $total_amount += $db_sales_amount= $row['sales_amount'];
                 $show_amount = english2bangla($db_sales_amount);
-                $total_pv += $db_sales_pv= $row['sales_pv'];
+                $total_pv += $db_sales_pv= ($row['sales_profit']*$db_pv);
                 echo "
                 <tr>
                 <td style='text-align: cente;border:1px black solid;'>$show_count</td>

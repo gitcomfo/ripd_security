@@ -55,23 +55,6 @@ function get_catagory() {
                 s=checkTime(s)
                 document.getElementById('txt').value=h+" : "+m+" : "+s
                 t=setTimeout('ShowTime()',1000)
-                if(document.getElementById('pname').value !="")
-                { document.getElementById("QTY").disabled = false;}
-                else {document.getElementById("QTY").disabled = true;}
-     
-                if(document.getElementById('tretail').value !="")
-                { document.getElementById("cash").disabled = false;}
-                else {document.getElementById("cash").disabled = true;}
-          
-                a=Number(document.abc.QTY.value);
-                if (a!=0) {document.getElementById("addtoCart").disabled = false;}
-                else {document.getElementById("addtoCart").disabled = true;}
-                payable = Number(document.getElementById('gtotal').value);
-                cash = Number(document.getElementById('cash').value);
-                if(cash<payable)
-                {document.getElementById("print").disabled = true;}
-                else {document.getElementById("print").disabled =false ;}
-
             }
             function checkTime(i)
             {

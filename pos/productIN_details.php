@@ -27,7 +27,7 @@ foreach ($arr_rslt as $value) {
     $db_pv = $value['pv_value'];
 }
 $ins_purchase_sum = $conn->prepare("INSERT INTO product_purchase_summary(chalan_no, chln_invest_amount, chln_reuse_amount, total_chalan_cost, transport_cost ,others_cost ,chalan_comment , chalan_date , cfs_user_idUser ,chalan_scan_copy,pps_onstype,pps_onsID) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?)");
-$ins_purchase = $conn->prepare("INSERT INTO product_purchase(in_ons_type, in_onsid, in_input_date ,input_type ,in_howmany , in_pv , in_extra_profit ,in_profit, in_buying_price, in_sellingprice, pps_id, Product_chart_idproductchart) VALUES (?, ?, NOW(), 'in', ?, ?, ?, ?, ?, ?, ?, ?)");
+$ins_purchase = $conn->prepare("INSERT INTO product_purchase(in_ons_type, in_onsid, in_input_date ,input_type ,in_howmany  , in_extra_profit ,in_profit, in_buying_price, in_sellingprice, pps_id, Product_chart_idproductchart) VALUES (?, ?, NOW(), 'in', ?, ?, ?, ?, ?, ?, ?)");
 $sel_purchase_sum = $conn->prepare("SELECT * FROM product_purchase_summary WHERE chalan_no= ? ");
 
 if(isset($_POST['next']))
@@ -109,7 +109,6 @@ if(isset($_POST['entry']))
     $p_sell = $_POST['proSellingPrice']; 
     $p_xprofit = $_POST['proXprofit']; 
     $p_profit = $_POST['proProfit']; 
-    $p_pv = $_POST['proPV']; 
     $p_qty = $_POST['porQty']; 
 
     $conn->beginTransaction();
@@ -121,10 +120,9 @@ if(isset($_POST['entry']))
                 $sell=$p_sell[$i];
                 $profit=$p_profit[$i];
                 $xtraprofit=$p_xprofit[$i];
-                $pv=$p_pv[$i];
                 $qty=$p_qty[$i];
                 $chartid=$p_chartID[$i];
-                $sqlrslt2 = $ins_purchase->execute(array($scatagory, $storeID, $qty, $pv,  $xtraprofit, $profit, $buy, $sell, $purchase_sum_id, $chartid));
+                $sqlrslt2 = $ins_purchase->execute(array($scatagory, $storeID, $qty,$xtraprofit, $profit, $buy, $sell, $purchase_sum_id, $chartid));
             }
             if($sqlrslt1  && $sqlrslt2)
             {
@@ -192,18 +190,14 @@ function calculate(val,i)
     var xprofit = Number(val);
     var buying = Number(document.getElementById("proBuyingPrice["+i+"]").value);
    var selling = Number(document.getElementById("proSellingPrice["+i+"]").value);
-    var currentpv = Number(document.getElementById("currentPv").value);
     var profit = selling - (buying + xprofit);
-    var pv = profit * currentpv;
-    if((selling < buying) || (pv <= 0))
+    if(selling <= buying)
         {
-            alert("দুঃখিত, বিক্রয়মূল্য < ক্রয়মূল্য হতে পারবে না\n এবং\n পিভি ০ হতে পারবে না");
+            alert("দুঃখিত, বিক্রয়মূল্য < ক্রয়মূল্য হতে পারবে না\n এবং\n প্রফিট ০ হতে পারবে না");
             document.getElementById("proProfit["+i+"]").value = 0;
-            document.getElementById("proPV["+i+"]").value = 0;
         }
         else {
                 document.getElementById("proProfit["+i+"]").value = profit;
-                document.getElementById("proPV["+i+"]").value = pv;
         }
 }
 
@@ -254,7 +248,6 @@ var blank = validate();
         <td width="11%" style="color: #0000cc;text-align: center;"><strong>প্রতি একক বিক্রয়মূল্য (টাকা)</strong></td>
         <td width="9%" style="color: #0000cc;text-align: center;"><strong>এক্সট্রা প্রফিট (টাকা)</strong></td>
         <td width="7%" style="color: #0000cc;text-align: center;"><strong>প্রফিট (টাকা)</strong></td>
-        <td width="10%" style="color: #0000cc;text-align: center;"><strong>পিভি</strong><input type="hidden" id="currentPv" value="<?php echo $db_pv;?>" /></td>
       </tr>
     <?php
             $sl = 1;
@@ -269,7 +262,6 @@ var blank = validate();
                         <td style='text-align: center;padding-right:2px;'><input type='text' name='proSellingPrice[$sl]' id='proSellingPrice[$sl]' style='width:95%;height=100%;text-align:right' onkeypress='return checkIt(event)' /></td>
                         <td style='text-align: center;'><input type='text' name='proXprofit[$sl]' id='proXprofit[$sl]' style='width:92%;height=100%;text-align:right' onkeypress='return checkIt(event)' onkeyup='calculate(this.value,$sl)' /></td>
                         <td style='text-align: center;'><input type='text' name='proProfit[$sl]' id='proProfit[$sl]' readonly style='width:90%;height=100%;text-align:right' /></td>
-                        <td style='text-align: center;'><input class='inbox' type='text' name='proPV[$sl]' id='proPV[$sl]' readonly style='width:90%;height=100%;' /></td>
                         </tr>";
                 $sl ++;
             }

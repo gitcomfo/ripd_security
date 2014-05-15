@@ -17,10 +17,10 @@ $sel_unreg_customer = $conn->prepare("SELECT * FROM unregistered_customer WHERE 
 $ins_unreg_customer = $conn->prepare("INSERT INTO `unregistered_customer` (`unregcust_name` ,`unregcust_address` ,`unregcust_occupation` ,`unregcust_mobile` ,`unregcust_email` ,`unregcust_buyingcount` ,`unregcust_status` ,`unregcust_lastupdated_date`) 
                     VALUES (?, ?, ?, ?, '', '1', 'unregistered', NOW())");
 $up_ureg_customer = $conn->prepare("UPDATE `unregistered_customer` SET `unregcust_buyingcount` = ? WHERE unregcust_mobile= ? ");
-$ins_sales_summary = $conn->prepare("INSERT INTO sales_summary(sal_store_type, sal_storeid, sal_buyer_type,sal_buyerid, sal_salesdate ,sal_salestime ,sal_total_buying_price, sal_totalamount ,sal_totalpv ,sal_total_lessprofit, sal_total_profit,sal_total_xtraprofit, sal_givenamount ,sal_invoiceno, cfs_userid,sal_return_org,sal_cash_paid,sal_acc_paid,status,selling_type) 
-            VALUES (?, ?,?, ?,CURDATE(), CURTIME(), ?, ?, ?, ?, ?, ?, ?,?,?, ?,?, ?,'not_replaced',?);");
-$ins_sales = $conn->prepare("INSERT INTO sales(quantity ,sales_buying_price, sales_amount ,sales_less_profit, sales_pv , sales_profit, sales_extra_profit, inventory_idinventory ,sales_summery_idsalessummery) 
-            VALUES (? ,?, ?, ?, ?, ?, ?, ?, ?);");
+$ins_sales_summary = $conn->prepare("INSERT INTO sales_summary(sal_store_type, sal_storeid, sal_buyer_type,sal_buyerid, sal_salesdate ,sal_salestime ,sal_total_buying_price, sal_totalamount ,sal_total_lessprofit, sal_total_profit,sal_total_xtraprofit, sal_givenamount ,sal_invoiceno, cfs_userid,sal_return_org,sal_cash_paid,sal_acc_paid,status,selling_type) 
+            VALUES (?, ?,?, ?,CURDATE(), CURTIME(), ?, ?, ?, ?, ?, ?,?,?, ?,?, ?,'not_replaced',?);");
+$ins_sales = $conn->prepare("INSERT INTO sales(quantity ,sales_buying_price, sales_amount ,sales_less_profit, sales_profit, sales_extra_profit, inventory_idinventory ,sales_summery_idsalessummery) 
+            VALUES (? ,?, ?, ?, ?, ?, ?, ?);");
 
 if(isset($_POST['print']))
 {
@@ -120,11 +120,10 @@ $result= $sel_sales_summary->fetchAll();
               $_SESSION['SESS_MEMBER_ID']=$str_recipt;
         }
 
-        $totalamount =0; $totalPV = 0; $totalbuy = 0;$totalLessProfit=0;$totalprofit = 0;$totalxprofit=0;
+        $totalamount =0; $totalbuy = 0;$totalLessProfit=0;$totalprofit = 0;$totalxprofit=0;
              foreach($_SESSION['arrSellTemp'] as $key => $row) {
                  $pro_qty = $row[4];
                    $totalamount = $totalamount + $row[5];
-                   $totalPV = $totalPV + $row[6];
                    $totalbuy = $totalbuy + $row[2];
                    $totalLessProfit = $totalLessProfit + $row[7];
                    $totalprofit = $totalprofit + ($row[8] * $pro_qty);
@@ -134,19 +133,18 @@ $result= $sel_sales_summary->fetchAll();
     $invoiceNo = $_SESSION['SESS_MEMBER_ID'];
     $conn->beginTransaction();
     $sellingtype = 'whole';
-    $sqlresult1=$ins_sales_summary->execute(array($G_s_type,$G_s_id,$buyertype,$buyerid,$totalbuy,$totalamount,$totalPV,$totalLessProfit,$actualProfit,$totalxprofit,$P_getTaka,$invoiceNo,$cfsID,$P_backTaka, $P_paiedByCash,$P_paiedByAcc,$sellingtype));
+    $sqlresult1=$ins_sales_summary->execute(array($G_s_type,$G_s_id,$buyertype,$buyerid,$totalbuy,$totalamount,$totalLessProfit,$actualProfit,$totalxprofit,$P_getTaka,$invoiceNo,$cfsID,$P_backTaka, $P_paiedByCash,$P_paiedByAcc,$sellingtype));
     $sales_sum_id= $conn->lastInsertId();
     
      foreach($_SESSION['arrSellTemp'] as $key => $row) 
     {
         $pro_qty = $row[4];
         $pro_amount = $row[5];
-        $pro_pv = $row[6];
         $pro_profitless = $row[7];
         $pro_buy= $row[2];
         $pro_profit = ($row[8] * $pro_qty) - $pro_profitless;
         $pro_xprofit = ($row[9] * $pro_qty);
-        $sqlresult2=$ins_sales->execute(array($pro_qty,$pro_buy,$pro_amount,$pro_profitless,$pro_pv,$pro_profit,$pro_xprofit,$key,$sales_sum_id));
+        $sqlresult2=$ins_sales->execute(array($pro_qty,$pro_buy,$pro_amount,$pro_profitless,$pro_profit,$pro_xprofit,$key,$sales_sum_id));
     }
   if($sqlresult1 && $sqlresult2)
     {

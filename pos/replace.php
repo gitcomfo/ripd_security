@@ -15,6 +15,14 @@ $sel_sales_store = $conn->prepare("SELECT * FROM sales_store WHERE idSales_store
 $sel_office = $conn->prepare("SELECT * FROM office WHERE idOffice= ?");
 $sel_unreg = $conn->prepare("SELECT * FROM unregistered_customer WHERE idunregcustomer= ? ");
 $sel_cfsuser = $conn->prepare("SELECT * FROM cfs_user WHERE idUser= ? ");
+
+$sel_command = $conn->prepare("SELECT * FROM running_command");
+$sel_command->execute();
+$arr_rslt = $sel_command->fetchAll();
+foreach ($arr_rslt as $value) {
+    $db_pv = $value['pv_value'];
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -45,24 +53,7 @@ function ShowTime()
       m=checkTime(m)
       s=checkTime(s)
       document.getElementById('txt').value=h+" : "+m+" : "+s
-      t=setTimeout('ShowTime()',1000)
-      if(document.getElementById('pname').value !="")
-          { document.getElementById("QTY").disabled = false;}
-     else {document.getElementById("QTY").disabled = true;}
-     
-     if(document.getElementById('tretail').value !="")
-          { document.getElementById("cash").disabled = false;}
-     else {document.getElementById("cash").disabled = true;}
-          
-      a=Number(document.abc.QTY.value);
-if (a!=0) {document.getElementById("addtoCart").disabled = false;}
-  else {document.getElementById("addtoCart").disabled = true;}
-  payable = Number(document.getElementById('gtotal').value);
-  cash = Number(document.getElementById('cash').value);
-  if(cash<payable)
-  {document.getElementById("print").disabled = true;}
-  else {document.getElementById("print").disabled =false ;}
-
+      t=setTimeout('ShowTime()',1000);
 }
 function checkTime(i)
     {
@@ -176,7 +167,7 @@ if (isset($_GET['id']))
                         $db_sellTime=$row["sal_salestime"];
                         $db_selltotalbuy = $row['sal_total_buying_price'];
                         $db_sellTotalAmount=$row["sal_totalamount"];
-                        $db_sellTotalPV=$row["sal_totalpv"];
+                        $db_sellTotalPV= ($row['sal_total_profit'] * $db_pv);
                         $db_givenTaka=$row["sal_givenamount"];
                         $db_invoiceno=$row['sal_invoiceno'];
                         $db_buyerid= $row['sal_buyerid'];
@@ -278,7 +269,7 @@ if (isset($_GET['id']))
                         {
                             $db_itemqty=$rowSales["quantity"];
                             $db_itemprice=$rowSales["sales_amount"];
-                            $db_itemTotalPV=$rowSales["sales_pv"];
+                            $db_itemTotalPV= ($rowSales["sales_profit"] * $db_pv);
                             $db_inventID=$rowSales["inventory_idinventory"];
                             $db_itembuy= $rowSales['sales_buying_price'];
                             $db_proCode=$rowSales["ins_product_code"];
