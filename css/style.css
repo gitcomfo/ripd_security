@@ -232,7 +232,7 @@ way to fit your requirements.
 .menu ul ul {width: auto;}
 
 /* float the top list items to make it horizontal and a relative positon so that you can control the dropdown menu positon */
-.menu ul li {z-index: 5000;float:left;height:28px;line-height:28px;margin: 0px;}
+.menu ul li {z-index: 1;float:left;height:28px;line-height:28px;margin: 0px;}
 
 /* style the sub level list items */
 .menu ul ul li {display:block;width: auto;height:auto;position:relative;line-height:1em; border-bottom:1px #2384BF solid;}

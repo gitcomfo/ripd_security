@@ -7,16 +7,9 @@ include_once 'includes/MiscFunctions.php';
 $storeName= $_SESSION['loggedInOfficeName'];
 $logedInUserID = $_SESSION['userIDUser'];
 
-$sqlpv = $conn->prepare("SELECT * FROM running_command;");
-$sqlpv->execute();
-$pvrow = $sqlpv->fetchAll();
-foreach ($pvrow as $row) {
-    $unitpv= $row['pv_value'];
-}
-
 $sel_discount_product = $conn->prepare("SELECT * FROM discount_product WHERE dis_procode= ? ");
-$ins_dead_product = $conn->prepare("INSERT INTO discount_product (fk_inventoryid, dis_qty, dis_procode, dis_orgprice, dis_newbuyprc,dis_profit,dis_extraprofit, dis_sellprice, dis_newpv, dis_startdate, dis_made_userid) 
-                                                                VALUES (?,?,?,?,?,?,?,?,?,NOW(),?)");
+$ins_dead_product = $conn->prepare("INSERT INTO discount_product (fk_inventoryid, dis_qty, dis_procode, dis_orgprice, dis_newbuyprc,dis_profit,dis_extraprofit, dis_sellprice, dis_startdate, dis_made_userid) 
+                                                                VALUES (?,?,?,?,?,?,?,?,NOW(),?)");
 
 if(isset($_POST['submit']))
 {
@@ -38,9 +31,8 @@ if(isset($_POST['submit']))
     $p_newSelling = $_POST['updatedselling'];
     $p_newXprofit = $_POST['updatedxprofit'];
     $p_newProfit = $_POST['updatedprofit'];
-    $p_newPV = $_POST['updatedpv'];
     
-    $result1= $ins_dead_product->execute(array($p_productID,$p_productQty,$discountProductCode,$p_originalBuying,$p_newBuying,$p_newProfit, $p_newXprofit, $p_newSelling, $p_newPV, $logedInUserID));
+    $result1= $ins_dead_product->execute(array($p_productID,$p_productQty,$discountProductCode,$p_originalBuying,$p_newBuying,$p_newProfit, $p_newXprofit, $p_newSelling, $logedInUserID));
     if($result1 == 1)
     {
        echo "<script>alert('ডিসকাউন্ট দেয়া হয়েছে')</script>"; 
@@ -95,26 +87,22 @@ function calculate(val)
     var xprofit = Number(val);
     var buying = Number(document.getElementById("updatedbuying").value);
     var selling = Number(document.getElementById("updatedselling").value);
-    var currentpv = <?php echo $unitpv?> ;
     var profit = selling - (buying + xprofit);
-    var pv = profit * currentpv;
-    if((selling < buying) || (pv <= 0))
+    if(selling <= buying)
         {
-            alert("দুঃখিত, বিক্রয়মূল্য < ক্রয়মূল্য হতে পারবে না\n এবং\n পিভি ০ হতে পারবে না");
+            alert("দুঃখিত, বিক্রয়মূল্য <= ক্রয়মূল্য হতে পারবে না\n এবং\n প্রফিট ০ হতে পারবে না");
             document.getElementById("updatedprofit").value = 0;
-            document.getElementById("updatedpv").value = 0;
         }
         else {
                 document.getElementById("updatedprofit").value = profit;
-                 document.getElementById("updatedpv").value = pv;
         }
 }
 function beforeSave()
 {
-     var pv = document.getElementById("updatedpv").value;
+     var profit = document.getElementById("updatedprofit").value;
       var a=document.getElementById('proInventID').value;
       var b=document.getElementById('QTY').value;
-        if ((a != "") && (b != 0) && pv !="" && pv!= 0) { return true; }
+        if ((a != "") && (b != 0) && profit !="" && profit!= 0) { return true; }
         else { return false; }
  }
 </script>
@@ -150,7 +138,6 @@ function beforeSave()
             $db_selling = $result["ins_sellingprice"];
             $db_xtraprofit = $result["ins_extra_profit"];
             $db_profit = $result["ins_profit"];
-            $db_pv = $result["ins_pv"];
         }
     ?>
         <form method="POST" onsubmit="return beforeSave();" action="discount_product_entry.php">
@@ -184,9 +171,6 @@ function beforeSave()
                                     <tr>
                                         <td colspan="2">প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" readonly name="xprofit" value="<?php echo $db_profit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /> টাকা</td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="2">পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" readonly name="xprofit" value="<?php echo $db_pv;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
-                                    </tr>
                                 </table>
                             </fieldset>
                         </td>
@@ -205,9 +189,6 @@ function beforeSave()
                                     </tr>
                                     <tr>
                                         <td colspan="2">প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" name="updatedprofit" id="updatedprofit" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" readonly/> টাকা</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" name="updatedpv" id="updatedpv"  style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" readonly /></td>
                                     </tr>
                                 </table>
                             </fieldset>

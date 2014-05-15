@@ -10,14 +10,8 @@ $check = 0; $msg ="";
 $arr_left_qty= array();
 $arr_ri8_qty = array();
 
-$sql_runningpv = $conn->prepare("SELECT * FROM running_command ;");
-$sql_runningpv->execute();
-$pvrow = $sql_runningpv->fetchAll();
-foreach ($pvrow as $value) {
-    $current_pv = $value['pv_value'];
-}
 $inventstmt = $conn->prepare("SELECT * FROM inventory WHERE ins_productid= ? AND ins_ons_type=? AND ins_ons_id =? AND ins_product_type = ? ");
-$up_invetory = $conn->prepare("UPDATE inventory SET ins_extra_profit= ?,ins_sellingprice=?, ins_buying_price=? ,ins_profit=? ,ins_pv=? , ins_lastupdate= NOW()
+$up_invetory = $conn->prepare("UPDATE inventory SET ins_extra_profit= ?,ins_sellingprice=?, ins_buying_price=? ,ins_profit=? , ins_lastupdate= NOW()
                                                     WHERE ins_product_type='package' AND ins_productid=? AND ins_ons_type=? AND ins_ons_id = ? ");
 $selectstmt2 = $conn ->prepare("SELECT * FROM package_details WHERE pckg_infoid = ?");
 
@@ -28,8 +22,7 @@ if(isset($_POST['update']))
     $P_updatedpckgprofit = $_POST['updateprofit'];
     $P_updatedpckgxprofit = $_POST['updatexprofit'];
     $P_pckgid = $_POST['pckgID'];
-    $P_pv = $_POST['updatepv'];  
-    $yes= $up_invetory->execute(array($P_updatedpckgxprofit,$P_updatedpckgsell,$P_updatedpckgbuy,$P_updatedpckgprofit,$P_pv,$P_pckgid,$scatagory,$storeID));
+    $yes= $up_invetory->execute(array($P_updatedpckgxprofit,$P_updatedpckgsell,$P_updatedpckgbuy,$P_updatedpckgprofit,$P_pckgid,$scatagory,$storeID));
     if($yes ==1)
     {$msg = "প্যাকেজটি সফলভাবে আপডেট হয়েছে";}
     else { $msg = "দুঃখিত প্যাকেজটি আপডেট হয়নি";}
@@ -73,15 +66,11 @@ function beforeUpdate()
 }
 function getUpdate(xprofit) // after update pckg prices
 {
-   var run_pv = <?php echo $current_pv?>;
    xprofit = Number(xprofit);
    var updatedbuy = Number(document.getElementById('updatebuy').value);
    var updatedsell = Number(document.getElementById('updatesellprz').value);
    var profit = updatedsell - (updatedbuy + xprofit);
-   var pv = (run_pv * profit);
-   pv = (pv).toFixed(2);
    document.getElementById('updateprofit').value = profit;
-   document.getElementById('updatepv').value = pv;
 }
 function out()
     {
@@ -142,7 +131,6 @@ function out()
                                                  <th width="14%">বর্তমান বিক্রয়মূল্য</th>
                                                  <th width="10%">বর্তমান প্রফিট</th>
                                                   <th width="10%">বর্তমান এক্সট্রা প্রফিট</th>
-                                                 <th width="12%">বর্তমান পিভি</th>
                                              </thead>
                                              <tbody style="font-size: 16px;">
                                              <?php
@@ -162,12 +150,10 @@ function out()
                                                                         $prosell = $row['ins_sellingprice'] * $proqty;
                                                                         $proprofit = $row['ins_profit'] * $proqty;
                                                                         $proxprofit = $row['ins_extra_profit'] * $proqty;
-                                                                        $propv = $row['ins_pv'];
                                                                         $buysum = $buysum+$probuy;
                                                                         $sellsum = $sellsum+$prosell;
                                                                         $profitsum = $profitsum+$proprofit;
                                                                         $xprofitsum = $xprofitsum+$proxprofit;
-                                                                        $pvsum = $pvsum+$propv;
                                                                       }
                                                                    echo "<tr>
                                                                        <td>$procode</td>
@@ -177,7 +163,6 @@ function out()
                                                                       <td>$prosell</td>
                                                                       <td>$proprofit</td>
                                                                       <td align='center'>$proxprofit </td>
-                                                                      <td >$propv</td>
                                                                       </tr>";
                                                                    array_push($arr_left_qty,$proqty);
                                                             }                                         
@@ -194,8 +179,7 @@ function out()
                                          <b>বর্তমান মোট বিক্রয়মূল্য &nbsp;&nbsp;&nbsp;: </b><input type="text" readonly style="text-align: right;" value="<?php echo $sellsum;?>" /> টাকা</br>
                                          <b>বর্তমান মোট প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" readonly style="text-align: right;" value="<?php echo $profitsum;?>"/> টাকা</br>
                                          <b>বর্তমান মোট এক্সট্রা প্রফিট : </b><input type="text" readonly style="text-align: right;" value="<?php echo $xprofitsum;?>" /> টাকা</br>
-                                         <b>বর্তমান মোট পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input type="text" readonly style="text-align: right;" value="<?php echo $pvsum;?>" /> টাকা
-                                    </fieldset>
+                                         </fieldset>
                                 </td>
                             </tr>
                             <tr>
@@ -207,7 +191,6 @@ function out()
                                                         foreach($pckgall as $pckgrow)
                                                         {
                                                            $db_pckgsell = $pckgrow['ins_sellingprice'];
-                                                            $db_pckgpv= $pckgrow['ins_pv'];
                                                             $db_pckgxprofit = $pckgrow['ins_extra_profit'];
                                                             $db_pckgprofit= $pckgrow['ins_profit'];
                                                             $db_pckgbuy = $pckgrow['ins_buying_price'];
@@ -219,7 +202,6 @@ function out()
                                         <b>বর্তমান প্যাকেজ বিক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgprz" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgsell;?>" /> টাকা</br>
                                         <b>বর্তমান প্যাকেজ এক্সট্রা প্রফিট : </b><input id="currentpckgxprft" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgxprofit;?>" /> টাকা</br>
                                         <b>বর্তমান প্যাকেজ প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgprft" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgprofit;?>" /> টাকা</br>                                 
-                                        <b>বর্তমান প্যাকেজ পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="currentpckgpv" type="text" readonly style="text-align: right;" value="<?php echo $db_pckgpv;?>" /></br>
                                     </fieldset>
                                 </td>
                                 <td>
@@ -229,7 +211,6 @@ function out()
                                          <b>আপডেট প্যাকেজ বিক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updatesellprz" name="updatesellprz" type="text" onkeypress="return checkIt(event)" style="text-align: right;width: 100px;" value="<?php echo $db_pckgsell;?>"/> টাকা</br>
                                          <b>আপডেট প্যাকেজ এক্সট্রা প্রফিট : </b><input id="updatexprofit" name="updatexprofit" type="text" style="text-align: right;width: 100px;" onkeypress="return checkIt(event)" onblur="getUpdate(this.value)" value="<?php echo $db_pckgxprofit;?>"/> টাকা</br>
                                          <b>আপডেটেট প্যাকেজ প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updateprofit" name="updateprofit" readonly type="text" style="text-align: right;width: 100px;" value="<?php echo $db_pckgprofit;?>"  /> টাকা</br>
-                                         <b>আপডেটেট প্যাকেজ পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input id="updatepv" name="updatepv" type="text" readonly style="text-align: right;width: 100px;" value="<?php echo $db_pckgpv;?>"/></br>
                                     </fieldset>
                                 </td>
                             </tr>

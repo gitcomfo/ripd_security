@@ -34,56 +34,6 @@ function get_catagory() {
        function details_show(id){
                   TINY.box.show({url:'product_details.php?sum_id='+id,width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
        </script>
-         <style type="text/css">
-            .prolinks:focus{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
-            .prolinks:hover{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
-        </style>
-        <script type="text/javascript">
-            function ShowTime()
-            {
-                var time=new Date()
-                var h=time.getHours()
-                var m=time.getMinutes()
-                var s=time.getSeconds()
-  
-                m=checkTime(m)
-                s=checkTime(s)
-                document.getElementById('txt').value=h+" : "+m+" : "+s
-                t=setTimeout('ShowTime()',1000)
-                if(document.getElementById('pname').value !="")
-                { document.getElementById("QTY").disabled = false;}
-                else {document.getElementById("QTY").disabled = true;}
-     
-                if(document.getElementById('tretail').value !="")
-                { document.getElementById("cash").disabled = false;}
-                else {document.getElementById("cash").disabled = true;}
-          
-                a=Number(document.abc.QTY.value);
-                if (a!=0) {document.getElementById("addtoCart").disabled = false;}
-                else {document.getElementById("addtoCart").disabled = true;}
-                payable = Number(document.getElementById('gtotal').value);
-                cash = Number(document.getElementById('cash').value);
-                if(cash<payable)
-                {document.getElementById("print").disabled = true;}
-                else {document.getElementById("print").disabled =false ;}
-
-            }
-            function checkTime(i)
-            {
-                if (i<10)
-                {
-                    i="0" + i
-                }
-                return i
-            }
-        </script>
-
         <!--===========================================================================================================================-->
         <script>
             function showTypes(catagory) // for types dropdown list

@@ -12,6 +12,13 @@ $sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_cod
 $sel_inventory_all = $conn->prepare("SELECT * FROM inventory WHERE idinventory =? ");
 $sel_inventory = $conn->prepare("SELECT * FROM inventory WHERE ins_ons_id = ? AND ins_ons_type=? AND ins_product_type='general' ");
 
+$sql_runningpv = $conn->prepare("SELECT * FROM running_command ;");
+$sql_runningpv->execute();
+$pvrow = $sql_runningpv->fetchAll();
+foreach ($pvrow as $value) {
+    $current_pv = $value['pv_value'];
+}
+
 function get_catagory($sql) {
     echo "<option value=0> -সিলেক্ট করুন- </option>";
     $sql->execute();
@@ -28,16 +35,6 @@ function get_catagory($sql) {
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>পণ্যের তালিকা</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<style type="text/css">
-.prolinks:focus{
-    background-color: cadetblue;
-    color: yellow !important;
-}
-.prolinks:hover{
-    background-color: cadetblue;
-    color: yellow !important;
-}
-</style>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
  <script src="scripts/tinybox.js" type="text/javascript"></script>
   <script type="text/javascript">
@@ -262,7 +259,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                                 $db_price=english2bangla($row["ins_sellingprice"]);
                                 $db_qty=english2bangla($row["ins_how_many"]);
                                 $db_procode=$row["ins_product_code"];
-                                $db_proPV=english2bangla($row["ins_pv"]);
+                                $db_proPV=english2bangla($row["ins_profit"] * $current_pv);
                                 $inventoryID= $row['idinventory'];
                             }              
               echo '<tr>';
@@ -286,7 +283,7 @@ function showBrandProducts(brandcode,procatid) // show products from brand
                             $db_price=english2bangla($row["ins_sellingprice"]);
                             $db_qty=english2bangla($row["ins_how_many"]);
                             $db_procode=$row["ins_product_code"];
-                            $db_proPV=english2bangla($row["ins_pv"]);
+                            $db_proPV=english2bangla($row["ins_profit"] * $current_pv);
                             $inventoryID= $row['idinventory'];
 
                             echo '<tr>';

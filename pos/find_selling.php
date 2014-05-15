@@ -11,6 +11,13 @@ $sel_sales_store = $conn->prepare("SELECT * FROM sales_store WHERE idSales_store
 $sel_office = $conn->prepare("SELECT * FROM office WHERE idOffice= ?");
 $sel_unreg = $conn->prepare("SELECT * FROM unregistered_customer WHERE idunregcustomer= ? ");
 $sel_cfsuser = $conn->prepare("SELECT * FROM cfs_user WHERE idUser= ? ");
+
+$sql_runningpv = $conn->prepare("SELECT * FROM running_command ;");
+$sql_runningpv->execute();
+$pvrow = $sql_runningpv->fetchAll();
+foreach ($pvrow as $value) {
+    $current_pv = $value['pv_value'];
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -95,7 +102,7 @@ if (isset($_GET['id']))
                         $db_sellTime=$row["sal_salestime"];
                         $db_selltotalbuy = $row['sal_total_buying_price'];
                         $db_sellTotalAmount=$row["sal_totalamount"];
-                        $db_sellTotalPV=$row["sal_totalpv"];
+                        $db_sellTotalPV=$row["sal_total_profit"] * $current_pv; 
                         $db_givenTaka=$row["sal_givenamount"];
                         $db_invoiceno=$row['sal_invoiceno'];
                         $db_buyerid= $row['sal_buyerid'];
@@ -184,7 +191,7 @@ if (isset($_GET['id']))
                         {
                             $db_itemqty=$rowSales["quantity"];
                             $db_itemprice=$rowSales["sales_amount"];
-                            $db_itemTotalPV=$rowSales["sales_pv"];
+                            $db_itemTotalPV=$rowSales["sales_profit"] * $current_pv;
                             $db_inventID=$rowSales["inventory_idinventory"];
                             $db_itembuy= $rowSales['sales_buying_price'];
                             $db_proCode=$rowSales["ins_product_code"];

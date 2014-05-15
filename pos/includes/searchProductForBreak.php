@@ -68,14 +68,12 @@ elseif (isset($_GET['code'])) {
                         $db_sellingprice = $inventoryrow['ins_sellingprice'];
                         $db_profit = $inventoryrow['ins_profit'];
                         $db_xtraprofit = $inventoryrow['ins_extra_profit'];
-                        $db_pv = $inventoryrow['ins_pv'];
                     }
                    $newbuyingprice = ($db_buyingprice / $g_qty1) * $g_qty2;
                    $newsellingprice = ($db_sellingprice / $g_qty1) * $g_qty2;
                    $newprofit = ($db_profit / $g_qty1) * $g_qty2;
                    $newxtraprofit = ($db_xtraprofit / $g_qty1) * $g_qty2;
-                   $newpv = ($db_pv / $g_qty1) * $g_qty2;
-                    $str_sent3 = $newbuyingprice.",".$newsellingprice.",".$newprofit.",".$newxtraprofit.",".$newpv;
+                    $str_sent3 = $newbuyingprice.",".$newsellingprice.",".$newprofit.",".$newxtraprofit;
                   echo $str_sent3;
 }
 ?>

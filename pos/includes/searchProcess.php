@@ -1,8 +1,13 @@
 <?php
-include 'ConnectDB.inc';
+include_once 'ConnectDB.inc';
 include_once 'MiscFunctions.php';
 $storeID = $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory = $_SESSION['loggedInOfficeType'];
+
+$sql_runningpv = mysql_query("SELECT * FROM running_command");
+$pvrow = mysql_fetch_assoc($sql_runningpv);
+    $current_pv = $pvrow['pv_value'];
+    
 if ($_GET['id']== 't')
 {
     $G_catCode= $_GET['catagory'];
@@ -76,7 +81,7 @@ elseif ($_GET['id']== 'all')
                                 $db_price=english2bangla($row["ins_sellingprice"]);
                                 $db_qty=english2bangla($row["ins_how_many"]);
                                 $db_procode=$row["ins_product_code"];
-                                $db_proPV=english2bangla($row["ins_pv"]);
+                                $db_proPV=english2bangla($row["ins_profit"] * $current_pv);
                                 $inventoryID= $row['idinventory'];
 
               echo '<tr>';
@@ -122,7 +127,7 @@ elseif ($_GET['id']== 'catagory')
                                         echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row["ins_productname"].'</div></td>';
                                         echo '<td><div align="center">'.english2bangla($row["ins_how_many"]).'</div></td>';
                                         echo '<td><div align="center">'.english2bangla($row["ins_sellingprice"]).'</div></td>';
-                                        echo '<td><div align="center">'.english2bangla($row["ins_pv"]).'</div></td>';
+                                        echo '<td><div align="center">'.english2bangla($row["ins_profit"] * $current_pv).'</div></td>';
                                         echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
                                         echo '</tr>';
                                         $SL++;
@@ -159,7 +164,7 @@ elseif ($_GET['id']== 'type')
                                         echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row["ins_productname"].'</div></td>';
                                         echo '<td><div align="center">'.english2bangla($row["ins_how_many"]).'</div></td>';
                                         echo '<td><div align="center">'.english2bangla($row["ins_sellingprice"]).'</div></td>';
-                                        echo '<td><div align="center">'.english2bangla($row["ins_pv"]).'</div></td>';
+                                        echo '<td><div align="center">'.english2bangla($row["ins_profit"] * $current_pv).'</div></td>';
                                         echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
                                         echo '</tr>';
                                         $SL++;
@@ -205,7 +210,7 @@ elseif ($_GET['id']== 'brnd')
                                         echo '<td><div align="left">&nbsp;&nbsp;&nbsp;'.$row["ins_productname"].'</div></td>';
                                         echo '<td><div align="center">'.english2bangla($row["ins_how_many"]).'</div></td>';
                                         echo '<td><div align="center">'.english2bangla($row["ins_sellingprice"]).'</div></td>';
-                                        echo '<td><div align="center">'.english2bangla($row["ins_pv"]).'</div></td>';
+                                        echo '<td><div align="center">'.english2bangla($row["ins_profit"] * $current_pv).'</div></td>';
                                         echo "<td><a onclick='productUpdate($inventoryID)' style='cursor:pointer;color:blue;'><u>আপডেট করুন</u></a></td>";
                                         echo '</tr>';
                                         $SL++;

@@ -114,7 +114,6 @@ function beforeSave()
             $db_selling = $result["ins_sellingprice"];
             $db_xtraprofit = $result["ins_extra_profit"];
             $db_profit = $result["ins_profit"];
-            $db_pv = $result["ins_pv"];
         }
     ?>
         <form method="POST" onsubmit="return beforeSave();" action="buy_from_own_store.php">
@@ -148,9 +147,6 @@ function beforeSave()
                                     <tr>
                                         <td colspan="2">প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" readonly name="xprofit" value="<?php echo $db_profit;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /> টাকা</td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="2">পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" readonly name="xprofit" value="<?php echo $db_pv;?>" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /></td>
-                                    </tr>
                                 </table>
                             </fieldset>
                         </td>
@@ -169,9 +165,6 @@ function beforeSave()
                                     </tr>
                                     <tr>
                                         <td colspan="2">প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" name="updatedprofit" id="updatedprofit" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" value="0" readonly/> টাকা</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" name="updatedpv" id="updatedpv"  style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" value="0" readonly /></td>
                                     </tr>
                                 </table>
                             </fieldset>

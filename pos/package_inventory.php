@@ -11,6 +11,13 @@ $scatagory =$_SESSION['loggedInOfficeType'];
 $selstmt = $conn->prepare("SELECT * FROM package_info WHERE idpckginfo = ANY(SELECT pckg_infoid FROM package_details WHERE product_chartid = ?)");
 $selstmt2 = $conn->prepare("SELECT * FROM inventory WHERE ins_productid = ? AND ins_ons_type=? AND ins_ons_id=? AND ins_product_type=?");
 $selstmt3 = $conn->prepare("SELECT * FROM inventory WHERE ins_ons_type=? AND ins_ons_id=? AND ins_product_type = 'package' ");
+
+$sql_runningpv = $conn->prepare("SELECT * FROM running_command ;");
+$sql_runningpv->execute();
+$pvrow = $sql_runningpv->fetchAll();
+foreach ($pvrow as $value) {
+    $current_pv = $value['pv_value'];
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
@@ -123,7 +130,7 @@ function searchPckgPro(keystr) // show products from brand
                                     $pckgSelling = $row2['ins_sellingprice'];
                                     $pckgProfit = $row2['ins_profit'];
                                     $pckgXprofit = $row2['ins_extra_profit'];
-                                    $pckgPV = $row2['ins_pv'];
+                                    $pckgPV = $row2["ins_profit"] * $current_pv;
                                 }
                                 echo '<tr>';
                                 echo '<td><div align="center">'.english2bangla($sl).'</div></td>';
@@ -157,7 +164,7 @@ function searchPckgPro(keystr) // show products from brand
                         $pckgSelling = $row3['ins_sellingprice'];
                         $pckgProfit = $row3['ins_profit'];
                         $pckgXprofit = $row3['ins_extra_profit'];
-                        $pckgPV = $row3['ins_pv'];
+                        $pckgPV = $row3["ins_profit"] * $current_pv;
                         $pckgid = $row3['ins_productid'];
                             echo '<tr>';
                             echo '<td><div align="center">'.english2bangla($sl).'</div></td>';

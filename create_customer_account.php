@@ -7,6 +7,13 @@ include_once 'includes/checkAccountNo.php';
 include_once 'includes/email_conf.php';
 include_once './includes/sms_send_function.php';
 
+$sql_runningpv = $conn->prepare("SELECT * FROM running_command ;");
+$sql_runningpv->execute();
+$pvrow = $sql_runningpv->fetchAll();
+foreach ($pvrow as $value) {
+    $current_pv = $value['pv_value'];
+}
+
 if (isset($_POST['submit']) || isset($_POST['retry']))
   {
         $user_username = $_POST['user_username'];
@@ -48,11 +55,11 @@ if (isset($_POST['submit']) || isset($_POST['retry']))
                     $getreferer_sql = mysql_query("SELECT * FROM pin_makingused, sales_summary WHERE idsalessummary = sales_summery_idsalessummery AND pin_no = '$pin_number'");
                     $refererrow = mysql_fetch_assoc($getreferer_sql);
                     $db_referid = $refererrow['sal_buyerid'];
-                    echo $db_pv= $refererrow['sal_totalpv'];
+                    $db_pv= ($refererrow['sal_total_profit'] * $current_pv);
            //*************************************get account type from pv ************************
                     $getactype_sql = mysql_query("SELECT * FROM account_type WHERE account_minPV_value <= $db_pv ORDER BY account_minPV_value DESC LIMIT 1");
                     $actyperow = mysql_fetch_assoc($getactype_sql);
-                    echo $db_accounttypeID = $actyperow['idAccount_type'];
+                    $db_accounttypeID = $actyperow['idAccount_type'];
              //*************************cutomer_account table-e insert*************
                     $ins_custaccount=mysql_query("INSERT INTO customer_account (opening_pin_no, referer_id, Account_type_idAccount_type, Designation_idDesignation, cfs_user_idUser)
                                             VALUES ('$pin_number', $db_referid, $db_accounttypeID, 1, $cfs_user_id )") or exit(mysql_error());
@@ -111,11 +118,11 @@ if (isset($_POST['submitwithpass']))
                     $getreferer_sql = mysql_query("SELECT * FROM pin_makingused, sales_summary WHERE idsalessummary = sales_summery_idsalessummery AND pin_no = '$pin_number'");
                     $refererrow = mysql_fetch_assoc($getreferer_sql);
                     $db_referid = $refererrow['sal_buyerid'];
-                    echo $db_pv= $refererrow['sal_totalpv'];
+                    $db_pv= ($refererrow['sal_total_profit'] * $current_pv);
            //*************************************get account type from pv ************************
                     $getactype_sql = mysql_query("SELECT * FROM account_type WHERE account_minPV_value <= $db_pv ORDER BY account_minPV_value DESC LIMIT 1");
                     $actyperow = mysql_fetch_assoc($getactype_sql);
-                    echo $db_accounttypeID = $actyperow['idAccount_type'];
+                    $db_accounttypeID = $actyperow['idAccount_type'];
              //*************************cutomer_account table-e insert*************
                     $ins_custaccount=mysql_query("INSERT INTO customer_account (opening_pin_no, referer_id, Account_type_idAccount_type, Designation_idDesignation, cfs_user_idUser)
                                             VALUES ('$pin_number', $db_referid, $db_accounttypeID, 1, $cfs_user_id )") or exit(mysql_error());

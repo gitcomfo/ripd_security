@@ -68,17 +68,12 @@ function getPrice(xprofitless)
     if((sell < totalsell) || (Number(xprofitless) < totalxtra))
         {
             var pckgprofit = sell - (buy + Number(xprofitless)); 
-            var cur_pv = <?php echo $current_pv?>;
-            var pv = cur_pv * pckgprofit;
-            pv = (pv).toFixed(5);
             pckgprofit = (pckgprofit).toFixed(5);
             document.getElementById('pckgprofitless').value = pckgprofit;
-            document.getElementById('pckgpv').value = pv;
     }
     else
         {
             document.getElementById('pckgprofitless').value = 0;
-            document.getElementById('pckgpv').value = 0;
         }
 }
 function checkIt(evt) // float value-er jonno***********************
@@ -94,7 +89,7 @@ function checkIt(evt) // float value-er jonno***********************
 }
 function beforeSave()
 {
-    var pckgpv = document.getElementById('pckgpv').value;
+    var pckgpv = document.getElementById('pckgprofitless').value;
     if((pckgpv != 0) && (pckgpv != ""))
         {
             return true;
@@ -137,7 +132,6 @@ function beforeSave()
                  <th width="10%">বিক্রয় মূল্য</th>
                  <th width="10%">প্রফিট</th>
                  <th width="5%">এক্সট্রা প্রফিট</th>
-                 <th width="10%">পিভি</th>
              </thead>
              <tbody>
              <?php
@@ -156,12 +150,10 @@ function beforeSave()
                                                                         $prosell = $row['ins_sellingprice'] * $proqty;
                                                                         $proprofit = $row['ins_profit'] * $proqty;
                                                                         $proxprofit = $row['ins_extra_profit'] * $proqty;
-                                                                        $propv = $row['ins_pv'];
                                                                         $buysum = $buysum+$probuy;
                                                                         $sellsum = $sellsum+$prosell;
                                                                         $profitsum = $profitsum+$proprofit;
                                                                         $xprofitsum = $xprofitsum+$proxprofit;
-                                                                        $pvsum = $pvsum+$propv;
                                                                       }
                                                                    echo "<tr>
                                                                       <td>$procode </td>
@@ -171,7 +163,6 @@ function beforeSave()
                                                                       <td align='center'>$prosell</td>
                                                                       <td align='center'>$proprofit</td>
                                                                       <td align='center'>$proxprofit </td>
-                                                                      <td>$propv</td>
                                                                       </tr>";
                                                             }                                         
              ?>
@@ -185,7 +176,6 @@ function beforeSave()
                     <b>মোট বিক্রয়মূল্য&nbsp;&nbsp;&nbsp;&nbsp;:</b><input name="totalsellprz" type="hidden" id="totalsellprz" size="20" style="text-align:right;" value="<?php echo $sellsum;?>" readonly/> <?php echo english2bangla($sellsum);?> টাকা</br>
                      <b>মোট এক্সট্রা প্রফিট :</b><input name="totalxprofit" type="hidden" id="totalxprofit" size="20" style="text-align:right;" value="<?php echo $xprofitsum;?>" readonly/> <?php echo english2bangla($xprofitsum);?> টাকা</br>
                     <b>মোট প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b> <input name="totalprofit" type="hidden" id="totalprofit" size="20" readonly style="text-align:right;" value="<?php echo $profitsum;?>"/> <?php echo english2bangla($profitsum);?> টাকা</br>
-                    <b>মোট পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b><input name="totalpv" type="hidden" id="totalpv" size="20" readonly style="text-align:right;" value="<?php echo $pvsum;?>"/> <?php echo english2bangla($pvsum);?> টাকা
                     <input type="hidden" name="pckgBuy" readonly value="<?php echo $probuy;?>"/>
                 </fieldset>
              </div>
@@ -197,7 +187,6 @@ function beforeSave()
                     <b>প্যাকেজ বিক্রয়মূল্য&nbsp;&nbsp;&nbsp; :</b> <input name="pckgsellprz" type="text" id="pckgsellprz" size="20" style="text-align:right;" onkeypress="return checkIt(event)" /> টাকা</br>
                     <b>প্যাকেজ এক্সট্রা প্রফিট :</b> <input name="pckgxprofitless" type="text" id="pckgxprofitless" onkeypress="return checkIt(event)" onblur="getPrice(this.value)" size="20" style="text-align:right;" /> টাকা</br>
                     <b>প্যাকেজ প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b><input name="pckgprofitless" type="text" id="pckgprofitless" readonly size="20" style="text-align:right;" /> টাকা</br>    
-                    <b>প্যাকেজ পিভি&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b> <input name="pckgpv" type="text" id="pckgpv" size="20" readonly style="text-align:right;" /> টাকা
                  </fieldset>
             </div>
          </div> 

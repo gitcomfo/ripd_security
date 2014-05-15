@@ -33,39 +33,6 @@ function get_catagory() {
         <title>পণ্যের তালিকা</title>
         <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
         <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
-        <style type="text/css">
-            .prolinks:focus{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
-            .prolinks:hover{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
-        </style>
-        <script type="text/javascript">
-            function ShowTime()
-            {
-                var time=new Date()
-                var h=time.getHours()
-                var m=time.getMinutes()
-                var s=time.getSeconds()
-  
-                m=checkTime(m)
-                s=checkTime(s)
-                document.getElementById('txt').value=h+" : "+m+" : "+s
-                t=setTimeout('ShowTime()',1000)
-            }
-            function checkTime(i)
-            {
-                if (i<10)
-                {
-                    i="0" + i
-                }
-                return i
-            }
-        </script>
-
         <!--===========================================================================================================================-->
         <script>
             function showTypes(catagory) // for types dropdown list

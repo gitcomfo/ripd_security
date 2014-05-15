@@ -2,7 +2,15 @@
 //include 'includes/session.inc';
 include_once 'includes/header.php';
 $userID = $_SESSION['userIDUser'];
-$select_refered = $conn->prepare("SELECT ss.sal_salesdate, ss.sal_salestime, ss.sal_totalamount,ss.sal_invoiceno, ss.sal_totalpv,idsalessummary,temp.refered,temp.package  
+
+$sql_runningpv = $conn->prepare("SELECT * FROM running_command ;");
+$sql_runningpv->execute();
+$pvrow = $sql_runningpv->fetchAll();
+foreach ($pvrow as $value) {
+    $current_pv = $value['pv_value'];
+}
+
+$select_refered = $conn->prepare("SELECT ss.sal_salesdate, ss.sal_salestime, ss.sal_totalamount,ss.sal_invoiceno, ss.sal_total_profit,idsalessummary,temp.refered,temp.package  
     FROM sales_summary AS ss
     LEFT JOIN 
         (SELECT pin.pin_state, pin.pin_usedby_cfsuserid, cfs.idUser, cust.cfs_user_idUser, cust.Account_type_idAccount_type, acc.idAccount_type, pin.sales_summery_idsalessummery, cfs.account_name AS refered, acc.account_name AS package 
@@ -12,7 +20,7 @@ $select_refered = $conn->prepare("SELECT ss.sal_salesdate, ss.sal_salestime, ss.
     ON ss.idsalessummary = temp.sales_summery_idsalessummery
     WHERE ss.sal_buyerid = ? ");
 
-$select_refered_selected = $conn->prepare("SELECT ss.sal_salesdate, ss.sal_salestime, ss.sal_totalamount,ss.sal_invoiceno, ss.sal_totalpv,idsalessummary,temp.refered,temp.package  
+$select_refered_selected = $conn->prepare("SELECT ss.sal_salesdate, ss.sal_salestime, ss.sal_totalamount,ss.sal_invoiceno, ss.sal_total_profit,idsalessummary,temp.refered,temp.package  
     FROM sales_summary AS ss
     LEFT JOIN 
         (SELECT pin.pin_state, pin.pin_usedby_cfsuserid, cfs.idUser, cust.cfs_user_idUser, cust.Account_type_idAccount_type, acc.idAccount_type, pin.sales_summery_idsalessummery, cfs.account_name AS refered, acc.account_name AS package 
@@ -91,7 +99,7 @@ function printthis()
                                                 $db_sal_salestime = $value["sal_salestime"];
                                                 $db_sal_totalamount = $value["sal_totalamount"];
                                                 $db_sal_invoiceno = $value["sal_invoiceno"];
-                                                $db_sal_totalpv = $value['sal_totalpv'];
+                                                $db_sal_totalpv = $value['sal_total_profit'] * $current_pv;
                                                 $db_salsumid = $value['idsalessummary'];
                                                 $db_refered = $value['refered'];
                                                 $db_package = $value['package'];
@@ -115,7 +123,7 @@ function printthis()
                                                 $db_sal_salestime = $value["sal_salestime"];
                                                 $db_sal_totalamount = $value["sal_totalamount"];
                                                 $db_sal_invoiceno = $value["sal_invoiceno"];
-                                                $db_sal_totalpv = $value['sal_totalpv'];
+                                                $db_sal_totalpv = $value['sal_total_profit'] * $current_pv;
                                                 $db_salsumid = $value['idsalessummary'];
                                                 $db_refered = $value['refered'];
                                                 $db_package = $value['package'];
