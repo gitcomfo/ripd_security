@@ -18,7 +18,7 @@ foreach ($pvrow as $value) {
     $current_pv = $value['pv_value'];
 }
 $inventstmt = $conn->prepare("SELECT * FROM inventory WHERE ins_productid= ? AND ins_ons_type=? AND ins_ons_id =? AND ins_product_type = ? ");
-$insstmt = $conn->prepare("INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_pv, pckg_selling_price ,pckg_buying_price, pckg_original_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?,?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?)");
+$insstmt = $conn->prepare("INSERT INTO package_inventory(pckg_infoid ,pckg_quantity , pckg_selling_price ,pckg_buying_price, pckg_original_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?,?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?)");
 $stmtsel = $conn ->prepare( "SELECT * FROM package_info WHERE idpckginfo= ?");
 $selectstmt2 = $conn ->prepare("SELECT * FROM package_details WHERE pckg_infoid = ?");
 $selectstmt3 = $conn ->prepare("SELECT * FROM product_chart WHERE idproductchart= ? ");
@@ -32,12 +32,11 @@ if(isset($_POST['update']))
     $P_updatedpckgxprofit = $_POST['updatexprofit'];
     $P_newqty = $_POST['newentry'];
     $P_pckgid = $_POST['pckgID'];
-    $P_pv = $_POST['updatepv'];
     $type = 'making';
     $timestamp=time(); //current timestamp
      $date=date("Y/m/d", $timestamp);  
     
-    $yes= $insstmt->execute(array($P_pckgid, $P_newqty,$P_pv,  $P_updatedpckgsell, $P_updatedpckgbuy, $P_oldpckgbuy, $P_updatedpckgprofit, $P_updatedpckgxprofit, $date, $cfsID, $type, $scatagory, $storeID));
+    $yes= $insstmt->execute(array($P_pckgid, $P_newqty, $P_updatedpckgsell, $P_updatedpckgbuy, $P_oldpckgbuy, $P_updatedpckgprofit, $P_updatedpckgxprofit, $date, $cfsID, $type, $scatagory, $storeID));
     if($yes ==1)
     {$msg = "প্যাকেজটি সফলভাবে এন্ট্রি হয়েছে";}
     else { $msg = "দুঃখিত প্যাকেজটি এন্ট্রি হয়নি";}
@@ -436,7 +435,7 @@ if($_GET['step']==1) {
                                                                         $prosell = $row['ins_sellingprice'] * $proqty;
                                                                         $proprofit = $row['ins_profit'] * $proqty;
                                                                         $proxprofit = $row['ins_extra_profit'] * $proqty;
-                                                                        $propv = $row['ins_pv'];
+                                                                        $propv = $proprofit * $current_pv;
                                                                         $buysum = $buysum+$probuy;
                                                                         $sellsum = $sellsum+$prosell;
                                                                         $profitsum = $profitsum+$proprofit;
@@ -544,9 +543,10 @@ if($_GET['step']==1) {
                                                         foreach($pckgall as $pckgrow)
                                                         {
                                                            $db_pckgsell = $pckgrow['ins_sellingprice'];
-                                                            $db_pckgpv= $pckgrow['ins_pv'];
+                                                            
                                                             $db_pckgxprofit = $pckgrow['ins_extra_profit'];
                                                             $db_pckgprofit= $pckgrow['ins_profit'];
+                                                            $db_pckgpv= $db_pckgprofit * $current_pv;
                                                             $db_pckgqty= $pckgrow['ins_how_many'];
                                                             $db_pckgbuy = $pckgrow['ins_buying_price'];
                                                         }

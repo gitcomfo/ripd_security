@@ -14,7 +14,7 @@ $pvrow = $sql_runningpv->fetchAll();
 foreach ($pvrow as $value) {
     $current_pv = $value['pv_value'];
 }
- $insstmt = $conn ->prepare("INSERT INTO package_inventory(pckg_infoid ,pckg_quantity ,pckg_pv, pckg_selling_price ,pckg_buying_price, pckg_original_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?)");
+ $insstmt = $conn ->prepare("INSERT INTO package_inventory(pckg_infoid ,pckg_quantity , pckg_selling_price ,pckg_buying_price, pckg_original_buying_price, pckg_profit, pckg_extraprofit, making_date, pckg_makerid, pckg_type, ons_type, ons_id) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?)");
  $selectstmt = $conn ->prepare("SELECT * FROM inventory WHERE ins_productid= ? AND ins_ons_type=? AND ins_ons_id =? AND ins_product_type = 'general'");
 
  if(isset($_POST['ok']))
@@ -38,11 +38,10 @@ if(isset($_POST['entry']))
     $pckgprofit = $_POST['pckgprofitless'];
     $pckgxprofit = $_POST['pckgxprofitless'];
     $P_pckgselling = $_POST['pckgsellprz'];
-    $P_pckgpv = $_POST['pckgpv'];
      $timestamp=time(); //current timestamp
      $date=date("Y/m/d", $timestamp);  
      $pckgtype = "making";
-     $x = $insstmt->execute(array($P_pckgID, $P_pckgqty,$P_pckgpv, $P_pckgselling, $P_pckgbuying,$P_pckgbuying, $pckgprofit, $pckgxprofit, $date, $cfsID, $pckgtype, $scatagory, $storeID));
+     $x = $insstmt->execute(array($P_pckgID, $P_pckgqty,$P_pckgselling, $P_pckgbuying,$P_pckgbuying, $pckgprofit, $pckgxprofit, $date, $cfsID, $pckgtype, $scatagory, $storeID));
      
     if($x == 1)
        {

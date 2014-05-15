@@ -29,7 +29,6 @@ if(isset($_POST['break']))
               foreach($getpckg as $pckg)
                   {
                      $db_pckgqty = $pckg['pckg_quantity'];
-                     $db_pckgpv = $pckg['pckg_pv'];
                      $db_pckgsell = $pckg['pckg_selling_price'];
                      $db_pckgbuy = $pckg['pckg_buying_price'];
                      $db_pckgprofit = $pckg['pckg_profit'];
