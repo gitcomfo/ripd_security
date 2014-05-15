@@ -394,7 +394,7 @@ function addToCart() // to add into temporary array*******************
 </div>
 </fieldset></form>
 
-  <fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
+<fieldset style="border-width: 3px;margin:0 20px 0 20px;font-family: SolaimanLipi !important;">
 <legend style="color: brown;">ক্রয়কৃত পণ্যের তালিকা</legend>
     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
       <tr>
@@ -422,7 +422,7 @@ function addToCart() // to add into temporary array*******************
                   echo '</tr>';
 }
 ?>
-</table>
+    </table>
 </fieldset>
 <form action="preview2.php" method="post" name="mn" id="suggestSearch">
 <div align="right" style="margin-top:10px;margin-right:100px;font-family: SolaimanLipi !important;">
