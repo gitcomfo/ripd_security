@@ -144,7 +144,7 @@ if(isset($_POST['entry']))
                 }
                 else
                 {
-                    echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে')</script>;
+                    echo "<script>alert('প্রোডাক্ট সফলভাবে এন্ট্রি হয়েছে');
                                         window.location='productIN.php'; 
                               </script>";
                 }

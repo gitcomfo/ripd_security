@@ -34,16 +34,6 @@ function get_catagory() {
        function details_show(id){
                   TINY.box.show({url:'product_details.php?sum_id='+id,width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
        </script>
-        <style type="text/css">
-            .prolinks:focus{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
-            .prolinks:hover{
-                background-color: cadetblue;
-                color: yellow !important;
-            }
-        </style>
         <!--===========================================================================================================================-->
         <script>
             function showTypes(catagory) // for types dropdown list
