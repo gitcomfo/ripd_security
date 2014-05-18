@@ -182,9 +182,6 @@ $result= $sel_sales_summary->fetchAll();
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" /> 
 <script src="scripts/tinybox.js" type="text/javascript"></script>
 <script type="text/javascript">
- function pinGenerate(ssumid,totalpv)
-	{ TINY.box.show({url:'pinGenerator.php?ssumid='+ssumid+'&pv='+totalpv,animate:true,close:true,boxid:'success',top:100,width:400,height:100}); }
-
  function accGenerate()
 	{ TINY.box.show({iframe:'accountGenerator.php',width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
  </script> 
