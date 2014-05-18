@@ -326,6 +326,27 @@ function readBarcode(code,location) {
         }	
 }       	
 
+function pinGenerate()
+{
+        var reqst = getXMLHTTP();		
+        if (reqst) 
+        {
+            reqst.onreadystatechange = function()
+            {
+                if (reqst.readyState == 4) 
+                {			
+                    if (reqst.status == 200)
+                    { 
+                         document.getElementById('pinNo').value=reqst.responseText;
+                    } 
+                    else 
+                    {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
+                }				
+            }			
+            reqst.open("GET", "pinGenerator.php?generate=1", true);
+            reqst.send(null);
+        }	
+}
 function addToCart() // to add into temporary array*******************
     {
         var id = document.getElementById("inventoryID").value;

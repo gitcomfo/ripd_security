@@ -43,23 +43,23 @@ $sql_select_own_buy = $conn->prepare("SELECT * FROM sal_for_own_store, inventory
                        $sql_select_own_buy->execute(array($storeID, $scatagory));
                        $arr_discount = $sql_select_own_buy->fetchAll();
                        foreach ($arr_discount as $row) {
-                        $db_date = english2bangla(date('d-m-Y', strtotime($row["buying_date"])));
-                        $db_procode = $row["ins_product_code"];
-                        $db_pro_name = $row["ins_productname"];
-                        $db_how_many =  english2bangla($row['qty']);
-                        $db_buying_price_org = english2bangla($row['ins_buying_price']);
-                        $db_buying_price_total = english2bangla($row['total_buying_price']);
-                        $db_username = $row['account_name'];
-                        echo '<tr>';
-                        echo '<td><div align="center">' . $db_date . '</div></td>';
-                        echo '<td>' . $db_procode . '</td>';
-                        echo '<td>' . $db_pro_name . '</td>';
-                        echo '<td><div align="center">' . $db_buying_price_org . '</div></td>';
-                        echo '<td><div align="center">' . $db_how_many . '</div></td>';
-                        echo '<td><div align="center">' . $db_buying_price_total . '</div></td>';                      
-                        echo '<td><div align="center">' . $db_username . '</div></td>';
-                        echo '</tr>';
-                    }
+                            $db_date = english2bangla(date('d-m-Y', strtotime($row["buying_date"])));
+                            $db_procode = $row["ins_product_code"];
+                            $db_pro_name = $row["ins_productname"];
+                            $db_how_many =  english2bangla($row['qty']);
+                            $db_buying_price_org = english2bangla($row['ins_buying_price']);
+                            $db_buying_price_total = english2bangla($row['total_buying_price']);
+                            $db_username = $row['account_name'];
+                            echo '<tr>';
+                            echo '<td><div align="center">' . $db_date . '</div></td>';
+                            echo '<td>' . $db_procode . '</td>';
+                            echo '<td>' . $db_pro_name . '</td>';
+                            echo '<td><div align="center">' . $db_buying_price_org . '</div></td>';
+                            echo '<td><div align="center">' . $db_how_many . '</div></td>';
+                            echo '<td><div align="center">' . $db_buying_price_total . '</div></td>';                      
+                            echo '<td><div align="center">' . $db_username . '</div></td>';
+                            echo '</tr>';
+                        }
                     ?>
                 </table>
             </div>

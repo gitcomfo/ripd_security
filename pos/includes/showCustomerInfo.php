@@ -7,8 +7,10 @@ if($_GET['selltype']=='1')
     {
         case 1:
             echo "<table width='100%' cellspacing='0' cellpadding='0' style='border: #000000 inset 1px; font-size:20px;'><tr>";
-            echo "<td width='50%'>কাস্টমার অ্যাকাউন্ট নং: <input id='accountNo' name='accountNo'  onblur='showCustName(this.value)' maxlength='15' /></td>";
+            echo "<td width='40%'>কাস্টমার অ্যাকাউন্ট নং: <input id='accountNo' name='accountNo'  onblur='showCustName(this.value)' maxlength='15' /></td>";
             echo "<td>কাস্টমারের নামঃ <input type= 'text' id='acName' name='acName' readonly /></td>";
+            echo "<td>পিন নং<a onclick='pinGenerate()' style='margin: 1% 5% 5% 5%;display: block;width: 30px;height: 30px;float: left;background-image: url(images/pingenerator.png);background-repeat: no-repeat;background-size:100% 100%;text-align:center;cursor:pointer;text-decoration:none;'></a>
+                        <input type= 'text' id='pinNo' name='pinNo' readonly /></td>";
             echo "</tr></table>";
         break;
         case 2:
