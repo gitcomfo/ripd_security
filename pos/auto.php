@@ -338,12 +338,13 @@ function pinGenerate()
                     if (reqst.status == 200)
                     { 
                          document.getElementById('pinNo').value=reqst.responseText;
+                         document.getElementById('pinflag').value=1;
                     } 
                     else 
                     {alert("There was a problem while using XMLHTTP:\n" + reqst.statusText);}
                 }				
             }			
-            reqst.open("GET", "pinGenerator.php?generate=1", true);
+            reqst.open("GET", "pinGenerator.php", true);
             reqst.send(null);
         }	
 }
@@ -481,7 +482,7 @@ function addToCart() // to add into temporary array*******************
                             $finalPV +=  $row[6];
                         }
                     ?>
-                    <b>সর্বমোট পিভি :</b><?php echo english2bangla($finalPV); ?></br>
+                    <b>সর্বমোট পিভি :</b><?php echo english2bangla($finalPV); ?><input type="hidden" name="pinflag" id="pinflag" value="0" /></br>
                     <b>সর্বমোট :</b><input name="tretail" type="hidden" id="tretail" size="20" style="text-align:right;" value="<?php echo $finalTotal; ?>" readonly/><?php echo english2bangla($finalTotal); ?> টাকা</b></br>
                     <b>প্রদেয় টাকা&nbsp;:</b> <input name="gtotal" type="hidden" id="gtotal" size="20" readonly style="text-align:right;" value="<?php echo $finalTotal; ?>"/><?php echo english2bangla($finalTotal); ?> টাকা
                 </div>    
