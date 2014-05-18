@@ -8,7 +8,7 @@ $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory = $_SESSION['loggedInOfficeType'];
 
 $sql_select_own_buy = $conn->prepare("SELECT * FROM sal_for_own_store, inventory, cfs_user WHERE fk_inventory_id = idinventory
-                                                                            AND buyerid = idUser AND ons_id = ? AND ons_type = ? ORDER BY buying_date");
+                                                                            AND buyerid = idUser AND ons_id = ? AND ons_type = ? ORDER BY buying_date DESC");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
