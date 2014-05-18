@@ -35,6 +35,7 @@ if(isset($_POST['submit']))
     $result1= $ins_dead_product->execute(array($p_productID,$p_productQty,$discountProductCode,$p_originalBuying,$p_newBuying,$p_newProfit, $p_newXprofit, $p_newSelling, $logedInUserID));
     if($result1 == 1)
     {
+        unset($_SESSION['pro_inventory_array']);
        echo "<script>alert('ডিসকাউন্ট দেয়া হয়েছে')</script>"; 
     }
     else {

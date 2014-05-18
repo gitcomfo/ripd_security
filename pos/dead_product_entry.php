@@ -19,6 +19,7 @@ if(isset($_POST['submit']))
     $result1= $ins_dead_product->execute(array($p_productID,$p_productQty, $db_buyingprice, $p_productReason,$logedInUserID));
     if($result1 == 1)
     {
+        unset($_SESSION['pro_inventory_array']);
        echo "<script>alert('প্রোডাক্ট সফলভাবে বাতিল হয়েছে')</script>"; 
     }
  else {
