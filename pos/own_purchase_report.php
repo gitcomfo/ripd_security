@@ -7,7 +7,7 @@ $storeName = $_SESSION['loggedInOfficeName'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory = $_SESSION['loggedInOfficeType'];
 
-$sql_select_own_buy = $conn->prepare("SELECT * FROM sal_for own_store, inventory, cfs_user WHERE fk_inventory_id = idinventory
+$sql_select_own_buy = $conn->prepare("SELECT * FROM sal_for_own_store, inventory, cfs_user WHERE fk_inventory_id = idinventory
                                                                             AND buyerid = idUser AND ons_id = ? AND ons_type = ? ORDER BY buying_date");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -19,7 +19,7 @@ $sql_select_own_buy = $conn->prepare("SELECT * FROM sal_for own_store, inventory
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 </head>
 
-<body onLoad="ShowTime()">
+<body>
     <div id="maindiv">
         <div id="header" style="width:100%;height:100px;background-image: url(../images/sara_bangla_banner_1.png);background-repeat: no-repeat;background-size:100% 100%;margin:0 auto;"></div></br>
         <div style="width: 90%;height: 70px;margin: 0 5% 0 5%;float: none;">
@@ -32,7 +32,7 @@ $sql_select_own_buy = $conn->prepare("SELECT * FROM sal_for own_store, inventory
             <div id="resultTable">
                 <table width="100%" border="1" cellspacing="0" cellpadding="0" style="border-color:#000000; border-width:thin; font-size:18px;">
                     <tr>
-                        <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>তারিখ</strong></div></td>
+                        <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>তারিখ</strong></div></td>
                         <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>প্রোডাক্টের কোড</strong></div></td>
                         <td width="25%" style="color: blue; font-size: 25px"><div align="center"><strong>প্রোডাক্টের নাম</strong></div></td>
                         <td width="8%" style="color: blue; font-size: 25px"><div align="center"><strong>একক ক্রয়মূল্য</strong></div></td>
