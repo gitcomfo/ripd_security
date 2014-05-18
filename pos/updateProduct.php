@@ -172,7 +172,7 @@ function out()
                                         <td colspan="2">এক্সট্রা প্রফিট : <input type="text" name="updatedxprofit" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" onkeyup="calculate(this.value)" onkeypress='return checkIt(event)' /> টাকা</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2">প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" name="updatedprofit" id="updatedprofit" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" /> টাকা</td>
+                                        <td colspan="2">প্রফিট&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" name="updatedprofit" id="updatedprofit" style="width: 100px;text-align: right;padding-right: 5px;font-size: 16px;" readonly /> টাকা</td>
                                     </tr>
                                 </table>
                             </fieldset>
