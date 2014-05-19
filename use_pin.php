@@ -1,67 +1,153 @@
 <?php
+mysql_error();
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
 $logedInUserID = $_SESSION['userIDUser'];
 $logedinOfficeId = $_SESSION['loggedInOfficeID'];
 
-if(isset($_POST['pay']))
+if(isset($_POST['check']))
 {
-    $p_adminpass = md5($_POST['pass']);
-    $p_sendID = $_POST['sendID'];
-    $p_amount = $_POST['getamount'];
-    $p_send_track = $_POST['sendtrack'];
-    $p_amount_track = $_POST['amounttrack'];
-    $p_charge_amount = $_POST['chargeamount'];
-    $charge_code = 'CSA';
-    $arr_send_track = explode(',', $p_send_track);
-    $arr_amount_track = explode(',', $p_amount_track);
-    $arr_fund = array('1'=>'HIA','2'=>'RHC');
+    $p_commandid = $_POST['commandID'];
+    $p_pinprofit = $_POST['pinprofit'];
+    $p_ssumID = $_POST['salessummaryID'];
     
-    $up_main_fund = $conn->prepare("UPDATE main_fund SET fund_amount = fund_amount - ?, last_update=NOW() WHERE fund_code = ?");
-    
-    $sel_onsID = $conn->prepare("SELECT idons_relation FROM ons_relation WHERE add_ons_id = ? AND catagory='office'");
-    $sel_onsID->execute(array($logedinOfficeId));
-    $offrow = $sel_onsID->fetchAll();
-    foreach ($offrow as $value) {
-       $office_ons_id = $value['idons_relation'];
+    // select referers *************************************
+        $sel_referer = mysql_query("SELECT * FROM view_usertree WHERE ut_customerid = $logedInUserID");
+        while($row = mysql_fetch_assoc($sel_referer)) {
+            $one = $row['ut_first_parentid'];
+            $two = $row['ut_second_parentid'];
+            $three = $row['ut_third_parentid'];
+            $four = $row['ut_fourth_parentid'];
+            $five = $row['ut_fifth_parentid'];
+        }
+        // select customer pkg ******************************
+        $sel_cust_pkg = mysql_query("SELECT Account_type_idAccount_type FROM customer_account WHERE cfs_user_idUser = $logedInUserID");
+        while($row = mysql_fetch_assoc($sel_cust_pkg)) {
+            $pkgtype = $row['Account_type_idAccount_type'];
+        }
+        
+     // select view pv view **************************
+     $sel_pv_view = mysql_query("SELECT * FROM view_pv_view WHERE cust_type = 'account' AND sales_type= 'general' 
+                                                    AND store_type='both' AND account_type_id=$pkgtype AND idcommand = $p_commandid");
+    while($row = mysql_fetch_assoc($sel_pv_view)) {
+        $direct_sales = $row['direct_sales_cust'];
+        $Rone = $row['Rone'];
+        $Rtwo = $row['Rtwo'];
+        $Rthree = $row['Rthree'];
+        $Rfour = $row['Rfour'];
+        $Rfive = $row['Rfive'];
     }
-    
-    $sel_user = $conn->prepare("SELECT * FROM cfs_user WHERE idUser =? AND password = ?");
-    $sel_user->execute(array($logedInUserID,$p_adminpass));
-    $cfsrow = $sel_user->fetchAll();
-    if(count($cfsrow) == 0)
-    {
-        echo "<script>alert('দুঃখিত, পাসওয়ার্ড সঠিক হয়নি')</script>";
-    }
-    else {
-            $conn->beginTransaction();
-            
-            $up_amount_transfer = $conn->prepare("UPDATE acc_user_amount_transfer SET send_amt_status='paid', send_paid_date=NOW(), 
-                                                                                paid_office_id=? WHERE idpamounttrans = ? ");
-            $update = $up_amount_transfer->execute(array($office_ons_id,$p_sendID));
-            
-            for($i=0;$i<count($arr_send_track);$i++)
+    $borkot = 0;
+     mysql_query("START TRANSACTION");
+        if($one != 0)
+        {
+            $one_hit = ($p_pinprofit * $Rone) / 100;
+            $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $one_hit, total_balanace = total_balanace + $one_hit WHERE cfs_user_iduser = $one ");
+            $sql5 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $one_hit, last_update = NOW() WHERE fund_code = 'RHC'");
+            $sel_child_row = mysql_query("SELECT * FROM cust_pv_child_date WHERE cust_own_id = $one AND date = CURDATE() ");
+            if(mysql_num_rows($sel_child_row)> 0)
             {
-                $track_no = $arr_send_track[$i];
-                $fundcode = $arr_fund[$track_no];
-                $update1 = $up_main_fund->execute(array($arr_amount_track[$i],$fundcode));
+               $sql6 = mysql_query("UPDATE cust_pv_child_date SET cust_c1 = cust_c1+$one_hit WHERE cust_own_id = $one AND date = CURDATE() ");
             }
-            
-            $update2 = $up_main_fund->execute(array($p_charge_amount,$charge_code));
-            
-            $ins_daily_inout = $conn->prepare("INSERT INTO acc_ofc_daily_inout (daily_date, daily_onsid, out_amount) VALUES (NOW(),?,?)");
-            $insert = $ins_daily_inout->execute(array($office_ons_id,$p_amount));
-                if($update && $insert && $update1 && $update2)
+            else
                 {
-                    $conn->commit();
-                    echo "<script>alert('টাকা প্রদান করা হল')</script>";
+                    $sql6 = mysql_query("INSERT INTO cust_pv_child_date (cust_own_id,cust_c1,date) VALUES ($one,$one_hit,NOW())");
                 }
-                else
+        }
+        else { $borkot = $borkot + (($p_pinprofit * $Rone) / 100); $one_hit = 0; $sql1=1; $sql5=1; $sql6 =1;}
+        
+        if($two != 0)
+        {
+            $two_hit = ($p_pinprofit * $Rtwo) / 100;
+            $sql1=mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $two_hit, total_balanace = total_balanace + $two_hit WHERE cfs_user_iduser = $two ");
+            $sql5 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $two_hit, last_update = NOW() WHERE fund_code = 'RHC'");
+            $sel_child_row = mysql_query("SELECT * FROM cust_pv_child_date WHERE cust_own_id = $two AND date = CURDATE()");
+            if(mysql_num_rows($sel_child_row)> 0)
+            {
+               $sql6 = mysql_query("UPDATE cust_pv_child_date SET cust_c2 = cust_c2+$two_hit WHERE cust_own_id = $two AND date = CURDATE()");
+            }
+            else
                 {
-                    $conn->rollBack();
-                    echo "<script>alert('দুঃখিত, টাকা প্রদান করা হয়নি')</script>";
+                    $sql6 = mysql_query("INSERT INTO cust_pv_child_date (cust_own_id,cust_c2,date) VALUES ($two,$two_hit,NOW())");
                 }
-       }
+        }
+        else { $borkot = $borkot + (($p_pinprofit * $Rtwo) / 100); $two_hit = 0;  }
+        
+        if($three != 0)
+        {
+            $three_hit = ($p_pinprofit * $Rthree) / 100;
+            $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $three_hit, total_balanace = total_balanace + $three_hit WHERE cfs_user_iduser = $three ");
+            $sql5 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $three_hit, last_update = NOW() WHERE fund_code = 'RHC'");
+            $sel_child_row = mysql_query("SELECT * FROM cust_pv_child_date WHERE cust_own_id = $three AND date = CURDATE()");
+            if(mysql_num_rows($sel_child_row)> 0)
+            {
+               $sql6 = mysql_query("UPDATE cust_pv_child_date SET cust_c3 = cust_c3+$three_hit WHERE cust_own_id = $three AND date = CURDATE()");
+            }
+            else
+                {
+                    $sql6 = mysql_query("INSERT INTO cust_pv_child_date (cust_own_id,cust_c3,date) VALUES ($three,$three_hit,NOW())");
+                }
+        }
+        else { $borkot = $borkot + (($p_pinprofit * $Rthree) / 100); $three_hit = 0;  }
+        if($four != 0)
+        {
+            $four_hit = ($p_pinprofit * $Rfour) / 100;
+            $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $four_hit, total_balanace = total_balanace + $four_hit WHERE cfs_user_iduser = $four ");
+            $sql5 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $four_hit, last_update = NOW() WHERE fund_code = 'RHC'");
+            $sel_child_row = mysql_query("SELECT * FROM cust_pv_child_date WHERE cust_own_id = $four AND date = CURDATE()");
+            if(mysql_num_rows($sel_child_row)> 0)
+            {
+               $sql6 = mysql_query("UPDATE cust_pv_child_date SET cust_c4 = cust_c4+$four_hit WHERE cust_own_id = $four AND date = CURDATE()");
+            }
+            else
+                {
+                    $sql6 = mysql_query("INSERT INTO cust_pv_child_date (cust_own_id,cust_c4,date) VALUES ($four,$four_hit,NOW())");
+                }
+        }
+        else { $borkot = $borkot + (($p_pinprofit * $Rfour) / 100); $four_hit = 0;  }
+        if($five != 0)
+        {
+            $five_hit = ($p_pinprofit * $Rfive) / 100;
+            $sql1 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $five_hit, total_balanace = total_balanace + $five_hit WHERE cfs_user_iduser = $five ");
+            $sql5 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $five_hit, last_update = NOW() WHERE fund_code = 'RHC'");
+            $sel_child_row = mysql_query("SELECT * FROM cust_pv_child_date WHERE cust_own_id = $five AND date = CURDATE()");
+            if(mysql_num_rows($sel_child_row)> 0)
+            {
+               $sql6 = mysql_query("UPDATE cust_pv_child_date SET cust_c5 = cust_c5+$five_hit WHERE cust_own_id = $five AND date = CURDATE()");
+            }
+            else
+                {
+                    $sql6 = mysql_query("INSERT INTO cust_pv_child_date (cust_own_id,cust_c5,date) VALUES ($five,$five_hit,NOW())");
+                }
+        }
+        else { $borkot = $borkot + (($p_pinprofit * $Rfive) / 100); $five_hit = 0;  }
+        
+        $own_hit = ($p_pinprofit * $direct_sales) / 100;
+        $sel_own_row = mysql_query("SELECT * FROM cust_pv_child_date WHERE cust_own_id = $logedInUserID AND date = CURDATE()");
+            if(mysql_num_rows($sel_own_row)> 0)
+            {
+               $sql7 = mysql_query("UPDATE cust_pv_child_date SET cust_own_pv = cust_own_pv+$own_hit WHERE cust_own_id = $logedInUserID AND date = CURDATE()");
+            }
+            else
+                {
+                    $sql7 = mysql_query("INSERT INTO cust_pv_child_date (cust_own_id,cust_own_pv,date) VALUES ($logedInUserID,$own_hit,NOW())");
+                }
+           
+           $sql5 = mysql_query("UPDATE sales_customer_hitting SET own = $own_hit ,Rone = $one_hit,Rtwo = $two_hit,Rthree = $three_hit ,
+                                                Rfour = $four_hit ,Rfive = $five_hit,borkot = $borkot WHERE  sales_summery_idsalessummery = $p_ssumID") or exit(mysql_error());
+           $sql4 = mysql_query("UPDATE acc_user_balance SET pv_balance = pv_balance + $own_hit, total_balanace = total_balanace + $own_hit WHERE cfs_user_iduser = $logedInUserID ");
+           $sql8 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $own_hit, last_update = NOW() WHERE fund_code = 'RHC'");
+           $sql9 = mysql_query("UPDATE pin_makingused SET pin_state = 'selfaccount', pin_used_date= CURDATE(), 
+                                                pin_usedby_cfsuserid = $logedInUserID WHERE fk_idsalessummary = $p_ssumID");
+           
+           if($sql1 && $sql4 && $sql5 && $sql6 && $sql7 && $sql8 && $sql9)
+           {         
+                mysql_query("COMMIT");
+                echo "<script>alert('পিন ব্যবহৃত হয়েছে');</script>";
+           }
+          else {
+               mysql_query("ROLLBACK");
+               echo "<script>alert('দুঃখিত,পিন ব্যবহৃত হয়নি');</script>";
+           }
 }
 ?>
 
@@ -88,13 +174,12 @@ function getPinInfo(pin) // find pin info *****************
 
 function beforeSubmit()
     {
-        if((document.getElementById('chequeStatus').value == 'made')
-            && (document.getElementById('pass').value != ""))
+        if(document.getElementById('pindate').value != '')
         {
             return true;
         }
         else {
-            alert("দুঃখিত,চেক স্ট্যাটাস টাকা প্রদানের উপযোগী নয়\nঅথবা\nপাসওয়ার্ড দেয়া হয়নি");
+            alert("দুঃখিত, আপনার পিন নম্বরটি সঠিক নয় অথবা ব্যবহৃত হয়েছে");
             return false; 
         }
     }
