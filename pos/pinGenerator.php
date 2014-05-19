@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 include 'includes/ConnectDB.inc';
 $cfsID = $_SESSION['userIDUser'];
 
@@ -13,11 +13,11 @@ $check=1;
                 $str_pin_random= str_pad($str_random_no,4, "0", STR_PAD_LEFT);
                 $str_pin =$str_pin."-".$str_pin_random;
             }
-        $result = mysql_query("SELECT * FROM pin_makingused where pin_no= '$str_pin'");
+        $result = mysql_query("SELECT * FROM pin_makingused WHERE pin_no= '$str_pin'");
         if(mysql_num_rows($result) == 0)
         {
-            $insreslt = mysql_query( "INSERT INTO pin_makingused (pin_no ,pin_state, pin_making_date, pin_madeby_cfsuserid) 
-                                                    VALUES ('$str_pin', 'open', CURDATE(), $cfsID)");
+            mysql_query("INSERT INTO pin_makingused (pin_no ,pin_state, pin_making_date, pin_madeby_cfsuserid) 
+                                    VALUES ('$str_pin', 'open', CURDATE(), $cfsID)") or exit(mysql_error());
             $check = 2;
         }
     }

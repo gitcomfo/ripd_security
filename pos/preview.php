@@ -161,10 +161,10 @@ $result= $sel_sales_summary->fetchAll();
         if($p_pinflag == 1)
         {
             $p_pinno = $_POST['pinNo'];
-            pin_pv_hitting($sales_sum_id,$totalprofit,$p_pinno);
+            pin_pv_hitting($buyerid,$sales_sum_id,$totalprofit,$p_pinno);
         }
         else {
-            $pv_hitting = pv_hitting($buyerid,$buyertype,$sales_sum_id,'general',$totalprofit);
+            pv_hitting($buyerid,$buyertype,$sales_sum_id,'general',$totalprofit);
         }
     }
  else {
@@ -200,7 +200,7 @@ $result= $sel_sales_summary->fetchAll();
     <table width="100%" border="1" cellspacing="0" cellpadding="0" style="font-family: SolaimanLipi !important; font-size:14px;">
       <tr>
           <td width="17%"><div align="center"><strong>প্রোডাক্ট কোড</strong></div></td>
-        <td width="43%"><div align="center"><strong>প্রোডাক্ট-এর নাম</strong></div></td>       
+        <td width="43%"><div align="center"><strong>প্রোডাক্টের নাম</strong></div></td>       
         <td width="10%"><div align="center"><strong>খুচরা মূল্য</strong></div></td>
         <td width="17%"><div align="center"><strong>পরিমাণ</strong></div></td>
         <td width="13%"><div align="center"><strong>মোট টাকা</strong></div></td>
@@ -223,28 +223,28 @@ $result= $sel_sales_summary->fetchAll();
               }
               
 ?>
-<td colspan="4" ><div align="right"><strong>সর্বমোট:</strong>&nbsp;</div></td>
+<td colspan="4" ><div align="right"><strong>সর্বমোট</strong>&nbsp;</div></td>
 <td width="13%"><div align="right" style="padding-right: 8px;"><?php echo english2bangla($finalTotal);?></div></td>
 </tr>
 <tr>
-    <td colspan="4" ><div align="right"><strong>প্রদেয় টাকা:</strong>&nbsp;</div></td>
+    <td colspan="4" ><div align="right"><strong>প্রদেয় টাকা</strong>&nbsp;</div></td>
     <td width="13%" ><div align="right"  style="padding-right: 8px;"><?php echo english2bangla($finalTotal);?></div></td>
 </tr>
 <tr>
-    <td colspan="4" ><div align="right"><strong>পেমেন্ট টাইপ:</strong>&nbsp;</div></td>
+    <td colspan="4" ><div align="right"><strong>পেমেন্ট টাইপ</strong>&nbsp;</div></td>
     <td width="13%" ><div align="right"  style="padding-right: 8px;"><?php echo $pay;?></div></td>
 </tr>
 <tr>
-    <td colspan="4" ><div align="right"><strong>ক্যাশ টাকা গ্রহন:</strong>&nbsp;</div></td>
+    <td colspan="4" ><div align="right"><strong>ক্যাশ টাকা গ্রহন</strong>&nbsp;</div></td>
     <td width="13%" ><div align="right"  style="padding-right: 8px;"><?php echo english2bangla($P_getTaka);?></div></td>
 </tr>
 <tr>
-    <td colspan="4" ><div align="right"><strong>ক্যাশ টাকা ফেরত:</strong>&nbsp;</div></td>
+    <td colspan="4" ><div align="right"><strong>ক্যাশ টাকা ফেরত</strong>&nbsp;</div></td>
     <td width="13%" ><div align="right" style="padding-right: 8px;"><?php echo english2bangla($P_actualChange);?></div></td>
 </tr>
 <?php if($buyertype == 'customer') {?>
 <tr>
-    <td colspan="4" ><div align="right"><strong>মোট পিভি:</strong>&nbsp;</div></td>
+    <td colspan="4" ><div align="right"><strong>মোট পিভি</strong>&nbsp;</div></td>
     <td width="13%" ><div align="right" style="padding-right: 8px;"><?php echo english2bangla($finalPV);?></div></td>
 </tr>
 <?php }?>

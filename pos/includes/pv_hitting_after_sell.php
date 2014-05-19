@@ -287,22 +287,23 @@ function pv_hitting($custID, $cust_type, $sumID,$selling_type,$total_profit)
   return $flag;
 }
 
-function pin_pv_hitting($sumID,$total_profit,$pin)
+function pin_pv_hitting($custID,$sumID,$total_profit,$pin) // when pin no is generated, without directsell and reference hit ********************
 {
     $sel_current_command = mysql_query("SELECT idcommand FROM command LEFT JOIN running_command 
-                                                                    ON command.commandno = running_command.commandno");
+                                                                    ON command.commandno = running_command.commandno") or exit(mysql_error()."error1");
     $rowcommand = mysql_fetch_assoc($sel_current_command);
     $commandID = $rowcommand['idcommand'];
     $type = 'account';
 
      // select customer pkg ******************************
-        $sel_cust_pkg = mysql_query("SELECT Account_type_idAccount_type FROM customer_account WHERE cfs_user_idUser = $custID");
+        $sel_cust_pkg = mysql_query("SELECT Account_type_idAccount_type FROM customer_account WHERE cfs_user_idUser = $custID") or exit(mysql_error()."error2");
         while($row = mysql_fetch_assoc($sel_cust_pkg)) {
             $pkgtype = $row['Account_type_idAccount_type'];
         }
     
     // select view pv view **************************
-     $sel_pv_view = mysql_query("SELECT * FROM view_pv_view WHERE cust_type = '$type' AND sales_type= '$selling_type' AND store_type='both' AND account_type_id=$pkgtype AND idcommand = $commandID");
+     $sel_pv_view = mysql_query("SELECT * FROM view_pv_view WHERE cust_type = '$type' AND sales_type= 'general' 
+                                                    AND store_type='both' AND account_type_id=$pkgtype AND idcommand = $commandID") or exit(mysql_error()."error3");
         while($row = mysql_fetch_assoc($sel_pv_view)) {
             $se = $row['selling_earn'];
             $ri = $row['pv_ripd_income'];
@@ -356,19 +357,20 @@ function pin_pv_hitting($sumID,$total_profit,$pin)
         
         // calculate total soft cost ****************************     
            foreach ($arr_softcost as $key => $value) {
-               $sql2 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $value, last_update = NOW() WHERE fund_code = '$key' ");
+               $sql2 = mysql_query("UPDATE main_fund SET fund_amount = fund_amount + $value, last_update = NOW() WHERE fund_code = '$key' ") or exit(mysql_error()."error4");
                $total_softcost =$total_softcost+$value;
            }
            $se_hit = ($total_profit * $se) / 100;
            $ri_hit = ($total_profit * $ri) / 100;
            
            $sql3 = mysql_query("INSERT INTO sales_customer_hitting (selling_earn,soft_costing,ripd_income,sales_summery_idsalessummery) 
-                                             VALUES($se_hit,$total_softcost,$ri_hit,$sumID)");
+                                             VALUES($se_hit,$total_softcost,$ri_hit,$sumID)") or exit(mysql_error()."error5");
            
            $sql_pin = mysql_query("SELECT * FROM pin_makingused WHERE  pin_no = '$pin'");
                 if(mysql_num_rows($sql_pin) == 1)
                 { 
-                    $up_sql = mysql_query("UPDATE pin_makingused SET pin_total_profit = $total_profit, sales_summery_idsalessummery = $sumeryid "); 
+                    $up_sql = mysql_query("UPDATE pin_makingused SET pin_total_profit = $total_profit, command_id = $commandID, 
+                                                            fk_idsalessummary = $sumID WHERE pin_no = '$pin'") or exit(mysql_error()."error6"); 
                 }
 
            if($sql2 && $sql3 && $up_sql)
@@ -380,7 +382,7 @@ function pin_pv_hitting($sumID,$total_profit,$pin)
                mysql_query("ROLLBACK");
                $flag = 0;
            }
-           return $flag;
+        return $flag;
 }
 
 ?>
