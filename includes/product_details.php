@@ -51,7 +51,7 @@ foreach ($arr_product as $proRow) {
                                            <td>: <?php echo $db_proArticle;?></td>
                                        </tr>
                                        <tr>
-                                           <td colspan="2" style="text-align: center" ><img src="../<?php echo $db_proImage;?>" width="40px" height="40px"/></td>
+                                           <td colspan="2" style="text-align: center" ><img src="../<?php echo $db_proImage;?>" width="80px" height="80px"/></td>
                                        </tr>
                             </table>
                         </fieldset>

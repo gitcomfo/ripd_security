@@ -132,7 +132,7 @@ $result= $sel_sales_summary->fetchAll();
                 }
               $_SESSION['SESS_MEMBER_ID']=$str_recipt;
         }
-    $totalamount =0;  $totalbuy = 0; $totalprofit = 0;$totalxprofit=0;
+    $totalamount =0; $totalbuy = 0; $totalprofit = 0;$totalxprofit=0;
              foreach($_SESSION['arrSellTemp'] as $key => $row) {
                     $pro_qty = $row[4];
                    $totalamount = $totalamount + $row[5];
@@ -169,7 +169,8 @@ $result= $sel_sales_summary->fetchAll();
     }
  else {
         $conn->rollBack();
-        echo "<script>alert('দুঃখিত,প্রোডাক্ট বিক্রয় হয়নি')</script>";
+        echo "<script>alert('দুঃখিত,প্রোডাক্ট বিক্রয় হয়নি');
+            window.history.back();</script>";
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
