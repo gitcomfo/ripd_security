@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 include 'includes/ConnectDB.inc';
 $cfsID = $_SESSION['userIDUser'];
 

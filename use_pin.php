@@ -1,5 +1,4 @@
 <?php
-mysql_error();
 include_once 'includes/header.php';
 $logedInUserID = $_SESSION['userIDUser'];
 $logedinOfficeId = $_SESSION['loggedInOfficeID'];
