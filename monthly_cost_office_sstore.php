@@ -149,7 +149,7 @@ if (isset($_POST['submit'])) // ************************ insert query **********
 <script type="text/javascript" src="javascripts/jquery-1.4.3.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-  $('.inbox').blur(function() {
+  $('.inbox').keyup(function() {
         var total= 0;
         $(".inbox").filter(function() {
          var val = parseFloat($(this).val());
@@ -174,7 +174,7 @@ $('.del').live('click',function(){
     });
     $('.add').live('click',function()
     {
-        var appendTxt= "<tr><td><input class='textfield'  id='sub' name='sub[]' type='text' /></td><td><input class='inbox' onblur='calculate()' style='text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;' id='quantity1' name='quantity1[]' type='text' onkeypress='return checkIt(event)'  /><em2> *</em2>\n\
+        var appendTxt= "<tr><td><input class='textfield'  id='sub' name='sub[]' type='text' /></td><td><input class='inbox' onkeyup='calculate()' style='text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;' id='quantity1' name='quantity1[]' type='text' onkeypress='return checkIt(event)'  /><em2> *</em2>\n\
                                          TK </td><td><input type='button' class='del' /></td><td>&nbsp;<input type='button' class='add' /></td></tr>";
         $("#container_others:last").after(appendTxt);
     })
@@ -251,11 +251,11 @@ function beforeSubmit()
                     </tr>
                     <tr>
                         <td  >কারেন্ট বিল</td>
-                        <td >:   <input class="inbox" style="text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;" type="text" id="electicity_bill1" name="electicity_bill1" onkeypress="return checkIt(event)" value="<?php echo $current; ?>" onblur="calculateTotal(this.value);" /><em2> *</em2> TK<em> (ইংরেজিতে লিখুন)</em></td>
+                        <td >:   <input class="inbox" style="text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;" type="text" id="electicity_bill1" name="electicity_bill1" onkeypress="return checkIt(event)" value="<?php echo $current; ?>" /> TK<em2> *</em2></td>
                     </tr>
                     <tr>
                         <td >পানি বিল</td>
-                        <td>:   <input class="inbox" style="text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;" type="text" id="water_bill1" name="water_bill1" onkeypress="return checkIt(event)" value="<?php echo $water; ?>" onblur="calculateTotal(this.value);" /><em2> *</em2> TK<em> (ইংরেজিতে লিখুন)</em> </td>
+                        <td>:   <input class="inbox" style="text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;" type="text" id="water_bill1" name="water_bill1" onkeypress="return checkIt(event)" value="<?php echo $water; ?>" /> TK<em2> *</em2> </td>
                     </tr>                     
                     <tr>
                         <td colspan="2" ><hr /></td>
@@ -268,13 +268,13 @@ function beforeSubmit()
                             <table id="container_others">
                                 <tr>
                                      <td>বিষয়  :</td>
-                                      <td>পরিমান : <em> (ইংরেজিতে লিখুন)</em></td>
+                                      <td>পরিমান : </td>
                                  </tr>
                                 <?php
                                     for ($i = 0; $i < $count; $i++) {
                                         echo "<tr>";
                                         echo "<td style='width:20%;'><input class='textfield' type='text'  id='sub' name='sub[]' value='$sub[$i]' /></td>";
-                                        echo"<td style='width:27%;'><input class='inbox' style='text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;' id='quantity1' name='quantity1[]' type='text' onkeypress='return checkIt(event)' value='$quan[$i]' /><em2> *</em2> TK</td>";
+                                        echo"<td style='width:27%;'><input class='inbox' style='text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;' id='quantity1' name='quantity1[]' type='text' onkeypress='return checkIt(event)' value='$quan[$i]' /> TK<em2> *</em2></td>";
                                         echo "<td><input type='button' class='add' /></td></tr>";
                                     }
                                 ?>
@@ -285,7 +285,7 @@ function beforeSubmit()
                         <td colspan="2" ><hr /></td>
                     </tr>
                     <tr>
-                        <td>মোট</td>
+                        <td><b>মোট</b></td>
                         <td>: <input class="textfield" id="totalamount" name="totalamount"  type="text" readonly="" style="text-align: right;" value="<?php echo $totalcost;?>" /> TK</td>
                     </tr>
                     <tr>                    

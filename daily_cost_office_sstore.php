@@ -64,7 +64,7 @@ if (isset($_POST['submit'])) {
     });
     $('.add').live('click',function()
     {
-        var appendTxt= "<tr><td ><input class='inbox'  id='sub' name='sub[]' type='text' style=' width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;' /><em2> *</em2></td><td><input class='inbox' style='text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;' id='quantity1' name='quantity1[]' type='text' onkeypress='return numbersonly(event)' onblur='calculateTotal(this.value)' />\n\
+        var appendTxt= "<tr><td ><input id='sub' name='sub[]' type='text' style=' width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;' /><em2> *</em2></td><td><input class='inbox' style='text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;' id='quantity1' name='quantity1[]' type='text' onkeypress='return numbersonly(event)' onkeyup='calculateTotal()' />\n\
                                         <em2> *</em2> TK</td>\n\
                                          <td><textarea class='textfield' type='text' id='desc' name='desc[]' ></textarea></td><td ><input class='box5' type='file' id='cost_scandoc' name='cost_scandoc' style='font-size:10px;''/></td><td ><input type='button' class='del' /></td><td><input type='button' class='add' /></td><?php
 $new++;
@@ -93,12 +93,14 @@ function checkIt(evt) // float value-er jonno***********************
     status = "This field accepts numbers only.";
     return false;
 }
-function calculateTotal(amount)
+function calculateTotal()
 {
-    var taka = Number(amount);
-    var existtaka = Number(document.getElementById('totalamount').value);
-    var total = existtaka + taka;
-    document.getElementById('totalamount').value = total;
+    var total= 0;
+        $(".inbox").filter(function() {
+         var val = parseFloat($(this).val());
+         total = parseFloat(total) + val;
+    });
+    $('#totalamount').val(total);
 }
 function validate() {
         var notOK= 0;
@@ -133,14 +135,14 @@ function beforeSubmit()
                         <td colspan="6"><b>খরচের তারিখঃ </b><input class="box" type="text" id="date" placeholder="Date" name="exp_date"/><em2> *</em2></td>     
                     </tr>               
                     <tr>
-                        <td>বিষয়  :</td>
-                        <td>পরিমান : <em> (ইংরেজিতে লিখুন)</em></td>
-                        <td>ব্যাখ্যা  :</td>
-                        <td>স্ক্যান ডকুমেন্টস  :</td>
+                        <td><b>বিষয় :</b></td>
+                        <td><b>পরিমান :</b></td>
+                        <td><b>ব্যাখ্যা :</b></td>
+                        <td><b>স্ক্যান ডকুমেন্টস :</b></td>
                     </tr>
                     <tr id="container_others">
-                        <td><input class="inbox" id="sub" name="sub[]"  type="text" style=" width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;" /><em2> *</em2></td>
-                        <td><input class="inbox" style="text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;"" id="quantity1" name="quantity1[]" type="text" onkeypress="return checkIt(event)" onblur="calculateTotal(this.value);" /><em2> *</em2> TK</td>
+                        <td><input id="sub" name="sub[]"  type="text" style=" width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;" /><em2> *</em2></td>
+                        <td><input class="inbox" style="text-align: right;width: 135px;border: 1px inset darkblue;padding-left: 1px;-moz-border-radius: 2px;border-radius: 2px;" id="quantity1" name="quantity1[]" type="text" onkeypress="return checkIt(event)" onkeyup="calculateTotal();" /><em2> *</em2> TK</td>
                         <td><textarea class="textfield" type="text" id="desc" name="desc[]" ></textarea></td>
                         <td><input class="box5" type="file" id="cost_scandoc0" name="cost_scandoc0" style="font-size:10px;"/></td>
                         <td ></td>
@@ -150,12 +152,12 @@ function beforeSubmit()
                         <td colspan="2" ><hr /></td>
                     </tr>
                     <tr>
-                        <td style="text-align: right">মোট :</td>
+                        <td style="text-align: right"><b>মোট :</b></td>
                         <td><input class="textfield" id="totalamount" name="totalamount"  type="text" readonly="" style="text-align: right;" value="0" /> TK</td>
                     </tr>
                     <tr>                    
                         <td colspan="4" style="padding-left: 320px; " >
-                            </br><input class="btn" style =" font-size: 12px " type="submit" name="submit" id="submit" value="সেভ করুন" readonly="" />
+                            <br/><input class="btn" style =" font-size: 12px " type="submit" name="submit" id="submit" value="সেভ করুন" readonly="" />
                         </td>                           
                     </tr>
                 </table>
