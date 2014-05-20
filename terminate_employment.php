@@ -18,17 +18,17 @@ if(isset($_POST['submit']))
     $p_empcfsid = $_POST['cfsid'];
 
     $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
-        $extension = end(explode(".", $_FILES["terminationdoc"]["name"]));
-        $scan_name ="terminate_".$p_empcfsid."_".$_FILES["terminationdoc"]["name"];
-        $scan_path = "pic/" . $scan_name;
-        if (($_FILES["terminationdoc"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
-                {
-                    move_uploaded_file($_FILES["terminationdoc"]["tmp_name"], "pic/" . $scan_name);
-                } 
-        else 
-                {
-                echo "Invalid file format.";
-                }
+    $extension = end(explode(".", $_FILES["terminationdoc"]["name"]));
+    $scan_name ="terminate_".$p_empcfsid."_".$_FILES["terminationdoc"]["name"];
+    $scan_path = "pic/" . $scan_name;
+    if (($_FILES["terminationdoc"]["size"] < 999999999999) && in_array($extension, $allowedExts)) 
+            {
+                move_uploaded_file($_FILES["terminationdoc"]["tmp_name"], "pic/" . $scan_name);
+            } 
+    else 
+            {
+            echo "Invalid file format.";
+            }
     
     $sql_ins_terminate = mysql_query("INSERT INTO terminate_employeement (term_reason, term_date, term_explanation,  	terminated_by, payment_status, post_block_date, acc_block_date, emp_cfs_id, term_scandoc)
         VALUES ('$p_reason', '$p_terminationdate','$p_terminationdes', $db_onsid,'$p_paymentstatus', '$p_postblockdate', '$p_accblockdate', $p_empcfsid, '$scan_path');");
@@ -43,6 +43,12 @@ if(isset($_POST['submit']))
 ?>
 <title>চাকুরি স্থগিতকরন</title>
 <style type="text/css"> @import "css/bush.css";</style>
+<link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
+<script src="javascripts/tinybox.js" type="text/javascript"></script>
+<script type="text/javascript">
+ function showAttendanceSummary(id)
+     { TINY.box.show({url:'attendance_summary.php?empCfsID='+id,width:550,height:530,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+</script>
 <script>
     function getEmployee(keystr) //search employee by account number***************
 {
@@ -172,7 +178,7 @@ function beforeSubmit()
                                     <div id="empfound"></div></td>
                                     </tr>
                                     <tr>
-                                        <td width="34%" rowspan='4' style="padding-left: 0px;"> <img src="<?php echo $db_empphoto;?>" width="128px" height="128px" alt=""></td> 
+                                        <td width="34%" rowspan='5' style="padding-left: 0px;"> <img src="<?php echo $db_empphoto;?>" width="128px" height="128px" alt=""></td> 
                                     </tr>
                                     <tr>
                                         <td width="66%"><input type="hidden" readonly="" value="<?php echo $db_empname;?>" /><?php echo $db_empname;?></td>
@@ -186,7 +192,7 @@ function beforeSubmit()
                                         <input type="hidden" readonly="" name="cfsid"value="<?php echo $empCfsid;?>" /></td>
                                     </tr>     
                                     <tr>
-                                        <td height="74" style="text-align: center;"><a href="">বিস্তারিত</a></td>
+                                        <td height="74" style="text-align: center;"><a onclick="showAttendanceSummary('<?php echo $empCfsid?>')" style="color: blue;cursor: pointer"><u>হাজিরা বিস্তারিত</u></a></td>
                                     </tr>     
                                     </table>
                         </td>

@@ -48,7 +48,6 @@ if (isset($_POST['award_submit'])) {
         <style type="text/css"> @import "css/bush.css";</style>
         <link rel="stylesheet" type="text/css" media="all" href="javascripts/jsDatePick_ltr.min.css" />
         <script type="text/javascript" src="javascripts/jsDatePick.min.1.3.js"></script>
-        <script src="javascripts/tinybox.js" type="text/javascript"></script>
         <script type="text/javascript">
             window.onclick = function()
             {

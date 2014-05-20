@@ -1,7 +1,6 @@
 <?php
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
 $msg = "";
 
 $loginUSERname = $_SESSION['UserID'] ;
@@ -41,8 +40,8 @@ if(isset($_POST['submit']))
 <link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
 <script src="javascripts/tinybox.js" type="text/javascript"></script>
   <script type="text/javascript">
- function update(id)
-	{ TINY.box.show({iframe:'updateSalaryRange.php?gradeid='+id,width:500,height:280,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+ function showAttendanceSummary(id)
+     { TINY.box.show({url:'attendance_summary.php?empCfsID='+id,width:550,height:530,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
  </script>
 
 <script>
@@ -151,43 +150,42 @@ function checkFund(need) //check fund amount ***************
                     ?>
                     <tr>
                        <?php
-                                        if(isset($_GET['id']))
-                                        {
-                                            $empCfsid = $_GET['id'];
-                                            $selreslt= mysql_query("SELECT * FROM  cfs_user WHERE idUser = $empCfsid");
-                                            $getrow = mysql_fetch_assoc($selreslt);
-                                            $db_empname = $getrow['account_name'];
-                                            $db_empmobile = $getrow['mobile'];
-                                            $sql_post = mysql_query("SELECT post_name FROM employee, employee_posting, post_in_ons, post
-                                                                                        WHERE idPost = Post_idPost AND idpostinons = post_in_ons_idpostinons AND Employee_idEmployee = idEmployee
-                                                                                            AND  cfs_user_idUser = $empCfsid");
-                                            $sql_postrow = mysql_fetch_assoc($sql_post);
-                                            $db_empposition = $sql_postrow['post_name'];
-                                            $sql_employee = mysql_query("SELECT * FROM employee WHERE cfs_user_idUser = $empCfsid");
-                                            $emprow = mysql_fetch_assoc($sql_employee);
-                                            $db_paygrdid = $emprow['pay_grade_id'];
-                                            $db_empid = $emprow['idEmployee'];
-                                            $sql_empinfo = mysql_query("SELECT * FROM employee_information WHERE Employee_idEmployee = $db_empid");
-                                            $empinforow = mysql_fetch_assoc($sql_empinfo);
-                                            $db_empphoto = $empinforow['emplo_scanDoc_picture'];
-                                            $sql_empsal = mysql_query("SELECT * FROM employee_salary WHERE user_id=$db_empid AND pay_grade_idpaygrade= $db_paygrdid ORDER BY insert_date DESC LIMIT 1");
-                                            $empsalrow = mysql_fetch_assoc($sql_empsal);
-                                            $db_empsalary = $empsalrow['total_salary'];
-                                            $db_empsalID = $empsalrow['idempsal'];
-                                            // check for current Or previous loan *********************
-                                            $sel_loan = mysql_query("SELECT * FROM loan WHERE Employee_idEmployee=$db_empid AND loan_status='given'");
-                                            $loanrow = mysql_fetch_assoc($sel_loan);
-                                            if(mysql_num_rows($sel_loan) > 0)
-                                            {
-                                                $db_loan = $loanrow['loan_amount'];
-                                                $loan_description = $db_loan." টাকার লোন দেয়া আছে";
-                                            }
-                                            else
-                                            {
-                                                $loan_description = "কোন লোন নেই";
-                                            }
-                                            
-                                        }
+                                if(isset($_GET['id']))
+                                {
+                                    $empCfsid = $_GET['id'];
+                                    $selreslt= mysql_query("SELECT * FROM  cfs_user WHERE idUser = $empCfsid");
+                                    $getrow = mysql_fetch_assoc($selreslt);
+                                    $db_empname = $getrow['account_name'];
+                                    $db_empmobile = $getrow['mobile'];
+                                    $sql_post = mysql_query("SELECT post_name FROM employee, employee_posting, post_in_ons, post
+                                                                                WHERE idPost = Post_idPost AND idpostinons = post_in_ons_idpostinons AND Employee_idEmployee = idEmployee
+                                                                                    AND  cfs_user_idUser = $empCfsid");
+                                    $sql_postrow = mysql_fetch_assoc($sql_post);
+                                    $db_empposition = $sql_postrow['post_name'];
+                                    $sql_employee = mysql_query("SELECT * FROM employee WHERE cfs_user_idUser = $empCfsid");
+                                    $emprow = mysql_fetch_assoc($sql_employee);
+                                    $db_paygrdid = $emprow['pay_grade_id'];
+                                    $db_empid = $emprow['idEmployee'];
+                                    $sql_empinfo = mysql_query("SELECT * FROM employee_information WHERE Employee_idEmployee = $db_empid");
+                                    $empinforow = mysql_fetch_assoc($sql_empinfo);
+                                    $db_empphoto = $empinforow['emplo_scanDoc_picture'];
+                                    $sql_empsal = mysql_query("SELECT * FROM employee_salary WHERE user_id=$db_empid AND pay_grade_idpaygrade= $db_paygrdid ORDER BY insert_date DESC LIMIT 1");
+                                    $empsalrow = mysql_fetch_assoc($sql_empsal);
+                                    $db_empsalary = $empsalrow['total_salary'];
+                                    $db_empsalID = $empsalrow['idempsal'];
+                                    // check for current Or previous loan *********************
+                                    $sel_loan = mysql_query("SELECT * FROM loan WHERE Employee_idEmployee=$db_empid AND loan_status='given'");
+                                    $loanrow = mysql_fetch_assoc($sel_loan);
+                                    if(mysql_num_rows($sel_loan) > 0)
+                                    {
+                                        $db_loan = $loanrow['loan_amount'];
+                                        $loan_description = $db_loan." টাকার লোন দেয়া আছে";
+                                    }
+                                    else
+                                    {
+                                        $loan_description = "কোন লোন নেই";
+                                    }
+                                }
                             ?>
                         <td></br>
                             <table style="margin-left: 0px !important;">
@@ -227,7 +225,7 @@ function checkFund(need) //check fund amount ***************
                                     <div id="empfound"></div></td>
                                     </tr>
                                     <tr>
-                                        <td width="40%" rowspan='6' style="padding-left: 0px;"> <img src="<?php echo $db_empphoto;?>" width="128px" height="128px" alt=""></td> 
+                                        <td width="40%" rowspan='7' style="padding-left: 0px;"> <img src="<?php echo $db_empphoto;?>" width="128px" height="128px" alt=""></td> 
                                     </tr>
                                     <tr>
                                         <td width="57%"><input type="hidden" readonly="" value="<?php echo $db_empname;?>" /><?php echo $db_empname;?></td>
@@ -247,7 +245,7 @@ function checkFund(need) //check fund amount ***************
                                         <td><b><?php echo $loan_description;?></b><input type="hidden" name="empsalid"value="<?php echo $db_empsalID;?>" /></td>
                                     </tr> 
                                     <tr>
-                                        <td style="text-align: center;"><a href="">বিস্তারিত</a></td>
+                                        <td style="text-align: center;"><a onclick="showAttendanceSummary('<?php echo $empCfsid?>')" style="color: blue;cursor: pointer"><u>হাজিরা বিস্তারিত</u></a></td>
                                     </tr>     
                                     </table>
                                 </td>
@@ -261,6 +259,4 @@ function checkFund(need) //check fund amount ***************
             </form>
         </div>           
     </div>
-    <?php
-    include_once 'includes/footer.php';
-    ?>
+    <?php include_once 'includes/footer.php'; ?>

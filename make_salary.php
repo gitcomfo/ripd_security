@@ -248,7 +248,6 @@ function beforeSubmit()
                                                     <td style='border: 1px solid #000099;text-align: center;width: 5%;' ><strong>গ্রেড</strong></td>
                                                     <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>পোস্ট</strong></td>
                                                     <td style='border: 1px solid #000099;text-align: center;width: 15%;'><strong>উপস্থিতির হিসেব</strong></td>
-                                                     <td style='border: 1px solid #000099;text-align: center;width: 3%;'><strong>উপস্থিতির বিস্তারিত তথ্য</strong></td>
                                                     <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মূল বেতন (টাকা)</strong></td>
                                                     <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মাসে পাবে (পেনসন ও লোন বাদ)</strong></td>
                                                     <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>অতিরিক্ত প্রদান (টাকা)</strong></td>
@@ -331,7 +330,6 @@ function beforeSubmit()
                                                     <b>ছুটিঃ</b> $leaveDays দিন</br>
                                                     <b>ওভারটাইমঃ</b> $db_overtime ঘণ্টা    
                                                    </td>
-                                                   <td style='border: 1px solid black; text-align: center'><a style='cursor:pointer;color:blue;' id='details[$sl]' ><u>বিস্তারিত</u></a><input type='hidden' name='actual[$sl]' value='$db_main_salary' /></td>
                                                    <td style='border: 1px solid black; text-align: center'>".$db_main_salary."<input type='hidden' name='pension[$sl]' value='$db_pension' /><input type='hidden' name='loan[$sl]' value='$db_loan' /></td>
                                                    <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary[$sl]' id='monthlySalary[$sl]' value='$totalsalary' />".$totalsalary."</td>
                                                    <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay[$sl]' name='xtrapay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryPlus(this.value,$sl)'  /></td>

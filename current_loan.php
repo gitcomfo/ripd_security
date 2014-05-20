@@ -23,7 +23,6 @@ foreach ($loanrow as $row) {
 }
 ?>
 <style type="text/css"> @import "css/bush.css";</style>
-<link rel="stylesheet" href="css/tinybox.css" type="text/css" media="screen" charset="utf-8"/>
 <div class="main_text_box">
     <div style="padding-left: 110px;"><a href="personal_official_profile_employee.php"><b>ফিরে যান</b></a></div>
     <div>
