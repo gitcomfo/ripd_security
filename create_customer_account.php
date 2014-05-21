@@ -6,9 +6,9 @@ include_once 'includes/makeAccountNumbers.php';
 include_once 'includes/checkAccountNo.php';
 include_once 'includes/email_conf.php';
 include_once './includes/sms_send_function.php';
-if(isset($_GET['from'])
+if(isset($_GET['from']))
 {
- 
+    $_SESSION['from'] = 1;
 }
 
 $sql_runningpv = $conn->prepare("SELECT * FROM running_command ;");

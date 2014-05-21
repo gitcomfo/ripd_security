@@ -86,10 +86,6 @@ for ($i = 0; $i <= 18; $i++) {
         
 </script>
 <script type="text/javascript">
-function goBack()
-    {
-        window.history.go(-2);
-    }
 function showBox(classname)
     {
         elements = $(classname);
@@ -429,7 +425,7 @@ $sql_cust_sel = mysql_query("SELECT * FROM customer_account, cfs_user WHERE idUs
 ?>
 <div class="column6">
     <div class="main_text_box">
-        <div style="padding-left: 110px;"><a onclick="goBack();" style="cursor: pointer;"><b><u>ফিরে যান</u></b></a></div> 
+        <div style="padding-left: 110px;"><?php if(isset($_SESSION['from'])) { ?><a href="profile_account_management.php"><b>ফিরে যান</b></a><?php } else {?><a href="crm_management.php"><b>ফিরে যান</b></a><?php }?></div> 
         <div class="domtab">
             <ul class="domtabs">
                 <li class="current"><a href="#01">মূল তথ্য</a></li><li class="current"><a href="#02">ব্যাক্তিগত  তথ্য</a></li> <li class="current"><a href="#03">নমিনির তথ্য</a></li><li class="current"><a href="#04">শিক্ষাগত যোগ্যতা</a></li><li class="current"><a href="#05"> যোগাযোগের ঠিকানা</a></li>
