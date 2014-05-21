@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
 $custAcid = base64_decode($_GET['custACid']);
 ?>
 <title>ক্রিয়েট কাস্টমার অ্যাকাউন্ট</title>
@@ -87,14 +86,14 @@ for ($i = 0; $i <= 18; $i++) {
         
 </script>
 <script type="text/javascript">
-    function showBox(classname)
+function showBox(classname)
     {
         elements = $(classname);
         elements.each(function() { 
             $(this).css("visibility","visible"); 
         });
     }
-    function hideBox(classname)
+function hideBox(classname)
     {
         elements = $(classname);
         elements.each(function() { 

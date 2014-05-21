@@ -151,7 +151,7 @@ function getEmployee(keystr) //search employee by account number***************
         <form method="POST" action="" enctype="multipart/form-data" style=" font-family: SolaimanLipi !important;">	
             <table  class="formstyle" style =" width:80%"id="make_presentation_fillter">                   
                     <tr>
-                        <th colspan="8" style="font-size: 22px;" >কর্মচারীর ছুটি গণনা</th>
+                        <th colspan="8" style="font-size: 22px;" >কর্মচারীর ছুটি প্রদান</th>
                         <?php
                                         if(isset($_GET['id']))
                                         {

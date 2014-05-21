@@ -89,7 +89,7 @@ mysql_query("START TRANSACTION");
                                      employee_occupation='$employee_occupation', employee_religion='$employee_religion', employee_natonality='$employee_natonality',
                                      employee_national_ID='$employee_national_ID', employee_passport='$employee_passport', employee_date_of_birth='$dob',
                                      employee_birth_certificate_No='$employee_birth_certificate_No' ,emplo_scanDoc_signature='$sing_path', emplo_scanDoc_picture='$image_path',  scanDoc_finger_print='$finger_path'
-                                     WHERE Employee_idEmployee=$employeeID") or exit(mysql_error());
+                                     WHERE Employee_idEmployee=$employeeID");
       
     //proprietor's Current Address Infromation
     $e_Village_idVillage = $_POST['vilg_id'];
@@ -113,7 +113,7 @@ mysql_query("START TRANSACTION");
     {
         $sql_e_insert_current_address = mysql_query("INSERT INTO address 
                                     (address_type, house, house_no, road, address_whom, post_code,Thana_idThana, post_idpost, village_idvillage ,adrs_cepng_id)
-                                     VALUES ('Present', '$e_house', '$e_house_no', '$e_road', 'emp', '$e_post_code','$e_Thana_idThana','$e_Post_idPost', '$e_Village_idVillage', '$employeeID')")or exit(mysql_error()." sorryyyyyy sroryrr") ;
+                                     VALUES ('Present', '$e_house', '$e_house_no', '$e_road', 'emp', '$e_post_code','$e_Thana_idThana','$e_Post_idPost', '$e_Village_idVillage', '$employeeID')") ;
     }
     else {$sql_e_insert_current_address = mysql_query("UPDATE address 
                                                                     SET house='$e_house', house_no='$e_house_no', road='$e_road', post_code='$e_post_code',Thana_idThana='$e_Thana_idThana', post_idpost='$e_Post_idPost', village_idvillage='$e_Village_idVillage'  WHERE adrs_cepng_id=$employeeID AND address_whom='emp' AND address_type='Present' ");}
@@ -126,7 +126,7 @@ mysql_query("START TRANSACTION");
                                      VALUES ('Permanent', '$ep_house', '$ep_house_no', '$ep_road', 'emp', '$ep_post_code','$ep_Thana_idThana', '$ep_Post_idPost', '$ep_Village_idVillage', '$employeeID')");
     }
    else {$sql_ep_insert_permanent_address = mysql_query("UPDATE address 
-                                                                         SET house='$ep_house', house_no='$ep_house_no', road='$ep_road', post_code='$ep_post_code',Thana_idThana='$ep_Thana_idThana', post_idpost='$ep_Post_idPost', village_idvillage='$ep_Village_idVillage'  WHERE adrs_cepng_id=$employeeID AND address_whom='emp' AND address_type ='Permanent' ") or exit(mysql_error()." hi hi hi"); }
+                                                                         SET house='$ep_house', house_no='$ep_house_no', road='$ep_road', post_code='$ep_post_code',Thana_idThana='$ep_Thana_idThana', post_idpost='$ep_Post_idPost', village_idvillage='$ep_Village_idVillage'  WHERE adrs_cepng_id=$employeeID AND address_whom='emp' AND address_type ='Permanent' "); }
 
     if ($sql_update_employee || $sql_e_insert_current_address || $sql_ep_insert_permanent_address) {
         mysql_query("COMMIT");
