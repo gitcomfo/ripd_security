@@ -1,11 +1,15 @@
 <?php
 error_reporting(0);
-include_once 'includes/session.inc';
+//include_once 'includes/session.inc';
 include_once 'includes/MiscFunctions.php';
 include_once 'includes/makeAccountNumbers.php';
 include_once 'includes/checkAccountNo.php';
 include_once 'includes/email_conf.php';
 include_once './includes/sms_send_function.php';
+if(isset($_GET['from'])
+{
+ 
+}
 
 $sql_runningpv = $conn->prepare("SELECT * FROM running_command ;");
 $sql_runningpv->execute();
