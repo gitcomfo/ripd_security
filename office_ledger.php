@@ -2,17 +2,16 @@
 //error_reporting(0);
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
-include_once 'includes/selectQueryPDO.php';
 $ons_type = $_SESSION['loggedInOfficeType'];
 $ons_id = $_SESSION['loggedInOfficeID'];
 
+$sql_select_id_ons_relation = $conn->prepare("SELECT idons_relation FROM  ons_relation WHERE catagory =  ? AND add_ons_id = ?");
 $sql_select_id_ons_relation->execute(array($ons_type,$ons_id));
 $row = $sql_select_id_ons_relation->fetchAll();
 foreach ($row as $onsrow) {
     $db_onsID = $onsrow['idons_relation'];
 }
 
-$sel_daily_inout = $conn->prepare();
 $current_month = date('m');
 $current_year = date('Y');
 $monthName = date("F", mktime(0, 0, 0, $current_month, 10));
@@ -45,7 +44,7 @@ $sel_ofc_ledger = mysql_query("SELECT * FROM acc_ofc_physc_ledger WHERE month_no
                     <tr>
                       <td>
                           <form method="POST" action="">
-                        <b>মাসঃ </b>
+                            <b>মাসঃ </b>
                             <select class='box2' name='month' style="width: 100px;" id="month">
                                 <?php
                                 $inc = 1;
@@ -69,30 +68,30 @@ $sel_ofc_ledger = mysql_query("SELECT * FROM acc_ofc_physc_ledger WHERE month_no
                     </tr>
                     <tr>
                         <td>
-                            <table>
+                            <table style="width: 50%;">
                                 <tr>
-                                    <td>মাস : </td>
+                                    <td style="text-align: right;"><b>মাস :</b></td>
                                     <td><?php echo $monthName?></td>
                                 </tr>
                                 <tr>
-                                    <td>বছর : </td>
+                                    <td style="text-align: right;"><b>বছর :</b></td>
                                     <td><?php echo $current_year?></td>
                                 </tr>
                                 <tr>
-                                    <td>রিপড এমাউন্ট : </td>
-                                    <td><?php echo $db_ripd_amount?></td>
+                                    <td style="text-align: right;"><b>রিপড এমাউন্ট :</b></td>
+                                    <td><?php echo $db_ripd_amount?> TK</td>
                                 </tr>
                                 <tr>
-                                    <td>ইন এমাউন্ট : </td>
-                                    <td><?php echo $db_in_amount?></td>
+                                    <td style="text-align: right;"><b>ইন এমাউন্ট :</b></td>
+                                    <td><?php echo $db_in_amount?> TK</td>
                                 </tr>
                                 <tr>
-                                    <td>আউট এমাউন্ট : </td>
-                                    <td><?php echo $db_out_amount?></td>
+                                    <td style="text-align: right;"><b>আউট এমাউন্ট :</b></td>
+                                    <td><?php echo $db_out_amount?> TK</td>
                                 </tr>
                                 <tr>
-                                    <td>মোট : </td>
-                                    <td><?php echo $db_total_amount?></td>
+                                    <td style="text-align: right;"><b>মোট বর্তমান এমাউন্ট :</b></td>
+                                    <td><?php echo $db_total_amount?> TK</td>
                                 </tr>
                             </table>
                         </td>
