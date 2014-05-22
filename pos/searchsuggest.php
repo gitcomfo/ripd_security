@@ -20,6 +20,15 @@ if (isset($_GET['searchcode']) && $_GET['searchcode'] != '') {
                         }
                     }
 }
+if (isset($_GET['code']) && $_GET['code'] != '') {
+	//Add slashes to any quotes to avoid SQL problems.
+	$barcode = $_GET['code'];
+	foreach ($_SESSION['pro_chart_array'] as $k => $v) {
+                        if (stripos($v['pro_code'], $barcode) !== false) {
+                            echo $v['idproductchart'];
+                        }
+                    }
+}
 
 if (isset($_GET['searchname']) && $_GET['searchname'] != '') {
 	$str_key = $_GET['searchname'];

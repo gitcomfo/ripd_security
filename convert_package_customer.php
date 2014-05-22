@@ -26,7 +26,6 @@ function get_packages($current_ac_value,$conn)
         echo "<option value='$str_value' >". $row['account_name'] ."</option>";
     }
 }
-
 ?>
 <style type="text/css"> @import "css/bush.css";</style>
 <script type="text/javascript" src="javascripts/jquery-1.4.3.min.js"></script>

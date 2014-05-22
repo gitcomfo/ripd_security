@@ -14,6 +14,7 @@ $sel_product_chart = $conn->prepare("SELECT * FROM product_chart WHERE idproduct
 <meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>প্রোডাক্ট এন্ট্রি</title>
+<script type="text/javascript" src="scripts/jquery-1.4.3.min.js"></script>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 <style type="text/css">
@@ -26,9 +27,19 @@ $sel_product_chart = $conn->prepare("SELECT * FROM product_chart WHERE idproduct
     color: yellow !important;
 }
 </style>
-<script type="text/javascript" src="scripts/jquery-1.4.3.min.js"></script>
 <!--===========================================================================================================================-->
 <script LANGUAGE="JavaScript">
+$(document).ready(function(){
+    $("#barcode").keydown(function(e){
+        if(e.which==17 || e.which==74){
+            e.preventDefault();
+            var code = $('#barcode').val();
+            readBarcode(code,'productIN.php');
+        }else{
+            console.log(e.which);
+        }
+    })
+});
 function checkIt(evt) {
     evt = (evt) ? evt : window.event
     var charCode = (evt.which) ? evt.which : evt.keyCode
@@ -227,6 +238,28 @@ function deleteProduct(id) // to add into temporary array*******************
         xmlhttp.open("GET","includes/inProductTemporary.php?type=del&chartID="+id,true);
         xmlhttp.send();    
 }
+
+function readBarcode(code,location) {
+    var xmlhttp;  
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                var id =xmlhttp.responseText;
+                window.location=location+"?code="+id;
+            }
+        }
+        xmlhttp.open("GET","searchsuggest.php?code="+code,true);
+        xmlhttp.send();    
+}  
 </script>  
 </head>
     
@@ -244,6 +277,8 @@ function deleteProduct(id) // to add into temporary array*******************
          <legend style="color: brown;">পণ্য প্রবেশ</legend>
     <div class="top" style="width: 100%;">
         <div class="topleft" style="float: left;width: 30%;">
+            <b>বার কোড&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+            <input type="text" id="barcode" name="barcode" style="width: 300px;"/><br/>
             <b>প্রোডাক্ট কোড</b>
             <input type="text" id="amots" name="amots" onKeyUp="searchCode('productIN.php')" autocomplete="off" style="width: 300px;"/>
             <div id="layer2"style="width:400px;position:absolute;top:46%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>

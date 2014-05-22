@@ -48,7 +48,7 @@ if (isset($_POST['submit'])) {
         $classification_code = '100';
         //$pro_code = $pro_cat_code . '-' . $pro_type_code . '-' . $brand_code . '-' . $classification_code;
         if ($_POST['addressConfirm1'] == 'asabove') {
-            $pro_code = $pro_cat_code . $pro_type_code . $pro_brand_code . $classification_code;
+            $pro_code = $pro_cat_code . $pro_type_code . $brand_code . $classification_code;
         } else {
             $pro_code = $_POST['pro_code'];
         }
