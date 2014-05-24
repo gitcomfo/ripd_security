@@ -20,11 +20,11 @@ function updateCatName(catName)
 function updateCatCode(catCode,catName)
 { TINY.box.show({iframe:'product_catcode_update.php?catCode='+catCode+'&catName='+catName,width:500,height:240,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
 
-function updateTypeName(url)
-{ TINY.box.show({iframe:'select_office.php?url='+url,width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+function updateTypeName(typeName)
+{ TINY.box.show({iframe:'product_type_update.php?typeName='+typeName,width:500,height:240,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
 
-function updateTypeCode(url)
-{ TINY.box.show({iframe:'select_office.php?url='+url,width:900,height:400,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+function updateTypeCode(typeCode,typeName)
+{ TINY.box.show({iframe:'product_typecode_update.php?typeCode='+typeCode+'&typeName='+typeName,width:500,height:240,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
 </script>
 
 <div class="column6">
@@ -92,8 +92,8 @@ function updateTypeCode(url)
                                         echo "<tr>
                                                     <td>".$typerow['pro_type']."</td>
                                                      <td>".$typerow['pro_type_code']."</td>
-                                                    <td><a onclick='updateTypeName(".$typerow['pro_type'].");' style='cursor:pointer;color:green'><u>নাম আপডেট</u></a></td>
-                                                    <td><a onclick='updateTypeCode(".$typerow['pro_type_code'].");' style='cursor:pointer;color:#D03D29'><u>কোড আপডেট</u></a></td>
+                                                    <td><a onclick=updateTypeName('".$typerow['pro_type']."') style='cursor:pointer;color:green'><u>নাম আপডেট</u></a></td>
+                                                    <td><a onclick=updateTypeCode('".$typerow['pro_type_code']."','".$typerow['pro_type']."') style='cursor:pointer;color:#D03D29'><u>কোড আপডেট</u></a></td>
                                             </tr>";
                                     }
                             ?>
