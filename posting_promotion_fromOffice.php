@@ -1,6 +1,5 @@
 <?php
-include_once 'includes/MiscFunctions.php';
-include 'includes/header.php';
+include_once 'includes/header.php';
 include_once './includes/selectQueryPDO.php';
 ?>
 <style type="text/css">@import "css/bush.css";</style>

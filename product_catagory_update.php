@@ -1,24 +1,19 @@
 <?php
 error_reporting(0);
-include_once 'includes/ConnectDB.inc';
+include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
-$g_submodid = $_GET['submodid'];
-$submod_sel = mysql_query("SELECT * FROM securiy_submodules WHERE idsecuritysubmod = $g_submodid;");
-$submodrow = mysql_fetch_assoc($submod_sel);
-$db_submodname = $submodrow['submod_name'];
-$db_submoddes = $submodrow['submod_desc'];
+$g_cataname = $_GET['catName'];
+$sql_up_category = $conn->prepare("UPDATE product_catagory SET pro_catagory = ? WHERE  pro_catagory = ?");
 $msg ="";
 if(isset($_POST['update']))
 {
-    $p_name = $_POST['up_submodname'];
-    $p_des = $_POST['up_submoddes'];
-    $p_id = $_POST['submoduleID'];
-    $upquery = mysql_query("UPDATE `securiy_submodules` SET `submod_name` = '$p_name', `submod_desc` = '$p_des' WHERE `idsecuritysubmod` =$p_id");
+    $p_current = $_POST['current_name'];
+    $p_update = $_POST['up_name'];
+    $upquery = $sql_up_category->execute(array($p_update,$p_current));
     if ($upquery ==1)
 	{$msg = "আপডেট হয়েছে"; }
         else { $msg ="আপডেট হয়নি"; }
 }
-
 ?>
 <script>
     function out()
@@ -35,16 +30,15 @@ if(isset($_POST['update']))
 <body>
                 <form method="POST"  action="">	
                 <table  class="formstyle" style="font-family: SolaimanLipi !important;margin: 0 !important;">          
-                    <tr><th colspan="2" style="text-align: center;">আপডেট সাবমডিউল</th></tr>
+                    <tr><th colspan="2" style="text-align: center;">আপডেট ক্যাটাগরির নাম</th></tr>
                     <?php if($msg == "") {?>
                   <tr>
-                    <td style="text-align: center; width: 50%;">সাবমডিউলের নাম</td>
-                    <td>: <input  class="box" type="text" name="up_submodname"  id="up_submodname" value="<?php echo $db_submodname;?>"/>
-                        <input type="hidden" name="submoduleID" value="<?php echo $g_submodid;?>" /></td>   
+                    <td style="text-align: center; width: 50%;">বর্তমান নাম</td>
+                    <td>: <input  class="box" type="text" name="current_name"  id="current_name" value="<?php echo $g_cataname;?>" readonly /></td>   
                     </tr>
                     <tr>
-                        <td style="text-align: center; width: 50%;">সাবমডিউলের বর্ণনা</td>
-                        <td>&nbsp;&nbsp;<textarea  class="box" type="text" name="up_submoddes" value="" ><?php echo $db_submoddes;?></textarea></td>   
+                    <td style="text-align: center; width: 50%;">নতুন নাম</td>
+                    <td>: <input  class="box" type="text" name="up_name"  id="up_name" /></td>   
                     </tr>
                     <tr>                    
                         <td colspan="2" style="padding-left: 150px; " ></br><input class="btn" style =" font-size: 12px; " type="submit" name="update" value="আপডেট করুন" />
