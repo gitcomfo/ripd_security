@@ -2,7 +2,9 @@
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
 $sql_select_brand = $conn->prepare("SELECT DISTINCT pro_brand_or_grp, pro_brnd_or_grp_code FROM product_chart ORDER BY pro_brand_or_grp");
-$sql_select_class = $conn->prepare("SELECT DISTINCT pro_classification, pro_classification_code FROM product_chart ORDER BY pro_classification")
+$sql_select_class = $conn->prepare("SELECT DISTINCT pro_classification, pro_classification_code FROM product_chart ORDER BY pro_classification");
+$sql_select_products = $conn->prepare("SELECT * FROM product_chart ORDER BY pro_productname");
+
 ?>
 <style type="text/css">
     @import "css/bush.css";
@@ -17,14 +19,11 @@ $sql_select_class = $conn->prepare("SELECT DISTINCT pro_classification, pro_clas
 function updateBrandName(brandName,brandCode)
 { TINY.box.show({iframe:'product_brand_update.php?brandName='+brandName+'&brandCode='+brandCode,width:500,height:240,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
 
-function updateBrandCode(brandCode,brandName)
-{ TINY.box.show({iframe:'product_catcode_update.php?catCode='+catCode+'&catName='+catName,width:500,height:240,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
-
 function updateClassName(className,classCode)
 { TINY.box.show({iframe:'product_class_update.php?className='+className+'&classCode='+classCode,width:500,height:240,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
 
-function updateClassCode(classCode,className)
-{ TINY.box.show({iframe:'product_typecode_update.php?typeCode='+typeCode+'&typeName='+typeName,width:500,height:240,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
+function updateProInfo(proID)
+{ TINY.box.show({iframe:'product_info_update.php?proID='+proID,width:700,height:500,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'}); }
 </script>
 
 <div class="column6">
@@ -106,27 +105,27 @@ function updateClassCode(classCode,className)
           </from>
         </div>
         
-                <div>
+          <div>
             <h2><a name="03" id="03"></a></h2><br/>
             <from method="post" action="" >
             <table  class="formstyle">          
-                <tr><th colspan="7" style="text-align: center;">পণ্য তথ্য</th></tr>
+                <tr><th colspan="7" style="text-align: center;">পণ্য তালিকা</th></tr>
                 <tr>
                     <td colspan="2">
                         <table style="border: 1px solid #808080">
                             <tr id="table_row_odd">
-                                <td><b>টাইপ</b></td>
-                                <td><b>নাম আপডেট</b></td>
-                                <td><b>কোড আপডেট</b></td>
+                                <td><b>নাম</b></td>
+                                <td><b>কোড</b></td>
+                                <td><b>আপডেট</b></td>
                             </tr>
                             <?php
-                                    $sql_select_type->execute();
-                                    $arr_type = $sql_select_type->fetchAll();
+                                    $sql_select_products->execute();
+                                    $arr_type = $sql_select_products->fetchAll();
                                     foreach ($arr_type as $typerow) {
                                         echo "<tr>
-                                                    <td>".$typerow['pro_type']."</td>
-                                                    <td><a onclick='updateTypeName(".$typerow['pro_type'].");' style='cursor:pointer;color:green'><u>নাম আপডেট</u></a></td>
-                                                    <td><a onclick='updateTypeCode(".$typerow['pro_type'].");' style='cursor:pointer;color:#D03D29'><u>কোড আপডেট</u></a></td>
+                                                    <td>".$typerow['pro_productname']."</td>
+                                                     <td>".$typerow['pro_code']."</td>
+                                                    <td><a onclick=updateProInfo('".$typerow['idproductchart']."') style='cursor:pointer;color:green'><u>আপডেট</u></a></td>
                                             </tr>";
                                     }
                             ?>

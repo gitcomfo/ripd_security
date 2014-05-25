@@ -164,23 +164,23 @@ if (isset($_POST['submit'])) {
                 <tr><th style="text-align: center" colspan="2"><h1>প্রোডাক্ট ইন</h1>
                 </th>
                 </tr>  
-<?php
-if ($msg != "") {
-    echo '<tr><td colspan="2" style="text-align: center;font-size: 16px;color: green;">' . $msg . '</td></tr>';
-}
-?>                  
+                    <?php
+                    if ($msg != "") {
+                        echo '<tr><td colspan="2" style="text-align: center;font-size: 16px;color: green;">' . $msg . '</td></tr>';
+                    }
+                    ?>                  
                 <tr>
                     <td>প্রোডাক্ট ক্যাটাগরি</td>
                     <td>: <select class="box2" type="text" id="product_id" name="product" style="width: 150px;" onchange="getproduct_type() " />
                 <option value='' selected="selected">- প্রোডাক্ট ক্যাটাগরি -</option>
-                <?php
-                $product_cat_sql = mysql_query("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory");
-                while ($product_cat_rows = mysql_fetch_array($product_cat_sql)) {
-                    $db_product_cat_code = $product_cat_rows['pro_cat_code'];
-                    $db_product_cat_name = $product_cat_rows['pro_catagory'];
-                    echo "<option style='width: 96%' value='$db_product_cat_code'>$db_product_cat_name</option>";
-                }
-                ?>
+                    <?php
+                    $product_cat_sql = mysql_query("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory");
+                    while ($product_cat_rows = mysql_fetch_array($product_cat_sql)) {
+                        $db_product_cat_code = $product_cat_rows['pro_cat_code'];
+                        $db_product_cat_name = $product_cat_rows['pro_catagory'];
+                        echo "<option style='width: 96%' value='$db_product_cat_code'>$db_product_cat_name</option>";
+                    }
+                    ?>
                 </select><em2> *</em2></td> 
                 </tr>                  
                 <tr>
@@ -200,15 +200,15 @@ if ($msg != "") {
                     <td>একক</td>
                     <td>: 
                     <?php
-                    $product_unit_sql = mysql_query("SELECT DISTINCT prounit_name FROM product_unit");
-                    echo "<select  class='box2' style = 'border: 1px gray inset;width: 150px;' name='pro_unit' id='pro_unit' onchange='makeProductName(this.value)'>
-                                                            <option value= '0'>- একক -</option>";
-                    while ($product_unit_rows = mysql_fetch_array($product_unit_sql)) {
-                        $db_product_unit_name = $product_unit_rows['prounit_name'];
-                        echo "<option style='width: 96%' value='$db_product_unit_name'>$db_product_unit_name</option>";
-                    }
-                    echo '</select>
-                                                অথবা <input class="box" type="text" id="new_unit" name="new_unit" onblur="makeProductName(this.value)" />';
+                        $product_unit_sql = mysql_query("SELECT DISTINCT prounit_name FROM product_unit");
+                        echo "<select  class='box2' style = 'border: 1px gray inset;width: 150px;' name='pro_unit' id='pro_unit' onchange='makeProductName(this.value)'>
+                                                                <option value= '0'>- একক -</option>";
+                        while ($product_unit_rows = mysql_fetch_array($product_unit_sql)) {
+                            $db_product_unit_name = $product_unit_rows['prounit_name'];
+                            echo "<option style='width: 96%' value='$db_product_unit_name'>$db_product_unit_name</option>";
+                        }
+                        echo '</select>
+                                                    অথবা <input class="box" type="text" id="new_unit" name="new_unit" onblur="makeProductName(this.value)" />';
                     ?> <em2> *</em2>     
                 </td>
                 </tr>           
