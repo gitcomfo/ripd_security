@@ -1,11 +1,11 @@
 <?php
 //error_reporting(0);
-include_once 'includes/MiscFunctions.php';
 include_once 'includes/header.php';
 include_once './includes/insertQueryPDO.php';
 include_once './includes/updateQueryPDO.php';
 include_once './includes/selectQueryPDO.php';
-$arrayUserType = array('employee' => 'কর্মচারী', 'programmer' => 'প্রোগ্রামার', 'presenter' => 'প্রেজেন্টার', 'trainer' => 'trainer');
+$arrayUserType = array('employee' => 'কর্মচারী', 'programmer' => 'প্রোগ্রামার', 'presenter' => 'প্রেজেন্টার', 'trainer' => 'ট্রেইনার');
+
 if(isset($_POST['submit']))
 {
      $p_oldOnSID = $_POST['oldonsID'];
@@ -73,7 +73,7 @@ function beforeSubmit()
                     $db_cfs_name = $cfs_row['account_name'];
                     $db_cfs_account = $cfs_row['account_number'];
                     $db_mobile = $cfs_row['mobile'];
-                    $db_picture = $cfs_row['emplo_scanDoc_picture'];
+                   $db_picture = $cfs_row['emplo_scanDoc_picture'];
                     $db_cfsuserid = $cfs_row['idUser'];
                     $db_usertype = $cfs_row['user_type'];
                 }
@@ -184,9 +184,6 @@ function beforeSubmit()
                                 <td colspan="2" style="width: 50%; text-align:right">ছুটি</td>
                                 <td colspan="2" style="width: 50%; text-align:left">: '.english2bangla($total_leaveDays).'দিন</td>     
                             </tr>
-                            <tr>
-                            <td colspan="4"><div align="center"><a onclick="detailsWithPrice()" style="cursor:pointer;color:blue;">উপস্থিতির বিস্তারিত তথ্য</a></div></td>
-                            </tr>
                             </table>
                             </filedset></td>
                     </tr>';
@@ -249,7 +246,4 @@ function beforeSubmit()
             </form>
         </div>
     </div>
-
-    <?php
-    include 'includes/footer.php';
-    ?>
+<?php include 'includes/footer.php';?>

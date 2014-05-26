@@ -58,7 +58,7 @@ $sql_select_employee_grade = $conn->prepare("SELECT grade_name,employee_salary.i
                                                                                AND pay_grade_idpaygrade = idpaygrade ORDER BY employee_salary.insert_date DESC LIMIT 1");
 $sql_select_view_emp_post = $conn->prepare("SELECT * FROM view_emp_post 
                                                                             WHERE Employee_idEmployee=? AND add_ons_id= ? ORDER BY posting_date DESC LIMIT 1");
-$sql_select_emplyee_cfs = $conn->prepare("SELECT * FROM cfs_user,employee,employee_information WHERE idUser = cfs_user_idUser AND idEmployee = ?");
+$sql_select_emplyee_cfs = $conn->prepare("SELECT * FROM cfs_user,employee,employee_information WHERE idUser = cfs_user_idUser AND Employee_idEmployee = idEmployee AND idEmployee = ?");
 $sql_select_emp_address = $conn->prepare("SELECT * FROM address,thana,district,division WHERE address_whom = 'emp'
                                                                         AND address_type='Present' AND adrs_cepng_id = ?
                                                                         AND Thana_idThana = idThana AND District_idDistrict=idDistrict AND Division_idDivision= idDivision ");

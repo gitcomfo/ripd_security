@@ -254,9 +254,6 @@ function beforeSubmit()
                                 <td colspan="2" style="width: 50%; text-align:right">ছুটি</td>
                                 <td colspan="2" style="width: 50%; text-align:left">: '.english2bangla($total_leaveDays).'দিন</td>     
                             </tr>
-                            <tr>
-                            <td colspan="4"><div align="center"><a onclick="detailsWithPrice()" style="cursor:pointer;color:blue;">উপস্থিতির বিস্তারিত তথ্য</a></div></td>
-                            </tr>
                             </table>
                             </filedset></td>
                     </tr>';
