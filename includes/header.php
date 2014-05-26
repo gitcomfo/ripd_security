@@ -75,7 +75,7 @@ $logedinOfficeType = $_SESSION['loggedInOfficeType'];
                                 {
                                     $catagory='official';
                                     $sel_official_notification = $conn->prepare("SELECT * FROM ons_relation, notification WHERE catagory=? AND add_ons_id=?
-                                                                                                            AND idons_relation=nfc_receiverid AND nfc_status =='unread' AND nfc_catagory =?");
+                                                                                                            AND idons_relation=nfc_receiverid AND nfc_status ='unread' AND nfc_catagory =?");
                                     $sel_official_notification ->execute(array($logedinOfficeType,$logedinOfficeId,$catagory));
                                     $notificationrow = $sel_official_notification->fetchAll();
                                     $countrow = count($notificationrow);

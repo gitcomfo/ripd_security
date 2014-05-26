@@ -107,7 +107,7 @@ if(isset($_POST['makesalary']))
     $sqlrslt1= $insert_sal_approval->execute(array($p_officeTotalSalary,$p_monthNo,$p_yearNo,$p_onsid,$loginUSERid));
     $sal_approval_id = $conn->lastInsertId();
     for($i=1;$i<=$numberOfRows;$i++)
-    {   
+    {
          $sqlrslt2= $insert_sal_chart->execute(array($p_monthNo, $p_yearNo,$p_actual[$i],$p_pension[$i],$p_loan[$i], $p_monthlyPay[$i], $p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i-1], $p_empCfsID[$i], $sal_approval_id));
     }
     $url = "salary_approval.php?id=".$sal_approval_id;
@@ -313,8 +313,8 @@ function beforeSubmit()
                                                    $db_empgrade = $gradrow['grade_name'];
                                                }
                                                $sql_select_view_emp_post = $conn->prepare("SELECT post_name FROM employee_posting,post_in_ons,post 
-                                                   WHERE Employee_idEmployee = ? AND ons_relation_idons_relation=? AND post_in_ons_idpostinons= idpostinons 
-                                                   AND Post_idPost= idPost ORDER BY posting_date DESC LIMIT 1");
+                                                                                                                            WHERE Employee_idEmployee = ? AND ons_relation_idons_relation=? AND post_in_ons_idpostinons= idpostinons 
+                                                                                                                            AND Post_idPost= idPost ORDER BY posting_date DESC LIMIT 1");
                                                $sql_select_view_emp_post->execute(array($db_empID,$db_onsid));
                                                $row9 = $sql_select_view_emp_post->fetchAll();
                                                foreach ($row9 as $postrow) {
@@ -330,7 +330,7 @@ function beforeSubmit()
                                                     <b>ছুটিঃ</b> $leaveDays দিন</br>
                                                     <b>ওভারটাইমঃ</b> $db_overtime ঘণ্টা    
                                                    </td>
-                                                   <td style='border: 1px solid black; text-align: center'>".$db_main_salary."<input type='hidden' name='pension[$sl]' value='$db_pension' /><input type='hidden' name='loan[$sl]' value='$db_loan' /></td>
+                                                   <td style='border: 1px solid black; text-align: center'>".$db_main_salary."<input type='hidden' name='actual[$sl]' value='$db_main_salary' /><input type='hidden' name='pension[$sl]' value='$db_pension' /><input type='hidden' name='loan[$sl]' value='$db_loan' /></td>
                                                    <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary[$sl]' id='monthlySalary[$sl]' value='$totalsalary' />".$totalsalary."</td>
                                                    <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay[$sl]' name='xtrapay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryPlus(this.value,$sl)' value='0'  /></td>
                                                    <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' id='deductpay[$sl]' name='deductpay[$sl]' onkeypress='return checkIt(event)' onkeyup='calculateSalaryMinus(this.value,$sl)' value='0' /></td>

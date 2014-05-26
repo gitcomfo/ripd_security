@@ -1,7 +1,6 @@
 <?php
 //include_once 'includes/session.inc';
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
 include_once './includes/selectQueryPDO.php';
 include_once './includes/insertQueryPDO.php';
 include_once './includes/updateQueryPDO.php';
@@ -156,7 +155,6 @@ function calculateSalaryPlus(xtra,i)
                                         <td style='border: 1px solid #000099;text-align: center;width: 5%;' ><strong>গ্রেড</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;' ><strong>পোস্ট</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 15%;'><strong>উপস্থিতির হিসেব</strong></td>
-                                         <td style='border: 1px solid #000099;text-align: center;width: 3%;'><strong>উপস্থিতির বিস্তারিত তথ্য</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মূল বেতন (টাকা)</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>মাসে পাবে (পেনসন ও লোন বাদ)</strong></td>
                                         <td style='border: 1px solid #000099;text-align: center;width: 10%;'><strong>অতিরিক্ত প্রদান (টাকা)</strong></td>
@@ -240,7 +238,6 @@ function calculateSalaryPlus(xtra,i)
                                                     <b>ছুটিঃ</b> $leaveDays দিন</br>
                                                     <b>ওভারটাইমঃ</b> $db_overtime ঘণ্টা    
                                                    </td>
-                                                   <td style='border: 1px solid black; text-align: center'><a style='cursor:pointer;color:blue;' id='details[$sl]' ><u>বিস্তারিত</u></a></td>
                                                    <td style='border: 1px solid black; text-align: center'>".$db_main_salary."</td>
                                                    <td style='border: 1px solid black; text-align: center'><input type='hidden' name='monthlySalary[$sl]' id='monthlySalary[$sl]' value='$db_monthlypay' />".$db_monthlypay."</td>
                                                    <td style='border: 1px solid black; text-align: left;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right' id='xtrapay[$sl]' name='xtrapay[$sl]' onkeypress='return checkIt(event)' value='$db_xtrapay' onkeyup='calculateSalaryPlus(this.value,$sl)' /></td>
@@ -250,10 +247,10 @@ function calculateSalaryPlus(xtra,i)
                                         }
                                 ?>
                                     <tr>
-                                        <td colspan="10" style='border: 1px solid black; text-align: right'><b>মোট</b></td>
+                                        <td colspan="9" style='border: 1px solid black; text-align: right'><b>মোট</b></td>
                                         <td style='border: 1px solid black; text-align: right;padding-left:0px;'><input class='box' type='text' style='width:92%;text-align:right;' readonly name='totalOfficeSalary' id="totalOfficeSalary" value="<?php echo $db_officeTotalSalary;?>" /></td>
                                     </tr>
-                                    <tr><td colspan="11" style="text-align: center;"></br><input class="btn" type="submit" name="givsalary" value="বেতন মঞ্জুর" /></td></tr>
+                                    <tr><td colspan="10" style="text-align: center;"></br><input class="btn" type="submit" name="givsalary" value="বেতন মঞ্জুর" /></td></tr>
                                 </tbody>
                             </table>
                             </form>
