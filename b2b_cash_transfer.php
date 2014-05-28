@@ -1,7 +1,6 @@
 <?php
-include 'includes/session.inc';
+include_once 'includes/session.inc';
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
 ?>
 <style type="text/css"> @import "css/bush.css";</style>
 <script>
@@ -16,7 +15,9 @@ function numbersonly(e)
     }
 function beforeSubmit()
 {
-    if ((document.getElementById('fund').value != "0") 
+    var what = document.querySelector('input[name = "officetype"]:checked').value;
+    alert(what);
+    if ((what != "") 
             && (document.getElementById('t_in_amount').value != "")
             && (document.getElementById('t_in_amount').value != "0"))
         { return true; }
@@ -75,11 +76,6 @@ function beforeSubmit()
                         <td >মোট পরিমান</td>
                         <td>: <input class="box" type="text" id="t_in_amount" name="t_in_amount" onkeypress=' return numbersonly(event)' /><em2> *</em2> TK</td>          
                     </tr>
-                    <tr>
-                        <td >পদ্ধতি</td>
-                        <td>: <input type="radio" name="cashInType" value="cash" /> ক্যাশ &nbsp;&nbsp;&nbsp;&nbsp;
-                                 <input type="radio" name="cashInType" value="cheque" /> চেক<em2> *</em2></td>          
-                    </tr> 
                     <tr> 
                         <td>কারন</td>
                         <td> <textarea name="inDescription" ></textarea></td>           
@@ -93,6 +89,4 @@ function beforeSubmit()
         </div>
     </div>
 </div>
-<?php
-include 'includes/footer.php';
-?>
+<?php include_once 'includes/footer.php'; ?>
