@@ -1,7 +1,6 @@
 <?php
 include 'includes/session.inc';
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
  $loginUSERid = $_SESSION['userIDUser'] ;
  
 $sel_banks = $conn->prepare("SELECT * FROM bank_list ORDER BY bank_name");

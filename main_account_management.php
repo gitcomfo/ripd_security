@@ -87,7 +87,7 @@ if (!file_exists($aab_picture))
                         <table>                          
                             <tr>
                                 <td style="width: 40%;"><b>একাউন্ট নম্বর</b></td>
-                                <td style="width: 60%;">: <?php echo $aab_account_number; ?></td>
+                                <td style="width: 60%;">: <?php echo $_SESSION['loggedInOfficeAccNo']; ?></td>
                             </tr>
                             <tr>
                                 <td><b> ব্রাঞ্চ নাম </b></td>
