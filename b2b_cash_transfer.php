@@ -120,7 +120,7 @@ function checkAmount(amount)
                     }
             }
         }
-        var acNo = document.getElementById('acNo').value;
+        var acNo = <?php echo $logedInOfficeAcc;?>;
         xmlhttp.open("GET","includes/office_amount_check.php?acNo="+acNo+"&amount="+amount,true);
         xmlhttp.send();
     }
