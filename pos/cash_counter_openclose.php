@@ -9,10 +9,9 @@ $cfsID = $_SESSION['userIDUser'];
 $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
 
-$infostmt = $conn->prepare("INSERT INTO ons_counter(counter_name ,counter_onsid ,counter_onstype ,created_date ,fk_creater_id,last_update) 
-                                                VALUES (?, ?, ?, NOW(), ?, NOW())");
 $sel_counter_info = $conn->prepare("SELECT * FROM ons_counter WHERE counter_onsid = ? AND counter_onstype= ?");
-
+$up_counter_open = $conn->prepare("UPDATE ons_counter SET counter_status = 'open', temp_strt_amount= ? ,last_update= NOW() WHERE idonscounter=?");
+$up_counter_close = $conn->prepare("UPDATE ons_counter SET counter_status = 'closed', temp_strt_amount= ?,last_update= NOW() WHERE idonscounter=?");
 function getCounters($sql,$id,$type) {
     $sql->execute(array($id,$type));
     $arr_counter = $sql->fetchAll();
@@ -21,19 +20,36 @@ function getCounters($sql,$id,$type) {
     }
 }
 
-// ********************* counter entry হওয়ার জন্য*******************************************
-if(isset($_POST['ok']))
+// ********************* counter open হওয়ার জন্য*******************************************
+if(isset($_POST['open']))
 {
-    $P_pckgname=$_POST['pckg_name'];
-     $P_pckgcode=$_POST['pckg_code'];
+    $p_counterID=$_POST['countername'];
+    $p_opencash=$_POST['day_cash'];
 
-    $timestamp=time(); //current timestamp
-    $date=date("Y/m/d", $timestamp);      
-    $infostmt->execute(array($P_pckgname, $P_pckgcode,$image_path, $date, $cfsID));
-    $pckg_infoid = $conn->lastInsertId('idpckginfo'); 
-    $_SESSION['pckgname'] = $P_pckgname;
-    $_SESSION['pckgcode'] = $P_pckgcode;
-    $_SESSION['pckgid'] = $pckg_infoid;
+    $sqlreslt = $up_counter_open->execute(array($p_opencash, $p_counterID));
+    if($sqlreslt)
+    {
+        echo "<script>alert('কাউন্টার খোলা হল');</script>";
+    }
+    else {
+        echo "<script>alert('দুঃখিত, কাউন্টার খোলা হয়নি');</script>";
+    }
+}
+
+// ********************* counter close হওয়ার জন্য*******************************************
+if(isset($_POST['close']))
+{
+    $p_counterID=$_POST['countername'];
+    $p_closecash=$_POST['day_cash'];
+
+    $sqlreslt = $up_counter_close->execute(array($p_closecash, $p_counterID));
+    if($sqlreslt)
+    {
+        echo "<script>alert('কাউন্টার বন্ধ হল');</script>";
+    }
+    else {
+        echo "<script>alert('দুঃখিত, কাউন্টার বন্ধ হয়নি');</script>";
+    }
 }
 
 ?>
