@@ -10,8 +10,10 @@ $storeID = $_SESSION['loggedInOfficeID'];
 $scatagory =$_SESSION['loggedInOfficeType'];
 
 $sel_counter_info = $conn->prepare("SELECT * FROM ons_counter WHERE counter_onsid = ? AND counter_onstype= ?");
-$up_counter_open = $conn->prepare("UPDATE ons_counter SET counter_status = 'open', temp_strt_amount= ? ,last_update= NOW() WHERE idonscounter=?");
-$up_counter_close = $conn->prepare("UPDATE ons_counter SET counter_status = 'closed', temp_strt_amount= ?,last_update= NOW() WHERE idonscounter=?");
+$up_counter_open = $conn->prepare("UPDATE ons_counter SET counter_status = 'open', temp_strt_amount= ? ,last_update= NOW() 
+                                                                WHERE idonscounter=? ");
+$up_counter_close = $conn->prepare("UPDATE ons_counter SET counter_status = 'closed', temp_strt_amount= ?,last_update= NOW() 
+                                                                WHERE idonscounter=?");
 function getCounters($sql,$id,$type) {
     $sql->execute(array($id,$type));
     $arr_counter = $sql->fetchAll();
@@ -90,6 +92,16 @@ function getCounterStatus(id) // check if counter is open or not****************
             if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
                 document.getElementById('submitdiv').innerHTML=xmlhttp.responseText;
+                var status = document.getElementById('status').value;
+                if(status != 'closed')
+                    {
+                        document.getElementById('day_cash').readonly = true;
+                        document.getElementById('day_cash').value = status;
+                    }
+                    else
+                        {
+                             document.getElementById('day_cash').value = 0;
+                        }
             }
         }
         xmlhttp.open("GET","includes/counter_includes.php?id="+id,true);
@@ -132,7 +144,7 @@ function getCounterStatus(id) // check if counter is open or not****************
                       </tr>
                       <tr>
                           <td align="right">ক্যাশ প্রদান</td>
-                          <td><input type="text" name="day_cash" onkeypress='return checkIt(event)' /> TK</td>
+                          <td><input type="text" id="day_cash" name="day_cash" onkeypress='return checkIt(event)' /> TK</td>
                       </tr>
                   </table>
               </div><br/>
