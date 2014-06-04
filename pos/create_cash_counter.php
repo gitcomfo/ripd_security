@@ -57,8 +57,6 @@ $counterrow1 = $sel_counter_info->fetchAll();
         <link rel="icon" type="image/png" href="images/favicon.png" />
         <title>কাউন্টার তৈরি</title>
         <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-        <script language="JavaScript" type="text/javascript" src="scripts/suggest.js"></script>
-        <script language="JavaScript" type="text/javascript" src="scripts/productsearch.js"></script>
         <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 </head>
     

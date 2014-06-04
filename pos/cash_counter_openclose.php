@@ -62,8 +62,6 @@ if(isset($_POST['close']))
 <link rel="icon" type="image/png" href="images/favicon.png" />
 <title>কাউন্টার খোলা / বন্ধ</title>
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8"/>
-<script language="JavaScript" type="text/javascript" src="scripts/suggest.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/productsearch.js"></script>
 <link rel="stylesheet" href="css/css.css" type="text/css" media="screen" />
 
 <script LANGUAGE="JavaScript">
@@ -95,11 +93,12 @@ function getCounterStatus(id) // check if counter is open or not****************
                 var status = document.getElementById('status').value;
                 if(status != 'closed')
                     {
-                        document.getElementById('day_cash').readonly = true;
                         document.getElementById('day_cash').value = status;
+                        document.getElementById('day_cash').readonly = true;
                     }
                     else
                         {
+                            document.getElementById('day_cash').readonly = false;
                              document.getElementById('day_cash').value = 0;
                         }
             }
@@ -144,7 +143,7 @@ function getCounterStatus(id) // check if counter is open or not****************
                       </tr>
                       <tr>
                           <td align="right">ক্যাশ প্রদান</td>
-                          <td><input type="text" id="day_cash" name="day_cash" onkeypress='return checkIt(event)' /> TK</td>
+                          <td><input type="text" id="day_cash" name="day_cash" readonly onkeypress='return checkIt(event)' /> TK</td>
                       </tr>
                   </table>
               </div><br/>
