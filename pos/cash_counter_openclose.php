@@ -94,11 +94,11 @@ function getCounterStatus(id) // check if counter is open or not****************
                 if(status != 'closed')
                     {
                         document.getElementById('day_cash').value = status;
-                        document.getElementById('day_cash').readonly = true;
+                        document.getElementById('day_cash').readOnly = true;
                     }
                     else
                         {
-                            document.getElementById('day_cash').readonly = false;
+                            document.getElementById('day_cash').readOnly = false;
                              document.getElementById('day_cash').value = 0;
                         }
             }
@@ -143,7 +143,7 @@ function getCounterStatus(id) // check if counter is open or not****************
                       </tr>
                       <tr>
                           <td align="right">ক্যাশ প্রদান</td>
-                          <td><input type="text" id="day_cash" name="day_cash" readonly onkeypress='return checkIt(event)' /> TK</td>
+                          <td><input type="text" id="day_cash" name="day_cash" readonly="true" onkeypress='return checkIt(event)' /> TK</td>
                       </tr>
                   </table>
               </div><br/>
