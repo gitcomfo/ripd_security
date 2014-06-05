@@ -1,7 +1,7 @@
 <?php 
 error_reporting(0);
 session_start();
-include 'includes/connectionPDO.php';
+include_once 'includes/connectionPDO.php';
 include_once 'includes/MiscFunctions.php';
 include_once './includes/pv_hitting_after_sell.php';
 
