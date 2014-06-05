@@ -12,7 +12,7 @@ $scatagory =$_SESSION['loggedInOfficeType'];
 $sel_counter_info = $conn->prepare("SELECT * FROM ons_counter WHERE counter_onsid = ? AND counter_onstype= ?");
 $up_counter_open = $conn->prepare("UPDATE ons_counter SET counter_status = 'open', temp_strt_amount= ? ,last_update= NOW() 
                                                                 WHERE idonscounter=? ");
-$up_counter_close = $conn->prepare("UPDATE ons_counter SET counter_status = 'closed', temp_strt_amount= ?,last_update= NOW() 
+$up_counter_close = $conn->prepare("UPDATE ons_counter SET counter_status = 'closed', temp_strt_amount= 0,last_update= NOW() 
                                                                 WHERE idonscounter=?");
 function getCounters($sql,$id,$type) {
     $sql->execute(array($id,$type));
@@ -42,9 +42,8 @@ if(isset($_POST['open']))
 if(isset($_POST['close']))
 {
     $p_counterID=$_POST['countername'];
-    $p_closecash=$_POST['day_cash'];
 
-    $sqlreslt = $up_counter_close->execute(array($p_closecash, $p_counterID));
+    $sqlreslt = $up_counter_close->execute(array($p_counterID));
     if($sqlreslt)
     {
         echo "<script>alert('কাউন্টার বন্ধ হল');</script>";
