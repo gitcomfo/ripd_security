@@ -308,7 +308,7 @@ function readBarcode(code,location) {
     <div class="top" style="width: 100%;">
      <div class="topleft" style="float: left;width: 32%;">
          <b>বার কোড&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b>
-          <input type="text" id="barcode" name="barcode" style="width: 250px;"/><br/>
+          <input type="text" id="barcode" name="barcode" style="width: 200px;"/><br/>
             <b>প্রোডাক্ট কোড :</b> <input type="text" id="amots" name="amots" onKeyUp="bleble('sellAfterReplace.php');" autocomplete="off" style="width: 200px;"/>
             <div style="width:400px;position:absolute;top:45.8%;left:18%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" id="layer2" ></div></br></br>
             <b>প্রোডাক্ট নাম&nbsp;&nbsp; :</b> <input type="text" id="allsearch" name="allsearch" onKeyUp="searchProductAll('sellAfterReplace.php');" autocomplete="off" style="width: 200px;"/>
