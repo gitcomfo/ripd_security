@@ -28,7 +28,7 @@ li {
 ul.nav li a {
     -webkit-transition: all 0.3s ease-out;
     background: url(../images/border.png) no-repeat;
-    background-color: #1a82f7; background-image: url(../images/linear_bg_1.png); background-repeat: repeat-y; /* Safari 4-5, Chrome 1-9 */ background: -webkit-gradient(linear, left top, right top, from(#1a82f7), to(#2F2727)); /* Safari 5.1, Chrome 10+ */ background: -webkit-linear-gradient(left, #2F2727, #1a82f7); /* Firefox 3.6+ */ background: -moz-linear-gradient(left, #2F2727, #1a82f7); /* IE 10 */ background: -ms-linear-gradient(left, #2F2727, #1a82f7); /* Opera 11.10+ */ background: -o-linear-gradient(left, #2F2727, #1a82f7);
+    background-color: #1a82f7; background-image: url(../images/linear_bg_1.png); background-repeat: repeat-y;  background: -webkit-gradient(linear, left top, right top, from(#1a82f7), to(#2F2727)); background: -webkit-linear-gradient(left, #2F2727, #1a82f7);  background: -moz-linear-gradient(left, #2F2727, #1a82f7);  background: -ms-linear-gradient(left, #2F2727, #1a82f7);  background: -o-linear-gradient(left, #2F2727, #1a82f7);
     color: #fff;
     padding: 7px 15px 7px 15px;
     -webkit-border-top-right-radius: 10px;
@@ -39,11 +39,17 @@ ul.nav li a {
     -webkit-box-shadow: 2px 2px 4px #888;
 }
 
-ul.nav li a:hover {
+ul.nav li a:hover{
     background: #AEABAB url(../images/border.png) no-repeat;
     color: #313740;
     padding: 7px 15px 7px 30px;
 }
+ul.nav li a.current{
+    background: #AEABAB url(../images/border.png) no-repeat;
+    color: #313740;
+    padding: 7px 15px 7px 30px;
+}
+
 /********End Tab*********/
 
 body
