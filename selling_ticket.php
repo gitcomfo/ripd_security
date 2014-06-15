@@ -2,7 +2,6 @@
 error_reporting(0);
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
 
 $loginUSERname = $_SESSION['UserID'] ;
 $logedinOfficeId = $_SESSION['loggedInOfficeID'];
@@ -10,7 +9,7 @@ $logedinOfficeId = $_SESSION['loggedInOfficeID'];
 $queryemp = mysql_query("SELECT idUser FROM cfs_user WHERE user_name = '$loginUSERname';");
 $emprow = mysql_fetch_assoc($queryemp);
 $db_onsid = $emprow['idUser'];
-$sqlerror="";$str_emp_name="";$str_emp_email="";
+$sqlerror=""; $str_emp_name=""; $str_emp_email="";
 ?>
 <title>টিকেট সেলিং</title>
 <link href="css/bush.css" rel="stylesheet" type="text/css"/>

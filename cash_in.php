@@ -1,7 +1,6 @@
 <?php
-include 'includes/session.inc';
+include_once 'includes/session.inc';
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
 $logedinOfficeId = $_SESSION['loggedInOfficeID'];
 $logedinOfficeName = $_SESSION['loggedInOfficeName'];
 $loginUSERid = $_SESSION['userIDUser'];
