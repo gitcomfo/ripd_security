@@ -26,7 +26,7 @@ $logedinOfficeType = $_SESSION['loggedInOfficeType'];
                 <div class="menu">
                     <ul>
                         <li><a href="index.php">হোম</a></li>
-                        <li><a>কোম্পানি</a>
+                        <li><a onClick='return true'>কোম্পানি</a>
                             <ul>
                                 <li><a href="about_company.php">এবাউট কোম্পানী</a></li>
                                 <li><a href="product_info.php" title="">পণ্যের তথ্য</a></li>
