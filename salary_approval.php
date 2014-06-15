@@ -7,6 +7,7 @@ include_once './includes/updateQueryPDO.php';
  $loginUSERid = $_SESSION['userIDUser'] ;
 $g_approvalID = $_GET['id'];
 $g_nfcid = $_GET['nfcid'];
+$sel_main_fund = $conn->prepare("SELECT fund_amount FROM main_fund WHERE fund_code= 'SWO'");
 $sel_select_sal_approval = $conn->prepare("SELECT * FROM salary_approval WHERE salappid= ?");
 $sel_select_sal_approval->execute(array($g_approvalID));
 $row = $sel_select_sal_approval->fetchAll();
@@ -66,7 +67,18 @@ if(isset($_POST['givsalary']))
     $nfc_catagory="personal"; 
     
     $conn->beginTransaction(); 
-    $sqlrslt1= $sql_update_sal_approval->execute(array($p_officeTotalSalary,$loginUSERid,$p_approvalID));
+    $sel_main_fund->execute();
+    $fundrow = $sel_main_fund->fetchAll();
+    foreach ($fundrow as $value) {
+        $fundamount = $value['fund_amount'];
+    }
+    if($fundamount >= $p_officeTotalSalary)
+    {
+        $sqlrslt1= $sql_update_sal_approval->execute(array($p_officeTotalSalary,$loginUSERid,$p_approvalID));
+    }
+    else {
+           $sqlrslt1 = 0;
+       }
     for($i=1;$i<=$numberOfRows;$i++)
     {
          $sqlrslt2= $sql_update_salary_chart->execute(array($p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i-1], $p_approvalID,$p_empCfsID[$i]));

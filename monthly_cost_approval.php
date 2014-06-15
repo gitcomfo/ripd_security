@@ -2,7 +2,6 @@
 //include 'includes/session.inc';
 error_reporting(0);
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
 $loginUSERid = $_SESSION['userIDUser'] ;
 $g_ons_exp_id = $_GET['id'];
 $g_nfcid = $_GET['nfcid'];

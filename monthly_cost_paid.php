@@ -2,17 +2,21 @@
 //include 'includes/session.inc';
 error_reporting(0);
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
  $loginUSERid = $_SESSION['userIDUser'] ;
  $logedinOfficeId = $_SESSION['loggedInOfficeID'];
  
  $g_ons_exp_id = $_GET['id'];
  $g_nfcid = $_GET['nfcid'];
+ $currentMonth = date('n');
+ $currentYear = date('Y');
 
 $sql_update_notification = $conn->prepare("UPDATE notification SET nfc_status=? WHERE idnotification=? ");
 $sql_fixed_expenditure = $conn->prepare("UPDATE ons_fixed_expenditure SET status='given' WHERE idfixexp=? ");
 $sel_fixed_exp = $conn->prepare("SELECT * FROM ons_fixed_expenditure WHERE idfixexp= ? AND 	status = 'approved' ");
 $ins_daily_inout = $conn->prepare("INSERT INTO acc_ofc_daily_inout (daily_date, daily_onsid, out_amount) VALUES (NOW(),?,?)");
+$sel_ledger = $conn->prepare("SELECT total_amount FROM acc_ofc_physc_ledger 
+                                                    WHERE month_no= ? AND year_no = ? AND ripd_office_id = ?");
+
 // ************************* select query ****************************************
 $sel_fixed_exp->execute(array($g_ons_exp_id));
 $row = $sel_fixed_exp->fetchAll();
@@ -33,8 +37,22 @@ if(isset($_POST['submit']))
     }
     
     $p_total = $_POST['total'];
-    $conn->beginTransaction(); 
-    $sqlrslt1= $sql_fixed_expenditure->execute(array($g_ons_exp_id ));
+    
+    $conn->beginTransaction();
+    
+    $sel_ledger->execute(array($currentMonth,$currentYear,$office_ons_id));
+    $ledgerrow = $sel_ledger->fetchAll();
+    foreach ($ledgerrow as $value) {
+        $ledgeramount = $value['total_amount'];
+    }
+    if($ledgeramount >= $p_total)
+    {
+        $sqlrslt1= $sql_fixed_expenditure->execute(array($g_ons_exp_id ));
+    }
+ else {
+    $sqlrslt1 = 0;
+    }
+    
     $status = 'complete';
     $sqlrslt3 = $sql_update_notification->execute(array($status,$g_nfcid));
     $insert = $ins_daily_inout->execute(array($office_ons_id,$p_total));
@@ -62,7 +80,7 @@ if(isset($_POST['submit']))
                     <tr><th colspan="2" style="text-align: center;font-size: 22px;">মাসিক খরচের টাকা গ্রহন</th></tr>
                     <tr>
                         <td colspan="2" style="text-align: center;font-size: 16px;"><input type="hidden" name="total" value="<?php echo $db_monthlytotal;?>" />
-                            <?php echo $monthName." , ".$db_year?>-এর মাসিক খরচ বাবদ <?php echo $db_monthlytotal?> টাকা গ্রহন করা হল
+                            <?php echo $monthName." , ".$db_year?>-এর মাসিক খরচ বাবদ <?php echo $db_monthlytotal?> টাকা গ্রহন ও খরচ করা হল
                         </td>          
                     </tr>
                     <tr>                    
@@ -74,6 +92,4 @@ if(isset($_POST['submit']))
         </div>
     </div>
 </div>
-<?php
-include 'includes/footer.php';
-?>
+<?php include 'includes/footer.php'; ?>
