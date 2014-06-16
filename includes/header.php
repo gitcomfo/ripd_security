@@ -35,7 +35,7 @@ $logedinOfficeType = $_SESSION['loggedInOfficeType'];
                                 <li><a href="awards.php" title="">এওয়ার্ড</a></li>
                             </ul>
                         </li>
-                        <li><a>প্রোডাক্ট চার্ট</a>
+                        <li><a onClick='return true'>প্রোডাক্ট চার্ট</a>
                             <ul>
                                 <li><a href="masterChart_part_1.php">মূল পণ্যতালিকা</a></li>
                                 <li><a href="product_finder.php" title="">প্রোডাক্ট খোঁজা</a></li>
@@ -44,13 +44,13 @@ $logedinOfficeType = $_SESSION['loggedInOfficeType'];
                                 <li><a href="previous_product.php" title="">প্রিভিয়াস প্রোডাক্ট চার্ট</a></li>
                             </ul>
                         </li>
-                        <li><a>যোগাযোগ</a>
+                        <li><a onClick='return true'>যোগাযোগ</a>
                             <ul>
                                 <li><a href="officeNcontact.php">অফিস এন্ড কন্টাক্ট</a></li>
                                 <li><a href="salesStoreAndContact.php" title="">সেলস স্টোর এন্ড কন্টাক্ট</a></li>
                             </ul>
                         </li>
-                        <li><a>নোটিশ বোর্ড</a>
+                        <li><a onClick='return true'>নোটিশ বোর্ড</a>
                             <ul>
                                 <li><a href="program_notice.php">প্রোগ্রাম</a></li>
                                 <li><a href="presentation_notice.php" title="">প্রেজেন্টেশন</a></li>
@@ -58,7 +58,7 @@ $logedinOfficeType = $_SESSION['loggedInOfficeType'];
                                 <li><a href="travel_notice.php" title="">ট্রাভেল</a></li>
                             </ul>
                         </li>
-                        <li><a>ক্যালেন্ডার</a>
+                        <li><a onClick='return true'>ক্যালেন্ডার</a>
                             <ul>
                                 <li><a href="office_day_calendar.php">অফিস ক্যালেন্ডার</a></li>
                                 <li><a href="salestore_day_calendar.php" title="">শপিং ক্যালেন্ডার</a></li>
