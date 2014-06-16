@@ -141,10 +141,8 @@ if(isset($_POST['makesalary']))
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;
     if (charCode ==8 || (charCode >47 && charCode <58) || charCode==46) {
-        status = "";
         return true;
     }
-    status = "This field accepts numbers only.";
     return false;
 }
 function calculateSalaryMinus(deduct,i)

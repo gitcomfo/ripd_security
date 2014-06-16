@@ -4,11 +4,18 @@ include_once 'includes/header.php';
 include_once './includes/selectQueryPDO.php';
 include_once './includes/insertQueryPDO.php';
 include_once './includes/updateQueryPDO.php';
+
  $loginUSERid = $_SESSION['userIDUser'] ;
 $g_approvalID = $_GET['id'];
 $g_nfcid = $_GET['nfcid'];
 $sel_main_fund = $conn->prepare("SELECT fund_amount FROM main_fund WHERE fund_code= 'SWO'");
+$sel_store_logical = $conn->prepare("SELECT * FROM acc_store_logc WHERE ons_type= 's_store' AND ons_id = ?");
+$up_main_fund = $conn->prepare("UPDATE main_fund SET fund_amount = fund_amount - ? WHERE fund_code = 'SWO'");
+$up_store_logical_xprofit = $conn->prepare("UPDATE acc_store_logc SET AEP = AEP - ?, last_update = NOW() WHERE ons_type= 's_store' AND ons_id = ?");
+$up_store_logical_profit = $conn->prepare("UPDATE acc_store_logc SET ASE = ASE - ?, last_update = NOW() WHERE ons_type= 's_store' AND ons_id = ?");
+$up_store_logical_buying = $conn->prepare("UPDATE acc_store_logc SET ACM = ACM - ?, last_update = NOW() WHERE ons_type= 's_store' AND ons_id = ?");
 $sel_select_sal_approval = $conn->prepare("SELECT * FROM salary_approval WHERE salappid= ?");
+
 $sel_select_sal_approval->execute(array($g_approvalID));
 $row = $sel_select_sal_approval->fetchAll();
 foreach ($row as $salapprovalrow) {
@@ -66,19 +73,63 @@ if(isset($_POST['givsalary']))
     $type="msg";
     $nfc_catagory="personal"; 
     
-    $conn->beginTransaction(); 
-    $sel_main_fund->execute();
-    $fundrow = $sel_main_fund->fetchAll();
-    foreach ($fundrow as $value) {
-        $fundamount = $value['fund_amount'];
-    }
-    if($fundamount >= $p_officeTotalSalary)
+    $conn->beginTransaction();
+    if($db_onstype == 'office')
     {
-        $sqlrslt1= $sql_update_sal_approval->execute(array($p_officeTotalSalary,$loginUSERid,$p_approvalID));
+        $sel_main_fund->execute();
+        $fundrow = $sel_main_fund->fetchAll();
+        foreach ($fundrow as $value) {
+            $fundamount = $value['fund_amount'];
+        }
+        if($fundamount >= $p_officeTotalSalary)
+        {
+            $sqlrslt1= $sql_update_sal_approval->execute(array($p_officeTotalSalary,$loginUSERid,$p_approvalID));
+            $sqlrslt5 = $up_main_fund->execute(array($p_officeTotalSalary));
+        }
+        else {
+               $sqlrslt1 = 0;
+           }
     }
-    else {
-           $sqlrslt1 = 0;
-       }
+ else {
+        $sel_store_logical->execute(array($db_offid));
+        $storerow = $sel_store_logical->fetchAll();
+        foreach ($storerow as $value) {
+            $db_profit = $value['ASE'];
+            $db_xtraProfit = $value['AEP'];
+            $db_buying = $value['ACM'];
+            $db_total = $db_profit + $db_xtraProfit + $db_buying;
+        }
+        if($db_total > $p_officeTotalSalary)
+        {
+            if($p_officeTotalSalary > $db_profit)
+            {
+                $upsql = $up_store_logical_profit->execute(array($db_profit,$db_offid));
+                $updated_totalsalary = $p_officeTotalSalary - $db_profit;
+                
+                if($updated_totalsalary > $db_xtraProfit)
+                {
+                     $upsql = $up_store_logical_xprofit->execute(array($db_xtraProfit,$db_offid));
+                     $updated_totalsalary = $updated_totalsalary - $db_xtraProfit;
+                     $upsql =  $up_store_logical_buying->execute(array($updated_totalsalary,$db_offid));
+                }
+                else 
+                {
+                     $upsql = $up_store_logical_xprofit->execute(array($updated_totalsalary,$db_offid));
+                }
+            }
+            else
+            {
+                $upsql = $up_store_logical_profit->execute(array($p_officeTotalSalary,$db_offid));
+            }
+            $sqlrslt1= $sql_update_sal_approval->execute(array($p_officeTotalSalary,$loginUSERid,$p_approvalID));
+        }
+    else 
+        {
+            $sqlrslt1 = 0;
+        }
+        
+    }
+    
     for($i=1;$i<=$numberOfRows;$i++)
     {
          $sqlrslt2= $sql_update_salary_chart->execute(array($p_deduct[$i], $p_xtrapay[$i], $p_totalpay[$i-1], $p_approvalID,$p_empCfsID[$i]));
@@ -87,6 +138,7 @@ if(isset($_POST['givsalary']))
     }
     $status = 'complete';
     $sqlrslt3 = $sql_update_notification->execute(array($status,$g_nfcid));
+    
      if($sqlrslt1  && $sqlrslt2 && $sqlrslt3 && $sqlrslt4)
         {
             $conn->commit();
