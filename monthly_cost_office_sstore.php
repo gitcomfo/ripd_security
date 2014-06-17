@@ -219,7 +219,7 @@ function beforeSubmit()
         <div>
             <form method="POST" action="" id="off_form" name="off_form" onsubmit="return beforeSubmit()">
                 <table class="formstyle"  > 
-                    <tr><th colspan="4" style="text-align: center" colspan="2"><h1>অফিস খরচ (মাসিক)</h1></th></tr>                      
+                    <tr><th colspan="4" style="text-align: center" colspan="2"><h1>অফিস / সেলসস্টোর খরচ (মাসিক)</h1></th></tr>                      
                     <tr>                    
                         <td>
                             <b>মাসঃ </b>
