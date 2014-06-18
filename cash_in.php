@@ -11,8 +11,8 @@ if(isset($_POST['cash_in']))
     $p_total_amount = $_POST['t_in_amount'];
     $p_reason = $_POST['inDescription'];
     $in_cheque_number = get_time_random_no(10);
-    $ins_acc_cheque = $conn->prepare("INSERT INTO acc_user_cheque (cheque_num, cheque_type, cheque_description, cheque_mak_datetime, cheque_amount, cheque_makerid, cheque_status)
-                                                                 VALUES (?,'in', ?,NOW(),?, ?, 'in_amount')");
+    $ins_acc_cheque = $conn->prepare("INSERT INTO acc_user_cheque (cheque_num, cheque_type, cheque_description, cheque_mak_datetime, cheque_amount, cheque_makerid, cheque_status,cheque_updated_userid,chqupd_officeid)
+                                                                 VALUES (?,'in', ?,NOW(),?, ?, 'in_amount',?,?)");
     $ins_daily_inout = $conn->prepare("INSERT INTO acc_ofc_daily_inout (daily_date, daily_onsid, in_amount) VALUES (NOW(),?,?)");
     $sel_onsID = $conn->prepare("SELECT idons_relation FROM ons_relation WHERE add_ons_id = ? AND catagory='office'");
     $up_main_fund = $conn->prepare("UPDATE main_fund SET fund_amount = fund_amount + ?, last_update = NOW() WHERE fund_code = 'HIA'");
@@ -32,7 +32,7 @@ if(isset($_POST['cash_in']))
     
     $conn->beginTransaction();
     
-    $sqlrslt1 = $ins_acc_cheque->execute(array($in_cheque_number,$p_reason,$p_total_amount,$p_cfsid));
+    $sqlrslt1 = $ins_acc_cheque->execute(array($in_cheque_number,$p_reason,$p_total_amount,$p_cfsid,$loginUSERid,$logedinOfficeId));
     $sqlrslt2 = $ins_daily_inout->execute(array($office_ons_id,$p_total_amount));
     $sqlrslt3 = $up_main_fund->execute(array($p_total_amount));
     $sqlrslt4 = $insert_notification->execute(array($loginUSERid,$p_cfsid,$notice,$url,$status,$type,$nfc_catagory));

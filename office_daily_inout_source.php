@@ -15,6 +15,8 @@ $sel_invest = $conn->prepare("SELECT SUM(inamount), receving_date FROM acc_ofc_p
                                                 AND  office_id = ? AND receving_date LIKE ? GROUP BY receving_date ORDER BY receving_date");
 $sel_branch_transfer = $conn->prepare("SELECT SUM(inamount), receving_date FROM acc_ofc_physc_in WHERE amount_status='branch'
                                                 AND  office_id = ? AND receving_date LIKE ? GROUP BY receving_date ORDER BY receving_date");
+$sel_cash_in = $conn->prepare("SELECT SUM(cheque_amount), cheque_mak_datetime FROM acc_user_cheque WHERE cheque_status='in_amount'
+                                                AND  chqupd_officeid = ? AND cheque_mak_datetime LIKE ? GROUP BY cheque_mak_datetime ORDER BY cheque_mak_datetime");
 
 $current_month = date('m');
 $current_year = date('Y');
@@ -81,7 +83,8 @@ if(isset($_POST['submit']))
                                 <?php
                                             $total_in_amount = 0;
                                             $total_out_amount = 0;
-                                           $receiving_date = $current_year."-".$current_month."-%";
+                                            $receiving_date = $current_year."-".$current_month."-%";
+                                            $receiving_datetime = $current_year."-".$current_month."-% %";
                                            $sel_invest->execute(array($db_onsID,$receiving_date));
                                            $investrow = $sel_invest->fetchAll();
                                            foreach ($investrow as $row) {
@@ -98,14 +101,27 @@ if(isset($_POST['submit']))
                                                 $branchrow = $sel_branch_transfer->fetchAll();
                                                 foreach ($branchrow as $row) {
                                                          $db_date = $row['receving_date'];
-                                                         $db_in_amount = $row['SUM(inamount)'];
+                                                         $db_branch_in_amount = $row['SUM(inamount)'];
 
                                                          echo "<tr>
                                                              <td>".  english2bangla(date('d/m/Y',  strtotime($db_date)))."</td>
                                                              <td style='text-align:right;'></td>
-                                                             <td style='text-align:right;'>$db_in_amount</td>
+                                                             <td style='text-align:right;'>$db_branch_in_amount</td>
                                                             </tr>";
                                                      }
+                                                        $sel_cash_in->execute(array($ons_id,$receiving_datetime));
+                                                        $cashinrow = $sel_cash_in->fetchAll();
+                                                        foreach ($cashinrow as $row) {
+                                                                 $db_date = $row['cheque_mak_datetime'];
+                                                                 $db_cash_in_amount = $row['SUM(cheque_amount)'];
+
+                                                                 echo "<tr>
+                                                                     <td>".  english2bangla(date('d/m/Y',  strtotime($db_date)))."</td>
+                                                                     <td style='text-align:right;'></td>
+                                                                     <td style='text-align:right;'></td>
+                                                                     <td style='text-align:right;'>$db_cash_in_amount</td>
+                                                                    </tr>";
+                                                             }
                                 ?>
                                 <tr>
                                     <td style='text-align:right;border-top: 1px solid black'>মোট</td>

@@ -5,10 +5,7 @@ include_once 'includes/header.php';
 
 $loginUSERname = $_SESSION['UserID'] ;
 $logedinOfficeId = $_SESSION['loggedInOfficeID'];
-
-$queryemp = mysql_query("SELECT idUser FROM cfs_user WHERE user_name = '$loginUSERname';");
-$emprow = mysql_fetch_assoc($queryemp);
-$db_onsid = $emprow['idUser'];
+$loginUSERid = $_SESSION['userIDUser'];
 $sqlerror=""; $str_emp_name=""; $str_emp_email="";
 ?>
 <title>টিকেট সেলিং</title>
@@ -461,14 +458,14 @@ if(isset($_POST['submit_ticket']))
                     
                    mysql_query("START TRANSACTION");
                    
-                   $tsql="INSERT INTO ticket (ticket_owner_name ,ticket_owner_mobile ,ticket_buyer_id, no_ofTicket_purchase ,seat_no ,xtra_seat ,total_ticket_prize ,total_amount, total_makingCharge, tckt_cash_paid, tckt_acc_paid, ticket_seller_id, Program_idprogram) 
-                            VALUES ('$ownerName', '$ownerMbl',$buyerid, $total_no_of_seat , '$str_SelectedSeat' , '$str_SelectedXSeat', $totalTicketPrize,  $totalamount,$totalMakingCharge, $paymentByCash, $paymentByAccount, $db_onsid, $valueID );";
+                   $tsql="INSERT INTO ticket (ticket_owner_name ,ticket_owner_mobile ,ticket_buyer_id, no_ofTicket_purchase ,seat_no ,xtra_seat ,total_ticket_prize ,total_amount, total_makingCharge, tckt_cash_paid, tckt_acc_paid, ticket_seller_id, ticket_selling_office, Program_idprogram) 
+                            VALUES ('$ownerName', '$ownerMbl',$buyerid, $total_no_of_seat , '$str_SelectedSeat' , '$str_SelectedXSeat', $totalTicketPrize,  $totalamount,$totalMakingCharge, $paymentByCash, $paymentByAccount, $loginUSERid,$logedinOfficeId, $valueID );";
                     $treslt=mysql_query($tsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৭';
                     $TicketID = mysql_insert_id();
                     
                     $ins_daily_inout = mysql_query("INSERT INTO acc_ofc_daily_inout (daily_date, daily_onsid, in_amount) VALUES (NOW(),$office_ons_id,$paymentByCash)") or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন?';
                     $sqlrslt3 = mysql_query("INSERT INTO notification (nfc_senderid,nfc_receiverid,nfc_message,nfc_actionurl,nfc_date,nfc_status, nfc_type, nfc_catagory) 
-                                                                VALUES ($db_onsid,$buyerid,'$notice','$url',NOW(),'$status','$type','$nfc_catagory')");
+                                                                VALUES ($loginUSERid,$buyerid,'$notice','$url',NOW(),'$status','$type','$nfc_catagory')");
                      if($treslt && $ins_daily_inout && $sqlrslt3)
                         {
                             mysql_query("COMMIT");

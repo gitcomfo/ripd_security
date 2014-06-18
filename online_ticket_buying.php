@@ -2,7 +2,6 @@
 error_reporting(0);
 //include_once 'includes/session.inc';
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
 
 $userID = $_SESSION['userIDUser'];
 $sel_cfs = mysql_query("SELECT * FROM cfs_user WHERE idUser = $userID");
@@ -222,10 +221,11 @@ if(isset($_POST['submit_ticket']))
                     $type="msg";
                     $nfc_catagory="personal";
                     $notice = "আপনার একাউন্ট হতে ".$program_name."-এর ".$total_no_of_seat." টি টিকেট কেনা হয়েছে";
+                    
                     mysql_query("START TRANSACTION");
 
-                    $tsql="INSERT INTO ticket (ticket_owner_name, ticket_owner_mobile, ticket_buyer_id, no_ofTicket_purchase, seat_no, xtra_seat, total_ticket_prize, total_amount,tckt_acc_paid, ticket_seller_id, Program_idprogram) 
-                                VALUES ('$ownerName', '$ownerMbl', '$buyer_id', '$total_no_of_seat', '$str_SelectedSeat', '$str_SelectedXSeat', '$totalTicketPrize', '$totalamount','$totalamount', 0, '$valueID');";
+                    $tsql="INSERT INTO ticket (ticket_owner_name, ticket_owner_mobile, ticket_buyer_id, no_ofTicket_purchase, seat_no, xtra_seat, total_ticket_prize, total_amount,tckt_acc_paid, ticket_seller_id, ticket_selling_office, Program_idprogram) 
+                                VALUES ('$ownerName', '$ownerMbl', '$buyer_id', '$total_no_of_seat', '$str_SelectedSeat', '$str_SelectedXSeat', '$totalTicketPrize', '$totalamount','$totalamount', 0, 0, '$valueID');";
                     $treslt=mysql_query($tsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৭';
                     $TicketID = mysql_insert_id();
 
@@ -238,6 +238,7 @@ if(isset($_POST['submit_ticket']))
                     else
                     {
                         mysql_query("ROLLBACK");
+                             echo "<script>alert('দুঃখিত, টিকিট ক্রয় করা যায়নাই')</script>";
                     }
                }
                else { $bookedmsg = "error"; }
