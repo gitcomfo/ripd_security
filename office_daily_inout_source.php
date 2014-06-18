@@ -13,10 +13,24 @@ foreach ($row as $onsrow) {
 }
 $sel_invest = $conn->prepare("SELECT SUM(inamount), receving_date FROM acc_ofc_physc_in WHERE amount_status='to_office'
                                                 AND  office_id = ? AND receving_date LIKE ? GROUP BY receving_date ORDER BY receving_date");
+
 $sel_branch_transfer = $conn->prepare("SELECT SUM(inamount), receving_date FROM acc_ofc_physc_in WHERE amount_status='branch'
                                                 AND  office_id = ? AND receving_date LIKE ? GROUP BY receving_date ORDER BY receving_date");
+
+$sel_branch_transfer_out = $conn->prepare("SELECT SUM(inamount), receving_date FROM acc_ofc_physc_in WHERE amount_status='branch'
+                                                AND  sender_office = ? AND receving_date LIKE ? GROUP BY receving_date ORDER BY receving_date");
+
 $sel_cash_in = $conn->prepare("SELECT SUM(cheque_amount), cheque_mak_datetime FROM acc_user_cheque WHERE cheque_status='in_amount'
                                                 AND  chqupd_officeid = ? AND cheque_mak_datetime LIKE ? GROUP BY cheque_mak_datetime ORDER BY cheque_mak_datetime");
+
+$sel_cash_out = $conn->prepare("SELECT SUM(cheque_amount), cheque_update_datetime FROM acc_user_cheque WHERE cheque_status='paid'
+                                                AND  chqupd_officeid = ? AND cheque_update_datetime LIKE ? GROUP BY cheque_update_datetime ORDER BY cheque_update_datetime");
+
+$sel_ticket_in = $conn->prepare("SELECT SUM(tckt_cash_paid), ticket_selling_date FROM ticket 
+                                                    WHERE ticket_selling_office = ? AND ticket_selling_date LIKE ? GROUP BY ticket_selling_date ORDER BY ticket_selling_date");
+
+$sel_daily_expenditure = $conn->prepare("SELECT SUM(exp_total_amount), exp_making_date  FROM ons_operational_exp 
+                                                    WHERE exp_ons_id = ? AND exp_making_date LIKE ? GROUP BY exp_making_date ORDER BY exp_making_date");
 
 $current_month = date('m');
 $current_year = date('Y');
@@ -65,7 +79,7 @@ if(isset($_POST['submit']))
                     <tr>
                         <td>
                             <table>
-                                <tr id="table_row_odd"><td colspan="3" style="text-align: center;"><b><?php echo $monthName." ,".$current_year?>-এর দৈনিক ইন/ আউট</b></td></tr>
+                                <tr id="table_row_odd"><td colspan="8" style="text-align: center;"><b><?php echo $monthName." ,".$current_year?>-এর দৈনিক ইন/ আউট</b></td></tr>
                                 <tr id="table_row_odd">
                                     <td rowspan="2"><b>তারিখ</b></td>
                                     <td colspan="4"><b>ইন এমাউন্ট</b></td>
@@ -81,8 +95,13 @@ if(isset($_POST['submit']))
                                     <td><b>কাস্টমার ক্যাশ আউট</b></td>
                                 </tr>
                                 <?php
-                                            $total_in_amount = 0;
-                                            $total_out_amount = 0;
+                                            $total_invest_amount = 0;
+                                            $total_cashin_amount = 0;
+                                            $total_ticketin_amount = 0;
+                                            $total_branchin_amount = 0;
+                                            $total_branchout_amount = 0;
+                                            $total_cashout_amount = 0;
+                                            $total_dexp_amount = 0;
                                             $receiving_date = $current_year."-".$current_month."-%";
                                             $receiving_datetime = $current_year."-".$current_month."-% %";
                                            $sel_invest->execute(array($db_onsID,$receiving_date));
@@ -90,7 +109,7 @@ if(isset($_POST['submit']))
                                            foreach ($investrow as $row) {
                                                     $db_date = $row['receving_date'];
                                                     $db_in_amount = $row['SUM(inamount)'];
-                                                    
+                                                    $total_invest_amount =+ $db_in_amount;
                                                     echo "<tr>
                                                         <td>".  english2bangla(date('d/m/Y',  strtotime($db_date)))."</td>
                                                         <td style='text-align:right;'>$db_in_amount</td>
@@ -102,31 +121,104 @@ if(isset($_POST['submit']))
                                                 foreach ($branchrow as $row) {
                                                          $db_date = $row['receving_date'];
                                                          $db_branch_in_amount = $row['SUM(inamount)'];
-
+                                                         $total_branchin_amount =+ $db_branch_in_amount;
                                                          echo "<tr>
                                                              <td>".  english2bangla(date('d/m/Y',  strtotime($db_date)))."</td>
                                                              <td style='text-align:right;'></td>
                                                              <td style='text-align:right;'>$db_branch_in_amount</td>
                                                             </tr>";
                                                      }
-                                                        $sel_cash_in->execute(array($ons_id,$receiving_datetime));
-                                                        $cashinrow = $sel_cash_in->fetchAll();
-                                                        foreach ($cashinrow as $row) {
-                                                                 $db_date = $row['cheque_mak_datetime'];
-                                                                 $db_cash_in_amount = $row['SUM(cheque_amount)'];
+                                                    $sel_cash_in->execute(array($ons_id,$receiving_datetime));
+                                                    $cashinrow = $sel_cash_in->fetchAll();
+                                                    foreach ($cashinrow as $row) {
+                                                             $db_date = $row['cheque_mak_datetime'];
+                                                             $db_cash_in_amount = $row['SUM(cheque_amount)'];
+                                                             $total_cashin_amount =+ $db_cash_in_amount;
+
+                                                             echo "<tr>
+                                                                 <td>".  english2bangla(date('d/m/Y',  strtotime($db_date)))."</td>
+                                                                 <td style='text-align:right;'></td>
+                                                                 <td style='text-align:right;'></td>
+                                                                 <td style='text-align:right;'>$db_cash_in_amount</td>
+                                                                </tr>";
+                                                         }
+
+                                                         $sel_ticket_in->execute(array($ons_id,$receiving_date));
+                                                        $ticketrow = $sel_ticket_in->fetchAll();
+                                                        foreach ($ticketrow as $row) {
+                                                                 $db_date = $row['ticket_selling_date'];
+                                                                 $db_ticket_amount = $row['SUM(tckt_cash_paid)'];
+                                                                 $total_ticketin_amount =+ $db_ticket_amount;
+                                                                 echo "<tr>
+                                                                     <td>".  english2bangla(date('d/m/Y',  strtotime($db_date)))."</td>
+                                                                     <td style='text-align:right;'></td>
+                                                                     <td style='text-align:right;'></td>
+                                                                     <td style='text-align:right;'></td>
+                                                                     <td style='text-align:right;'>$db_ticket_amount</td>
+                                                                    </tr>";
+                                                             }
+                                                        
+                                                        $sel_daily_expenditure->execute(array($db_onsID,$receiving_datetime));
+                                                        $dexprow = $sel_daily_expenditure->fetchAll();
+                                                        foreach ($dexprow as $row) {
+                                                                 $db_date = $row['exp_making_date'];
+                                                                 $db_dexp_amount = $row['SUM(exp_total_amount)'];
+                                                                 $total_dexp_amount =+ $db_dexp_amount;
 
                                                                  echo "<tr>
                                                                      <td>".  english2bangla(date('d/m/Y',  strtotime($db_date)))."</td>
                                                                      <td style='text-align:right;'></td>
                                                                      <td style='text-align:right;'></td>
-                                                                     <td style='text-align:right;'>$db_cash_in_amount</td>
+                                                                     <td style='text-align:right;'></td>
+                                                                     <td style='text-align:right;'></td>
+                                                                     <td style='text-align:right;'>$db_dexp_amount</td>
                                                                     </tr>";
                                                              }
+                                                             // branch transfer out ***************
+                                                             $sel_branch_transfer_out->execute(array($db_onsID,$receiving_date));
+                                                        $branchrow2 = $sel_branch_transfer_out->fetchAll();
+                                                        foreach ($branchrow2 as $row) {
+                                                                 $db_date = $row['receving_date'];
+                                                                 $db_branch_out_amount = $row['SUM(inamount)'];
+                                                                 $total_branchout_amount =+ $db_branch_out_amount;
+                                                                 echo "<tr>
+                                                                     <td>".  english2bangla(date('d/m/Y',  strtotime($db_date)))."</td>
+                                                                     <td style='text-align:right;'></td>
+                                                                     <td style='text-align:right;'></td>
+                                                                     <td style='text-align:right;'></td>
+                                                                     <td style='text-align:right;'></td>
+                                                                     <td style='text-align:right;'></td>
+                                                                     <td style='text-align:right;'>$db_branch_out_amount</td>
+                                                                    </tr>";
+                                                             }
+                                                             // cash out by user *******************
+                                                              $sel_cash_out->execute(array($ons_id,$receiving_datetime));
+                                                            $cashoutrow = $sel_cash_out->fetchAll();
+                                                            foreach ($cashoutrow as $row) {
+                                                                     $db_date = $row['cheque_update_datetime'];
+                                                                     $db_cash_out_amount = $row['SUM(cheque_amount)'];
+                                                                     $total_cashout_amount =+ $db_cash_out_amount;
+                                                                     echo "<tr>
+                                                                         <td>".  english2bangla(date('d/m/Y',  strtotime($db_date)))."</td>
+                                                                         <td style='text-align:right;'></td>
+                                                                         <td style='text-align:right;'></td>
+                                                                         <td style='text-align:right;'></td>
+                                                                         <td style='text-align:right;'></td>
+                                                                         <td style='text-align:right;'></td>
+                                                                         <td style='text-align:right;'></td>
+                                                                         <td style='text-align:right;'>$db_cash_out_amount</td>
+                                                                        </tr>";
+                                                                 }
                                 ?>
                                 <tr>
                                     <td style='text-align:right;border-top: 1px solid black'>মোট</td>
-                                    <td style='text-align:right;border-top: 1px solid black'><?php echo $total_in_amount;?></td>
-                                    <td style='text-align:right;border-top: 1px solid black'><?php echo $total_out_amount;?></td>
+                                    <td style='text-align:right;border-top: 1px solid black'><?php echo $total_invest_amount;?></td>
+                                    <td style='text-align:right;border-top: 1px solid black'><?php echo $total_branchin_amount;?></td>
+                                    <td style='text-align:right;border-top: 1px solid black'><?php echo $total_cashin_amount;?></td>
+                                    <td style='text-align:right;border-top: 1px solid black'><?php echo $total_ticketin_amount;?></td>
+                                    <td style='text-align:right;border-top: 1px solid black'><?php echo $total_dexp_amount;?></td>
+                                    <td style='text-align:right;border-top: 1px solid black'><?php echo $total_branchout_amount;?></td>
+                                    <td style='text-align:right;border-top: 1px solid black'><?php echo $total_cashout_amount;?></td>
                                 </tr>
                             </table>
                         </td>
