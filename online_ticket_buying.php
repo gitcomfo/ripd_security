@@ -224,8 +224,8 @@ if(isset($_POST['submit_ticket']))
                     
                     mysql_query("START TRANSACTION");
 
-                    $tsql="INSERT INTO ticket (ticket_owner_name, ticket_owner_mobile, ticket_buyer_id, no_ofTicket_purchase, seat_no, xtra_seat, total_ticket_prize, total_amount,tckt_acc_paid, ticket_seller_id, ticket_selling_office, Program_idprogram) 
-                                VALUES ('$ownerName', '$ownerMbl', '$buyer_id', '$total_no_of_seat', '$str_SelectedSeat', '$str_SelectedXSeat', '$totalTicketPrize', '$totalamount','$totalamount', 0, 0, '$valueID');";
+                    $tsql="INSERT INTO ticket (ticket_owner_name, ticket_owner_mobile, ticket_buyer_id, no_ofTicket_purchase, seat_no, xtra_seat, total_ticket_prize, total_amount,tckt_acc_paid, ticket_seller_id, ticket_selling_office, ticket_selling_date, Program_idprogram) 
+                                VALUES ('$ownerName', '$ownerMbl', '$buyer_id', '$total_no_of_seat', '$str_SelectedSeat', '$str_SelectedXSeat', '$totalTicketPrize', '$totalamount','$totalamount', 0, 0, NOW(), '$valueID');";
                     $treslt=mysql_query($tsql) or $sqlerror=' অজ্ঞাত ত্রুটি, সিস্টেম অ্যাডমিনের সাথে যোগাযোগ করুন৭';
                     $TicketID = mysql_insert_id();
 
