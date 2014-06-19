@@ -281,9 +281,9 @@ function readBarcode(code,location) {
             <input type="text" id="barcode" name="barcode" style="width: 300px;"/><br/>
             <b>প্রোডাক্ট কোড</b>
             <input type="text" id="amots" name="amots" onKeyUp="searchCode('productIN.php')" autocomplete="off" style="width: 300px;"/>
-            <div id="layer2"style="width:400px;position:absolute;top:46%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br></br>
+            <div id="layer2"style="width:400px;position:absolute;top:53%;left:8%;z-index:1;padding:5px;border: 1px solid #000000; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div></br>
             <b>প্রোডাক্ট নাম</b><input type="text" id="allsearch" name="allsearch" onKeyUp="searchName('productIN.php');" autocomplete="off" style="width: 300px;"/>
-            <div  id="searchResult"style="position:absolute;top:58%;left:8%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
+            <div  id="searchResult"style="position:absolute;top:61.5%;left:8%;width:400px;z-index:10;padding:5px;border: 1px inset black; overflow:auto; height:105px; background-color:#F5F5FF;display: none;" ></div>
         </div>
     <div class="topright" style="float:left; width: 70%;">
     <?php
