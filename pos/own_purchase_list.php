@@ -89,7 +89,7 @@ function get_catagory() {
                         <tr>
                             <td width="10%" style="color: blue; font-size: 25px"><div align="center"><strong>তারিখ</strong></div></td>
                             <td width="12%"style="color: blue; font-size: 25px"><div align="center"><strong>চালান নং</strong></div></td>
-                            <td width="20%" style="color: blue; font-size: 25px"><div align="center"><strong>প্রোডাক্টের কোড</strong></div></td>
+                            <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>প্রোডাক্টের কোড</strong></div></td>
                             <td width="25%" style="color: blue; font-size: 25px"><div align="center"><strong>প্রোডাক্টের নাম</strong></div></td>
                             <td width="8%" style="color: blue; font-size: 25px"><div align="center"><strong>পরিমাণ</strong></div></td>
                             <td width="15%" style="color: blue; font-size: 25px"><div align="center"><strong>ক্রয়মূল্য (টাকা)</strong></div></td>
