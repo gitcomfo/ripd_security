@@ -13,7 +13,7 @@ $sql_select_purchase_list = $conn->prepare("SELECT in_input_date, chalan_no, pro
                                                     WHERE product_purchase.Product_chart_idproductchart = product_chart.idproductchart
                                                     AND product_purchase.pps_id = product_purchase_summary.ppsid
                                                     AND product_purchase_summary.cfs_user_idUser = cfs_user.idUser
-                                                    AND in_onsid = ? AND in_ons_type = ? ORDER BY in_input_date DESC");
+                                                    AND in_onsid = ? AND in_ons_type = ? ORDER BY in_input_date DESC,chalan_no ");
 
 $sql_select_category = $conn->prepare("SELECT DISTINCT pro_catagory, pro_cat_code FROM product_catagory ORDER BY pro_catagory");
 
