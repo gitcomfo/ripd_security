@@ -207,7 +207,7 @@ function showCustInfo(custType)
 		 reqst.send(null);
 	}		
 }
-function showPayType(payType)
+function showPayType(payType) // to select payment type ***************
 {
 var reqst = getXMLHTTP();		
 	if (reqst) 
