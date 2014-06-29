@@ -11,12 +11,12 @@ $sql_update_notification = $conn->prepare("UPDATE send_message SET status='read'
 $sel_message->execute(array($g_id));
     $row = $sel_message->fetchAll();
     foreach ($row as $value) {
-        $db_sender_id = $value['sender_id'];
+        $db_receiver_id = $value['receiver_id'];
         $db_msg = $value['msg'];
         $db_date = $value['sending_date'];
         $db_time = $value['sending_time'];
     }
-    $sql_select_cfs_user->execute(array($db_sender_id));
+    $sql_select_cfs_user->execute(array($db_receiver_id));
     $row1 = $sql_select_cfs_user->fetchAll();
     foreach ($row1 as $value1) {
         $db_sender_name = $value1['account_name'];
@@ -33,9 +33,9 @@ $sel_message->execute(array($g_id));
 <body>
     
     <table  class="formstyle" style="margin: 5px 10px 15px 10px; width: 98%; font-family: SolaimanLipi !important;">          
-        <tr><th colspan="3" style="text-align: center;">আপনার প্রাপ্ত ক্ষুদে বার্তা</th></tr>
+        <tr><th colspan="3" style="text-align: center;">আপনার পাঠানো ক্ষুদে বার্তা</th></tr>
             <tr>
-                <td style="width: 20%"><b>প্রেরক</b></td>
+                <td style="width: 20%"><b>প্রাপক</b></td>
                 <td style="width: 1%">:</td>
                 <td style="width: 55%"><?php echo $db_sender_name;?></td>                                      
             </tr>

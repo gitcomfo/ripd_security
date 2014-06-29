@@ -7,7 +7,11 @@ $loginUSERid = $_SESSION['userIDUser'];
 $sql_select_cfs_user= $conn->prepare("SELECT account_name FROM cfs_user WHERE idUser = ?");
 $sel_personal_notification = $conn->prepare("SELECT * FROM send_message WHERE receiver_id = ? 
                                                                          ORDER BY sending_date,sending_time DESC LIMIT 10");
+$sel_personal_notification_send = $conn->prepare("SELECT * FROM send_message WHERE sender_id = ? 
+                                                                         ORDER BY sending_date,sending_time DESC LIMIT 10");
 $sel_personal_notification_selected = $conn->prepare("SELECT * FROM send_message WHERE receiver_id = ? 
+                                                                        AND sending_date BETWEEN ? AND ? ORDER BY sending_date,sending_time DESC LIMIT 10");
+$sel_personal_notification_selected_send = $conn->prepare("SELECT * FROM send_message WHERE sender_id = ? 
                                                                         AND sending_date BETWEEN ? AND ? ORDER BY sending_date,sending_time DESC LIMIT 10");
 ?>
 
@@ -22,6 +26,10 @@ $sel_personal_notification_selected = $conn->prepare("SELECT * FROM send_message
     function message_details(id)
     {
         TINY.box.show({iframe:'show_message.php?id='+id,width:850,height:600,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});
+    }
+     function send_message_details(id)
+    {
+        TINY.box.show({iframe:'show_outbox_message.php?id='+id,width:850,height:600,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});
     }
 </script>
  
@@ -45,96 +53,196 @@ $sel_personal_notification_selected = $conn->prepare("SELECT * FROM send_message
                         </td>
                         <td style="text-align: center;"><a onclick="send_message();" style="cursor: pointer;"><img src="images/mail_send.png" style="width: 50px;height: 50px;" /><br/><font style="color:green"><b>বার্তা পাঠান</b></font></a></td>
                 </tr>
-                <tr><td colspan="3" style="text-align: center"><br/><font style="color: green;"><b>প্রাপ্ত ক্ষুদে বার্তা</b></font><hr><br/></td></tr>
-                <tr id="table_row_odd">
-                    <td style="width: 20%;border-bottom:1px solid black"><b><?php echo "প্রেরক";?></b></td>
-                    <td style="width: 60%;text-align: center;border-bottom:1px solid black"><b><?php echo "বার্তা";?></b></td>               
-                    <td style="width: 20%;text-align: center;border-bottom:1px solid black"><b><?php echo "তারিখ";?></b></td>
-                            
+                <tr>
+                    <td colspan="2" style="text-align: center"><br/><font style="color: green;"><b>প্রাপ্ত ক্ষুদে বার্তা</b></font><hr><br/></td>
+                    <td style="text-align: center"><br/><font style="color: green;"><b>পাঠানো ক্ষুদে বার্তা</b></font><hr><br/></td>
                 </tr>
-                <tbody>
-                    <?php
-                    if(isset($_POST['submit']))
-                    {
-                       $startdate = $_POST['startdate'];
-                       $enddate = $_POST['enddate'];
-                        $sel_personal_notification_selected ->execute(array($loginUSERid,$startdate,$enddate));
-                        $notificationrow = $sel_personal_notification_selected->fetchAll();
-                        $countrow = count($notificationrow);
-                        if($countrow == 0)
-                        {
-                            echo "<tr><td colspan = '3' style='color:red;text-align:center;'> আপনার জন্য কোন বার্তা নেই</td></tr>";
-                        }
-                        else 
-                        {
-                            foreach ($notificationrow as $value)
-                                 {
-                                    $db_nfc_id = $value['idmessage'];
-                                    $db_sender_id = $value['sender_id'];
-                                    $db_status = $value['status'];
-                                    $sql_select_cfs_user->execute(array($db_sender_id));
-                                    $row = $sql_select_cfs_user->fetchAll();
-                                    foreach ($row as $value1) {
-                                        $db_sender_name = $value1['account_name'];
-                                    }
-                                    $db_msg = $value['msg'];
-                                    $rest = $rest = substr($db_msg, 0,50); 
-                                    $db_date = $value['sending_date'];
-                                    if($db_status == 'send')
-                                    {
-                                        echo "<tr style='background-color:#ffcc99'>";
-                                    }
-                                    else {
-                                     echo "<tr>";   
-                                    } 
-                                     echo "<td style=';border-bottom:1px solid black'>$db_sender_name</td>";
-                                    echo "<td style='border-bottom:1px solid black'><a onclick=message_details(".$db_nfc_id.") style='cursor:pointer;' >$rest ...</a></td>";                                 
-                                    echo "<td style='text-align: center;border-bottom:1px solid black'>".english2bangla(date('d/m/Y', strtotime($db_date)))."</td>";
-                                    echo "</tr>";
-                                  }
-                        }
-                    }
-                    else
-                    {
-                        $sel_personal_notification ->execute(array($loginUSERid));
-                        $notificationrow = $sel_personal_notification->fetchAll();
-                        $countrow = count($notificationrow);
-                        if($countrow == 0)
-                        {
-                            echo "<tr><td colspan = '3' style='color:red;text-align:center;'> এই মুহূর্তে আপনার জন্য কোন বার্তা নেই</td></tr>";
-                        }
-                        else 
-                        {
-                            foreach ($notificationrow as $value)
-                                 {
-                                    $db_nfc_id = $value['idmessage'];
-                                    $db_sender_id = $value['sender_id'];
-                                    $db_status = $value['status'];
-                                    $sql_select_cfs_user->execute(array($db_sender_id));
-                                    $row = $sql_select_cfs_user->fetchAll();
-                                    foreach ($row as $value1) {
-                                        $db_sender_name = $value1['account_name'];
-                                    }
-                                    $db_msg = $value['msg'];
-                                    $rest = $rest = substr($db_msg, 0,50); 
-                                    $db_date = $value['sending_date'];
-                                    if($db_status == 'send')
-                                    {
-                                        echo "<tr style='background-color:#ffcc99'>";
-                                    }
-                                    else {
-                                     echo "<tr>";   
-                                    }
-                                    echo "<td style='border-bottom:1px solid black'>$db_sender_name</td>";            
-                                    echo "<td style='border-bottom:1px solid black'><a onclick=message_details(".$db_nfc_id.") style='cursor:pointer;' >$rest...</a></td>";
-                                    echo "<td style='text-align: center;border-bottom:1px solid black'>".english2bangla(date('d/m/Y', strtotime($db_date)))."</td>";
-                                    echo "</tr>";
-                                  }
-                        }
-                    }
-                        
-                    ?>
-                </tbody>          
+                <tr id="table_row_odd">
+                    <td colspan="2" style="width: 50%;padding-left: 0px;">
+                        <table>
+                            <tr>
+                                <td style="width: 20%;border-bottom:1px solid black;"><b><?php echo "প্রেরক";?></b></td>
+                                <td style="width: 60%;text-align: center;border-bottom:1px solid black"><b><?php echo "বার্তা";?></b></td>               
+                                <td style="width: 20%;text-align: center;border-bottom:1px solid black;border-right: 1px solid black"><b><?php echo "তারিখ";?></b></td>
+                            </tr>
+                            <tbody>
+                                            <?php
+                                            if(isset($_POST['submit']))
+                                            {
+                                               $startdate = $_POST['startdate'];
+                                               $enddate = $_POST['enddate'];
+                                                $sel_personal_notification_selected ->execute(array($loginUSERid,$startdate,$enddate));
+                                                $notificationrow = $sel_personal_notification_selected->fetchAll();
+                                                $countrow = count($notificationrow);
+                                                if($countrow == 0)
+                                                {
+                                                    echo "<tr><td colspan = '3' style='color:red;text-align:center;'> আপনার জন্য কোন বার্তা নেই</td></tr>";
+                                                }
+                                                else 
+                                                {
+                                                    foreach ($notificationrow as $value)
+                                                         {
+                                                            $db_nfc_id = $value['idmessage'];
+                                                            $db_sender_id = $value['sender_id'];
+                                                            $db_status = $value['status'];
+                                                            $sql_select_cfs_user->execute(array($db_sender_id));
+                                                            $row = $sql_select_cfs_user->fetchAll();
+                                                            foreach ($row as $value1) {
+                                                                $db_sender_name = $value1['account_name'];
+                                                            }
+                                                            $db_msg = $value['msg'];
+                                                            $rest = $rest = substr($db_msg, 0,30); 
+                                                            $db_date = $value['sending_date'];
+                                                            if($db_status == 'send')
+                                                            {
+                                                                echo "<tr style='background-color:#ffcc99'>";
+                                                            }
+                                                            else {
+                                                             echo "<tr>";   
+                                                            } 
+                                                             echo "<td style=';border-bottom:1px solid black'>$db_sender_name</td>";
+                                                            echo "<td style='border-bottom:1px solid black'><a onclick=message_details(".$db_nfc_id.") style='cursor:pointer;' >$rest ...</a></td>";                                 
+                                                            echo "<td style='text-align: center;border-bottom:1px solid black;border-right: 1px solid black'>".english2bangla(date('d/m/Y', strtotime($db_date)))."</td>";
+                                                            echo "</tr>";
+                                                          }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                $sel_personal_notification ->execute(array($loginUSERid));
+                                                $notificationrow = $sel_personal_notification->fetchAll();
+                                                $countrow = count($notificationrow);
+                                                if($countrow == 0)
+                                                {
+                                                    echo "<tr><td colspan = '3' style='color:red;text-align:center;'> এই মুহূর্তে আপনার জন্য কোন বার্তা নেই</td></tr>";
+                                                }
+                                                else 
+                                                {
+                                                    foreach ($notificationrow as $value)
+                                                         {
+                                                            $db_nfc_id = $value['idmessage'];
+                                                            $db_sender_id = $value['sender_id'];
+                                                            $db_status = $value['status'];
+                                                            $sql_select_cfs_user->execute(array($db_sender_id));
+                                                            $row = $sql_select_cfs_user->fetchAll();
+                                                            foreach ($row as $value1) {
+                                                                $db_sender_name = $value1['account_name'];
+                                                            }
+                                                            $db_msg = $value['msg'];
+                                                            $rest = $rest = substr($db_msg, 0,30); 
+                                                            $db_date = $value['sending_date'];
+                                                            if($db_status == 'send')
+                                                            {
+                                                                echo "<tr style='background-color:#ffcc99'>";
+                                                            }
+                                                            else {
+                                                             echo "<tr>";   
+                                                            }
+                                                            echo "<td style='border-bottom:1px solid black'>$db_sender_name</td>";            
+                                                            echo "<td style='border-bottom:1px solid black'><a onclick=message_details(".$db_nfc_id.") style='cursor:pointer;' >$rest...</a></td>";
+                                                            echo "<td style='text-align: center;border-bottom:1px solid black;border-right: 1px solid black'>".english2bangla(date('d/m/Y', strtotime($db_date)))."</td>";
+                                                            echo "</tr>";
+                                                          }
+                                                }
+                                            }
+
+                                            ?>
+                                    </tbody>
+                        </table>
+                    </td>
+                    <td style="padding-left: 0px;">
+                        <table>
+                            <tr>
+                                <td style="width: 20%;border-bottom:1px solid black;border-left: 1px solid black"><b><?php echo "প্রাপক";?></b></td>
+                                <td style="width: 60%;text-align: center;border-bottom:1px solid black"><b><?php echo "বার্তা";?></b></td>               
+                                <td style="width: 20%;text-align: center;border-bottom:1px solid black;"><b><?php echo "তারিখ";?></b></td>
+                            </tr>
+                            <tbody>
+                                            <?php
+                                            if(isset($_POST['submit']))
+                                            {
+                                               $startdate = $_POST['startdate'];
+                                               $enddate = $_POST['enddate'];
+                                                $sel_personal_notification_selected_send ->execute(array($loginUSERid,$startdate,$enddate));
+                                                $notificationrow = $sel_personal_notification_selected_send->fetchAll();
+                                                $countrow = count($notificationrow);
+                                                if($countrow == 0)
+                                                {
+                                                    echo "<tr><td colspan = '3' style='color:red;text-align:center;'> আপনার জন্য কোন বার্তা নেই</td></tr>";
+                                                }
+                                                else 
+                                                {
+                                                    foreach ($notificationrow as $value)
+                                                         {
+                                                            $db_nfc_id = $value['idmessage'];
+                                                            $db_sender_id = $value['sender_id'];
+                                                            $db_status = $value['status'];
+                                                            $sql_select_cfs_user->execute(array($db_sender_id));
+                                                            $row = $sql_select_cfs_user->fetchAll();
+                                                            foreach ($row as $value1) {
+                                                                $db_sender_name = $value1['account_name'];
+                                                            }
+                                                            $db_msg = $value['msg'];
+                                                            $rest = $rest = substr($db_msg, 0,10); 
+                                                            $db_date = $value['sending_date'];
+                                                            if($db_status == 'send')
+                                                            {
+                                                                echo "<tr style='background-color:#ffcc99'>";
+                                                            }
+                                                            else {
+                                                             echo "<tr>";   
+                                                            } 
+                                                             echo "<td style=';border-bottom:1px solid black;border-left: 1px solid black'>$db_sender_name</td>";
+                                                            echo "<td style='border-bottom:1px solid black'><a onclick=send_message_details(".$db_nfc_id.") style='cursor:pointer;' >$rest ...</a></td>";                                 
+                                                            echo "<td style='text-align: center;border-bottom:1px solid black'>".english2bangla(date('d/m/Y', strtotime($db_date)))."</td>";
+                                                            echo "</tr>";
+                                                          }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                $sel_personal_notification_send ->execute(array($loginUSERid));
+                                                $notificationrow = $sel_personal_notification_send->fetchAll();
+                                                $countrow = count($notificationrow);
+                                                if($countrow == 0)
+                                                {
+                                                    echo "<tr><td colspan = '3' style='color:red;text-align:center;'> এই মুহূর্তে আপনার জন্য কোন বার্তা নেই</td></tr>";
+                                                }
+                                                else 
+                                                {
+                                                    foreach ($notificationrow as $value)
+                                                         {
+                                                            $db_nfc_id = $value['idmessage'];
+                                                            $db_sender_id = $value['sender_id'];
+                                                            $db_status = $value['status'];
+                                                            $sql_select_cfs_user->execute(array($db_sender_id));
+                                                            $row = $sql_select_cfs_user->fetchAll();
+                                                            foreach ($row as $value1) {
+                                                                $db_sender_name = $value1['account_name'];
+                                                            }
+                                                            $db_msg = $value['msg'];
+                                                            $rest = $rest = substr($db_msg, 0,10); 
+                                                            $db_date = $value['sending_date'];
+                                                            if($db_status == 'send')
+                                                            {
+                                                                echo "<tr style='background-color:#ffcc99'>";
+                                                            }
+                                                            else {
+                                                             echo "<tr>";   
+                                                            }
+                                                            echo "<td style='border-bottom:1px solid black;border-left: 1px solid black'>$db_sender_name</td>";            
+                                                            echo "<td style='border-bottom:1px solid black'><a onclick=send_message_details(".$db_nfc_id.") style='cursor:pointer;' >$rest...</a></td>";
+                                                            echo "<td style='text-align: center;border-bottom:1px solid black'>".english2bangla(date('d/m/Y', strtotime($db_date)))."</td>";
+                                                            echo "</tr>";
+                                                          }
+                                                }
+                                            }
+
+                                            ?>
+                                    </tbody>
+                        </table>
+                    </td>    
+                </tr>     
             </table>
     </div>
 <?php include_once 'includes/footer.php'; ?> 
