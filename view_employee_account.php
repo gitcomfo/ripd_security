@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
 include_once 'includes/areaSearch2.php';
 $userID = $_SESSION['userIDUser'];
 

@@ -108,7 +108,7 @@ function beforeSubmit()
                             <td style="text-align: left; width: 60%"> <input class="box" type="text" readonly="" name="leave_code" class="box" value="<?php echo $leaveCode;?>" /></td>
                         </tr>
                         <tr><td style="text-align: right; width: 40%"><b>বর্ণনা : </b></td>
-                            <td style="text-align: left; width: 60%"><textarea class="box" type="text" name="leave_des" class="box" /></textarea></td>
+                            <td style="text-align: left; width: 60%;padding-left: 0px;"><textarea class="box" type="text" name="leave_des" class="box" /></textarea></td>
                         </tr>
                         <tr><td style="text-align: right; width: 40%"><b >বেতন কর্তন : </b></td>
                             <td><input type='radio' name='deduct' id="deduct" value='yes' onclick = 'deduction(this.value)'/> হবে

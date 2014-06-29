@@ -1,6 +1,5 @@
 <?php
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
 
 $lvingrdsql = "UPDATE `leave_in_grade` SET `no_of_days` = ? WHERE `pay_grade_idpaygrade` =? AND `leave_policy_idleavepolicy` =?";
 $lv_up_stmt = $conn->prepare($lvingrdsql);
@@ -117,15 +116,15 @@ function deduction(checkvalue)
                         </tr>
                             <?php }?>
                         <tr>
-                            <td colspan="2" ></br><hr /></br></td>
+                            <td colspan="2" ></br><hr /></td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <table>
+                                <table cellspacing="0">
                                     <tr id = "table_row_odd">
-                                        <td width="43%" style="text-align: center;"><b>ক্যাটাগরি</b></td>
-                                        <td width="27%" style="text-align: center;"><b>গ্রেড</b></td>
-                                        <td width="30%" style="text-align: center;"><b>প্রাপ্ত ছুটি</b></td>
+                                        <td width="43%" style="text-align: center;border-bottom: 2px solid black;"><b>ক্যাটাগরি</b></td>
+                                        <td width="27%" style="text-align: center;border-bottom: 2px solid black;"><b>গ্রেড</b></td>
+                                        <td width="30%" style="text-align: center;border-bottom: 2px solid black;"><b>প্রাপ্ত ছুটি</b></td>
                                     </tr>
                                         <?php
                                             $sqlgrd = mysql_query("SELECT * FROM `pay_grade` ORDER BY employee_type ");
@@ -135,9 +134,10 @@ function deduction(checkvalue)
                                                 $sql_lvingrade = mysql_query("SELECT * FROM leave_in_grade WHERE pay_grade_idpaygrade=$paygradeid AND leave_policy_idleavepolicy= $db_policyid");
                                                 $leaveingrdrow = mysql_fetch_assoc($sql_lvingrade);
                                                $leavedays = $leaveingrdrow['no_of_days'];
-                                                echo "<tr><td>".$grdrow['employee_type']."</td>
-                                                            <td>".$grdrow['grade_name']."<input name='grdid[]' type='hidden' value='".$grdrow['idpaygrade']."'/></td>
-                                                            <td><input  type='text' style='width:100%;text-align: center;' name='acceptedLeave[]' onkeypress='return checkIt(event)' value='$leavedays''/></td></tr>";             
+                                                echo "<tr>
+                                                            <td style='border-left:1px solid #313740;border-bottom:1px solid #313740;'>".$grdrow['employee_type']."</td>
+                                                            <td style='border-bottom:1px solid #313740;'>".$grdrow['grade_name']."<input name='grdid[]' type='hidden' value='".$grdrow['idpaygrade']."'/></td>
+                                                            <td style='border-right:1px solid #313740;border-bottom:1px solid #313740;'><input  type='text' style='width:100%;text-align: center;' name='acceptedLeave[]' onkeypress='return checkIt(event)' value='$leavedays''/></td></tr>";             
                                             }
                                         ?>
                                 </table>
