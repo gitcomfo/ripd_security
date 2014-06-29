@@ -69,7 +69,7 @@ function beforeSubmit()
 </head>
 <body>
 <form method="POST" onsubmit="return beforeSubmit();" name="" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">	
-    <table  class="formstyle" style="margin: 5px 10px 15px 10px; width: 100%; font-family: SolaimanLipi !important;">          
+    <table  class="formstyle" style="margin: 5px 10px 15px 10px; width: 98%;font-family: SolaimanLipi !important;">          
         <tr><th colspan="3" style="text-align: center;">ক্ষুদে বার্তা পাঠানো</th></tr>
         <?php
         if ($msg == "") {
@@ -87,7 +87,7 @@ function beforeSubmit()
             <tr>
                 <td> বার্তা</td>
                 <td>:</td>
-                <td><textarea id='message' name='message' style='width: 90%;'></textarea><em2>*</em2></td>
+                <td><textarea id='message' name='message' style='width: 90%;height: 400px;'></textarea><em2>*</em2></td>
             </tr>
             <tr>                    
                 <td colspan="3" style="text-align:center;">                            

@@ -32,7 +32,7 @@ $sel_message->execute(array($g_id));
     
 <body>
     
-    <table  class="formstyle" style="margin: 5px 10px 15px 10px; width: 100%; font-family: SolaimanLipi !important;">          
+    <table  class="formstyle" style="margin: 5px 10px 15px 10px; width: 98%; font-family: SolaimanLipi !important;">          
         <tr><th colspan="3" style="text-align: center;">আপনার ক্ষুদে বার্তা</th></tr>
             <tr>
                 <td style="width: 20%"><b>প্রেরক</b></td>
@@ -52,7 +52,7 @@ $sel_message->execute(array($g_id));
             <tr>
                 <td><b>বার্তা</b></td>
                 <td>:</td>
-                <td><?php echo $db_msg;?></td>
+                <td style="border: 1px solid #606060"><?php echo nl2br($db_msg);?></td>
             </tr>
     </table>
 </body>

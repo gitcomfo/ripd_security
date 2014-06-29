@@ -17,11 +17,11 @@ $sel_personal_notification_selected = $conn->prepare("SELECT * FROM send_message
 <script type="text/javascript">
     function send_message()
     {
-        TINY.box.show({iframe:'send_message.php',width:650,height:300,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});
+        TINY.box.show({iframe:'send_message.php',width:850,height:600,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});
     }
     function message_details(id)
     {
-        TINY.box.show({iframe:'show_message.php?id='+id,width:650,height:300,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});
+        TINY.box.show({iframe:'show_message.php?id='+id,width:850,height:600,opacity:30,topsplit:3,animate:true,close:true,maskid:'bluemask',maskopacity:50,boxid:'success'});
     }
 </script>
  
