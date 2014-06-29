@@ -616,25 +616,25 @@ window.history.go(-1);
                         <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td >:   <input class="box" type="text" id="e_house" name="e_house" value="<?php echo $preHouse;?>"/></td>
                         <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        <td >:   <input class="box" type="text" id="ep_house" name="ep_house" value="<?php echo $perHouse;?>"/></td>
+                        <td>&nbsp;&nbsp; : <input class="box" type="text" id="ep_house" name="ep_house" value="<?php echo $perHouse;?>"/></td>
                     </tr>
                     <tr>
                         <td  >বাড়ি নং</td>
                         <td >:   <input class="box" type="text" id="e_house_no" name="e_house_no" value="<?php echo $preHouseNo;?>" /></td>
                         <td >বাড়ি নং</td>
-                        <td>:   <input class="box" type="text" id="ep_house_no" name="ep_house_no" value="<?php echo $perHouseNo;?>"/></td>
+                        <td>&nbsp;&nbsp; : <input class="box" type="text" id="ep_house_no" name="ep_house_no" value="<?php echo $perHouseNo;?>"/></td>
                     </tr>
                     <tr>
                         <td >রোড নং</td>
                         <td>:   <input class="box" type="text" id="e_road" name="e_road" value="<?php echo $preRode;?>"/> </td>
                         <td >রোড নং</td>
-                        <td>:   <input class="box" type="text" id="ep_road" name="ep_road" value="<?php echo $perRode;?>" /></td>
+                        <td>&nbsp;&nbsp; : <input class="box" type="text" id="ep_road" name="ep_road" value="<?php echo $perRode;?>" /></td>
                     </tr>
                     <tr>
                         <td >পোষ্ট কোড</td>
                         <td>:   <input class="box" type="text" id="e_post_code" name="e_post_code" value="<?php echo $prePostCode;?>"/></td>
                         <td >পোষ্ট কোড</td>
-                        <td>:   <input class="box" type="text" id="ep_post_code" name="ep_post_code" value="<?php echo $perPostCode;?>"/></td>
+                        <td>&nbsp;&nbsp; : <input class="box" type="text" id="ep_post_code" name="ep_post_code" value="<?php echo $perPostCode;?>"/></td>
                     </tr> 
                     <tr>
                         <td colspan="2"><?php getArea($preDivID,$preDisID,$preThanaID,$prePostID,$preVilID); ?></td>
@@ -697,25 +697,25 @@ window.history.go(-1);
                         <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
                         <td >:   <input class="box" type="text" id="n_house" name="n_house" value="<?php echo $nompreHouse;?>"/></td>
                         <td  >বাড়ির নাম / ফ্ল্যাট নং</td>
-                        <td >:   <input class="box" type="text" id="np_house" name="np_house" value="<?php echo $nomperHouse;?>"/></td>
+                        <td >&nbsp;&nbsp; : <input class="box" type="text" id="np_house" name="np_house" value="<?php echo $nomperHouse;?>"/></td>
                     </tr>
                     <tr>
                         <td  >বাড়ি নং</td>
                         <td >:   <input class="box" type="text" id="n_house_no" name="n_house_no" value="<?php echo $nompreHouseNo;?>"/></td>
                         <td >বাড়ি নং</td>
-                        <td>:   <input class="box" type="text" id="np_house_no" name="np_house_no" value="<?php echo $nomperHouseNo;?>"/></td>
+                        <td>&nbsp;&nbsp; : <input class="box" type="text" id="np_house_no" name="np_house_no" value="<?php echo $nomperHouseNo;?>"/></td>
                     </tr>
                     <tr>
                         <td >রোড নং</td>
                         <td>:   <input class="box" type="text" id="n_road" name="n_road" value="<?php echo $nompreRode;?>"/> </td>
                         <td >রোড নং</td>
-                        <td>:   <input class="box" type="text" id="np_road" name="np_road" value="<?php echo $nomperRode;?>"/></td>
+                        <td>&nbsp;&nbsp; : <input class="box" type="text" id="np_road" name="np_road" value="<?php echo $nomperRode;?>"/></td>
                     </tr>
                     <tr>
                         <td >পোষ্ট কোড</td>
                         <td>:   <input class="box" type="text" id="n_post_code" name="n_post_code" value="<?php echo $nomprePostCode;?>"/></td>
                         <td >পোষ্ট কোড</td>
-                        <td>:   <input class="box" type="text" id="np_post_code" name="np_post_code" value="<?php echo $nomperPostCode;?>"/></td>
+                        <td>&nbsp;&nbsp; : <input class="box" type="text" id="np_post_code" name="np_post_code" value="<?php echo $nomperPostCode;?>"/></td>
                     </tr>
                      <tr>
                         <td colspan="2"><?php getArea3($nompreDivID,$nompreDisID,$nompreThanaID,$nomprePostID,$nompreVilID); ?></td>
