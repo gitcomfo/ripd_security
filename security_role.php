@@ -81,7 +81,7 @@ if ($_GET['action'] == 'list') {
                                 echo "  <tr>
                                 <td>$db_rolename</td>
                                <td style='text-align: center ' ><a onclick='editRole($db_roleid)' style='cursor:pointer;color:blue;'><u>এডিট করুন</u></a>
-                                   &nbsp;&nbsp;&nbsp;<a onclick='setRole($db_roleid)' style='cursor:pointer;color:yellow;'><u>সেটিং করুন</u></a></td>
+                                   &nbsp;&nbsp;&nbsp;<a onclick='setRole($db_roleid)' style='cursor:pointer;color:green;'><u>সেটিং করুন</u></a></td>
                             </tr>";
                             }
                             ?>
