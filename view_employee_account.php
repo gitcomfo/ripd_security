@@ -127,7 +127,8 @@ elseif (isset($_POST['submit2'])) {
                     }
         }
     $sql_sel_nominee = mysql_query("SELECT * FROM nominee WHERE idNominee = $nominee_id");
-mysql_query("START TRANSACTION");
+    
+    mysql_query("START TRANSACTION");
     if(mysql_num_rows($sql_sel_nominee) <1)
     {
         $sql_nominee = mysql_query("INSERT INTO nominee(nominee_name, nominee_relation, nominee_mobile,

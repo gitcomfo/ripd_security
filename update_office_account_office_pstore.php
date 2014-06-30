@@ -4,13 +4,13 @@
  */
 error_reporting(0); 
 include_once 'includes/header.php'; 
+
 $g_type = $_GET['pwr'];
 $logedinOfficeId = $_SESSION['loggedInOfficeID'];
 $sel_office = mysql_query("SELECT * FROM office WHERE idOffice = $logedinOfficeId");
 $officerow = mysql_fetch_assoc($sel_office);
 $db_selectedOffice = $officerow['office_selection'];
 ?>
-<title>আপডেট অফিস অ্যাকাউন্ট</title>
 <style type="text/css">@import "css/style.css";</style>
 <script type="text/javascript" src="javascripts/area.js"></script>
 <script type="text/javascript" src="javascripts/external/mootools.js"></script>
@@ -101,7 +101,6 @@ $db_selectedOffice = $officerow['office_selection'];
         </div>
             </div>
     </div>
-
 
 <script type="text/javascript">
     var filter = new DG.Filter({

@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
 include_once 'includes/header.php';
-include_once 'includes/MiscFunctions.php';
 include_once 'includes/areaSearch2.php';
 $x= $_GET['id'];
 $employeeID= base64_decode($x);
@@ -466,7 +465,6 @@ elseif (isset($_POST['submit5'])) {
         $db_scan_other = $scan_row['scanDoc_other'];
         $other_name = end(explode("-", $db_scan_other));
 ?>
-<title>প্রোপ্রাইটার অ্যাকাউন্ট</title>
 <style type="text/css">@import "css/bush.css";</style>
 <script type="text/javascript" src="javascripts/area2.js"></script>
 <script type="text/javascript" src="javascripts/jquery-1.4.3.min.js"></script>

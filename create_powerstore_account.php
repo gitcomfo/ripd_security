@@ -1,5 +1,5 @@
 <?php 
-error_reporting(0);
+//error_reporting(0);
 include_once 'includes/session.inc';
 include_once 'includes/header.php';
 include_once 'includes/makeAccountNumbers.php';
@@ -22,19 +22,20 @@ if(isset($_POST['submit0']))
                 $ripdemailid = "";
             }
      mysql_query("START TRANSACTION");
-   $sql= "INSERT INTO ". $dbname .".`office` (`office_type` ,`office_selection` ,`office_name` ,`office_number` ,`account_number` ,`office_email` ,email_password, `Thana_idThana`,`office_details_address`) 
+     
+   $sql= "INSERT INTO `office` (`office_type` ,`office_selection` ,`office_name` ,`office_number` ,`account_number` ,`office_email` ,email_password, `Thana_idThana`,`office_details_address`) 
               VALUES ( 'pwr_head', 'pwr','$name' , '$off_no', '$off_acc','$ripdemailid' ,'$passwrd' , '$thana', '$off_add')";
     $reslt=mysql_query($sql);
     $off = mysql_insert_id();
     
-     $ssql = "INSERT INTO ". $dbname .".`ons_relation` ( `catagory` ,`insert_date` ,`add_ons_id`) VALUES (  'office', NOW(), '$off');";
+     $ssql = "INSERT INTO `ons_relation` ( `catagory` ,`insert_date` ,`add_ons_id`) VALUES (  'office', NOW(), '$off');";
     $sreslt = mysql_query($ssql);
     $ons = mysql_insert_id();
     
     $b_space = $_POST['office_space'];
     $b_type = $_POST['building_type'];
     $b_floor = $_POST['floor_number'];
-    $isql = "INSERT INTO ". $dbname .".`ons_information` ( `space` ,`building_type` ,`floor` ,`ons_relation_idons_relation`) VALUES ( '$b_space', '$b_type', '$b_floor', '$ons');";
+    $isql = "INSERT INTO `ons_information` ( `space` ,`building_type` ,`floor` ,`ons_relation_idons_relation`) VALUES ( '$b_space', '$b_type', '$b_floor', '$ons');";
     $ireslt = mysql_query($isql);
       
      $rent1 = $_POST['office_rent1'];
@@ -52,7 +53,7 @@ if(isset($_POST['submit0']))
      $deco1 = $_POST['decoration1'];
      $deco2 = $_POST['decoration2'];
      $deco = $deco1.".".$deco2;
-     $csql = "INSERT INTO ". $dbname .".`ons_cost` (`rent` ,`current_bill` ,`water_bill` ,`advanced_amount` ,`decoration` ,`ons_relation_idons_relation`) 
+     $csql = "INSERT INTO `ons_cost` (`rent` ,`current_bill` ,`water_bill` ,`advanced_amount` ,`decoration` ,`ons_relation_idons_relation`) 
                 VALUES ('$rent', '$e_bill', '$w_bill', '$adv_pay', '$deco', '$ons');";
      $creslt = mysql_query($csql);
      $ons_cost = mysql_insert_id();
@@ -65,7 +66,7 @@ if(isset($_POST['submit0']))
      for($i=0; $i<$n; $i++)
      {
          $quan[$i] = $quan1[$i].".".$quan2[$i];
-         $osql = "INSERT INTO ". $dbname .".`ons_cost_others` (`cost_type` ,`cost_amount` ,`ons_cost_idons_cost`) 
+         $osql = "INSERT INTO `ons_cost_others` (`cost_type` ,`cost_amount` ,`ons_cost_idons_cost`) 
                         VALUES ( '$sub[$i]',  '$quan[$i]', '$ons_cost');";
          $oreslt = mysql_query($osql) or exit('query failed: '.mysql_error());
      }
@@ -79,7 +80,6 @@ if(isset($_POST['submit0']))
                     move_uploaded_file($_FILES["image"]["tmp_name"], "pic/" . $image_name);
                 } 
                 
-                  $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
                     $extension = end(explode(".", $_FILES["signature"]["name"]));
                     $sign_name = $off_acc."_". $_FILES["signature"]["name"];
                     $sing_path = "sign/" . $sign_name;
@@ -87,7 +87,7 @@ if(isset($_POST['submit0']))
                     {
                             move_uploaded_file($_FILES["signature"]["tmp_name"], "sign/" . $sign_name);
                      }                 
-                $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+
         $extension = end(explode(".", $_FILES["owner_finger_print"]["name"]));
         $finger_name = $off_acc."_".$_FILES["owner_finger_print"]["name"];
         $finger_path = "fingerprints/".$finger_name;
@@ -96,7 +96,6 @@ if(isset($_POST['submit0']))
                         move_uploaded_file($_FILES["owner_finger_print"]["tmp_name"], "fingerprints/" . $finger_name);
                 } 
                 
-                $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG","pdf");
         $extension = end(explode(".", $_FILES["scanDoc"]["name"]));
          $scan_name = $off_acc."_".$_FILES["scanDoc"]["name"];
           $scan_path = "scaned/".$scan_name;
@@ -111,7 +110,7 @@ if(isset($_POST['submit0']))
      $own_mail = $_POST['mail_address'];
      $own_valid = $_POST['validity'];
     
-     $ownsql = "INSERT INTO ". $dbname .".`ons_deed` (`owner_name` ,`owner_address` ,`cell_number` ,`owner_email` ,`owner_photo` ,`owner_signature`  ,`expire_date` ,`scan_documents` ,`ons_relation_idons_relation`,`owner_fingerprint`) VALUES  ( '$own_name', '$own_add' , '$own_mbl' , '$own_mail'  , '$image_path' , '$sing_path'  , '$own_valid' , '$scan_path' , '$ons' , '$finger_path');";
+     $ownsql = "INSERT INTO `ons_deed` (`owner_name` ,`owner_address` ,`cell_number` ,`owner_email` ,`owner_photo` ,`owner_signature`  ,`expire_date` ,`scan_documents` ,`ons_relation_idons_relation`,`owner_fingerprint`) VALUES  ( '$own_name', '$own_add' , '$own_mbl' , '$own_mail'  , '$image_path' , '$sing_path'  , '$own_valid' , '$scan_path' , '$ons' , '$finger_path');";
      $ownreslt = mysql_query($ownsql) or exit('query failed: '.mysql_error());
      
        // ****************** default insert into post_in_ons ***************************************
@@ -294,8 +293,8 @@ xmlhttp.send();
 function beforeSubmit()
 {
     if ((document.getElementById('office_name').value != "")
-                && (document.getElementById('mobile_number').innerHTML != "")
-                && (document.getElementById('owner_Name').innerHTML == "")
+                && (document.getElementById('mobile_number').value != "")
+                && (document.getElementById('owner_Name').value != "")
                 && (document.getElementById('advanced_payment1').value !="")
                 && (document.getElementById('floor_number').value !="")
                 && (document.getElementById('office_rent1').value !="")

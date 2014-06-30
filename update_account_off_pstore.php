@@ -8,25 +8,25 @@ include_once 'includes/header.php';
 $type  = $_GET['type'];     
 $x= $_GET['id'];
       $ofid= base64_decode($x);
-      $all = "SELECT * FROM office WHERE idOffice=$ofid ";
-      $allsql = mysql_query($all) or exit('query failed: '.mysql_error());
+      
+      $allsql = mysql_query("SELECT * FROM office WHERE idOffice=$ofid");
      while( $off_row = mysql_fetch_assoc($allsql))
      {      
-    $name = $off_row['office_name'];
-    $off_add = $off_row['office_details_address'];
-    $off_no = $off_row['office_number'];
-    $mail = $off_row['office_email'];
-    $off_acc = $off_row['account_number'];
-    $off_thana = $off_row['Thana_idThana'];
+        $name = $off_row['office_name'];
+        $off_add = $off_row['office_details_address'];
+        $off_no = $off_row['office_number'];
+        $mail = $off_row['office_email'];
+        $off_acc = $off_row['account_number'];
+        $off_thana = $off_row['Thana_idThana'];
     }
-    $onsq = "SELECT * FROM ".$dbname.".`ons_relation` WHERE add_ons_id=$ofid AND catagory= 'office' ";
+    $onsq = "SELECT * FROM `ons_relation` WHERE add_ons_id=$ofid AND catagory= 'office' ";
     $onssql = mysql_query($onsq) or exit('query failed: '.mysql_error());
     while($ons_row = mysql_fetch_assoc($onssql))
     {
         $idons=$ons_row['idons_relation'];
     }
     
-    $info = "SELECT * FROM ".$dbname.".`ons_information` WHERE ons_relation_idons_relation=$idons";
+    $info = "SELECT * FROM `ons_information` WHERE ons_relation_idons_relation=$idons";
     $infosql = mysql_query($info) or exit('query failed: '.mysql_error());
     while($info_row = mysql_fetch_assoc($infosql))
     {
@@ -35,7 +35,7 @@ $x= $_GET['id'];
         $floor=$info_row['floor'];
         $info_id=$info_row['idons_information'];
     }
-    $deed = "SELECT * FROM ".$dbname.".`ons_deed` WHERE ons_relation_idons_relation=$idons";
+    $deed = "SELECT * FROM `ons_deed` WHERE ons_relation_idons_relation=$idons";
     $deedsql = mysql_query($deed) or exit('query failed: '.mysql_error());
     while($deed_row = mysql_fetch_assoc($deedsql))
     {
@@ -54,7 +54,7 @@ $x= $_GET['id'];
         $oexpire=$deed_row['expire_date'];
         $deedid=$deed_row['idons_deed'];
     }
-    $cost = "SELECT * FROM ".$dbname.".`ons_cost` WHERE ons_relation_idons_relation=$idons";
+    $cost = "SELECT * FROM `ons_cost` WHERE ons_relation_idons_relation=$idons";
     $costsql = mysql_query($cost) or exit('query failed: '.mysql_error());
     while($cost_row = mysql_fetch_assoc($costsql))
     {
@@ -81,7 +81,7 @@ $x= $_GET['id'];
         $decorationDeci = substr($after_dot, 0, 2);
      }
     $count =0;
-    $othercost = "SELECT * FROM ".$dbname.".`ons_cost_others` WHERE ons_cost_idons_cost=$costid";
+    $othercost = "SELECT * FROM `ons_cost_others` WHERE ons_cost_idons_cost=$costid";
     $othercostsql = mysql_query($othercost) or exit('query failed: '.mysql_error());
     
     while($othercost_row = mysql_fetch_assoc($othercostsql))
@@ -141,7 +141,7 @@ $x= $_GET['id'];
     for($i=0; $i<$n; $i++)
      {
          $quan[$i] = $quan1[$i].".".$quan2[$i];
-         $osql = "INSERT INTO ". $dbname .".`ons_cost_others` (`cost_type` ,`cost_amount` ,`ons_cost_idons_cost`) VALUES ( '$sub[$i]',  '$quan[$i]', '$costid');";
+         $osql = "INSERT INTO `ons_cost_others` (`cost_type` ,`cost_amount` ,`ons_cost_idons_cost`) VALUES ( '$sub[$i]',  '$quan[$i]', '$costid');";
          $oreslt = mysql_query($osql) or exit('query failed: '.mysql_error());
      }
      
@@ -167,8 +167,7 @@ $x= $_GET['id'];
                 echo "Invalid file format.";
                 }
         }
-                
-        $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+
         $extension = end(explode(".", $_FILES["signature"]["name"]));
         $sign_name = $_FILES["signature"]["name"];
         if($sign_name=="")
@@ -190,7 +189,7 @@ $x= $_GET['id'];
                 echo "Invalid file format.";
                 }
         }
-                $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+
         $extension = end(explode(".", $_FILES["owner_finger_print"]["name"]));
         $finger_name = $_FILES["owner_finger_print"]["name"];
         if($finger_name=="")
@@ -211,8 +210,7 @@ $x= $_GET['id'];
                 echo "Invalid file format.";
                 }
         }
-            
-        $allowedExts = array("gif", "jpeg", "jpg", "png", "JPG", "JPEG", "GIF", "PNG");
+
         $extension = end(explode(".", $_FILES["scanDoc"]["name"]));
          $scan_name = $_FILES["scanDoc"]["name"];
          if($scan_name=="")
@@ -245,7 +243,6 @@ $x= $_GET['id'];
     echo "<script type='text/javascript'>window.location.href = window.location; </script>";
   }
 ?>
-<title>আপডেট অফিস অ্যাকাউন্ট</title>
 <link rel="stylesheet" type="text/css" media="all" href="css/bush.css" />
 <link rel="stylesheet" type="text/css" media="all" href="javascripts/jsDatePick_ltr.min.css" />
 <script type="text/javascript" src="javascripts/jsDatePick.min.1.3.js"></script>
@@ -347,7 +344,7 @@ xmlhttp.send();
         <div style="padding-left: 110px;"><a href="update_office_account_office_pstore.php?pwr=<?php echo $type;?>"><b>ফিরে যান</b></a></div>
       <div>
            <table  class="formstyle" style="width: 78%;" >   
-               <tr><th colspan="4" style="text-align: center" colspan="2"><h1>আপডেট</h1></th></tr>
+               <tr><th colspan="4" style="text-align: center" colspan="2"><h1><?php echo $name;?> আপডেট</h1></th></tr>
                     <tr><td colspan="4" ></td></tr>
                     <tr>
                         <td>

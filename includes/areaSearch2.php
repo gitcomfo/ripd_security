@@ -258,7 +258,7 @@ function getArea3($dv,$d,$t,$p,$v)
     </span></br>
     গ্রাম / পাড়া / প্রোজেক্ট&nbsp;&nbsp;&nbsp;&nbsp;: <span id="vid2">
         <select name='vilg_id2' id='vilg_id2' class="box" >
-            <option value="all">-গ্রাম/পাড়া/প্রোজেক্ট-</option>
+            <option value="">-গ্রাম/পাড়া/প্রোজেক্ট-</option>
             <?php
             $vilg_sql = mysql_query("SELECT * FROM " . $dbname . ".village ORDER BY village_name ASC");
             while ($vilg_rows = mysql_fetch_array($vilg_sql)) {
