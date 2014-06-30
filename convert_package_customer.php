@@ -51,6 +51,28 @@ function get_packages($current_ac_value,$conn)
             $(this).css("visibility","hidden"); 
         });
     }
+    
+function calculateTotalPay(currentPckgPV)
+    {
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function()
+        {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+            {
+                document.getElementById("total_pay").value = xmlhttp.responseText;
+            }
+        }
+        var selectedpackg = document.getElementById('pvvalue').value;
+        xmlhttp.open("GET", "includes/convert_package_includes.php?currentpv="+currentPckgPV+"&selectedpv="+selectedpackg, true);
+        xmlhttp.send();
+    }
 </script>
 
 <div class="main_text_box">
@@ -78,7 +100,7 @@ function get_packages($current_ac_value,$conn)
                                 <td colspan="2">
                                     <fieldset style="border: #686c70 solid 3px;width: 80%; margin-left: 50px">
                                         <legend style="color: brown;">সার্চ প্যাকেজ</legend>
-                                        পরবর্তী প্যাকেজঃ <select class="box" name="next_packages" onclick="setPVvalue(this.value)" >
+                                        পরবর্তী প্যাকেজঃ <select class="box" name="next_packages" id="next_packages" onclick="setPVvalue(this.value)" >
                                              <?php get_packages($current_account_value,$conn);?>
                                         </select>
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -88,8 +110,8 @@ function get_packages($current_ac_value,$conn)
                                 </td>
                             </tr>
                             <tr>         
-                                <td style="padding-left: 0px; text-align: right; width: 35%"><input type="radio" name="pvtype" value="pin" onclick="showBox('.permanentBox1')" /> পিন ব্যবহার</td>
-                                <td><input type="radio" name="pvtype" value="account" onclick="hideBox('.permanentBox1')" />অর্জিত পিভি ব্যবহার</td>
+                                <td style="padding-left: 0px; text-align: right; width: 35%"><input type="radio" name="pvtype" value="pin" onclick="showBox('.permanentBox1');calculateTotalPay('<?php echo $current_account_value;?>')" /> পিন ব্যবহার</td>
+                                <td><input type="radio" name="pvtype" value="account" onclick="hideBox('.permanentBox1'); calculateTotalPay('<?php echo $current_account_value;?>')" />অর্জিত পিভি ব্যবহার</td>
                             </tr>
                             <tr class="permanentBox1" style="visibility: hidden;">
                                 <td style="padding-left: 0px; text-align: right; width: 35%">এন্টার পিন নং :</td>
@@ -100,12 +122,8 @@ function get_packages($current_ac_value,$conn)
                                 <td> <input class="box" type="text" id="pckg_convert_charge" name="pckg_convert_charge" /> টাকা</td>
                             </tr>
                             <tr>
-                                <td style="padding-left: 0px; text-align: right; width: 35%">একাউন্ট চার্জ :</td>
-                                <td> <input class="box" type="text" id="account_charge" name="account_charge" /> টাকা</td>
-                            </tr>
-                            <tr>
                                 <td style="padding-left: 0px; text-align: right; width: 35%">টোটাল একাউন্ট পে:</td>
-                                <td> <input class="box" type="text" id="total_pay" name="total_pay" /> টাকা</td>
+                                <td> <input class="box" type="text" id="total_pay" name="total_pay" readonly="" /> টাকা</td>
                             </tr>
                              <tr>
                                 <td style="padding-left: 0px; text-align: right; width: 35%">পাসওয়ার্ড:</td>

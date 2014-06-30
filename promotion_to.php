@@ -33,8 +33,8 @@ if(isset($_POST['promotion']))
      $p_newgrade = $_POST['nextGrade'];
      $p_newSalary = $_POST['nextSalary'];
      $p_newPostinID = $_POST['newpostID'];
-     echo $p_loannext = $_POST['loanAmount'];
-     echo $p_repaymonth = $_POST['repayMonth'];
+     $p_loannext = $_POST['loanAmount'];
+     $p_repaymonth = $_POST['repayMonth'];
      $p_loanID = $_POST['loanID'];
      $todate = date("Y-m-d");
      $conn->beginTransaction();
@@ -310,7 +310,4 @@ function beforeSubmit()
             </form>
         </div>
     </div>
-
-    <?php
-    include 'includes/footer.php';
-    ?>
+    <?php include 'includes/footer.php';?>
