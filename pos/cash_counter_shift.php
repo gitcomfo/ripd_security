@@ -22,7 +22,8 @@ $up_counter_shifting = $conn->prepare("UPDATE ons_shifting SET ending_cash = ?,s
 $sel_counter_info = $conn->prepare("SELECT * FROM ons_counter WHERE idonscounter =?");
 $sel_counter_now = $conn->prepare("SELECT * FROM ons_counter JOIN ons_shifting ON idonscounter =  fk_counterid
                                                             WHERE cfs_userid = ? AND counter_login= 'Y' AND shifting_date = CURDATE() AND shift_end IS NULL");
-$sel_salesum = $conn->prepare("SELECT SUM(sal_cash_paid) FROM sales_summary WHERE cfs_userid = ? AND sal_salesdate = CURDATE()");
+$sel_salesum = $conn->prepare("SELECT SUM(sal_cash_paid) FROM sales_summary 
+                                        WHERE cfs_userid = ? AND sal_salesdate = CURDATE() AND sal_salestime > ?");
 
 function getCounters($sql,$id,$type) {
     $sql->execute(array($id,$type));
@@ -88,12 +89,16 @@ foreach ($rowall as $value) {
     $db_starting_amount = $value['starting_cash'];
     $db_counterID =$value['fk_counterid'];
     $db_shiftingID = $value['idonsshifting'];
+    $db_shiftstart = $value['shift_start'];
 }
-$sel_salesum->execute(array($cfsID));
-$salerow = $sel_salesum->fetchAll();
-foreach ($salerow as $row) {
-    $db_totalsale = $row['SUM(sal_cash_paid)'];
-}
+$shift_starting_time = $tme = date('H:m:s',  strtotime($db_shiftstart));
+
+    $sel_salesum->execute(array($cfsID,$shift_starting_time));
+    $salerow = $sel_salesum->fetchAll();
+    foreach ($salerow as $row) {
+        $db_totalsale = $row['SUM(sal_cash_paid)'];
+    }   
+
 $now_cash = $db_starting_amount + $db_totalsale;
 
 ?>
